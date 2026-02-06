@@ -54,3 +54,39 @@ git push -u origin main
 **https://zhangsan.github.io/visbody-demo/**
 
 把该链接发给别人即可直接打开 Demo 页面。
+
+---
+
+## 遇到 404 “There isn't a GitHub Pages site here” 时
+
+按下面逐项检查：
+
+### 1. 链接是否带仓库名（最常见）
+
+- **错误**：访问 `https://你的用户名.github.io`（没有仓库名）
+- **正确**：访问 `https://你的用户名.github.io/visbody-demo/`（末尾的 `/` 可加可不加）
+
+项目页必须带仓库名，例如：`https://你的用户名.github.io/visbody-demo/`。
+
+### 2. 是否已开启 GitHub Pages
+
+1. 打开仓库 → **Settings** → 左侧 **Pages**
+2. **Build and deployment** 下：
+   - **Source** 选 **Deploy from a branch**
+   - **Branch** 选 **main**（不是 master）
+   - **Folder** 选 **/ (root)** → 点 **Save**
+3. 保存后等 1～2 分钟再访问
+
+### 3. 分支和文件是否一致
+
+- 代码必须在 **main** 分支（若你用的是 master，在 Pages 里就选 master）
+- 仓库根目录下要有 **index.html**（本仓库已满足）
+
+### 4. 仓库是否为 Public
+
+- GitHub 免费版只对 **Public** 仓库提供 Pages，请确认仓库是公开的。
+
+### 5. 仍不行时
+
+- 到仓库 **Settings → Pages** 看是否出现绿色提示 “Your site is live at …”，用那里给的链接打开。
+- 若刚推送或刚改设置，可再等几分钟后刷新。
