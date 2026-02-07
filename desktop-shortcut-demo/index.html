@@ -1,0 +1,493 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <meta name="theme-color" content="#2563eb" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+  <meta name="apple-mobile-web-app-title" content="快捷演示" />
+  <title>桌面快捷方式 - 移动端演示</title>
+  <link rel="manifest" href="manifest.json" />
+  <style>
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      background: linear-gradient(180deg, #eff6ff 0%, #fff 50%);
+      min-height: 100vh;
+      padding: 24px;
+      color: #1e293b;
+    }
+    .page-content {
+      max-width: 400px;
+      margin: 0 auto;
+      padding-top: 40px;
+      text-align: center;
+    }
+    .page-content.hide { display: none; }
+    .page-content h1 { font-size: 1.5rem; color: #1e40af; margin-bottom: 8px; }
+    .page-content p { color: #64748b; font-size: 0.9rem; }
+    .btn-row {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      margin-top: 24px;
+      max-width: 280px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+    .btn-start {
+      display: block;
+      width: 100%;
+      padding: 14px 24px;
+      font-size: 0.95rem;
+      border-radius: 12px;
+      border: none;
+      background: #2563eb;
+      color: #fff;
+      font-weight: 500;
+      cursor: pointer;
+      transition: background 0.2s;
+      box-shadow: 0 2px 8px rgba(37, 99, 235, 0.3);
+    }
+    .btn-start:hover { background: #1d4ed8; }
+    .btn-start:active { background: #1e40af; }
+    .btn-start.outline {
+      background: #fff;
+      color: #2563eb;
+      border: 2px solid #2563eb;
+      box-shadow: none;
+    }
+    .btn-start.outline:hover { background: #eff6ff; }
+    .btn-start.outline:active { background: #dbeafe; }
+
+    .overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.4);
+      display: flex;
+      align-items: flex-end;
+      justify-content: center;
+      padding: 0;
+      z-index: 1000;
+      opacity: 0;
+      visibility: hidden;
+      transition: opacity 0.25s, visibility 0.25s;
+    }
+    .overlay.show { opacity: 1; visibility: visible; }
+    .sheet {
+      background: #fff;
+      border-radius: 20px 20px 0 0;
+      width: 100%;
+      max-width: 480px;
+      padding: 24px 20px 32px;
+      box-shadow: 0 -4px 24px rgba(0,0,0,0.12);
+      transform: translateY(100%);
+      transition: transform 0.3s ease;
+    }
+    .overlay.show .sheet { transform: translateY(0); }
+    .sheet h2 { margin: 0 0 8px; font-size: 1.25rem; color: #0f172a; }
+    .sheet .hint { color: #64748b; font-size: 0.875rem; margin-bottom: 24px; }
+    .btn-group { display: flex; gap: 12px; }
+    .btn {
+      flex: 1;
+      padding: 14px 20px;
+      border: none;
+      border-radius: 12px;
+      font-size: 1rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    .btn-secondary { background: #f1f5f9; color: #475569; }
+    .btn-primary { background: #2563eb; color: #fff; }
+    .btn-primary:active { background: #1d4ed8; }
+    .btn-secondary:active { background: #e2e8f0; }
+    .btn-full { width: 100%; margin-top: 16px; }
+
+    .sheet-steps .sheet-steps-title { font-size: 1.1rem; color: #0f172a; margin: 0 0 8px; }
+    .sheet-steps .sheet-steps-browser { font-size: 0.95rem; color: #475569; margin: 0 0 12px; font-weight: 500; }
+    .sheet-steps ol { margin: 0 0 8px; padding-left: 22px; color: #475569; font-size: 0.9rem; line-height: 1.7; }
+    .sheet-steps ol li { margin-bottom: 6px; }
+    .sheet-steps ol .arrow { color: #2563eb; margin: 4px 0; list-style: none; padding-left: 0; }
+
+    .guide-panel {
+      display: none;
+      margin-top: 16px;
+      text-align: left;
+      background: #f8fafc;
+      border-radius: 12px;
+      padding: 16px;
+    }
+    .guide-panel.show { display: block; }
+    .guide-panel h3 { font-size: 0.9rem; color: #334155; margin: 0 0 8px; }
+    .guide-panel ol { margin: 0; padding-left: 20px; color: #64748b; font-size: 0.85rem; line-height: 1.6; }
+    .guide-panel .arrow { color: #2563eb; margin: 4px 0; }
+
+    .badge {
+      display: inline-block;
+      padding: 4px 10px;
+      border-radius: 999px;
+      font-size: 0.75rem;
+      margin-bottom: 16px;
+      background: #dbeafe;
+      color: #1d4ed8;
+    }
+
+    .guide-page {
+      display: none;
+      max-width: 480px;
+      margin: 0 auto;
+      padding: 0 20px 40px;
+      text-align: left;
+    }
+    .guide-page.show { display: block; }
+    .guide-page .back-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      margin-bottom: 20px;
+      color: #2563eb;
+      font-size: 0.9rem;
+      text-decoration: none;
+      cursor: pointer;
+    }
+    .guide-page .back-link:hover { text-decoration: underline; }
+    .guide-page h2 { font-size: 1.25rem; color: #0f172a; margin: 0 0 8px; }
+    .guide-page .subtitle { color: #64748b; font-size: 0.875rem; margin-bottom: 20px; }
+    .guide-page .browser-section { margin-bottom: 20px; }
+    .guide-page .browser-section-title { font-size: 0.8rem; color: #64748b; margin-bottom: 10px; font-weight: 500; }
+    .guide-page .browser-chips {
+      display: flex;
+      gap: 10px;
+      overflow-x: auto;
+      padding: 0 4px 6px 0;
+      -webkit-overflow-scrolling: touch;
+      scrollbar-width: none;
+    }
+    .guide-page .browser-chips::-webkit-scrollbar { display: none; }
+    .guide-page .browser-chip {
+      flex-shrink: 0;
+      min-height: 44px;
+      padding: 10px 16px;
+      border-radius: 22px;
+      border: 1.5px solid #e2e8f0;
+      background: #fff;
+      color: #475569;
+      font-size: 0.9rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: background 0.2s, border-color 0.2s, color 0.2s;
+      -webkit-tap-highlight-color: transparent;
+    }
+    .guide-page .browser-chip:hover { background: #f8fafc; }
+    .guide-page .browser-chip.active { background: #2563eb; border-color: #2563eb; color: #fff; }
+    .guide-page .browser-chip.active:hover { background: #1d4ed8; }
+    .guide-page .browser-card {
+      background: #f8fafc;
+      border-radius: 12px;
+      padding: 20px;
+      border: 1px solid #e2e8f0;
+      margin-top: 8px;
+    }
+    .guide-page .browser-card h3 { font-size: 1rem; color: #334155; margin: 0 0 14px; }
+    .guide-page .browser-card ol { margin: 0; padding-left: 22px; color: #475569; font-size: 0.95rem; line-height: 1.75; }
+    .guide-page .browser-card ol li { margin-bottom: 8px; }
+    .guide-page .browser-card .arrow { color: #2563eb; margin: 4px 0; list-style: none; padding-left: 0; }
+  </style>
+</head>
+<body>
+  <div class="page-content" id="homePage">
+    <p class="badge" id="deviceBadge">检测设备中…</p>
+    <h1>桌面快捷方式演示</h1>
+    <p>本页用于演示在手机/平板上询问并创建桌面快捷方式的流程。</p>
+    <div class="btn-row">
+      <button type="button" class="btn-start" id="btnSupport">① 支持创建桌面快捷键流程</button>
+      <button type="button" class="btn-start outline" id="btnUnsupport">② 不支持创建桌面快捷键的流程</button>
+    </div>
+  </div>
+
+  <div class="guide-page" id="guidePage">
+    <a href="javascript:void(0)" class="back-link" id="backToHome">← 返回首页</a>
+    <h2>按浏览器查看操作方式</h2>
+    <p class="subtitle">请选择您当前使用的浏览器，按步骤将本页添加到主屏幕。</p>
+    <div id="browserChipsContainer"></div>
+    <div class="browser-card" id="browserCard">
+      <h3 id="browserCardTitle"></h3>
+      <ol id="browserCardSteps"></ol>
+    </div>
+  </div>
+
+  <div class="overlay" id="overlay" role="dialog" aria-labelledby="sheetTitle" aria-modal="true">
+    <div class="sheet">
+      <div class="sheet-ask" id="sheetAsk">
+        <h2 id="sheetTitle">创建桌面快捷方式</h2>
+        <p class="hint" id="sheetHint">将本页添加到主屏幕，下次可从桌面图标直接打开</p>
+        <div class="btn-group">
+          <button type="button" class="btn btn-secondary" id="btnNo">暂不</button>
+          <button type="button" class="btn btn-primary" id="btnYes">同意</button>
+        </div>
+        <div class="guide-panel" id="guideIOS">
+          <h3>请按以下步骤操作：</h3>
+          <ol>
+            <li>点击浏览器底部的 <strong>「分享」</strong> 按钮</li>
+            <li class="arrow">↓</li>
+            <li>在菜单中找到并点击 <strong>「添加到主屏幕」</strong></li>
+            <li class="arrow">↓</li>
+            <li>点击右上角 <strong>「添加」</strong> 完成</li>
+          </ol>
+        </div>
+        <div class="guide-panel" id="guideAndroid">
+          <h3>若未弹出系统窗口，请手动添加：</h3>
+          <ol>
+            <li>点击浏览器右上角 <strong>「⋮」</strong> 菜单</li>
+            <li class="arrow">↓</li>
+            <li>选择 <strong>「添加到主屏幕」</strong> 或 <strong>「安装应用」</strong></li>
+          </ol>
+        </div>
+      </div>
+      <div class="sheet-steps" id="sheetSteps" style="display: none;">
+        <h2 class="sheet-steps-title">请按以下步骤操作</h2>
+        <h3 id="sheetStepsBrowserName" class="sheet-steps-browser"></h3>
+        <ol id="sheetStepsList"></ol>
+        <button type="button" class="btn btn-primary btn-full" id="btnOtherBrowsers">查看其他浏览器操作方式</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    (function () {
+      var STORAGE_KEY = 'desktop_shortcut_asked';
+      var overlay = document.getElementById('overlay');
+      var sheetHint = document.getElementById('sheetHint');
+      var guideIOS = document.getElementById('guideIOS');
+      var guideAndroid = document.getElementById('guideAndroid');
+      var btnYes = document.getElementById('btnYes');
+      var btnNo = document.getElementById('btnNo');
+      var btnSupport = document.getElementById('btnSupport');
+      var btnUnsupport = document.getElementById('btnUnsupport');
+      var homePage = document.getElementById('homePage');
+      var guidePage = document.getElementById('guidePage');
+      var backToHome = document.getElementById('backToHome');
+      var browserChipsContainer = document.getElementById('browserChipsContainer');
+      var browserCardTitle = document.getElementById('browserCardTitle');
+      var browserCardSteps = document.getElementById('browserCardSteps');
+      var deviceBadge = document.getElementById('deviceBadge');
+      var sheetAsk = document.getElementById('sheetAsk');
+      var sheetSteps = document.getElementById('sheetSteps');
+      var sheetStepsBrowserName = document.getElementById('sheetStepsBrowserName');
+      var sheetStepsList = document.getElementById('sheetStepsList');
+      var btnOtherBrowsers = document.getElementById('btnOtherBrowsers');
+      var isUnsupportFlow = false;
+
+      var browserGuides = [
+        { id: 'android_chrome', platform: 'Android', chipLabel: 'Chrome', title: 'Chrome（安卓）', steps: ['点击浏览器右上角「⋮」（更多）', '在菜单中选择「添加到主屏幕」或「安装应用」', '在弹窗中确认名称后点击「添加」或「安装」'] },
+        { id: 'android_samsung', platform: 'Android', chipLabel: '三星浏览器', title: 'Samsung Internet（三星浏览器）', steps: ['点击浏览器底部导航栏「菜单」（三横线）', '选择「添加到主屏幕」或「添加页面到」→「主屏幕」', '确认名称后点击「添加」'] },
+        { id: 'android_firefox', platform: 'Android', chipLabel: 'Firefox', title: 'Firefox（安卓）', steps: ['点击右上角「⋮」菜单', '选择「安装」或「添加到主屏幕」', '按提示确认添加'] },
+        { id: 'android_edge', platform: 'Android', chipLabel: 'Edge', title: 'Edge（安卓）', steps: ['点击底部或顶部的「⋯」菜单', '选择「添加到主屏幕」或「将此应用安装到设备」', '确认后点击「添加」'] },
+        { id: 'android_other', platform: 'Android', chipLabel: '其它', title: '其它 Android 浏览器', steps: ['打开浏览器菜单（多为右上角 ⋮ 或 ⋯）', '在菜单中查找「添加到主屏幕」「安装应用」或「添加书签/快捷方式」等类似选项', '按提示完成添加'] },
+        { id: 'ios_safari', platform: 'iPhone', chipLabel: 'Safari', title: 'Safari（iPhone）', steps: ['点击屏幕底部「分享」按钮（方框带向上箭头）', '在分享菜单中向下滑动，找到并点击「添加到主屏幕」', '可修改名称，然后点击右上角「添加」'] },
+        { id: 'ios_chrome', platform: 'iPhone', chipLabel: 'Chrome / Edge', title: 'Chrome / Edge / Firefox（iPhone）', steps: ['点击底部「分享」图标（或右上角「⋯」→ 分享）', '在分享页中选择「添加到主屏幕」', '点击「添加」完成'] },
+        { id: 'ipad_safari', platform: 'iPad', chipLabel: 'Safari', title: 'Safari（iPad）', steps: ['点击地址栏左侧或顶部的「分享」按钮（方框带向上箭头）', '在分享菜单中点击「添加到主屏幕」', '确认名称后点击「添加」'] },
+        { id: 'ipad_chrome', platform: 'iPad', chipLabel: 'Chrome / Edge', title: 'Chrome / Edge（iPad）', steps: ['点击「⋯」或「分享」', '在弹出项中选择「添加到主屏幕」或通过系统分享找到该选项', '点击「添加」完成'] }
+      ];
+
+      function isStandalone() {
+        return window.navigator.standalone === true ||
+          window.matchMedia('(display-mode: standalone)').matches ||
+          document.referrer.includes('android-app://');
+      }
+      function isIOS() {
+        var ua = navigator.userAgent;
+        return /iPad|iPhone|iPod/.test(ua) ||
+          (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+      }
+      function isAndroid() { return /Android/i.test(navigator.userAgent); }
+      function isTablet() {
+        var w = Math.min(window.screen.width, window.screen.height);
+        return window.matchMedia('(min-width: 768px)').matches || (isIOS() && w >= 768);
+      }
+      function getDeviceLabel() {
+        if (isStandalone()) return '已从主屏幕打开';
+        if (isIOS() && isTablet()) return 'iPad';
+        if (isIOS()) return 'iPhone';
+        if (isAndroid() && isTablet()) return 'Android 平板';
+        if (isAndroid()) return 'Android 手机';
+        return '桌面/其他';
+      }
+
+      function setAsked() { try { localStorage.setItem(STORAGE_KEY, '1'); } catch (e) {} }
+
+      deviceBadge.textContent = getDeviceLabel();
+
+      var deferredPrompt = null;
+      window.addEventListener('beforeinstallprompt', function (e) { e.preventDefault(); deferredPrompt = e; });
+
+      if ('serviceWorker' in navigator) { navigator.serviceWorker.register('sw.js').catch(function () {}); }
+
+      function closeOverlay() {
+        overlay.classList.remove('show');
+        guideIOS.classList.remove('show');
+        guideAndroid.classList.remove('show');
+        showSheetAsk();
+        isUnsupportFlow = false;
+      }
+      function showSheetAsk() { sheetAsk.style.display = ''; sheetSteps.style.display = 'none'; }
+      function showSheetSteps() { sheetAsk.style.display = 'none'; sheetSteps.style.display = 'block'; }
+
+      function getCurrentBrowserGuide() {
+        var ua = navigator.userAgent;
+        if (isAndroid()) {
+          if (/SamsungBrowser|Samsung/i.test(ua)) return browserGuides.find(function (g) { return g.id === 'android_samsung'; }) || browserGuides[0];
+          if (/Firefox/i.test(ua)) return browserGuides.find(function (g) { return g.id === 'android_firefox'; }) || browserGuides[0];
+          if (/Edg/i.test(ua)) return browserGuides.find(function (g) { return g.id === 'android_edge'; }) || browserGuides[0];
+          if (/Chrome/i.test(ua)) return browserGuides.find(function (g) { return g.id === 'android_chrome'; }) || browserGuides[0];
+          return browserGuides.find(function (g) { return g.id === 'android_other'; }) || browserGuides[0];
+        }
+        if (isIOS()) {
+          if (isTablet()) {
+            if (/CriOS|FxiOS|Edg/i.test(ua)) return browserGuides.find(function (g) { return g.id === 'ipad_chrome'; }) || browserGuides[0];
+            return browserGuides.find(function (g) { return g.id === 'ipad_safari'; }) || browserGuides[0];
+          }
+          if (/CriOS|FxiOS|Edg/i.test(ua)) return browserGuides.find(function (g) { return g.id === 'ios_chrome'; }) || browserGuides[0];
+          return browserGuides.find(function (g) { return g.id === 'ios_safari'; }) || browserGuides[0];
+        }
+        return browserGuides[0];
+      }
+      function renderSheetSteps(guide) {
+        var g = guide || getCurrentBrowserGuide() || browserGuides[0];
+        sheetStepsBrowserName.textContent = g.title;
+        sheetStepsList.innerHTML = '';
+        g.steps.forEach(function (step, i) {
+          var li = document.createElement('li');
+          li.textContent = step;
+          sheetStepsList.appendChild(li);
+          if (i < g.steps.length - 1) {
+            var arrow = document.createElement('li');
+            arrow.className = 'arrow';
+            arrow.textContent = '↓';
+            sheetStepsList.appendChild(arrow);
+          }
+        });
+      }
+
+      function showGuideIOS() { sheetHint.style.display = 'none'; guideIOS.classList.add('show'); guideAndroid.classList.remove('show'); }
+      function showGuideAndroid() { sheetHint.style.display = 'none'; guideAndroid.classList.add('show'); guideIOS.classList.remove('show'); }
+      function resetSheet() { sheetHint.style.display = ''; guideIOS.classList.remove('show'); guideAndroid.classList.remove('show'); }
+
+      btnNo.addEventListener('click', function () {
+        if (!isUnsupportFlow) setAsked();
+        closeOverlay();
+        resetSheet();
+      });
+
+      btnYes.addEventListener('click', function () {
+        if (isUnsupportFlow) {
+          renderSheetSteps(getCurrentBrowserGuide());
+          showSheetSteps();
+          return;
+        }
+        setAsked();
+        if (isAndroid() && deferredPrompt) {
+          deferredPrompt.prompt();
+          deferredPrompt.userChoice.then(function (choice) {
+            if (choice.outcome === 'accepted') { closeOverlay(); resetSheet(); return; }
+            showGuideAndroid();
+          });
+          return;
+        }
+        if (isAndroid()) { showGuideAndroid(); return; }
+        if (isIOS()) { showGuideIOS(); return; }
+        closeOverlay();
+        resetSheet();
+      });
+
+      btnOtherBrowsers.addEventListener('click', function () {
+        closeOverlay();
+        resetSheet();
+        homePage.classList.add('hide');
+        guidePage.classList.add('show');
+        var guide = getCurrentBrowserGuide() || browserGuides[0];
+        setActiveChip(guide.id);
+        renderBrowserGuide(guide.id);
+      });
+
+      overlay.addEventListener('click', function (e) {
+        if (e.target === overlay) {
+          if (!isUnsupportFlow) setAsked();
+          closeOverlay();
+          resetSheet();
+        }
+      });
+
+      btnSupport.addEventListener('click', function () {
+        isUnsupportFlow = false;
+        resetSheet();
+        showSheetAsk();
+        overlay.classList.add('show');
+      });
+
+      btnUnsupport.addEventListener('click', function () {
+        isUnsupportFlow = true;
+        resetSheet();
+        showSheetAsk();
+        overlay.classList.add('show');
+      });
+
+      backToHome.addEventListener('click', function () {
+        guidePage.classList.remove('show');
+        homePage.classList.remove('hide');
+      });
+
+      var platforms = ['Android', 'iPhone', 'iPad'];
+      platforms.forEach(function (platform) {
+        var section = document.createElement('div');
+        section.className = 'browser-section';
+        var title = document.createElement('div');
+        title.className = 'browser-section-title';
+        title.textContent = platform;
+        section.appendChild(title);
+        var chipsWrap = document.createElement('div');
+        chipsWrap.className = 'browser-chips';
+        browserGuides.filter(function (g) { return g.platform === platform; }).forEach(function (g) {
+          var chip = document.createElement('button');
+          chip.type = 'button';
+          chip.className = 'browser-chip';
+          chip.setAttribute('data-id', g.id);
+          chip.textContent = g.chipLabel;
+          chip.addEventListener('click', function () { setActiveChip(g.id); renderBrowserGuide(g.id); });
+          chipsWrap.appendChild(chip);
+        });
+        section.appendChild(chipsWrap);
+        browserChipsContainer.appendChild(section);
+      });
+
+      function setActiveChip(id) {
+        browserChipsContainer.querySelectorAll('.browser-chip').forEach(function (c) {
+          c.classList.toggle('active', c.getAttribute('data-id') === id);
+        });
+      }
+
+      function renderBrowserGuide(id) {
+        var g = browserGuides.find(function (x) { return x.id === id; }) || browserGuides[0];
+        browserCardTitle.textContent = g.title;
+        browserCardSteps.innerHTML = '';
+        g.steps.forEach(function (step, i) {
+          var li = document.createElement('li');
+          li.textContent = step;
+          if (i < g.steps.length - 1) {
+            var arrow = document.createElement('li');
+            arrow.className = 'arrow';
+            arrow.textContent = '↓';
+            browserCardSteps.appendChild(li);
+            browserCardSteps.appendChild(arrow);
+          } else { browserCardSteps.appendChild(li); }
+        });
+      }
+      setActiveChip(browserGuides[0].id);
+      renderBrowserGuide(browserGuides[0].id);
+    })();
+  </script>
+</body>
+</html>
