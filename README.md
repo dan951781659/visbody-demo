@@ -1,18 +1,23 @@
-# 维塑数字健康平台 - 顶部栏与侧边栏交互 Demo
+# 维塑 Demo 集合
 
 通过 GitHub Pages 部署的静态演示页。
 
-- **顶部栏**：向下滚动时收起，滚回顶部或点击顶部栏恢复。
-- **左侧菜单**：点击底部 ◀/▶ 按钮自由收起或展开。
+## 演示列表
+
+| 演示 | 说明 | 链接 |
+|------|------|------|
+| **平台布局** | 顶部栏收起、左侧菜单收起 | [index.html](https://dan951781659.github.io/visbody-demo/) |
+| **用户身体指标统计** | PC / 移动端原型（折线图、双 Y 轴、批量导出） | [body-metrics/](https://dan951781659.github.io/visbody-demo/body-metrics/) |
+
+## 用户身体指标统计 - 可分享链接
+
+部署后可直接分享以下链接（将 `dan951781659` 换成你的 GitHub 用户名）：
+
+- **首页（选择端）**：https://dan951781659.github.io/visbody-demo/body-metrics/
+- **PC 端演示**：https://dan951781659.github.io/visbody-demo/body-metrics/pc.html
+- **移动端演示**：https://dan951781659.github.io/visbody-demo/body-metrics/mobile.html
 
 ## 本地预览
 
-直接用浏览器打开 `index.html` 即可。
-
-## 在线链接
-
-部署到 GitHub Pages 后，可分享链接形如：
-
-**https://你的用户名.github.io/visbody-demo/**
-
-（将「你的用户名」和「visbody-demo」替换为你的 GitHub 用户名和仓库名。）
+- 平台布局：打开根目录 `index.html`
+- 身体指标：打开 `body-metrics/index.html` 或 `body-metrics/pc.html`、`body-metrics/mobile.html`

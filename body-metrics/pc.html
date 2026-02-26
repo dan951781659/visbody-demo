@@ -1,0 +1,1190 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>用户身体指标统计 - 原型演示</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700&family=Noto+Sans+SC:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-zoom@2.0.1/dist/chartjs-plugin-zoom.min.js"></script>
+  <script src="https://cdn.sheetjs.com/xlsx-0.20.0/package/dist/xlsx.full.min.js"></script>
+  <style>
+    :root {
+      --bg: #f5f7fa;
+      --card-bg: #fff;
+      --primary: #165DFF;
+      --primary-light: #e8f0ff;
+      --accent-blue: #0ea5e9;
+      --accent-green: #22c55e;
+      --accent-yellow: #eab308;
+      --accent-orange: #f97316;
+      --accent-purple: #a855f7;
+      --text: #1e293b;
+      --text-muted: #64748b;
+      --border: #e2e8f0;
+      --shadow: 0 1px 3px rgba(0,0,0,.08);
+      --shadow-hover: 0 4px 12px rgba(0,0,0,.1);
+      --radius: 12px;
+      --radius-sm: 8px;
+      --font-sans: 'DM Sans', 'Noto Sans SC', system-ui, sans-serif;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: var(--font-sans);
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      line-height: 1.5;
+    }
+
+    /* 头部 */
+    .header {
+      background: var(--card-bg);
+      padding: 16px 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 1px solid var(--border);
+      box-shadow: var(--shadow);
+    }
+    .breadcrumb {
+      font-size: 15px;
+      color: var(--text-muted);
+    }
+    .breadcrumb a {
+      color: var(--primary);
+      text-decoration: none;
+      font-weight: 500;
+    }
+    .breadcrumb a:hover { text-decoration: underline; }
+    .breadcrumb span { color: var(--text); font-weight: 600; }
+    .btn-outline {
+      padding: 10px 20px;
+      border: 1px solid var(--primary);
+      color: var(--primary);
+      background: transparent;
+      border-radius: var(--radius-sm);
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      font-family: inherit;
+      transition: all .2s;
+    }
+    .btn-outline:hover {
+      background: var(--primary-light);
+    }
+
+    /* 主内容区 */
+    .main {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 24px;
+    }
+
+    /* 报告类型标签 */
+    .tabs {
+      display: flex;
+      gap: 4px;
+      background: var(--card-bg);
+      padding: 6px;
+      border-radius: var(--radius);
+      margin-bottom: 20px;
+      box-shadow: var(--shadow);
+      flex-wrap: wrap;
+    }
+    .tab {
+      padding: 12px 20px;
+      border: none;
+      background: transparent;
+      color: var(--text-muted);
+      font-size: 14px;
+      font-weight: 500;
+      border-radius: var(--radius-sm);
+      cursor: pointer;
+      font-family: inherit;
+      transition: all .2s;
+    }
+    .tab:hover { color: var(--text); background: var(--bg); }
+    .tab.active {
+      background: var(--primary);
+      color: #fff;
+    }
+
+    /* 指标卡片区域 */
+    .section-title {
+      font-size: 13px;
+      color: var(--text-muted);
+      margin-bottom: 12px;
+      font-weight: 500;
+    }
+    .cards-wrap {
+      background: var(--card-bg);
+      border-radius: var(--radius);
+      padding: 20px;
+      margin-bottom: 24px;
+      box-shadow: var(--shadow);
+      max-height: 280px;
+      overflow-y: auto;
+    }
+    .cards-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+      gap: 14px;
+    }
+    .card {
+      width: 180px;
+      height: 120px;
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      padding: 14px;
+      cursor: pointer;
+      transition: all .2s;
+      min-width: 0;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+    .card:hover { border-color: var(--primary); box-shadow: var(--shadow); }
+    .card.selected, .card.latest {
+      background: var(--primary-light);
+      border-color: var(--primary);
+      box-shadow: var(--shadow);
+    }
+    .card .name {
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--text);
+      line-height: 1.3;
+    }
+    .card .value {
+      font-size: 26px;
+      font-weight: 700;
+      color: var(--text);
+      line-height: 1.2;
+    }
+    .card .date {
+      font-size: 12px;
+      color: var(--text-muted);
+    }
+
+    /* 数据统计区 */
+    .stats-section {
+      background: var(--card-bg);
+      border-radius: var(--radius);
+      padding: 24px;
+      box-shadow: var(--shadow);
+    }
+    .stats-header {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 16px;
+      margin-bottom: 20px;
+    }
+    /* 批量导出工具栏 */
+    .batch-export-bar {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      flex-wrap: wrap;
+      margin-left: auto;
+    }
+    .report-select-all {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 14px;
+      color: var(--text);
+      cursor: pointer;
+      user-select: none;
+    }
+    .report-select-all input { width: 18px; height: 18px; accent-color: var(--primary); cursor: pointer; }
+    .batch-export-wrap { position: relative; }
+    .btn-batch-export {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 10px 18px;
+      background: var(--primary);
+      color: #fff;
+      border: none;
+      border-radius: var(--radius-sm);
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      font-family: inherit;
+      transition: all .2s;
+    }
+    .btn-batch-export:hover { background: #0d4ed8; }
+    .btn-batch-export:disabled { background: var(--text-muted); cursor: not-allowed; opacity: 0.8; }
+    .batch-export-count { font-size: 12px; opacity: 0.95; }
+    .batch-export-arrow { font-size: 10px; opacity: 0.9; }
+    .batch-export-dropdown {
+      position: absolute;
+      top: 100%;
+      right: 0;
+      margin-top: 4px;
+      min-width: 200px;
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      box-shadow: 0 8px 24px rgba(0,0,0,.12);
+      padding: 8px 0;
+      z-index: 100;
+    }
+    .batch-export-dropdown[hidden] { display: none !important; }
+    .batch-export-section { padding: 0 4px; }
+    .batch-export-section-title {
+      font-size: 11px;
+      color: var(--text-muted);
+      padding: 6px 14px 4px;
+      font-weight: 600;
+    }
+    .batch-export-option {
+      display: block;
+      width: 100%;
+      padding: 10px 14px;
+      border: none;
+      background: none;
+      font-size: 14px;
+      color: var(--text);
+      text-align: left;
+      cursor: pointer;
+      font-family: inherit;
+      border-radius: 6px;
+    }
+    .batch-export-option:hover { background: var(--primary-light); color: var(--primary); }
+    .batch-export-divider { height: 1px; background: var(--border); margin: 6px 0; }
+    .date-picker-wrap {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .date-picker-wrap label {
+      font-size: 13px;
+      color: var(--text-muted);
+    }
+    .date-input {
+      padding: 10px 14px;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      font-size: 14px;
+      font-family: inherit;
+      width: 180px;
+    }
+    .date-input:focus {
+      outline: none;
+      border-color: var(--primary);
+    }
+    .date-presets {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+    .date-preset-btn {
+      padding: 6px 14px;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      background: var(--card-bg);
+      color: var(--text-muted);
+      font-size: 13px;
+      font-weight: 500;
+      cursor: pointer;
+      font-family: inherit;
+      transition: all .2s;
+    }
+    .date-preset-btn:hover { border-color: var(--primary); color: var(--primary); }
+    .date-preset-btn.active { background: var(--primary-light); border-color: var(--primary); color: var(--primary); }
+    .legend-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      align-items: center;
+    }
+    .legend-item {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 13px;
+      color: var(--text-muted);
+      cursor: pointer;
+    }
+    .legend-item .dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+    }
+    .legend-item.active { color: var(--text); font-weight: 500; }
+
+    .chart-wrap {
+      position: relative;
+      height: 320px;
+      background: var(--bg);
+      border-radius: var(--radius-sm);
+      border: 1px solid var(--border);
+    }
+    .chart-placeholder {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--text-muted);
+      font-size: 15px;
+      background: var(--bg);
+      border-radius: var(--radius-sm);
+    }
+    .chart-placeholder.hidden { display: none; }
+
+    .charts-row { display: flex; flex-direction: column; gap: 24px; }
+    .chart-group { display: flex; flex-direction: column; gap: 8px; }
+    .chart-group-title { font-size: 13px; color: var(--text-muted); font-weight: 500; }
+    .chart-group-title .chart-axis-hint { font-size: 11px; color: var(--text-muted); font-weight: 400; opacity: 0.85; }
+    .chart-zoom-hint {
+      font-size: 12px;
+      color: var(--text-muted);
+      margin-top: 8px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+    .chart-zoom-hint .btn-reset-zoom {
+      padding: 4px 10px;
+      border: 1px solid var(--primary);
+      color: var(--primary);
+      background: transparent;
+      border-radius: 6px;
+      font-size: 12px;
+      cursor: pointer;
+      font-family: inherit;
+    }
+    .chart-zoom-hint .btn-reset-zoom:hover { background: var(--primary-light); }
+
+    #customTooltip {
+      position: fixed;
+      z-index: 9999;
+      padding: 14px 16px;
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      box-shadow: 0 8px 24px rgba(0,0,0,.12);
+      font-size: 13px;
+      pointer-events: none;
+      opacity: 0;
+      visibility: hidden;
+      transform: translate(-50%, 6px);
+      transition: opacity 0.15s ease, visibility 0.15s, transform 0.15s ease;
+      max-width: 320px;
+      min-width: 180px;
+    }
+    #customTooltip.visible {
+      opacity: 1;
+      visibility: visible;
+      transform: translate(-50%, 0);
+    }
+    #customTooltip .tt-time {
+      font-weight: 600;
+      margin-bottom: 10px;
+      padding-bottom: 8px;
+      border-bottom: 1px solid var(--border);
+      font-size: 12px;
+      color: var(--text-muted);
+    }
+    #customTooltip .tt-body {
+      max-height: 200px;
+      overflow-y: auto;
+      padding-right: 2px;
+    }
+    #customTooltip .tt-body::-webkit-scrollbar { width: 4px; }
+    #customTooltip .tt-body::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
+    #customTooltip .tt-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-top: 6px;
+      margin-bottom: 2px;
+    }
+    #customTooltip .tt-row:first-child { margin-top: 0; }
+    #customTooltip .tt-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      flex-shrink: 0;
+    }
+    #customTooltip .tt-name {
+      color: var(--text-muted);
+      flex: 1;
+      min-width: 0;
+    }
+    #customTooltip .tt-value {
+      font-weight: 600;
+      color: var(--text);
+      flex-shrink: 0;
+    }
+    #customTooltip::after {
+      content: '';
+      position: absolute;
+      left: 50%;
+      bottom: -6px;
+      margin-left: -6px;
+      border: 6px solid transparent;
+      border-top-color: var(--card-bg);
+      border-bottom: none;
+      opacity: 0;
+      transition: opacity 0.15s;
+    }
+    #customTooltip.visible::after { opacity: 1; }
+    #customTooltip.tt-below::after {
+      bottom: auto;
+      top: -6px;
+      border-top: none;
+      border-bottom-color: var(--card-bg);
+    }
+
+    /* 加载动画 */
+    .loading {
+      display: inline-flex;
+      gap: 4px;
+    }
+    .loading span {
+      width: 6px;
+      height: 6px;
+      background: var(--primary);
+      border-radius: 50%;
+      animation: bounce .6s ease-in-out infinite;
+    }
+    .loading span:nth-child(2) { animation-delay: .1s; }
+    .loading span:nth-child(3) { animation-delay: .2s; }
+    @keyframes bounce {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-6px); }
+    }
+  </style>
+</head>
+<body>
+  <header class="header">
+    <div class="breadcrumb" id="breadcrumb">
+      <a href="#">&lt; 用户管理</a>
+      <span> | 身体指标</span>
+    </div>
+    <button type="button" class="btn-outline" id="btnOutline">生成训练大纲</button>
+  </header>
+
+  <main class="main">
+    <div id="customTooltip"></div>
+    <!-- 报告类型标签 -->
+    <div class="tabs">
+      <button type="button" class="tab active" data-type="body_composition">体成分</button>
+      <button type="button" class="tab" data-type="posture">体态</button>
+      <button type="button" class="tab" data-type="circumference">体围</button>
+      <button type="button" class="tab" data-type="fms">FMS</button>
+      <button type="button" class="tab" data-type="fitness">体适能</button>
+    </div>
+
+    <!-- 指标卡片网格 -->
+    <p class="section-title">指标概览 · 点击卡片可选中/取消，用于下方趋势对比</p>
+    <div class="cards-wrap">
+      <div class="cards-grid" id="cardsGrid"></div>
+    </div>
+
+    <!-- 数据统计 -->
+    <section class="stats-section">
+      <h2 style="font-size:16px;font-weight:600;margin-bottom:16px;">数据统计</h2>
+      <div class="stats-header">
+        <div class="date-picker-wrap">
+          <label>时间范围</label>
+          <input type="date" class="date-input" id="startDate" value="">
+          <span style="color:var(--text-muted)">至</span>
+          <input type="date" class="date-input" id="endDate" value="">
+          <div class="date-presets">
+            <button type="button" class="date-preset-btn" data-range="1w">近一周</button>
+            <button type="button" class="date-preset-btn active" data-range="1m">近一月</button>
+            <button type="button" class="date-preset-btn" data-range="1y">近一年</button>
+          </div>
+        </div>
+        <div class="batch-export-bar">
+          <label class="report-select-all">
+            <input type="checkbox" id="reportSelectAll" aria-label="全选本页">
+            <span>全选本页</span>
+          </label>
+          <div class="batch-export-wrap">
+            <button type="button" class="btn-batch-export" id="btnBatchExport" aria-haspopup="true" aria-expanded="false">
+              <span>批量导出</span>
+              <span class="batch-export-count" id="batchExportCount"></span>
+              <span class="batch-export-arrow">▼</span>
+            </button>
+            <div class="batch-export-dropdown" id="batchExportDropdown" role="menu" hidden>
+              <div class="batch-export-section">
+                <button type="button" class="batch-export-option" data-export="excel" role="menuitem">导出为 Excel</button>
+                <button type="button" class="batch-export-option" data-export="csv" role="menuitem">导出为 CSV</button>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="legend-list" id="legendList" style="flex-basis:100%;margin-top:4px"></div>
+      </div>
+      <div class="chart-zoom-hint" id="chartZoomHint" style="display:none">
+        <span>拖动图表可放大查看时间区间</span>
+        <button type="button" class="btn-reset-zoom" id="btnResetZoom">重置缩放</button>
+      </div>
+      <div class="charts-row" id="chartsRow"></div>
+    </section>
+  </main>
+
+  <script>
+    // 精度：0=整数, 1=保留1位小数, 2=保留2位小数
+    function formatValue(m, val) {
+      if (val == null) return '—';
+      const v = Number(val);
+      if (m.precision === 0) return String(Math.round(v));
+      if (m.precision === 2) return v.toFixed(2);
+      return v.toFixed(1);
+    }
+    function formatValueWithUnit(m, val) {
+      const s = formatValue(m, val);
+      return m.unit ? s + ' ' + m.unit : s;
+    }
+
+    // 模拟数据：按需求 6.4 指标展示样式
+    const MOCK_METRICS = {
+      body_composition: [
+        { id: 'weight', name: '体重', unit: 'kg', precision: 1, value: 65.5, date: '2025-6-9', color: '#0ea5e9' },
+        { id: 'bmi', name: 'BMI', unit: '', precision: 1, value: 22.5, date: '2025-6-9', color: '#a855f7' },
+        { id: 'body_fat', name: '体脂率', unit: '%', precision: 1, value: 18.5, date: '2025-6-9', color: '#22c55e' },
+        { id: 'lean_mass', name: '去脂体重', unit: 'kg', precision: 1, value: 53.4, date: '2025-6-9', color: '#eab308' },
+        { id: 'body_fat_kg', name: '体脂肪', unit: 'kg', precision: 1, value: 12.1, date: '2025-6-9', color: '#f97316' },
+        { id: 'muscle', name: '肌肉量', unit: 'kg', precision: 1, value: 45.2, date: '2025-6-8', color: '#ec4899' },
+        { id: 'bmr', name: '基础代谢率', unit: 'kcal', precision: 0, value: 1450, date: '2025-6-8', color: '#06b6d4' },
+        { id: 'visceral', name: '内脏脂肪等级', unit: '', precision: 0, value: 5, date: '2025-6-8', color: '#84cc16' },
+        { id: 'water', name: '体水分', unit: 'kg', precision: 1, value: 38.5, date: '2025-6-7', color: '#0ea5e9' },
+        { id: 'protein', name: '蛋白质', unit: 'kg', precision: 1, value: 9.8, date: '2025-6-7', color: '#22c55e' },
+        { id: 'mineral', name: '无机盐', unit: 'kg', precision: 1, value: 3.2, date: '2025-6-6', color: '#eab308' },
+        { id: 'skeletal_muscle', name: '骨骼肌', unit: 'kg', precision: 1, value: 28.5, date: '2025-6-6', color: '#f97316' },
+        { id: 'subcutaneous_fat', name: '皮下脂肪', unit: 'kg', precision: 1, value: 8.5, date: '2025-6-5', color: '#a855f7' },
+        { id: 'body_age', name: '身体年龄', unit: '岁', precision: 0, value: 28, date: '2025-6-5', color: '#06b6d4' },
+      ],
+      posture: [
+        { id: 'head_forward', name: '头部前倾', unit: '°', precision: 1, value: 5.2, date: '2025-6-9', color: '#0ea5e9' },
+        { id: 'shoulder_height', name: '高低肩', unit: 'mm', precision: 1, value: 3.5, date: '2025-6-9', color: '#22c55e' },
+        { id: 'pelvis_ante', name: '骨盆前倾', unit: '°', precision: 1, value: 8.5, date: '2025-6-8', color: '#eab308' },
+        { id: 'pelvis_lateral', name: '骨盆侧倾', unit: '°', precision: 1, value: 2.1, date: '2025-6-8', color: '#f97316' },
+        { id: 'knee_varus', name: '膝内翻/外翻', unit: '°', precision: 1, value: 1.5, date: '2025-6-7', color: '#a855f7' },
+        { id: 'arch_height', name: '足弓高度', unit: 'mm', precision: 1, value: 25.3, date: '2025-6-7', color: '#06b6d4' },
+      ],
+      circumference: [
+        { id: 'chest', name: '胸围', unit: 'cm', precision: 1, value: 95.5, date: '2025-6-9', color: '#0ea5e9' },
+        { id: 'waist', name: '腰围', unit: 'cm', precision: 1, value: 78.2, date: '2025-6-9', color: '#22c55e' },
+        { id: 'hip', name: '臀围', unit: 'cm', precision: 1, value: 92.5, date: '2025-6-9', color: '#eab308' },
+        { id: 'arm_l', name: '左臂围', unit: 'cm', precision: 1, value: 28.5, date: '2025-6-8', color: '#f97316' },
+        { id: 'arm_r', name: '右臂围', unit: 'cm', precision: 1, value: 29.0, date: '2025-6-8', color: '#a855f7' },
+        { id: 'thigh_l', name: '左大腿围', unit: 'cm', precision: 1, value: 52.5, date: '2025-6-7', color: '#06b6d4' },
+        { id: 'thigh_r', name: '右大腿围', unit: 'cm', precision: 1, value: 53.0, date: '2025-6-7', color: '#ec4899' },
+        { id: 'calf_l', name: '左小腿围', unit: 'cm', precision: 1, value: 35.5, date: '2025-6-6', color: '#84cc16' },
+        { id: 'calf_r', name: '右小腿围', unit: 'cm', precision: 1, value: 36.0, date: '2025-6-6', color: '#0ea5e9' },
+        { id: 'neck', name: '颈围', unit: 'cm', precision: 1, value: 36.5, date: '2025-6-5', color: '#22c55e' },
+        { id: 'shoulder_width', name: '肩宽', unit: 'cm', precision: 1, value: 42.5, date: '2025-6-5', color: '#eab308' },
+      ],
+      fms: [
+        { id: 'squat', name: '深蹲', unit: '分', precision: 0, value: 2, date: '2025-6-9', color: '#0ea5e9', min: 0, max: 3 },
+        { id: 'hurdle', name: '跨栏步', unit: '分', precision: 0, value: 2, date: '2025-6-9', color: '#22c55e', min: 0, max: 3 },
+        { id: 'lunge', name: '直线弓步蹲', unit: '分', precision: 0, value: 3, date: '2025-6-8', color: '#eab308', min: 0, max: 3 },
+        { id: 'shoulder_mob', name: '肩部灵活性', unit: '分', precision: 0, value: 2, date: '2025-6-8', color: '#f97316', min: 0, max: 3 },
+        { id: 'leg_raise', name: '主动直腿上抬', unit: '分', precision: 0, value: 2, date: '2025-6-7', color: '#a855f7', min: 0, max: 3 },
+        { id: 'pushup', name: '躯干稳定性俯卧撑', unit: '分', precision: 0, value: 3, date: '2025-6-7', color: '#06b6d4', min: 0, max: 3 },
+        { id: 'rotation', name: '旋转稳定性', unit: '分', precision: 0, value: 2, date: '2025-6-6', color: '#ec4899', min: 0, max: 3 },
+        { id: 'fms_total', name: 'FMS总分', unit: '分', precision: 0, value: 16, date: '2025-6-6', color: '#84cc16', min: 0, max: 21 },
+      ],
+      fitness: [
+        { id: 'grip', name: '握力', unit: 'kg', precision: 1, value: 35.5, date: '2025-6-9', color: '#0ea5e9' },
+        { id: 'back_strength', name: '背力', unit: 'kg', precision: 1, value: 85.5, date: '2025-6-9', color: '#22c55e' },
+        { id: 'sit_reach', name: '坐位体前屈', unit: 'cm', precision: 1, value: 12.5, date: '2025-6-9', color: '#eab308' },
+        { id: 'balance', name: '闭眼单脚站立', unit: '秒', precision: 0, value: 45, date: '2025-6-8', color: '#f97316' },
+        { id: 'reaction', name: '反应时', unit: '秒', precision: 2, value: 0.35, date: '2025-6-8', color: '#a855f7' },
+        { id: 'vertical_jump', name: '纵跳', unit: 'cm', precision: 1, value: 45.5, date: '2025-6-7', color: '#06b6d4' },
+        { id: 'pushups', name: '俯卧撑', unit: '次', precision: 0, value: 25, date: '2025-6-7', color: '#ec4899' },
+        { id: 'sit_ups', name: '仰卧起坐', unit: '次', precision: 0, value: 35, date: '2025-6-6', color: '#84cc16' },
+      ],
+    };
+
+    // 模拟趋势数据（按时间范围生成）
+    function genTrendData(metrics, start, end) {
+      const out = {};
+      if (!metrics.length) return { labels: [], data: out, metrics: [] };
+
+      const startMs = new Date(start).getTime();
+      const endMs = new Date(end).getTime();
+      const dayMs = 24 * 60 * 60 * 1000;
+      let t = startMs;
+      const labels = [];
+
+      while (t <= endMs) {
+        const d = new Date(t);
+        const y = d.getFullYear(), m = String(d.getMonth() + 1).padStart(2, '0'), day = String(d.getDate()).padStart(2, '0');
+        const h = String(d.getHours()).padStart(2, '0'), min = String(d.getMinutes()).padStart(2, '0'), s = String(d.getSeconds()).padStart(2, '0');
+        labels.push(`${y}/${m}/${day} ${h}:${min}:${s}`);
+        t += dayMs;
+      }
+
+      metrics.forEach(m => {
+        const base = m.value;
+        const p = m.precision ?? 1;
+        const lo = m.min != null ? m.min : -Infinity;
+        const hi = m.max != null ? m.max : Infinity;
+        out[m.id] = labels.map((_, i) => {
+          if (Math.random() < 0.1) return null;
+          const noise = (Math.random() - 0.5) * 2;
+          const trend = i * 0.05;
+          let v = base + noise + trend;
+          v = Math.max(lo, Math.min(hi, v));
+          if (p === 0) return Math.round(v);
+          const f = Math.pow(10, p);
+          return Math.round(v * f) / f;
+        });
+      });
+
+      return { labels, data: out, metrics };
+    }
+
+    function genDualAxisDemoData(metrics, start, end) {
+      const base = genTrendData(metrics, start, end);
+      if (!base.labels.length || base.metrics.length < 2) return base;
+      const startMs = new Date(start).getTime();
+      const endMs = new Date(end).getTime();
+      const n = base.labels.length;
+      const t0 = startMs;
+      const span = Math.max(1, endMs - t0);
+      base.metrics.forEach((m, idx) => {
+        const arr = base.data[m.id];
+        if (!arr) return;
+        const id = m.id;
+        const p = m.precision ?? 1;
+        const round = (v) => p === 0 ? Math.round(v) : Math.round(v * Math.pow(10, p)) / Math.pow(10, p);
+        if (id === 'weight') {
+          for (let i = 0; i < n; i++) {
+            const k = (new Date(base.labels[i]).getTime() - t0) / span;
+            arr[i] = round(60 + k * 10);
+          }
+        } else if (id === 'lean_mass' || id === 'muscle' || id === 'skeletal_muscle') {
+          for (let i = 0; i < n; i++) {
+            const k = (new Date(base.labels[i]).getTime() - t0) / span;
+            arr[i] = round(52 + k * 2 + (idx % 3) * 0.2);
+          }
+        } else if (id === 'protein' || id === 'body_fat_kg' || id === 'subcutaneous_fat') {
+          for (let i = 0; i < n; i++) {
+            const k = (new Date(base.labels[i]).getTime() - t0) / span;
+            arr[i] = round(9 + k * 2);
+          }
+        } else if (id === 'mineral') {
+          for (let i = 0; i < n; i++) {
+            const k = (new Date(base.labels[i]).getTime() - t0) / span;
+            arr[i] = round(2.8 + k * 0.4);
+          }
+        } else if (id === 'water') {
+          for (let i = 0; i < n; i++) {
+            const k = (new Date(base.labels[i]).getTime() - t0) / span;
+            arr[i] = round(38 + k * 1);
+          }
+        }
+      });
+      return base;
+    }
+
+    function groupMetricsByUnit(metrics) {
+      const map = new Map();
+      metrics.forEach(m => {
+        const key = m.unit != null && m.unit !== '' ? m.unit : '__none__';
+        if (!map.has(key)) map.set(key, []);
+        map.get(key).push(m);
+      });
+      return map;
+    }
+
+    let currentType = 'body_composition';
+    let selectedIds = new Set();
+    let chartInstances = [];
+    let allChartData = null;
+    const MAX_EXPORT_ROWS = 500;
+
+    function getFilteredMetrics() {
+      const list = MOCK_METRICS[currentType] || [];
+      return list;
+    }
+
+    function updateBatchExportUI() {
+      const list = getFilteredMetrics();
+      const count = selectedIds.size;
+      const countEl = document.getElementById('batchExportCount');
+      const selectAll = document.getElementById('reportSelectAll');
+      if (countEl) countEl.textContent = count > 0 ? ' (' + count + ')' : '';
+      if (selectAll) {
+        selectAll.checked = list.length > 0 && list.every(m => selectedIds.has(m.id));
+        selectAll.indeterminate = list.length > 0 && selectedIds.size > 0 && selectedIds.size < list.length;
+      }
+    }
+
+    function buildExportRows(metrics, start, end) {
+      if (!metrics.length || !start || !end) return { headers: [], rows: [] };
+      const { labels, data, metrics: ms } = genTrendData(metrics, start, end);
+      if (!labels.length) return { headers: ['日期'], rows: [] };
+      const headers = ['日期'].concat(ms.map(m => m.unit ? m.name + '(' + m.unit + ')' : m.name));
+      const rows = labels.map((label, i) => {
+        const row = [label];
+        ms.forEach(m => {
+          const v = data[m.id] && data[m.id][i];
+          row.push(v != null ? formatValue(m, v) : '—');
+        });
+        return row;
+      });
+      return { headers, rows };
+    }
+
+    function downloadCSV(headers, rows, filename) {
+      const BOM = '\uFEFF';
+      const allRows = [headers].concat(rows);
+      const csv = allRows.map(row => row.map(cell => {
+        const s = String(cell == null ? '' : cell);
+        if (/[",\r\n]/.test(s)) return '"' + s.replace(/"/g, '""') + '"';
+        return s;
+      }).join(',')).join('\r\n');
+      const blob = new Blob([BOM + csv], { type: 'text/csv;charset=utf-8' });
+      const a = document.createElement('a');
+      a.href = URL.createObjectURL(blob);
+      a.download = filename;
+      a.click();
+      URL.revokeObjectURL(a.href);
+    }
+
+    function downloadExcel(headers, rows, filename) {
+      if (typeof XLSX === 'undefined') {
+        downloadCSV(headers, rows, filename.replace(/\.xlsx$/i, '.csv'));
+        return;
+      }
+      const allRows = [headers].concat(rows);
+      const ws = XLSX.utils.aoa_to_sheet(allRows);
+      const wb = XLSX.utils.book_new();
+      XLSX.utils.book_append_sheet(wb, ws, '身体指标数据');
+      XLSX.writeFile(wb, filename);
+    }
+
+    function doExport(format) {
+      const list = getFilteredMetrics();
+      const metrics = list.filter(m => selectedIds.has(m.id));
+      const start = document.getElementById('startDate').value;
+      const end = document.getElementById('endDate').value;
+
+      if (!metrics.length) {
+        alert('请至少选择 1 个指标后再导出。');
+        return;
+      }
+      if (!start || !end) {
+        alert('请选择时间范围后再导出。');
+        return;
+      }
+
+      let { headers, rows } = buildExportRows(metrics, start, end);
+      if (!rows.length) {
+        alert('当前筛选无数据可导出。');
+        return;
+      }
+      if (rows.length > MAX_EXPORT_ROWS) {
+        alert('单次最多导出 ' + MAX_EXPORT_ROWS + ' 条数据，请缩小时间范围。');
+        return;
+      }
+
+      const ts = new Date().toISOString().slice(0, 10).replace(/-/g, '');
+      const ext = format === 'excel' ? 'xlsx' : 'csv';
+      const filename = '身体指标数据_' + ts + '_' + rows.length + '条.' + ext;
+
+      const btn = document.getElementById('btnBatchExport');
+      if (btn) { btn.disabled = true; btn.innerHTML = '<span>导出中…</span>'; }
+      setTimeout(() => {
+        if (format === 'excel') downloadExcel(headers, rows, filename);
+        else downloadCSV(headers, rows, filename);
+        if (btn) {
+          btn.disabled = false;
+          btn.innerHTML = '<span>批量导出</span><span class="batch-export-count" id="batchExportCount"></span><span class="batch-export-arrow">▼</span>';
+          updateBatchExportUI();
+        }
+        closeBatchExportDropdown();
+      }, 100);
+    }
+
+    function closeBatchExportDropdown() {
+      const dd = document.getElementById('batchExportDropdown');
+      const btn = document.getElementById('btnBatchExport');
+      if (dd) dd.hidden = true;
+      if (btn) btn.setAttribute('aria-expanded', 'false');
+    }
+
+    function openBatchExportDropdown() {
+      const dd = document.getElementById('batchExportDropdown');
+      const btn = document.getElementById('btnBatchExport');
+      if (dd) dd.hidden = false;
+      if (btn) btn.setAttribute('aria-expanded', 'true');
+    }
+
+    function setDefaultDates() {
+      applyDatePreset('1m');
+    }
+
+    function applyDatePreset(range) {
+      const end = new Date();
+      const start = new Date();
+      if (range === '1w') {
+        start.setDate(start.getDate() - 6);
+      } else if (range === '1m') {
+        start.setMonth(start.getMonth() - 1);
+      } else if (range === '1y') {
+        start.setFullYear(start.getFullYear() - 1);
+      }
+      document.getElementById('startDate').value = start.toISOString().slice(0, 10);
+      document.getElementById('endDate').value = end.toISOString().slice(0, 10);
+      document.querySelectorAll('.date-preset-btn').forEach(btn => {
+        btn.classList.toggle('active', btn.dataset.range === range);
+      });
+    }
+
+    function clearDatePresetActive() {
+      document.querySelectorAll('.date-preset-btn').forEach(btn => btn.classList.remove('active'));
+    }
+
+    function renderCards() {
+      const list = MOCK_METRICS[currentType] || [];
+      const grid = document.getElementById('cardsGrid');
+      grid.innerHTML = list.map(m => {
+        const isSelected = selectedIds.has(m.id);
+        const isLatest = list.length && list[0].id === m.id;
+        const nameLabel = m.unit ? `${m.name} (${m.unit})` : m.name;
+        const displayValue = formatValueWithUnit(m, m.value);
+        return `
+          <div class="card ${isSelected ? 'selected' : ''} ${isLatest ? 'latest' : ''}" data-id="${m.id}">
+            <div class="name">${nameLabel}</div>
+            <div class="value">${displayValue}</div>
+            <div class="date">${m.date}</div>
+          </div>
+        `;
+      }).join('');
+
+      grid.querySelectorAll('.card').forEach(el => {
+        el.addEventListener('click', () => {
+          const id = el.dataset.id;
+          if (selectedIds.has(id)) {
+            selectedIds.delete(id);
+          } else {
+            selectedIds.add(id);
+          }
+          renderCards();
+          renderLegend();
+          updateChart();
+          updateBatchExportUI();
+        });
+      });
+    }
+
+    function renderLegend() {
+      const list = MOCK_METRICS[currentType] || [];
+      const mapped = list.filter(m => selectedIds.has(m.id));
+      const wrap = document.getElementById('legendList');
+      wrap.innerHTML = mapped.map(m => `
+        <div class="legend-item active">
+          <span class="dot" style="background:${m.color}"></span>
+          <span>${m.name}</span>
+        </div>
+      `).join('');
+    }
+
+    function updateChart() {
+      const list = MOCK_METRICS[currentType] || [];
+      const filtered = list.filter(m => selectedIds.has(m.id));
+      const start = document.getElementById('startDate').value;
+      const end = document.getElementById('endDate').value;
+      const row = document.getElementById('chartsRow');
+
+      chartInstances.forEach(c => c.destroy());
+      chartInstances = [];
+      row.innerHTML = '';
+
+      if (!filtered.length || !start || !end) {
+        row.innerHTML = `
+          <div class="chart-wrap">
+            <div class="chart-placeholder">【暂无数据】</div>
+          </div>
+        `;
+        return;
+      }
+
+      const groups = groupMetricsByUnit(filtered);
+      const groupsArr = [];
+      groups.forEach((metrics, unitKey) => {
+        const { labels, data, metrics: ms } = (currentType === 'body_composition' && unitKey === 'kg') ? genDualAxisDemoData(metrics, start, end) : genTrendData(metrics, start, end);
+        groupsArr.push({ unitKey, metrics: ms, data, labels });
+      });
+      allChartData = {
+        labels: groupsArr[0] ? groupsArr[0].labels : [],
+        groups: groupsArr.map(g => ({ metrics: g.metrics, data: g.data })),
+      };
+
+      const ttEl = document.getElementById('customTooltip');
+      const GAP = 14;
+      function externalTooltip(ctx) {
+        if (!ctx.tooltip || ctx.tooltip.opacity === 0) {
+          ttEl.classList.remove('visible', 'tt-below');
+          return;
+        }
+        const i = ctx.tooltip.dataIndex;
+        if (!allChartData || i < 0 || i >= allChartData.labels.length) {
+          ttEl.classList.remove('visible', 'tt-below');
+          return;
+        }
+        const time = allChartData.labels[i];
+        let rows = '';
+        allChartData.groups.forEach(g => {
+          g.metrics.forEach(m => {
+            const v = g.data[m.id] && g.data[m.id][i];
+            const str = formatValueWithUnit(m, v);
+            rows += '<div class="tt-row"><span class="tt-dot" style="background:' + m.color + '"></span><span class="tt-name">' + m.name + '</span><span class="tt-value">' + str + '</span></div>';
+          });
+        });
+        ttEl.innerHTML = '<div class="tt-time">' + time + '</div><div class="tt-body">' + rows + '</div>';
+        ttEl.classList.remove('tt-below');
+        ttEl.classList.add('visible');
+        const rect = ctx.chart.canvas.getBoundingClientRect();
+        const caretX = rect.left + ctx.tooltip.caretX;
+        const caretY = rect.top + ctx.tooltip.caretY;
+        const ttRect = ttEl.getBoundingClientRect();
+        const padding = 12;
+        let x = Math.max(padding + ttRect.width / 2, Math.min(window.innerWidth - padding - ttRect.width / 2, caretX));
+        let y;
+        const aboveY = caretY - ttRect.height - GAP;
+        if (aboveY >= padding) {
+          y = aboveY;
+        } else {
+          y = caretY + GAP;
+          ttEl.classList.add('tt-below');
+        }
+        if (y < padding) y = padding;
+        if (y + ttRect.height > window.innerHeight - padding) y = window.innerHeight - padding - ttRect.height;
+        ttEl.style.left = x + 'px';
+        ttEl.style.top = y + 'px';
+      }
+
+      const startYear = start ? new Date(start).getFullYear() : new Date().getFullYear();
+      const endYear = end ? new Date(end).getFullYear() : new Date().getFullYear();
+      const sameYear = startYear === endYear;
+      const startMs = new Date(start).getTime();
+      const endMs = new Date(end).getTime();
+      const daysCount = Math.round((endMs - startMs) / (24 * 60 * 60 * 1000)) + 1;
+      const isLongRange = daysCount > 90;
+      const zoomHintEl = document.getElementById('chartZoomHint');
+      if (zoomHintEl) zoomHintEl.style.display = isLongRange ? 'flex' : 'none';
+
+      groupsArr.forEach(({ unitKey, metrics: ms, data, labels }) => {
+        const unitLabel = unitKey === '__none__' ? '无单位' : unitKey;
+        const ranges = ms.map(m => {
+          const arr = data[m.id];
+          if (!arr || !arr.length) return { min: 0, max: 0, range: 0 };
+          const vals = arr.filter(v => v != null);
+          if (!vals.length) return { min: 0, max: 0, range: 0 };
+          const min = Math.min(...vals);
+          const max = Math.max(...vals);
+          return { min, max, range: max - min || 1 };
+        });
+        const maxRange = Math.max(...ranges.map(r => r.range));
+        const minRange = Math.min(...ranges.filter(r => r.range > 0).map(r => r.range)) || 1;
+        const useDualAxis = ms.length >= 2 && maxRange / minRange > 3;
+        const threshold = Math.sqrt(maxRange * minRange);
+        const yAxisId = useDualAxis ? ms.map((m, i) => ranges[i].range >= threshold ? 'y' : 'y1') : ms.map(() => 'y');
+
+        const wrap = document.createElement('div');
+        wrap.className = 'chart-group';
+        wrap.innerHTML = `
+          <div class="chart-group-title">${unitLabel}${useDualAxis ? ' <span class="chart-axis-hint">（左/右轴）</span>' : ''}</div>
+          <div class="chart-wrap"><canvas height="280"></canvas></div>
+        `;
+        row.appendChild(wrap);
+        const canvas = wrap.querySelector('canvas');
+        const ctx = canvas.getContext('2d');
+
+        const datasets = ms.map((m, i) => ({
+          label: m.name,
+          data: data[m.id],
+          borderColor: m.color,
+          backgroundColor: m.color + '20',
+          fill: false,
+          tension: 0.3,
+          pointRadius: 3,
+          pointHoverRadius: 6,
+          yAxisID: yAxisId[i],
+          spanGaps: false,
+        }));
+
+        const scaleY = { grid: { color: 'rgba(0,0,0,.05)' }, beginAtZero: false, position: 'left', ticks: { font: { size: 12 }, color: 'rgba(0,0,0,0.7)' } };
+        const scaleY1 = useDualAxis ? { grid: { color: 'rgba(0,0,0,.05)' }, beginAtZero: false, position: 'right', ticks: { font: { size: 12 }, color: 'rgba(0,0,0,0.7)' } } : null;
+
+        const zoomPanOptions = isLongRange ? {
+          zoom: {
+            zoom: {
+              wheel: { enabled: true },
+              pinch: { enabled: true },
+              drag: { enabled: true },
+              mode: 'x',
+            },
+            pan: { enabled: true, mode: 'x' },
+            limits: { x: { minRange: 7 } },
+          },
+        } : {};
+
+        const ch = new Chart(ctx, {
+          type: 'line',
+          data: { labels, datasets },
+          options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            interaction: { intersect: false, mode: 'index' },
+            plugins: {
+              legend: { display: false },
+              tooltip: {
+                enabled: false,
+                external: externalTooltip,
+              },
+              ...zoomPanOptions,
+            },
+            scales: {
+              x: {
+                grid: { color: 'rgba(0,0,0,.05)' },
+                ticks: {
+                  maxTicksLimit: sameYear ? 8 : 10,
+                  callback: (_, i) => {
+                    const d = new Date(labels[i]);
+                    if (sameYear) return (d.getMonth() + 1) + '/' + d.getDate();
+                    return d.getFullYear() + '/' + (d.getMonth() + 1) + '/' + d.getDate();
+                  },
+                },
+              },
+              y: scaleY,
+              ...(scaleY1 ? { y1: scaleY1 } : {}),
+            },
+          },
+          plugins: [{
+            id: 'lastPointLabel',
+            afterDatasetsDraw(chart) {
+              const ctx = chart.ctx;
+              chart.data.datasets.forEach((ds, i) => {
+                const meta = chart.getDatasetMeta(i);
+                if (!meta.data.length) return;
+                const arr = ds.data;
+                let lastIdx = arr.length - 1;
+                while (lastIdx >= 0 && (arr[lastIdx] == null || arr[lastIdx] === undefined)) lastIdx--;
+                if (lastIdx < 0) return;
+                const last = meta.data[lastIdx];
+                const val = arr[lastIdx];
+                const m = ms.find(x => x.name === ds.label);
+                const unit = m && m.unit ? ' ' + m.unit : '';
+                const text = String(val) + unit;
+                ctx.save();
+                ctx.fillStyle = ds.borderColor;
+                ctx.font = '12px ' + getComputedStyle(document.body).fontFamily;
+                ctx.textAlign = 'right';
+                const left = chart.chartArea?.left ?? 0;
+                const rightEdge = chart.chartArea?.right ?? chart.width;
+                const rightMargin = (chart.options?.scales?.y1 != null) ? 46 : 4;
+                const x = Math.max(left + 4, Math.min(last.x - 6, rightEdge - rightMargin));
+                ctx.fillText(text, x, last.y);
+                ctx.restore();
+              });
+            },
+          }],
+        });
+        chartInstances.push(ch);
+      });
+    }
+
+    function defaultSelectedIds() {
+      const list = MOCK_METRICS[currentType] || [];
+      return new Set(list.slice(0, 7).map(m => m.id));
+    }
+
+    function init() {
+      setDefaultDates();
+      selectedIds = defaultSelectedIds();
+      renderCards();
+      renderLegend();
+      updateChart();
+      updateBatchExportUI();
+
+      document.querySelectorAll('.tab').forEach(tab => {
+        tab.addEventListener('click', () => {
+          document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+          tab.classList.add('active');
+          currentType = tab.dataset.type;
+          selectedIds = defaultSelectedIds();
+          renderCards();
+          renderLegend();
+          updateChart();
+          updateBatchExportUI();
+        });
+      });
+
+      document.getElementById('startDate').addEventListener('change', () => { clearDatePresetActive(); updateChart(); updateBatchExportUI(); });
+      document.getElementById('endDate').addEventListener('change', () => { clearDatePresetActive(); updateChart(); updateBatchExportUI(); });
+      document.querySelectorAll('.date-preset-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+          applyDatePreset(btn.dataset.range);
+          updateChart();
+          updateBatchExportUI();
+        });
+      });
+
+      document.getElementById('btnResetZoom').addEventListener('click', () => {
+        chartInstances.forEach(c => { if (c.resetZoom) c.resetZoom(); });
+      });
+
+      // 批量导出：全选本页
+      const selectAll = document.getElementById('reportSelectAll');
+      if (selectAll) {
+        selectAll.addEventListener('change', function() {
+          const list = getFilteredMetrics();
+          if (this.checked) list.forEach(m => selectedIds.add(m.id));
+          else list.forEach(m => selectedIds.delete(m.id));
+          renderCards();
+          renderLegend();
+          updateChart();
+          updateBatchExportUI();
+        });
+      }
+
+      // 批量导出：下拉 toggle
+      const btn = document.getElementById('btnBatchExport');
+      const dropdown = document.getElementById('batchExportDropdown');
+      if (btn) {
+        btn.addEventListener('click', (e) => {
+          e.stopPropagation();
+          if (dropdown.hidden) openBatchExportDropdown();
+          else closeBatchExportDropdown();
+        });
+      }
+      document.addEventListener('click', (e) => {
+        if (dropdown && btn && !dropdown.contains(e.target) && !btn.contains(e.target)) closeBatchExportDropdown();
+      });
+      if (dropdown) dropdown.addEventListener('click', (e) => e.stopPropagation());
+
+      // 批量导出：选项点击
+      dropdown && dropdown.querySelectorAll('.batch-export-option').forEach(opt => {
+        opt.addEventListener('click', (e) => {
+          e.preventDefault();
+          const fmt = opt.dataset.export;
+          if (fmt === 'excel' || fmt === 'csv') doExport(fmt);
+        });
+      });
+    }
+
+    init();
+  </script>
+</body>
+</html>
