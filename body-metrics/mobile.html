@@ -26,7 +26,7 @@
       --safe-bottom: env(safe-area-inset-bottom, 0);
     }
     * { box-sizing: border-box; margin: 0; padding: 0; }
-    html { -webkit-tap-highlight-color: transparent; }
+    html { -webkit-tap-highlight-color: transparent; overflow-x: hidden; }
     body {
       font-family: var(--font-sans);
       background: var(--bg);
@@ -35,6 +35,7 @@
       min-height: 100dvh;
       line-height: 1.5;
       padding-bottom: var(--safe-bottom);
+      overflow-x: hidden;
     }
 
     .header {
@@ -65,15 +66,35 @@
     }
     .back-btn:active { background: var(--primary-light); }
     .header-title {
+      flex: 1;
       font-size: 18px;
       font-weight: 600;
       color: var(--text);
     }
+    .header-settings-btn {
+      width: 40px;
+      height: 40px;
+      margin: -8px -8px -8px 0;
+      padding: 0;
+      border: none;
+      background: transparent;
+      color: var(--text-muted);
+      font-size: 20px;
+      cursor: pointer;
+      border-radius: var(--radius-sm);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      -webkit-tap-highlight-color: transparent;
+    }
+    .header-settings-btn:active { background: var(--primary-light); color: var(--primary); }
 
     .main {
       padding: 16px;
       max-width: 480px;
       margin: 0 auto;
+      overflow-x: hidden;
+      width: 100%;
     }
 
     .tabs-wrap {
@@ -109,12 +130,100 @@
     .tab:active { background: var(--bg); }
     .tab.active { background: var(--primary); color: #fff; }
 
+    .section-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      margin-bottom: 4px;
+    }
     .section-title {
       font-size: 13px;
       color: var(--text-muted);
-      margin-bottom: 12px;
+      margin-bottom: 0;
       font-weight: 500;
     }
+    .btn-set-metrics {
+      padding: 6px 12px;
+      border: 1px solid var(--primary);
+      border-radius: var(--radius-sm);
+      background: var(--card-bg);
+      color: var(--primary);
+      font-size: 12px;
+      font-weight: 500;
+      cursor: pointer;
+      font-family: inherit;
+      -webkit-tap-highlight-color: transparent;
+    }
+    .btn-set-metrics:active { background: var(--primary-light); }
+    .stats-section-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      margin-bottom: 12px;
+    }
+    .stats-section-head h2 { margin-bottom: 0; }
+    .btn-help {
+      width: 28px;
+      height: 28px;
+      border: 1px solid var(--border);
+      border-radius: 50%;
+      background: var(--card-bg);
+      color: var(--text-muted);
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      -webkit-tap-highlight-color: transparent;
+    }
+    .btn-help:active { background: var(--bg); color: var(--primary); }
+    .device-filters-sheet { flex-direction: column; align-items: flex-start; gap: 14px; margin-bottom: 16px; }
+    .device-priority-block { display: none; }
+    .device-priority-block.visible { display: block; }
+    .device-priority-hint { font-size: 12px; color: var(--text-muted); line-height: 1.5; margin-bottom: 12px; }
+    .device-priority-list { display: flex; flex-direction: column; gap: 12px; }
+    .device-priority-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 12px;
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+    }
+    .device-priority-item .rank-label { font-size: 12px; color: var(--text-muted); min-width: 48px; }
+    .device-priority-item .device-name { font-size: 14px; font-weight: 600; color: var(--text); flex: 1; }
+    .device-priority-item .btn-move-up {
+      padding: 6px 14px;
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--primary);
+      background: transparent;
+      border: 1px solid var(--primary);
+      border-radius: var(--radius-sm);
+      cursor: pointer;
+      -webkit-tap-highlight-color: transparent;
+    }
+    .device-priority-item .btn-move-up:disabled { opacity: 0.4; cursor: not-allowed; }
+    .device-priority-item .btn-move-up:active:not(:disabled) { background: var(--primary-light); }
+    .device-filters {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      align-items: center;
+    }
+    .device-check {
+      font-size: 13px;
+      color: var(--text);
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .device-check input { width: 16px; height: 16px; }
     .cards-wrap {
       background: var(--card-bg);
       border-radius: var(--radius);
@@ -122,6 +231,7 @@
       margin-bottom: 20px;
       box-shadow: var(--shadow);
       max-height: 280px;
+      overflow-x: hidden;
       overflow-y: auto;
       -webkit-overflow-scrolling: touch;
     }
@@ -129,9 +239,11 @@
       display: grid;
       grid-template-columns: repeat(4, 1fr);
       gap: 6px;
+      min-width: 0;
     }
     .card {
       min-height: 78px;
+      min-width: 0;
       background: var(--bg);
       border: 1px solid var(--border);
       border-radius: 6px;
@@ -141,6 +253,7 @@
       display: flex;
       flex-direction: column;
       justify-content: space-between;
+      position: relative;
       -webkit-tap-highlight-color: transparent;
     }
     .card:active { opacity: 0.9; }
@@ -157,6 +270,7 @@
       overflow: hidden;
       text-overflow: ellipsis;
       white-space: nowrap;
+      padding-right: 26px;
     }
     .card .value {
       font-size: 15px;
@@ -171,6 +285,30 @@
       font-size: 10px;
       color: var(--text-muted);
     }
+    .card .card-device-wrap {
+      position: absolute;
+      top: 8px;
+      right: 8px;
+      margin: 0;
+      min-height: 0;
+    }
+    .card .card-source-btn {
+      width: 18px;
+      height: 18px;
+      border: 1px solid var(--border);
+      border-radius: 50%;
+      background: var(--card-bg);
+      color: var(--text-muted);
+      font-size: 11px;
+      font-weight: 600;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0;
+      -webkit-tap-highlight-color: transparent;
+    }
+    .card .card-source-btn:active { background: var(--primary-light); color: var(--primary); }
     @media (max-width: 360px) {
       .cards-grid { grid-template-columns: repeat(3, 1fr); }
     }
@@ -281,6 +419,42 @@
     .bottom-sheet-actions button { flex: 1; padding: 12px; border-radius: var(--radius-sm); font-size: 14px; font-weight: 600; font-family: inherit; cursor: pointer; -webkit-tap-highlight-color: transparent; }
     .bottom-sheet-actions .btn-cancel { border: 1px solid var(--border); background: var(--bg); color: var(--text); }
     .bottom-sheet-actions .btn-confirm { border: none; background: var(--primary); color: #fff; }
+    .sheet-hint { font-size: 12px; color: var(--text-muted); margin: -8px 0 12px; }
+    .set-metrics-panel .set-metrics-list {
+      max-height: 50vh;
+      overflow-y: auto;
+      -webkit-overflow-scrolling: touch;
+      margin-bottom: 16px;
+    }
+    .set-metrics-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 12px 0;
+      border-bottom: 1px solid var(--border);
+      cursor: pointer;
+      -webkit-tap-highlight-color: transparent;
+    }
+    .set-metrics-item:last-child { border-bottom: none; }
+    .set-metrics-item .dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }
+    .set-metrics-item .name { flex: 1; font-size: 14px; color: var(--text); }
+    .set-metrics-item .unit { font-size: 12px; color: var(--text-muted); }
+    .set-metrics-item .check { width: 20px; height: 20px; flex-shrink: 0; }
+    .settings-panel .settings-block { margin-bottom: 20px; }
+    .settings-panel .settings-block:last-of-type { margin-bottom: 0; }
+    .settings-block-title { font-size: 14px; font-weight: 600; color: var(--text); margin-bottom: 8px; }
+    .settings-panel .set-metrics-list { max-height: 36vh; overflow-y: auto; -webkit-overflow-scrolling: touch; margin-bottom: 8px; }
+    .help-panel .help-content {
+      max-height: 55vh;
+      overflow-y: auto;
+      -webkit-overflow-scrolling: touch;
+      font-size: 13px;
+      line-height: 1.7;
+      color: var(--text);
+      margin-bottom: 16px;
+    }
+    .help-panel .help-content ol { margin: 0; padding-left: 20px; }
+    .help-panel .help-content li { margin-bottom: 10px; }
     .legend-list {
       display: flex;
       flex-wrap: wrap;
@@ -340,7 +514,27 @@
       opacity: 1;
       visibility: visible;
       transform: translate(-50%, 0);
+      pointer-events: auto;
     }
+    #customTooltip .tt-footer { margin-top: 10px; padding-top: 8px; border-top: 1px solid var(--border); }
+    #customTooltip .tt-detail-trigger {
+      font-size: 12px;
+      color: var(--primary);
+      cursor: pointer;
+      -webkit-tap-highlight-color: transparent;
+    }
+    .tooltip-detail-body { font-size: 13px; margin-bottom: 16px; }
+    .tooltip-detail-body .detail-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 10px 0;
+      border-bottom: 1px solid var(--border);
+    }
+    .tooltip-detail-body .detail-row:last-child { border-bottom: none; }
+    .tooltip-detail-body .detail-name { color: var(--text); }
+    .tooltip-detail-body .detail-value { font-weight: 600; color: var(--text); }
+    .tooltip-detail-body .detail-device { font-size: 12px; color: var(--text-muted); margin-left: 8px; }
     #customTooltip .tt-time {
       font-weight: 600;
       margin-bottom: 10px;
@@ -367,6 +561,7 @@
     #customTooltip .tt-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
     #customTooltip .tt-name { color: var(--text-muted); font-size: 12px; flex: 1; min-width: 0; }
     #customTooltip .tt-value { font-weight: 600; color: var(--text); font-size: 13px; flex-shrink: 0; }
+    #customTooltip .tt-device { font-weight: 400; color: var(--text-muted); font-size: 11px; }
     #customTooltip::after {
       content: '';
       position: absolute;
@@ -392,6 +587,7 @@
   <header class="header">
     <a href="#" class="back-btn" aria-label="返回" onclick="history.back();return false">‹</a>
     <h1 class="header-title">身体指标</h1>
+    <button type="button" class="header-settings-btn" id="btnSettings" aria-label="设置">⚙</button>
   </header>
 
   <main class="main">
@@ -406,13 +602,16 @@
       </div>
     </div>
 
-    <p class="section-title">指标概览 · 点击卡片选中/取消，用于趋势对比</p>
+    <p class="section-title">指标概览</p>
     <div class="cards-wrap">
       <div class="cards-grid" id="cardsGrid"></div>
     </div>
 
     <section class="stats-section">
-      <h2>数据统计</h2>
+      <div class="stats-section-head">
+        <h2>数据统计</h2>
+        <button type="button" class="btn-help" id="btnHelp" aria-label="帮助">?</button>
+      </div>
       <div class="stats-header">
         <div class="date-picker-wrap">
           <input type="date" id="startDate" value="" style="position:absolute;left:-9999px;">
@@ -445,6 +644,50 @@
       <div class="bottom-sheet-actions">
         <button type="button" class="btn-cancel" id="sheetCancel">取消</button>
         <button type="button" class="btn-confirm" id="sheetConfirm">确定</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="bottom-sheet-backdrop" id="settingsSheet">
+    <div class="bottom-sheet-panel settings-panel">
+      <h3>设置</h3>
+      <div class="settings-block">
+        <h4 class="settings-block-title">设置显示项</h4>
+        <div class="set-metrics-list" id="setMetricsList"></div>
+      </div>
+      <div class="settings-block">
+        <h4 class="settings-block-title">数据来源设备</h4>
+        <p class="sheet-hint">选择要统计的设备类型，支持多选/全选</p>
+        <div class="device-filters device-filters-sheet" id="deviceFilters"></div>
+      </div>
+      <div class="settings-block device-priority-block" id="devicePriorityBlock">
+        <h4 class="settings-block-title">身体指标数据排序</h4>
+        <p class="sheet-hint device-priority-hint">*1. 用户管理-身体指标中的数据将根据设置的设备类型排序进行取值，示例：用户同一天在多个设备类型测了体脂率数据，则取排序在前面的设备上测出来的体脂率数据。<br>*2. 仅显示已勾选的设备类型；若勾选设备类型少于 2 个则不显示本设置。</p>
+        <div class="device-priority-list" id="devicePriorityList"></div>
+      </div>
+      <div class="bottom-sheet-actions">
+        <button type="button" class="btn-cancel" id="settingsCancel">取消</button>
+        <button type="button" class="btn-confirm" id="settingsConfirm">确定</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="bottom-sheet-backdrop" id="helpSheet">
+    <div class="bottom-sheet-panel help-panel">
+      <h3>数据对比显示规则</h3>
+      <div class="help-content" id="helpContent"></div>
+      <div class="bottom-sheet-actions">
+        <button type="button" class="btn-confirm" id="helpClose" style="flex:1">我知道了</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="bottom-sheet-backdrop" id="tooltipDetailSheet">
+    <div class="bottom-sheet-panel">
+      <h3 id="tooltipDetailTime">数据详情</h3>
+      <div class="tooltip-detail-body" id="tooltipDetailBody"></div>
+      <div class="bottom-sheet-actions">
+        <button type="button" class="btn-confirm" id="tooltipDetailClose" style="flex:1">关闭</button>
       </div>
     </div>
   </div>
@@ -537,11 +780,14 @@
         labels.push(y + '/' + m + '/' + day + ' ' + h + ':' + min + ':' + s);
         t += dayMs;
       }
+      const devices = ['VAPRO6', 'VDPRO3', 'VAPRO3', 'VDPRO2'];
+      const deviceSource = {};
       metrics.forEach(m => {
         const base = m.value;
         const p = m.precision ?? 1;
         const lo = m.min != null ? m.min : -Infinity;
         const hi = m.max != null ? m.max : Infinity;
+        deviceSource[m.id] = labels.map(() => devices[Math.floor(Math.random() * devices.length)]);
         out[m.id] = labels.map((_, i) => {
           if (Math.random() < 0.1) return null;
           const noise = (Math.random() - 0.5) * 2;
@@ -552,12 +798,13 @@
           return Math.round(v * Math.pow(10, p)) / Math.pow(10, p);
         });
       });
-      return { labels, data: out, metrics };
+      return { labels, data: out, metrics, deviceSource };
     }
 
     function genDualAxisDemoData(metrics, start, end) {
       const base = genTrendData(metrics, start, end);
       if (!base.labels.length || base.metrics.length < 2) return base;
+      const dayMs = 24 * 60 * 60 * 1000;
       const startMs = new Date(start).getTime();
       const endMs = new Date(end).getTime();
       const n = base.labels.length;
@@ -596,6 +843,13 @@
           }
         }
       });
+      const devices = ['VAPRO6', 'VDPRO3', 'VAPRO3', 'VDPRO2'];
+      if (!base.deviceSource) base.deviceSource = {};
+      base.metrics.forEach(m => {
+        if (!base.deviceSource[m.id] && base.data[m.id]) {
+          base.deviceSource[m.id] = base.labels.map(() => devices[Math.floor(Math.random() * devices.length)]);
+        }
+      });
       return base;
     }
 
@@ -609,8 +863,12 @@
       return map;
     }
 
+    const MAX_SELECTED_METRICS = 8;
+    const MOCK_DEVICE_TYPES = ['VAPRO6', 'VDPRO3', 'VAPRO3', 'VDPRO2', 'VAPRO5', 'VE260'];
     let currentType = 'body_composition';
     let selectedIds = new Set();
+    let selectedDeviceIds = new Set(MOCK_DEVICE_TYPES);
+    let devicePriorityOrder = [...MOCK_DEVICE_TYPES];
     let chartInstances = [];
     let allChartData = null;
 
@@ -650,23 +908,46 @@
 
     function renderCards() {
       const list = MOCK_METRICS[currentType] || [];
+      const devices = list.map((m, idx) => m.deviceModel || MOCK_DEVICE_TYPES[idx % MOCK_DEVICE_TYPES.length]);
+      const devicesSame = devices.length <= 1 || new Set(devices).size === 1;
       const grid = document.getElementById('cardsGrid');
-      grid.innerHTML = list.map(m => {
+      grid.innerHTML = list.map((m, idx) => {
         const isSelected = selectedIds.has(m.id);
         const isLatest = list.length && list[0].id === m.id;
         const nameLabel = m.unit ? m.name + ' (' + m.unit + ')' : m.name;
         const displayValue = formatValueWithUnit(m, m.value);
+        const deviceModel = devices[idx];
+        const showSourceBtn = !devicesSame;
+        const devicePart = showSourceBtn
+          ? '<div class="card-device-wrap"><button type="button" class="card-source-btn" data-name="' + m.name + '" data-value="' + displayValue.replace(/"/g, '&quot;') + '" data-device="' + deviceModel + '" aria-label="查看数据来源">?</button></div>'
+          : '<div class="card-device-wrap"></div>';
         return '<div class="card ' + (isSelected ? 'selected' : '') + (isLatest ? ' latest' : '') + '" data-id="' + m.id + '">' +
-          '<div class="name">' + nameLabel + '</div><div class="value">' + displayValue + '</div><div class="date">' + m.date + '</div></div>';
+          '<div class="name">' + nameLabel + '</div><div class="value">' + displayValue + '</div><div class="date">' + m.date + '</div>' + devicePart + '</div>';
       }).join('');
       grid.querySelectorAll('.card').forEach(el => {
-        el.addEventListener('click', () => {
+        el.addEventListener('click', (e) => {
+          if (e.target.closest('.card-source-btn')) return;
           const id = el.dataset.id;
-          if (selectedIds.has(id)) selectedIds.delete(id);
-          else selectedIds.add(id);
+          if (selectedIds.has(id)) {
+            selectedIds.delete(id);
+          } else {
+            if (selectedIds.size >= MAX_SELECTED_METRICS) return;
+            selectedIds.add(id);
+          }
           renderCards();
           renderLegend();
           updateChart();
+        });
+      });
+      grid.querySelectorAll('.card-source-btn').forEach(btn => {
+        btn.addEventListener('click', function(e) {
+          e.preventDefault();
+          e.stopPropagation();
+          const name = this.dataset.name;
+          const value = this.dataset.value;
+          const device = this.dataset.device || '—';
+          window._tooltipDetail = { time: '当前值', rows: [{ name, value, device }] };
+          openTooltipDetailSheet();
         });
       });
     }
@@ -699,32 +980,52 @@
       const groupsArr = [];
       groups.forEach((metrics, unitKey) => {
         const res = (currentType === 'body_composition' && unitKey === 'kg') ? genDualAxisDemoData(metrics, start, end) : genTrendData(metrics, start, end);
-        groupsArr.push({ unitKey, metrics: res.metrics, data: res.data, labels: res.labels });
+        groupsArr.push({ unitKey, metrics: res.metrics, data: res.data, labels: res.labels, deviceSource: res.deviceSource || {} });
       });
-      allChartData = { labels: groupsArr[0] ? groupsArr[0].labels : [], groups: groupsArr.map(g => ({ metrics: g.metrics, data: g.data })) };
+      allChartData = { labels: groupsArr[0] ? groupsArr[0].labels : [], groups: groupsArr.map(g => ({ metrics: g.metrics, data: g.data, deviceSource: g.deviceSource || {} })) };
 
       const ttEl = document.getElementById('customTooltip');
       const GAP = 14;
+      if (!ttEl.dataset.ttListeners) {
+        ttEl.dataset.ttListeners = '1';
+        ttEl.addEventListener('mouseenter', function() { clearTimeout(ttEl._ttHideTimeout); });
+        ttEl.addEventListener('mouseleave', function() { ttEl.classList.remove('visible', 'tt-below'); });
+      }
       function externalTooltip(ctx) {
         if (!ctx.tooltip || ctx.tooltip.opacity === 0) {
-          ttEl.classList.remove('visible', 'tt-below');
+          clearTimeout(ttEl._ttHideTimeout);
+          ttEl._ttHideTimeout = setTimeout(function() { ttEl.classList.remove('visible', 'tt-below'); }, 400);
           return;
         }
+        clearTimeout(ttEl._ttHideTimeout);
         const i = ctx.tooltip.dataIndex;
         if (!allChartData || i < 0 || i >= allChartData.labels.length) {
           ttEl.classList.remove('visible', 'tt-below');
           return;
         }
-        const time = allChartData.labels[i];
+        let time = (allChartData.labels[i] != null && String(allChartData.labels[i]) !== 'undefined') ? allChartData.labels[i] : null;
+        if (time == null && start) {
+          const d = new Date(start);
+          d.setDate(d.getDate() + i);
+          time = d.getFullYear() + '/' + (d.getMonth() + 1) + '/' + d.getDate();
+        }
+        if (time == null) time = '当日数据';
+        const detailRows = [];
         let rows = '';
         allChartData.groups.forEach(g => {
           g.metrics.forEach(m => {
             const v = g.data[m.id] && g.data[m.id][i];
             const str = formatValueWithUnit(m, v);
-            rows += '<div class="tt-row"><span class="tt-dot" style="background:' + m.color + '"></span><span class="tt-name">' + m.name + '</span><span class="tt-value">' + str + '</span></div>';
+            const device = (g.deviceSource && g.deviceSource[m.id] && g.deviceSource[m.id][i]) ? g.deviceSource[m.id][i] : '';
+            const deviceHtml = device ? ' <span class="tt-device">· ' + device + '</span>' : '';
+            rows += '<div class="tt-row"><span class="tt-dot" style="background:' + m.color + '"></span><span class="tt-name">' + m.name + '</span><span class="tt-value">' + str + deviceHtml + '</span></div>';
+            detailRows.push({ name: m.name, value: str, device: device || '—' });
           });
         });
-        ttEl.innerHTML = '<div class="tt-time">' + time + '</div><div class="tt-body">' + rows + '</div>';
+        window._tooltipDetail = { time, rows: detailRows };
+        ttEl.innerHTML = '<div class="tt-time">' + time + '</div><div class="tt-body">' + rows + '</div><div class="tt-footer"><span class="tt-detail-trigger" id="ttDetailTrigger">? 查看详细数据与设备来源</span></div>';
+        const trigger = document.getElementById('ttDetailTrigger');
+        if (trigger) trigger.onclick = function(e) { e.preventDefault(); openTooltipDetailSheet(); };
         ttEl.classList.remove('tt-below');
         ttEl.classList.add('visible');
         const rect = ctx.chart.canvas.getBoundingClientRect();
@@ -863,7 +1164,159 @@
 
     function defaultSelectedIds() {
       const list = MOCK_METRICS[currentType] || [];
-      return new Set(list.slice(0, 7).map(m => m.id));
+      return new Set(list.slice(0, MAX_SELECTED_METRICS).map(m => m.id));
+    }
+
+    function openSettingsSheet() {
+      const list = MOCK_METRICS[currentType] || [];
+      const container = document.getElementById('setMetricsList');
+      const selected = new Set(selectedIds);
+      container.innerHTML = list.map(m => {
+        const checked = selected.has(m.id);
+        return '<label class="set-metrics-item" data-id="' + m.id + '">' +
+          '<span class="dot" style="background:' + m.color + '"></span>' +
+          '<span class="name">' + m.name + '</span>' +
+          '<span class="unit">' + (m.unit ? m.unit : '') + '</span>' +
+          '<input type="checkbox" class="check" ' + (checked ? 'checked' : '') + ' onclick="event.stopPropagation()">' +
+          '</label>';
+      }).join('');
+      container.querySelectorAll('.set-metrics-item').forEach(el => {
+        el.addEventListener('click', function(e) {
+          const id = el.dataset.id;
+          const check = el.querySelector('.check');
+          if (e.target.classList.contains('check')) {
+            if (check.checked) {
+              if (selected.size >= MAX_SELECTED_METRICS) check.checked = false;
+              else selected.add(id);
+            } else selected.delete(id);
+            return;
+          }
+          if (check.checked) {
+            check.checked = false;
+            selected.delete(id);
+          } else {
+            if (selected.size >= MAX_SELECTED_METRICS) return;
+            check.checked = true;
+            selected.add(id);
+          }
+        });
+      });
+      window._setMetricsTemp = selected;
+      window._devicePriorityTemp = null;
+      renderDeviceFilters();
+      renderDevicePriorityList();
+      document.getElementById('settingsSheet').classList.add('show');
+    }
+    function closeSettingsSheet() {
+      document.getElementById('settingsSheet').classList.remove('show');
+    }
+    function confirmSettings() {
+      const temp = window._setMetricsTemp;
+      if (temp) {
+        selectedIds = new Set(temp);
+        renderCards();
+        renderLegend();
+        updateChart();
+      }
+      if (window._devicePriorityTemp && window._devicePriorityTemp.length) {
+        const ordered = window._devicePriorityTemp;
+        devicePriorityOrder = [...ordered, ...devicePriorityOrder.filter(d => !ordered.includes(d))];
+      }
+      closeSettingsSheet();
+    }
+
+    const HELP_RULES = [
+      '支持选择多个指标进行对比显示；',
+      '选择后的指标显示在下方，点击关闭后，该指标的数据不在图表上显示。',
+      '底部的图表支持按日、周、月、年等时间范围快速查看；点击某一天可显示当天详细数据；默认显示当周。',
+      '若查询范围内无数据，则图表显示为【暂无数据】的样式。',
+      '若用户选择多个无法合并展示的指标时，展示规则与 wellnesshub 平台一致。',
+    ];
+    function openHelpSheet() {
+      document.getElementById('helpContent').innerHTML = '<ol>' + HELP_RULES.map(r => '<li>' + r + '</li>').join('') + '</ol>';
+      document.getElementById('helpSheet').classList.add('show');
+    }
+    function closeHelpSheet() {
+      document.getElementById('helpSheet').classList.remove('show');
+    }
+
+    function renderDeviceFilters() {
+      const wrap = document.getElementById('deviceFilters');
+      if (!wrap) return;
+      wrap.innerHTML = '<label class="device-check"><input type="checkbox" id="deviceSelectAll"> 全选</label>';
+      const allCheck = document.getElementById('deviceSelectAll');
+      allCheck.checked = selectedDeviceIds.size === MOCK_DEVICE_TYPES.length;
+      allCheck.addEventListener('change', function() {
+        if (this.checked) MOCK_DEVICE_TYPES.forEach(d => selectedDeviceIds.add(d));
+        else selectedDeviceIds.clear();
+        wrap.querySelectorAll('input[data-device]').forEach(inp => { inp.checked = selectedDeviceIds.has(inp.dataset.device); });
+      });
+      MOCK_DEVICE_TYPES.forEach(dev => {
+        const label = document.createElement('label');
+        label.className = 'device-check';
+        const input = document.createElement('input');
+        input.type = 'checkbox';
+        input.dataset.device = dev;
+        input.checked = selectedDeviceIds.has(dev);
+        input.addEventListener('change', () => {
+          if (input.checked) selectedDeviceIds.add(dev);
+          else selectedDeviceIds.delete(dev);
+          allCheck.checked = selectedDeviceIds.size === MOCK_DEVICE_TYPES.length;
+          renderDevicePriorityList();
+        });
+        label.appendChild(input);
+        label.appendChild(document.createTextNode(dev));
+        wrap.appendChild(label);
+      });
+    }
+
+    function renderDevicePriorityList() {
+      const block = document.getElementById('devicePriorityBlock');
+      const listEl = document.getElementById('devicePriorityList');
+      if (!block || !listEl) return;
+      const baseOrder = window._devicePriorityTemp || devicePriorityOrder;
+      let ordered = baseOrder.filter(d => selectedDeviceIds.has(d));
+      const newlyAdded = [...selectedDeviceIds].filter(d => !ordered.includes(d));
+      if (newlyAdded.length) {
+        newlyAdded.sort((a, b) => devicePriorityOrder.indexOf(a) - devicePriorityOrder.indexOf(b));
+        ordered = ordered.concat(newlyAdded);
+      }
+      window._devicePriorityTemp = ordered;
+      if (ordered.length <= 1) {
+        block.classList.remove('visible');
+        return;
+      }
+      block.classList.add('visible');
+      listEl.innerHTML = ordered.map((dev, idx) =>
+        '<div class="device-priority-item" data-device="' + dev + '" data-idx="' + idx + '">' +
+        '<span class="rank-label">排序' + (idx + 1) + '</span>' +
+        '<span class="device-name">' + dev + '</span>' +
+        '<button type="button" class="btn-move-up" data-idx="' + idx + '" ' + (idx === 0 ? 'disabled' : '') + '>前移</button>' +
+        '</div>'
+      ).join('');
+      listEl.querySelectorAll('.btn-move-up:not([disabled])').forEach(btn => {
+        btn.addEventListener('click', function() {
+          const idx = parseInt(this.dataset.idx, 10);
+          if (idx <= 0) return;
+          const arr = window._devicePriorityTemp;
+          [arr[idx - 1], arr[idx]] = [arr[idx], arr[idx - 1]];
+          window._devicePriorityTemp = arr;
+          renderDevicePriorityList();
+        });
+      });
+    }
+    function openTooltipDetailSheet() {
+      const d = window._tooltipDetail;
+      if (!d) return;
+      document.getElementById('tooltipDetailTime').textContent = (d.time != null && String(d.time) !== 'undefined') ? d.time : '数据详情';
+      document.getElementById('tooltipDetailBody').innerHTML = d.rows.map(r =>
+        '<div class="detail-row"><span class="detail-name">' + r.name + '</span><span class="detail-value">' + r.value + '<span class="detail-device">' + r.device + '</span></span></div>'
+      ).join('');
+      document.getElementById('tooltipDetailSheet').classList.add('show');
+      document.getElementById('customTooltip').classList.remove('visible');
+    }
+    function closeTooltipDetailSheet() {
+      document.getElementById('tooltipDetailSheet').classList.remove('show');
     }
 
     function openDateRangeSheet() {
@@ -882,6 +1335,15 @@
       renderCards();
       renderLegend();
       updateChart();
+      document.getElementById('btnSettings').addEventListener('click', openSettingsSheet);
+      document.getElementById('settingsCancel').addEventListener('click', closeSettingsSheet);
+      document.getElementById('settingsConfirm').addEventListener('click', confirmSettings);
+      document.getElementById('settingsSheet').addEventListener('click', function(e) { if (e.target === this) closeSettingsSheet(); });
+      document.getElementById('btnHelp').addEventListener('click', openHelpSheet);
+      document.getElementById('helpSheet').addEventListener('click', function(e) { if (e.target === this) closeHelpSheet(); });
+      document.getElementById('helpClose').addEventListener('click', closeHelpSheet);
+      document.getElementById('tooltipDetailSheet').addEventListener('click', function(e) { if (e.target === this) closeTooltipDetailSheet(); });
+      document.getElementById('tooltipDetailClose').addEventListener('click', closeTooltipDetailSheet);
       document.querySelectorAll('.tab').forEach(tab => {
         tab.addEventListener('click', () => {
           document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));

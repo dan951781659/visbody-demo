@@ -170,6 +170,31 @@
       font-size: 12px;
       color: var(--text-muted);
     }
+    .card { position: relative; }
+    .card .name { padding-right: 26px; }
+    .card .card-device-wrap {
+      position: absolute;
+      top: 8px;
+      right: 8px;
+      margin: 0;
+      min-height: 0;
+    }
+    .card .card-source-btn {
+      width: 20px;
+      height: 20px;
+      border: 1px solid var(--border);
+      border-radius: 50%;
+      background: var(--card-bg);
+      color: var(--text-muted);
+      font-size: 12px;
+      font-weight: 600;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0;
+    }
+    .card .card-source-btn:hover { background: var(--primary-light); color: var(--primary); }
 
     /* 数据统计区 */
     .stats-section {
@@ -387,7 +412,11 @@
       opacity: 1;
       visibility: visible;
       transform: translate(-50%, 0);
+      pointer-events: auto;
     }
+    #customTooltip .tt-footer { margin-top: 10px; padding-top: 8px; border-top: 1px solid var(--border); }
+    #customTooltip .tt-detail-trigger { font-size: 12px; color: var(--primary); cursor: pointer; }
+    #customTooltip .tt-device { font-weight: 400; color: var(--text-muted); font-size: 11px; }
     #customTooltip .tt-time {
       font-weight: 600;
       margin-bottom: 10px;
@@ -447,6 +476,41 @@
       border-bottom-color: var(--card-bg);
     }
 
+    .tooltip-detail-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,.4);
+      z-index: 10000;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+      opacity: 0;
+      visibility: hidden;
+      transition: opacity .2s, visibility .2s;
+    }
+    .tooltip-detail-overlay.show { opacity: 1; visibility: visible; }
+    .tooltip-detail-panel {
+      background: var(--card-bg);
+      border-radius: 12px;
+      padding: 20px;
+      max-width: 360px;
+      width: 100%;
+      box-shadow: 0 8px 32px rgba(0,0,0,.2);
+    }
+    .tooltip-detail-panel h3 { font-size: 14px; font-weight: 600; margin-bottom: 12px; color: var(--text-muted); }
+    .tooltip-detail-body .detail-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 8px 0;
+      border-bottom: 1px solid var(--border);
+      font-size: 13px;
+    }
+    .tooltip-detail-body .detail-row:last-child { border-bottom: none; }
+    .tooltip-detail-body .detail-device { font-size: 12px; color: var(--text-muted); margin-left: 8px; }
+    .tooltip-detail-panel .btn-close { margin-top: 16px; width: 100%; padding: 10px; border: none; background: var(--primary); color: #fff; border-radius: 8px; font-size: 14px; cursor: pointer; }
+
     /* 加载动画 */
     .loading {
       display: inline-flex;
@@ -495,7 +559,10 @@
 
     <!-- 数据统计 -->
     <section class="stats-section">
-      <h2 style="font-size:16px;font-weight:600;margin-bottom:16px;">数据统计</h2>
+      <div class="stats-section-head" style="display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:16px;">
+        <h2 style="font-size:16px;font-weight:600;margin:0;">数据统计</h2>
+        <button type="button" class="btn-help" id="btnHelp" aria-label="帮助" style="width:28px;height:28px;border:1px solid var(--border);border-radius:50%;background:var(--card-bg);color:var(--text-muted);font-size:14px;font-weight:600;cursor:pointer;display:flex;align-items:center;justify-content:center;">?</button>
+      </div>
       <div class="stats-header">
         <div class="date-picker-wrap">
           <label>时间范围</label>
@@ -536,6 +603,22 @@
       <div class="charts-row" id="chartsRow"></div>
     </section>
   </main>
+
+  <div class="tooltip-detail-overlay" id="tooltipDetailSheet">
+    <div class="tooltip-detail-panel" onclick="event.stopPropagation()">
+      <h3 id="tooltipDetailTime">数据详情</h3>
+      <div class="tooltip-detail-body" id="tooltipDetailBody"></div>
+      <button type="button" class="btn-close" id="tooltipDetailClose">关闭</button>
+    </div>
+  </div>
+
+  <div class="tooltip-detail-overlay" id="helpSheet" style="z-index:9998;">
+    <div class="tooltip-detail-panel" id="helpPanel" onclick="event.stopPropagation()" style="max-width:480px;">
+      <h3>数据对比显示规则</h3>
+      <div class="tooltip-detail-body" id="helpContent" style="max-height:60vh;overflow-y:auto;"></div>
+      <button type="button" class="btn-close" id="helpClose">我知道了</button>
+    </div>
+  </div>
 
   <script>
     // 精度：0=整数, 1=保留1位小数, 2=保留2位小数
@@ -611,6 +694,7 @@
         { id: 'sit_ups', name: '仰卧起坐', unit: '次', precision: 0, value: 35, date: '2025-6-6', color: '#84cc16' },
       ],
     };
+    const MOCK_DEVICE_TYPES = ['VAPRO6', 'VDPRO3', 'VAPRO3', 'VDPRO2'];
 
     // 模拟趋势数据（按时间范围生成）
     function genTrendData(metrics, start, end) {
@@ -631,11 +715,14 @@
         t += dayMs;
       }
 
+      const devices = ['VAPRO6', 'VDPRO3', 'VAPRO3', 'VDPRO2'];
+      const deviceSource = {};
       metrics.forEach(m => {
         const base = m.value;
         const p = m.precision ?? 1;
         const lo = m.min != null ? m.min : -Infinity;
         const hi = m.max != null ? m.max : Infinity;
+        deviceSource[m.id] = labels.map(() => devices[Math.floor(Math.random() * devices.length)]);
         out[m.id] = labels.map((_, i) => {
           if (Math.random() < 0.1) return null;
           const noise = (Math.random() - 0.5) * 2;
@@ -647,13 +734,14 @@
           return Math.round(v * f) / f;
         });
       });
-
-      return { labels, data: out, metrics };
+      return { labels, data: out, metrics, deviceSource };
     }
 
+    // 双 Y 轴演示：身体成分 kg 组使用假数据，保证数值跨度比 > 3，右侧 Y 轴可见
     function genDualAxisDemoData(metrics, start, end) {
       const base = genTrendData(metrics, start, end);
       if (!base.labels.length || base.metrics.length < 2) return base;
+      const dayMs = 24 * 60 * 60 * 1000;
       const startMs = new Date(start).getTime();
       const endMs = new Date(end).getTime();
       const n = base.labels.length;
@@ -690,6 +778,13 @@
             const k = (new Date(base.labels[i]).getTime() - t0) / span;
             arr[i] = round(38 + k * 1);
           }
+        }
+      });
+      const devices = ['VAPRO6', 'VDPRO3', 'VAPRO3', 'VDPRO2'];
+      if (!base.deviceSource) base.deviceSource = {};
+      base.metrics.forEach(m => {
+        if (!base.deviceSource[m.id] && base.data[m.id]) {
+          base.deviceSource[m.id] = base.labels.map(() => devices[Math.floor(Math.random() * devices.length)]);
         }
       });
       return base;
@@ -856,23 +951,32 @@
 
     function renderCards() {
       const list = MOCK_METRICS[currentType] || [];
+      const devices = list.map((m, idx) => m.deviceModel || MOCK_DEVICE_TYPES[idx % MOCK_DEVICE_TYPES.length]);
+      const devicesSame = devices.length <= 1 || new Set(devices).size === 1;
       const grid = document.getElementById('cardsGrid');
-      grid.innerHTML = list.map(m => {
+      grid.innerHTML = list.map((m, idx) => {
         const isSelected = selectedIds.has(m.id);
         const isLatest = list.length && list[0].id === m.id;
         const nameLabel = m.unit ? `${m.name} (${m.unit})` : m.name;
         const displayValue = formatValueWithUnit(m, m.value);
+        const deviceModel = devices[idx];
+        const showSourceBtn = !devicesSame;
+        const devicePart = showSourceBtn
+          ? `<div class="card-device-wrap"><button type="button" class="card-source-btn" data-name="${m.name}" data-value="${displayValue.replace(/"/g, '&quot;')}" data-device="${deviceModel}" aria-label="查看数据来源">?</button></div>`
+          : '<div class="card-device-wrap"></div>';
         return `
           <div class="card ${isSelected ? 'selected' : ''} ${isLatest ? 'latest' : ''}" data-id="${m.id}">
             <div class="name">${nameLabel}</div>
             <div class="value">${displayValue}</div>
             <div class="date">${m.date}</div>
+            ${devicePart}
           </div>
         `;
       }).join('');
 
       grid.querySelectorAll('.card').forEach(el => {
-        el.addEventListener('click', () => {
+        el.addEventListener('click', (e) => {
+          if (e.target.closest('.card-source-btn')) return;
           const id = el.dataset.id;
           if (selectedIds.has(id)) {
             selectedIds.delete(id);
@@ -883,6 +987,17 @@
           renderLegend();
           updateChart();
           updateBatchExportUI();
+        });
+      });
+      grid.querySelectorAll('.card-source-btn').forEach(btn => {
+        btn.addEventListener('click', function(e) {
+          e.preventDefault();
+          e.stopPropagation();
+          const name = this.dataset.name;
+          const value = this.dataset.value;
+          const device = this.dataset.device || '—';
+          window._tooltipDetail = { time: '当前值', rows: [{ name, value, device }] };
+          openTooltipDetailSheet();
         });
       });
     }
@@ -922,38 +1037,59 @@
       const groups = groupMetricsByUnit(filtered);
       const groupsArr = [];
       groups.forEach((metrics, unitKey) => {
-        const { labels, data, metrics: ms } = (currentType === 'body_composition' && unitKey === 'kg') ? genDualAxisDemoData(metrics, start, end) : genTrendData(metrics, start, end);
-        groupsArr.push({ unitKey, metrics: ms, data, labels });
+        const res = (currentType === 'body_composition' && unitKey === 'kg')
+          ? genDualAxisDemoData(metrics, start, end) : genTrendData(metrics, start, end);
+        groupsArr.push({ unitKey, metrics: res.metrics, data: res.data, labels: res.labels, deviceSource: res.deviceSource || {} });
       });
       allChartData = {
         labels: groupsArr[0] ? groupsArr[0].labels : [],
-        groups: groupsArr.map(g => ({ metrics: g.metrics, data: g.data })),
+        groups: groupsArr.map(g => ({ metrics: g.metrics, data: g.data, deviceSource: g.deviceSource || {} })),
       };
 
       const ttEl = document.getElementById('customTooltip');
       const GAP = 14;
+      if (!ttEl.dataset.ttListeners) {
+        ttEl.dataset.ttListeners = '1';
+        ttEl.addEventListener('mouseenter', function() { clearTimeout(ttEl._ttHideTimeout); });
+        ttEl.addEventListener('mouseleave', function() { ttEl.classList.remove('visible', 'tt-below'); });
+      }
       function externalTooltip(ctx) {
         if (!ctx.tooltip || ctx.tooltip.opacity === 0) {
-          ttEl.classList.remove('visible', 'tt-below');
+          clearTimeout(ttEl._ttHideTimeout);
+          ttEl._ttHideTimeout = setTimeout(function() { ttEl.classList.remove('visible', 'tt-below'); }, 150);
           return;
         }
+        clearTimeout(ttEl._ttHideTimeout);
         const i = ctx.tooltip.dataIndex;
         if (!allChartData || i < 0 || i >= allChartData.labels.length) {
           ttEl.classList.remove('visible', 'tt-below');
           return;
         }
-        const time = allChartData.labels[i];
+        let time = (allChartData.labels[i] != null && String(allChartData.labels[i]) !== 'undefined') ? allChartData.labels[i] : null;
+        if (time == null && start) {
+          const d = new Date(start);
+          d.setDate(d.getDate() + i);
+          time = d.getFullYear() + '/' + (d.getMonth() + 1) + '/' + d.getDate();
+        }
+        if (time == null) time = '当日数据';
+        const detailRows = [];
         let rows = '';
         allChartData.groups.forEach(g => {
           g.metrics.forEach(m => {
             const v = g.data[m.id] && g.data[m.id][i];
             const str = formatValueWithUnit(m, v);
-            rows += '<div class="tt-row"><span class="tt-dot" style="background:' + m.color + '"></span><span class="tt-name">' + m.name + '</span><span class="tt-value">' + str + '</span></div>';
+            const device = (g.deviceSource && g.deviceSource[m.id] && g.deviceSource[m.id][i]) ? g.deviceSource[m.id][i] : '';
+            const deviceHtml = device ? ' <span class="tt-device">· ' + device + '</span>' : '';
+            rows += '<div class="tt-row"><span class="tt-dot" style="background:' + m.color + '"></span><span class="tt-name">' + m.name + '</span><span class="tt-value">' + str + deviceHtml + '</span></div>';
+            detailRows.push({ name: m.name, value: str, device: device || '—' });
           });
         });
-        ttEl.innerHTML = '<div class="tt-time">' + time + '</div><div class="tt-body">' + rows + '</div>';
+        window._tooltipDetail = { time, rows: detailRows };
+        ttEl.innerHTML = '<div class="tt-time">' + time + '</div><div class="tt-body">' + rows + '</div><div class="tt-footer"><span class="tt-detail-trigger" id="ttDetailTrigger">? 查看详细数据与设备来源</span></div>';
         ttEl.classList.remove('tt-below');
         ttEl.classList.add('visible');
+        const trigger = document.getElementById('ttDetailTrigger');
+        if (trigger) trigger.onclick = function(e) { e.preventDefault(); openTooltipDetailSheet(); };
         const rect = ctx.chart.canvas.getBoundingClientRect();
         const caretX = rect.left + ctx.tooltip.caretX;
         const caretY = rect.top + ctx.tooltip.caretY;
@@ -1110,6 +1246,35 @@
       return new Set(list.slice(0, 7).map(m => m.id));
     }
 
+    const HELP_RULES = [
+      '支持选择多个指标进行对比显示；一次性最多选择 8 个指标进行对比显示。',
+      '选择后的指标显示在下方，点击关闭后，该指标的数据不在图表上显示。',
+      '底部的图表支持按日、周、月、年等时间范围快速查看；点击某一天可显示当天详细数据；默认显示当周。',
+      '若查询范围内无数据，则图表显示为【暂无数据】的样式。',
+      '若用户选择多个无法合并展示的指标时，展示规则与 wellnesshub 平台一致。',
+    ];
+    function openHelpSheet() {
+      document.getElementById('helpContent').innerHTML = '<ol>' + HELP_RULES.map(r => '<li>' + r + '</li>').join('') + '</ol>';
+      document.getElementById('helpSheet').classList.add('show');
+    }
+    function closeHelpSheet() {
+      document.getElementById('helpSheet').classList.remove('show');
+    }
+
+    function openTooltipDetailSheet() {
+      const d = window._tooltipDetail;
+      if (!d) return;
+      document.getElementById('tooltipDetailTime').textContent = (d.time != null && String(d.time) !== 'undefined') ? d.time : '数据详情';
+      document.getElementById('tooltipDetailBody').innerHTML = d.rows.map(r =>
+        '<div class="detail-row"><span class="detail-name">' + r.name + '</span><span class="detail-value">' + r.value + '<span class="detail-device"> ' + r.device + '</span></span></div>'
+      ).join('');
+      document.getElementById('tooltipDetailSheet').classList.add('show');
+      document.getElementById('customTooltip').classList.remove('visible');
+    }
+    function closeTooltipDetailSheet() {
+      document.getElementById('tooltipDetailSheet').classList.remove('show');
+    }
+
     function init() {
       setDefaultDates();
       selectedIds = defaultSelectedIds();
@@ -1182,6 +1347,15 @@
           if (fmt === 'excel' || fmt === 'csv') doExport(fmt);
         });
       });
+
+      document.getElementById('tooltipDetailSheet').addEventListener('click', function(e) { if (e.target === this) closeTooltipDetailSheet(); });
+      document.getElementById('tooltipDetailClose').addEventListener('click', closeTooltipDetailSheet);
+
+      const btnHelp = document.getElementById('btnHelp');
+      if (btnHelp) btnHelp.addEventListener('click', openHelpSheet);
+      const helpClose = document.getElementById('helpClose');
+      if (helpClose) helpClose.addEventListener('click', closeHelpSheet);
+      document.getElementById('helpSheet').addEventListener('click', function(e) { if (e.target === this) closeHelpSheet(); });
     }
 
     init();
