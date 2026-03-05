@@ -1,0 +1,703 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>身体围度报告 - Withings 风格</title>
+  <style>
+    :root {
+      --primary-start: #0A84FF;
+      --primary-end: #5E5CE6;
+      --bg: #F3F4F6;
+      --card: #FFFFFF;
+      --border: #E5E7EB;
+      --border-strong: #D1D5DB;
+      --text-main: #111827;
+      --text-sub: #6B7280;
+      --radius-lg: 18px;
+      --radius-md: 14px;
+      --radius-sm: 10px;
+      --shadow-soft: 0 18px 48px rgba(15,23,42,0.09);
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "SF Pro Text", "PingFang SC", "Microsoft YaHei", sans-serif;
+      background: radial-gradient(circle at top, #E5EDFF 0, #F3F4F6 55%, #E5E7EB 100%);
+      -webkit-font-smoothing: antialiased;
+      color: var(--text-main);
+    }
+    .page {
+      max-width: 430px;
+      margin: 0 auto;
+      min-height: 100vh;
+      background: linear-gradient(to bottom, rgba(249,250,251,0.98), rgba(243,244,246,1));
+    }
+    .status-bar {
+      height: 20px;
+    }
+    .nav-bar {
+      height: 44px;
+      display: flex;
+      align-items: center;
+      padding: 0 12px;
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      background: rgba(249,250,251,0.97);
+      backdrop-filter: blur(18px);
+      border-bottom: 1px solid rgba(229,231,235,0.9);
+    }
+    .nav-back {
+      width: 32px;
+      height: 32px;
+      border-radius: 999px;
+      border: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 18px;
+      color: var(--text-sub);
+      background: #FFFFFF;
+    }
+    .nav-title {
+      flex: 1;
+      text-align: center;
+      font-size: 16px;
+      font-weight: 600;
+    }
+    .nav-more {
+      width: 32px;
+      text-align: right;
+      color: var(--text-sub);
+      font-size: 20px;
+    }
+    .tabs {
+      display: flex;
+      padding: 8px 12px 10px;
+      gap: 6px;
+      background: #F9FAFB;
+      border-bottom: 1px solid #E5E7EB;
+    }
+    .tab {
+      flex: 1;
+      text-align: center;
+      font-size: 13px;
+      padding: 7px 4px 8px;
+      border-radius: 999px;
+      color: var(--text-sub);
+      background: #FFFFFF;
+      border: 1px solid transparent;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .tab.active {
+      color: #111827;
+      border-color: #CBD5F5;
+      box-shadow: 0 10px 22px rgba(15,23,42,0.08);
+      position: relative;
+    }
+    .tab.active::after {
+      content: '';
+      position: absolute;
+      inset-inline: 24px;
+      bottom: -2px;
+      height: 2px;
+      border-radius: 999px;
+      background-image: linear-gradient(90deg, var(--primary-start), var(--primary-end));
+    }
+    .scroll {
+      padding: 12px 12px 24px;
+    }
+
+    /* 顶部 Summary 区域 */
+    .summary-card {
+      border-radius: 24px;
+      background: #FFFFFF;
+      border: 1px solid rgba(226,232,240,0.9);
+      box-shadow: 0 22px 60px rgba(15,23,42,0.10);
+      padding: 14px 14px 12px;
+      margin-bottom: 14px;
+    }
+    .summary-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+    }
+    .user-info {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .avatar {
+      width: 34px;
+      height: 34px;
+      border-radius: 999px;
+      background-image: linear-gradient(135deg, var(--primary-start), var(--primary-end));
+      color: #FFFFFF;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 16px;
+      font-weight: 600;
+      box-shadow: 0 12px 25px rgba(37,99,235,0.40);
+    }
+    .user-text-main {
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--text-main);
+    }
+    .user-text-sub {
+      font-size: 11px;
+      color: var(--text-sub);
+      margin-top: 2px;
+      max-width: 200px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .pill-toggle {
+      display: inline-flex;
+      padding: 3px;
+      border-radius: 999px;
+      background: #F3F4FF;
+      border: 1px solid #E0EAFF;
+    }
+    .pill-btn {
+      padding: 5px 10px;
+      font-size: 11px;
+      border-radius: 999px;
+      border: none;
+      background: transparent;
+      color: #6B7280;
+    }
+    .pill-btn.active {
+      background-image: linear-gradient(135deg, var(--primary-start), var(--primary-end));
+      color: #FFFFFF;
+      box-shadow: 0 10px 18px rgba(37,99,235,0.45);
+    }
+
+    .summary-subrow {
+      margin-top: 10px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 10px;
+      font-size: 11px;
+      color: var(--text-sub);
+    }
+    .date-info span {
+      display: block;
+    }
+    .dropdown {
+      padding: 5px 11px;
+      border-radius: 999px;
+      border: 1px solid var(--border);
+      background: #F9FAFB;
+      font-size: 12px;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      color: #1F2937;
+    }
+    .dropdown span:last-child {
+      font-size: 10px;
+      color: #9CA3AF;
+    }
+
+    /* 模型迷你卡片 */
+    .summary-model {
+      margin-top: 12px;
+      border-radius: var(--radius-lg);
+      background: radial-gradient(circle at top, #E5EDFF 0, #FFFFFF 58%);
+      border: 1px solid #E0E7FF;
+      padding: 10px 12px 10px;
+      display: grid;
+      grid-template-columns: auto 1fr;
+      gap: 10px;
+    }
+    .summary-model-label {
+      font-size: 12px;
+      color: var(--text-sub);
+    }
+    .summary-model-label strong {
+      display: block;
+      font-size: 13px;
+      color: var(--text-main);
+      margin-bottom: 2px;
+    }
+    .summary-model-figure {
+      display: flex;
+      justify-content: center;
+      gap: 12px;
+      align-items: center;
+    }
+    .figure-small {
+      width: 62px;
+      height: 140px;
+      border-radius: 999px;
+      background:
+        radial-gradient(circle at 30% 0, rgba(156,163,175,0.85) 0, transparent 55%),
+        radial-gradient(circle at 70% 0, rgba(209,213,219,0.8) 0, transparent 55%),
+        radial-gradient(circle at 50% 65%, rgba(148,163,184,0.9) 0, rgba(209,213,219,0.05) 68%);
+      border: 1px solid #E5E7EB;
+      box-shadow: 0 14px 30px rgba(148,163,184,0.7);
+      position: relative;
+      overflow: hidden;
+    }
+    .figure-small::after {
+      content: '';
+      position: absolute;
+      inset-inline: 6px;
+      bottom: -8px;
+      height: 22px;
+      background: radial-gradient(circle at 50% 0, rgba(148,163,184,0.55) 0, transparent 70%);
+    }
+    .legend {
+      margin-top: 10px;
+      font-size: 11px;
+      color: var(--text-sub);
+      display: flex;
+      gap: 18px;
+      justify-content: center;
+    }
+    .legend span {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+    }
+    .legend span:first-child::before {
+      content: '';
+      width: 8px;
+      height: 8px;
+      border-radius: 999px;
+      background-image: linear-gradient(135deg, var(--primary-start), var(--primary-end));
+    }
+    .legend span:last-child::before {
+      content: '';
+      width: 8px;
+      height: 8px;
+      border-radius: 999px;
+      border: 2px solid #CBD5F5;
+      background: transparent;
+    }
+
+    /* 模块标题 */
+    .section-title {
+      margin-top: 16px;
+      margin-bottom: 8px;
+      font-size: 13px;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      color: #111827;
+    }
+    .section-title::before {
+      content: '';
+      width: 16px;
+      height: 16px;
+      border-radius: 8px;
+      background-image: linear-gradient(135deg, var(--primary-start), var(--primary-end));
+      box-shadow: 0 6px 14px rgba(37,99,235,0.45);
+    }
+    .section-sub {
+      margin-left: 24px;
+      font-size: 11px;
+      color: var(--text-sub);
+      margin-bottom: 6px;
+    }
+
+    /* 分组卡片 */
+    .group-card {
+      border-radius: var(--radius-lg);
+      background: #FFFFFF;
+      border: 1px solid var(--border);
+      padding: 10px 10px 6px;
+      box-shadow: var(--shadow-soft);
+      margin-bottom: 10px;
+    }
+    .group-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 8px;
+    }
+    .group-title {
+      font-size: 12px;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      color: #111827;
+    }
+    .group-title span.icon {
+      width: 18px;
+      height: 18px;
+      border-radius: 999px;
+      background: #EEF2FF;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 11px;
+      color: #4F46E5;
+    }
+    .group-mini {
+      font-size: 11px;
+      color: var(--text-sub);
+    }
+    .group-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 8px;
+    }
+    .metric-card {
+      border-radius: var(--radius-md);
+      border: 1px solid #E5E7EB;
+      background: #F9FAFB;
+      padding: 7px 8px 6px;
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+    .metric-name {
+      font-size: 12px;
+      color: #4B5563;
+    }
+    .metric-main-row {
+      display: flex;
+      align-items: baseline;
+      gap: 4px;
+      margin-top: 2px;
+    }
+    .metric-value {
+      font-size: 15px;
+      font-weight: 600;
+      background: linear-gradient(135deg, var(--primary-start), var(--primary-end));
+      -webkit-background-clip: text;
+      color: transparent;
+    }
+    .metric-unit {
+      font-size: 11px;
+      color: var(--text-sub);
+    }
+    .metric-bottom {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 11px;
+      margin-top: 2px;
+    }
+    .change {
+      display: inline-flex;
+      align-items: center;
+      gap: 2px;
+      color: #22C55E;
+    }
+    .change.up {
+      color: #F97316;
+    }
+    .change .icon {
+      font-size: 10px;
+    }
+    .badge {
+      padding: 1px 7px;
+      border-radius: 999px;
+      background: #ECFDF5;
+      color: #15803D;
+      border: 1px solid #BBF7D0;
+    }
+    .badge.warn {
+      background: #FFF7ED;
+      color: #C05621;
+      border-color: #FED7AA;
+    }
+
+    .page-footer {
+      font-size: 11px;
+      color: var(--text-sub);
+      margin-top: 8px;
+      padding: 0 2px 4px;
+      line-height: 1.5;
+    }
+    .page-footer .mark {
+      margin-top: 4px;
+      color: #9CA3AF;
+    }
+
+    @media (min-width: 768px) {
+      body {
+        background: radial-gradient(circle at top, #E0ECFF 0, #E5E7EB 55%, #E5E7EB 100%);
+      }
+      .page {
+        margin-top: 18px;
+        margin-bottom: 24px;
+        border-radius: 22px;
+        box-shadow: 0 40px 80px rgba(15,23,42,0.12);
+        border: 1px solid rgba(226,232,240,0.95);
+      }
+      .status-bar {
+        height: 14px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="page">
+    <div class="status-bar"></div>
+    <header class="nav-bar">
+      <div class="nav-back">‹</div>
+      <div class="nav-title">测量报告</div>
+      <div class="nav-more">⋯</div>
+    </header>
+
+    <div class="tabs">
+      <div class="tab">身体成分</div>
+      <div class="tab">体态评估</div>
+      <div class="tab active">身体围度</div>
+      <div class="tab">肩部功能</div>
+    </div>
+
+    <main class="scroll">
+      <section class="summary-card">
+        <div class="summary-header">
+          <div class="user-info">
+            <div class="avatar">H</div>
+            <div>
+              <div class="user-text-main">身体围度报告</div>
+              <div class="user-text-sub">ID: hassie.ratkle@gmail.com</div>
+            </div>
+          </div>
+          <div class="pill-toggle">
+            <button class="pill-btn active">本次</button>
+            <button class="pill-btn">对比上次</button>
+          </div>
+        </div>
+        <div class="summary-subrow">
+          <div class="date-info">
+            <span>本次测量时间：2026-01-21 15:16:54</span>
+            <span>围度变更于 {date} 更新</span>
+          </div>
+          <div class="dropdown">
+            <span>2025.07.09</span>
+            <span>▼</span>
+          </div>
+        </div>
+
+        <div class="summary-model">
+          <div class="summary-model-label">
+            <strong>身体模型对比</strong>
+            <span>左侧为本次，右侧为对比日期</span>
+          </div>
+          <div class="summary-model-figure">
+            <div class="figure-small"></div>
+            <div class="figure-small"></div>
+          </div>
+        </div>
+        <div class="legend">
+          <span>本次</span>
+          <span>对比日期</span>
+        </div>
+      </section>
+
+      <h2 class="section-title">身体围度概览</h2>
+      <p class="section-sub">按部位分组展示本次围度与对比日期的变化。</p>
+
+      <section class="group-card">
+        <div class="group-header">
+          <div class="group-title">
+            <span class="icon">颈</span>
+            <span>头颈围度</span>
+          </div>
+          <div class="group-mini">重点观察脂肪/肌肉变化</div>
+        </div>
+        <div class="group-grid">
+          <div class="metric-card">
+            <div class="metric-name">颈围</div>
+            <div class="metric-main-row">
+              <span class="metric-value">30.2</span><span class="metric-unit">cm</span>
+            </div>
+            <div class="metric-bottom">
+              <div class="change"><span class="icon">↓</span><span>0.4</span></div>
+              <div class="badge">良好</div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="group-card">
+        <div class="group-header">
+          <div class="group-title">
+            <span class="icon">臂</span>
+            <span>上肢围度</span>
+          </div>
+          <div class="group-mini">评估上肢肌肉量与脂肪分布</div>
+        </div>
+        <div class="group-grid">
+          <div class="metric-card">
+            <div class="metric-name">左上臂围</div>
+            <div class="metric-main-row">
+              <span class="metric-value">21.8</span><span class="metric-unit">cm</span>
+            </div>
+            <div class="metric-bottom">
+              <div class="change"><span class="icon">↓</span><span>0.4</span></div>
+              <div class="badge">良好</div>
+            </div>
+          </div>
+          <div class="metric-card">
+            <div class="metric-name">右上臂围</div>
+            <div class="metric-main-row">
+              <span class="metric-value">23.4</span><span class="metric-unit">cm</span>
+            </div>
+            <div class="metric-bottom">
+              <div class="change"><span class="icon">↓</span><span>0.4</span></div>
+              <div class="badge">良好</div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="group-card">
+        <div class="group-header">
+          <div class="group-title">
+            <span class="icon">躯</span>
+            <span>躯干围度</span>
+          </div>
+          <div class="group-mini">胸围与腰围共同反映脂肪聚集情况</div>
+        </div>
+        <div class="group-grid">
+          <div class="metric-card">
+            <div class="metric-name">胸围</div>
+            <div class="metric-main-row">
+              <span class="metric-value">81.5</span><span class="metric-unit">cm</span>
+            </div>
+            <div class="metric-bottom">
+              <div class="change"><span class="icon">↓</span><span>0.4</span></div>
+              <div class="badge warn">关注</div>
+            </div>
+          </div>
+          <div class="metric-card">
+            <div class="metric-name">高腰围</div>
+            <div class="metric-main-row">
+              <span class="metric-value">68.6</span><span class="metric-unit">cm</span>
+            </div>
+            <div class="metric-bottom">
+              <div class="change"><span class="icon">↓</span><span>0.4</span></div>
+              <div class="badge warn">关注</div>
+            </div>
+          </div>
+          <div class="metric-card">
+            <div class="metric-name">中腰围</div>
+            <div class="metric-main-row">
+              <span class="metric-value">83.6</span><span class="metric-unit">cm</span>
+            </div>
+            <div class="metric-bottom">
+              <div class="change up"><span class="icon">↑</span><span>0.4</span></div>
+              <div class="badge warn">偏高</div>
+            </div>
+          </div>
+          <div class="metric-card">
+            <div class="metric-name">低腰围</div>
+            <div class="metric-main-row">
+              <span class="metric-value">84.8</span><span class="metric-unit">cm</span>
+            </div>
+            <div class="metric-bottom">
+              <div class="change"><span class="icon">↓</span><span>0.4</span></div>
+              <div class="badge">良好</div>
+            </div>
+          </div>
+          <div class="metric-card">
+            <div class="metric-name">臀围</div>
+            <div class="metric-main-row">
+              <span class="metric-value">95.0</span><span class="metric-unit">cm</span>
+            </div>
+            <div class="metric-bottom">
+              <div class="change"><span class="icon">↓</span><span>0.4</span></div>
+              <div class="badge">良好</div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="group-card">
+        <div class="group-header">
+          <div class="group-title">
+            <span class="icon">腿</span>
+            <span>下肢围度</span>
+          </div>
+          <div class="group-mini">评估下肢肌肉量与对称性</div>
+        </div>
+        <div class="group-grid">
+          <div class="metric-card">
+            <div class="metric-name">左大腿围</div>
+            <div class="metric-main-row">
+              <span class="metric-value">46.2</span><span class="metric-unit">cm</span>
+            </div>
+            <div class="metric-bottom">
+              <div class="change"><span class="icon">↓</span><span>0.4</span></div>
+              <div class="badge">良好</div>
+            </div>
+          </div>
+          <div class="metric-card">
+            <div class="metric-name">右大腿围</div>
+            <div class="metric-main-row">
+              <span class="metric-value">46.5</span><span class="metric-unit">cm</span>
+            </div>
+            <div class="metric-bottom">
+              <div class="change"><span class="icon">↓</span><span>0.4</span></div>
+              <div class="badge">良好</div>
+            </div>
+          </div>
+          <div class="metric-card">
+            <div class="metric-name">左大腿最小围</div>
+            <div class="metric-main-row">
+              <span class="metric-value">33.8</span><span class="metric-unit">cm</span>
+            </div>
+            <div class="metric-bottom">
+              <div class="change"><span class="icon">↓</span><span>0.4</span></div>
+              <div class="badge">良好</div>
+            </div>
+          </div>
+          <div class="metric-card">
+            <div class="metric-name">右大腿最小围</div>
+            <div class="metric-main-row">
+              <span class="metric-value">35.1</span><span class="metric-unit">cm</span>
+            </div>
+            <div class="metric-bottom">
+              <div class="change"><span class="icon">↓</span><span>0.4</span></div>
+              <div class="badge">良好</div>
+            </div>
+          </div>
+          <div class="metric-card">
+            <div class="metric-name">左小腿围</div>
+            <div class="metric-main-row">
+              <span class="metric-value">30.7</span><span class="metric-unit">cm</span>
+            </div>
+            <div class="metric-bottom">
+              <div class="change"><span class="icon">↓</span><span>0.4</span></div>
+              <div class="badge">良好</div>
+            </div>
+          </div>
+          <div class="metric-card">
+            <div class="metric-name">右小腿围</div>
+            <div class="metric-main-row">
+              <span class="metric-value">31.0</span><span class="metric-unit">cm</span>
+            </div>
+            <div class="metric-bottom">
+              <div class="change"><span class="icon">↓</span><span>0.4</span></div>
+              <div class="badge">良好</div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <div class="page-footer">
+        <div>*为保证数据准确性，需穿着紧身衣物，扎起头发。</div>
+        <div class="mark">*报告内容仅供参考，不作为诊断或医疗依据。</div>
+      </div>
+    </main>
+  </div>
+</body>
+</html>
+
