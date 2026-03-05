@@ -1,0 +1,1230 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <title>设备 Pro 续费中心 · VISBODY Demo</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <style>
+      :root {
+        --primary: #2563eb;
+        --primary-soft: rgba(37, 99, 235, 0.08);
+        --primary-border: rgba(37, 99, 235, 0.3);
+        --bg: #f5f7fb;
+        --sidebar-bg: #ffffff;
+        --card-bg: #ffffff;
+        --text-main: #111827;
+        --text-sub: #6b7280;
+        --text-light: #9ca3af;
+        --border-soft: #e5e7eb;
+        --danger: #dc2626;
+        --success: #16a34a;
+        --warning: #f97316;
+        --radius-lg: 14px;
+        --radius-md: 10px;
+        --shadow-soft: 0 18px 45px rgba(15, 23, 42, 0.08);
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        margin: 0;
+        font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", system-ui,
+          -system-ui, "Segoe UI", Roboto, "Helvetica Neue", Arial, "PingFang SC",
+          "Hiragino Sans GB", "Microsoft YaHei UI", "Microsoft YaHei", sans-serif;
+        background: radial-gradient(circle at top left, #e0f2fe 0, #f5f7fb 38%, #fdf2ff 100%);
+        color: var(--text-main);
+      }
+
+      .app-shell {
+        min-height: 100vh;
+        display: grid;
+        grid-template-columns: 240px minmax(0, 1fr);
+      }
+
+      @media (max-width: 960px) {
+        .app-shell {
+          grid-template-columns: minmax(0, 1fr);
+        }
+        .sidebar {
+          display: none;
+        }
+      }
+
+      .sidebar {
+        background: var(--sidebar-bg);
+        border-right: 1px solid rgba(148, 163, 184, 0.25);
+        padding: 20px 18px;
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+      }
+
+      .logo {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        padding: 6px 8px;
+      }
+      .logo-mark {
+        width: 22px;
+        height: 22px;
+        border-radius: 999px;
+        background: conic-gradient(
+          from 200deg,
+          #2563eb,
+          #22c55e,
+          #eab308,
+          #ec4899,
+          #2563eb
+        );
+      }
+      .logo-text {
+        font-weight: 700;
+        letter-spacing: 0.16em;
+        font-size: 13px;
+      }
+      .logo-sub {
+        font-size: 10px;
+        color: var(--text-light);
+      }
+
+      .nav-section-title {
+        font-size: 11px;
+        text-transform: uppercase;
+        letter-spacing: 0.16em;
+        color: var(--text-light);
+        margin: 10px 0 4px;
+      }
+
+      .nav-list {
+        list-style: none;
+        margin: 0;
+        padding: 0;
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+      }
+
+      .nav-item {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        padding: 8px 10px;
+        border-radius: 9px;
+        font-size: 13px;
+        color: var(--text-sub);
+        cursor: pointer;
+        transition: all 0.16s ease-out;
+      }
+
+      .nav-item span.icon {
+        width: 18px;
+        height: 18px;
+        border-radius: 6px;
+        border: 1px solid rgba(148, 163, 184, 0.5);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 11px;
+      }
+
+      .nav-item.active {
+        background: rgba(37, 99, 235, 0.08);
+        color: var(--primary);
+        font-weight: 600;
+      }
+      .nav-item.active span.icon {
+        background: var(--primary);
+        color: #fff;
+        border-color: transparent;
+      }
+
+      .sidebar-footer {
+        margin-top: auto;
+        font-size: 11px;
+        color: var(--text-light);
+      }
+
+      .sidebar-footer .tag {
+        display: inline-flex;
+        align-items: center;
+        gap: 4px;
+        padding: 3px 7px;
+        border-radius: 999px;
+        background: rgba(15, 23, 42, 0.04);
+        margin-top: 6px;
+      }
+
+      .main {
+        padding: 18px 22px 26px;
+        display: flex;
+        flex-direction: column;
+        gap: 16px;
+      }
+
+      .top-bar {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 12px;
+      }
+
+      .breadcrumb {
+        font-size: 13px;
+        color: var(--text-light);
+      }
+      .breadcrumb strong {
+        color: var(--text-main);
+      }
+
+      .user-actions {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      }
+      .chip {
+        padding: 4px 10px;
+        border-radius: 999px;
+        font-size: 12px;
+        border: 1px solid rgba(148, 163, 184, 0.35);
+        background: rgba(255, 255, 255, 0.6);
+        display: inline-flex;
+        align-items: center;
+        gap: 4px;
+        color: var(--text-sub);
+      }
+      .avatar {
+        width: 30px;
+        height: 30px;
+        border-radius: 999px;
+        background: linear-gradient(135deg, #6366f1, #ec4899);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #fff;
+        font-size: 14px;
+        font-weight: 600;
+      }
+
+      .page-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        flex-wrap: wrap;
+        gap: 10px;
+      }
+
+      .store-title {
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+      }
+      .store-name {
+        font-size: 20px;
+        font-weight: 600;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+      .badge-pro {
+        padding: 2px 8px;
+        border-radius: 999px;
+        font-size: 11px;
+        background: linear-gradient(135deg, #2563eb, #4f46e5);
+        color: #fff;
+        font-weight: 600;
+      }
+      .store-sub {
+        font-size: 12px;
+        color: var(--text-sub);
+      }
+
+      .summary-chips {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        flex-wrap: wrap;
+      }
+
+      .summary-chip {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        padding: 6px 10px;
+        border-radius: 999px;
+        background: rgba(255, 255, 255, 0.8);
+        border: 1px solid rgba(148, 163, 184, 0.25);
+        font-size: 12px;
+        color: var(--text-sub);
+      }
+      .summary-chip strong {
+        color: var(--text-main);
+      }
+
+      .summary-primary {
+        border-color: var(--primary-border);
+        background: var(--primary-soft);
+        color: var(--primary);
+      }
+
+      .content-layout {
+        display: grid;
+        grid-template-columns: minmax(0, 1.5fr) minmax(0, 1fr);
+        gap: 16px;
+        align-items: flex-start;
+      }
+      @media (max-width: 1120px) {
+        .content-layout {
+          grid-template-columns: minmax(0, 1fr);
+        }
+      }
+
+      .card {
+        background: rgba(255, 255, 255, 0.96);
+        border-radius: var(--radius-lg);
+        box-shadow: var(--shadow-soft);
+        border: 1px solid rgba(148, 163, 184, 0.2);
+        padding: 16px 16px 12px;
+      }
+
+      .card-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: 10px;
+        gap: 8px;
+      }
+      .card-title {
+        font-size: 15px;
+        font-weight: 600;
+      }
+      .card-sub {
+        font-size: 12px;
+        color: var(--text-sub);
+        margin-top: 2px;
+      }
+
+      .btn {
+        border-radius: 999px;
+        border: none;
+        padding: 8px 16px;
+        font-size: 13px;
+        cursor: pointer;
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        transition: all 0.16s ease-out;
+        font-weight: 500;
+        white-space: nowrap;
+      }
+      .btn-primary {
+        background: linear-gradient(135deg, #2563eb, #4f46e5);
+        color: #fff;
+        box-shadow: 0 12px 28px rgba(37, 99, 235, 0.35);
+      }
+      .btn-primary:hover {
+        transform: translateY(-1px);
+        box-shadow: 0 16px 32px rgba(37, 99, 235, 0.45);
+      }
+      .btn-ghost {
+        background: rgba(255, 255, 255, 0.7);
+        border: 1px solid rgba(148, 163, 184, 0.4);
+        color: var(--text-sub);
+      }
+      .btn-ghost:hover {
+        background: #f9fafb;
+      }
+
+      .device-list {
+        margin-top: 8px;
+        border-radius: var(--radius-md);
+        border: 1px solid rgba(148, 163, 184, 0.25);
+        overflow: hidden;
+        background: rgba(249, 250, 251, 0.9);
+      }
+
+      .device-row {
+        display: grid;
+        grid-template-columns: 2.2fr 1.7fr 1.7fr 1.2fr 1.4fr;
+        padding: 10px 12px;
+        align-items: center;
+        gap: 10px;
+        font-size: 13px;
+        border-bottom: 1px solid rgba(226, 232, 240, 0.9);
+        cursor: pointer;
+        background: #fff;
+        transition: background 0.12s ease-out;
+      }
+      .device-row:nth-child(even) {
+        background: #f9fafb;
+      }
+      .device-row:hover {
+        background: #eff6ff;
+      }
+      .device-row.active {
+        background: #e0edff;
+        box-shadow: inset 2px 0 0 var(--primary);
+      }
+
+      .device-name {
+        display: flex;
+        flex-direction: column;
+        gap: 2px;
+      }
+      .device-name-main {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        font-weight: 500;
+      }
+      .device-sn {
+        font-size: 11px;
+        color: var(--text-light);
+      }
+      .badge-model {
+        font-size: 11px;
+        padding: 2px 6px;
+        border-radius: 999px;
+        background: #eef2ff;
+        color: #4f46e5;
+      }
+      .badge-store {
+        font-size: 11px;
+        padding: 2px 7px;
+        border-radius: 999px;
+        background: #ecfdf3;
+        color: #166534;
+      }
+      .status-pill {
+        font-size: 11px;
+        padding: 3px 8px;
+        border-radius: 999px;
+        display: inline-flex;
+        align-items: center;
+        gap: 4px;
+      }
+      .status-pill.pro {
+        background: rgba(22, 163, 74, 0.08);
+        color: #15803d;
+      }
+      .status-pill.expiring {
+        background: rgba(234, 179, 8, 0.1);
+        color: #92400e;
+      }
+      .status-pill.expired {
+        background: rgba(220, 38, 38, 0.08);
+        color: #b91c1c;
+      }
+
+      .text-muted {
+        color: var(--text-sub);
+      }
+      .text-danger {
+        color: var(--danger);
+      }
+      .text-success {
+        color: var(--success);
+      }
+
+      .chip-mini {
+        font-size: 11px;
+        padding: 2px 6px;
+        border-radius: 999px;
+        border: 1px dashed rgba(148, 163, 184, 0.6);
+        color: var(--text-light);
+      }
+
+      .side-panel {
+        background: rgba(255, 255, 255, 0.96);
+        border-radius: var(--radius-lg);
+        box-shadow: var(--shadow-soft);
+        border: 1px solid rgba(148, 163, 184, 0.2);
+        padding: 16px 16px 14px;
+        position: relative;
+        overflow: hidden;
+      }
+      .side-panel::before {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background: radial-gradient(circle at top right, rgba(59, 130, 246, 0.12), transparent 60%);
+        pointer-events: none;
+        opacity: 0.9;
+      }
+      .side-panel-inner {
+        position: relative;
+        z-index: 1;
+      }
+
+      .panel-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 10px;
+        margin-bottom: 10px;
+      }
+      .panel-title {
+        font-size: 15px;
+        font-weight: 600;
+      }
+      .panel-tag {
+        font-size: 11px;
+        padding: 3px 8px;
+        border-radius: 999px;
+        background: rgba(255, 255, 255, 0.8);
+        border: 1px solid rgba(148, 163, 184, 0.35);
+        color: var(--text-sub);
+      }
+
+      .device-summary {
+        border-radius: var(--radius-md);
+        background: rgba(15, 23, 42, 0.85);
+        color: #e5e7eb;
+        padding: 10px 12px;
+        font-size: 12px;
+        margin-bottom: 12px;
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+      }
+      .device-summary-main {
+        display: flex;
+        justify-content: space-between;
+        gap: 8px;
+        align-items: center;
+      }
+      .device-summary-main strong {
+        color: #f9fafb;
+      }
+
+      .pill-pro {
+        padding: 2px 8px;
+        border-radius: 999px;
+        background: rgba(52, 211, 153, 0.12);
+        color: #6ee7b7;
+        font-size: 11px;
+      }
+
+      .summary-grid {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 8px;
+        margin-bottom: 12px;
+      }
+      .summary-box {
+        border-radius: 10px;
+        padding: 8px 9px;
+        background: linear-gradient(135deg, rgba(15, 23, 42, 0.04), rgba(148, 163, 184, 0.08));
+        font-size: 11px;
+      }
+      .summary-box strong {
+        display: block;
+        margin-bottom: 2px;
+        font-size: 11px;
+        color: var(--text-main);
+      }
+
+      .plan-list {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+        margin-bottom: 12px;
+      }
+
+      .plan-card {
+        border-radius: 11px;
+        border: 1px solid var(--border-soft);
+        background: rgba(255, 255, 255, 0.9);
+        padding: 8px 10px;
+        display: grid;
+        grid-template-columns: minmax(0, 1.7fr) minmax(0, 1.4fr) minmax(0, 1.3fr);
+        align-items: center;
+        gap: 8px;
+        cursor: pointer;
+        transition: all 0.15s ease-out;
+      }
+      .plan-card:hover {
+        border-color: var(--primary-border);
+        box-shadow: 0 10px 24px rgba(15, 23, 42, 0.08);
+        transform: translateY(-1px);
+      }
+      .plan-card.selected {
+        border-color: var(--primary);
+        box-shadow: 0 14px 32px rgba(37, 99, 235, 0.25);
+        background: linear-gradient(135deg, rgba(37, 99, 235, 0.08), rgba(129, 140, 248, 0.12));
+      }
+      .plan-name {
+        font-size: 13px;
+        font-weight: 600;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+      }
+      .plan-price {
+        font-size: 13px;
+        text-align: right;
+      }
+      .plan-meta {
+        font-size: 11px;
+        color: var(--text-sub);
+      }
+
+      .radio-dot {
+        width: 18px;
+        height: 18px;
+        border-radius: 999px;
+        border: 2px solid rgba(148, 163, 184, 0.7);
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+      }
+      .radio-dot-inner {
+        width: 8px;
+        height: 8px;
+        border-radius: 999px;
+        background: transparent;
+      }
+      .plan-card.selected .radio-dot {
+        border-color: var(--primary);
+        background: rgba(37, 99, 235, 0.08);
+      }
+      .plan-card.selected .radio-dot-inner {
+        background: var(--primary);
+      }
+
+      .payment-summary {
+        border-radius: 10px;
+        border: 1px dashed rgba(148, 163, 184, 0.6);
+        padding: 8px 10px;
+        font-size: 12px;
+        margin-bottom: 12px;
+        background: rgba(248, 250, 252, 0.85);
+      }
+      .payment-row {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 4px;
+      }
+      .payment-row.total {
+        margin-top: 4px;
+        font-weight: 600;
+      }
+      .payment-row.total span:last-child {
+        color: var(--primary);
+        font-size: 13px;
+      }
+
+      .hint {
+        font-size: 11px;
+        color: var(--text-sub);
+        display: flex;
+        align-items: flex-start;
+        gap: 5px;
+      }
+      .hint-dot {
+        font-size: 14px;
+        line-height: 1;
+        color: var(--primary);
+      }
+
+      .panel-footer {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-top: 10px;
+        gap: 10px;
+        flex-wrap: wrap;
+      }
+
+      .toast {
+        position: fixed;
+        right: 20px;
+        bottom: 20px;
+        padding: 10px 14px;
+        border-radius: 999px;
+        background: rgba(22, 163, 74, 0.95);
+        color: #ecfdf3;
+        font-size: 13px;
+        display: none;
+        align-items: center;
+        gap: 8px;
+        box-shadow: 0 18px 40px rgba(22, 163, 74, 0.55);
+        z-index: 50;
+      }
+      .toast.visible {
+        display: inline-flex;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="app-shell">
+      <aside class="sidebar">
+        <div>
+          <div class="logo">
+            <div class="logo-mark"></div>
+            <div>
+              <div class="logo-text">VISBODY</div>
+              <div class="logo-sub">Shaping Digital Health</div>
+            </div>
+          </div>
+
+          <div class="nav-section">
+            <div class="nav-section-title">设备管理</div>
+            <ul class="nav-list">
+              <li class="nav-item">
+                <span class="icon">📊</span>
+                体态扫描记录
+              </li>
+              <li class="nav-item active">
+                <span class="icon">💎</span>
+                Pro 设备与积分
+              </li>
+              <li class="nav-item">
+                <span class="icon">🧾</span>
+                缴费记录
+              </li>
+            </ul>
+          </div>
+
+          <div class="nav-section">
+            <div class="nav-section-title">门店管理</div>
+            <ul class="nav-list">
+              <li class="nav-item">
+                <span class="icon">🏬</span>
+                门店与子门店
+              </li>
+              <li class="nav-item">
+                <span class="icon">👥</span>
+                员工账号
+              </li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="sidebar-footer">
+          总门店积分池
+          <div class="tag">
+            <span
+              style="
+                width: 6px;
+                height: 6px;
+                border-radius: 999px;
+                background: #22c55e;
+              "
+            ></span>
+            Pro 有效中，可用积分共用
+          </div>
+        </div>
+      </aside>
+
+      <main class="main">
+        <header class="top-bar">
+          <div class="breadcrumb">
+            设备管理 / Pro 设备与积分 / <strong>设备 Pro 续费</strong>
+          </div>
+          <div class="user-actions">
+            <div class="chip">我的账号</div>
+            <div class="chip">我的套餐</div>
+            <div class="avatar">X</div>
+          </div>
+        </header>
+
+        <section class="page-header">
+          <div class="store-title">
+            <div class="store-name">
+              XAtest
+              <span class="badge-pro">Pro</span>
+            </div>
+            <div class="store-sub">
+              名下共有 <strong id="store-device-count">0</strong> 台设备，正在使用 Pro
+              的设备支持共享积分池。
+            </div>
+          </div>
+
+          <div class="summary-chips">
+            <div class="summary-chip summary-primary">
+              当前可用积分：<strong id="chip-balance">0</strong>
+            </div>
+            <div class="summary-chip">
+              即将到期设备：<strong id="chip-expiring">0</strong> 台
+            </div>
+            <div class="summary-chip">
+              已到期设备：<strong id="chip-expired">0</strong> 台
+            </div>
+            <button class="btn btn-primary" id="btn-add-pro">
+              <span>添加 Pro 设备</span>
+            </button>
+          </div>
+        </section>
+
+        <section class="content-layout">
+          <div class="card">
+            <div class="card-header">
+              <div>
+                <div class="card-title">设备列表</div>
+                <div class="card-sub">
+                  为单台设备开通 / 续费 Pro，获得积分并加入总门店积分池。
+                </div>
+              </div>
+              <button class="btn btn-ghost" id="btn-filter-pro">
+                仅看 Pro 设备
+              </button>
+            </div>
+
+            <div class="device-list" id="device-list"></div>
+          </div>
+
+          <aside class="side-panel">
+            <div class="side-panel-inner">
+              <div class="panel-header">
+                <div>
+                  <div class="panel-title">为选中设备续费 Pro</div>
+                  <div class="card-sub">
+                    选择续费周期查看到期时间与积分变化，实际价格以正式计费为准。
+                  </div>
+                </div>
+                <div class="panel-tag">模拟 Demo · 无真实扣费</div>
+              </div>
+
+              <div id="empty-state" class="card-sub" style="margin-top: 12px;">
+                请选择左侧一台设备后，在此配置续费 Pro 套餐与积分。
+              </div>
+
+              <div id="panel-body" style="display: none;">
+                <div class="device-summary" id="summary-device">
+                  <div class="device-summary-main">
+                    <div>
+                      <div>
+                        <strong id="summary-name"></strong>
+                        <span class="pill-pro">Pro 有效中</span>
+                      </div>
+                      <div style="margin-top: 2px; font-size: 11px;">
+                        SN：<span id="summary-sn"></span> · 门店：
+                        <span id="summary-store"></span>
+                      </div>
+                    </div>
+                    <div style="text-align: right; font-size: 11px;">
+                      <div>
+                        当前到期：<span id="summary-expire"></span>
+                      </div>
+                      <div>
+                        当前可用积分：
+                        <span class="text-success" id="summary-balance"></span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="summary-grid">
+                  <div class="summary-box">
+                    <strong>Pro 状态</strong>
+                    <div id="summary-status-text">-</div>
+                  </div>
+                  <div class="summary-box">
+                    <strong>续费后到期预估</strong>
+                    <div id="summary-new-expire">请选择续费周期</div>
+                  </div>
+                  <div class="summary-box">
+                    <strong>本次预计获得积分</strong>
+                    <div>
+                      <span id="summary-new-points">0</span>
+                      <span class="text-sub">（加入总门店积分池）</span>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="plan-list" id="plan-list"></div>
+
+                <div class="payment-summary">
+                  <div class="payment-row">
+                    <span>本次续费周期</span>
+                    <span id="pay-cycle">未选择</span>
+                  </div>
+                  <div class="payment-row">
+                    <span>当前应付金额</span>
+                    <span id="pay-amount">¥ 0.00</span>
+                  </div>
+                  <div class="payment-row">
+                    <span>积分变化</span>
+                    <span id="pay-points-change">+0 积分</span>
+                  </div>
+                  <div class="payment-row total">
+                    <span>续费后总门店积分池可用</span>
+                    <span id="pay-total-points">0 积分</span>
+                  </div>
+                </div>
+
+                <div class="hint">
+                  <span class="hint-dot">•</span>
+                  <span>
+                    本 Demo 仅模拟
+                    <strong>「按设备开通 / 续费 Pro 获取积分」</strong> 的前端交互，真实价格与积分档位以后台配置为准。
+                  </span>
+                </div>
+
+                <div class="panel-footer">
+                  <button class="btn btn-ghost" id="btn-buy-points">
+                    仅按量购买积分
+                  </button>
+                  <div style="display: flex; gap: 8px; align-items: center;">
+                    <span
+                      class="chip-mini"
+                      id="summary-strategy-label"
+                    >推荐：Pro 续费补积分</span>
+                    <button class="btn btn-primary" id="btn-renew-now">
+                      续费 Pro 并获取积分
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </aside>
+        </section>
+      </main>
+
+      <div class="toast" id="toast">
+        <span>✅ 操作已模拟完成：未真实扣费，仅更新本页数据。</span>
+      </div>
+    </div>
+
+    <script>
+      const devices = [
+        {
+          id: 1,
+          name: "Visbody-M60",
+          model: "M60",
+          sn: "MC1023456789300",
+          store: "XAtest 总店",
+          expire: "2026-10-08",
+          status: "normal",
+          points: 12000,
+        },
+        {
+          id: 2,
+          name: "Visbody-M30",
+          model: "M30",
+          sn: "MC1023456789105",
+          store: "XAtest 子门店 · A",
+          expire: "2026-04-18",
+          status: "expiring",
+          points: 6000,
+        },
+        {
+          id: 3,
+          name: "Visbody-Explorer",
+          model: "Explorer",
+          sn: "ME023456789010",
+          store: "XAtest 子门店 · B",
+          expire: "2026-02-15",
+          status: "expired",
+          points: 0,
+        },
+      ];
+
+      const plans = [
+        {
+          id: "month",
+          name: "按月续费 Pro",
+          desc: "适合短期活动或试运营门店",
+          cycleLabel: "1 个月",
+          price: 399,
+          points: 2000,
+        },
+        {
+          id: "year",
+          name: "按年续费 Pro",
+          desc: "长期门店推荐方案，价格更优",
+          cycleLabel: "12 个月",
+          price: 3990,
+          points: 24000,
+          highlight: true,
+        },
+        {
+          id: "two-year",
+          name: "两年续费 Pro",
+          desc: "重度使用客户，可一次性续两年",
+          cycleLabel: "24 个月",
+          price: 7390,
+          points: 48000,
+        },
+      ];
+
+      let filterOnlyPro = false;
+      let selectedDeviceId = null;
+      let selectedPlanId = null;
+      let totalPointsPool = devices.reduce((acc, d) => acc + d.points, 0);
+
+      const deviceListEl = document.getElementById("device-list");
+      const storeDeviceCountEl = document.getElementById("store-device-count");
+      const chipBalanceEl = document.getElementById("chip-balance");
+      const chipExpiringEl = document.getElementById("chip-expiring");
+      const chipExpiredEl = document.getElementById("chip-expired");
+
+      function computeSummary() {
+        storeDeviceCountEl.textContent = devices.length.toString();
+        chipBalanceEl.textContent = totalPointsPool.toLocaleString("zh-CN");
+        chipExpiringEl.textContent = devices.filter(
+          (d) => d.status === "expiring"
+        ).length;
+        chipExpiredEl.textContent = devices.filter(
+          (d) => d.status === "expired"
+        ).length;
+      }
+
+      function renderDevices() {
+        deviceListEl.innerHTML = "";
+        const list = devices.filter((d) =>
+          filterOnlyPro ? d.status !== "expired" : true
+        );
+
+        list.forEach((device) => {
+          const row = document.createElement("div");
+          row.className =
+            "device-row" + (device.id === selectedDeviceId ? " active" : "");
+          row.dataset.id = device.id;
+
+          const nameCol = document.createElement("div");
+          nameCol.className = "device-name";
+          nameCol.innerHTML = `
+            <div class="device-name-main">
+              <span>${device.name}</span>
+              <span class="badge-model">${device.model}</span>
+            </div>
+            <div class="device-sn">SN：${device.sn}</div>
+          `;
+
+          const storeCol = document.createElement("div");
+          storeCol.innerHTML = `<span class="badge-store">${device.store}</span>`;
+
+          const expireCol = document.createElement("div");
+          let statusClass = "pro";
+          let label = "Pro 有效";
+          if (device.status === "expiring") {
+            statusClass = "expiring";
+            label = "即将到期";
+          } else if (device.status === "expired") {
+            statusClass = "expired";
+            label = "已到期";
+          }
+          expireCol.innerHTML = `
+            <div>${device.expire}</div>
+            <div class="status-pill ${statusClass}">${label}</div>
+          `;
+
+          const pointsCol = document.createElement("div");
+          pointsCol.innerHTML = `
+            <div class="${
+              device.points > 0 ? "text-success" : "text-muted"
+            }">${device.points.toLocaleString("zh-CN")} 积分</div>
+            <div class="text-muted" style="font-size:11px;">计入总门店积分池</div>
+          `;
+
+          const actionCol = document.createElement("div");
+          const btn = document.createElement("button");
+          btn.className = "btn btn-ghost";
+          btn.textContent =
+            device.status === "expired" ? "重新开通 Pro" : "续费 Pro";
+          btn.addEventListener("click", (e) => {
+            e.stopPropagation();
+            onSelectDevice(device.id);
+          });
+          actionCol.appendChild(btn);
+
+          row.appendChild(nameCol);
+          row.appendChild(storeCol);
+          row.appendChild(expireCol);
+          row.appendChild(pointsCol);
+          row.appendChild(actionCol);
+
+          row.addEventListener("click", () => onSelectDevice(device.id));
+          deviceListEl.appendChild(row);
+        });
+      }
+
+      const emptyStateEl = document.getElementById("empty-state");
+      const panelBodyEl = document.getElementById("panel-body");
+      const summaryNameEl = document.getElementById("summary-name");
+      const summarySnEl = document.getElementById("summary-sn");
+      const summaryStoreEl = document.getElementById("summary-store");
+      const summaryExpireEl = document.getElementById("summary-expire");
+      const summaryBalanceEl = document.getElementById("summary-balance");
+      const summaryStatusTextEl = document.getElementById("summary-status-text");
+      const summaryNewExpireEl = document.getElementById("summary-new-expire");
+      const summaryNewPointsEl = document.getElementById("summary-new-points");
+      const planListEl = document.getElementById("plan-list");
+      const payCycleEl = document.getElementById("pay-cycle");
+      const payAmountEl = document.getElementById("pay-amount");
+      const payPointsChangeEl = document.getElementById("pay-points-change");
+      const payTotalPointsEl = document.getElementById("pay-total-points");
+      const strategyLabelEl = document.getElementById(
+        "summary-strategy-label"
+      );
+
+      function onSelectDevice(id) {
+        const device = devices.find((d) => d.id === id);
+        if (!device) return;
+
+        selectedDeviceId = id;
+        selectedPlanId = "year";
+
+        emptyStateEl.style.display = "none";
+        panelBodyEl.style.display = "block";
+
+        summaryNameEl.textContent = device.name;
+        summarySnEl.textContent = device.sn;
+        summaryStoreEl.textContent = device.store;
+        summaryExpireEl.textContent = device.expire;
+        summaryBalanceEl.textContent = device.points.toLocaleString("zh-CN");
+
+        if (device.status === "expired") {
+          summaryStatusTextEl.textContent =
+            "Pro 已到期，重新开通后立即生效并获得积分。";
+        } else if (device.status === "expiring") {
+          summaryStatusTextEl.textContent =
+            "Pro 即将到期，建议优先续费，避免中断使用与积分清零。";
+        } else {
+          summaryStatusTextEl.textContent =
+            "Pro 正常使用中，可随时提前续费并叠加到期时间。";
+        }
+
+        renderPlans();
+        updatePaymentSummary();
+        renderDevices();
+      }
+
+      function renderPlans() {
+        planListEl.innerHTML = "";
+        plans.forEach((plan) => {
+          const card = document.createElement("div");
+          card.className =
+            "plan-card" + (plan.id === selectedPlanId ? " selected" : "");
+          card.dataset.id = plan.id;
+
+          const left = document.createElement("div");
+          left.innerHTML = `
+            <div class="plan-name">
+              <span class="radio-dot">
+                <span class="radio-dot-inner"></span>
+              </span>
+              <span>${plan.name}</span>
+              ${
+                plan.highlight
+                  ? '<span class="badge-model" style="background:#dbeafe;color:#1d4ed8;border-radius:999px;">推荐</span>'
+                  : ""
+              }
+            </div>
+            <div class="plan-meta">${plan.desc}</div>
+          `;
+
+          const middle = document.createElement("div");
+          middle.className = "plan-meta";
+          middle.innerHTML = `
+            周期：<strong>${plan.cycleLabel}</strong><br />
+            本次预计获得 <strong>${plan.points.toLocaleString(
+              "zh-CN"
+            )}</strong> 积分
+          `;
+
+          const right = document.createElement("div");
+          right.className = "plan-price";
+          right.innerHTML = `
+            <div>¥ ${plan.price.toLocaleString("zh-CN")}</div>
+            <div class="text-muted" style="font-size:11px;">含 Pro 服务与 AI 功能</div>
+          `;
+
+          card.appendChild(left);
+          card.appendChild(middle);
+          card.appendChild(right);
+
+          card.addEventListener("click", () => {
+            selectedPlanId = plan.id;
+            renderPlans();
+            updatePaymentSummary();
+          });
+
+          planListEl.appendChild(card);
+        });
+      }
+
+      function updatePaymentSummary() {
+        const device = devices.find((d) => d.id === selectedDeviceId);
+        const plan = plans.find((p) => p.id === selectedPlanId);
+        if (!device || !plan) return;
+
+        summaryNewPointsEl.textContent = plan.points.toLocaleString("zh-CN");
+        payCycleEl.textContent = plan.cycleLabel;
+        payAmountEl.textContent = "¥ " + plan.price.toLocaleString("zh-CN");
+        payPointsChangeEl.textContent =
+          "+" + plan.points.toLocaleString("zh-CN") + " 积分";
+
+        const newPool = totalPointsPool + plan.points;
+        payTotalPointsEl.textContent = newPool.toLocaleString("zh-CN") + " 积分";
+
+        const devicePointShare = device.points + plan.points;
+        summaryNewExpireEl.textContent =
+          "续费后到期时间在原基础上顺延 " +
+          plan.cycleLabel +
+          "（示意），同时设备贡献积分 " +
+          devicePointShare.toLocaleString("zh-CN") +
+          "。";
+
+        strategyLabelEl.textContent =
+          plan.id === "year" ? "推荐：按年续费补积分" : "按需选择续费周期";
+      }
+
+      function showToast(message) {
+        const toast = document.getElementById("toast");
+        toast.firstElementChild.textContent = "✅ " + message;
+        toast.classList.add("visible");
+        setTimeout(() => toast.classList.remove("visible"), 2600);
+      }
+
+      document
+        .getElementById("btn-filter-pro")
+        .addEventListener("click", () => {
+          filterOnlyPro = !filterOnlyPro;
+          document.getElementById("btn-filter-pro").textContent = filterOnlyPro
+            ? "查看全部设备"
+            : "仅看 Pro 设备";
+          renderDevices();
+        });
+
+      document.getElementById("btn-add-pro").addEventListener("click", () => {
+        showToast("此 Demo 仅模拟入口，「添加 Pro 设备」暂不创建新设备。");
+      });
+
+      document
+        .getElementById("btn-buy-points")
+        .addEventListener("click", () => {
+          showToast("已打开「按量购买积分」示意入口，实际支付逻辑需接后端。");
+        });
+
+      document.getElementById("btn-renew-now").addEventListener("click", () => {
+        const device = devices.find((d) => d.id === selectedDeviceId);
+        const plan = plans.find((p) => p.id === selectedPlanId);
+        if (!device || !plan) {
+          showToast("请先选择设备和续费周期。");
+          return;
+        }
+
+        totalPointsPool += plan.points;
+        device.points += plan.points;
+        computeSummary();
+        updatePaymentSummary();
+        renderDevices();
+
+        showToast(
+          `${device.name} 已模拟续费成功，积分池增加 ${plan.points.toLocaleString(
+            "zh-CN"
+          )} 积分。`
+        );
+      });
+
+      computeSummary();
+      renderDevices();
+    </script>
+  </body>
+</html>
+
