@@ -1,13 +1,15 @@
+<!-- html-demo-generator: visbody 报告列表批量导出（含用户授权）演示 Demo -->
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>报告列表批量导出 - 研发演示 Demo</title>
+  <title>报告列表批量导出 - visbody 研发演示 Demo</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700&family=Noto+Sans+SC:wght@400;500;600;700&display=swap" rel="stylesheet">
   <style>
+    /* ========== 变量与基础 ========== */
     :root {
       --bg: #f5f7fa;
       --card-bg: #fff;
@@ -23,6 +25,7 @@
     * { box-sizing: border-box; margin: 0; padding: 0; }
     body { font-family: var(--font-sans); background: var(--bg); color: var(--text); min-height: 100vh; line-height: 1.5; }
 
+    /* ========== 头部 ========== */
     .header {
       background: var(--card-bg);
       padding: 16px 24px;
@@ -38,7 +41,7 @@
 
     .main { max-width: 1400px; margin: 0 auto; padding: 24px; }
 
-    /* 筛选区 */
+    /* ========== 筛选区 ========== */
     .filter-bar {
       background: var(--card-bg);
       padding: 20px 24px;
@@ -50,7 +53,6 @@
       align-items: center;
       gap: 16px;
     }
-    .filter-bar label { font-size: 14px; color: var(--text-muted); margin-right: 6px; }
     .filter-bar input[type="text"],
     .filter-bar input[type="date"] {
       padding: 8px 12px;
@@ -60,40 +62,12 @@
       font-family: inherit;
     }
     .filter-bar input[type="text"] { width: 200px; }
-    .filter-bar select {
-      padding: 8px 12px;
-      border: 1px solid var(--border);
-      border-radius: 6px;
-      font-size: 14px;
-      font-family: inherit;
-      min-width: 120px;
-    }
-    .date-range {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-    }
+    .date-range { display: inline-flex; align-items: center; gap: 8px; }
     .date-range input[type="date"] { width: 140px; }
     .date-range .sep { color: var(--text-muted); font-size: 14px; }
-    .date-range .calendar-icon {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      width: 32px;
-      height: 32px;
-      border: 1px solid var(--border);
-      border-radius: 6px;
-      color: var(--text-muted);
-      cursor: pointer;
-      margin-left: 2px;
-    }
-    .date-range .calendar-icon:hover { border-color: var(--primary); color: var(--primary); }
-    .search-btn {
-      padding: 10px 16px;
-      min-width: 44px;
-      justify-content: center;
-    }
+    .search-btn { padding: 10px 16px; min-width: 44px; justify-content: center; }
     .search-btn svg { width: 18px; height: 18px; }
+
     .btn {
       padding: 10px 20px;
       border: none;
@@ -107,58 +81,17 @@
       align-items: center;
       gap: 8px;
     }
-    .btn-primary {
-      background: var(--primary);
-      color: #fff;
-    }
+    .btn-primary { background: var(--primary); color: #fff; }
     .btn-primary:hover:not(:disabled) { filter: brightness(1.05); }
     .btn-primary:disabled { background: #94a3b8; cursor: not-allowed; }
-    .btn-outline {
-      background: transparent;
-      border: 1px solid var(--primary);
-      color: var(--primary);
-    }
+    .btn-outline { background: transparent; border: 1px solid var(--primary); color: var(--primary); }
     .btn-outline:hover:not(:disabled) { background: var(--primary-light); }
     .btn-group { display: flex; align-items: center; gap: 8px; margin-left: auto; }
-    .export-wrap { position: relative; }
-    .export-wrap .btn-export { min-width: 120px; }
-    .export-dropdown {
-      display: none;
-      position: absolute;
-      top: 100%;
-      right: 0;
-      margin-top: 4px;
-      background: var(--card-bg);
-      border: 1px solid var(--border);
-      border-radius: 6px;
-      box-shadow: var(--shadow);
-      min-width: 160px;
-      z-index: 10;
-    }
-    .export-dropdown.show { display: block; }
-    .export-dropdown button {
-      width: 100%;
-      padding: 12px 16px;
-      border: none;
-      background: none;
-      text-align: left;
-      font-size: 14px;
-      cursor: pointer;
-      font-family: inherit;
-      border-radius: 0;
-    }
-    .export-dropdown button:hover { background: var(--bg); }
-    .export-dropdown button:first-child { border-radius: 6px 6px 0 0; }
-    .export-dropdown button:last-child { border-radius: 0 0 6px 6px; }
-    .selected-count {
-      font-size: 13px;
-      color: rgba(255, 255, 255, 0.9);
-      margin-left: 8px;
-      font-weight: 500;
-    }
+
+    .selected-count { font-size: 13px; color: rgba(255,255,255,.9); margin-left: 8px; font-weight: 500; }
     .selected-count strong { color: #fff; font-weight: 600; }
 
-    /* 表格 */
+    /* ========== 表格 ========== */
     .table-wrap {
       background: var(--card-bg);
       border-radius: var(--radius);
@@ -168,12 +101,9 @@
     table { width: 100%; border-collapse: collapse; font-size: 14px; }
     th, td { padding: 14px 16px; text-align: left; border-bottom: 1px solid var(--border); }
     th { background: #f8fafc; color: var(--text-muted); font-weight: 600; }
-    th input[type="checkbox"] { cursor: pointer; }
-    td input[type="checkbox"] { cursor: pointer; }
+    th input[type="checkbox"], td input[type="checkbox"] { cursor: pointer; }
     tr:hover { background: #f8fafc; }
     tr.selected { background: var(--primary-light); }
-    .user-cell { display: flex; align-items: center; gap: 10px; }
-    .user-avatar { width: 32px; height: 32px; border-radius: 50%; background: var(--primary-light); color: var(--primary); display: flex; align-items: center; justify-content: center; font-weight: 600; font-size: 13px; }
     .user-name { font-weight: 500; }
     .user-contact { font-size: 12px; color: var(--text-muted); }
     .measure-icons { display: flex; gap: 4px; }
@@ -182,12 +112,16 @@
     .measure-icon.purple { background: #a855f7; }
     .measure-icon.red { background: #ef4444; }
     .ops { display: flex; gap: 8px; align-items: center; }
-    .ops .icon { width: 28px; height: 28px; border-radius: 6px; display: inline-flex; align-items: center; justify-content: center; cursor: pointer; font-size: 14px; color: var(--text-muted); }
+    .ops .icon {
+      width: 28px; height: 28px; border-radius: 6px;
+      display: inline-flex; align-items: center; justify-content: center;
+      cursor: pointer; font-size: 14px; color: var(--text-muted);
+    }
     .ops .icon:hover { background: var(--bg); color: var(--primary); }
     .ops .icon.download { color: #22c55e; }
     .ops .icon.delete { color: #ef4444; }
 
-    /* 分页 */
+    /* ========== 分页 ========== */
     .pagination {
       display: flex;
       align-items: center;
@@ -200,7 +134,8 @@
     }
     .pagination-info { font-size: 14px; color: var(--text-muted); }
     .pagination-controls { display: flex; align-items: center; gap: 4px; }
-    .pagination-controls button, .pagination-controls span {
+    .pagination-controls button,
+    .pagination-controls span {
       min-width: 36px; height: 36px;
       border: 1px solid var(--border);
       background: var(--card-bg);
@@ -224,7 +159,7 @@
       font-family: inherit;
     }
 
-    /* Toast */
+    /* ========== Toast ========== */
     .toast {
       position: fixed;
       bottom: 24px;
@@ -240,16 +175,19 @@
       transition: transform .25s, opacity .25s;
       z-index: 1000;
     }
-    .toast.show {
-      transform: translateX(-50%) translateY(0);
-      opacity: 1;
-    }
+    .toast.show { transform: translateX(-50%) translateY(0); opacity: 1; }
     .btn.loading { pointer-events: none; opacity: .8; }
-    .btn.loading::after { content: ''; width: 16px; height: 16px; border: 2px solid currentColor; border-right-color: transparent; border-radius: 50%; animation: spin .6s linear infinite; margin-left: 8px; }
-    .btn-secondary { background: #64748b; color: #fff; }
-    .btn-secondary:hover:not(:disabled) { filter: brightness(1.1); }
+    .btn.loading::after {
+      content: '';
+      width: 16px; height: 16px;
+      border: 2px solid currentColor;
+      border-right-color: transparent;
+      border-radius: 50%;
+      animation: spin .6s linear infinite;
+      margin-left: 8px;
+    }
 
-    /* 批量导出弹窗 */
+    /* ========== 弹窗 ========== */
     .modal-mask {
       display: none;
       position: fixed;
@@ -266,6 +204,8 @@
       padding: 24px;
       min-width: 480px;
       max-width: 600px;
+      max-height: 90vh;
+      overflow-y: auto;
       box-shadow: 0 8px 24px rgba(0,0,0,.15);
     }
     .modal h3 { font-size: 18px; margin-bottom: 20px; color: var(--text); font-weight: 600; }
@@ -282,17 +222,10 @@
     }
     .modal-option:hover { border-color: var(--primary); background: var(--primary-light); }
     .modal-option.selected { border-color: var(--primary); background: var(--primary-light); }
-    .modal-option-title { font-size: 15px; color: var(--text); font-weight: 600; margin-bottom: 6px; }
+    .modal-option-title { font-size: 15px; font-weight: 600; margin-bottom: 6px; }
     .modal-option-desc { font-size: 13px; color: var(--text-muted); }
-    .modal-filter-group {
-      margin-bottom: 16px;
-    }
-    .modal-filter-group label {
-      display: block;
-      font-size: 14px;
-      color: var(--text-muted);
-      margin-bottom: 8px;
-    }
+    .modal-filter-group { margin-bottom: 16px; }
+    .modal-filter-group label { display: block; font-size: 14px; color: var(--text-muted); margin-bottom: 8px; }
     .modal-filter-group select,
     .modal-filter-group input[type="date"] {
       width: 100%;
@@ -311,11 +244,7 @@
       margin-bottom: 20px;
     }
     .modal-info strong { color: var(--primary); font-weight: 600; }
-    .modal-format-group {
-      display: flex;
-      gap: 12px;
-      margin-bottom: 20px;
-    }
+    .modal-format-group { display: flex; gap: 12px; margin-bottom: 20px; }
     .modal-format-option {
       flex: 1;
       padding: 12px;
@@ -341,7 +270,8 @@
       border-top: 1px solid var(--border);
     }
     .modal-actions .btn { min-width: 80px; }
-    /* 授权模块 */
+
+    /* ========== 授权模块 ========== */
     .agreement-block {
       margin-top: 12px;
       padding: 12px 14px;
@@ -390,26 +320,16 @@
       font-weight: 600;
       box-shadow: 0 1px 2px rgba(0,0,0,.08);
     }
-    .agreement-content-wrap {
-      margin-top: 4px;
-      margin-bottom: 6px;
-    }
+    .agreement-content-wrap { margin-top: 4px; margin-bottom: 6px; }
     .agreement-content {
       max-height: 100px;
       overflow-y: auto;
       padding-right: 6px;
       line-height: 1.5;
     }
-    .agreement-content.hidden {
-      display: none;
-    }
-    .agreement-content p {
-      margin-bottom: 4px;
-    }
-    .agreement-content ul {
-      padding-left: 16px;
-      margin: 4px 0;
-    }
+    .agreement-content.hidden { display: none; }
+    .agreement-content p { margin-bottom: 4px; }
+    .agreement-content ul { padding-left: 16px; margin: 4px 0; }
     .agreement-check {
       display: flex;
       align-items: flex-start;
@@ -419,18 +339,10 @@
       cursor: pointer;
       color: var(--text);
     }
-    .agreement-check input {
-      margin-top: 2px;
-      cursor: pointer;
-    }
-    .agreement-tip {
-      margin-top: 4px;
-      font-size: 11px;
-      color: #f97316;
-    }
-    .agreement-tip.ok {
-      color: #16a34a;
-    }
+    .agreement-check input { margin-top: 2px; cursor: pointer; }
+    .agreement-tip { margin-top: 4px; font-size: 11px; color: #f97316; }
+    .agreement-tip.ok { color: #16a34a; }
+
     @keyframes spin { to { transform: rotate(360deg); } }
   </style>
 </head>
@@ -455,7 +367,7 @@
       <div class="btn-group">
         <button type="button" class="btn btn-primary">数据预览</button>
         <button type="button" class="btn btn-primary" id="btnBatchExport">
-          批量导出
+          报告数据批量导出
           <span class="selected-count" id="selectedCount"></span>
         </button>
       </div>
@@ -465,9 +377,7 @@
       <table>
         <thead>
           <tr>
-            <th style="width: 48px;">
-              <input type="checkbox" id="checkAll" title="全选本页">
-            </th>
+            <th style="width: 48px;"><input type="checkbox" id="checkAll" title="全选本页"></th>
             <th>用户信息</th>
             <th>扫描时间</th>
             <th>测量项目</th>
@@ -477,9 +387,7 @@
             <th style="width: 140px;">操作</th>
           </tr>
         </thead>
-        <tbody id="tbody">
-          <!-- 由 JS 填充 -->
-        </tbody>
+        <tbody id="tbody"></tbody>
       </table>
       <div class="pagination">
         <div class="pagination-info">共 335 条</div>
@@ -505,12 +413,10 @@
 
   <div class="toast" id="toast"></div>
 
-  <!-- 批量导出弹窗 -->
   <div class="modal-mask" id="exportModal">
     <div class="modal">
       <h3>报告数据批量导出</h3>
-      
-      <!-- 步骤1：选择导出方式 -->
+
       <div class="modal-step active" id="step1">
         <div class="modal-step-title">请选择导出方式</div>
         <div class="modal-option" data-mode="selected">
@@ -564,7 +470,6 @@
         </div>
       </div>
 
-      <!-- 步骤2：按勾选导出 - 选择格式 -->
       <div class="modal-step" id="step2Selected">
         <div class="modal-step-title">选择导出格式</div>
         <div class="modal-info">已选择 <strong id="selectedCountStep2">0</strong> 条报告</div>
@@ -584,7 +489,6 @@
         </div>
       </div>
 
-      <!-- 步骤2：按条件导出 - 设置筛选条件 -->
       <div class="modal-step" id="step2Filter">
         <div class="modal-step-title">设置筛选条件</div>
         <div class="modal-filter-group">
@@ -618,7 +522,6 @@
         </div>
       </div>
 
-      <!-- 步骤3：按条件导出 - 选择格式 -->
       <div class="modal-step" id="step3Filter">
         <div class="modal-step-title">选择导出格式</div>
         <div class="modal-info">当前筛选结果约 <strong id="filterResultCountStep3">335</strong> 条</div>
@@ -641,6 +544,7 @@
   </div>
 
   <script>
+    /* ========== 配置与模拟数据 ========== */
     const MAX_EXPORT = 500;
     const mockRows = [
       { id: 1, name: 'koko-sss', contact: '7818****3367@qq.com', time: '2026-01-22 11:17:27', icons: ['green','purple','red'], device: 'Visbody-M30', sn: 'N1C0123456789290', store: '【测试】西安测试' },
@@ -661,17 +565,15 @@
       secondsLeft: 10
     };
 
+    /* ========== 表格渲染与勾选 ========== */
     function renderTable() {
       const tbody = document.getElementById('tbody');
       tbody.innerHTML = mockRows.map(r => `
         <tr data-id="${r.id}">
           <td><input type="checkbox" class="row-check" value="${r.id}"></td>
           <td>
-            <div class="user-cell">
-              <div>
-                <div class="user-name">${r.name}</div>
-                <div class="user-contact">${r.contact}</div>
-            </div>
+            <div class="user-name">${r.name}</div>
+            <div class="user-contact">${r.contact}</div>
           </td>
           <td>${r.time}</td>
           <td><div class="measure-icons">${r.icons.map(c => `<span class="measure-icon ${c}"></span>`).join('')}</div></td>
@@ -717,30 +619,16 @@
 
     function updateExportState() {
       const n = getSelectedCount();
-      const btn = document.getElementById('btnBatchExport');
       const countEl = document.getElementById('selectedCount');
-      if (n === 0) {
-        countEl.textContent = '';
-      } else {
-        countEl.innerHTML = n <= MAX_EXPORT ? `(<strong>已选 ${n} 条</strong>)` : `(<strong>已选 ${n} 条</strong>，超过单次上限 ${MAX_EXPORT} 条)`;
-      }
-      // 更新弹窗中的选中数量
+      if (n === 0) countEl.textContent = '';
+      else countEl.innerHTML = n <= MAX_EXPORT ? `(<strong>已选 ${n} 条</strong>)` : `(<strong>已选 ${n} 条</strong>，超过单次上限 ${MAX_EXPORT} 条)`;
       const modalCountEl = document.getElementById('selectedCountInModal');
       if (modalCountEl) modalCountEl.textContent = n;
-      // 如果弹窗打开且在步骤1且选择了"按勾选导出"，更新下一步按钮状态
       const modal = document.getElementById('exportModal');
-      if (modal.classList.contains('show') && currentStep === 'step1' && selectedMode === 'selected') {
-        const nextBtn = document.getElementById('step1Next');
-        if (n === 0) {
-          nextBtn.disabled = true;
-          nextBtn.title = '请至少选择 1 条报告后再导出';
-        } else {
-          nextBtn.disabled = false;
-          nextBtn.title = '';
-        }
-      }
+      if (modal.classList.contains('show') && currentStep === 'step1' && selectedMode === 'selected') updateStep1NextState();
     }
 
+    /* ========== 提示与步骤 ========== */
     function showToast(msg) {
       const el = document.getElementById('toast');
       el.textContent = msg;
@@ -762,10 +650,9 @@
       showStep('step1');
     }
 
-    function getFilterResultCount() {
-      return 335; // 演示用，实际应由后端根据筛选条件返回
-    }
+    function getFilterResultCount() { return 335; }
 
+    /* ========== 授权：可继续下一步条件 ========== */
     function canProceedStep1() {
       if (!selectedMode) return false;
       if (selectedMode === 'selected' && getSelectedCount() === 0) return false;
@@ -777,15 +664,10 @@
       const nextBtn = document.getElementById('step1Next');
       if (!nextBtn) return;
       nextBtn.disabled = !canProceedStep1();
-      if (selectedMode === 'selected' && getSelectedCount() === 0) {
-        nextBtn.title = '请至少选择 1 条报告后再导出，并完成授权阅读。';
-      } else if (!agreementState.scrolled || !agreementState.timerDone) {
-        nextBtn.title = '请先向下滚动阅读完整授权说明并等待倒计时结束，再勾选同意。';
-      } else if (!document.getElementById('agreementCheckboxStep1')?.checked) {
-        nextBtn.title = '请勾选同意后继续。';
-      } else {
-        nextBtn.title = '';
-      }
+      if (selectedMode === 'selected' && getSelectedCount() === 0) nextBtn.title = '请至少选择 1 条报告后再导出，并完成授权阅读。';
+      else if (!agreementState.scrolled || !agreementState.timerDone) nextBtn.title = '请先向下滚动阅读完整授权说明并等待倒计时结束，再勾选同意。';
+      else if (!document.getElementById('agreementCheckboxStep1')?.checked) nextBtn.title = '请勾选同意后继续。';
+      else nextBtn.title = '';
     }
 
     function updateAgreementTipText() {
@@ -819,10 +701,7 @@
       }, 1000);
       agreementState.timerId = setTimeout(() => {
         agreementState.timerDone = true;
-        if (agreementState.intervalId) {
-          clearInterval(agreementState.intervalId);
-          agreementState.intervalId = null;
-        }
+        if (agreementState.intervalId) { clearInterval(agreementState.intervalId); agreementState.intervalId = null; }
         updateAgreementTipText();
         updateStep1NextState();
       }, 10000);
@@ -840,7 +719,6 @@
             updateAgreementTipText();
             updateStep1NextState();
           } else if (!agreementState.started) {
-            // 用户一旦开始滚动即可启动计时
             startAgreementTimer();
             updateAgreementTipText();
           }
@@ -850,27 +728,16 @@
     }
 
     function resetAgreement() {
-      if (agreementState.timerId) {
-        clearTimeout(agreementState.timerId);
-        agreementState.timerId = null;
-      }
-      if (agreementState.intervalId) {
-        clearInterval(agreementState.intervalId);
-        agreementState.intervalId = null;
-      }
+      if (agreementState.timerId) { clearTimeout(agreementState.timerId); agreementState.timerId = null; }
+      if (agreementState.intervalId) { clearInterval(agreementState.intervalId); agreementState.intervalId = null; }
       agreementState.scrolled = false;
       agreementState.timerDone = false;
       agreementState.started = false;
       agreementState.secondsLeft = 10;
       const checkbox = document.getElementById('agreementCheckboxStep1');
       if (checkbox) checkbox.checked = false;
-      // 重置为中国大陆 Tab
-      document.querySelectorAll('#agreementBlockStep1 .agreement-tab').forEach(tab => {
-        tab.classList.toggle('active', tab.dataset.market === 'cn');
-      });
-      document.querySelectorAll('#agreementBlockStep1 .agreement-content').forEach(content => {
-        content.classList.toggle('hidden', content.dataset.market !== 'cn');
-      });
+      document.querySelectorAll('#agreementBlockStep1 .agreement-tab').forEach(tab => tab.classList.toggle('active', tab.dataset.market === 'cn'));
+      document.querySelectorAll('#agreementBlockStep1 .agreement-content').forEach(content => content.classList.toggle('hidden', content.dataset.market !== 'cn'));
       updateAgreementTipText();
       updateStep1NextState();
     }
@@ -881,22 +748,16 @@
           const market = tab.dataset.market;
           document.querySelectorAll('#agreementBlockStep1 .agreement-tab').forEach(t => t.classList.remove('active'));
           tab.classList.add('active');
-          document.querySelectorAll('#agreementBlockStep1 .agreement-content').forEach(c => {
-            c.classList.toggle('hidden', c.dataset.market !== market);
-          });
+          document.querySelectorAll('#agreementBlockStep1 .agreement-content').forEach(c => c.classList.toggle('hidden', c.dataset.market !== market));
         });
       });
       const checkbox = document.getElementById('agreementCheckboxStep1');
-      if (checkbox) {
-        checkbox.addEventListener('change', () => {
-          updateStep1NextState();
-        });
-      }
+      if (checkbox) checkbox.addEventListener('change', () => updateStep1NextState());
       bindAgreementScroll();
       updateAgreementTipText();
     }
 
-    // 批量导出按钮点击
+    /* ========== 事件绑定 ========== */
     document.getElementById('btnBatchExport').addEventListener('click', function() {
       updateExportState();
       document.getElementById('exportModal').classList.add('show');
@@ -905,7 +766,6 @@
       bindAgreementScroll();
     });
 
-    // 步骤1：选择导出方式
     document.querySelectorAll('#step1 .modal-option').forEach(opt => {
       opt.addEventListener('click', function() {
         document.querySelectorAll('#step1 .modal-option').forEach(o => o.classList.remove('selected'));
@@ -924,18 +784,11 @@
       }
       if (selectedMode === 'selected') {
         const n = getSelectedCount();
-        if (n === 0) {
-          showToast('请至少选择 1 条报告后再导出。');
-          return;
-        }
-        if (n > MAX_EXPORT) {
-          showToast(`单次最多导出 ${MAX_EXPORT} 条报告，请缩小范围或使用『按条件导出』。`);
-          return;
-        }
+        if (n === 0) { showToast('请至少选择 1 条报告后再导出。'); return; }
+        if (n > MAX_EXPORT) { showToast(`单次最多导出 ${MAX_EXPORT} 条报告，请缩小范围或使用『按条件导出』。`); return; }
         document.getElementById('selectedCountStep2').textContent = n;
         showStep('step2Selected');
       } else {
-        // 同步筛选区的日期到弹窗
         document.getElementById('modalStartDate').value = document.getElementById('startDate').value;
         document.getElementById('modalEndDate').value = document.getElementById('endDate').value;
         document.getElementById('filterResultCount').textContent = getFilterResultCount();
@@ -943,7 +796,6 @@
       }
     });
 
-    // 步骤2：按勾选导出 - 选择格式
     document.querySelectorAll('#step2Selected .modal-format-option').forEach(opt => {
       opt.addEventListener('click', function() {
         document.querySelectorAll('#step2Selected .modal-format-option').forEach(o => o.classList.remove('selected'));
@@ -951,7 +803,6 @@
         this.querySelector('input[type="radio"]').checked = true;
       });
     });
-
     document.getElementById('step2SelectedBack').addEventListener('click', () => showStep('step1'));
     document.getElementById('step2SelectedConfirm').addEventListener('click', function() {
       const format = document.querySelector('#step2Selected input[name="format"]:checked').value;
@@ -960,19 +811,16 @@
       this.classList.add('loading');
       setTimeout(() => {
         this.classList.remove('loading');
-        showToast(format === 'excel' ? `已导出 ${n} 条为 Excel（演示 Demo 不生成真实文件）` : `已导出 ${n} 条为 CSV（演示 Demo 不生成真实文件）`);
+        showToast(format === 'excel' ? `已导出 ${n} 条为 Excel（演示不生成真实文件）` : `已导出 ${n} 条为 CSV（演示不生成真实文件）`);
       }, 1200);
     });
 
-    // 步骤2：按条件导出 - 设置筛选条件
     document.getElementById('step2FilterBack').addEventListener('click', () => showStep('step1'));
     document.getElementById('step2FilterNext').addEventListener('click', function() {
-      const count = getFilterResultCount();
-      document.getElementById('filterResultCountStep3').textContent = count;
+      document.getElementById('filterResultCountStep3').textContent = getFilterResultCount();
       showStep('step3Filter');
     });
 
-    // 步骤3：按条件导出 - 选择格式
     document.querySelectorAll('#step3Filter .modal-format-option').forEach(opt => {
       opt.addEventListener('click', function() {
         document.querySelectorAll('#step3Filter .modal-format-option').forEach(o => o.classList.remove('selected'));
@@ -980,32 +828,27 @@
         this.querySelector('input[type="radio"]').checked = true;
       });
     });
-
     document.getElementById('step3FilterBack').addEventListener('click', () => showStep('step2Filter'));
     document.getElementById('step3FilterConfirm').addEventListener('click', function() {
-      const format = document.querySelector('#step3Filter input[name="formatFilter"]:checked').value;
       const n = getFilterResultCount();
       closeModal();
       this.classList.add('loading');
       setTimeout(() => {
         this.classList.remove('loading');
-        showToast(`导出任务已提交（当前筛选约 ${n} 条），完成后将通知下载。（演示 Demo 不生成真实文件）`);
+        showToast(`导出任务已提交（当前筛选约 ${n} 条），完成后将通知下载。（演示不生成真实文件）`);
       }, 1200);
     });
 
-    // 点击遮罩关闭弹窗
-    document.getElementById('exportModal').addEventListener('click', function(e) {
-      if (e.target === this) closeModal();
-    });
-
-    // 日历图标点击打开结束日期选择
+    document.getElementById('exportModal').addEventListener('click', function(e) { if (e.target === this) closeModal(); });
     document.querySelector('.date-range .calendar-icon')?.addEventListener('click', function() {
       document.getElementById('endDate').focus();
       document.getElementById('endDate').showPicker?.();
     });
 
+    /* ========== 初始化 ========== */
     renderTable();
     updateExportState();
+    initAgreementTabs();
   </script>
 </body>
 </html>
