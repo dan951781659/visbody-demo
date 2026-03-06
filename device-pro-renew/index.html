@@ -872,7 +872,7 @@
                     <span
                       class="chip-mini"
                       id="summary-strategy-label"
-                    >推荐：Pro 续费补积分</span>
+                    >推荐：按年续费补积分</span>
                     <button class="btn btn-primary" id="btn-renew-now">
                       续费 Pro 并获取积分
                     </button>
@@ -899,7 +899,8 @@
           store: "XAtest 总店",
           expire: "2026-10-08",
           status: "normal",
-          points: 12000,
+          // Pro 有效但当前设备已无可用积分（典型“积分用完”场景）
+          points: 0,
         },
         {
           id: 2,
@@ -1061,6 +1062,8 @@
       const strategyLabelEl = document.getElementById(
         "summary-strategy-label"
       );
+      const btnBuyPoints = document.getElementById("btn-buy-points");
+      const btnRenewNow = document.getElementById("btn-renew-now");
 
       function onSelectDevice(id) {
         const device = devices.find((d) => d.id === id);
@@ -1086,7 +1089,9 @@
             "Pro 即将到期，建议优先续费，避免中断使用与积分清零。";
         } else {
           summaryStatusTextEl.textContent =
-            "Pro 正常使用中，可随时提前续费并叠加到期时间。";
+            device.points > 0
+              ? "Pro 正常使用中，可随时提前续费并叠加到期时间。"
+              : "Pro 仍在有效期内，但当前设备可用积分已用尽，建议通过「按量购买积分」或为本设备续费 Pro 补充积分。";
         }
 
         renderPlans();
@@ -1170,8 +1175,34 @@
           devicePointShare.toLocaleString("zh-CN") +
           "。";
 
-        strategyLabelEl.textContent =
-          plan.id === "year" ? "推荐：按年续费补积分" : "按需选择续费周期";
+        // 根据当前设备与积分状态，动态切换推荐动作与主按钮
+        const shouldRecommendBuyPoints =
+          device.status !== "expired" && device.points === 0;
+
+        if (shouldRecommendBuyPoints) {
+          strategyLabelEl.textContent = "当前场景推荐：先按量购买积分";
+
+          // 高亮「按量购买积分」，弱化「续费 Pro」
+          btnBuyPoints.classList.remove("btn-ghost");
+          btnBuyPoints.classList.add("btn-primary");
+          btnBuyPoints.textContent = "按量购买积分";
+
+          btnRenewNow.classList.remove("btn-primary");
+          btnRenewNow.classList.add("btn-ghost");
+          btnRenewNow.textContent = "改为续费 Pro 并获取积分";
+        } else {
+          strategyLabelEl.textContent =
+            plan.id === "year" ? "推荐：按年续费补积分" : "按需选择续费周期";
+
+          // 高亮「续费 Pro 并获取积分」，按量购买作为次要入口
+          btnBuyPoints.classList.remove("btn-primary");
+          btnBuyPoints.classList.add("btn-ghost");
+          btnBuyPoints.textContent = "仅按量购买积分";
+
+          btnRenewNow.classList.remove("btn-ghost");
+          btnRenewNow.classList.add("btn-primary");
+          btnRenewNow.textContent = "续费 Pro 并获取积分";
+        }
       }
 
       function showToast(message) {
@@ -1198,7 +1229,25 @@
       document
         .getElementById("btn-buy-points")
         .addEventListener("click", () => {
-          showToast("已打开「按量购买积分」示意入口，实际支付逻辑需接后端。");
+          const device = devices.find((d) => d.id === selectedDeviceId);
+          if (!device) {
+            showToast("请先在左侧选择一台设备，再按量购买积分。");
+            return;
+          }
+
+          // 模拟一次按量购买积分：例如直接购买 5 000 积分
+          const purchased = 5000;
+          totalPointsPool += purchased;
+          device.points += purchased;
+          computeSummary();
+          updatePaymentSummary();
+          renderDevices();
+
+          showToast(
+            `已模拟为 ${device.name} 所在的总门店按量购买 ${purchased.toLocaleString(
+              "zh-CN"
+            )} 积分，积分池已更新。`
+          );
         });
 
       document.getElementById("btn-renew-now").addEventListener("click", () => {
