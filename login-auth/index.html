@@ -206,14 +206,44 @@
       font-family: inherit;
     }
     .btn-primary:hover { opacity: .92; }
+    .btn-primary:disabled { opacity: .6; cursor: not-allowed; }
 
-    .carrier-tip {
+    .remember-row {
+      display: flex;
+      align-items: center;
+      margin: 8px 0 4px;
       font-size: 13px;
       color: var(--text-muted);
-      margin-top: 12px;
-      text-align: center;
     }
-    .carrier-tip a { color: var(--primary); text-decoration: none; }
+    .remember-row input[type="checkbox"] {
+      margin-right: 6px;
+      width: 16px;
+      height: 16px;
+      accent-color: var(--primary);
+    }
+
+    .agreements {
+      margin-top: 8px;
+      font-size: 12px;
+      color: var(--text-muted);
+    }
+    .agreements-item {
+      display: flex;
+      align-items: flex-start;
+      margin-bottom: 4px;
+    }
+    .agreements-item input[type="checkbox"] {
+      margin: 2px 6px 0 0;
+      width: 16px;
+      height: 16px;
+      accent-color: var(--primary);
+      flex-shrink: 0;
+    }
+    .agreements-item label {
+      line-height: 1.4;
+      cursor: pointer;
+    }
+    .agreements-item a { color: var(--primary); text-decoration: none; }
 
     .footer-links {
       display: flex;
@@ -381,8 +411,8 @@
         <!-- 国内登录 -->
         <div class="auth-section active" id="section-cn-login">
           <div class="third-party-row">
-            <button type="button" class="third-btn wechat" title="微信登录">微</button>
-            <button type="button" class="third-btn qq" title="QQ登录">Q</button>
+            <button type="button" class="third-btn wechat js-third" title="微信登录">微</button>
+            <button type="button" class="third-btn qq js-third" title="QQ登录">Q</button>
           </div>
           <div class="divider"><span>或</span></div>
           <div class="input-group">
@@ -392,14 +422,23 @@
               <button type="button" class="btn-code">获取验证码</button>
             </div>
           </div>
-          <button type="button" class="btn-primary">下一步</button>
-          <p class="carrier-tip">支持 <a href="#">运营商一键登录</a>，免输验证码</p>
+          <div class="remember-row">
+            <input type="checkbox" id="rememberCn">
+            <label for="rememberCn">记住我</label>
+          </div>
+          <div class="agreements">
+            <div class="agreements-item">
+              <input type="checkbox" id="agreeCn" class="js-agree">
+              <label for="agreeCn">我已阅读并同意 <a href="#">《用户协议》</a> 和 <a href="#">《隐私政策》</a></label>
+            </div>
+          </div>
+          <button type="button" class="btn-primary js-submit" data-action="login-cn" disabled>下一步</button>
         </div>
 
         <!-- 海外登录 -->
         <div class="auth-section" id="section-overseas-login">
           <div class="third-party-row">
-            <button type="button" class="third-btn google" title="使用 Google 登录">G</button>
+            <button type="button" class="third-btn google js-third" title="使用 Google 登录">G</button>
           </div>
           <div class="divider"><span>或使用邮箱验证码</span></div>
 
@@ -414,7 +453,17 @@
             <label>验证码</label>
             <input type="text" placeholder="请输入邮箱验证码" value="654321">
           </div>
-          <button type="button" class="btn-primary">下一步</button>
+          <div class="remember-row">
+            <input type="checkbox" id="rememberOverseas">
+            <label for="rememberOverseas">记住我</label>
+          </div>
+          <div class="agreements">
+            <div class="agreements-item">
+              <input type="checkbox" id="agreeOverseas" class="js-agree">
+              <label for="agreeOverseas">我已阅读并同意 <a href="#">《用户协议》</a> 和 <a href="#">《隐私政策》</a></label>
+            </div>
+          </div>
+          <button type="button" class="btn-primary js-submit" data-action="login-overseas" disabled>下一步</button>
           <div class="help-link">
             <button type="button" id="btnLoginHelp">登录遇到问题？</button>
           </div>
@@ -422,10 +471,6 @@
 
         <!-- 国内注册 -->
         <div class="auth-section" id="section-cn-register">
-          <div class="input-group">
-            <label>账号名</label>
-            <input type="text" placeholder="5-100 字符，至少包含字母和数字" value="demo_user_cn01">
-          </div>
           <div class="input-group">
             <label>昵称</label>
             <input type="text" placeholder="请输入昵称" value="演示用户（国内）">
@@ -449,16 +494,18 @@
             <label>邀请码（选填）</label>
             <input type="text" placeholder="如有邀请码请输入" value="DEMO-INVITE-01">
           </div>
-          <button type="button" class="btn-primary" data-action="register-cn">注册并进入首页</button>
+          <div class="agreements">
+            <div class="agreements-item">
+              <input type="checkbox" id="agreeCnReg" class="js-agree">
+              <label for="agreeCnReg">我已阅读并同意 <a href="#">《用户协议》</a> 和 <a href="#">《隐私政策》</a></label>
+            </div>
+          </div>
+          <button type="button" class="btn-primary js-submit" data-action="register-cn" disabled>注册并进入首页</button>
           <p class="footer-links"><a href="#" data-link="to-login">已有账号？去登录</a></p>
         </div>
 
         <!-- 海外注册 -->
         <div class="auth-section" id="section-overseas-register">
-          <div class="input-group">
-            <label>账号名</label>
-            <input type="text" placeholder="5-100 字符，至少包含字母和数字" value="demo_user_oversea01">
-          </div>
           <div class="input-group">
             <label>显示名称</label>
             <input type="text" placeholder="将在 App 中展示" value="Demo User (EN)">
@@ -478,11 +525,15 @@
             <label>验证码</label>
             <input type="text" placeholder="请输入邮箱验证码" value="654321">
           </div>
-          <button type="button" class="btn-primary" data-action="register-overseas">注册并进入首页</button>
+          <div class="agreements">
+            <div class="agreements-item">
+              <input type="checkbox" id="agreeOverseasReg" class="js-agree">
+              <label for="agreeOverseasReg">我已阅读并同意 <a href="#">《用户协议》</a> 和 <a href="#">《隐私政策》</a></label>
+            </div>
+          </div>
+          <button type="button" class="btn-primary js-submit" data-action="register-overseas" disabled>注册并进入首页</button>
           <p class="footer-links"><a href="#" data-link="to-login">已有账号？去登录</a></p>
         </div>
-
-        <p class="agreement">登录即表示同意 <a href="#">用户协议</a> 和 <a href="#">隐私政策</a></p>
       </div>
     </div>
 
@@ -536,12 +587,12 @@
     </div>
 
     <div class="spec-note">
-      <h3>需求说明（修改后）</h3>
+      <h3>需求说明（更新后）</h3>
       <ul>
-        <li>国内：微信、手机验证码、运营商一键登录；<strong>无密码</strong></li>
-        <li>海外：Google 授权 + 邮箱验证码为主；短信验证码登录通过「登录遇到问题 → 历史用户」三级入口，仅在日本等少数地区兼容保留</li>
-        <li>注册：不要求设置密码，验证码或第三方授权即可完成</li>
-        <li>同一套代码：通过地区标识动态渲染不同登录选项</li>
+        <li>国内：微信授权 + 手机验证码登录；<strong>已去掉运营商一键登录</strong>；无密码</li>
+        <li>海外：Google 授权 + 邮箱验证码为主；短信验证码仅通过三级入口为日本等少数地区兼容</li>
+        <li>登录/注册：均需手动勾选「用户协议」「隐私政策」，按钮才可点击；支持「记住我」</li>
+        <li>同一套代码：通过地区切换展示不同登录方式</li>
       </ul>
     </div>
   </main>
@@ -641,9 +692,33 @@
           }, 1000);
         });
       });
+      
+      function sectionAgreed(section) {
+        if (!section) return true;
+        var checks = section.querySelectorAll('.js-agree');
+        if (!checks.length) return true;
+        return Array.prototype.every.call(checks, function (c) { return c.checked; });
+      }
 
-      document.querySelectorAll('.btn-primary').forEach(function (btn) {
+      function refreshSubmitState() {
+        document.querySelectorAll('.auth-section').forEach(function (sec) {
+          var btn = sec.querySelector('.js-submit');
+          if (!btn) return;
+          btn.disabled = !sectionAgreed(sec);
+        });
+      }
+
+      document.querySelectorAll('.js-agree').forEach(function (cb) {
+        cb.addEventListener('change', refreshSubmitState);
+      });
+
+      document.querySelectorAll('.js-submit').forEach(function (btn) {
         btn.addEventListener('click', function () {
+          var sec = this.closest('.auth-section');
+          if (!sectionAgreed(sec)) {
+            alert('请先勾选用户协议和隐私政策');
+            return;
+          }
           var action = this.getAttribute('data-action') || '';
           if (action === 'login-sms-overseas') {
             showSuccess('login-sms');
@@ -655,8 +730,13 @@
         });
       });
 
-      document.querySelectorAll('.third-btn').forEach(function (btn) {
+      document.querySelectorAll('.js-third').forEach(function (btn) {
         btn.addEventListener('click', function () {
+          var sec = this.closest('.auth-section');
+          if (!sectionAgreed(sec)) {
+            alert('请先勾选用户协议和隐私政策');
+            return;
+          }
           showSuccess('login');
         });
       });
@@ -714,6 +794,8 @@
           helpStepList.classList.add('active');
         });
       }
+
+      refreshSubmitState();
     })();
   </script>
 </body>

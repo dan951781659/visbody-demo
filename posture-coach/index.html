@@ -1,0 +1,479 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>体态报告 · 教练指导版</title>
+  <style>
+    :root {
+      --bg: #ECFEFF;
+      --card: #FFFFFF;
+      --border: #E5E7EB;
+      --text-main: #020617;
+      --text-sub: #6B7280;
+      --primary: #0EA5E9;
+      --primary-alt: #22C55E;
+      --danger: #EF4444;
+      --radius-lg: 20px;
+      --radius-md: 16px;
+      --shadow-soft: 0 20px 48px rgba(15,23,42,0.12);
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "SF Pro Text", "PingFang SC", "Microsoft YaHei", sans-serif;
+      background: radial-gradient(circle at top, #E0F2FE 0, #ECFEFF 45%, #E5E7EB 100%);
+      -webkit-font-smoothing: antialiased;
+      color: var(--text-main);
+    }
+    .page {
+      max-width: 430px;
+      margin: 0 auto;
+      min-height: 100vh;
+      background: linear-gradient(to bottom, rgba(240,253,250,0.98), rgba(239,246,255,1));
+    }
+    .status-bar { height: 20px; }
+    .nav-bar {
+      height: 44px;
+      display: flex;
+      align-items: center;
+      padding: 0 12px;
+      border-bottom: 1px solid rgba(219,234,254,0.9);
+      background: rgba(239,246,255,0.96);
+      backdrop-filter: blur(18px);
+      position: sticky;
+      top: 0;
+      z-index: 20;
+    }
+    .nav-back {
+      width: 32px;
+      height: 32px;
+      border-radius: 999px;
+      border: 1px solid rgba(191,219,254,0.9);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 18px;
+      color: var(--text-sub);
+      background: #FFFFFF;
+    }
+    .nav-title {
+      flex: 1;
+      text-align: center;
+      font-size: 16px;
+      font-weight: 600;
+    }
+    .nav-more {
+      width: 32px;
+      text-align: right;
+      color: var(--text-sub);
+      font-size: 20px;
+    }
+    .scroll {
+      padding: 12px 12px 18px;
+    }
+    .hero-card {
+      border-radius: var(--radius-lg);
+      background: radial-gradient(circle at top left, #E0F2FE 0, #F9FAFB 48%, #ECFEFF 100%);
+      border: 1px solid rgba(191,219,254,0.9);
+      box-shadow: var(--shadow-soft);
+      padding: 10px 10px 8px;
+      display: grid;
+      grid-template-columns: minmax(0, 1.15fr) minmax(0, 1.4fr);
+      gap: 10px;
+      align-items: center;
+    }
+    .hero-model-wrap {
+      border-radius: 18px;
+      background: rgba(255,255,255,0.85);
+      border: 1px solid rgba(191,219,254,0.9);
+      padding: 6px 4px 4px;
+      position: relative;
+      overflow: hidden;
+    }
+    .hero-model {
+      width: 100%;
+      height: 200px;
+      border-radius: 999px;
+      background-image: url('../assets/model-front.png');
+      background-size: contain;
+      background-position: center bottom;
+      background-repeat: no-repeat;
+    }
+    .hero-badge {
+      position: absolute;
+      top: 8px;
+      left: 8px;
+      padding: 2px 8px;
+      border-radius: 999px;
+      font-size: 11px;
+      background: rgba(14,165,233,0.1);
+      color: #0369A1;
+      border: 1px solid rgba(56,189,248,0.7);
+    }
+    .hero-right-title {
+      font-size: 15px;
+      font-weight: 600;
+      margin-bottom: 4px;
+    }
+    .hero-right-sub {
+      font-size: 11px;
+      color: var(--text-sub);
+      margin-bottom: 6px;
+    }
+    .hero-pills {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-bottom: 8px;
+    }
+    .pill {
+      padding: 3px 9px;
+      border-radius: 999px;
+      font-size: 11px;
+      border: 1px solid rgba(148,163,184,0.6);
+      background: rgba(255,255,255,0.9);
+    }
+    .pill-danger { border-color: rgba(239,68,68,0.5); color: var(--danger); background: #FEF2F2; }
+    .pill-ok { border-color: rgba(16,185,129,0.45); color: #059669; background: #ECFDF3; }
+    .hero-summary {
+      font-size: 11px;
+      color: var(--text-sub);
+      line-height: 1.5;
+    }
+
+    .section-header {
+      margin-top: 14px;
+      margin-bottom: 6px;
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+    }
+    .section-title {
+      font-size: 13px;
+      font-weight: 600;
+    }
+    .section-sub {
+      font-size: 11px;
+      color: var(--text-sub);
+    }
+
+    .issue-carousel {
+      margin-top: 2px;
+      overflow-x: auto;
+      padding-bottom: 6px;
+      -webkit-overflow-scrolling: touch;
+    }
+    .issue-track {
+      display: flex;
+      gap: 10px;
+      min-width: 100%;
+    }
+    .issue-card {
+      flex: 0 0 80%;
+      max-width: 80%;
+      border-radius: var(--radius-md);
+      background: var(--card);
+      border: 1px solid var(--border);
+      box-shadow: 0 14px 32px rgba(15,23,42,0.08);
+      padding: 10px 9px 8px;
+      font-size: 11px;
+    }
+    .issue-card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 6px;
+    }
+    .issue-name {
+      font-size: 12px;
+      font-weight: 600;
+    }
+    .severity-chip {
+      padding: 2px 8px;
+      border-radius: 999px;
+      font-size: 11px;
+      font-weight: 500;
+    }
+    .severity-chip.bad { background: #FEF2F2; color: var(--danger); border: 1px solid rgba(239,68,68,0.6); }
+    .severity-chip.mid { background: #FEF3C7; color: #B45309; border: 1px solid rgba(245,158,11,0.6); }
+    .severity-chip.good { background: #ECFDF3; color: #059669; border: 1px solid rgba(16,185,129,0.5); }
+
+    .mini-model {
+      width: 64px;
+      height: 150px;
+      border-radius: 999px;
+      background-image: url('../assets/model-front.png');
+      background-size: contain;
+      background-position: center bottom;
+      background-repeat: no-repeat;
+      border: 1px solid rgba(191,219,254,0.9);
+      box-shadow: 0 12px 26px rgba(59,130,246,0.35);
+    }
+    .issue-inner-grid {
+      display: grid;
+      grid-template-columns: auto minmax(0, 1fr);
+      gap: 8px;
+    }
+    .metric-row {
+      font-size: 11px;
+      margin-bottom: 4px;
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+    }
+    .metric-label { color: var(--text-sub); }
+    .metric-value { font-weight: 600; }
+    .progress-bar {
+      margin-top: 4px;
+      width: 100%;
+      height: 6px;
+      border-radius: 999px;
+      background: #E5E7EB;
+      overflow: hidden;
+    }
+    .progress-fill {
+      height: 100%;
+      border-radius: 999px;
+      background-image: linear-gradient(90deg, #0EA5E9, #22C55E);
+      width: 70%;
+    }
+    .progress-fill.high { background-image: linear-gradient(90deg, #F97373, #FB7185); width: 88%; }
+    .progress-fill.low { background-image: linear-gradient(90deg, #38BDF8, #22C55E); width: 55%; }
+
+    .coach-list {
+      margin-top: 10px;
+      border-radius: var(--radius-md);
+      background: rgba(255,255,255,0.92);
+      border: 1px solid rgba(209,213,219,0.9);
+      padding: 8px 9px 6px;
+      font-size: 11px;
+    }
+    .coach-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      gap: 6px;
+    }
+    .coach-item + .coach-item { margin-top: 4px; }
+    .coach-label { color: var(--text-sub); }
+    .coach-value { font-weight: 600; }
+
+    .good-card {
+      margin-top: 12px;
+      border-radius: var(--radius-md);
+      border: 1px dashed rgba(22,163,74,0.7);
+      background: #ECFDF3;
+      padding: 8px 10px 6px;
+      font-size: 11px;
+      color: #166534;
+    }
+
+    .bottom-bar {
+      margin-top: 14px;
+      border-radius: 999px;
+      background: #0F172A;
+      color: #E5E7EB;
+      padding: 8px 10px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 12px;
+    }
+    .bottom-bar strong { font-size: 13px; }
+    .bottom-btn {
+      border-radius: 999px;
+      border: none;
+      padding: 7px 10px;
+      font-size: 12px;
+      background: linear-gradient(135deg, #0EA5E9, #22C55E);
+      color: #FFFFFF;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+  <div class="page">
+    <div class="status-bar"></div>
+    <header class="nav-bar">
+      <div class="nav-back">‹</div>
+      <div class="nav-title">体态教练视图</div>
+      <div class="nav-more">⋯</div>
+    </header>
+
+    <main class="scroll">
+      <section class="hero-card">
+        <div class="hero-model-wrap">
+          <div class="hero-model"></div>
+          <div class="hero-badge">本次 · 正面</div>
+        </div>
+        <div>
+          <div class="hero-right-title">主要姿势问题：圆肩 + 骨盆前倾</div>
+          <div class="hero-right-sub">下面是为你量身定制的「减压颈肩 + 稳定骨盆」训练建议，整体训练时间控制在 20~30 分钟。</div>
+          <div class="hero-pills">
+            <span class="pill pill-danger">久坐办公 · 上交叉综合征倾向</span>
+            <span class="pill">下肢对称良好</span>
+            <span class="pill pill-ok">适合从低冲击训练开始</span>
+          </div>
+          <div class="hero-summary">
+            建议一周 3~4 天训练：2 天「颈肩+胸椎」伸展激活，1~2 天「臀腿+核心」力量训练，并配合日常站姿/坐姿微调。
+          </div>
+        </div>
+      </section>
+
+      <div class="section-header">
+        <div class="section-title">重点问题卡片</div>
+        <div class="section-sub">横向滑动查看不同问题</div>
+      </div>
+
+      <div class="issue-carousel" id="carousel">
+        <div class="issue-track">
+          <article class="issue-card">
+            <div class="issue-card-header">
+              <div class="issue-name">1. 圆肩 / 驼背</div>
+              <span class="severity-chip bad">需要优先处理</span>
+            </div>
+            <div class="issue-inner-grid">
+              <div class="mini-model"></div>
+              <div>
+                <div class="metric-row">
+                  <span class="metric-label">肩峰前移角度</span>
+                  <span class="metric-value">12°</span>
+                </div>
+                <div class="metric-row">
+                  <span class="metric-label">主观不适</span>
+                  <span class="metric-value">颈肩酸痛 · 3/5</span>
+                </div>
+                <div class="progress-bar">
+                  <div class="progress-fill high"></div>
+                </div>
+                <div style="margin-top:4px;font-size:10px;color:var(--text-sub);">
+                  目标：<strong>放松胸小肌 / 上斜方肌</strong>，激活菱形肌与下斜方肌，让肩胛骨重新回到「插进裤兜」的位置。
+                </div>
+              </div>
+            </div>
+            <div class="coach-list" style="margin-top:8px;">
+              <div class="coach-item">
+                <span class="coach-label">推荐动作</span>
+                <span class="coach-value">胸椎猫牛、门框拉伸、弹力带划船</span>
+              </div>
+              <div class="coach-item">
+                <span class="coach-label">每周频次</span>
+                <span class="coach-value">3~4 次 · 每次 10~12 分钟</span>
+              </div>
+            </div>
+          </article>
+
+          <article class="issue-card">
+            <div class="issue-card-header">
+              <div class="issue-name">2. 骨盆前倾 / 腰椎前凸</div>
+              <span class="severity-chip mid">中等优先级</span>
+            </div>
+            <div class="issue-inner-grid">
+              <div class="mini-model"></div>
+              <div>
+                <div class="metric-row">
+                  <span class="metric-label">骨盆前倾角</span>
+                  <span class="metric-value">16°</span>
+                </div>
+                <div class="metric-row">
+                  <span class="metric-label">腰背紧张</span>
+                  <span class="metric-value">站立 30min 出现</span>
+                </div>
+                <div class="progress-bar">
+                  <div class="progress-fill"></div>
+                </div>
+                <div style="margin-top:4px;font-size:10px;color:var(--text-sub);">
+                  目标：放松髂腰肌与腰方肌，<strong>增强臀大肌与腹肌</strong>，让骨盆回到更中立的位置。
+                </div>
+              </div>
+            </div>
+            <div class="coach-list" style="margin-top:8px;">
+              <div class="coach-item">
+                <span class="coach-label">推荐动作</span>
+                <span class="coach-value">臀桥、鸟狗式、死虫式、髋屈肌拉伸</span>
+              </div>
+              <div class="coach-item">
+                <span class="coach-label">每周频次</span>
+                <span class="coach-value">2~3 次 · 每次 12~15 分钟</span>
+              </div>
+            </div>
+          </article>
+
+          <article class="issue-card">
+            <div class="issue-card-header">
+              <div class="issue-name">3. 下肢力线轻度内扣</div>
+              <span class="severity-chip good">可结合训练顺便纠正</span>
+            </div>
+            <div class="issue-inner-grid">
+              <div class="mini-model"></div>
+              <div>
+                <div class="metric-row">
+                  <span class="metric-label">HKA 角偏移</span>
+                  <span class="metric-value">内扣 3°</span>
+                </div>
+                <div class="metric-row">
+                  <span class="metric-label">当前不适</span>
+                  <span class="metric-value">偶尔膝内侧紧</span>
+                </div>
+                <div class="progress-bar">
+                  <div class="progress-fill low"></div>
+                </div>
+                <div style="margin-top:4px;font-size:10px;color:var(--text-sub);">
+                  目标：<strong>强化臀中肌与足弓控制</strong>，在深蹲与弓步动作中保持膝盖对准脚尖方向。
+                </div>
+              </div>
+            </div>
+            <div class="coach-list" style="margin-top:8px;">
+              <div class="coach-item">
+                <span class="coach-label">推荐动作</span>
+                <span class="coach-value">弹力带侧走、单腿桥、杯式深蹲</span>
+              </div>
+              <div class="coach-item">
+                <span class="coach-label">每周频次</span>
+                <span class="coach-value">1~2 次 · 与力量日结合</span>
+              </div>
+            </div>
+          </article>
+        </div>
+      </div>
+
+      <div class="section-header">
+        <div class="section-title">今日训练建议</div>
+        <div class="section-sub">约 22 分钟 · 适合作为一日训练计划</div>
+      </div>
+      <div class="coach-list">
+        <div class="coach-item">
+          <span class="coach-label">热身（5 分钟）</span>
+          <span class="coach-value">猫牛式 · 肩部绕圈 · 轻度快走</span>
+        </div>
+        <div class="coach-item">
+          <span class="coach-label">主训练（12 分钟）</span>
+          <span class="coach-value">胸椎伸展 + 弹力带划船 + 臀桥 + 鸟狗式</span>
+        </div>
+        <div class="coach-item">
+          <span class="coach-label">放松（5 分钟）</span>
+          <span class="coach-value">门框拉伸 · 髋屈肌拉伸 · 呼吸放松</span>
+        </div>
+      </div>
+
+      <div class="good-card">
+        👍 当前下肢对称性整体良好，肌力基础不错。只要在训练中留意膝盖方向与足弓承重，就可以在改善上半身姿势的同时，顺带把下肢力线也调得更好。
+      </div>
+
+      <div class="bottom-bar">
+        <div>
+          <div>今日建议训练时长</div>
+          <div><strong>约 20~25 分钟</strong></div>
+        </div>
+        <button class="bottom-btn">
+          生成分步训练计划 →
+        </button>
+      </div>
+    </main>
+  </div>
+</body>
+</html>
+

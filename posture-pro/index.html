@@ -1,0 +1,421 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>体态报告 · 专业评估版</title>
+  <style>
+    :root {
+      --bg: #F3F4F6;
+      --card: #FFFFFF;
+      --border: #E5E7EB;
+      --border-strong: #D1D5DB;
+      --text-main: #111827;
+      --text-sub: #6B7280;
+      --primary: #2563EB;
+      --primary-soft: #EFF6FF;
+      --danger: #DC2626;
+      --warn: #F97316;
+      --ok: #16A34A;
+      --radius-lg: 18px;
+      --radius-md: 14px;
+      --shadow-soft: 0 18px 42px rgba(15,23,42,0.10);
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "SF Pro Text", "PingFang SC", "Microsoft YaHei", sans-serif;
+      background: radial-gradient(circle at top, #E5EDFF 0, #F3F4F6 55%, #E5E7EB 100%);
+      color: var(--text-main);
+      -webkit-font-smoothing: antialiased;
+    }
+    .page {
+      max-width: 430px;
+      margin: 0 auto;
+      min-height: 100vh;
+      background: linear-gradient(to bottom, #F9FAFB, #F3F4F6);
+    }
+    .status-bar { height: 20px; }
+    .nav-bar {
+      height: 44px;
+      display: flex;
+      align-items: center;
+      padding: 0 12px;
+      border-bottom: 1px solid rgba(229,231,235,0.9);
+      background: rgba(249,250,251,0.96);
+      backdrop-filter: blur(16px);
+      position: sticky;
+      top: 0;
+      z-index: 20;
+    }
+    .nav-back {
+      width: 32px;
+      height: 32px;
+      border-radius: 999px;
+      border: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 18px;
+      color: var(--text-sub);
+      background: #FFF;
+    }
+    .nav-title {
+      flex: 1;
+      text-align: center;
+      font-size: 16px;
+      font-weight: 600;
+    }
+    .nav-more {
+      width: 32px;
+      text-align: right;
+      color: var(--text-sub);
+      font-size: 20px;
+    }
+    .scroll {
+      padding: 12px 12px 20px;
+    }
+    .summary-card {
+      border-radius: var(--radius-lg);
+      background: var(--card);
+      border: 1px solid var(--border);
+      box-shadow: var(--shadow-soft);
+      padding: 10px 10px 8px;
+      display: grid;
+      grid-template-columns: auto 1fr;
+      gap: 10px;
+      align-items: center;
+      margin-bottom: 12px;
+    }
+    .summary-left {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+    .score-chip {
+      font-size: 13px;
+      font-weight: 600;
+    }
+    .score-chip span {
+      font-size: 20px;
+      color: var(--primary);
+      margin-right: 4px;
+    }
+    .summary-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-top: 4px;
+    }
+    .tag {
+      padding: 2px 8px;
+      border-radius: 999px;
+      font-size: 11px;
+      border: 1px solid var(--border);
+      background: #F9FAFB;
+      color: var(--text-sub);
+    }
+    .tag.danger { border-color: rgba(239,68,68,0.3); color: var(--danger); background: #FEF2F2; }
+    .tag.warn { border-color: rgba(249,115,22,0.3); color: var(--warn); background: #FFF7ED; }
+    .summary-desc {
+      font-size: 11px;
+      color: var(--text-sub);
+      margin-top: 4px;
+    }
+    .model-card {
+      border-radius: var(--radius-lg);
+      background: var(--card);
+      border: 1px solid var(--border);
+      box-shadow: var(--shadow-soft);
+      padding: 10px 10px 8px;
+      margin-bottom: 10px;
+    }
+    .model-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 12px;
+      color: var(--text-sub);
+      margin-bottom: 6px;
+    }
+    .model-main {
+      display: grid;
+      grid-template-columns: minmax(0, 1.1fr) minmax(0, 1.1fr);
+      gap: 10px;
+      align-items: stretch;
+    }
+    .skeleton-wrap {
+      border-radius: var(--radius-md);
+      border: 1px solid var(--border-strong);
+      background:
+        linear-gradient(to bottom, #F9FAFB, #EEF2FF);
+      padding: 8px 4px 4px;
+      position: relative;
+      overflow: hidden;
+    }
+    .skeleton-figure {
+      width: 100%;
+      height: 220px;
+      border-radius: 999px;
+      background-image: url('../assets/model-front.png');
+      background-size: contain;
+      background-position: center bottom;
+      background-repeat: no-repeat;
+      position: relative;
+      overflow: hidden;
+    }
+    .joint-dot {
+      position: absolute;
+      width: 10px;
+      height: 10px;
+      border-radius: 999px;
+      border: 2px solid #EFF6FF;
+      background: rgba(59,130,246,0.95);
+      box-shadow: 0 0 8px rgba(37,99,235,0.7);
+      opacity: 0.35;
+      transition: opacity .2s ease-out, transform .2s ease-out;
+    }
+    .joint-dot.active {
+      opacity: 1;
+      transform: scale(1.15);
+    }
+    .joint-dot.shoulder { left: 32%; top: 23%; }
+    .joint-dot.shoulder-r { left: 68%; top: 23%; }
+    .joint-dot.pelvis { left: 50%; top: 53%; }
+    .joint-dot.knee-l { left: 38%; top: 72%; }
+    .joint-dot.knee-r { left: 62%; top: 72%; }
+
+    .issue-detail {
+      font-size: 11px;
+      color: var(--text-sub);
+      margin-top: 6px;
+    }
+    .issue-detail strong { color: var(--text-main); }
+
+    .issue-list {
+      border-radius: var(--radius-md);
+      border: 1px solid var(--border);
+      background: #F9FAFB;
+      padding: 6px 6px 4px;
+      font-size: 11px;
+      max-height: 240px;
+      overflow: auto;
+    }
+    .issue-item {
+      padding: 6px 6px 6px;
+      border-radius: 10px;
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 8px;
+      cursor: pointer;
+      transition: background .15s ease-out, border-color .15s ease-out;
+      border: 1px solid transparent;
+    }
+    .issue-item + .issue-item { margin-top: 4px; }
+    .issue-item:hover { background: #EEF2FF; }
+    .issue-item.active {
+      background: #EEF2FF;
+      border-color: rgba(37,99,235,0.7);
+    }
+    .issue-title {
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--text-main);
+      margin-bottom: 2px;
+    }
+    .issue-meta {
+      font-size: 10px;
+      color: var(--text-sub);
+    }
+    .severity-pill {
+      padding: 2px 8px;
+      border-radius: 999px;
+      font-size: 11px;
+      font-weight: 500;
+      white-space: nowrap;
+    }
+    .severity-pill.severe { background: #FEF2F2; color: var(--danger); border: 1px solid rgba(239,68,68,0.6); }
+    .severity-pill.moderate { background: #FFF7ED; color: var(--warn); border: 1px solid rgba(249,115,22,0.5); }
+    .severity-pill.mild { background: #ECFDF3; color: var(--ok); border: 1px solid rgba(22,163,74,0.4); }
+
+    .section-title {
+      margin-top: 14px;
+      margin-bottom: 4px;
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text-main);
+    }
+    .section-sub {
+      font-size: 11px;
+      color: var(--text-sub);
+      margin-bottom: 6px;
+    }
+
+    .actions {
+      margin-top: 12px;
+      display: flex;
+      gap: 8px;
+    }
+    .btn {
+      flex: 1;
+      border-radius: 999px;
+      border: none;
+      font-size: 13px;
+      padding: 9px 10px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      cursor: pointer;
+    }
+    .btn-primary {
+      background: linear-gradient(135deg, #2563EB, #4F46E5);
+      color: #FFFFFF;
+      box-shadow: 0 12px 30px rgba(37,99,235,0.35);
+    }
+    .btn-outline {
+      background: #FFFFFF;
+      color: var(--text-main);
+      border: 1px solid var(--border-strong);
+    }
+    .footer {
+      margin-top: 12px;
+      font-size: 10px;
+      color: var(--text-sub);
+      padding: 0 2px 6px;
+    }
+  </style>
+</head>
+<body>
+  <div class="page">
+    <div class="status-bar"></div>
+    <header class="nav-bar">
+      <div class="nav-back">‹</div>
+      <div class="nav-title">体态评估报告</div>
+      <div class="nav-more">⋯</div>
+    </header>
+
+    <main class="scroll">
+      <section class="summary-card">
+        <div class="summary-left">
+          <div class="score-chip"><span>78</span>分 · 姿势偏差中度</div>
+          <div class="summary-tags">
+            <span class="tag danger">主要问题：圆肩 + 骨盆前倾</span>
+            <span class="tag warn">轻度：头前引 · 下肢力线偏移</span>
+          </div>
+          <div class="summary-desc">建议优先处理上交叉综合征（颈肩）与骨盆稳定性，再结合下肢校正训练。</div>
+        </div>
+      </section>
+
+      <section class="model-card">
+        <div class="model-header">
+          <div>本次姿势 · 正面</div>
+          <div style="font-size:11px;color:var(--text-sub);">点击下方问题，高亮对应部位</div>
+        </div>
+        <div class="model-main">
+          <div>
+            <div class="skeleton-wrap">
+              <div class="skeleton-figure" id="skeleton">
+                <div class="joint-dot shoulder" data-key="round-shoulder"></div>
+                <div class="joint-dot shoulder-r" data-key="round-shoulder"></div>
+                <div class="joint-dot pelvis" data-key="pelvis-tilt"></div>
+                <div class="joint-dot knee-l" data-key="knee-valgus"></div>
+                <div class="joint-dot knee-r" data-key="knee-valgus"></div>
+              </div>
+            </div>
+            <div class="issue-detail" id="issue-detail">
+              <strong>圆肩（中度）</strong>：肩关节前移，胸椎过度后凸，易引起颈肩酸痛和上背紧张。
+            </div>
+          </div>
+          <div class="issue-list" id="issue-list">
+            <div class="issue-item active" data-key="round-shoulder">
+              <div>
+                <div class="issue-title">圆肩 / 驼背</div>
+                <div class="issue-meta">肩峰前移 12° · 肩峰线较胸廓前移 · 肱骨内旋</div>
+              </div>
+              <span class="severity-pill moderate">MODERATE</span>
+            </div>
+            <div class="issue-item" data-key="head-posture">
+              <div>
+                <div class="issue-title">头前引</div>
+                <div class="issue-meta">耳垂前移 18mm · 颈椎曲度变直 · 上颈伸展代偿明显</div>
+              </div>
+              <span class="severity-pill mild">MILD</span>
+            </div>
+            <div class="issue-item" data-key="pelvis-tilt">
+              <div>
+                <div class="issue-title">骨盆前倾</div>
+                <div class="issue-meta">骨盆前倾角 16° · 腰椎前凸增加 · 腰背肌过度紧张</div>
+              </div>
+              <span class="severity-pill moderate">MODERATE</span>
+            </div>
+            <div class="issue-item" data-key="knee-valgus">
+              <div>
+                <div class="issue-title">下肢力线内扣</div>
+                <div class="issue-meta">双膝内扣 3° · HKA 角偏内 · 易合并膝内侧压力增大</div>
+              </div>
+              <span class="severity-pill mild">MILD</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <h2 class="section-title">评估结论</h2>
+      <p class="section-sub">按影响优先级从高到低排序，帮助教练或医生快速抓住重点问题。</p>
+
+      <div style="border-radius:14px;border:1px solid var(--border);background:#F9FAFB;padding:8px 9px 6px;font-size:11px;color:var(--text-sub);">
+        <div style="margin-bottom:4px;"><strong style="color:var(--text-main);">1. 上交叉综合征倾向（圆肩 + 头前引）</strong> · 主要影响颈肩舒适度与呼吸效率。</div>
+        <div style="margin-bottom:4px;"><strong style="color:var(--text-main);">2. 骨盆前倾 + 腰椎前凸增加</strong> · 建议关注腰背疲劳与久站/久坐后的酸胀感。</div>
+        <div><strong style="color:var(--text-main);">3. 下肢力线轻度内扣</strong> · 当前仍在可接受范围，适合结合力量训练提前干预。</div>
+      </div>
+
+      <div class="actions">
+        <button class="btn btn-primary">导出体态 PDF 报告</button>
+        <button class="btn btn-outline">查看训练建议</button>
+      </div>
+
+      <div class="footer">
+        *本报告基于当前一次测量结果，仅用于姿势评估与训练参考，不作为诊断依据。如有明显不适，请及时就医或咨询专业人士。
+      </div>
+    </main>
+  </div>
+
+  <script>
+    (function () {
+      var issues = {
+        "round-shoulder": "圆肩（中度）：肩峰前移，胸椎后凸加重，胸肌紧张、菱形肌与下斜方肌偏弱，久坐办公人群常见。",
+        "head-posture": "头前引（轻度）：耳垂前移约 18mm，上颈部伸展代偿，易出现枕颈部紧绷与头痛。",
+        "pelvis-tilt": "骨盆前倾（中度）：骨盆前倾角增大，腰椎前凸明显，腰背肌与髂腰肌紧张，臀肌与腹肌相对偏弱。",
+        "knee-valgus": "下肢力线内扣（轻度）：双膝轻度内扣，增加膝内侧关节与足弓压力，建议配合下肢力量与稳定性训练。"
+      };
+      var list = document.getElementById('issue-list');
+      var dots = document.querySelectorAll('.joint-dot');
+      var detail = document.getElementById('issue-detail');
+
+      function setActive(key) {
+        list.querySelectorAll('.issue-item').forEach(function (item) {
+          item.classList.toggle('active', item.getAttribute('data-key') === key);
+        });
+        dots.forEach(function (dot) {
+          dot.classList.toggle('active', dot.getAttribute('data-key') === key);
+        });
+        if (issues[key]) {
+          detail.innerHTML = '<strong>' + list.querySelector('[data-key=\"' + key + '\"] .issue-title').textContent +
+            '</strong>：' + issues[key];
+        }
+      }
+
+      list.addEventListener('click', function (e) {
+        var item = e.target.closest('.issue-item');
+        if (!item) return;
+        var key = item.getAttribute('data-key');
+        if (!key) return;
+        setActive(key);
+      });
+
+      setActive('round-shoulder');
+    })();
+  </script>
+</body>
+</html>
+
