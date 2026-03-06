@@ -132,6 +132,14 @@
       padding: 12px 12px 24px;
     }
 
+    .view-section {
+      display: none;
+    }
+
+    .view-section.active-view {
+      display: block;
+    }
+
     .info-card {
       border-radius: var(--radius-lg);
       padding: 10px 12px 11px;
@@ -493,6 +501,667 @@
         height: 14px;
       }
     }
+
+    /* 身体成分专用样式 */
+    .composition-header {
+      border-radius: var(--radius-lg);
+      padding: 12px 12px 10px;
+      background:
+        radial-gradient(circle at top left, rgba(15,118,255,0.22) 0, transparent 55%),
+        radial-gradient(circle at top right, rgba(30,64,175,0.7) 0, transparent 60%),
+        linear-gradient(to bottom right, #020617, #020617);
+      border: 1px solid rgba(55,65,81,0.95);
+      box-shadow: 0 22px 60px rgba(15,23,42,0.95);
+      margin-bottom: 12px;
+      display: grid;
+      grid-template-columns: auto 1.1fr;
+      gap: 10px;
+      align-items: center;
+    }
+
+    .composition-figure {
+      width: 110px;
+      height: 210px;
+      border-radius: 999px;
+      background:
+        radial-gradient(circle at 30% 0, rgba(248,250,252,0.9) 0, transparent 55%),
+        radial-gradient(circle at 70% 0, rgba(191,219,254,0.7) 0, transparent 55%),
+        radial-gradient(circle at 50% 65%, rgba(55,65,81,0.9) 0, rgba(15,23,42,1) 65%);
+      border: 1px solid rgba(148,163,184,0.9);
+      box-shadow: 0 22px 55px rgba(15,23,42,0.98);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .composition-figure::after {
+      content: '';
+      position: absolute;
+      inset-inline: 12px;
+      bottom: -8px;
+      height: 26px;
+      background: radial-gradient(circle at 50% 0, rgba(15,23,42,0.8) 0, transparent 70%);
+    }
+
+    .composition-panel {
+      font-size: 12px;
+      color: var(--text-sub);
+    }
+
+    .composition-score-row {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      margin-bottom: 4px;
+    }
+
+    .composition-score-label {
+      font-size: 13px;
+      color: #E5E7EB;
+    }
+
+    .composition-score-value {
+      font-size: 20px;
+      font-weight: 700;
+      background: linear-gradient(135deg, #F9FAFB, #BFDBFE);
+      -webkit-background-clip: text;
+      color: transparent;
+    }
+
+    .composition-score-extra {
+      font-size: 11px;
+      color: var(--text-sub);
+      margin-bottom: 6px;
+    }
+
+    .composition-main-metrics {
+      border-radius: var(--radius-md);
+      background: radial-gradient(circle at top, rgba(15,23,42,0.95) 0, rgba(15,23,42,0.95) 55%);
+      border: 1px solid rgba(55,65,81,0.95);
+      padding: 6px 8px;
+      display: grid;
+      grid-template-columns: 1.1fr 1fr;
+      gap: 4px 12px;
+    }
+
+    .composition-main-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      font-size: 11px;
+      color: var(--text-sub);
+    }
+
+    .composition-main-item span.value {
+      color: #E5E7EB;
+      font-weight: 500;
+    }
+
+    .composition-main-item span.value.bad {
+      color: #F97373;
+    }
+
+    .composition-legend {
+      margin-top: 6px;
+      display: flex;
+      gap: 10px;
+      font-size: 10px;
+      color: var(--text-sub);
+    }
+
+    .composition-legend span {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .composition-legend span::before {
+      content: '';
+      width: 8px;
+      height: 8px;
+      border-radius: 999px;
+    }
+
+    .composition-legend span.legend-normal::before {
+      background-image: linear-gradient(135deg, #22C55E, #4ADE80);
+    }
+
+    .composition-legend span.legend-high::before {
+      background-image: linear-gradient(135deg, #FB7185, #F97316);
+    }
+
+    /* 老版风格：节段脂肪 / 节段肌肉表 */
+    .segment-panel {
+      margin-top: 10px;
+      border-radius: var(--radius-lg);
+      background: radial-gradient(circle at top left, rgba(15,23,42,0.96) 0, rgba(15,23,42,1) 55%);
+      border: 1px solid rgba(55,65,81,0.95);
+      box-shadow: 0 20px 55px rgba(15,23,42,0.98);
+      padding: 8px 10px 6px;
+    }
+
+    .segment-tabs {
+      display: flex;
+      font-size: 12px;
+      color: var(--text-sub);
+      border-bottom: 1px solid rgba(55,65,81,0.9);
+    }
+
+    .segment-tab {
+      padding: 4px 8px 6px;
+      cursor: pointer;
+    }
+
+    .segment-tab.active {
+      color: #38BDF8;
+      border-bottom: 2px solid #38BDF8;
+    }
+
+    .segment-table {
+      margin-top: 6px;
+      font-size: 12px;
+      color: #E5E7EB;
+      display: grid;
+      grid-template-columns: 1.1fr 1fr;
+      row-gap: 4px;
+    }
+
+    .segment-table-header {
+      font-size: 11px;
+      color: var(--text-sub);
+      margin-bottom: 2px;
+    }
+
+    .segment-table-row {
+      display: contents;
+    }
+
+    .segment-table-cell {
+      padding-block: 1px;
+    }
+
+    .segment-table-cell.value {
+      text-align: right;
+      color: #F97373;
+    }
+
+    .score-card {
+      border-radius: var(--radius-lg);
+      padding: 14px 14px 12px;
+      background:
+        radial-gradient(circle at top, rgba(8,47,73,0.9) 0, rgba(15,23,42,1) 55%),
+        linear-gradient(to bottom, #020617, #020617);
+      border: 1px solid rgba(30,64,175,0.85);
+      box-shadow: 0 22px 60px rgba(15,23,42,0.95);
+      margin-bottom: 14px;
+      display: grid;
+      grid-template-columns: auto 1fr;
+      gap: 12px;
+      align-items: center;
+    }
+
+    .score-circle {
+      width: 88px;
+      height: 88px;
+      border-radius: 999px;
+      background:
+        conic-gradient(from 220deg, var(--primary-start), var(--primary-end), rgba(56,189,248,0.2), rgba(15,23,42,0.6)),
+        radial-gradient(circle at center, #020617 0, #020617 55%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      box-shadow: 0 16px 40px rgba(37,99,235,0.7);
+    }
+
+    .score-circle::after {
+      content: '';
+      position: absolute;
+      inset: 8px;
+      border-radius: 999px;
+      background: radial-gradient(circle at top, #020617 0, #020617 60%);
+      border: 1px solid rgba(148,163,184,0.7);
+    }
+
+    .score-number {
+      position: relative;
+      font-size: 30px;
+      font-weight: 700;
+      color: #FFFFFF;
+      text-shadow: 0 0 18px rgba(15,23,42,0.85);
+    }
+
+    .score-number span {
+      position: absolute;
+      bottom: -14px;
+      right: -6px;
+      font-size: 11px;
+      color: var(--text-sub);
+    }
+
+    .score-text-main {
+      font-size: 13px;
+      color: #E5E7EB;
+      margin-bottom: 6px;
+    }
+
+    .score-text-sub {
+      font-size: 11px;
+      color: var(--text-sub);
+      margin-bottom: 4px;
+    }
+
+    .score-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-top: 4px;
+    }
+
+    .score-tag {
+      padding: 3px 8px;
+      border-radius: 999px;
+      font-size: 11px;
+      background: rgba(15,23,42,0.9);
+      border: 1px solid rgba(55,65,81,0.9);
+      color: #E5E7EB;
+    }
+
+    .summary-grid {
+      margin-top: 10px;
+      border-radius: var(--radius-lg);
+      background: linear-gradient(to bottom, rgba(15,23,42,0.96), rgba(15,23,42,0.98));
+      border: 1px solid rgba(55,65,81,0.9);
+      padding: 8px 6px 6px;
+      box-shadow: 0 18px 45px rgba(15,23,42,0.95);
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .summary-grid .metric-row,
+    .body-param-card .metric-row {
+      margin-top: 0;
+    }
+
+    .summary-card-item {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      padding: 4px 4px;
+      border-radius: var(--radius-md);
+    }
+
+    .summary-name {
+      font-size: 12px;
+      color: #E5E7EB;
+    }
+
+    .summary-eval {
+      margin-left: 8px;
+      font-size: 11px;
+      color: var(--text-sub);
+    }
+
+    .summary-right {
+      text-align: right;
+      font-size: 11px;
+      color: var(--text-sub);
+    }
+
+    .summary-value {
+      font-size: 14px;
+      font-weight: 600;
+      background: linear-gradient(135deg, #E5F0FF, #9FB5FF);
+      -webkit-background-clip: text;
+      color: transparent;
+    }
+
+    .summary-unit {
+      font-size: 11px;
+      color: var(--text-sub);
+      margin-left: 3px;
+    }
+
+    .body-param-card {
+      margin-top: 12px;
+      border-radius: var(--radius-lg);
+      background: linear-gradient(to bottom, rgba(15,23,42,0.96), rgba(15,23,42,0.98));
+      border: 1px solid rgba(55,65,81,0.9);
+      padding: 8px 6px 8px;
+      box-shadow: 0 18px 45px rgba(15,23,42,0.95);
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .body-param-item {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      padding: 4px 4px;
+      border-radius: var(--radius-md);
+    }
+
+    /* 身体成分：紧凑型进度条 */
+    .metric-row {
+      margin-top: 6px;
+      padding: 8px 6px 6px;
+      border-radius: var(--radius-md);
+      background: radial-gradient(circle at top, rgba(15,23,42,0.9) 0, rgba(15,23,42,0.96) 60%);
+      border: 1px solid rgba(55,65,81,0.9);
+    }
+
+    .metric-row-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 6px;
+      font-size: 12px;
+      color: #E5E7EB;
+    }
+
+    .metric-row-label {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .metric-row-name {
+      font-size: 12px;
+    }
+
+    .metric-row-q {
+      font-size: 10px;
+      color: var(--text-sub);
+      opacity: 0.8;
+    }
+
+    .metric-row-pill {
+      padding: 2px 8px;
+      border-radius: 999px;
+      font-size: 11px;
+      background: rgba(30,64,175,0.85);
+      color: #E5E7EB;
+    }
+
+    .metric-row-pill.warn {
+      background: rgba(234,179,8,0.9);
+      color: #111827;
+    }
+
+    .metric-row-pill.danger {
+      background: rgba(248,113,113,0.95);
+      color: #111827;
+    }
+
+    .metric-row-value {
+      font-size: 12px;
+      color: #F9FAFB;
+    }
+
+    .metric-row-value span {
+      font-weight: 600;
+    }
+
+    .metric-bar-wrap {
+      margin-top: 2px;
+      position: relative;
+    }
+
+    .metric-value-badge {
+      display: inline-block;
+      padding: 2px 8px;
+      border-radius: 6px;
+      font-size: 12px;
+      font-weight: 600;
+      color: #fff;
+      margin-bottom: 4px;
+      position: relative;
+    }
+
+    .metric-value-badge::after {
+      content: '';
+      position: absolute;
+      left: 50%;
+      bottom: -4px;
+      transform: translateX(-50%);
+      border: 4px solid transparent;
+      border-top-color: inherit;
+    }
+
+    .metric-value-badge.high {
+      background: linear-gradient(135deg, #F97373, #FB7185);
+    }
+
+    .metric-value-badge.high::after {
+      border-top-color: #DC2626;
+    }
+
+    .metric-value-badge.ok {
+      background: linear-gradient(135deg, #22C55E, #4ADE80);
+    }
+
+    .metric-value-badge.ok::after {
+      border-top-color: #16A34A;
+    }
+
+    .metric-bar {
+      position: relative;
+      height: 10px;
+      border-radius: 999px;
+      background: #020617;
+      overflow: hidden;
+    }
+
+    .metric-bar-fill {
+      position: absolute;
+      inset-block: 0;
+      left: 0;
+      width: 75%;
+      background-image: linear-gradient(90deg, #F97373, #FB7185);
+      border-radius: 999px;
+    }
+
+    .metric-bar-fill.ok {
+      background-image: linear-gradient(90deg, #22C55E, #4ADE80);
+    }
+
+    .metric-scale {
+      margin-top: 4px;
+      display: flex;
+      justify-content: space-between;
+      font-size: 10px;
+      color: var(--text-sub);
+    }
+
+    .segment-card {
+      margin-top: 12px;
+      border-radius: var(--radius-lg);
+      background: radial-gradient(circle at top, rgba(15,23,42,1) 0, rgba(15,23,42,1) 55%);
+      border: 1px solid rgba(55,65,81,0.9);
+      padding: 10px 10px 8px;
+      box-shadow: 0 22px 60px rgba(15,23,42,0.95);
+    }
+
+    .segment-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 12px;
+      color: var(--text-sub);
+      margin-bottom: 6px;
+    }
+
+    .segment-body {
+      display: grid;
+      grid-template-columns: 1.1fr auto 1.1fr;
+      gap: 8px;
+      align-items: center;
+    }
+
+    .segment-col {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      font-size: 11px;
+      color: var(--text-sub);
+    }
+
+    .segment-figure {
+      width: 90px;
+      height: 170px;
+      border-radius: 999px;
+      background:
+        radial-gradient(circle at 30% 0, rgba(248,250,252,0.85) 0, transparent 55%),
+        radial-gradient(circle at 70% 0, rgba(191,219,254,0.55) 0, transparent 50%),
+        radial-gradient(circle at 50% 60%, rgba(55,65,81,0.9) 0, rgba(17,24,39,1) 60%);
+      border: 1px solid rgba(156,163,175,0.9);
+      box-shadow: 0 18px 45px rgba(15,23,42,0.95);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .segment-figure::after {
+      content: '';
+      position: absolute;
+      inset-inline: 8px;
+      bottom: -6px;
+      height: 24px;
+      background: radial-gradient(circle at 50% 0, rgba(15,23,42,0.75) 0, transparent 70%);
+    }
+
+    .segment-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+    }
+
+    .segment-item span.value {
+      color: #E5E7EB;
+    }
+
+    .advise-card {
+      margin-top: 12px;
+      border-radius: var(--radius-lg);
+      background: linear-gradient(to bottom, rgba(15,23,42,0.96), rgba(15,23,42,0.98));
+      border: 1px solid rgba(55,65,81,0.9);
+      padding: 8px 8px 6px;
+      box-shadow: 0 18px 45px rgba(15,23,42,0.95);
+    }
+
+    .advise-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 10px;
+    }
+
+    .advise-item {
+      border-radius: var(--radius-md);
+      padding: 10px 8px 8px;
+      background: rgba(30,41,59,0.6);
+      border: 1px solid rgba(55,65,81,0.85);
+      font-size: 11px;
+    }
+
+    .advise-item-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 6px;
+    }
+
+    .advise-title {
+      font-size: 14px;
+      font-weight: 600;
+      color: #E5E7EB;
+    }
+
+    .advise-deviation {
+      font-size: 15px;
+      font-weight: 600;
+      color: #F9FAFB;
+      margin-top: 2px;
+    }
+
+    .advise-pill {
+      padding: 2px 8px;
+      border-radius: 999px;
+      font-size: 11px;
+      font-weight: 500;
+    }
+
+    .advise-pill.over {
+      color: #FCA5A5;
+      background: rgba(239,68,68,0.25);
+      border: 1px solid rgba(239,68,68,0.6);
+    }
+
+    .advise-pill.low {
+      color: #93C5FD;
+      background: rgba(59,130,246,0.2);
+      border: 1px solid rgba(59,130,246,0.5);
+    }
+
+    .advise-pill.ok {
+      color: #6EE7B7;
+      background: rgba(34,197,94,0.2);
+      border: 1px solid rgba(34,197,94,0.5);
+    }
+
+    .advise-trend {
+      margin-top: 8px;
+      padding-top: 6px;
+      border-top: 1px solid rgba(55,65,81,0.5);
+    }
+
+    .advise-trend-bar {
+      position: relative;
+      height: 24px;
+      margin-bottom: 6px;
+    }
+
+    .advise-trend-svg {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 0;
+    }
+
+    .advise-trend-svg line {
+      stroke-width: 2;
+      stroke-linecap: round;
+    }
+
+    .advise-trend-dot {
+      position: absolute;
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      transform: translate(-50%, -50%);
+      z-index: 1;
+    }
+
+    .advise-trend-dot.measured.over { background: #F97373; }
+    .advise-trend-dot.measured.low { background: #60A5FA; }
+    .advise-trend-dot.measured.ok { background: #4ADE80; }
+    .advise-trend-dot.ideal { background: #4ADE80; }
+
+    .advise-trend.trend-down .advise-trend-dot.measured { left: 8%; top: 22%; }
+    .advise-trend.trend-down .advise-trend-dot.ideal { left: 92%; top: 78%; }
+    .advise-trend.trend-up .advise-trend-dot.measured { left: 8%; top: 78%; }
+    .advise-trend.trend-up .advise-trend-dot.ideal { left: 92%; top: 22%; }
+    .advise-trend.trend-flat .advise-trend-dot { left: 50%; top: 50%; }
+
+    .advise-trend-labels {
+      display: flex;
+      justify-content: space-between;
+      font-size: 10px;
+      color: var(--text-sub);
+    }
+
+    .advise-trend-labels .measured { color: #FCA5A5; }
+    .advise-trend-labels .ideal { color: #6EE7B7; }
   </style>
 </head>
 <body>
@@ -505,61 +1174,410 @@
     </header>
 
     <div class="tabs">
-      <div class="tab">身体成分</div>
-      <div class="tab">体态评估</div>
-      <div class="tab active">身体围度</div>
-      <div class="tab">肩部功能</div>
+      <div class="tab" data-view="composition">身体成分</div>
+      <div class="tab" data-view="posture">体态评估</div>
+      <div class="tab active" data-view="circumference">身体围度</div>
+      <div class="tab" data-view="shoulder">肩部功能</div>
     </div>
 
     <main class="scroll">
-      <section class="info-card">
-        <div class="info-row-top">
-          <div class="id-text">ID: hassie.ratkle@gmail.com</div>
-          <div class="time-pill">
-            <span>2026-01-21</span>
-            <span>15:16:54</span>
+      <!-- 身体成分视图 -->
+      <section class="view-section" data-view="composition">
+        <section class="info-card">
+          <div class="info-row-top">
+            <div class="id-text">ID: hassie.ratkle@gmail.com</div>
+            <div class="time-pill">
+              <span>2026-01-21</span>
+              <span>15:16:54</span>
+            </div>
           </div>
-        </div>
-        <div class="hint-row">*身体围度变更于 {date} 更新！</div>
-        <div class="date-row">
-          <div class="date-label">选择对比变化日期</div>
-          <div class="date-select">
-            <span>2025.07.09</span>
-            <span>▼</span>
+          <div class="hint-row">*身体成分分数及节段数据的计算规则已于 {date} 更新！</div>
+        </section>
+
+        <!-- 顶部：左 3D 人体 + 右侧节段脂肪/肌肉（合并布局） -->
+        <section class="composition-header">
+          <div class="composition-figure"></div>
+          <section class="segment-panel">
+            <div class="segment-tabs">
+              <div class="segment-tab active">节段脂肪</div>
+              <div class="segment-tab">节段肌肉</div>
+            </div>
+            <div class="segment-table-header">单位：kg</div>
+            <div class="segment-table">
+              <div class="segment-table-row">
+                <div class="segment-table-cell">右上肢</div>
+                <div class="segment-table-cell value">2.1 kg</div>
+              </div>
+              <div class="segment-table-row">
+                <div class="segment-table-cell">左上肢</div>
+                <div class="segment-table-cell value">2.1 kg</div>
+              </div>
+              <div class="segment-table-row">
+                <div class="segment-table-cell">躯干</div>
+                <div class="segment-table-cell value">12.3 kg</div>
+              </div>
+              <div class="segment-table-row">
+                <div class="segment-table-cell">右下肢</div>
+                <div class="segment-table-cell value">3.0 kg</div>
+              </div>
+              <div class="segment-table-row">
+                <div class="segment-table-cell">左下肢</div>
+                <div class="segment-table-cell value">3.1 kg</div>
+              </div>
+            </div>
+          </section>
+        </section>
+
+        <!-- 下方仍保留新的综合指标与建议，可以继续优化 -->
+        <h2 class="section-title">人体成分概览</h2>
+        <p class="section-sub">从体重、脂肪、肌肉等多个维度综合评估当前身体状态。</p>
+
+        <section class="summary-grid">
+          <div class="metric-row">
+            <div class="metric-row-header">
+              <div class="metric-row-label"><span class="metric-row-name">体重 | kg</span><span class="metric-row-q">?</span></div>
+              <span class="metric-row-pill warn">↑1.3</span>
+            </div>
+            <div class="metric-bar-wrap">
+              <div class="metric-value-badge high">70.0</div>
+              <div class="metric-bar">
+                <div class="metric-bar-fill" style="width:85%;"></div>
+              </div>
+            </div>
+            <div class="metric-scale">
+              <span>低标准</span><span>48.4</span><span>标准</span><span>59.2</span><span>超标准</span>
+            </div>
           </div>
+          <div class="metric-row">
+            <div class="metric-row-header">
+              <div class="metric-row-label"><span class="metric-row-name">体脂肪 | kg</span><span class="metric-row-q">?</span></div>
+              <span class="metric-row-pill warn">↑9.4</span>
+            </div>
+            <div class="metric-bar-wrap">
+              <div class="metric-value-badge high">23.9</div>
+              <div class="metric-bar">
+                <div class="metric-bar-fill" style="width:90%;"></div>
+              </div>
+            </div>
+            <div class="metric-scale">
+              <span>低标准</span><span>10.8</span><span>标准</span><span>17.2</span><span>超标准</span>
+            </div>
+          </div>
+          <div class="metric-row">
+            <div class="metric-row-header">
+              <div class="metric-row-label"><span class="metric-row-name">去脂体重 | kg</span><span class="metric-row-q">?</span></div>
+              <span class="metric-row-pill">↓8.1</span>
+            </div>
+            <div class="metric-bar-wrap">
+              <div class="metric-value-badge high">28.5</div>
+              <div class="metric-bar">
+                <div class="metric-bar-fill" style="width:35%;"></div>
+              </div>
+            </div>
+            <div class="metric-scale">
+              <span>低标准</span><span>37.3</span><span>标准</span><span>45.5</span><span>超标准</span>
+            </div>
+          </div>
+          <div class="metric-row">
+            <div class="metric-row-header">
+              <div class="metric-row-label"><span class="metric-row-name">骨骼肌量 | kg</span><span class="metric-row-q">?</span></div>
+              <span class="metric-row-pill">↓3.5</span>
+            </div>
+            <div class="metric-bar-wrap">
+              <div class="metric-value-badge high">15.5</div>
+              <div class="metric-bar">
+                <div class="metric-bar-fill" style="width:45%;"></div>
+              </div>
+            </div>
+            <div class="metric-scale">
+              <span>低标准</span><span>20.3</span><span>标准</span><span>24.9</span><span>超标准</span>
+            </div>
+          </div>
+          <div class="metric-row">
+            <div class="metric-row-header">
+              <div class="metric-row-label"><span class="metric-row-name">体水分 | kg</span><span class="metric-row-q">?</span></div>
+              <span class="metric-row-pill">↓6.3</span>
+            </div>
+            <div class="metric-bar-wrap">
+              <div class="metric-value-badge high">20.9</div>
+              <div class="metric-bar">
+                <div class="metric-bar-fill" style="width:50%;"></div>
+              </div>
+            </div>
+            <div class="metric-scale">
+              <span>低标准</span><span>27.2</span><span>标准</span><span>33.2</span><span>超标准</span>
+            </div>
+          </div>
+          <div class="metric-row">
+            <div class="metric-row-header">
+              <div class="metric-row-label"><span class="metric-row-name">内脏脂肪等级</span><span class="metric-row-q">?</span></div>
+              <span class="metric-row-pill warn">↑5.0</span>
+            </div>
+            <div class="metric-bar-wrap">
+              <div class="metric-value-badge ok">10.0</div>
+              <div class="metric-bar">
+                <div class="metric-bar-fill ok" style="width:65%;"></div>
+              </div>
+            </div>
+            <div class="metric-scale">
+              <span>低标准</span><span>1.0</span><span>标准</span><span>10.0</span><span>超标准</span>
+            </div>
+          </div>
+        </section>
+
+        <h2 class="section-title">身体参数</h2>
+        <p class="section-sub">从基础代谢、细胞外水分等指标判断整体代谢情况。</p>
+
+        <section class="body-param-card">
+          <div class="metric-row">
+            <div class="metric-row-header">
+              <div class="metric-row-label"><span class="metric-row-name">基础代谢率 | kcal/d</span><span class="metric-row-q">?</span></div>
+              <span class="metric-row-pill">↓12</span>
+            </div>
+            <div class="metric-bar-wrap">
+              <div class="metric-value-badge ok">1225.9</div>
+              <div class="metric-bar">
+                <div class="metric-bar-fill ok" style="width:62%;"></div>
+              </div>
+            </div>
+            <div class="metric-scale">
+              <span>低标准</span><span>1000</span><span>标准</span><span>1500</span><span>超标准</span>
+            </div>
+          </div>
+          <div class="metric-row">
+            <div class="metric-row-header">
+              <div class="metric-row-label"><span class="metric-row-name">体脂率 | %</span><span class="metric-row-q">?</span></div>
+              <span class="metric-row-pill warn">↑8.2</span>
+            </div>
+            <div class="metric-bar-wrap">
+              <div class="metric-value-badge high">45.0</div>
+              <div class="metric-bar">
+                <div class="metric-bar-fill" style="width:90%;"></div>
+              </div>
+            </div>
+            <div class="metric-scale">
+              <span>低标准</span><span>18</span><span>标准</span><span>28</span><span>超标准</span>
+            </div>
+          </div>
+          <div class="metric-row">
+            <div class="metric-row-header">
+              <div class="metric-row-label"><span class="metric-row-name">BMI | kg/m²</span><span class="metric-row-q">?</span></div>
+              <span class="metric-row-pill warn">↑0.5</span>
+            </div>
+            <div class="metric-bar-wrap">
+              <div class="metric-value-badge ok">24.5</div>
+              <div class="metric-bar">
+                <div class="metric-bar-fill ok" style="width:75%;"></div>
+              </div>
+            </div>
+            <div class="metric-scale">
+              <span>低标准</span><span>18.5</span><span>标准</span><span>24</span><span>超标准</span>
+            </div>
+          </div>
+          <div class="metric-row">
+            <div class="metric-row-header">
+              <div class="metric-row-label"><span class="metric-row-name">细胞外水分率 | %</span><span class="metric-row-q">?</span></div>
+              <span class="metric-row-pill warn">↑3.0</span>
+            </div>
+            <div class="metric-bar-wrap">
+              <div class="metric-value-badge high">45.0</div>
+              <div class="metric-bar">
+                <div class="metric-bar-fill" style="width:85%;"></div>
+              </div>
+            </div>
+            <div class="metric-scale">
+              <span>低标准</span><span>37</span><span>标准</span><span>42</span><span>超标准</span>
+            </div>
+          </div>
+          <div class="metric-row">
+            <div class="metric-row-header">
+              <div class="metric-row-label"><span class="metric-row-name">细胞外水分 | kg</span><span class="metric-row-q">?</span></div>
+              <span class="metric-row-pill">↓2.1</span>
+            </div>
+            <div class="metric-bar-wrap">
+              <div class="metric-value-badge ok">16.8</div>
+              <div class="metric-bar">
+                <div class="metric-bar-fill ok" style="width:55%;"></div>
+              </div>
+            </div>
+            <div class="metric-scale">
+              <span>低标准</span><span>12.0</span><span>标准</span><span>18.0</span><span>超标准</span>
+            </div>
+          </div>
+          <div class="metric-row">
+            <div class="metric-row-header">
+              <div class="metric-row-label"><span class="metric-row-name">细胞内水分 | kg</span><span class="metric-row-q">?</span></div>
+              <span class="metric-row-pill">↓4.2</span>
+            </div>
+            <div class="metric-bar-wrap">
+              <div class="metric-value-badge high">11.7</div>
+              <div class="metric-bar">
+                <div class="metric-bar-fill" style="width:40%;"></div>
+              </div>
+            </div>
+            <div class="metric-scale">
+              <span>低标准</span><span>15.0</span><span>标准</span><span>20.0</span><span>超标准</span>
+            </div>
+          </div>
+        </section>
+
+        <h2 class="section-title">调节建议</h2>
+        <p class="section-sub">结合当前体脂和肌肉情况，给出简单的减脂增肌方向。</p>
+
+        <section class="advise-card">
+          <div class="advise-grid">
+            <div class="advise-item">
+              <div class="advise-item-header">
+                <div>
+                  <div class="advise-title">体重</div>
+                  <div class="advise-deviation">-10.1 kg</div>
+                </div>
+                <span class="advise-pill over">过量</span>
+              </div>
+              <div class="advise-trend trend-down">
+                <div class="advise-trend-bar">
+                  <svg class="advise-trend-svg" viewBox="0 0 100 24" preserveAspectRatio="none">
+                    <defs><linearGradient id="gDown1" x1="0%" y1="0%" x2="100%" y2="0%"><stop offset="0%" stop-color="#4ADE80"/><stop offset="100%" stop-color="#F97373"/></linearGradient></defs>
+                    <line x1="8" y1="5" x2="92" y2="19" stroke="url(#gDown1)"/>
+                  </svg>
+                  <span class="advise-trend-dot ideal"></span>
+                  <span class="advise-trend-dot measured over"></span>
+                </div>
+                <div class="advise-trend-labels">
+                  <span class="measured">测量值：70.7</span>
+                  <span class="ideal">理想值：60.6 ※</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="advise-item">
+              <div class="advise-item-header">
+                <div>
+                  <div class="advise-title">体脂肪</div>
+                  <div class="advise-deviation">-18.0 kg</div>
+                </div>
+                <span class="advise-pill over">过量</span>
+              </div>
+              <div class="advise-trend trend-down">
+                <div class="advise-trend-bar">
+                  <svg class="advise-trend-svg" viewBox="0 0 100 24" preserveAspectRatio="none">
+                    <defs><linearGradient id="gDown2" x1="0%" y1="0%" x2="100%" y2="0%"><stop offset="0%" stop-color="#4ADE80"/><stop offset="100%" stop-color="#F97373"/></linearGradient></defs>
+                    <line x1="8" y1="5" x2="92" y2="19" stroke="url(#gDown2)"/>
+                  </svg>
+                  <span class="advise-trend-dot ideal"></span>
+                  <span class="advise-trend-dot measured over"></span>
+                </div>
+                <div class="advise-trend-labels">
+                  <span class="measured">测量值：31.5</span>
+                  <span class="ideal">理想值：13.5 ※</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="advise-item">
+              <div class="advise-item-header">
+                <div>
+                  <div class="advise-title">肌肉量</div>
+                  <div class="advise-deviation">+6.2 kg</div>
+                </div>
+                <span class="advise-pill low">不足</span>
+              </div>
+              <div class="advise-trend trend-up">
+                <div class="advise-trend-bar">
+                  <svg class="advise-trend-svg" viewBox="0 0 100 24" preserveAspectRatio="none">
+                    <defs><linearGradient id="gUp1" x1="0%" y1="0%" x2="100%" y2="0%"><stop offset="0%" stop-color="#60A5FA"/><stop offset="100%" stop-color="#4ADE80"/></linearGradient></defs>
+                    <line x1="8" y1="19" x2="92" y2="5" stroke="url(#gUp1)"/>
+                  </svg>
+                  <span class="advise-trend-dot measured low"></span>
+                  <span class="advise-trend-dot ideal"></span>
+                </div>
+                <div class="advise-trend-labels">
+                  <span class="measured">测量值：36.1</span>
+                  <span class="ideal">理想值：42.3 ※</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="advise-item">
+              <div class="advise-item-header">
+                <div>
+                  <div class="advise-title">肌肉量</div>
+                  <div class="advise-deviation">0 kg</div>
+                </div>
+                <span class="advise-pill ok">标准</span>
+              </div>
+              <div class="advise-trend trend-flat">
+                <div class="advise-trend-bar">
+                  <svg class="advise-trend-svg" viewBox="0 0 100 24" preserveAspectRatio="none">
+                    <line x1="45" y1="12" x2="55" y2="12" stroke="#4ADE80"/>
+                  </svg>
+                  <span class="advise-trend-dot ideal"></span>
+                  <span class="advise-trend-dot measured ok"></span>
+                </div>
+                <div class="advise-trend-labels">
+                  <span class="measured">测量值：36.1</span>
+                  <span class="ideal">理想值：36.1 ※</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <div class="page-footer">
+          <div>*报告内容仅供参考，不作为诊断或医疗依据，如有不适请及时就医或咨询专业人士。</div>
         </div>
       </section>
 
-      <section class="model-card">
-        <div class="model-header">
-          <div class="model-label">
+      <!-- 身体围度视图 -->
+      <section class="view-section active-view" data-view="circumference">
+        <section class="info-card">
+          <div class="info-row-top">
+            <div class="id-text">ID: hassie.ratkle@gmail.com</div>
+            <div class="time-pill">
+              <span>2026-01-21</span>
+              <span>15:16:54</span>
+            </div>
+          </div>
+          <div class="hint-row">*身体围度变更于 {date} 更新！</div>
+          <div class="date-row">
+            <div class="date-label">选择对比变化日期</div>
+            <div class="date-select">
+              <span>2025.07.09</span>
+              <span>▼</span>
+            </div>
+          </div>
+        </section>
+
+        <section class="model-card">
+          <div class="model-header">
+            <div class="model-label">
+              <span>本次</span>
+              <span>2025-07-09 15:16:54</span>
+            </div>
+            <div class="model-page-dots">
+              <div class="dot active"></div>
+              <div class="dot"></div>
+              <div class="dot"></div>
+            </div>
+          </div>
+          <div class="model-body-wrap">
+            <div class="model-arrow">‹</div>
+            <div class="model-figure">
+              <div class="figure"></div>
+              <div class="figure"></div>
+            </div>
+            <div class="model-arrow">›</div>
+          </div>
+          <div class="model-footer">
             <span>本次</span>
-            <span>2025-07-09 15:16:54</span>
+            <span>对比日期</span>
           </div>
-          <div class="model-page-dots">
-            <div class="dot active"></div>
-            <div class="dot"></div>
-            <div class="dot"></div>
-          </div>
-        </div>
-        <div class="model-body-wrap">
-          <div class="model-arrow">‹</div>
-          <div class="model-figure">
-            <div class="figure"></div>
-            <div class="figure"></div>
-          </div>
-          <div class="model-arrow">›</div>
-        </div>
-        <div class="model-footer">
-          <span>本次</span>
-          <span>对比日期</span>
-        </div>
-      </section>
+        </section>
 
-      <h2 class="section-title">身体围度概览</h2>
-      <p class="section-sub">以下数值为本次测量结果，与所选对比日期的差异仅供参考。</p>
+        <h2 class="section-title">身体围度概览</h2>
+        <p class="section-sub">以下数值为本次测量结果，与所选对比日期的差异仅供参考。</p>
 
-      <section class="metrics-list">
+        <section class="metrics-list">
         <div class="metric-item">
           <div>
             <div class="metric-name">颈围</div>
@@ -761,8 +1779,29 @@
         <div>*为保证数据准确性，需穿着紧身衣物，扎起头发。</div>
         <div class="footer-mark">*报告内容仅供参考，不作为诊断或医疗依据。</div>
       </div>
+      </section>
     </main>
   </div>
 </body>
-</html>
+<script>
+  (function () {
+    var tabs = document.querySelectorAll('.tabs .tab[data-view]');
+    var views = document.querySelectorAll('.view-section[data-view]');
+    if (!tabs.length || !views.length) return;
 
+    tabs.forEach(function (tab) {
+      tab.addEventListener('click', function () {
+        var view = this.getAttribute('data-view');
+        if (!view) return;
+        tabs.forEach(function (t) {
+          t.classList.toggle('active', t === tab);
+        });
+        views.forEach(function (sec) {
+          sec.classList.toggle('active-view', sec.getAttribute('data-view') === view);
+        });
+      });
+    });
+  })();
+</script>
+</body>
+</html>

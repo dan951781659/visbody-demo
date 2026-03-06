@@ -616,6 +616,75 @@
     .advise-highlight.plus {
       color: #16A34A;
     }
+
+    .summary-grid {
+      border-radius: var(--radius-lg);
+      background: #FFFFFF;
+      border: 1px solid var(--border);
+      box-shadow: var(--shadow-soft);
+      padding: 8px 6px 6px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    .body-param-card {
+      margin-top: 12px;
+      border-radius: var(--radius-lg);
+      background: #FFFFFF;
+      border: 1px solid var(--border);
+      box-shadow: var(--shadow-soft);
+      padding: 8px 6px 8px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    .metric-row {
+      padding: 8px 6px 6px;
+      border-radius: var(--radius-md);
+      background: #F9FAFB;
+      border: 1px solid var(--border-soft);
+    }
+    .metric-row-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px; font-size: 12px; color: var(--text-main); }
+    .metric-row-label { display: flex; align-items: center; gap: 6px; }
+    .metric-row-name { font-size: 12px; }
+    .metric-row-q { font-size: 10px; color: var(--text-sub); }
+    .metric-row-pill { padding: 2px 8px; border-radius: 999px; font-size: 11px; background: rgba(59,130,246,0.15); color: #1D4ED8; }
+    .metric-row-pill.warn { background: rgba(234,179,8,0.2); color: #B45309; }
+    .metric-bar-wrap { margin-top: 2px; position: relative; }
+    .metric-value-badge { display: inline-block; padding: 2px 8px; border-radius: 6px; font-size: 12px; font-weight: 600; color: #fff; margin-bottom: 4px; position: relative; }
+    .metric-value-badge::after { content: ''; position: absolute; left: 50%; bottom: -4px; transform: translateX(-50%); border: 4px solid transparent; border-top-color: inherit; }
+    .metric-value-badge.high { background: linear-gradient(135deg, #DC2626, #EF4444); }
+    .metric-value-badge.high::after { border-top-color: #B91C1C; }
+    .metric-value-badge.ok { background: linear-gradient(135deg, #16A34A, #22C55E); }
+    .metric-value-badge.ok::after { border-top-color: #15803D; }
+    .metric-bar { position: relative; height: 10px; border-radius: 999px; background: #E5E7EB; overflow: hidden; }
+    .metric-bar-fill { position: absolute; inset-block: 0; left: 0; width: 75%; background: linear-gradient(90deg, #F97373, #FB7185); border-radius: 999px; }
+    .metric-bar-fill.ok { background: linear-gradient(90deg, #22C55E, #4ADE80); }
+    .metric-scale { margin-top: 4px; display: flex; justify-content: space-between; font-size: 10px; color: var(--text-sub); }
+
+    .advise-item-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 6px; }
+    .advise-deviation { font-size: 15px; font-weight: 600; color: var(--text-main); margin-top: 2px; }
+    .advise-pill { padding: 2px 8px; border-radius: 999px; font-size: 11px; font-weight: 500; }
+    .advise-pill.over { color: #DC2626; background: rgba(239,68,68,0.12); border: 1px solid rgba(239,68,68,0.4); }
+    .advise-pill.low { color: #2563EB; background: rgba(59,130,246,0.12); border: 1px solid rgba(59,130,246,0.4); }
+    .advise-pill.ok { color: #16A34A; background: rgba(34,197,94,0.12); border: 1px solid rgba(34,197,94,0.4); }
+    .advise-trend { margin-top: 8px; padding-top: 6px; border-top: 1px solid var(--border-soft); }
+    .advise-trend-bar { position: relative; height: 24px; margin-bottom: 6px; }
+    .advise-trend-svg { position: absolute; inset: 0; width: 100%; height: 100%; z-index: 0; }
+    .advise-trend-svg line { stroke-width: 2; stroke-linecap: round; }
+    .advise-trend-dot { position: absolute; width: 10px; height: 10px; border-radius: 50%; transform: translate(-50%, -50%); z-index: 1; }
+    .advise-trend-dot.measured.over { background: #F97373; }
+    .advise-trend-dot.measured.low { background: #60A5FA; }
+    .advise-trend-dot.measured.ok { background: #4ADE80; }
+    .advise-trend-dot.ideal { background: #4ADE80; }
+    .advise-trend.trend-down .advise-trend-dot.measured { left: 8%; top: 22%; }
+    .advise-trend.trend-down .advise-trend-dot.ideal { left: 92%; top: 78%; }
+    .advise-trend.trend-up .advise-trend-dot.measured { left: 8%; top: 78%; }
+    .advise-trend.trend-up .advise-trend-dot.ideal { left: 92%; top: 22%; }
+    .advise-trend.trend-flat .advise-trend-dot { left: 50%; top: 50%; }
+    .advise-trend-labels { display: flex; justify-content: space-between; font-size: 10px; color: var(--text-sub); }
+    .advise-trend-labels .measured { color: #DC2626; }
+    .advise-trend-labels .ideal { color: #16A34A; }
   </style>
 </head>
 <body>
@@ -666,70 +735,144 @@
         <h2 class="section-title">人体成分概览</h2>
         <p class="section-sub">体重、脂肪、肌肉等关键指标一览。</p>
 
-        <section class="param-card">
-          <div class="param-grid-3">
-            <div class="param-item">
-              <div class="param-name">体重</div>
-              <div><span class="param-value">70.0</span><span class="param-unit"> kg</span></div>
-              <div class="param-desc">目标 59.9 ~ 63.5 kg</div>
+        <section class="summary-grid">
+          <div class="metric-row">
+            <div class="metric-row-header">
+              <div class="metric-row-label"><span class="metric-row-name">体重 | kg</span><span class="metric-row-q">?</span></div>
+              <span class="metric-row-pill warn">↑1.3</span>
             </div>
-            <div class="param-item">
-              <div class="param-name">去脂体重</div>
-              <div><span class="param-value">38.5</span><span class="param-unit"> kg</span></div>
-              <div class="param-desc">骨骼肌偏少</div>
+            <div class="metric-bar-wrap">
+              <div class="metric-value-badge high">70.0</div>
+              <div class="metric-bar"><div class="metric-bar-fill" style="width:85%;"></div></div>
             </div>
-            <div class="param-item">
-              <div class="param-name">脂肪量</div>
-              <div><span class="param-value">31.5</span><span class="param-unit"> kg</span></div>
-              <div class="param-desc">略高，建议减脂</div>
+            <div class="metric-scale"><span>低标准</span><span>48.4</span><span>标准</span><span>59.2</span><span>超标准</span></div>
+          </div>
+          <div class="metric-row">
+            <div class="metric-row-header">
+              <div class="metric-row-label"><span class="metric-row-name">体脂肪 | kg</span><span class="metric-row-q">?</span></div>
+              <span class="metric-row-pill warn">↑9.4</span>
             </div>
-            <div class="param-item">
-              <div class="param-name">体水分</div>
-              <div><span class="param-value">36.1</span><span class="param-unit"> kg</span></div>
-              <div class="param-desc">接近正常范围</div>
+            <div class="metric-bar-wrap">
+              <div class="metric-value-badge high">23.9</div>
+              <div class="metric-bar"><div class="metric-bar-fill" style="width:90%;"></div></div>
             </div>
-            <div class="param-item">
-              <div class="param-name">骨骼肌量</div>
-              <div><span class="param-value">22.1</span><span class="param-unit"> kg</span></div>
-              <div class="param-desc">力量训练可进一步提高</div>
+            <div class="metric-scale"><span>低标准</span><span>10.8</span><span>标准</span><span>17.2</span><span>超标准</span></div>
+          </div>
+          <div class="metric-row">
+            <div class="metric-row-header">
+              <div class="metric-row-label"><span class="metric-row-name">去脂体重 | kg</span><span class="metric-row-q">?</span></div>
+              <span class="metric-row-pill">↓8.1</span>
             </div>
-            <div class="param-item">
-              <div class="param-name">内脏脂肪等级</div>
-              <div><span class="param-value">11.0</span></div>
-              <div class="param-desc">高于理想值，请重点关注</div>
+            <div class="metric-bar-wrap">
+              <div class="metric-value-badge high">28.5</div>
+              <div class="metric-bar"><div class="metric-bar-fill" style="width:35%;"></div></div>
             </div>
+            <div class="metric-scale"><span>低标准</span><span>37.3</span><span>标准</span><span>45.5</span><span>超标准</span></div>
+          </div>
+          <div class="metric-row">
+            <div class="metric-row-header">
+              <div class="metric-row-label"><span class="metric-row-name">骨骼肌量 | kg</span><span class="metric-row-q">?</span></div>
+              <span class="metric-row-pill">↓3.5</span>
+            </div>
+            <div class="metric-bar-wrap">
+              <div class="metric-value-badge high">15.5</div>
+              <div class="metric-bar"><div class="metric-bar-fill" style="width:45%;"></div></div>
+            </div>
+            <div class="metric-scale"><span>低标准</span><span>20.3</span><span>标准</span><span>24.9</span><span>超标准</span></div>
+          </div>
+          <div class="metric-row">
+            <div class="metric-row-header">
+              <div class="metric-row-label"><span class="metric-row-name">体水分 | kg</span><span class="metric-row-q">?</span></div>
+              <span class="metric-row-pill">↓6.3</span>
+            </div>
+            <div class="metric-bar-wrap">
+              <div class="metric-value-badge high">20.9</div>
+              <div class="metric-bar"><div class="metric-bar-fill" style="width:50%;"></div></div>
+            </div>
+            <div class="metric-scale"><span>低标准</span><span>27.2</span><span>标准</span><span>33.2</span><span>超标准</span></div>
+          </div>
+          <div class="metric-row">
+            <div class="metric-row-header">
+              <div class="metric-row-label"><span class="metric-row-name">内脏脂肪等级</span><span class="metric-row-q">?</span></div>
+              <span class="metric-row-pill warn">↑5.0</span>
+            </div>
+            <div class="metric-bar-wrap">
+              <div class="metric-value-badge ok">10.0</div>
+              <div class="metric-bar"><div class="metric-bar-fill ok" style="width:65%;"></div></div>
+            </div>
+            <div class="metric-scale"><span>低标准</span><span>1.0</span><span>标准</span><span>10.0</span><span>超标准</span></div>
           </div>
         </section>
 
         <h2 class="section-title">身体参数</h2>
         <p class="section-sub">代谢与水分相关参数。</p>
 
-        <section class="param-card" style="margin-top:10px;">
-          <div class="param-grid-3">
-            <div class="param-item">
-              <div class="param-name">基础代谢率</div>
-              <div><span class="param-value">1225.9</span><span class="param-unit"> kcal/d</span></div>
+        <section class="body-param-card">
+          <div class="metric-row">
+            <div class="metric-row-header">
+              <div class="metric-row-label"><span class="metric-row-name">基础代谢率 | kcal/d</span><span class="metric-row-q">?</span></div>
+              <span class="metric-row-pill">↓12</span>
             </div>
-            <div class="param-item">
-              <div class="param-name">体脂率</div>
-              <div><span class="param-value">45.0</span><span class="param-unit"> %</span></div>
+            <div class="metric-bar-wrap">
+              <div class="metric-value-badge ok">1225.9</div>
+              <div class="metric-bar"><div class="metric-bar-fill ok" style="width:62%;"></div></div>
             </div>
-            <div class="param-item">
-              <div class="param-name">BMI</div>
-              <div><span class="param-value">24.5</span><span class="param-unit"> kg/m²</span></div>
+            <div class="metric-scale"><span>低标准</span><span>1000</span><span>标准</span><span>1500</span><span>超标准</span></div>
+          </div>
+          <div class="metric-row">
+            <div class="metric-row-header">
+              <div class="metric-row-label"><span class="metric-row-name">体脂率 | %</span><span class="metric-row-q">?</span></div>
+              <span class="metric-row-pill warn">↑8.2</span>
             </div>
-            <div class="param-item">
-              <div class="param-name">细胞外水分率</div>
-              <div><span class="param-value">45.0</span><span class="param-unit"> %</span></div>
+            <div class="metric-bar-wrap">
+              <div class="metric-value-badge high">45.0</div>
+              <div class="metric-bar"><div class="metric-bar-fill" style="width:90%;"></div></div>
             </div>
-            <div class="param-item">
-              <div class="param-name">细胞外水分</div>
-              <div><span class="param-value">16.8</span><span class="param-unit"> kg</span></div>
+            <div class="metric-scale"><span>低标准</span><span>18</span><span>标准</span><span>28</span><span>超标准</span></div>
+          </div>
+          <div class="metric-row">
+            <div class="metric-row-header">
+              <div class="metric-row-label"><span class="metric-row-name">BMI | kg/m²</span><span class="metric-row-q">?</span></div>
+              <span class="metric-row-pill warn">↑0.5</span>
             </div>
-            <div class="param-item">
-              <div class="param-name">细胞内水分</div>
-              <div><span class="param-value">11.7</span><span class="param-unit"> kg</span></div>
+            <div class="metric-bar-wrap">
+              <div class="metric-value-badge ok">24.5</div>
+              <div class="metric-bar"><div class="metric-bar-fill ok" style="width:75%;"></div></div>
             </div>
+            <div class="metric-scale"><span>低标准</span><span>18.5</span><span>标准</span><span>24</span><span>超标准</span></div>
+          </div>
+          <div class="metric-row">
+            <div class="metric-row-header">
+              <div class="metric-row-label"><span class="metric-row-name">细胞外水分率 | %</span><span class="metric-row-q">?</span></div>
+              <span class="metric-row-pill warn">↑3.0</span>
+            </div>
+            <div class="metric-bar-wrap">
+              <div class="metric-value-badge high">45.0</div>
+              <div class="metric-bar"><div class="metric-bar-fill" style="width:85%;"></div></div>
+            </div>
+            <div class="metric-scale"><span>低标准</span><span>37</span><span>标准</span><span>42</span><span>超标准</span></div>
+          </div>
+          <div class="metric-row">
+            <div class="metric-row-header">
+              <div class="metric-row-label"><span class="metric-row-name">细胞外水分 | kg</span><span class="metric-row-q">?</span></div>
+              <span class="metric-row-pill">↓2.1</span>
+            </div>
+            <div class="metric-bar-wrap">
+              <div class="metric-value-badge ok">16.8</div>
+              <div class="metric-bar"><div class="metric-bar-fill ok" style="width:55%;"></div></div>
+            </div>
+            <div class="metric-scale"><span>低标准</span><span>12.0</span><span>标准</span><span>18.0</span><span>超标准</span></div>
+          </div>
+          <div class="metric-row">
+            <div class="metric-row-header">
+              <div class="metric-row-label"><span class="metric-row-name">细胞内水分 | kg</span><span class="metric-row-q">?</span></div>
+              <span class="metric-row-pill">↓4.2</span>
+            </div>
+            <div class="metric-bar-wrap">
+              <div class="metric-value-badge high">11.7</div>
+              <div class="metric-bar"><div class="metric-bar-fill" style="width:40%;"></div></div>
+            </div>
+            <div class="metric-scale"><span>低标准</span><span>15.0</span><span>标准</span><span>20.0</span><span>超标准</span></div>
           </div>
         </section>
 
@@ -760,23 +903,95 @@
         <section class="advise-card">
           <div class="advise-grid">
             <div class="advise-item">
-              <div class="advise-title">体重</div>
-              <div class="advise-main">建议<span class="advise-highlight">减重 -10.1 kg</span></div>
-              <div>目标 59.9 ~ 63.5 kg</div>
+              <div class="advise-item-header">
+                <div>
+                  <div class="advise-title">体重</div>
+                  <div class="advise-deviation">-10.1 kg</div>
+                </div>
+                <span class="advise-pill over">过量</span>
+              </div>
+              <div class="advise-trend trend-down">
+                <div class="advise-trend-bar">
+                  <svg class="advise-trend-svg" viewBox="0 0 100 24" preserveAspectRatio="none">
+                    <defs><linearGradient id="pwDown1" x1="0%" y1="0%" x2="100%" y2="0%"><stop offset="0%" stop-color="#4ADE80"/><stop offset="100%" stop-color="#F97373"/></linearGradient></defs>
+                    <line x1="8" y1="5" x2="92" y2="19" stroke="url(#pwDown1)"/>
+                  </svg>
+                  <span class="advise-trend-dot ideal"></span>
+                  <span class="advise-trend-dot measured over"></span>
+                </div>
+                <div class="advise-trend-labels">
+                  <span class="measured">测量值：70.7</span>
+                  <span class="ideal">理想值：60.6 ※</span>
+                </div>
+              </div>
             </div>
             <div class="advise-item">
-              <div class="advise-title">体脂肪</div>
-              <div class="advise-main">建议<span class="advise-highlight">减脂 -18.0 kg</span></div>
-              <div>重点控制饮食与增加有氧</div>
+              <div class="advise-item-header">
+                <div>
+                  <div class="advise-title">体脂肪</div>
+                  <div class="advise-deviation">-18.0 kg</div>
+                </div>
+                <span class="advise-pill over">过量</span>
+              </div>
+              <div class="advise-trend trend-down">
+                <div class="advise-trend-bar">
+                  <svg class="advise-trend-svg" viewBox="0 0 100 24" preserveAspectRatio="none">
+                    <defs><linearGradient id="pwDown2" x1="0%" y1="0%" x2="100%" y2="0%"><stop offset="0%" stop-color="#4ADE80"/><stop offset="100%" stop-color="#F97373"/></linearGradient></defs>
+                    <line x1="8" y1="5" x2="92" y2="19" stroke="url(#pwDown2)"/>
+                  </svg>
+                  <span class="advise-trend-dot ideal"></span>
+                  <span class="advise-trend-dot measured over"></span>
+                </div>
+                <div class="advise-trend-labels">
+                  <span class="measured">测量值：31.5</span>
+                  <span class="ideal">理想值：13.5 ※</span>
+                </div>
+              </div>
             </div>
             <div class="advise-item">
-              <div class="advise-title">肌肉量</div>
-              <div class="advise-main">建议<span class="advise-highlight plus">增肌 +6.2 kg</span></div>
-              <div>每周≥2 次力量训练</div>
+              <div class="advise-item-header">
+                <div>
+                  <div class="advise-title">肌肉量</div>
+                  <div class="advise-deviation">+6.2 kg</div>
+                </div>
+                <span class="advise-pill low">不足</span>
+              </div>
+              <div class="advise-trend trend-up">
+                <div class="advise-trend-bar">
+                  <svg class="advise-trend-svg" viewBox="0 0 100 24" preserveAspectRatio="none">
+                    <defs><linearGradient id="pwUp1" x1="0%" y1="0%" x2="100%" y2="0%"><stop offset="0%" stop-color="#60A5FA"/><stop offset="100%" stop-color="#4ADE80"/></linearGradient></defs>
+                    <line x1="8" y1="19" x2="92" y2="5" stroke="url(#pwUp1)"/>
+                  </svg>
+                  <span class="advise-trend-dot measured low"></span>
+                  <span class="advise-trend-dot ideal"></span>
+                </div>
+                <div class="advise-trend-labels">
+                  <span class="measured">测量值：36.1</span>
+                  <span class="ideal">理想值：42.3 ※</span>
+                </div>
+              </div>
             </div>
             <div class="advise-item">
-              <div class="advise-title">综合建议</div>
-              <div>配合作息管理、饮食记录，持续 3~6 个月复测。</div>
+              <div class="advise-item-header">
+                <div>
+                  <div class="advise-title">肌肉量</div>
+                  <div class="advise-deviation">0 kg</div>
+                </div>
+                <span class="advise-pill ok">标准</span>
+              </div>
+              <div class="advise-trend trend-flat">
+                <div class="advise-trend-bar">
+                  <svg class="advise-trend-svg" viewBox="0 0 100 24" preserveAspectRatio="none">
+                    <line x1="45" y1="12" x2="55" y2="12" stroke="#4ADE80"/>
+                  </svg>
+                  <span class="advise-trend-dot ideal"></span>
+                  <span class="advise-trend-dot measured ok"></span>
+                </div>
+                <div class="advise-trend-labels">
+                  <span class="measured">测量值：36.1</span>
+                  <span class="ideal">理想值：36.1 ※</span>
+                </div>
+              </div>
             </div>
           </div>
         </section>

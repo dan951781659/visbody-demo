@@ -246,6 +246,114 @@
     .spec-note h3 { font-size: 15px; color: var(--text); margin-bottom: 12px; }
     .spec-note ul { padding-left: 20px; }
     .spec-note li { margin-bottom: 6px; }
+
+    /* 登录帮助 / 三级入口样式 */
+    .help-link {
+      margin-top: 12px;
+      font-size: 12px;
+      color: var(--text-muted);
+      text-align: right;
+    }
+    .help-link button {
+      border: none;
+      background: transparent;
+      color: var(--primary);
+      cursor: pointer;
+      font-size: 12px;
+      padding: 0;
+      font-family: inherit;
+    }
+    .login-help-modal {
+      position: fixed;
+      inset: 0;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 30;
+    }
+    .login-help-backdrop {
+      position: absolute;
+      inset: 0;
+      background: rgba(15, 23, 42, .45);
+    }
+    .login-help-dialog {
+      position: relative;
+      z-index: 1;
+      width: min(420px, 90vw);
+      background: #fff;
+      border-radius: 16px;
+      box-shadow: 0 20px 60px rgba(15,23,42,.35);
+      padding: 20px 22px 18px;
+    }
+    .login-help-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 12px;
+    }
+    .login-help-title {
+      font-size: 15px;
+      font-weight: 600;
+    }
+    .login-help-close {
+      border: none;
+      background: transparent;
+      font-size: 18px;
+      line-height: 1;
+      cursor: pointer;
+      color: #94a3b8;
+    }
+    .login-help-body {
+      font-size: 13px;
+      color: var(--text-muted);
+    }
+    .faq-list {
+      padding-left: 18px;
+      margin: 8px 0 4px;
+    }
+    .faq-list li {
+      margin-bottom: 6px;
+    }
+    .faq-strong {
+      color: var(--text);
+      font-weight: 500;
+    }
+    .faq-sms-btn {
+      border: none;
+      background: transparent;
+      color: var(--primary);
+      cursor: pointer;
+      font-size: 13px;
+      padding: 0;
+      font-family: inherit;
+    }
+    .faq-sms-desc {
+      font-size: 12px;
+      color: #94a3b8;
+      margin-top: 2px;
+    }
+    .help-step {
+      display: none;
+    }
+    .help-step.active {
+      display: block;
+    }
+    .help-footer-btns {
+      margin-top: 14px;
+      display: flex;
+      justify-content: flex-end;
+      gap: 12px;
+    }
+    .btn-secondary {
+      padding: 8px 14px;
+      border-radius: 999px;
+      border: 1px solid var(--border);
+      background: #fff;
+      font-size: 13px;
+      cursor: pointer;
+      font-family: inherit;
+      color: var(--text-muted);
+    }
   </style>
 </head>
 <body>
@@ -291,52 +399,139 @@
         <!-- 海外登录 -->
         <div class="auth-section" id="section-overseas-login">
           <div class="third-party-row">
-            <button type="button" class="third-btn google" title="Google">G</button>
-            <button type="button" class="third-btn facebook" title="Facebook">f</button>
-            <button type="button" class="third-btn apple" title="Apple">A</button>
+            <button type="button" class="third-btn google" title="使用 Google 登录">G</button>
           </div>
-          <div class="divider"><span>或</span></div>
+          <div class="divider"><span>或使用邮箱验证码</span></div>
+
           <div class="input-group">
             <label>邮箱</label>
             <div class="input-with-btn">
-              <input type="email" placeholder="请输入邮箱">
-              <button type="button" class="btn-code">获取验证码</button>
+              <input type="email" placeholder="请输入邮箱" value="demo.user@example.com">
+              <button type="button" class="btn-code" data-fill="email">获取验证码</button>
             </div>
           </div>
+          <div class="input-group">
+            <label>验证码</label>
+            <input type="text" placeholder="请输入邮箱验证码" value="654321">
+          </div>
           <button type="button" class="btn-primary">下一步</button>
+          <div class="help-link">
+            <button type="button" id="btnLoginHelp">登录遇到问题？</button>
+          </div>
         </div>
 
         <!-- 国内注册 -->
         <div class="auth-section" id="section-cn-register">
           <div class="input-group">
+            <label>账号名</label>
+            <input type="text" placeholder="5-100 字符，至少包含字母和数字" value="demo_user_cn01">
+          </div>
+          <div class="input-group">
+            <label>昵称</label>
+            <input type="text" placeholder="请输入昵称" value="演示用户（国内）">
+          </div>
+          <div class="input-group">
+            <label>基础信息</label>
+            <input type="text" placeholder="性别 / 出生年份 等" value="男 · 1992 年">
+          </div>
+          <div class="input-group">
             <label>手机号码</label>
             <div class="input-with-btn">
-              <input type="tel" placeholder="请输入手机号" maxlength="11">
-              <button type="button" class="btn-code">获取验证码</button>
+              <input type="tel" placeholder="请输入手机号" maxlength="11" value="13800138000">
+              <button type="button" class="btn-code" data-fill="phone">获取验证码</button>
             </div>
           </div>
           <div class="input-group">
-            <label>邀请码（选填）</label>
-            <input type="text" placeholder="如有邀请码请输入">
+            <label>验证码</label>
+            <input type="text" placeholder="请输入短信验证码" value="123456">
           </div>
-          <button type="button" class="btn-primary">注册</button>
-          <p class="footer-links"><a href="#">已有账号？去登录</a></p>
+          <div class="input-group">
+            <label>邀请码（选填）</label>
+            <input type="text" placeholder="如有邀请码请输入" value="DEMO-INVITE-01">
+          </div>
+          <button type="button" class="btn-primary" data-action="register-cn">注册并进入首页</button>
+          <p class="footer-links"><a href="#" data-link="to-login">已有账号？去登录</a></p>
         </div>
 
         <!-- 海外注册 -->
         <div class="auth-section" id="section-overseas-register">
           <div class="input-group">
+            <label>账号名</label>
+            <input type="text" placeholder="5-100 字符，至少包含字母和数字" value="demo_user_oversea01">
+          </div>
+          <div class="input-group">
+            <label>显示名称</label>
+            <input type="text" placeholder="将在 App 中展示" value="Demo User (EN)">
+          </div>
+          <div class="input-group">
+            <label>国家/地区</label>
+            <input type="text" placeholder="例如 China / United States" value="United States (+1)">
+          </div>
+          <div class="input-group">
             <label>邮箱</label>
             <div class="input-with-btn">
-              <input type="email" placeholder="请输入邮箱">
-              <button type="button" class="btn-code">获取验证码</button>
+              <input type="email" placeholder="请输入邮箱" value="demo.user@example.com">
+              <button type="button" class="btn-code" data-fill="email">获取验证码</button>
             </div>
           </div>
-          <button type="button" class="btn-primary">注册</button>
-          <p class="footer-links"><a href="#">已有账号？去登录</a></p>
+          <div class="input-group">
+            <label>验证码</label>
+            <input type="text" placeholder="请输入邮箱验证码" value="654321">
+          </div>
+          <button type="button" class="btn-primary" data-action="register-overseas">注册并进入首页</button>
+          <p class="footer-links"><a href="#" data-link="to-login">已有账号？去登录</a></p>
         </div>
 
         <p class="agreement">登录即表示同意 <a href="#">用户协议</a> 和 <a href="#">隐私政策</a></p>
+      </div>
+    </div>
+
+    <!-- 登录帮助：二级（帮助）+ 三级（短信入口） -->
+    <div class="login-help-modal" id="loginHelpModal">
+      <div class="login-help-backdrop"></div>
+      <div class="login-help-dialog">
+        <div class="login-help-header">
+          <span class="login-help-title">登录遇到问题</span>
+          <button type="button" class="login-help-close" id="btnHelpClose">×</button>
+        </div>
+        <div class="login-help-body">
+          <div class="help-step active" id="helpStepList">
+            <p>请优先使用 <span class="faq-strong">Google 授权</span> 或 <span class="faq-strong">邮箱验证码</span> 登录：</p>
+            <ol class="faq-list">
+              <li>检查邮箱地址是否填写正确，尤其是后缀。</li>
+              <li>查看「垃圾邮件」或「推广」分类，验证码邮件可能被误拦截。</li>
+              <li>如 Google 无法使用，可尝试切换网络或使用邮箱验证码。</li>
+              <li>
+                <button type="button" class="faq-sms-btn" id="btnToSmsThird">
+                  我身在日本等少数国家，历史上使用过短信验证码登录
+                </button>
+                <div class="faq-sms-desc">该方式仅为旧版用户在特殊情况下使用，新用户建议继续尝试邮箱/Google。</div>
+              </li>
+            </ol>
+          </div>
+
+          <div class="help-step" id="helpStepSms">
+            <p class="faq-strong">旧版用户短信验证码登录（仅日本等少数国家）</p>
+            <p class="faq-sms-desc">为了兼容历史使用短信登录的用户，我们在此保留该入口。新注册用户仍建议使用邮箱或 Google 登录。</p>
+            <div class="overseas-sms-block">
+              <div class="input-group" style="margin-top:10px;">
+                <label>手机号（带国家区号）</label>
+                <div class="input-with-btn">
+                  <input type="tel" placeholder="+81 请输入手机号" value="+81 90-1234-5678">
+                  <button type="button" class="btn-code" data-fill="phone">获取验证码</button>
+                </div>
+              </div>
+              <div class="input-group">
+                <label>验证码</label>
+                <input type="text" placeholder="请输入短信验证码" value="112233">
+              </div>
+              <div class="help-footer-btns">
+                <button type="button" class="btn-secondary" id="btnBackHelpList">返回问题列表</button>
+                <button type="button" class="btn-primary" data-action="login-sms-overseas">使用短信登录</button>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
 
@@ -344,7 +539,7 @@
       <h3>需求说明（修改后）</h3>
       <ul>
         <li>国内：微信、手机验证码、运营商一键登录；<strong>无密码</strong></li>
-        <li>海外：Google/Facebook/Apple、邮箱验证码；<strong>无密码</strong>，避免高成本短信</li>
+        <li>海外：Google 授权 + 邮箱验证码为主；短信验证码登录通过「登录遇到问题 → 历史用户」三级入口，仅在日本等少数地区兼容保留</li>
         <li>注册：不要求设置密码，验证码或第三方授权即可完成</li>
         <li>同一套代码：通过地区标识动态渲染不同登录选项</li>
       </ul>
@@ -361,6 +556,44 @@
         document.querySelectorAll('.auth-section').forEach(function (el) {
           el.classList.toggle('active', el.id === id);
         });
+      }
+
+      function showSuccess(type) {
+        var inner = document.querySelector('.phone-frame-inner');
+        if (!inner) return;
+        var title = type === 'register'
+          ? (region === 'cn' ? '注册成功，已为你自动登录' : 'Sign up success, signed in')
+          : (region === 'cn' ? '登录成功' : 'Sign in success');
+        var sub;
+        if (region === 'cn') {
+          sub = '当前为「国内用户」场景，已用 ' + (mode === 'login' ? '手机号/验证码' : '手机号注册') + ' 完成认证。';
+        } else {
+          var overseasWay;
+          if (type === 'login-sms') {
+            overseasWay = '手机号短信验证码（日本等少数地区兼容）';
+          } else if (type === 'register') {
+            overseasWay = '邮箱注册';
+          } else {
+            overseasWay = 'Google 或 邮箱验证码';
+          }
+          sub = '当前为「海外用户」场景，已用 ' + overseasWay + ' 完成认证。';
+        }
+
+        inner.innerHTML = ''
+          + '<div class="logo-area"><div class="logo">VISBODY</div></div>'
+          + '<div style="text-align:center;margin-bottom:24px;">'
+          +   '<div style="font-size:20px;font-weight:600;margin-bottom:8px;">' + title + '</div>'
+          +   '<div style="font-size:14px;color:#64748b;margin-bottom:16px;">' + sub + '</div>'
+          +   '<div style="font-size:13px;color:#94a3b8;">以下仅为前端 Demo，实际环境需接入认证服务。</div>'
+          + '</div>'
+          + '<button type="button" class="btn-primary" id="btnBack">返回登录页</button>';
+
+        var back = document.getElementById('btnBack');
+        if (back) {
+          back.addEventListener('click', function () {
+            window.location.reload();
+          });
+        }
       }
 
       document.querySelectorAll('.region-btn').forEach(function (btn) {
@@ -384,16 +617,26 @@
       document.querySelectorAll('.btn-code').forEach(function (btn) {
         btn.addEventListener('click', function () {
           if (this.classList.contains('disabled')) return;
+          var scope = this.getAttribute('data-fill');
+          var wrap = this.closest('.input-with-btn');
+          if (wrap) {
+            var input = wrap.querySelector('input');
+            if (input) {
+              if (scope === 'phone') input.value = '13800138000';
+              if (scope === 'email') input.value = 'demo.user@example.com';
+            }
+          }
           this.classList.add('disabled');
           this.textContent = '60s 后重发';
           var n = 60;
+          var self = this;
           var t = setInterval(function () {
             n--;
-            btn.textContent = n + 's 后重发';
+            self.textContent = n + 's 后重发';
             if (n <= 0) {
               clearInterval(t);
-              btn.classList.remove('disabled');
-              btn.textContent = '获取验证码';
+              self.classList.remove('disabled');
+              self.textContent = '获取验证码';
             }
           }, 1000);
         });
@@ -401,15 +644,76 @@
 
       document.querySelectorAll('.btn-primary').forEach(function (btn) {
         btn.addEventListener('click', function () {
-          alert('Demo 演示：实际接入需对接后端认证接口');
+          var action = this.getAttribute('data-action') || '';
+          if (action === 'login-sms-overseas') {
+            showSuccess('login-sms');
+          } else if (action.indexOf('register') === 0) {
+            showSuccess('register');
+          } else {
+            showSuccess('login');
+          }
         });
       });
 
       document.querySelectorAll('.third-btn').forEach(function (btn) {
         btn.addEventListener('click', function () {
-          alert('Demo 演示：第三方登录需接入对应 SDK');
+          showSuccess('login');
         });
       });
+
+      document.querySelectorAll('[data-link="to-login"]').forEach(function (a) {
+        a.addEventListener('click', function (e) {
+          e.preventDefault();
+          mode = 'login';
+          document.querySelectorAll('.auth-tab').forEach(function (t) {
+            t.classList.toggle('active', t.dataset.mode === 'login');
+          });
+          showSection();
+        });
+      });
+
+      // 登录帮助 & 短信三级入口（仅海外场景使用）
+      var helpModal = document.getElementById('loginHelpModal');
+      var helpStepList = document.getElementById('helpStepList');
+      var helpStepSms = document.getElementById('helpStepSms');
+      var btnHelp = document.getElementById('btnLoginHelp');
+      var btnHelpClose = document.getElementById('btnHelpClose');
+      var btnToSmsThird = document.getElementById('btnToSmsThird');
+      var btnBackHelpList = document.getElementById('btnBackHelpList');
+      var backdrop = helpModal ? helpModal.querySelector('.login-help-backdrop') : null;
+
+      function openHelp() {
+        if (!helpModal) return;
+        helpModal.style.display = 'flex';
+        if (helpStepList && helpStepSms) {
+          helpStepList.classList.add('active');
+          helpStepSms.classList.remove('active');
+        }
+      }
+      function closeHelp() {
+        if (!helpModal) return;
+        helpModal.style.display = 'none';
+      }
+      if (btnHelp) {
+        btnHelp.addEventListener('click', function () {
+          if (region !== 'overseas') return;
+          openHelp();
+        });
+      }
+      if (btnHelpClose) btnHelpClose.addEventListener('click', closeHelp);
+      if (backdrop) backdrop.addEventListener('click', closeHelp);
+      if (btnToSmsThird && helpStepList && helpStepSms) {
+        btnToSmsThird.addEventListener('click', function () {
+          helpStepList.classList.remove('active');
+          helpStepSms.classList.add('active');
+        });
+      }
+      if (btnBackHelpList && helpStepList && helpStepSms) {
+        btnBackHelpList.addEventListener('click', function () {
+          helpStepSms.classList.remove('active');
+          helpStepList.classList.add('active');
+        });
+      }
     })();
   </script>
 </body>
