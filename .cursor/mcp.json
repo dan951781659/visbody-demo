@@ -1,0 +1,11 @@
+{
+  "mcpServers": {
+    "video-transcriber-mcp": {
+      "command": "video-transcriber-mcp",
+      "args": [],
+      "env": {
+        "RUST_LOG": "info"
+      }
+    }
+  }
+}

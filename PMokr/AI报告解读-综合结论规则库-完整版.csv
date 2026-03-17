@@ -1,0 +1,104 @@
+规则ID,综合结论名称,所属维度,优先级,必要指标组合(AND),可选强化指标,排除条件,覆盖规则ID,证据指标,结论描述模板
+SYNDROME_UPPER_CROSS_001,上交叉综合征,health|aesthetic|sport,5,PT_01异常 AND (PT_04异常 OR PT_05异常),SP_04|NC_01~06受限,,PT_HEAD_FWD_001|PT_ROUND_SHOULDER_001,PT_01|PT_04|PT_05,头颈前移伴圆肩，符合上交叉综合征表现，提示颈深屈肌、下斜方肌偏弱，上斜方肌、胸大肌偏紧。建议加强颈部深层肌群与下斜方肌，并拉伸胸大肌、上斜方肌。
+SYNDROME_LOWER_CROSS_001,下交叉综合征,health|aesthetic|sport,6,(PT_06异常 OR PT_07异常) AND (SP_05异常 OR HP_01~04受限 OR BT_01塌臀),PT_08|PT_09膝超伸,,PT_PELVIS_001|PT_PELVIS_SHIFT_001,PT_06|PT_07|SP_05|BT_01|HP_01~04,骨盆前倾/前移伴腰曲过大或臀型异常，符合下交叉综合征特征，提示髂腰肌、竖脊肌偏紧，臀肌、腹肌偏弱。建议加强臀肌与核心，并拉伸髂腰肌、竖脊肌。
+SYNDROME_UPPER_LOWER_001,上下交叉综合征,health|aesthetic|sport,4,PT_01异常 AND (PT_04异常 OR PT_05异常) AND (PT_06异常 OR PT_07异常),SP_05|HP_01~04,,SYNDROME_UPPER_CROSS_001|SYNDROME_LOWER_CROSS_001,PT_01|PT_04|PT_05|PT_06|PT_07,头前引、圆肩与骨盆前倾/前移并存，符合上下交叉综合征，需同步矫正上、下半身肌群失衡。建议在专业指导下进行全身性姿势矫正与核心稳定训练。
+TEEN_SCOLIOSIS_RISK_001,青少年脊柱侧弯风险,health|sport,7,SP_10异常 AND (SP_06|SP_07|SP_08任一),YG_01|YG_02,,,SP_10|SP_06|SP_07|SP_08,青少年脊柱侧弯风险评分异常，建议专业筛查与姿势干预。
+RISK_FALL_001,跌倒风险偏高,health|sport,8,BL_03~BL_08闭眼/睁眼平衡差(B/C/D级),BL_09~BL_28动态平衡,,,BL_03|BL_04|BL_05|BL_06|BL_07|BL_08,闭眼或睁眼平衡能力偏弱，提示本体感觉与稳定性不足，存在一定跌倒风险。建议进行平衡训练并注意日常防跌倒。
+SPINE_PAIN_RISK_001,脊柱负荷风险,health|sport,9,(SP_11异常 OR SP_12异常 OR SP_13异常) AND SP_02结构异常,SP_14|SP_15|SP_16,,,SP_11|SP_12|SP_13|SP_02,颈部/背部/腰部负荷与脊柱结构异常并存，建议专业评估并加强核心稳定与姿势矫正。
+OBESITY_CENTRAL_001,中心性肥胖,health|aesthetic,10,BC_15正常范围 AND BC_12超标(男>0.9/女>0.85),BC_16|BC_17|BW_11,BMI<18.5,,BC_15|BC_12,体型呈中心性肥胖特征，腰臀比超标而BMI在正常范围，提示腹部及内脏脂肪偏多，建议控制精制碳水、增加有氧与核心训练。
+PT_SCOLIOSIS_RISK_001,高低肩伴脊柱侧弯风险,health|aesthetic|sport,12,PT_03异常 AND (PT_02异常 OR PT_12异常 OR SP_10异常),PT_11|SP_01,,PT_HIGH_LOW_001,PT_03|PT_02|PT_12|SP_10,高低肩伴有头侧歪或身体倾斜，提示可能存在脊柱侧弯风险，建议专业筛查。
+RISK_VISCERAL_FAT_001,内脏脂肪风险,health,14,BC_16超标 OR BC_17>10,BC_12|BC_05,腰臀比体脂率均正常,,BC_16|BC_17,内脏脂肪偏高，与代谢负荷、心血管相关指标需关注相关。建议控制腹部脂肪，增加有氧与核心训练。
+OBESITY_LATENT_001,隐性肥胖,health|aesthetic,15,BC_15正常 AND BC_05超标 AND BC_03不足,BC_06不足,BMI超标,,BC_15|BC_05|BC_03,体型偏瘦但体脂率偏高、肌肉量不足，属于隐性肥胖，易被忽视。建议增肌减脂并重，适当力量训练。
+PT_PELVIS_ROTATION_001,可能骨盆旋转,health|aesthetic|sport,16,PT_11长短腿异常 OR PT_12身体倾斜 OR SP_14|SP_15|SP_16骨盆风险,PT_03|PT_06|PT_07,,,PT_11|PT_12|SP_14|SP_15|SP_16,长短腿或身体倾斜、骨盆专项风险提示可能存在骨盆旋转，需解决核心区肌肉失衡并建立良好骨盆控制感。建议定期专业体态评估并加强髋部与核心稳定。
+PT_PELVIS_ANTERIOR_001,骨盆前移,health|aesthetic|sport,17,PT_06异常,SP_01|BT_01,,PT_PELVIS_SHIFT_001,PT_06,存在骨盆前移倾向，易引起腰肌劳损、脏器下垂。建议加强核心与臀肌，拉伸髋屈肌。
+PT_PELVIS_ANTERIOR_TILT_001,骨盆前倾,health|aesthetic|sport,18,PT_07异常(前倾),SP_14|SP_05|BT_01,,PT_PELVIS_001,PT_07|SP_14|SP_05,骨盆前倾伴腰曲过大，易导致下背痛与假胯宽外观。建议加强臀肌与腹肌，拉伸髂腰肌、竖脊肌。
+PT_PELVIS_POSTERIOR_001,骨盆后倾,health|aesthetic|sport,19,PT_07异常(后倾),SP_15|SP_01,,,PT_07|SP_15,骨盆后倾可导致平背与胸椎代偿。建议强化下背与髋伸肌，改善坐站姿。
+OBESITY_MUSCULAR_001,肌肉型肥胖,health|aesthetic|sport,20,BC_05偏高 AND (BC_03充足 OR BC_06充足),BC_18节段肌肉,BC_03不足,,BC_05|BC_03|BC_06,体脂率偏高但肌肉量充足，属于肌肉型体型。建议在保持力量训练基础上，适度增加有氧与饮食控制以降低体脂。
+KNEE_HYPEREXTENSION_001,膝过伸倾向,health|aesthetic|sport,21,PT_08异常(超伸) OR PT_09异常(超伸),PT_10|PT_07,,,PT_08|PT_09,膝过伸可能由骨盆前倾或足弓问题诱发，增加膝关节压力。建议加强股四头肌离心控制与腘绳肌，改善站姿。
+KNEE_FLEXION_001,膝前屈倾向,health|aesthetic|sport,22,PT_08异常(前屈) OR PT_09异常(前屈),PT_10,,,PT_08|PT_09,存在膝前屈倾向，可能影响下肢力学。建议加强膝关节稳定性训练。
+LEG_ALIGNMENT_001,腿型异常(X/O/D/K型),health|aesthetic|sport,23,PT_10异常,PT_08|PT_09|PT_11,,,PT_10,腿型异常可导致下肢力学功能紊乱，增加膝关节损伤几率，并可诱发长短腿与步态异常。建议专业评估并针对性训练。
+LEG_K_TYPE_001,K型腿(膝内翻伴小腿外旋),health|aesthetic|sport,24,PT_10为K型,PT_11|PT_12|BL,,,PT_10|PT_11|PT_12,K型腿可导致下肢力线异常、足底压力分布异常。建议强化髋外旋肌群，改善足弓支撑与步态。
+LEG_D_TYPE_001,D型腿(膝外翻伴小腿内旋),health|aesthetic|sport,25,PT_10为D型,PT_11|PT_12|BL,,,PT_10|PT_11|PT_12,D型腿可导致下肢力线偏斜，足底内侧压力集中。建议强化髋内收肌群，进行距骨内旋矫正与稳定型训练。
+LEG_X_TYPE_001,X型腿(膝外翻),health|aesthetic|sport,26,PT_10为X型,BT_01|PT_11,,,PT_10|BT_01,X型腿可导致臀肌发力模式异常与假胯宽外观。建议矫正下肢力线并激活臀中肌，避免膝内扣姿势。
+JOINT_HIP_LIMITED_001,髋关节活动度受限,health|sport,27,HP_01~HP_04中至少2项受限,FMS_01|FMS_02异常,,,HP_01|HP_02|HP_03|HP_04,髋关节多方向活动度受限，可能由骨盆旋转或不稳诱发。建议进行髋关节灵活性与稳定性训练。
+JOINT_CERVICAL_LIMITED_001,颈椎活动度受限,sport|health,28,NC_01~NC_06中至少3项受限,PT_01|上交叉,,,NC_01|NC_02|NC_03|NC_04|NC_05|NC_06,颈椎多方向活动度受限。建议加强颈部柔韧性与深层稳定。
+JOINT_SHOULDER_LIMITED_001,肩关节活动度受限,sport|health,29,SH_01~SH_04中至少2项受限,PT_04|PT_05,,,SH_01|SH_02|SH_03|SH_04,肩关节多方向活动度受限。建议进行肩关节灵活性训练与肩胛稳定强化。
+SPINE_CURVATURE_001,脊柱曲度矢状面异常,health|sport,30,SP_01关键曲度异常(腰/胸/骨盆侧移或曲度),SP_02|SP_03|SP_04|SP_05,,,SP_01|SP_02|SP_03|SP_04|SP_05,脊柱关键曲度在矢状面过度前凸或后凸。建议核心肌群强化与姿势矫正，恢复脊柱自然曲度。
+SPINE_FLAT_BACK_001,平背态(胸椎过度后伸),health|aesthetic|sport,31,SP_04胸椎异常(后伸/平背),PT_07骨盆后倾|SP_01,,,SP_04|PT_07|SP_01,平背多由骨盆后倾导致。建议强化下背与髋伸肌，改善胸椎曲度。
+SPINE_CERVICAL_FWD_001,颈椎过度前凸,health|aesthetic|sport,32,SP_03颈椎异常(前凸),PT_01|SP_01,,,SP_03|PT_01|SP_01,颈椎过度前凸常由平背或头前引代偿引起。建议强化颈深屈肌、拉伸枕后肌群。
+FMS_DYSFUNCTION_001,FMS功能障碍模式,sport|health,33,FMS_01~FMS_10中至少3项异常或1项清除检查阳性,FMS深蹲+跨栏步+旋转稳定性,,,FMS_01~FMS_10,FMS多项异常提示存在动作模式代偿或不对称。建议进行功能性纠正训练。
+FMS_SQUAT_001,FMS深蹲异常,sport|health,34,FMS_01异常,FMS_02|FMS_03|HP_01~04,,,FMS_01,深蹲模式异常可能与髋、踝活动度或核心稳定有关。建议针对性改善髋踝灵活性与核心控制。
+FMS_HURDLE_001,FMS跨栏步异常,sport|health,35,FMS_02异常,FMS_01|HP_01~04|PT_10,,,FMS_02,跨栏步异常提示单腿稳定与髋关节控制不足。建议加强单腿平衡与髋部稳定性训练。
+FMS_LUNGE_001,FMS直线弓步异常,sport|health,36,FMS_03异常,FMS_01|FMS_02|PT_08|PT_09,,,FMS_03,直线弓步异常可能与膝、髋或躯干旋转控制有关。建议改善下肢对称性与躯干稳定。
+FMS_ASLR_001,FMS主动直腿上抬异常,sport|health,37,FMS_04异常,HP_01~04|FT_03,,,FMS_04,主动直腿上抬异常提示腘绳肌紧张或髋屈肌控制不足。建议拉伸腘绳肌并加强核心与髋屈肌控制。
+FMS_SHOULDER_001,FMS肩部灵活性异常,sport|health,38,FMS_05异常,SH_01~04|PT_04|PT_05,,,FMS_05,肩部灵活性异常可能与圆肩或胸椎活动度有关。建议改善胸椎与肩胛活动度及肩带肌平衡。
+FMS_TRUNK_001,FMS躯干稳定俯卧撑异常,sport|health,39,FMS_07异常,FMS_09|FT_02,,,FMS_07,躯干稳定俯卧撑异常提示核心抗伸不足。建议加强核心稳定性与肩胛控制。
+FMS_ROTATION_001,FMS旋转稳定性异常,sport|health,40,FMS_09异常,FMS_07|FT_02,,,FMS_09,旋转稳定性异常提示躯干旋转与抗旋控制不足。建议加强核心旋转与对角线模式训练。
+CORE_WEAKNESS_001,核心肌群薄弱,sport|health,41,FT_02核心肌耐力差 AND (FMS_07异常 OR FMS_09异常),PT_06骨盆前移,,,FT_02|FMS_07|FMS_09,核心肌耐力与FMS躯干/旋转稳定性异常。建议加强核心稳定性训练。
+BALANCE_DEFICIT_001,平衡能力不足,sport|health,42,(BL_03~BL_08异常 OR FT_06平衡差) AND 非RISK_FALL,,,RISK_FALL_001,BL_03~BL_08|FT_06,平衡能力偏弱。建议进行平衡训练。
+FLEXIBILITY_DEFICIT_001,柔韧性不足,sport|health,43,FT_03柔软度差 AND (NC_01~06受限 OR HP_01~04受限 OR FMS_04异常),,,,FT_03|NC|HP|FMS_04,柔韧性评估与关节活动度受限并存。建议进行系统性拉伸与柔韧性训练。
+UPPER_LIMB_STRENGTH_001,上肢肌耐力偏弱,sport,44,FT_04上肢肌耐力差,FMS_05|FMS_07|SH_01~04,,,FT_04,上肢肌耐力偏弱。建议加强上肢力量训练。
+LOWER_LIMB_STRENGTH_001,下肢肌耐力偏弱,sport,45,FT_05下肢肌耐力差,FMS_01|FMS_02|FMS_03|HP_01~04,,,FT_05,下肢肌耐力偏弱。建议加强下肢力量训练。
+TEEN_POSTURE_LOAD_001,青少年学习姿势负荷,health,46,SP_07学习姿势负荷指数异常,SP_06|SP_08,,,SP_07,学习姿势负荷偏高，可能影响脊柱发育。建议改善学习姿势、增加休息与运动。
+TEEN_GROWTH_PAIN_001,青少年生长负荷关注,health,47,SP_08生长痛预警指数异常,SP_06|SP_09|SP_10,,,SP_08,生长负荷指数异常。建议关注日常姿势与负荷，必要时专业评估。
+BODY_FLUID_IMBALANCE_001,水分分布失衡,health,48,(BC_10细胞内液异常 OR BC_11细胞外液异常),BC_09总水分,,,BC_10|BC_11,细胞内液/细胞外液分布异常，提示可能存在健康风险，需向专家咨询。
+METABOLIC_AGE_001,代谢年龄超前,health|aesthetic,49,BC_14代谢年龄>实际年龄+5岁,BC_13|BC_05,,,BC_14,代谢年龄超前于实际年龄。建议改善生活方式、增加运动。
+WAIST_VOLUME_001,腰腹体积分布异常,aesthetic|health,50,(WA_05~WA_09腰腹体积异常) AND WA_10腰臀比偏高,WA_11|WA_12,,,WA_05|WA_06|WA_07|WA_08|WA_09|WA_10,腰腹各段体积分布异常伴腰臀比偏高。建议加强核心与有氧。
+BUTTOCK_TYPE_001,臀型待改善,aesthetic,51,BT_01为方形臀/梨形臀/倒三角臀(非蜜桃/圆形),BW_12|下交叉,,,BT_01,当前臀型有改善空间。建议采用正确臀部锻炼方式，搭配合理饮食与有氧运动。
+BC_UNDERWEIGHT_001,体重偏轻,health|aesthetic,52,BC_01体重不足 OR BC_15 BMI<18.5,BC_03|BC_05,,,BC_01|BC_15,体重/BMI偏低。建议在平衡饮食基础上增加热量与优质蛋白，结合抗阻训练增重至BMI超过18.5。
+BC_SLIM_001,消瘦,health|aesthetic,53,BC_01明显偏低 AND BC_03不足 AND BC_05可正常或偏低,,BC_15已属偏轻,,BC_01|BC_03|BC_05,体重明显下降、肌肉消瘦。建议高蛋白饮食与渐进式力量训练，必要时咨询营养师。
+BC_MUSCLE_TOO_LOW_001,肌肉过少,health|aesthetic|sport,54,BC_03明显不足 AND (BC_05偏高 OR BC_15正常),BC_06,,,BC_03|BC_05|BC_15,肌肉量过少，日常活动易疲劳。建议以HIIT与抗阻训练为主增加肌肉量至合理范围。
+BC_OVERWEIGHT_001,超重,health|aesthetic,55,BC_15 BMI 24~29.9(超重未达肥胖),BC_05|BC_12,,,BC_15|BC_05|BC_12,体重超重。建议低能量平衡饮食搭配中高强度有氧与抗阻训练，以每月2~4斤幅度减重。
+BC_OBESITY_001,肥胖,health|aesthetic,56,BC_15 BMI≥30 OR (BC_05明显超标 AND BC_03不足),BC_16|BC_17,,,BC_15|BC_05|BC_03,体重超出正常范围、BMI偏高。建议控制餐量、增加日常活动与体重管理。
+BC_NORMAL_WEIGHT_001,体重正常,health|aesthetic,57,BC_15在18.5~24.9且无其他体成分高危,BC_05|BC_12,,,BC_15,体重与BMI在正常范围。建议保持均衡饮食与规律运动，并进一步关注体型与体态。
+BC_MUSCLE_WELL_001,肌肉发达,health|aesthetic|sport,58,BC_03充足或超标 AND BC_06充足,BC_18,,,BC_03|BC_06|BC_18,肌肉体积与力量较好。建议重点进行体态与关节健康评估，并注重柔韧性与心肺训练。
+BW_HEALTH_RISK_LOW_001,体围-健康风险低,health|aesthetic,59,体围与体成分均在正常范围且无高危结论,,已有体重偏低/消瘦/肥胖等,,BW_01~14|BC,身体指标与围度在健康范围内。建议保持健康习惯，预防未来超重或肥胖。
+BW_HEALTH_RISK_UP_001,体围-健康风险增加,health|aesthetic,60,体围或腰臀比轻度异常且未达肥胖/中心性肥胖,,已达肥胖或中心性肥胖,,BW_11|BC_12|BC_15,体重或腰围逐渐增加。建议逐步减少加工食品与高糖摄入，增加有氧与抗阻训练。
+BW_HEALTH_RISK_HIGH_001,体围-健康风险大幅度增加,health|aesthetic,61,体围与体成分多项异常或已达肥胖/中心性肥胖,,,BW_11|BC_12|BC_15|BC_05,体重与腰围明显超标。建议立即采取健康饮食与中高强度运动，并在专业人士指导下进行全面健康评估。
+PT_HEAD_FWD_001,头前引,health|aesthetic|sport,62,PT_01异常,,SYNDROME_UPPER_CROSS_001,,PT_01,存在头前引倾向。建议改善日常姿势并加强颈深屈肌。
+PT_HEAD_FWD_PELVIS_001,头前引可能由骨盆前倾/前移诱发,health|aesthetic|sport,63,PT_01异常 AND (PT_06异常 OR PT_07异常),SP_01,,PT_HEAD_FWD_001,PT_01|PT_06|PT_07,头前引与骨盆前倾/前移并存。建议优先矫正骨盆位置与核心控制，头颈位置将随脊柱节段重排改善。
+PT_HEAD_FWD_MUSCLE_001,头前引可能由枕后肌群或胸锁乳突肌斜角肌紧张诱发,health|aesthetic|sport,64,PT_01异常 AND (NC_01~06受限或不适),,SYNDROME_UPPER_CROSS_001,PT_01|NC_01~06,头前引伴颈后或侧方牵拉感。建议热敷、手法放松或寻求专业指导，配合颈深屈肌激活。
+PT_ROUND_SHOULDER_001,圆肩,health|aesthetic|sport,65,(PT_04异常 OR PT_05异常),,SYNDROME_UPPER_CROSS_001,,PT_04|PT_05,存在圆肩倾向。建议拉伸胸大肌、加强菱形肌与下斜方肌。
+PT_HIGH_LOW_001,高低肩,health|aesthetic|sport,66,PT_03异常,,PT_SCOLIOSIS_RISK_001,,PT_03,存在高低肩倾向。建议专业评估是否有脊柱侧弯。
+PT_HIGH_LOW_HEAD_001,高低肩由头侧歪诱发,health|aesthetic|sport,67,PT_03异常 AND PT_02异常,,PT_SCOLIOSIS_RISK_001,PT_03|PT_02,高低肩与头侧歪并存。建议矫正头部位置并放松高侧上斜方肌，重建颈肩对称控制。
+PT_HEAD_SIDE_001,头侧歪,health|aesthetic|sport,68,PT_02异常,,PT_SCOLIOSIS_RISK_001,,PT_02,存在头侧歪倾向。建议改善姿势并加强颈部对称性训练。
+PT_HEAD_SIDE_MUSCLE_001,头侧歪侧斜角肌/对侧斜方肌紧张,health|aesthetic|sport,69,PT_02异常 AND (NC或肩部活动度不对称),,PT_HEAD_SIDE_001,PT_02|NC|SH,头侧歪伴颈侧或肩部紧张。建议拉伸与放松紧张侧肌群，强化对侧肌力。
+PT_PELVIS_001,骨盆前倾,health|aesthetic|sport,70,PT_07异常(前倾),,SYNDROME_LOWER_CROSS_001,,PT_07,存在骨盆前倾倾向。建议加强臀肌与腹肌，拉伸髂腰肌。
+PT_PELVIS_SHIFT_001,骨盆前移,health|aesthetic|sport,71,PT_06异常,,SYNDROME_LOWER_CROSS_001,,PT_06,存在骨盆前移倾向。建议加强核心与臀肌。
+PT_BUTTOCK_001,梨形臀可能由骨盆前倾诱发,health|aesthetic,72,BT_01梨形臀 OR 臀型可改善 AND (PT_07异常 OR PT_06异常),SP_05,,,BT_01|PT_07|PT_06,梨形臀与骨盆前倾/前移相关。建议加强臀肌与下背，改善站坐姿。
+PT_LONG_SHORT_LEG_001,长短腿,health|aesthetic|sport,73,PT_11异常,PT_03|PT_12|SP_01,,,PT_11,长短腿可导致骨盆倾斜与肩带代偿。建议先确认功能性或结构性，必要时使用足弓支撑或寻求专业体态矫正指导。
+PT_BODY_LEAN_001,身体倾斜,health|aesthetic|sport,74,PT_12异常,PT_03|PT_11|PT_13,,,PT_12,身体倾斜常与高低肩、长短腿或重心偏移有关。建议评估脊柱侧弯与骨盆对称性。
+PT_CENTER_OF_MASS_001,重心不平衡,health|sport,75,PT_13重心平衡异常,BL_03~BL_28|FT_06,,,PT_13|BL|FT_06,重心偏移可引发肩带代偿与步态异常。建议进行平衡训练与对称性负重。
+SPINE_LATERAL_001,脊柱侧移(躯干倾斜),health|aesthetic|sport,76,SP_01侧移趋势 OR SP_10侧弯风险,PT_03|PT_11|PT_12,,,SP_01|SP_10|PT_03|PT_11|PT_12,脊柱侧移或侧弯风险与躯干倾斜、高低肩、长短腿相关。建议专业筛查并加强脊柱侧弯矫正与核心对称性训练。
+BC_LOW_MUSCLE_001,肌肉量不足,health|aesthetic|sport,77,BC_03不足 OR BC_06骨骼肌不足,,OBESITY_MUSCULAR_001,,BC_03|BC_06,肌肉量不足。建议加强力量训练、保障蛋白质摄入。
+BC_LOW_BMR_001,基础代谢偏低,health,78,BC_13低于参考范围,,,BC_13,基础代谢偏低。建议增肌、规律运动。
+BC_HIGH_BF_001,体脂率偏高,health|aesthetic,79,BC_05超标,,OBESITY_MUSCULAR_001|OBESITY_LATENT_001,,BC_05,体脂率偏高。建议增加有氧与力量训练、控制饮食。
+HP_SINGLE_001,髋外展/内收受限,health|sport,80,(HP_01~HP_04任一项异常),,JOINT_HIP_LIMITED_001,,HP_01|HP_02|HP_03|HP_04,髋关节某方向活动度受限。建议进行针对性髋关节灵活性与稳定性训练。
+SH_SINGLE_001,肩关节活动度异常,health|sport,81,(SH_01~SH_04任一项异常),,JOINT_SHOULDER_LIMITED_001,,SH_01|SH_02|SH_03|SH_04,肩关节某方向活动度异常。建议进行肩关节灵活性训练。
+NC_SINGLE_001,颈椎活动度异常,health|sport,82,(NC_01~NC_06任一项异常),,JOINT_CERVICAL_LIMITED_001,,NC_01|NC_02|NC_03|NC_04|NC_05|NC_06,颈椎某方向活动度异常。建议加强颈部柔韧性与稳定。
+FMS_SINGLE_001,FMS单项异常,sport,83,FMS_01~FMS_10任一项异常,,FMS_DYSFUNCTION_001,,FMS_01~FMS_10,FMS某项异常。建议针对性纠正训练。
+FT_SINGLE_001,体适能单项偏弱,sport,84,FT_01~FT_10任一项偏弱,,,FT_01|FT_02|FT_03|FT_04|FT_05|FT_06|FT_07|FT_08|FT_09|FT_10,体适能某项偏弱。建议针对性训练提升。
+BL_SINGLE_001,平衡单项异常,sport|health,85,BL_01~BL_28任一项异常,,BALANCE_DEFICIT_001|RISK_FALL_001,,BL_01~BL_28,平衡某项异常。建议进行平衡训练。
+BW_SINGLE_001,体围异常,aesthetic,86,BW_01~BW_14任一项异常(与参考或历史对比),,,,BW_01~BW_14,某部位围度异常。建议结合体成分与运动计划综合改善。
+WA_SINGLE_001,腰腹围度异常,aesthetic|health,87,WA_01~WA_12任一项异常,,WAIST_VOLUME_001,,WA_01~WA_12,腰腹围度或体积异常。建议加强核心与饮食管理。
+NU_DEFICIT_001,营养摄入建议,health,88,NU_01无电流营养分析有建议项,,,NU_01,根据营养分析建议调整饮食结构（具体见报告）。
+SP_PELVIS_RISK_001,骨盆专项风险(前倾/后倾/旋转),health|sport,89,SP_14异常 OR SP_15异常 OR SP_16异常,PT_06|PT_07,,,SP_14|SP_15|SP_16,骨盆前倾、后倾或旋转风险评分异常。建议结合体态与核心训练改善骨盆位置与稳定性。
+SP_TEEN_INDEX_001,青少年脊柱发育/骨骼平衡指数异常,health,90,SP_06异常 OR SP_09异常,YG_01|YG_02|SP_07|SP_08,,,SP_06|SP_09,青少年脊柱发育或骨骼平衡指数异常。建议关注姿势与负荷，定期复查。
+FT_VERTICAL_JUMP_001,垂直纵跳偏弱,sport,91,FT_01垂直纵跳差,FMS_01|FT_05,,,FT_01,垂直纵跳偏弱。建议加强下肢力量与弹跳训练。
+FT_REACTION_001,选择反应时偏慢,sport,92,FT_08选择反应时评估偏慢,,,FT_08,反应时偏慢。建议进行反应与协调性训练。
+FT_GRIP_001,握力偏弱,sport,93,FT_09握力评估偏弱,FMS_05|SH,,,FT_09,握力偏弱。建议加强前臂与手部力量训练。
+FT_VITAL_001,肺活量偏弱,health|sport,94,FT_10肺活量评估偏弱,,,FT_10,肺活量偏弱。建议增加有氧运动与呼吸训练。
+BC_02_SINGLE_001,去脂体重异常,health|aesthetic,95,BC_02异常且未命中其他体成分规则,,,BC_02,去脂体重偏离参考范围。建议结合饮食与力量训练，咨询营养或运动专业人士评估。
+BC_07_SINGLE_001,蛋白质异常,health,96,BC_07异常,,,BC_07,蛋白质指标偏离参考范围。建议均衡饮食、保障优质蛋白摄入，必要时咨询营养师。
+BC_08_SINGLE_001,无机盐异常,health,97,BC_08异常,,,BC_08,无机盐指标偏离参考范围。建议关注饮食结构，必要时寻求专业评估。
+BC_19_SINGLE_001,节段脂肪分布异常,aesthetic|health,98,BC_19节段脂肪异常且未命中其他规则,,,BC_19,节段脂肪分布有改善空间。建议结合全身有氧与局部力量训练，均衡体型。
+NORM_BC_001,体成分表现良好,health|aesthetic,200,【正常】体成分模块已测且均正常,,,BC,您的体成分指标表现良好，体重、体脂率、肌肉量等均在合理范围内。请继续保持均衡饮食与规律运动，定期监测以维持良好状态。
+NORM_PT_001,体态表现良好,health|aesthetic|sport,200,【正常】体态模块已测且均正常,,,PT,您的体态评估表现良好，头颈、肩背、骨盆及下肢姿态均在正常范围。请继续保持良好姿势习惯，避免久坐久站，定期进行体态复查。
+NORM_BW_001,体围比例良好,aesthetic,200,【正常】体围模块已测且均正常,,,BW,您的身体围度与比例表现良好。请继续保持当前的饮食与运动习惯，定期监测以维持理想体型。
+NORM_JOINT_001,关节活动度良好,sport|health,200,【正常】肩/髋/颈功能已测且均正常,,,HP|SH|NC,您的关节活动度表现良好，肩、髋、颈各方向活动均在正常范围。请继续保持拉伸与力量训练，维持关节灵活性。
+NORM_SPINE_001,脊柱状态良好,health|sport,200,【正常】脊柱模块已测且均正常,,,SP,您的脊柱评估表现良好，曲度与结构均在正常范围。请继续保持正确坐姿与站姿，避免长时间维持单一姿势。
+NORM_FMS_001,FMS动作模式良好,sport,200,【正常】FMS已测项目均正常,,,FMS,您的FMS动作模式表现良好，深蹲、跨栏步等基本动作无代偿或不对称。请继续保持功能性训练，预防运动损伤。
+NORM_FT_001,体适能表现良好,sport,200,【正常】体适能已测项目均正常,,,FT,您的体适能表现良好，力量、柔韧、平衡等指标均在合理范围。请继续保持多样化运动，提升综合体能。
+NORM_BALANCE_001,平衡能力良好,sport|health,200,【正常】平衡模块已测且均正常,,,BL,您的平衡能力表现良好。请继续保持单腿站、闭眼站等平衡练习，有助于预防跌倒、提升运动表现。
+NORM_BUTTOCK_001,臀型理想,aesthetic,200,【正常】BT_01为蜜桃臀或圆形臀,,,BT_01,您的臀型评估为理想型，请继续保持臀部锻炼与合理饮食，维持良好形态。
+NORM_FULL_001,整体表现优秀,health|aesthetic|sport,200,【正常】所有已测模块均无异常,,,ALL,恭喜！您本次测量范围内的各项指标均表现良好，体成分、体态与运动能力均处于较佳状态。请继续保持当前的生活与运动习惯，定期复查以长期维持。

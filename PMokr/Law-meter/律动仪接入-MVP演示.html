@@ -1,0 +1,1257 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <title>律动仪接入 - MVP 演示（手机端）</title>
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Noto+Sans+SC:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      /* 手机端 - 深色科技风 */
+      --bg: #0a0e1a;
+      --bg-card: rgba(22, 35, 60, 0.6);
+      --bg-card-hover: rgba(30, 50, 85, 0.7);
+      --primary: #3b82f6;
+      --primary-glow: rgba(59, 130, 246, 0.4);
+      --accent: #8b5cf6;
+      --accent-green: #22c55e;
+      --accent-orange: #f97316;
+      --text: #f1f5f9;
+      --text-muted: #94a3b8;
+      --border: rgba(148, 163, 184, 0.2);
+      --radius: 12px;
+      --radius-sm: 8px;
+      --font-sans: 'DM Sans', 'Noto Sans SC', system-ui, sans-serif;
+      --safe-top: env(safe-area-inset-top, 0);
+      --safe-bottom: env(safe-area-inset-bottom, 0);
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html, body {
+      font-family: var(--font-sans);
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      min-height: -webkit-fill-available;
+      line-height: 1.5;
+      overflow-x: hidden;
+      -webkit-tap-highlight-color: transparent;
+    }
+    body {
+      background: linear-gradient(180deg, #0f172a 0%, #1e293b 40%, #0f172a 100%);
+      max-width: 100%;
+      margin: 0 auto;
+      padding-left: var(--safe-top);
+      padding-right: var(--safe-top);
+      padding-bottom: var(--safe-bottom);
+    }
+
+    /* ========== 顶部空闲倒计时条（手机端紧凑）========== */
+    .idle-bar {
+      background: rgba(15, 23, 42, 0.9);
+      padding: 8px 16px;
+      padding-top: calc(8px + var(--safe-top));
+      text-align: center;
+      font-size: 12px;
+      color: var(--text-muted);
+      border-bottom: 1px solid var(--border);
+    }
+    .idle-bar .progress-wrap {
+      height: 4px;
+      background: rgba(59, 130, 246, 0.2);
+      border-radius: 2px;
+      margin-top: 8px;
+      overflow: hidden;
+    }
+    .idle-bar .progress-inner {
+      height: 100%;
+      background: linear-gradient(90deg, var(--primary), var(--accent));
+      border-radius: 2px;
+      width: 100%;
+      transition: width 1s linear;
+    }
+
+    /* ========== 主内容区（手机端）========== */
+    .main {
+      padding: 16px;
+      padding-bottom: calc(140px + var(--safe-bottom));
+      min-height: calc(100vh - 100px);
+    }
+
+    .page { display: none; }
+    .page.active { display: block; }
+
+    .back-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      color: var(--primary);
+      font-size: 15px;
+      font-weight: 500;
+      cursor: pointer;
+      margin-bottom: 20px;
+      text-decoration: none;
+      background: none;
+      border: none;
+      font-family: inherit;
+    }
+    .back-btn:hover { text-decoration: underline; }
+
+    .btn-primary {
+      padding: 14px 28px;
+      border: none;
+      background: linear-gradient(135deg, var(--primary), var(--accent));
+      color: #fff;
+      border-radius: var(--radius-sm);
+      font-size: 16px;
+      font-weight: 600;
+      cursor: pointer;
+      font-family: inherit;
+      transition: all .2s;
+      box-shadow: 0 0 20px var(--primary-glow);
+    }
+    .btn-primary:hover { opacity: .95; transform: translateY(-1px); }
+    .btn-outline {
+      padding: 12px 24px;
+      border: 1px solid rgba(59, 130, 246, 0.6);
+      color: var(--primary);
+      background: transparent;
+      border-radius: var(--radius-sm);
+      font-size: 15px;
+      font-weight: 600;
+      cursor: pointer;
+      font-family: inherit;
+      transition: all .2s;
+    }
+    .btn-outline:hover { background: rgba(59, 130, 246, 0.15); }
+
+    /* ========== 入口页 ========== */
+    .entry-card {
+      background: var(--bg-card);
+      border-radius: var(--radius);
+      padding: 32px 24px;
+      text-align: center;
+      border: 1px solid var(--border);
+      backdrop-filter: blur(12px);
+    }
+    .entry-card h2 { font-size: 20px; margin-bottom: 12px; color: var(--text); }
+    .entry-card p { color: var(--text-muted); font-size: 14px; margin-bottom: 24px; }
+    .entry-card .btn-primary { min-width: 100%; max-width: 260px; }
+
+    /* ========== 课程列表 - 默认封面图 ========== */
+    .section-title {
+      font-size: 16px;
+      font-weight: 600;
+      color: var(--text);
+      margin-bottom: 12px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .section-title .tag {
+      font-size: 11px;
+      padding: 3px 8px;
+      border-radius: 6px;
+      background: linear-gradient(135deg, var(--primary), var(--accent));
+      color: #fff;
+      font-weight: 500;
+    }
+    .course-list {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 12px;
+    }
+    .course-card {
+      background: var(--bg-card);
+      border-radius: var(--radius);
+      overflow: hidden;
+      border: 1px solid var(--border);
+      cursor: pointer;
+      transition: all .2s;
+      backdrop-filter: blur(8px);
+      -webkit-tap-highlight-color: transparent;
+    }
+    .course-card:active {
+      background: var(--bg-card-hover);
+      border-color: var(--primary);
+    }
+    .course-card .cover {
+      height: 120px;
+      background: linear-gradient(145deg, rgba(59, 130, 246, 0.25) 0%, rgba(139, 92, 246, 0.25) 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      overflow: hidden;
+    }
+    .course-card .cover::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='rgba(255,255,255,0.15)' stroke-width='1.5'%3E%3Cpath d='M12 3v18M3 12h18'/%3E%3Ccircle cx='12' cy='12' r='9'/%3E%3C/svg%3E") center/80px no-repeat;
+    }
+    .course-card .cover .cover-text {
+      font-size: 13px;
+      font-weight: 600;
+      color: rgba(255,255,255,0.9);
+      text-shadow: 0 0 20px rgba(0,0,0,0.3);
+      position: relative;
+      z-index: 1;
+    }
+    .course-card .body { padding: 12px; }
+    .course-card .name { font-size: 14px; font-weight: 600; margin-bottom: 4px; color: var(--text); }
+    .course-card .intro { font-size: 12px; color: var(--text-muted); line-height: 1.35; }
+    .block { margin-bottom: 24px; }
+
+    /* ========== 课程详情 - 动作列表带图 + 单独开始训练 ========== */
+    .detail-header {
+      background: var(--bg-card);
+      border-radius: var(--radius);
+      padding: 20px;
+      margin-bottom: 16px;
+      border: 1px solid var(--border);
+      backdrop-filter: blur(8px);
+    }
+    .detail-header h1 { font-size: 18px; margin-bottom: 10px; }
+    .detail-header .focus { font-size: 13px; color: var(--text-muted); margin-bottom: 16px; }
+    .detail-header .actions { display: flex; gap: 10px; flex-wrap: wrap; }
+
+    .action-list { background: var(--bg-card); border-radius: var(--radius); padding: 16px; border: 1px solid var(--border); }
+    .action-list h3 { font-size: 13px; color: var(--text-muted); margin-bottom: 12px; font-weight: 500; }
+    .action-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px;
+      border-radius: var(--radius-sm);
+      background: rgba(15, 23, 42, 0.5);
+      margin-bottom: 10px;
+      border: 1px solid var(--border);
+    }
+    .action-item:last-child { margin-bottom: 0; }
+    .action-item .thumb {
+      width: 72px;
+      height: 54px;
+      border-radius: var(--radius-sm);
+      background: linear-gradient(145deg, rgba(59, 130, 246, 0.3), rgba(139, 92, 246, 0.3));
+      flex-shrink: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      position: relative;
+    }
+    .action-item .thumb video,
+    .action-item .thumb img { width: 100%; height: 100%; object-fit: cover; position: relative; z-index: 1; }
+    .action-item .thumb .placeholder.fallback {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 12px;
+      color: rgba(255,255,255,0.6);
+      background: linear-gradient(145deg, rgba(59, 130, 246, 0.3), rgba(139, 92, 246, 0.3));
+      z-index: 0;
+    }
+    .action-item .thumb video:not([src]) + .fallback,
+    .action-item .thumb .placeholder:not(.fallback) {
+      font-size: 12px;
+      color: rgba(255,255,255,0.6);
+    }
+    .action-item .info { flex: 1; min-width: 0; }
+    .action-item .num {
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--primary), var(--accent));
+      color: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 600;
+      font-size: 13px;
+      flex-shrink: 0;
+    }
+    .action-item .name { font-weight: 600; font-size: 14px; margin-bottom: 2px; }
+    .action-item .meta { font-size: 11px; color: var(--text-muted); }
+    .action-item .btn-start-one {
+      padding: 8px 14px;
+      font-size: 13px;
+      flex-shrink: 0;
+    }
+
+    /* ========== 单动作详情页 ========== */
+    .single-action-panel {
+      background: var(--bg-card);
+      border-radius: var(--radius);
+      padding: 24px;
+      border: 1px solid var(--border);
+      text-align: center;
+      backdrop-filter: blur(8px);
+    }
+    .single-action-panel .action-thumb-large {
+      width: 100%;
+      max-width: 100%;
+      height: 200px;
+      margin: 0 auto 24px;
+      border-radius: var(--radius);
+      background: linear-gradient(145deg, rgba(59, 130, 246, 0.25), rgba(139, 92, 246, 0.25));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      position: relative;
+    }
+    .single-action-panel .action-thumb-large video,
+    .single-action-panel .action-thumb-large img { width: 100%; height: 100%; object-fit: cover; position: relative; z-index: 1; }
+    .single-action-panel .action-thumb-large .placeholder.fallback {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 14px;
+      color: rgba(255,255,255,0.6);
+      background: linear-gradient(145deg, rgba(59, 130, 246, 0.25), rgba(139, 92, 246, 0.25));
+      z-index: 0;
+    }
+    .single-action-panel h2 { font-size: 18px; margin-bottom: 8px; }
+    .single-action-panel .meta { color: var(--text-muted); font-size: 13px; margin-bottom: 20px; }
+    .single-action-panel .btn-primary { min-width: 100%; max-width: 200px; }
+
+    /* ========== 训练页 - 视频 + 进度 + 立即结束 ========== */
+    .training-panel {
+      background: var(--bg-card);
+      border-radius: var(--radius);
+      padding: 16px;
+      border: 1px solid var(--border);
+      backdrop-filter: blur(8px);
+    }
+    .training-panel h2 { font-size: 16px; margin-bottom: 12px; text-align: center; }
+    .training-progress-bar {
+      width: 100%;
+      height: 6px;
+      background: rgba(59, 130, 246, 0.2);
+      border-radius: 3px;
+      overflow: hidden;
+      margin-bottom: 12px;
+    }
+    .training-progress-bar .fill {
+      height: 100%;
+      background: linear-gradient(90deg, var(--primary), var(--accent));
+      border-radius: 3px;
+      transition: width 0.3s ease;
+    }
+    .training-progress-text {
+      font-size: 13px;
+      color: var(--text-muted);
+      text-align: center;
+      margin-bottom: 10px;
+    }
+    /* 竖屏视频样式：9:16 比例，适配竖版/竖屏视频内容 */
+    .training-video-wrap {
+      width: 100%;
+      max-width: 100%;
+      margin: 0 auto 16px;
+      border-radius: var(--radius);
+      overflow: hidden;
+      background: #000;
+      aspect-ratio: 9/16;
+      min-height: 0;
+    }
+    .training-video-wrap video {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      display: block;
+      vertical-align: middle;
+    }
+    .training-status {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 12px 20px;
+      border-radius: var(--radius-sm);
+      font-size: 14px;
+      font-weight: 500;
+      margin-bottom: 12px;
+      justify-content: center;
+    }
+    .training-status.running {
+      background: rgba(59, 130, 246, 0.2);
+      color: var(--primary);
+    }
+    .training-status.done {
+      background: rgba(34, 197, 94, 0.2);
+      color: var(--accent-green);
+    }
+    .training-status .spinner {
+      width: 18px;
+      height: 18px;
+      border: 2px solid currentColor;
+      border-top-color: transparent;
+      border-radius: 50%;
+      animation: spin .8s linear infinite;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    .training-desc { font-size: 13px; color: var(--text-muted); text-align: center; margin-bottom: 12px; }
+    .training-actions {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      align-items: center;
+    }
+    .training-panel .btn-end { margin-top: 4px; }
+    .training-panel .btn-outline { display: block; margin: 0 auto; }
+
+    /* ========== 底部用户栏（手机端紧凑）========== */
+    .bottom-bar {
+      position: fixed;
+      bottom: 40px;
+      left: 0;
+      right: 0;
+      background: rgba(22, 35, 60, 0.9);
+      padding: 12px 16px;
+      padding-bottom: calc(12px + var(--safe-bottom));
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-top: 1px solid var(--border);
+      backdrop-filter: blur(12px);
+      z-index: 20;
+    }
+    .bottom-bar .nav-left {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .bottom-bar .back-icon {
+      width: 36px;
+      height: 36px;
+      border-radius: var(--radius-sm);
+      background: rgba(255,255,255,0.1);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--text);
+      cursor: pointer;
+      font-size: 16px;
+      text-decoration: none;
+      -webkit-tap-highlight-color: transparent;
+    }
+    .bottom-bar .user-info {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 13px;
+      color: var(--text);
+    }
+    .bottom-bar .user-info .avatar {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--primary), var(--accent));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 14px;
+    }
+    .bottom-bar .user-info .meta { color: var(--text-muted); font-size: 11px; }
+    .bottom-bar .nav-right {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .bottom-bar .nav-right .btn-white {
+      padding: 8px 14px;
+      border-radius: var(--radius-sm);
+      border: 1px solid rgba(255,255,255,0.3);
+      background: rgba(255,255,255,0.1);
+      color: var(--text);
+      font-size: 12px;
+      cursor: pointer;
+      font-family: inherit;
+    }
+    .bottom-bar .nav-right .btn-white:active { background: rgba(255,255,255,0.15); }
+    .bottom-bar .settings-icon {
+      width: 36px;
+      height: 36px;
+      border-radius: var(--radius-sm);
+      background: rgba(255,255,255,0.1);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--text);
+      cursor: pointer;
+      font-size: 16px;
+    }
+
+    /* ========== 页脚状态栏（手机端）========== */
+    .footer-bar {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: rgba(15, 23, 42, 0.95);
+      padding: 6px 12px;
+      padding-bottom: calc(6px + var(--safe-bottom));
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size: 11px;
+      color: var(--text-muted);
+      border-top: 1px solid var(--border);
+      z-index: 10;
+    }
+    .footer-bar .icons { display: flex; gap: 12px; }
+    .footer-bar .icons span { opacity: 0.8; }
+    .footer-bar .time { display: flex; gap: 10px; align-items: center; }
+
+    /* ========== Toast 提示 ========== */
+    .toast {
+      position: fixed;
+      top: 80px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: rgba(15, 23, 42, 0.95);
+      color: var(--text);
+      padding: 12px 20px;
+      border-radius: var(--radius-sm);
+      font-size: 14px;
+      z-index: 9999;
+      opacity: 0;
+      visibility: hidden;
+      transition: opacity 0.3s, visibility 0.3s, transform 0.3s;
+      border: 1px solid var(--border);
+      backdrop-filter: blur(12px);
+      max-width: 90%;
+      text-align: center;
+    }
+    .toast.show {
+      opacity: 1;
+      visibility: visible;
+      transform: translateX(-50%) translateY(0);
+    }
+    .toast.error { border-color: var(--accent-orange); }
+    .toast.warning { border-color: var(--accent-orange); }
+    .toast.success { border-color: var(--accent-green); }
+
+    /* ========== 网络状态横幅 ========== */
+    .network-banner {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      background: var(--accent-orange);
+      color: #fff;
+      padding: 8px 16px;
+      text-align: center;
+      font-size: 12px;
+      z-index: 10000;
+      transform: translateY(-100%);
+      transition: transform 0.3s;
+    }
+    .network-banner.show {
+      transform: translateY(0);
+    }
+
+    /* ========== 空状态页面 ========== */
+    .empty-state {
+      text-align: center;
+      padding: 60px 20px;
+      color: var(--text-muted);
+    }
+    .empty-state .icon {
+      font-size: 48px;
+      margin-bottom: 16px;
+      opacity: 0.5;
+    }
+    .empty-state .text {
+      font-size: 15px;
+      margin-bottom: 24px;
+    }
+    .empty-state .btn-retry {
+      margin-top: 12px;
+    }
+
+    /* ========== 屏幕尺寸边界 ========== */
+    @media (max-width: 320px) {
+      .course-list { grid-template-columns: 1fr; }
+      .section-title { font-size: 14px; }
+      .course-card .name { font-size: 13px; }
+    }
+    @media (min-width: 768px) {
+      .main { max-width: 768px; margin: 0 auto; }
+    }
+    @media (orientation: landscape) {
+      .landscape-warning {
+        position: fixed;
+        inset: 0;
+        background: rgba(0,0,0,0.9);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        z-index: 10001;
+        color: var(--text);
+        font-size: 16px;
+        text-align: center;
+        padding: 20px;
+      }
+      .landscape-warning.hidden { display: none; }
+    }
+  </style>
+</head>
+<body>
+  <!-- 网络状态横幅 -->
+  <div class="network-banner" id="networkBanner">网络连接已断开，请检查网络设置</div>
+
+  <!-- 横屏提示 -->
+  <div class="landscape-warning" id="landscapeWarning">
+    <div>请竖屏使用以获得最佳体验</div>
+  </div>
+
+  <!-- Toast 提示 -->
+  <div class="toast" id="toast"></div>
+
+  <!-- 顶部：空闲返回倒计时 -->
+  <div class="idle-bar">
+    <div>当前无操作 <span id="idleCountdown">300</span> 秒后将返回首页</div>
+    <div class="progress-wrap">
+      <div class="progress-inner" id="idleProgress"></div>
+    </div>
+  </div>
+
+  <main class="main">
+    <!-- 入口页 -->
+    <section class="page active" id="page-entry">
+      <div class="entry-card">
+        <h2>评估已完成</h2>
+        <p>根据您的体成分、体态、体适能及 FMS 评估结果，已生成训练方案。</p>
+        <button type="button" class="btn-primary" data-go="list">进入律动仪课程</button>
+      </div>
+    </section>
+
+    <!-- 课程列表页 -->
+    <section class="page" id="page-list">
+      <a href="#" class="back-btn" data-page="entry">‹ 返回训练方案</a>
+      <div class="block" id="recommendBlock">
+        <h2 class="section-title">根据您的评估结果推荐 <span class="tag">推荐</span></h2>
+        <div class="course-list" id="recommendList"></div>
+      </div>
+      <div class="block" id="allBlock">
+        <h2 class="section-title">全部课程</h2>
+        <div class="course-list" id="allList"></div>
+        <div class="empty-state" id="emptyState" style="display: none;">
+          <div class="icon">📭</div>
+          <div class="text">暂无可用课程，请稍后再试</div>
+          <button type="button" class="btn-outline btn-retry" onclick="loadCourses()">刷新</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- 课程详情页：动作列表可单独开始训练，无单动作测试按钮 -->
+    <section class="page" id="page-detail">
+      <a href="#" class="back-btn" data-page="list">‹ 返回课程列表</a>
+      <div class="detail-header">
+        <h1 id="detailTitle">臀腿塑形训练</h1>
+        <p class="focus"><strong>训练重点：</strong>下肢与臀部肌群激活与塑形，配合律动仪节奏完成多组动作。</p>
+        <div class="actions">
+          <button type="button" class="btn-primary" id="btnStartTraining">开始训练（完整课程）</button>
+        </div>
+      </div>
+      <div class="action-list">
+        <h3>课程动作列表（可单独开始训练）</h3>
+        <div id="actionListContainer"></div>
+        <div class="empty-state" id="actionEmptyState" style="display: none;">
+          <div class="icon">📭</div>
+          <div class="text">该课程暂无动作，请联系管理员</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 单动作详情页：仅一个「开始训练」按钮 -->
+    <section class="page" id="page-single-action">
+      <a href="#" class="back-btn" data-page="detail">‹ 返回课程详情</a>
+      <div class="single-action-panel">
+        <div class="action-thumb-large" id="singleActionThumb">
+          <video id="singleActionVideo" muted preload="metadata" playsinline style="width:100%;height:100%;object-fit:cover"></video>
+          <span class="placeholder fallback">动作示意</span>
+        </div>
+        <h2 id="singleActionTitle">深蹲律动</h2>
+        <p class="meta" id="singleActionMeta">约 2 分钟 · 15 次</p>
+        <button type="button" class="btn-primary" id="btnStartSingleTraining">开始训练</button>
+      </div>
+    </section>
+
+    <!-- 训练页：视频播放 + 完整课程进度 + 立即结束 -->
+    <section class="page" id="page-training">
+      <div class="training-panel">
+        <h2 id="trainingCourseName">臀腿塑形训练</h2>
+        <div class="training-progress-bar" id="trainingProgressBarWrap" style="display: none;">
+          <div class="fill" id="trainingProgressFill" style="width: 0%;"></div>
+        </div>
+        <p class="training-progress-text" id="trainingProgressText" style="display: none;">动作 0/0</p>
+        <div class="training-video-wrap">
+          <video id="trainingVideo" playsinline controls></video>
+        </div>
+        <div class="training-status running" id="trainingStatus">
+          <span class="spinner" id="statusSpinner"></span>
+          <span id="statusText">训练进行中…</span>
+        </div>
+        <p class="training-desc" id="trainingDesc">课程已下发至律动仪，请跟随视频完成训练。</p>
+        <div class="training-actions">
+          <button type="button" class="btn-outline btn-end" id="btnEndTraining" style="display: none;">立即结束</button>
+          <button type="button" class="btn-outline" id="btnBackToList" style="display: none;">返回课程列表</button>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- 底部用户栏 -->
+  <div class="bottom-bar">
+    <div class="nav-left">
+      <a href="#" class="back-icon" data-page="entry" title="返回">‹</a>
+      <div class="user-info">
+        <div class="avatar" id="userAvatar">用</div>
+        <div>
+          <div id="userName">Visbody 001</div>
+          <div class="meta" id="userMeta">男 | 180cm | 24岁</div>
+        </div>
+      </div>
+    </div>
+    <div class="nav-right">
+      <button type="button" class="btn-white">编辑资料</button>
+      <button type="button" class="btn-white">历史报告</button>
+      <span class="settings-icon" title="设置">⚙</span>
+    </div>
+  </div>
+
+  <!-- 页脚状态栏 -->
+  <div class="footer-bar">
+    <div class="icons">
+      <span>🖥</span><span>👤</span><span>🔊</span><span>🖨</span><span>📶</span>
+    </div>
+    <div class="time">
+      <span id="footerTime">10:25</span>
+      <span id="footerDate">2025年12月6日</span>
+      <span>VISBODY</span>
+    </div>
+  </div>
+
+  <script>
+    (function () {
+      // ========== 工具函数 ==========
+      function debounce(func, wait) {
+        var timeout;
+        return function() {
+          var context = this, args = arguments;
+          clearTimeout(timeout);
+          timeout = setTimeout(function() { func.apply(context, args); }, wait);
+        };
+      }
+
+      function showToast(message, type) {
+        var toast = document.getElementById('toast');
+        if (!toast) return;
+        toast.textContent = message;
+        toast.className = 'toast ' + (type || '');
+        toast.classList.add('show');
+        setTimeout(function() { toast.classList.remove('show'); }, 3000);
+      }
+
+      function logError(type, message, data) {
+        console.error('[Error]', type, message, data || '');
+        // 实际项目中可发送到日志服务
+      }
+
+      // ========== 浏览器兼容性检测 ==========
+      function checkBrowserSupport() {
+        if (!document.createElement('video').canPlayType) {
+          showToast('您的浏览器不支持视频播放，请升级浏览器', 'error');
+          return false;
+        }
+        return true;
+      }
+
+      // ========== 网络状态检测 ==========
+      var networkBanner = document.getElementById('networkBanner');
+      function updateNetworkStatus() {
+        if (!navigator.onLine) {
+          networkBanner.classList.add('show');
+        } else {
+          networkBanner.classList.remove('show');
+        }
+      }
+      window.addEventListener('online', updateNetworkStatus);
+      window.addEventListener('offline', updateNetworkStatus);
+      updateNetworkStatus();
+
+      // ========== 横屏检测 ==========
+      function checkOrientation() {
+        var warning = document.getElementById('landscapeWarning');
+        if (!warning) return;
+        if (window.innerWidth > window.innerHeight) {
+          warning.classList.remove('hidden');
+        } else {
+          warning.classList.add('hidden');
+        }
+      }
+      window.addEventListener('resize', checkOrientation);
+      window.addEventListener('orientationchange', checkOrientation);
+      checkOrientation();
+
+      // ========== 页面可见性监听 ==========
+      var trainingVideo = null;
+      var wasPlaying = false;
+      document.addEventListener('visibilitychange', function() {
+        if (trainingVideo) {
+          if (document.hidden) {
+            wasPlaying = !trainingVideo.paused;
+            if (wasPlaying) trainingVideo.pause();
+          } else if (wasPlaying) {
+            trainingVideo.play().catch(function() {});
+          }
+        }
+      });
+
+      // ========== 数据定义 ==========
+      var VIDEO_BASE = './';
+      var COURSE_VIDEOS = [
+        VIDEO_BASE + '001-站姿.mp4',
+        VIDEO_BASE + '001-站姿.mp4',
+        VIDEO_BASE + '001-站姿.mp4'
+      ];
+      var COURSE_ACTION_NAMES = ['深蹲律动', '臀桥律动', '侧向律动'];
+      
+      // 模拟课程数据（实际应从接口获取）
+      var COURSE_DATA = {
+        recommended: [
+          { id: 'rec1', name: '臀腿塑形训练', intro: '针对下肢与臀部强化，改善肌力与线条。' },
+          { id: 'rec2', name: '腰腹塑形训练', intro: '针对核心与腰腹训练，提升稳定性。' }
+        ],
+        all: [
+          { id: '1', name: '臀腿塑形训练', intro: '针对下肢与臀部强化，改善肌力与线条。' },
+          { id: '2', name: '腰腹塑形训练', intro: '针对核心与腰腹训练，提升稳定性。' },
+          { id: '3', name: '圆肩驼背改善训练', intro: '改善肩背姿态，放松颈肩与上背。' }
+        ]
+      };
+
+      var ACTION_DATA = [
+        { video: './001-站姿.mp4', name: '深蹲律动', meta: '约 2 分钟 · 15 次' },
+        { video: './001-站姿.mp4', name: '臀桥律动', meta: '约 2 分钟 · 12 次' },
+        { video: './001-站姿.mp4', name: '侧向律动', meta: '约 1.5 分钟 · 10 次/侧' }
+      ];
+
+      var pages = {
+        entry: document.getElementById('page-entry'),
+        list: document.getElementById('page-list'),
+        detail: document.getElementById('page-detail'),
+        'single-action': document.getElementById('page-single-action'),
+        training: document.getElementById('page-training')
+      };
+
+      function showPage(name) {
+        // 训练中返回确认
+        if (trainingVideo && pages.training.classList.contains('active') && name !== 'training') {
+          if (confirm('训练进行中，确定要离开吗？')) {
+            if (_trainingEndFn) _trainingEndFn();
+            Object.keys(pages).forEach(function (k) { pages[k].classList.toggle('active', k === name); });
+            resetIdle();
+          }
+          return;
+        }
+        Object.keys(pages).forEach(function (k) { pages[k].classList.toggle('active', k === name); });
+        resetIdle();
+      }
+
+      // ========== 课程列表加载 ==========
+      function renderCourseCard(course, container) {
+        var card = document.createElement('div');
+        card.className = 'course-card';
+        card.setAttribute('data-id', course.id);
+        card.setAttribute('data-name', course.name);
+        card.setAttribute('data-intro', course.intro);
+        card.innerHTML = '<div class="cover"><span class="cover-text">' + course.name.replace('训练', '') + '</span></div>' +
+          '<div class="body"><div class="name">' + course.name + '</div><div class="intro">' + course.intro + '</div></div>';
+        container.appendChild(card);
+      }
+
+      function loadCourses() {
+        var recommendList = document.getElementById('recommendList');
+        var allList = document.getElementById('allList');
+        var recommendBlock = document.getElementById('recommendBlock');
+        var allBlock = document.getElementById('allBlock');
+        var emptyState = document.getElementById('emptyState');
+
+        recommendList.innerHTML = '';
+        allList.innerHTML = '';
+
+        if (COURSE_DATA.recommended && COURSE_DATA.recommended.length > 0) {
+          COURSE_DATA.recommended.forEach(function(c) { renderCourseCard(c, recommendList); });
+          recommendBlock.style.display = 'block';
+        } else {
+          recommendBlock.style.display = 'none';
+        }
+
+        if (COURSE_DATA.all && COURSE_DATA.all.length > 0) {
+          COURSE_DATA.all.forEach(function(c) { renderCourseCard(c, allList); });
+          allList.style.display = 'grid';
+          emptyState.style.display = 'none';
+        } else {
+          allList.style.display = 'none';
+          emptyState.style.display = 'block';
+        }
+      }
+
+      // ========== 动作列表加载 ==========
+      function loadActions() {
+        var container = document.getElementById('actionListContainer');
+        var emptyState = document.getElementById('actionEmptyState');
+        container.innerHTML = '';
+
+        if (!ACTION_DATA || ACTION_DATA.length === 0) {
+          container.style.display = 'none';
+          emptyState.style.display = 'block';
+          document.getElementById('btnStartTraining').style.display = 'none';
+          return;
+        }
+
+        container.style.display = 'block';
+        emptyState.style.display = 'none';
+        document.getElementById('btnStartTraining').style.display = 'block';
+
+        ACTION_DATA.forEach(function(action, idx) {
+          var item = document.createElement('div');
+          item.className = 'action-item';
+          item.setAttribute('data-video', action.video);
+          item.setAttribute('data-name', action.name);
+          item.setAttribute('data-meta', action.meta);
+          item.innerHTML = '<span class="num">' + (idx + 1) + '</span>' +
+            '<div class="thumb"><video muted preload="metadata" playsinline src="' + action.video + '" style="width:100%;height:100%;object-fit:cover" onerror="this.parentElement.querySelector(\'.fallback\').style.display=\'flex\'"></video><span class="placeholder fallback">动作示意</span></div>' +
+            '<div class="info"><div class="name">' + action.name + '</div><div class="meta">' + action.meta + '</div></div>' +
+            '<button type="button" class="btn-primary btn-start-one" data-single="' + (idx + 1) + '">开始训练</button>';
+          container.appendChild(item);
+        });
+      }
+
+      function openSingleAction(videoSrc, name, meta) {
+        window._singleActionVideo = videoSrc;
+        window._singleActionName = name;
+        window._singleActionMeta = meta;
+        document.getElementById('singleActionTitle').textContent = name;
+        document.getElementById('singleActionMeta').textContent = meta;
+        var thumbVideo = document.getElementById('singleActionVideo');
+        if (thumbVideo) {
+          thumbVideo.src = videoSrc || '';
+          thumbVideo.load();
+        }
+        showPage('single-action');
+      }
+
+      var _trainingEndFn = null;
+
+      function endTrainingNow() {
+        if (_trainingEndFn) _trainingEndFn();
+      }
+
+      function playTraining(videoUrls, courseName, isSingle, actionNames) {
+        if (!checkBrowserSupport()) return;
+        
+        showPage('training');
+        trainingVideo = document.getElementById('trainingVideo');
+        var video = trainingVideo;
+        var statusEl = document.getElementById('trainingStatus');
+        var statusText = document.getElementById('statusText');
+        var desc = document.getElementById('trainingDesc');
+        var btnBack = document.getElementById('btnBackToList');
+        var btnEnd = document.getElementById('btnEndTraining');
+        var spinner = document.getElementById('statusSpinner');
+        var progressBarWrap = document.getElementById('trainingProgressBarWrap');
+        var progressFill = document.getElementById('trainingProgressFill');
+        var progressText = document.getElementById('trainingProgressText');
+
+        var total = videoUrls.length;
+        var isFullCourse = !isSingle && total > 1;
+        if (isFullCourse) {
+          progressBarWrap.style.display = 'block';
+          progressText.style.display = 'block';
+          progressFill.style.width = '0%';
+          progressText.textContent = '动作 0/' + total;
+        } else {
+          progressBarWrap.style.display = 'none';
+          progressText.style.display = 'none';
+        }
+
+        video.style.display = 'block';
+        statusEl.className = 'training-status running';
+        statusText.textContent = '训练进行中…';
+        desc.textContent = '课程已下发至律动仪，请跟随视频完成训练。';
+        btnBack.style.display = 'none';
+        btnEnd.style.display = 'block';
+        if (spinner) spinner.style.display = 'inline-block';
+
+        var videoLoadTimeout = null;
+        var errorCount = 0;
+
+        function showDone(early) {
+          if (videoLoadTimeout) clearTimeout(videoLoadTimeout);
+          video.pause();
+          video.src = '';
+          statusEl.className = 'training-status done';
+          statusText.textContent = '训练已结束';
+          desc.textContent = early ? '您已提前结束本次训练。' : '本次训练已结束，律动仪已停止。';
+          if (spinner) spinner.style.display = 'none';
+          video.style.display = 'none';
+          btnEnd.style.display = 'none';
+          btnBack.style.display = 'block';
+          if (isFullCourse) {
+            if (early) progressText.textContent = '已提前结束';
+            else {
+              progressFill.style.width = '100%';
+              progressText.textContent = '动作 ' + total + '/' + total + ' 已完成';
+            }
+          }
+          _trainingEndFn = null;
+          trainingVideo = null;
+        }
+
+        function handleVideoError() {
+          errorCount++;
+          var currentIndex = index;
+          var actionName = isFullCourse && actionNames && actionNames[currentIndex] ? actionNames[currentIndex] : '该动作';
+          logError('VIDEO_ERROR', '视频加载失败', { url: videoUrls[currentIndex], index: currentIndex });
+          
+          if (isFullCourse) {
+            showToast('视频加载失败，已跳过该动作', 'warning');
+            index++;
+            playNext();
+          } else {
+            showToast('视频播放失败，请返回重试', 'error');
+            showDone(true);
+          }
+        }
+
+        var index = 0;
+        function playNext() {
+          if (index >= videoUrls.length) {
+            showDone();
+            return;
+          }
+          if (isFullCourse && actionNames && actionNames[index]) {
+            progressText.textContent = '动作 ' + (index + 1) + '/' + total + ' · ' + actionNames[index];
+            progressFill.style.width = ((index + 1) / total * 100) + '%';
+          }
+          
+          var currentUrl = videoUrls[index];
+          video.src = currentUrl;
+          video.load();
+          
+          // 视频加载超时检测（30秒）
+          if (videoLoadTimeout) clearTimeout(videoLoadTimeout);
+          videoLoadTimeout = setTimeout(function() {
+            if (video.readyState < 2) {
+              showToast('视频加载超时，已跳过该动作', 'warning');
+              handleVideoError();
+            }
+          }, 30000);
+          
+          video.onended = function() {
+            if (videoLoadTimeout) clearTimeout(videoLoadTimeout);
+            index++;
+            playNext();
+          };
+          video.onerror = function() {
+            if (videoLoadTimeout) clearTimeout(videoLoadTimeout);
+            handleVideoError();
+          };
+          
+          video.play().catch(function(err) {
+            if (videoLoadTimeout) clearTimeout(videoLoadTimeout);
+            logError('VIDEO_PLAY_ERROR', '视频播放失败', err);
+            handleVideoError();
+          });
+        }
+
+        _trainingEndFn = function () { showDone(true); };
+        playNext();
+      }
+
+      // ========== 防抖处理 ==========
+      var debouncedShowPage = debounce(function(name) { showPage(name); }, 300);
+      var debouncedGoToList = debounce(function() { showPage('list'); }, 500);
+
+      function startFullCourse() {
+        var btn = document.getElementById('btnStartTraining');
+        if (btn.disabled) return;
+        btn.disabled = true;
+        setTimeout(function() { btn.disabled = false; }, 1000);
+        playTraining(COURSE_VIDEOS, document.getElementById('detailTitle').textContent, false, COURSE_ACTION_NAMES);
+      }
+
+      function startSingleAction() {
+        var btn = document.getElementById('btnStartSingleTraining');
+        if (btn.disabled) return;
+        btn.disabled = true;
+        setTimeout(function() { btn.disabled = false; }, 1000);
+        var src = window._singleActionVideo;
+        var name = window._singleActionName || '单动作训练';
+        if (!src) {
+          showToast('视频路径错误，请重试', 'error');
+          btn.disabled = false;
+          return;
+        }
+        playTraining([src], name, true);
+      }
+
+      function endTrainingNow() {
+        var btn = document.getElementById('btnEndTraining');
+        if (btn.disabled) return;
+        btn.disabled = true;
+        setTimeout(function() { btn.disabled = false; }, 500);
+        if (_trainingEndFn) _trainingEndFn();
+      }
+
+      document.body.addEventListener('click', function (e) {
+        var target = e.target.closest('[data-go]');
+        if (target) {
+          e.preventDefault();
+          debouncedGoToList();
+          return;
+        }
+        var toPage = e.target.closest('[data-page]');
+        if (toPage) {
+          e.preventDefault();
+          var pageName = toPage.getAttribute('data-page');
+          if (pageName === 'list') {
+            debouncedShowPage('list');
+          } else {
+            showPage(pageName);
+          }
+          return;
+        }
+        var card = e.target.closest('.course-card');
+        if (card) {
+          e.preventDefault();
+          var debouncedCardClick = debounce(function() {
+            document.getElementById('detailTitle').textContent = card.getAttribute('data-name');
+            loadActions();
+            showPage('detail');
+          }, 300);
+          debouncedCardClick();
+          return;
+        }
+        if (e.target.id === 'btnStartTraining') {
+          e.preventDefault();
+          startFullCourse();
+          return;
+        }
+        if (e.target.id === 'btnStartSingleTraining') {
+          e.preventDefault();
+          startSingleAction();
+          return;
+        }
+        if (e.target.id === 'btnBackToList') {
+          e.preventDefault();
+          showPage('list');
+          return;
+        }
+        if (e.target.id === 'btnEndTraining') {
+          e.preventDefault();
+          endTrainingNow();
+          return;
+        }
+        var btnOne = e.target.closest('.btn-start-one');
+        if (btnOne) {
+          e.preventDefault();
+          if (btnOne.disabled) return;
+          btnOne.disabled = true;
+          setTimeout(function() { btnOne.disabled = false; }, 1000);
+          var item = btnOne.closest('.action-item');
+          var video = item.getAttribute('data-video');
+          var name = item.getAttribute('data-name');
+          var meta = item.getAttribute('data-meta');
+          openSingleAction(video, name, meta);
+        }
+      });
+
+      // 空闲倒计时 300 秒
+      var idleSeconds = 300;
+      var idleTimer;
+      var progressEl = document.getElementById('idleProgress');
+      var countdownEl = document.getElementById('idleCountdown');
+      function resetIdle() {
+        idleSeconds = 300;
+        if (progressEl) progressEl.style.width = '100%';
+        if (countdownEl) countdownEl.textContent = '300';
+        clearInterval(idleTimer);
+        idleTimer = setInterval(function () {
+          idleSeconds--;
+          if (countdownEl) countdownEl.textContent = idleSeconds;
+          if (progressEl) progressEl.style.width = (idleSeconds / 300 * 100) + '%';
+          if (idleSeconds <= 0) {
+            clearInterval(idleTimer);
+            showPage('entry');
+            idleSeconds = 300;
+          }
+        }, 1000);
+      }
+      document.body.addEventListener('mousedown', resetIdle);
+      document.body.addEventListener('touchstart', resetIdle);
+      resetIdle();
+
+      // ========== 页脚时间（含异常处理）==========
+      function updateTime() {
+        try {
+          var d = new Date();
+          if (isNaN(d.getTime())) {
+            document.getElementById('footerTime').textContent = '--:--';
+            document.getElementById('footerDate').textContent = '--年--月--日';
+            return;
+          }
+          document.getElementById('footerTime').textContent = d.getHours().toString().padStart(2,'0') + ':' + d.getMinutes().toString().padStart(2,'0');
+          document.getElementById('footerDate').textContent = d.getFullYear() + '年' + (d.getMonth()+1) + '月' + d.getDate() + '日';
+        } catch(err) {
+          logError('TIME_UPDATE_ERROR', '时间更新失败', err);
+          document.getElementById('footerTime').textContent = '--:--';
+          document.getElementById('footerDate').textContent = '--年--月--日';
+        }
+      }
+      updateTime();
+      setInterval(updateTime, 60000);
+
+      // ========== 用户信息处理（含异常）==========
+      function initUserInfo() {
+        var userName = 'Visbody 001' || '用户 001'; // 实际应从接口获取
+        var userMeta = '男 | 180cm | 24岁' || '-- | --cm | --岁'; // 实际应从接口获取
+        
+        document.getElementById('userName').textContent = userName || '未命名用户';
+        document.getElementById('userMeta').textContent = userMeta || '-- | --cm | --岁';
+        document.getElementById('userAvatar').textContent = (userName && userName.length > 0) ? userName.charAt(0) : '用';
+      }
+
+      // ========== 页面刷新/离开处理 ==========
+      window.addEventListener('beforeunload', function(e) {
+        if (trainingVideo && !trainingVideo.paused) {
+          e.preventDefault();
+          e.returnValue = '训练进行中，确定要离开吗？';
+          return e.returnValue;
+        }
+      });
+
+      // ========== 初始化 ==========
+      checkBrowserSupport();
+      initUserInfo();
+      loadCourses();
+      loadActions();
+
+      // 暴露全局函数供 onclick 调用
+      window.loadCourses = loadCourses;
+    })();
+  </script>
+</body>
+</html>
