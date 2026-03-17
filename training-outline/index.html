@@ -1,0 +1,1625 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>VISBODY 训练大纲 Demo</title>
+    <style>
+      :root {
+        --bg: #f2f6ff;
+        --card: #ffffff;
+        --line: #e5eaf5;
+        --text: #172338;
+        --sub: #62708a;
+        --primary: #4e7dff;
+        --primary-soft: #e9efff;
+        --green: #18b57a;
+        --green-soft: #e8fbf3;
+        --orange: #ff9b37;
+        --orange-soft: #fff5e7;
+        --radius-lg: 18px;
+        --radius-md: 12px;
+        --shadow: 0 12px 35px rgba(64, 93, 153, 0.12);
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        margin: 0;
+        font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "PingFang SC",
+          "Microsoft YaHei", sans-serif;
+        background: radial-gradient(circle at 10% -10%, #dce8ff 0%, transparent 35%), var(--bg);
+        color: var(--text);
+      }
+
+      .container {
+        width: min(1120px, 94vw);
+        margin: 22px auto 30px;
+      }
+
+      .top-hero {
+        background: linear-gradient(135deg, #19346b, #2f58a7);
+        border-radius: 24px;
+        color: #fff;
+        padding: 18px 20px;
+        box-shadow: var(--shadow);
+      }
+
+      .hero-row {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 10px;
+        flex-wrap: wrap;
+      }
+
+      .hero-title {
+        font-size: 22px;
+        font-weight: 700;
+      }
+
+      .hero-sub {
+        margin-top: 4px;
+        color: #d6e4ff;
+        font-size: 13px;
+      }
+
+      .hero-badge {
+        padding: 8px 12px;
+        background: rgba(255, 255, 255, 0.12);
+        border: 1px solid rgba(255, 255, 255, 0.25);
+        border-radius: 999px;
+        font-size: 12px;
+      }
+
+      .hero-metrics {
+        margin-top: 14px;
+        display: grid;
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+        gap: 10px;
+      }
+
+      .metric {
+        background: rgba(255, 255, 255, 0.1);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        border-radius: var(--radius-md);
+        padding: 9px 10px;
+      }
+
+      .metric-label {
+        font-size: 11px;
+        color: #d7e5ff;
+      }
+
+      .metric-value {
+        margin-top: 4px;
+        font-size: 17px;
+        font-weight: 700;
+      }
+
+      .section {
+        margin-top: 14px;
+      }
+
+      .grid-2 {
+        display: grid;
+        grid-template-columns: 1.1fr 1.3fr;
+        gap: 12px;
+      }
+
+      .card {
+        background: var(--card);
+        border: 1px solid var(--line);
+        border-radius: var(--radius-lg);
+        box-shadow: var(--shadow);
+        padding: 14px;
+      }
+
+      .card-title {
+        font-size: 16px;
+        font-weight: 700;
+      }
+
+      .card-sub {
+        margin-top: 3px;
+        font-size: 12px;
+        color: var(--sub);
+      }
+
+      .goal-list {
+        margin-top: 10px;
+        display: grid;
+        gap: 8px;
+      }
+
+      .compare-card {
+        margin-top: 10px;
+        border: 1px solid var(--line);
+        border-radius: var(--radius-md);
+        background: #f8fbff;
+        padding: 10px;
+      }
+
+      .compare-title {
+        font-size: 12px;
+        color: var(--sub);
+        margin-bottom: 8px;
+      }
+
+      .compare-visual {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 8px;
+      }
+
+      .compare-item {
+        border: 1px solid #dbe5fb;
+        border-radius: 10px;
+        background: #fff;
+        padding: 8px;
+      }
+
+      .compare-label {
+        font-size: 11px;
+        color: var(--sub);
+        margin-bottom: 6px;
+      }
+
+      .silhouette {
+        height: 86px;
+        border-radius: 8px;
+        background: linear-gradient(180deg, #ebf1ff, #d4e3ff);
+        position: relative;
+        overflow: hidden;
+      }
+
+      .silhouette::before {
+        content: "";
+        position: absolute;
+        width: 34px;
+        height: 34px;
+        border-radius: 50%;
+        background: rgba(51, 88, 157, 0.32);
+        left: 50%;
+        top: 12px;
+        transform: translateX(-50%);
+      }
+
+      .silhouette::after {
+        content: "";
+        position: absolute;
+        width: 46px;
+        height: 56px;
+        border-radius: 18px 18px 10px 10px;
+        background: rgba(51, 88, 157, 0.35);
+        left: 50%;
+        top: 34px;
+        transform: translateX(-50%);
+      }
+
+      .silhouette.after {
+        background: linear-gradient(180deg, #e6fcf4, #cef7e7);
+      }
+
+      .silhouette.after::before,
+      .silhouette.after::after {
+        background: rgba(11, 122, 86, 0.35);
+      }
+
+      .compare-tags {
+        margin-top: 6px;
+        display: flex;
+        gap: 6px;
+        flex-wrap: wrap;
+      }
+
+      .goal-item {
+        border: 1px solid var(--line);
+        border-radius: var(--radius-md);
+        padding: 10px;
+        background: #fbfdff;
+      }
+
+      .goal-head {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+
+      .goal-name {
+        font-size: 13px;
+        font-weight: 600;
+      }
+
+      .goal-value {
+        font-size: 13px;
+        color: var(--primary);
+        font-weight: 700;
+      }
+
+      .goal-why {
+        margin-top: 4px;
+        font-size: 12px;
+        color: var(--sub);
+      }
+
+      .phase-track {
+        margin-top: 10px;
+        display: grid;
+        gap: 10px;
+      }
+
+      .phase {
+        border: 1px solid var(--line);
+        border-radius: var(--radius-md);
+        padding: 10px;
+      }
+
+      .phase-top {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+
+      .phase-name {
+        font-size: 13px;
+        font-weight: 700;
+      }
+
+      .phase-week {
+        font-size: 11px;
+        color: var(--sub);
+      }
+
+      .phase-target {
+        margin-top: 6px;
+        font-size: 12px;
+        color: var(--sub);
+      }
+
+      .phase-value {
+        margin-top: 7px;
+        display: flex;
+        gap: 6px;
+        flex-wrap: wrap;
+      }
+
+      .phase-compare {
+        margin-top: 8px;
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 6px;
+      }
+
+      .mini-shape {
+        border-radius: 8px;
+        border: 1px solid #dde7fb;
+        background: #f7faff;
+        padding: 6px;
+      }
+
+      .mini-shape-label {
+        font-size: 11px;
+        color: var(--sub);
+        margin-bottom: 4px;
+      }
+
+      .mini-body {
+        height: 52px;
+        border-radius: 6px;
+        background: linear-gradient(180deg, #e8efff, #d8e4ff);
+      }
+
+      .mini-body.after {
+        background: linear-gradient(180deg, #e7fbf4, #cff7e8);
+      }
+
+      .pill {
+        padding: 2px 8px;
+        border-radius: 999px;
+        font-size: 11px;
+      }
+
+      .pill.blue {
+        background: var(--primary-soft);
+        color: #3659a8;
+      }
+
+      .pill.green {
+        background: var(--green-soft);
+        color: #0d8157;
+      }
+
+      .pill.orange {
+        background: var(--orange-soft);
+        color: #b06a13;
+      }
+
+      .tabs-card {
+        margin-top: 14px;
+      }
+
+      .week-picker {
+        margin-top: 10px;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 6px;
+      }
+
+      .week-chip {
+        border: 1px solid var(--line);
+        background: #f8fbff;
+        color: var(--sub);
+        border-radius: 999px;
+        font-size: 12px;
+        padding: 4px 10px;
+        cursor: pointer;
+      }
+
+      .week-chip.active {
+        background: #1f3f7e;
+        color: #fff;
+        border-color: #1f3f7e;
+      }
+
+      .phase-link-card {
+        margin-top: 10px;
+        border: 1px solid #dce7ff;
+        background: #f6f9ff;
+        border-radius: 12px;
+        padding: 9px 10px;
+      }
+
+      .phase-link-title {
+        font-size: 13px;
+        font-weight: 600;
+      }
+
+      .phase-link-sub {
+        margin-top: 3px;
+        font-size: 12px;
+        color: var(--sub);
+      }
+
+      .main-tabs {
+        display: flex;
+        gap: 8px;
+        margin-top: 10px;
+      }
+
+      .main-tab {
+        border: 1px solid var(--line);
+        background: #f8fbff;
+        color: var(--sub);
+        border-radius: 999px;
+        font-size: 13px;
+        padding: 7px 14px;
+        cursor: pointer;
+      }
+
+      .main-tab.active {
+        background: var(--primary);
+        border-color: var(--primary);
+        color: #fff;
+      }
+
+      .panel {
+        margin-top: 12px;
+      }
+
+      .chart-wrap {
+        border: 1px solid var(--line);
+        border-radius: var(--radius-md);
+        padding: 10px;
+        background: #fbfdff;
+      }
+
+      .map-tip {
+        margin-bottom: 8px;
+        font-size: 12px;
+        color: #3b4b67;
+        background: #eef4ff;
+        border: 1px solid #dbe6ff;
+        border-radius: 8px;
+        padding: 7px 8px;
+      }
+
+      .chart-title {
+        font-size: 13px;
+        font-weight: 600;
+      }
+
+      .week-chart {
+        margin-top: 8px;
+        display: grid;
+        grid-template-columns: repeat(7, minmax(0, 1fr));
+        gap: 8px;
+      }
+
+      .day-col {
+        border: 1px solid #e8edf8;
+        border-radius: 10px;
+        padding: 8px 6px;
+        text-align: center;
+        background: #fff;
+        cursor: pointer;
+        transition: 0.15s;
+      }
+
+      .day-col:hover {
+        border-color: #b8caf7;
+      }
+
+      .day-col.active {
+        border-color: #4e7dff;
+        background: #edf3ff;
+      }
+
+      .day-label {
+        font-size: 11px;
+        color: var(--sub);
+      }
+
+      .bar {
+        margin: 7px auto 5px;
+        width: 12px;
+        border-radius: 6px;
+        background: linear-gradient(180deg, #9ab8ff, #4e7dff);
+      }
+
+      .bar.rest {
+        background: #dee6f7;
+      }
+
+      .bar-label {
+        font-size: 11px;
+        font-weight: 600;
+      }
+
+      .action-grid {
+        margin-top: 10px;
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 8px;
+      }
+
+      .action {
+        border: 1px solid var(--line);
+        border-radius: 12px;
+        padding: 8px;
+        background: #fff;
+        cursor: pointer;
+        transition: 0.15s;
+      }
+
+      .action:hover {
+        border-color: #adc4ff;
+        transform: translateY(-1px);
+      }
+
+      .action-top {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 6px;
+      }
+
+      .action-thumb {
+        margin-bottom: 7px;
+        border-radius: 10px;
+        height: 94px;
+        background: linear-gradient(160deg, #e8efff, #d7f3e8);
+        border: 1px solid #d8e4fa;
+        display: flex;
+        align-items: flex-end;
+        justify-content: center;
+        color: #3f5f9e;
+        font-size: 11px;
+        padding-bottom: 6px;
+        position: relative;
+        overflow: hidden;
+      }
+
+      .action-thumb::before {
+        content: "";
+        position: absolute;
+        top: 14px;
+        width: 18px;
+        height: 18px;
+        border-radius: 50%;
+        background: rgba(63, 95, 158, 0.45);
+      }
+
+      .action-thumb::after {
+        content: "";
+        position: absolute;
+        top: 30px;
+        width: 28px;
+        height: 40px;
+        border-radius: 12px 12px 6px 6px;
+        background: rgba(63, 95, 158, 0.4);
+      }
+
+      .action-thumb span {
+        position: relative;
+        z-index: 2;
+      }
+
+      .action-name {
+        font-size: 13px;
+        font-weight: 600;
+      }
+
+      .action-tag {
+        font-size: 11px;
+        background: var(--primary-soft);
+        color: #3b5fb3;
+        border-radius: 999px;
+        padding: 2px 6px;
+      }
+
+      .action-sub {
+        margin-top: 4px;
+        font-size: 11px;
+        color: var(--sub);
+      }
+
+      .diet-grid {
+        display: grid;
+        grid-template-columns: 300px minmax(0, 1fr);
+        gap: 10px;
+      }
+
+      .day-switch {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 6px;
+        margin-bottom: 10px;
+      }
+
+      .day-chip {
+        border: 1px solid var(--line);
+        background: #f8fbff;
+        color: var(--sub);
+        border-radius: 999px;
+        font-size: 12px;
+        padding: 4px 10px;
+        cursor: pointer;
+      }
+
+      .day-chip.active {
+        background: var(--primary);
+        color: #fff;
+        border-color: var(--primary);
+      }
+
+      .macro-card {
+        border: 1px solid var(--line);
+        border-radius: var(--radius-md);
+        background: #fbfdff;
+        padding: 10px;
+      }
+
+      .ring {
+        width: 140px;
+        height: 140px;
+        margin: 8px auto;
+        border-radius: 50%;
+        background: conic-gradient(#4e7dff 0 46%, #18b57a 46% 76%, #ff9b37 76% 100%);
+        position: relative;
+      }
+
+      .ring::after {
+        content: "";
+        position: absolute;
+        inset: 22px;
+        background: #fff;
+        border-radius: 50%;
+      }
+
+      .ring-text {
+        position: absolute;
+        inset: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 15px;
+        font-weight: 700;
+        color: #31415e;
+        z-index: 2;
+      }
+
+      .macro-list {
+        margin-top: 8px;
+        font-size: 12px;
+        color: var(--sub);
+        line-height: 1.8;
+      }
+
+      .meal-card {
+        border: 1px solid var(--line);
+        border-radius: var(--radius-md);
+        overflow: hidden;
+      }
+
+      .meal-head {
+        background: #edf3ff;
+        padding: 8px 10px;
+        font-size: 13px;
+        font-weight: 600;
+      }
+
+      .meal-list {
+        padding: 8px;
+        background: #fbfdff;
+      }
+
+      .meal-item {
+        display: grid;
+        grid-template-columns: 64px 86px minmax(0, 1fr) 120px;
+        gap: 8px;
+        border: 1px solid #e3eaf8;
+        border-radius: 10px;
+        padding: 7px;
+        background: #fff;
+        margin-bottom: 7px;
+        align-items: center;
+      }
+
+      .meal-time {
+        color: var(--primary);
+        font-size: 12px;
+        font-weight: 600;
+      }
+
+      .meal-photo {
+        border-radius: 8px;
+        height: 54px;
+        background: linear-gradient(135deg, #fff6e8, #eaf3ff);
+        border: 1px solid #e9dfcc;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 11px;
+        color: #8b6a36;
+        position: relative;
+        overflow: hidden;
+      }
+
+      .meal-photo::before {
+        content: "";
+        position: absolute;
+        width: 36px;
+        height: 36px;
+        border-radius: 50%;
+        background: #fff;
+        border: 2px solid #e6edf8;
+      }
+
+      .meal-photo::after {
+        content: "";
+        position: absolute;
+        width: 20px;
+        height: 20px;
+        border-radius: 50%;
+        background: conic-gradient(#ffb86b 0 35%, #77d2a7 35% 68%, #77a8ff 68% 100%);
+      }
+
+      .meal-photo span {
+        position: relative;
+        z-index: 2;
+        margin-top: 38px;
+        font-size: 10px;
+      }
+
+      .meal-text {
+        font-size: 12px;
+      }
+
+      .meal-macro {
+        text-align: right;
+        font-size: 11px;
+        color: var(--sub);
+      }
+
+      .separate-module {
+        margin-top: 14px;
+      }
+
+      .module-grid {
+        margin-top: 10px;
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 10px;
+      }
+
+      .check-item {
+        border: 1px solid var(--line);
+        border-radius: 10px;
+        padding: 8px;
+        margin-bottom: 7px;
+        font-size: 12px;
+        color: var(--sub);
+        background: #fbfdff;
+      }
+
+      .check-title {
+        font-weight: 700;
+        color: var(--text);
+        margin-bottom: 4px;
+      }
+
+      details.faq {
+        border: 1px solid var(--line);
+        border-radius: 10px;
+        padding: 8px 10px;
+        margin-bottom: 7px;
+        background: #fff;
+      }
+
+      details.faq summary {
+        cursor: pointer;
+        font-size: 13px;
+        font-weight: 600;
+      }
+
+      details.faq p {
+        margin: 6px 0 0;
+        font-size: 12px;
+        color: var(--sub);
+      }
+
+      .modal-mask {
+        position: fixed;
+        inset: 0;
+        background: rgba(17, 24, 39, 0.48);
+        display: none;
+        align-items: center;
+        justify-content: center;
+        z-index: 20;
+      }
+
+      .modal {
+        width: min(520px, 92vw);
+        background: #fff;
+        border-radius: 16px;
+        padding: 14px;
+      }
+
+      .modal-head {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+
+      .modal-title {
+        font-size: 16px;
+        font-weight: 700;
+      }
+
+      .close {
+        border: none;
+        background: transparent;
+        font-size: 20px;
+        cursor: pointer;
+      }
+
+      .modal-media {
+        margin-top: 10px;
+        border-radius: 12px;
+        height: 180px;
+        background: linear-gradient(135deg, #dbe7ff, #c6f2e3);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #2f4f8f;
+        font-size: 13px;
+      }
+
+      .modal-line {
+        margin-top: 8px;
+        font-size: 12px;
+        color: var(--sub);
+      }
+
+      .meal-modal-media {
+        margin-top: 10px;
+        border-radius: 12px;
+        height: 160px;
+        background: linear-gradient(135deg, #ffe5c7, #e8f2ff);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #80571f;
+        font-size: 13px;
+      }
+
+      @media (max-width: 980px) {
+        .hero-metrics {
+          grid-template-columns: repeat(2, minmax(0, 1fr));
+        }
+
+        .grid-2,
+        .diet-grid,
+        .module-grid {
+          grid-template-columns: minmax(0, 1fr);
+        }
+
+        .action-grid {
+          grid-template-columns: repeat(2, minmax(0, 1fr));
+        }
+      }
+
+      @media (max-width: 620px) {
+        .week-chart {
+          grid-template-columns: repeat(4, minmax(0, 1fr));
+        }
+
+        .action-grid {
+          grid-template-columns: minmax(0, 1fr);
+        }
+
+        .meal-row {
+          grid-template-columns: 60px minmax(0, 1fr);
+        }
+
+        .meal-macro {
+          text-align: left;
+          grid-column: 2;
+        }
+
+        .meal-item {
+          grid-template-columns: 60px minmax(0, 1fr);
+        }
+
+        .meal-photo {
+          display: none;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <section class="top-hero">
+        <div class="hero-row">
+          <div>
+            <div class="hero-title">你的专属训练大纲</div>
+            <div class="hero-sub">基于体成分、体态、体围与健康档案自动生成</div>
+          </div>
+          <div class="hero-badge">第 1 周 / 共 8 周 · 每周 3 次</div>
+        </div>
+        <div class="hero-metrics">
+          <div class="metric">
+            <div class="metric-label">体脂率目标</div>
+            <div class="metric-value">32% → 26%</div>
+          </div>
+          <div class="metric">
+            <div class="metric-label">腰围目标</div>
+            <div class="metric-value">90cm → 84cm</div>
+          </div>
+          <div class="metric">
+            <div class="metric-label">体态重点</div>
+            <div class="metric-value">圆肩改善</div>
+          </div>
+          <div class="metric">
+            <div class="metric-label">预计可见变化</div>
+            <div class="metric-value">4 周明显体感</div>
+          </div>
+        </div>
+      </section>
+
+      <section class="section grid-2">
+        <div class="card">
+          <div class="card-title">关键目标</div>
+          <div class="card-sub">不是“做动作”，而是解决你当前最影响体验的 3 件事</div>
+          <div class="compare-card">
+            <div class="compare-title">改善前 vs 改善后（预期体型变化）</div>
+            <div class="compare-visual">
+              <div class="compare-item">
+                <div class="compare-label">改善前</div>
+                <div class="silhouette"></div>
+                <div class="compare-tags">
+                  <span class="pill orange">腰腹脂肪偏高</span>
+                  <span class="pill blue">含胸明显</span>
+                </div>
+              </div>
+              <div class="compare-item">
+                <div class="compare-label">改善后（8周目标）</div>
+                <div class="silhouette after"></div>
+                <div class="compare-tags">
+                  <span class="pill green">腰线更清晰</span>
+                  <span class="pill blue">体态更挺拔</span>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="goal-list">
+            <div class="goal-item">
+              <div class="goal-head">
+                <span class="goal-name">减脂与围度优化</span>
+                <span class="goal-value">腰围 -6cm</span>
+              </div>
+              <div class="goal-why">价值：衣物松紧和外观变化最直观，提升持续执行动力。</div>
+            </div>
+            <div class="goal-item">
+              <div class="goal-head">
+                <span class="goal-name">体态矫正（圆肩）</span>
+                <span class="goal-value">姿态评分 +18%</span>
+              </div>
+              <div class="goal-why">价值：降低肩颈疲劳、久坐不适，工作状态更稳定。</div>
+            </div>
+            <div class="goal-item">
+              <div class="goal-head">
+                <span class="goal-name">基础体能提升</span>
+                <span class="goal-value">耐力 +25%</span>
+              </div>
+              <div class="goal-why">价值：日常活动不易喘，训练恢复更快，长期更容易坚持。</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-title">阶段路线</div>
+          <div class="card-sub">每一阶段都对应可感知收益，避免“练了但不知道有什么变化”</div>
+          <div class="phase-track">
+            <div class="phase">
+              <div class="phase-top">
+                <div class="phase-name">阶段 1：适应激活</div>
+                <div class="phase-week">第 1–2 周</div>
+              </div>
+              <div class="phase-target">目标：建立动作基础，缓解久坐僵硬，养成固定训练节奏。</div>
+              <div class="phase-value">
+                <span class="pill blue">每周 3 次</span>
+                <span class="pill green">动作熟练度提升</span>
+              </div>
+              <div class="phase-compare">
+                <div class="mini-shape">
+                  <div class="mini-shape-label">阶段前</div>
+                  <div class="mini-body"></div>
+                </div>
+                <div class="mini-shape">
+                  <div class="mini-shape-label">阶段后</div>
+                  <div class="mini-body after"></div>
+                </div>
+              </div>
+            </div>
+            <div class="phase">
+              <div class="phase-top">
+                <div class="phase-name">阶段 2：减脂强化</div>
+                <div class="phase-week">第 3–6 周</div>
+              </div>
+              <div class="phase-target">目标：提高消耗与力量，重点改善腰腹围度和含胸圆肩。</div>
+              <div class="phase-value">
+                <span class="pill blue">力量 2 次 + 有氧 1 次</span>
+                <span class="pill orange">4 周开始有外观变化</span>
+              </div>
+              <div class="phase-compare">
+                <div class="mini-shape">
+                  <div class="mini-shape-label">阶段前</div>
+                  <div class="mini-body"></div>
+                </div>
+                <div class="mini-shape">
+                  <div class="mini-shape-label">阶段后</div>
+                  <div class="mini-body after"></div>
+                </div>
+              </div>
+            </div>
+            <div class="phase">
+              <div class="phase-top">
+                <div class="phase-name">阶段 3：巩固定型</div>
+                <div class="phase-week">第 7–8 周</div>
+              </div>
+              <div class="phase-target">目标：巩固结果，减少反弹风险，形成可长期执行的生活方式。</div>
+              <div class="phase-value">
+                <span class="pill blue">体态细节优化</span>
+                <span class="pill green">可持续习惯形成</span>
+              </div>
+              <div class="phase-compare">
+                <div class="mini-shape">
+                  <div class="mini-shape-label">阶段前</div>
+                  <div class="mini-body"></div>
+                </div>
+                <div class="mini-shape">
+                  <div class="mini-shape-label">阶段后</div>
+                  <div class="mini-body after"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="card tabs-card">
+        <div class="card-title">执行方案</div>
+        <div class="card-sub">第一层先选周次和日期，第二层看当天训练/饮食，并解释与阶段目标的关系</div>
+
+        <div class="week-picker" id="weekPicker">
+          <button class="week-chip active" onclick="selectWeek(1, event)">第1周</button>
+          <button class="week-chip" onclick="selectWeek(2, event)">第2周</button>
+          <button class="week-chip" onclick="selectWeek(3, event)">第3周</button>
+          <button class="week-chip" onclick="selectWeek(4, event)">第4周</button>
+          <button class="week-chip" onclick="selectWeek(5, event)">第5周</button>
+          <button class="week-chip" onclick="selectWeek(6, event)">第6周</button>
+          <button class="week-chip" onclick="selectWeek(7, event)">第7周</button>
+          <button class="week-chip" onclick="selectWeek(8, event)">第8周</button>
+        </div>
+
+        <div class="phase-link-card">
+          <div class="phase-link-title" id="phaseLinkTitle">第1周 · 阶段1（适应激活）</div>
+          <div class="phase-link-sub" id="phaseLinkSub">
+            本周重点：建立动作质量和训练节奏。你选择的当天任务会直接服务于“动作稳定 + 久坐缓解”目标。
+          </div>
+        </div>
+
+        <div class="week-chart" id="execDayStrip">
+          <div class="day-col active" data-day="周一" onclick="selectExecDay('周一', event)">
+            <div class="day-label">周一</div>
+            <div class="bar" style="height: 70px"></div>
+            <div class="bar-label">力量 A</div>
+          </div>
+          <div class="day-col" data-day="周二" onclick="selectExecDay('周二', event)">
+            <div class="day-label">周二</div>
+            <div class="bar rest" style="height: 20px"></div>
+            <div class="bar-label">恢复</div>
+          </div>
+          <div class="day-col" data-day="周三" onclick="selectExecDay('周三', event)">
+            <div class="day-label">周三</div>
+            <div class="bar" style="height: 58px"></div>
+            <div class="bar-label">心肺 + 体态</div>
+          </div>
+          <div class="day-col" data-day="周四" onclick="selectExecDay('周四', event)">
+            <div class="day-label">周四</div>
+            <div class="bar rest" style="height: 25px"></div>
+            <div class="bar-label">轻活动</div>
+          </div>
+          <div class="day-col" data-day="周五" onclick="selectExecDay('周五', event)">
+            <div class="day-label">周五</div>
+            <div class="bar" style="height: 75px"></div>
+            <div class="bar-label">力量 B</div>
+          </div>
+          <div class="day-col" data-day="周六" onclick="selectExecDay('周六', event)">
+            <div class="day-label">周六</div>
+            <div class="bar rest" style="height: 28px"></div>
+            <div class="bar-label">快走</div>
+          </div>
+          <div class="day-col" data-day="周日" onclick="selectExecDay('周日', event)">
+            <div class="day-label">周日</div>
+            <div class="bar rest" style="height: 18px"></div>
+            <div class="bar-label">恢复</div>
+          </div>
+        </div>
+
+        <div class="main-tabs">
+          <button class="main-tab active" data-tab="train" onclick="switchMainTab(event)">
+            训练计划
+          </button>
+          <button class="main-tab" data-tab="diet" onclick="switchMainTab(event)">
+            饮食计划
+          </button>
+        </div>
+
+        <div id="panel-train" class="panel">
+          <div class="chart-wrap">
+            <div class="map-tip" id="trainMapTip">
+              今日训练与阶段关系：第1周周一属于阶段1，重点是动作学习和基础激活，不追求大重量。
+            </div>
+            <div class="chart-title" id="trainDayTitle">周一训练动作（点击查看详情）</div>
+            <div class="action-grid" id="actionGrid"></div>
+          </div>
+        </div>
+
+        <div id="panel-diet" class="panel" style="display: none">
+          <div class="diet-grid">
+            <div class="macro-card">
+              <div class="map-tip" id="dietMapTip">
+                今日饮食与阶段关系：阶段1以规律进食和蛋白达标为主，帮助适应训练和恢复。
+              </div>
+              <div class="chart-title" id="dietChartTitle">周一营养目标（图表）</div>
+              <div class="ring">
+                <div class="ring-text" id="dietKcal">1950kcal</div>
+              </div>
+              <div class="macro-list" id="dietMacroList">
+                <div>蛋白质：约 122g（1.6g/kg）</div>
+                <div>碳水化合物：约 345g</div>
+                <div>脂肪：约 61g</div>
+                <div>饮水建议：每日 2L 以上</div>
+              </div>
+            </div>
+
+            <div class="meal-card">
+              <div class="meal-head" id="mealHeadTitle">周一一日食谱（图文）</div>
+              <div class="meal-list" id="mealList"></div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="card separate-module">
+        <div class="card-title">进度自查 / FAQ</div>
+        <div class="card-sub">单独模块，用于每 2 周复盘一次，判断是否按预期获得价值</div>
+        <div class="module-grid">
+          <div>
+            <div class="check-item">
+              <div class="check-title">第 2 周</div>
+              已能完成每周 2-3 次训练，肩颈僵硬有所缓解，训练后恢复时间在 24 小时内。
+            </div>
+            <div class="check-item">
+              <div class="check-title">第 4 周</div>
+              腰围和衣物松紧有变化，上下楼和快走更轻松，拍照时含胸明显减少。
+            </div>
+            <div class="check-item">
+              <div class="check-title">第 8 周</div>
+              体脂与围度改善明显，能自主安排训练和饮食，不易出现反弹焦虑。
+            </div>
+          </div>
+          <div>
+            <details class="faq">
+              <summary>这周太忙只能练 1 次，计划是不是作废了？</summary>
+              <p>不会。优先保留 1 次力量训练，其他天用 20-30 分钟快走补足活动量即可。</p>
+            </details>
+            <details class="faq">
+              <summary>体重变化不明显，为什么还说有效？</summary>
+              <p>你应该先看体脂率、腰围和体态评分。这些指标通常比体重更能反映真实变化。</p>
+            </details>
+            <details class="faq">
+              <summary>训练时出现不适怎么办？</summary>
+              <p>先降强度，检查动作，若刺痛持续请停练并咨询线下专业人士。</p>
+            </details>
+          </div>
+        </div>
+      </section>
+    </div>
+
+    <div class="modal-mask" id="actionModal">
+      <div class="modal">
+        <div class="modal-head">
+          <div class="modal-title" id="mName">动作详情</div>
+          <button class="close" onclick="closeAction()">×</button>
+        </div>
+        <div class="modal-media">动作图片 / 视频示范占位</div>
+        <div class="modal-line" id="mTarget"></div>
+        <div class="modal-line" id="mIntensity"></div>
+        <div class="modal-line" id="mGear"></div>
+        <div class="modal-line" id="mTips"></div>
+      </div>
+    </div>
+
+    <div class="modal-mask" id="mealModal">
+      <div class="modal">
+        <div class="modal-head">
+          <div class="modal-title" id="mealName">食谱详情</div>
+          <button class="close" onclick="closeMeal()">×</button>
+        </div>
+        <div class="meal-modal-media">食谱图片 / 视频示范占位</div>
+        <div class="modal-line" id="mealGoal"></div>
+        <div class="modal-line" id="mealIngredients"></div>
+        <div class="modal-line" id="mealMacro"></div>
+        <div class="modal-line" id="mealReplace"></div>
+        <div class="modal-line" id="mealTiming"></div>
+        <div class="modal-line" id="mealCaution"></div>
+      </div>
+    </div>
+
+    <script>
+      const trainPlan = {
+        周一: [
+          {
+            name: "杯式深蹲",
+            tag: "力量A",
+            sub: "强度：中等 · 时长：约 8 分钟",
+            target: "臀腿与核心",
+            intensity: "3-4组 × 10-12次",
+            gear: "哑铃/壶铃",
+            tips: "膝盖方向与脚尖一致，避免塌腰",
+          },
+          {
+            name: "臀桥/臀推",
+            tag: "力量A",
+            sub: "强度：中等 · 时长：约 7 分钟",
+            target: "臀大肌",
+            intensity: "3组 × 12-15次",
+            gear: "长凳/杠铃/弹力带",
+            tips: "顶点停顿1秒，避免腰部代偿",
+          },
+          {
+            name: "平板支撑",
+            tag: "核心",
+            sub: "强度：中等 · 时长：约 5 分钟",
+            target: "核心稳定",
+            intensity: "3组 × 20-30秒",
+            gear: "瑜伽垫",
+            tips: "头肩臀一线，保持自然呼吸",
+          },
+        ],
+        周二: [
+          {
+            name: "快走恢复",
+            tag: "恢复",
+            sub: "强度：低 · 时长：30 分钟",
+            target: "低强度恢复",
+            intensity: "均速快走",
+            gear: "跑步机/户外",
+            tips: "全程保持轻微出汗、可完整说话",
+          },
+          {
+            name: "髋屈肌拉伸",
+            tag: "拉伸",
+            sub: "强度：低 · 时长：约 8 分钟",
+            target: "髋部灵活度",
+            intensity: "每侧2组 × 30秒",
+            gear: "瑜伽垫",
+            tips: "保持骨盆稳定，不要耸肩",
+          },
+        ],
+        周三: [
+          {
+            name: "间歇快走/慢跑",
+            tag: "心肺",
+            sub: "强度：中高 · 时长：20 分钟",
+            target: "心肺能力",
+            intensity: "1分钟快 + 1分钟慢 × 10轮",
+            gear: "跑步机/户外",
+            tips: "保持可讲话但微喘，不追求冲刺",
+          },
+          {
+            name: "靠墙天使",
+            tag: "体态",
+            sub: "强度：中低 · 时长：约 8 分钟",
+            target: "肩胛稳定",
+            intensity: "3组 × 10次",
+            gear: "墙面/瑜伽垫",
+            tips: "腰背贴墙，动作慢而可控",
+          },
+        ],
+        周四: [
+          {
+            name: "轻松步行",
+            tag: "恢复",
+            sub: "强度：低 · 时长：35 分钟",
+            target: "促进恢复",
+            intensity: "均速步行",
+            gear: "户外",
+            tips: "步幅自然，避免久坐全天不动",
+          },
+        ],
+        周五: [
+          {
+            name: "跪姿俯卧撑",
+            tag: "力量B",
+            sub: "强度：中等 · 时长：约 6 分钟",
+            target: "胸肩与核心",
+            intensity: "3组 × 8-10次",
+            gear: "瑜伽垫/高台",
+            tips: "身体保持直线，避免耸肩",
+          },
+          {
+            name: "弹力带划船",
+            tag: "力量B",
+            sub: "强度：中等 · 时长：约 7 分钟",
+            target: "上背与肩胛稳定",
+            intensity: "3组 × 10-12次",
+            gear: "弹力带/划船器",
+            tips: "回拉时夹肩胛，避免后仰借力",
+          },
+          {
+            name: "死虫训练",
+            tag: "核心",
+            sub: "强度：中等 · 时长：约 6 分钟",
+            target: "深层核心控制",
+            intensity: "3组 × 每侧10次",
+            gear: "瑜伽垫",
+            tips: "保持腰椎中立，动作慢",
+          },
+        ],
+        周六: [
+          {
+            name: "户外快走",
+            tag: "轻活动",
+            sub: "强度：低中 · 时长：40 分钟",
+            target: "代谢维持",
+            intensity: "持续有氧",
+            gear: "户外",
+            tips: "可分两段完成，累计时长即可",
+          },
+        ],
+        周日: [
+          {
+            name: "呼吸与放松",
+            tag: "恢复",
+            sub: "强度：低 · 时长：15 分钟",
+            target: "身心恢复",
+            intensity: "腹式呼吸 + 轻拉伸",
+            gear: "瑜伽垫",
+            tips: "本日以恢复为主，不做高强度",
+          },
+        ],
+      };
+
+      const dietPlan = {
+        周一: {
+          kcal: "1950kcal",
+          macros: ["蛋白质：约 122g", "碳水化合物：约 345g", "脂肪：约 61g", "饮水建议：2L+"],
+          meals: [
+            {
+              time: "07:00",
+              photo: "早餐图",
+              text: "燕麦50g + 鸡蛋1个 + 牛奶250ml + 苹果1个",
+              macro: "P18/C52/F9",
+              detail: {
+                goal: "稳定上午能量，避免早间血糖波动导致饥饿反弹。",
+                ingredients: "燕麦50g、鸡蛋1个、低脂牛奶250ml、苹果1个",
+                replace: "可替换为全麦面包2片 + 无糖酸奶200g",
+                timing: "建议起床后60分钟内完成。",
+                caution: "乳糖不耐可将牛奶替换为无糖豆浆。",
+              },
+            },
+            {
+              time: "10:00",
+              photo: "加餐图",
+              text: "原味酸奶150g + 杏仁15g",
+              macro: "P8/C10/F9",
+              detail: {
+                goal: "延长饱腹感，降低午餐前高热量零食摄入。",
+                ingredients: "原味酸奶150g、杏仁15g",
+                replace: "可替换为无糖豆浆250ml + 水煮蛋1个",
+                timing: "早餐后2.5-3小时食用。",
+                caution: "坚果需控量，避免额外热量叠加。",
+              },
+            },
+            {
+              time: "12:30",
+              photo: "午餐图",
+              text: "糙米饭100g + 鸡胸120g + 西兰花200g",
+              macro: "P32/C68/F12",
+              detail: {
+                goal: "补充训练前主能量，保证下午不低血糖。",
+                ingredients: "糙米100g、鸡胸120g、西兰花200g",
+                replace: "鸡胸可换鱼肉/瘦牛肉同克数。",
+                timing: "如下午训练，建议训练前2-3小时吃完。",
+                caution: "优先蒸煮炖，减少额外油脂。",
+              },
+            },
+            {
+              time: "19:00",
+              photo: "晚餐图",
+              text: "蒸鱼150g + 红薯100g + 清炒蔬菜",
+              macro: "P28/C45/F10",
+              detail: {
+                goal: "训练后恢复并控制晚间总热量。",
+                ingredients: "蒸鱼150g、红薯100g、时蔬200g",
+                replace: "可替换为虾仁/豆腐 + 玉米/南瓜。",
+                timing: "建议训练后60-90分钟内完成。",
+                caution: "避免重油、重辣，减少夜间胃肠负担。",
+              },
+            },
+          ],
+        },
+        周二: {
+          kcal: "1900kcal",
+          macros: ["蛋白质：约 118g", "碳水化合物：约 320g", "脂肪：约 60g", "饮水建议：2L+"],
+          meals: [
+            { time: "07:00", photo: "早餐图", text: "全麦吐司2片 + 水煮蛋2个 + 无糖豆浆", macro: "P22/C46/F11" },
+            { time: "12:30", photo: "午餐图", text: "藜麦饭100g + 牛肉120g + 彩椒沙拉", macro: "P30/C60/F14" },
+            { time: "16:00", photo: "加餐图", text: "乳清蛋白1勺 + 香蕉1根", macro: "P25/C30/F3" },
+            { time: "19:00", photo: "晚餐图", text: "虾仁150g + 南瓜120g + 生菜沙拉", macro: "P30/C40/F9" },
+          ],
+        },
+        周三: {
+          kcal: "2000kcal",
+          macros: ["蛋白质：约 125g", "碳水化合物：约 350g", "脂肪：约 62g", "训练日适度加碳水"],
+          meals: [
+            { time: "07:00", photo: "早餐图", text: "燕麦奶昔 + 鸡蛋1个 + 蓝莓", macro: "P20/C55/F8" },
+            { time: "12:30", photo: "午餐图", text: "糙米120g + 三文鱼120g + 西兰花", macro: "P34/C70/F16" },
+            { time: "16:00", photo: "加餐图", text: "酸奶200g + 坚果10g", macro: "P11/C12/F9" },
+            { time: "19:00", photo: "晚餐图", text: "鸡胸150g + 土豆100g + 蔬菜汤", macro: "P35/C48/F10" },
+          ],
+        },
+        周四: {
+          kcal: "1850kcal",
+          macros: ["蛋白质：约 115g", "碳水化合物：约 300g", "脂肪：约 58g", "恢复日控制精制糖"],
+          meals: [
+            { time: "07:00", photo: "早餐图", text: "杂粮粥 + 鸡蛋 + 苹果", macro: "P16/C48/F8" },
+            { time: "12:30", photo: "午餐图", text: "荞麦面 + 鸡腿肉去皮 + 青菜", macro: "P30/C62/F13" },
+            { time: "19:00", photo: "晚餐图", text: "豆腐200g + 菌菇 + 玉米半根", macro: "P26/C38/F10" },
+          ],
+        },
+        周五: {
+          kcal: "1980kcal",
+          macros: ["蛋白质：约 124g", "碳水化合物：约 340g", "脂肪：约 61g", "训练日保持充足蛋白"],
+          meals: [
+            { time: "07:00", photo: "早餐图", text: "全麦三明治 + 牛奶", macro: "P22/C52/F12" },
+            { time: "12:30", photo: "午餐图", text: "糙米饭 + 瘦牛肉 + 西蓝花", macro: "P33/C68/F14" },
+            { time: "16:00", photo: "加餐图", text: "蛋白粉 + 香蕉", macro: "P25/C30/F3" },
+            { time: "19:00", photo: "晚餐图", text: "鳕鱼150g + 红薯120g + 蔬菜", macro: "P30/C44/F9" },
+          ],
+        },
+        周六: {
+          kcal: "1880kcal",
+          macros: ["蛋白质：约 118g", "碳水化合物：约 310g", "脂肪：约 59g", "外出日注意总量"],
+          meals: [
+            { time: "08:00", photo: "早餐图", text: "牛奶燕麦杯 + 水果", macro: "P18/C50/F8" },
+            { time: "13:00", photo: "午餐图", text: "轻食沙拉 + 鸡胸肉", macro: "P30/C35/F12" },
+            { time: "18:30", photo: "晚餐图", text: "清蒸鱼 + 粗粮饭 + 蔬菜", macro: "P31/C45/F10" },
+          ],
+        },
+        周日: {
+          kcal: "1820kcal",
+          macros: ["蛋白质：约 112g", "碳水化合物：约 295g", "脂肪：约 57g", "休息日不过量即可"],
+          meals: [
+            { time: "08:00", photo: "早餐图", text: "全麦面包 + 鸡蛋 + 牛奶", macro: "P20/C42/F11" },
+            { time: "12:30", photo: "午餐图", text: "鸡胸肉意面 + 沙拉", macro: "P30/C58/F12" },
+            { time: "19:00", photo: "晚餐图", text: "豆腐虾仁煲 + 时蔬", macro: "P28/C34/F10" },
+          ],
+        },
+      };
+
+      let currentWeek = 1;
+      let currentExecDay = "周一";
+
+      function getStageByWeek(week) {
+        if (week <= 2) {
+          return {
+            id: "阶段1（适应激活）",
+            trainFocus: "建立动作质量和训练节奏",
+            dietFocus: "规律进食 + 蛋白达标，减少暴食波动",
+          };
+        }
+        if (week <= 6) {
+          return {
+            id: "阶段2（减脂强化）",
+            trainFocus: "提高训练量与强度，聚焦减脂效率",
+            dietFocus: "稳定热量缺口，强化训练日补给",
+          };
+        }
+        return {
+          id: "阶段3（巩固定型）",
+          trainFocus: "巩固成果并优化体态细节",
+          dietFocus: "防反弹，平滑过渡到长期维持",
+        };
+      }
+
+      function getWeekProgressText(week) {
+        if (week === 1) return "本周参数：动作标准优先，使用基础重量。";
+        if (week === 2) return "本周参数：每组增加 1-2 次，保持动作质量。";
+        if (week === 3) return "本周参数：主动作负重提升约 5%。";
+        if (week === 4) return "本周参数：组间休息缩短 10-15 秒。";
+        if (week === 5) return "本周参数：主动作增加 1 组或增加 5-8 分钟训练量。";
+        if (week === 6) return "本周参数：保持强化强度，避免过度疲劳。";
+        if (week === 7) return "本周参数：总量降低约 10%，优化动作控制细节。";
+        return "本周参数：巩固周，保持强度并关注恢复与睡眠。";
+      }
+
+      function updatePhaseLink() {
+        const stage = getStageByWeek(currentWeek);
+        document.getElementById("phaseLinkTitle").textContent = `第${currentWeek}周 · ${stage.id}`;
+        document.getElementById(
+          "phaseLinkSub"
+        ).textContent = `本周重点：${stage.trainFocus}。你选择的当天任务会直接服务于该阶段目标。`;
+      }
+
+      function switchMainTab(event) {
+        const target = event.currentTarget.getAttribute("data-tab");
+        document.querySelectorAll(".main-tab").forEach((btn) => btn.classList.remove("active"));
+        event.currentTarget.classList.add("active");
+        document.getElementById("panel-train").style.display = target === "train" ? "block" : "none";
+        document.getElementById("panel-diet").style.display = target === "diet" ? "block" : "none";
+      }
+
+      function openAction(name, target, intensity, gear, tips) {
+        document.getElementById("mName").textContent = name;
+        document.getElementById("mTarget").textContent = "目标部位：" + target;
+        document.getElementById("mIntensity").textContent = "建议强度/时间：" + intensity;
+        document.getElementById("mGear").textContent = "推荐器械：" + gear;
+        document.getElementById("mTips").textContent = "注意事项：" + tips;
+        document.getElementById("actionModal").style.display = "flex";
+      }
+
+      function closeAction() {
+        document.getElementById("actionModal").style.display = "none";
+      }
+
+      function renderTrainActions(day) {
+        const actions = trainPlan[day] || [];
+        const stage = getStageByWeek(currentWeek);
+        document.getElementById("trainDayTitle").textContent = `第${currentWeek}周 ${day}训练动作（点击查看详情）`;
+        document.getElementById(
+          "trainMapTip"
+        ).textContent = `今日训练与阶段关系：第${currentWeek}周${day}属于${stage.id}，核心是${stage.trainFocus}。${getWeekProgressText(
+          currentWeek
+        )}`;
+        const grid = document.getElementById("actionGrid");
+        grid.innerHTML = actions
+          .map(
+            (a) => `
+              <div class="action" onclick="openAction('${a.name}','${a.target}','${a.intensity}','${a.gear}','${a.tips}')">
+                <div class="action-thumb"><span>${a.name} 示意图</span></div>
+                <div class="action-top">
+                  <span class="action-name">${a.name}</span><span class="action-tag">${a.tag}</span>
+                </div>
+                <div class="action-sub">${a.sub} · ${getWeekProgressText(currentWeek)}</div>
+              </div>
+            `
+          )
+          .join("");
+      }
+
+      function renderDietDay(day) {
+        const data = dietPlan[day];
+        if (!data) return;
+        const stage = getStageByWeek(currentWeek);
+        document.getElementById("dietChartTitle").textContent = `第${currentWeek}周 ${day}营养目标（图表）`;
+        document.getElementById("mealHeadTitle").textContent = `第${currentWeek}周 ${day}一日食谱（图文）`;
+        const baseKcal = Number(String(data.kcal).replace("kcal", ""));
+        let weekOffset = 0;
+        if (currentWeek >= 3 && currentWeek <= 6) weekOffset = -80;
+        if (currentWeek >= 7) weekOffset = -30;
+        document.getElementById("dietKcal").textContent = `${baseKcal + weekOffset}kcal`;
+        document.getElementById("dietMacroList").innerHTML = data.macros.map((m) => `<div>${m}</div>`).join("");
+        document.getElementById(
+          "dietMapTip"
+        ).textContent = `今日饮食与阶段关系：第${currentWeek}周${day}属于${stage.id}，本日策略是“${stage.dietFocus}”。`;
+        document.getElementById("mealList").innerHTML = data.meals
+          .map(
+            (m, idx) => `
+              <div class="meal-item" onclick="openMeal('${day}', ${idx})">
+                <div class="meal-time">${m.time}</div>
+                <div class="meal-photo"><span>${m.photo}</span></div>
+                <div class="meal-text">${m.text}</div>
+                <div class="meal-macro">${m.macro}</div>
+              </div>
+            `
+          )
+          .join("");
+      }
+
+      function selectExecDay(day, event) {
+        currentExecDay = day;
+        document.querySelectorAll("#execDayStrip .day-col").forEach((el) => {
+          el.classList.toggle("active", el.getAttribute("data-day") === day);
+        });
+        renderTrainActions(day);
+        renderDietDay(day);
+      }
+
+      function selectWeek(week, event) {
+        currentWeek = week;
+        document.querySelectorAll("#weekPicker .week-chip").forEach((el) => el.classList.remove("active"));
+        if (event && event.currentTarget) event.currentTarget.classList.add("active");
+        updatePhaseLink();
+        renderTrainActions(currentExecDay);
+        renderDietDay(currentExecDay);
+      }
+
+      function openMeal(day, idx) {
+        const meal = dietPlan[day]?.meals?.[idx];
+        if (!meal) return;
+        const detail = meal.detail || {
+          goal: "控制总热量并保证蛋白摄入，帮助减脂和恢复。",
+          ingredients: meal.text,
+          replace: "可用同蛋白来源食材等量替换，避免高油烹饪。",
+          timing: "建议按固定时间进食，训练前后优先保证蛋白和碳水。",
+          caution: "过敏体质或特殊疾病人群请按医生建议调整。",
+        };
+        document.getElementById("mealName").textContent = `${day} ${meal.time} 食谱详情`;
+        document.getElementById("mealGoal").textContent = `这餐目标：${detail.goal}`;
+        document.getElementById("mealIngredients").textContent = `食材与克数：${detail.ingredients}`;
+        document.getElementById("mealMacro").textContent = `营养估算：${meal.macro}`;
+        document.getElementById("mealReplace").textContent = `可替换方案：${detail.replace}`;
+        document.getElementById("mealTiming").textContent = `食用时机：${detail.timing}`;
+        document.getElementById("mealCaution").textContent = `注意事项：${detail.caution}`;
+        document.getElementById("mealModal").style.display = "flex";
+      }
+
+      function closeMeal() {
+        document.getElementById("mealModal").style.display = "none";
+      }
+
+      renderTrainActions(currentExecDay);
+      renderDietDay(currentExecDay);
+      updatePhaseLink();
+    </script>
+  </body>
+</html>
+
