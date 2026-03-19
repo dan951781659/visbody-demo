@@ -32,6 +32,9 @@
         --radius-sm: 8px;
         --radius-xs: 4px;
         --pad-card: 14px;
+        --gap-sm: 8px;
+        --gap-md: 12px;
+        --gap-lg: 16px;
         --text-xs: 11px;
         --text-sm: 13px;
         --text-base: 14px;
@@ -82,8 +85,8 @@
 
       .container {
         max-width: 100%;
-        margin: 0;
-        padding: 16px 0;
+        margin: 0 auto;
+        padding: 16px 12px;
         position: relative;
       }
 
@@ -117,13 +120,12 @@
 
       /* ===== Hero ===== */
       .top-hero {
-        background: linear-gradient(135deg, rgba(0, 229, 255, 0.12) 0%, rgba(120, 80, 255, 0.06) 50%, rgba(20, 30, 80, 0.9) 100%);
-        border: 1px solid rgba(0, 229, 255, 0.2);
-        border-radius: var(--radius-lg);
+        background: transparent;
+        border: none;
+        border-radius: 0;
         color: #fff;
-        padding: 16px;
-        box-shadow: 0 0 30px rgba(0, 229, 255, 0.06), inset 0 0 0 1px rgba(255,255,255,0.03);
-        backdrop-filter: var(--blur);
+        padding: 0 0 16px;
+        box-shadow: none;
       }
 
       .hero-row {
@@ -239,13 +241,13 @@
 
       /* ===== Section / Grid ===== */
       .section {
-        margin-top: 12px;
+        margin-top: var(--gap-md);
       }
 
       .grid-2 {
         display: grid;
         grid-template-columns: 1fr;
-        gap: 12px;
+        gap: var(--gap-md);
       }
 
       .card {
@@ -277,8 +279,10 @@
         gap: 8px;
         padding: 0;
         border-radius: 0;
-        background: transparent;
-        color: #fff;
+        background: linear-gradient(135deg, #fff 0%, var(--primary) 50%, var(--purple) 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
         letter-spacing: 0.5px;
         position: relative;
       }
@@ -320,7 +324,7 @@
 
       /* ===== Compare ===== */
       .compare-card {
-        margin-top: 10px;
+        margin-top: var(--gap-md);
         border: none;
         border-radius: 0;
         background: transparent;
@@ -331,26 +335,26 @@
         font-size: var(--text-base);
         color: var(--text);
         font-weight: 700;
-        margin-bottom: 8px;
+        margin-bottom: var(--gap-md);
       }
 
       .compare-visual {
         display: grid;
         grid-template-columns: 1fr 1fr;
-        gap: 8px;
+        gap: var(--gap-md);
       }
 
       .compare-item {
         border: 1px solid rgba(100, 140, 255, 0.12);
         border-radius: 10px;
         background: rgba(15, 22, 50, 0.6);
-        padding: 8px;
+        padding: var(--gap-md);
       }
 
       .compare-label {
         font-size: var(--text-sm);
         color: var(--sub);
-        margin-bottom: 6px;
+        margin-bottom: var(--gap-sm);
       }
 
       .silhouette {
@@ -386,15 +390,15 @@
 
       /* ===== Goals ===== */
       .goal-list {
-        margin-top: 10px;
+        margin-top: var(--gap-md);
         display: grid;
-        gap: 8px;
+        gap: var(--gap-md);
       }
 
       .goal-item {
         border: 1px solid rgba(0, 229, 255, 0.12);
         border-radius: var(--radius-md);
-        padding: 10px 12px;
+        padding: var(--gap-md);
         background: rgba(0, 229, 255, 0.04);
         position: relative;
         overflow: hidden;
@@ -447,9 +451,9 @@
 
       /* ===== Pills ===== */
       .pill {
-        padding: 2px 8px;
+        padding: 2px 6px;
         border-radius: 999px;
-        font-size: var(--text-sm);
+        font-size: var(--text-xs);
       }
 
       .pill.blue {
@@ -551,7 +555,7 @@
       }
 
       .phase-card-brief {
-        font-size: var(--text-sm);
+        font-size: var(--text-xs);
         color: rgba(200, 212, 230, 0.9);
       }
 
@@ -741,9 +745,9 @@
       /* ===== Level 3: Main Tabs (tertiary - content type) ===== */
       .main-tabs {
         display: flex;
-        gap: 6px;
-        margin-top: 10px;
-        padding: 4px;
+        gap: var(--gap-sm);
+        margin-top: var(--gap-md);
+        padding: var(--gap-sm);
         border-radius: var(--radius-sm);
         background: rgba(15, 22, 50, 0.5);
         border: 1px solid rgba(100, 140, 255, 0.08);
@@ -799,7 +803,7 @@
 
       /* ===== Panel ===== */
       .panel {
-        margin-top: 10px;
+        margin-top: var(--gap-lg);
       }
 
       .chart-wrap {
@@ -807,10 +811,15 @@
         border-radius: 0;
         padding: 0;
         background: transparent;
+        margin-top: var(--gap-md);
+      }
+
+      .chart-wrap:first-child {
+        margin-top: 0;
       }
 
       .map-tip {
-        margin-bottom: 8px;
+        margin-bottom: var(--gap-md);
         font-size: var(--text-base);
         font-weight: 500;
         color: rgba(200, 212, 230, 0.9);
@@ -818,16 +827,19 @@
         border: none;
         border-left: 3px solid rgba(100, 140, 255, 0.2);
         border-radius: 0;
-        padding: 4px 8px;
+        padding: var(--gap-sm) var(--gap-sm);
         line-height: 1.5;
       }
 
       .chart-title {
-        font-size: var(--text-base);
+        font-size: var(--text-lg);
         font-weight: 700;
         color: var(--text);
-        padding-left: 12px;
+        padding: 0 0 var(--gap-md) 12px;
+        margin-bottom: var(--gap-sm);
         position: relative;
+        display: flex;
+        align-items: center;
       }
 
       .chart-title::before {
@@ -837,7 +849,7 @@
         top: 50%;
         transform: translateY(-50%);
         width: 4px;
-        height: 14px;
+        height: 1em;
         border-radius: 2px;
         background: linear-gradient(180deg, var(--primary), var(--blue));
       }
@@ -853,10 +865,10 @@
 
       /* ===== Action Grid (single column on mobile) ===== */
       .action-grid {
-        margin-top: 8px;
+        margin-top: var(--gap-md);
         display: grid;
         grid-template-columns: 1fr;
-        gap: 10px;
+        gap: var(--gap-md);
       }
 
       .action {
@@ -980,7 +992,7 @@
       .diet-grid {
         display: grid;
         grid-template-columns: 1fr;
-        gap: 10px;
+        gap: var(--gap-lg);
       }
 
       .day-switch {
@@ -1095,11 +1107,11 @@
       }
 
       .macro-summary {
-        margin-top: 8px;
+        margin-top: var(--gap-md);
         border: none;
         border-radius: 0;
         background: transparent;
-        padding: 4px 0;
+        padding: var(--gap-sm) 0;
         font-size: var(--text-base);
         color: var(--sub);
       }
@@ -1115,7 +1127,7 @@
         display: flex;
         flex-direction: column;
         align-items: center;
-        gap: 8px;
+        gap: var(--gap-md);
         border: none;
         background: transparent;
         padding: 0;
@@ -1144,8 +1156,8 @@
         display: flex;
         flex-wrap: wrap;
         justify-content: center;
-        gap: 8px 14px;
-        margin-top: 10px;
+        gap: var(--gap-md);
+        margin-top: var(--gap-md);
         font-size: var(--text-sm);
         color: var(--sub);
       }
@@ -1171,9 +1183,9 @@
       .water-target-row {
         display: flex;
         align-items: center;
-        gap: 6px;
-        margin-top: 10px;
-        padding: 6px 0;
+        gap: var(--gap-sm);
+        margin-top: var(--gap-md);
+        padding: var(--gap-sm) 0;
         font-size: var(--text-sm);
         color: rgba(122, 139, 170, 0.75);
         border-top: 1px solid rgba(100, 140, 255, 0.06);
@@ -1278,14 +1290,14 @@
       }
 
       .macro-tips {
-        margin-top: 6px;
+        margin-top: var(--gap-sm);
       }
 
       .macro-tip {
         border-left: 2px solid rgba(122, 139, 170, 0.2);
         background: transparent;
         border-radius: 0;
-        padding: 4px 8px;
+        padding: var(--gap-sm);
         font-size: var(--text-sm);
         color: rgba(122, 139, 170, 0.65);
       }
@@ -1299,12 +1311,14 @@
 
       .meal-head {
         background: transparent;
-        padding: 0 2px 8px;
-        padding-left: 12px;
-        font-size: var(--text-base);
+        padding: 0 0 var(--gap-md) 12px;
+        margin-bottom: var(--gap-sm);
+        font-size: var(--text-lg);
         font-weight: 700;
         color: var(--text);
         position: relative;
+        display: flex;
+        align-items: center;
       }
 
       .meal-head::before {
@@ -1314,7 +1328,7 @@
         top: 50%;
         transform: translateY(-50%);
         width: 4px;
-        height: 14px;
+        height: 1em;
         border-radius: 2px;
         background: linear-gradient(180deg, var(--blue), var(--purple));
       }
@@ -1332,7 +1346,7 @@
         border-radius: 12px;
         padding: 0;
         background: rgba(15, 22, 50, 0.5);
-        margin-bottom: 10px;
+        margin-bottom: var(--gap-md);
         overflow: hidden;
         backdrop-filter: var(--blur);
       }
