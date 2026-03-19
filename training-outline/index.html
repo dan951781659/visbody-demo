@@ -152,9 +152,16 @@
       .card-title-icon {
         width: 18px;
         height: 18px;
-        border-radius: 6px;
-        background: radial-gradient(circle at 20% 20%, #ff7ab2, #165dff);
-        box-shadow: 0 0 8px rgba(22, 93, 255, 0.4);
+        border-radius: 0;
+        background-color: #165dff;
+        -webkit-mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1024 1024'%3E%3Cpath d='M896 160H128a32 32 0 0 0-32 32v640a32 32 0 0 0 32 32h768a32 32 0 0 0 32-32V192a32 32 0 0 0-32-32zM192 736V288h640v448H192zm96-320h128v96H288v-96zm192 0h256v64H480v-64zm0 128h256v64H480v-64z'/%3E%3C/svg%3E");
+        mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1024 1024'%3E%3Cpath d='M896 160H128a32 32 0 0 0-32 32v640a32 32 0 0 0 32 32h768a32 32 0 0 0 32-32V192a32 32 0 0 0-32-32zM192 736V288h640v448H192zm96-320h128v96H288v-96zm192 0h256v64H480v-64zm0 128h256v64H480v-64z'/%3E%3C/svg%3E");
+        -webkit-mask-size: contain;
+        mask-size: contain;
+        -webkit-mask-repeat: no-repeat;
+        mask-repeat: no-repeat;
+        -webkit-mask-position: center;
+        mask-position: center;
       }
 
       .card-sub {
@@ -171,16 +178,16 @@
 
       .compare-card {
         margin-top: 10px;
-        border: 1px solid rgba(22, 93, 255, 0.16);
-        border-radius: var(--radius-md);
-        background: radial-gradient(circle at 0 0, rgba(22, 93, 255, 0.06), transparent 60%),
-          #f8fbff;
-        padding: 10px;
+        border: none;
+        border-radius: 0;
+        background: transparent;
+        padding: 0;
       }
 
       .compare-title {
         font-size: 12px;
-        color: var(--sub);
+        color: #1f2f4a;
+        font-weight: 700;
         margin-bottom: 8px;
       }
 
@@ -249,12 +256,12 @@
 
       .goal-value {
         font-size: 12px;
-        color: #ffffff;
+        color: #2f4f8f;
         font-weight: 600;
-        padding: 3px 10px;
+        padding: 2px 10px;
         border-radius: 999px;
-        background: linear-gradient(135deg, #165dff, #3a7bff);
-        box-shadow: 0 6px 14px rgba(22, 93, 255, 0.35);
+        background: #eaf2ff;
+        border: 1px solid #cddfff;
       }
 
       .goal-why {
@@ -272,12 +279,10 @@
       .phase {
         border: 1px solid var(--line);
         border-radius: var(--radius-md);
-        padding: 10px 12px;
+        padding: 10px 132px 10px 12px;
         background: linear-gradient(120deg, rgba(22, 93, 255, 0.04), rgba(255, 255, 255, 0.98));
         position: relative;
-        display: grid;
-        grid-template-columns: minmax(0, 1.4fr) 120px;
-        gap: 8px;
+        min-height: 110px;
       }
 
       .phase::before {
@@ -304,13 +309,12 @@
 
       .phase-week {
         font-size: 11px;
-        color: #165dff;
-        font-weight: 700;
-        padding: 2px 8px;
+        color: #4f6690;
+        font-weight: 600;
+        padding: 1px 8px;
         border-radius: 999px;
-        border: 1px solid rgba(22, 93, 255, 0.25);
-        background: linear-gradient(135deg, rgba(22, 93, 255, 0.14), rgba(22, 93, 255, 0.04));
-        box-shadow: 0 4px 10px rgba(22, 93, 255, 0.12);
+        border: 1px solid #d9e4f8;
+        background: #f4f8ff;
       }
 
       .phase-target {
@@ -327,25 +331,54 @@
       }
 
       .phase-visual {
+        position: absolute;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        width: 120px;
         border-radius: 10px;
-        border: 1px dashed rgba(22, 93, 255, 0.22);
-        background: radial-gradient(circle at 20% 0, rgba(22, 93, 255, 0.14), transparent 60%),
-          #f9fbff;
+        border: none;
+        background: transparent;
         font-size: 11px;
-        color: #3b4b67;
-        padding: 6px 8px;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
+        color: #f9fafb;
+        padding: 0;
+        display: block;
         text-align: center;
-        gap: 4px;
+        gap: 0;
+        position: relative;
+        overflow: hidden;
+        min-height: 0;
+        border-radius: 0 var(--radius-md) var(--radius-md) 0;
       }
 
       .phase-visual img {
+        position: absolute;
+        inset: 0;
         width: 100%;
-        max-width: 90px;
-        border-radius: 8px;
+        height: 100%;
+        object-fit: cover;
+        max-width: none;
+        border-radius: 0;
+        display: block;
+        z-index: 0;
+      }
+
+      .phase-visual span {
+        position: absolute;
+        left: 8px;
+        bottom: 6px;
+        font-size: 11px;
+        font-weight: 600;
+        text-shadow: 0 1px 2px rgba(0, 0, 0, 0.35);
+        z-index: 2;
+      }
+
+      .phase-visual::after {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(to top, rgba(3, 7, 18, 0.55), transparent 55%);
+        z-index: 1;
       }
 
       .phase-compare {
@@ -378,48 +411,113 @@
       }
 
       .week-picker {
-        margin-top: 10px;
+        margin-top: 0;
         display: flex;
-        gap: 6px;
+        gap: 8px;
         overflow-x: auto;
-        padding-bottom: 4px;
+        padding: 2px 2px 6px;
         -webkit-overflow-scrolling: touch;
       }
 
       .week-chip {
-        border: 1px solid var(--line);
-        background: #f8fbff;
-        color: var(--sub);
-        border-radius: 999px;
-        font-size: 12px;
-        padding: 4px 10px;
+        border: 1px solid #dce7ff;
+        background: linear-gradient(150deg, #ffffff, #f5f8ff);
+        color: #35455f;
+        border-radius: 12px;
+        min-width: 96px;
+        padding: 7px 10px;
         cursor: pointer;
+        position: relative;
+        transition: 0.18s;
+        text-align: left;
       }
 
       .week-chip.active {
         background: linear-gradient(135deg, #165dff, #3f7cff);
         color: #fff;
         border-color: #165dff;
-        box-shadow: 0 6px 14px rgba(22, 93, 255, 0.26);
+        box-shadow: 0 10px 20px rgba(22, 93, 255, 0.34);
+        transform: translateY(-1px);
+        font-weight: 700;
       }
 
-      .phase-link-card {
-        margin-top: 10px;
-        border: 1px solid #dce7ff;
-        background: #f6f9ff;
-        border-radius: 12px;
-        padding: 9px 10px;
+      .week-chip.active::after {
+        content: "";
+        position: absolute;
+        left: 50%;
+        transform: translateX(-50%);
+        bottom: -8px;
+        border-left: 5px solid transparent;
+        border-right: 5px solid transparent;
+        border-top: 6px solid #3f7cff;
       }
 
-      .phase-link-title {
+      .week-num {
+        display: block;
         font-size: 13px;
-        font-weight: 600;
+        font-weight: 700;
+        line-height: 1.2;
       }
 
-      .phase-link-sub {
-        margin-top: 3px;
-        font-size: 12px;
-        color: var(--sub);
+      .week-stage {
+        display: block;
+        margin-top: 2px;
+        font-size: 11px;
+        color: #6880a4;
+        line-height: 1.2;
+      }
+
+      .week-chip.active .week-stage {
+        color: rgba(236, 243, 255, 0.95);
+      }
+
+      .week-head {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+      }
+
+      .week-icon {
+        width: 16px;
+        height: 16px;
+        border-radius: 5px;
+        border: 1px solid #d3def8;
+        background: #eef4ff;
+        display: inline-block;
+        position: relative;
+        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1024 1024'%3E%3Cpath fill='%237ea6ff' d='M512 96l320 128v224c0 198-128 373-320 480C320 821 192 646 192 448V224L512 96zm0 96l-224 90v166c0 147 88 283 224 373 136-90 224-226 224-373V282L512 192z'/%3E%3C/svg%3E");
+        background-size: 12px 12px;
+        background-position: center;
+        background-repeat: no-repeat;
+      }
+
+      .week-icon::after {
+        content: none;
+      }
+
+      .week-icon.boost::after {
+        content: none;
+      }
+
+      .week-icon.hold::after {
+        content: none;
+      }
+
+      .week-icon.boost {
+        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1024 1024'%3E%3Cpath fill='%2318b57a' d='M576 64L224 576h224l-64 384 416-544H576z'/%3E%3C/svg%3E");
+      }
+
+      .week-icon.hold {
+        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1024 1024'%3E%3Cpath fill='%23ff9b37' d='M512 96l320 128v224c0 198-128 373-320 480C320 821 192 646 192 448V224L512 96zm-48 450l-88-88-68 68 156 156 252-252-68-68-184 184z'/%3E%3C/svg%3E");
+      }
+
+      .week-chip.active .week-icon {
+        border-color: rgba(255, 255, 255, 0.6);
+        background-color: rgba(255, 255, 255, 0.16);
+      }
+
+      .week-chip.active .week-icon::after {
+        content: none;
       }
 
       .main-tabs {
@@ -429,19 +527,21 @@
       }
 
       .main-tab {
-        border: 1px solid var(--line);
-        background: #f8fbff;
-        color: var(--sub);
-        border-radius: 999px;
+        border: 1px solid #dce7ff;
+        background: linear-gradient(150deg, #ffffff, #f7faff);
+        color: #4d5f7b;
+        border-radius: 10px;
         font-size: 13px;
-        padding: 7px 14px;
+        font-weight: 600;
+        padding: 8px 16px;
         cursor: pointer;
       }
 
       .main-tab.active {
-        background: var(--primary);
+        background: linear-gradient(135deg, #165dff, #3f7cff);
         border-color: var(--primary);
         color: #fff;
+        box-shadow: 0 8px 16px rgba(22, 93, 255, 0.24);
       }
 
       .panel {
@@ -480,23 +580,28 @@
       }
 
       .day-col {
-        border: 1px solid #e8edf8;
-        border-radius: 10px;
-        padding: 8px 6px;
+        border: 1px solid rgba(22, 93, 255, 0.1);
+        border-radius: 12px;
+        padding: 5px 5px;
         text-align: center;
-        background: #fff;
+        background: linear-gradient(160deg, rgba(255, 255, 255, 0.95), rgba(247, 250, 255, 0.9));
         cursor: pointer;
         transition: 0.15s;
-        flex: 0 0 132px;
+        flex: 0 0 108px;
+        box-shadow: 0 4px 12px rgba(22, 93, 255, 0.05);
       }
 
       .day-col:hover {
-        border-color: #b8caf7;
+        border-color: rgba(22, 93, 255, 0.28);
+        box-shadow: 0 8px 16px rgba(22, 93, 255, 0.12);
       }
 
       .day-col.active {
-        border-color: #4e7dff;
-        background: #edf3ff;
+        border-color: rgba(22, 93, 255, 0.42);
+        background: linear-gradient(160deg, rgba(236, 244, 255, 0.95), rgba(247, 251, 255, 0.96));
+        box-shadow:
+          inset 0 0 0 1px rgba(22, 93, 255, 0.1),
+          0 8px 18px rgba(22, 93, 255, 0.14);
       }
 
       .day-label {
@@ -505,8 +610,8 @@
       }
 
       .bar {
-        margin: 7px auto 5px;
-        width: 12px;
+        margin: 5px auto 4px;
+        width: 10px;
         border-radius: 6px;
         background: linear-gradient(180deg, #ff7ab2, #165dff);
       }
@@ -530,10 +635,11 @@
       .action {
         border: 1px solid var(--line);
         border-radius: 12px;
-        padding: 8px;
+        padding: 0;
         background: #fff;
         cursor: pointer;
         transition: 0.15s;
+        overflow: hidden;
       }
 
       .action:hover {
@@ -546,15 +652,16 @@
         justify-content: space-between;
         align-items: center;
         gap: 6px;
+        padding: 8px 8px 0;
       }
 
       .action-thumb {
-        margin-bottom: 7px;
-        border-radius: 10px;
-        height: 110px;
+        margin-bottom: 0;
+        border-radius: 12px 12px 0 0;
+        height: 152px;
         background-size: cover;
         background-position: center;
-        border: 1px solid rgba(22, 93, 255, 0.2);
+        border: none;
         position: relative;
         overflow: hidden;
       }
@@ -593,6 +700,7 @@
         margin-top: 4px;
         font-size: 11px;
         color: var(--sub);
+        padding: 0 8px 8px;
       }
 
       .diet-grid {
@@ -625,47 +733,10 @@
       }
 
       .macro-card {
-        border: 1px solid var(--line);
-        border-radius: var(--radius-md);
-        background: #fbfdff;
-        padding: 10px;
-      }
-
-      .ring-shell {
-        width: 156px;
-        height: 156px;
-        margin: 8px auto;
-        border-radius: 50%;
-        padding: 10px;
-        background: conic-gradient(#165dff 0 20%, #18b57a 20% 40%, #ff9b37 40% 60%, #4da3ff 60% 80%, #d5deef 80% 100%);
-      }
-
-      .ring {
-        width: 100%;
-        height: 100%;
-        border-radius: 50%;
-        background: conic-gradient(#165dff 0 46%, #18b57a 46% 76%, #ff9b37 76% 100%);
-        position: relative;
-      }
-
-      .ring::after {
-        content: "";
-        position: absolute;
-        inset: 22px;
-        background: #fff;
-        border-radius: 50%;
-      }
-
-      .ring-text {
-        position: absolute;
-        inset: 0;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-size: 15px;
-        font-weight: 700;
-        color: #31415e;
-        z-index: 2;
+        border: none;
+        border-radius: 0;
+        background: transparent;
+        padding: 0;
       }
 
       .macro-list {
@@ -675,54 +746,142 @@
         line-height: 1.6;
       }
 
-      .macro-row {
-        border: 1px solid #e3ebff;
+      .target-grid {
+        display: grid;
+        gap: 6px;
+      }
+
+      .target-card {
+        border: 1px solid #e8eefb;
         border-radius: 8px;
-        background: #fff;
-        padding: 5px 7px;
-        margin-bottom: 6px;
-        cursor: pointer;
+        background: linear-gradient(160deg, #ffffff, #f9fbff);
+        padding: 6px 8px;
       }
 
-      .macro-row.active {
-        border-color: #a8c1ff;
-        background: #f2f7ff;
-      }
-
-      .macro-row-main {
+      .target-head {
         display: flex;
         justify-content: space-between;
         gap: 8px;
         font-size: 12px;
+        align-items: center;
       }
 
-      .macro-row-sub {
+      .target-name {
+        color: #41516f;
+      }
+
+      .target-value {
+        font-weight: 700;
+        color: #22324b;
+      }
+
+      .target-sub {
         margin-top: 3px;
         font-size: 11px;
         color: #60708b;
       }
 
-      .water-track {
+      .target-bar {
         margin-top: 4px;
-        height: 6px;
+        height: 5px;
         border-radius: 999px;
         background: #e8eefc;
         overflow: hidden;
       }
 
-      .water-fill {
+      .target-bar > span {
         height: 100%;
-        background: linear-gradient(90deg, #4da3ff, #2bc5b4);
+        display: block;
+      }
+
+      .target-kcal > .target-bar > span {
+        background: linear-gradient(90deg, #165dff, #4f92ff);
+      }
+
+      .target-protein > .target-bar > span {
+        background: linear-gradient(90deg, #165dff, #6f9bff);
+      }
+
+      .target-carb > .target-bar > span {
+        background: linear-gradient(90deg, #18b57a, #55c89a);
+      }
+
+      .target-fat > .target-bar > span {
+        background: linear-gradient(90deg, #ff9b37, #ffbe72);
+      }
+
+      .target-water > .target-bar > span {
+        background: linear-gradient(90deg, #35a8ff, #53d2c5);
       }
 
       .macro-summary {
         margin-top: 6px;
-        border: 1px solid #dce8ff;
+        border: 1px solid #e5ecfb;
         border-radius: 10px;
-        background: #f2f7ff;
+        background: #f8fbff;
         padding: 6px 8px;
         font-size: 12px;
         color: #31415e;
+      }
+
+      .macro-summary-kcal {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: flex-start;
+        gap: 8px;
+        border-color: #cfe0ff;
+        background: transparent;
+        border: none;
+        padding: 0;
+        text-align: center;
+      }
+
+      .kcal-label {
+        font-size: 12px;
+        color: #3a4f72;
+        font-weight: 600;
+        width: 100%;
+        text-align: center;
+      }
+
+      .kcal-ring {
+        width: 64px;
+        height: 64px;
+        border-radius: 999px;
+        background: conic-gradient(#36cfc9 0 120deg, #165dff 120deg 260deg, #6f9bff 260deg 360deg);
+        display: grid;
+        place-items: center;
+        box-shadow: inset 0 0 0 1px rgba(22, 93, 255, 0.1);
+        flex: 0 0 auto;
+      }
+
+      .kcal-ring-inner {
+        width: 48px;
+        height: 48px;
+        border-radius: 999px;
+        background: #ffffff;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        color: #1e3250;
+        font-size: 11px;
+        font-weight: 700;
+        text-align: center;
+        line-height: 1.1;
+        padding: 2px;
+      }
+
+      .kcal-ring-value {
+        font-size: 11px;
+        font-weight: 700;
+        color: #1e3250;
+      }
+
+      .kcal-ring-unit {
+        font-size: 9px;
+        color: #5d6f8e;
       }
 
       .macro-kpi-grid {
@@ -781,8 +940,8 @@
       }
 
       .macro-tip {
-        border-left: 3px solid #7aa3ff;
-        background: #f8fbff;
+        border-left: 3px solid #9ebcff;
+        background: #f9fbff;
         border-radius: 6px;
         padding: 5px 7px;
         font-size: 12px;
@@ -790,21 +949,21 @@
       }
 
       .meal-card {
-        border: 1px solid var(--line);
-        border-radius: var(--radius-md);
-        overflow: hidden;
+        border: none;
+        border-radius: 0;
+        overflow: visible;
       }
 
       .meal-head {
-        background: #edf3ff;
-        padding: 8px 10px;
+        background: transparent;
+        padding: 0 2px 8px;
         font-size: 13px;
         font-weight: 600;
       }
 
       .meal-list {
-        padding: 8px;
-        background: #fbfdff;
+        padding: 0;
+        background: transparent;
       }
 
       .meal-item {
@@ -813,10 +972,11 @@
         gap: 6px;
         border: 1px solid #e3eaf8;
         border-radius: 12px;
-        padding: 8px;
+        padding: 0;
         background: linear-gradient(145deg, #ffffff, #f6f9ff);
         margin-bottom: 8px;
         box-shadow: 0 5px 14px rgba(22, 93, 255, 0.08);
+        overflow: hidden;
       }
 
       .meal-item-top {
@@ -866,16 +1026,38 @@
         display: flex;
         flex-direction: column;
         gap: 6px;
+        align-items: stretch;
       }
 
       .meal-photo {
-        border-radius: 8px;
-        height: 78px;
+        border-radius: 12px 12px 0 0;
+        height: 116px;
         background-size: cover;
         background-position: center;
-        border: 1px solid #e9dfcc;
+        border: none;
         position: relative;
         overflow: hidden;
+      }
+
+      .meal-info {
+        display: grid;
+        gap: 8px;
+        padding: 0 8px 8px;
+      }
+
+      .meal-meta {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 8px;
+      }
+
+      .meal-meta-right {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        flex-wrap: wrap;
+        justify-content: flex-end;
       }
 
       .meal-photo::after {
@@ -904,7 +1086,7 @@
 
       .meal-main {
         display: grid;
-        gap: 3px;
+        gap: 5px;
       }
 
       .meal-goal {
@@ -918,6 +1100,7 @@
         padding: 1px 7px;
         font-size: 10px;
         font-weight: 600;
+        white-space: nowrap;
       }
 
       .meal-macro {
@@ -928,10 +1111,28 @@
         border: 1px solid #e5eefc;
         border-radius: 8px;
         padding: 5px 7px;
+        width: fit-content;
       }
 
-      .separate-module {
-        margin-top: 14px;
+      .review-panel {
+        margin-top: 12px;
+      }
+
+      .review-wrap {
+        border: none;
+        border-radius: 0;
+        padding: 0;
+        background: transparent;
+      }
+
+      .review-week-badge {
+        font-size: 12px;
+        border: 1px solid #cfe0ff;
+        color: #1f4ea8;
+        background: #edf4ff;
+        border-radius: 999px;
+        padding: 3px 10px;
+        font-weight: 600;
       }
 
       .module-grid {
@@ -977,23 +1178,6 @@
         color: #42526d;
       }
 
-      .adjust-btn {
-        margin-top: 6px;
-        border: 1px solid #165dff;
-        background: #165dff;
-        color: #fff;
-        border-radius: 8px;
-        font-size: 12px;
-        padding: 5px 10px;
-        cursor: pointer;
-      }
-
-      .adjust-note {
-        margin-top: 4px;
-        font-size: 11px;
-        color: #3f5e96;
-      }
-
       .faq-wrap {
         display: grid;
         gap: 8px;
@@ -1009,24 +1193,24 @@
         line-height: 1.5;
       }
 
-      details.faq {
-        border: 1px solid var(--line);
+      .review-note {
+        border: 1px solid #deebff;
         border-radius: 10px;
-        padding: 8px 10px;
-        margin-bottom: 7px;
         background: #fff;
+        padding: 8px 10px;
       }
 
-      details.faq summary {
-        cursor: pointer;
-        font-size: 13px;
-        font-weight: 600;
-      }
-
-      details.faq p {
-        margin: 6px 0 0;
+      .review-note-title {
         font-size: 12px;
-        color: var(--sub);
+        font-weight: 700;
+        color: #2e4f8f;
+      }
+
+      .review-note-sub {
+        margin-top: 4px;
+        font-size: 12px;
+        color: #51617d;
+        line-height: 1.5;
       }
 
       .modal-mask {
@@ -1134,6 +1318,22 @@
         .action-grid {
           grid-template-columns: repeat(2, minmax(0, 1fr));
         }
+
+        .phase {
+          padding: 10px 12px;
+          min-height: 0;
+        }
+
+        .phase-visual {
+          position: relative;
+          top: auto;
+          right: auto;
+          bottom: auto;
+          width: 100%;
+          height: 96px;
+          margin-top: 8px;
+          border-radius: 10px;
+        }
       }
 
       @media (max-width: 620px) {
@@ -1154,26 +1354,34 @@
         }
 
         .meal-content {
-          flex-direction: row;
-          align-items: center;
+          display: grid;
+          grid-template-columns: 188px minmax(0, 1fr);
+          align-items: stretch;
+          gap: 0;
         }
 
         .meal-photo {
-          flex: 0 0 150px;
-          height: 78px;
+          width: 100%;
+          height: 100%;
+          min-height: 116px;
+          border-radius: 0;
+        }
+
+        .meal-info {
+          min-height: 116px;
+          padding: 10px 12px;
         }
 
         .meal-text {
-          flex: 1;
-          padding: 0 10px;
-        }
-
-        .meal-main {
-          flex: 1;
+          padding: 0;
         }
 
         .meal-macro {
-          max-width: 210px;
+          max-width: none;
+        }
+
+        .review-wrap .module-grid {
+          margin-top: 0;
         }
       }
     </style>
@@ -1319,60 +1527,69 @@
 
       <section class="card tabs-card">
         <div class="card-title"><span class="card-title-icon"></span>执行方案</div>
-        <div class="card-sub">按周查看阶段重点，按天执行训练与饮食；可基于复盘结果一键自动调参。</div>
+        <div class="card-sub">按周查看阶段重点，按天查看训练与饮食安排。</div>
 
         <div class="week-picker" id="weekPicker">
-          <button class="week-chip active" onclick="selectWeek(1, event)">第1周</button>
-          <button class="week-chip" onclick="selectWeek(2, event)">第2周</button>
-          <button class="week-chip" onclick="selectWeek(3, event)">第3周</button>
-          <button class="week-chip" onclick="selectWeek(4, event)">第4周</button>
-          <button class="week-chip" onclick="selectWeek(5, event)">第5周</button>
-          <button class="week-chip" onclick="selectWeek(6, event)">第6周</button>
-          <button class="week-chip" onclick="selectWeek(7, event)">第7周</button>
-          <button class="week-chip" onclick="selectWeek(8, event)">第8周</button>
-        </div>
-
-        <div class="phase-link-card">
-          <div class="phase-link-title" id="phaseLinkTitle">第1周 · 阶段1（适应激活）</div>
-          <div class="phase-link-sub" id="phaseLinkSub">
-            本周重点：建立动作质量和训练节奏。你选择的当天任务会直接服务于“动作稳定 + 久坐缓解”目标。
-          </div>
+          <button class="week-chip active" onclick="selectWeek(1, event)">
+            <span class="week-head"><span class="week-icon"></span><span class="week-num">第1周</span></span><span class="week-stage">适应期</span>
+          </button>
+          <button class="week-chip" onclick="selectWeek(2, event)">
+            <span class="week-head"><span class="week-icon"></span><span class="week-num">第2周</span></span><span class="week-stage">适应期</span>
+          </button>
+          <button class="week-chip" onclick="selectWeek(3, event)">
+            <span class="week-head"><span class="week-icon boost"></span><span class="week-num">第3周</span></span><span class="week-stage">强化期</span>
+          </button>
+          <button class="week-chip" onclick="selectWeek(4, event)">
+            <span class="week-head"><span class="week-icon boost"></span><span class="week-num">第4周</span></span><span class="week-stage">强化期</span>
+          </button>
+          <button class="week-chip" onclick="selectWeek(5, event)">
+            <span class="week-head"><span class="week-icon boost"></span><span class="week-num">第5周</span></span><span class="week-stage">强化期</span>
+          </button>
+          <button class="week-chip" onclick="selectWeek(6, event)">
+            <span class="week-head"><span class="week-icon boost"></span><span class="week-num">第6周</span></span><span class="week-stage">强化期</span>
+          </button>
+          <button class="week-chip" onclick="selectWeek(7, event)">
+            <span class="week-head"><span class="week-icon hold"></span><span class="week-num">第7周</span></span><span class="week-stage">巩固期</span>
+          </button>
+          <button class="week-chip" onclick="selectWeek(8, event)">
+            <span class="week-head"><span class="week-icon hold"></span><span class="week-num">第8周</span></span><span class="week-stage">巩固期</span>
+          </button>
         </div>
 
         <div class="week-chart" id="execDayStrip">
           <div class="day-col active" data-day="周一" onclick="selectExecDay('周一', event)">
             <div class="day-label">周一</div>
-            <div class="bar" style="height: 70px"></div>
+            <div class="bar" style="height: 60px"></div>
             <div class="bar-label">力量 A</div>
           </div>
           <div class="day-col" data-day="周二" onclick="selectExecDay('周二', event)">
             <div class="day-label">周二</div>
-            <div class="bar rest" style="height: 20px"></div>
+            <div class="bar rest" style="height: 16px"></div>
             <div class="bar-label">恢复</div>
           </div>
           <div class="day-col" data-day="周三" onclick="selectExecDay('周三', event)">
             <div class="day-label">周三</div>
-            <div class="bar" style="height: 58px"></div>
+            <div class="bar" style="height: 50px"></div>
             <div class="bar-label">心肺 + 体态</div>
           </div>
           <div class="day-col" data-day="周四" onclick="selectExecDay('周四', event)">
             <div class="day-label">周四</div>
-            <div class="bar rest" style="height: 25px"></div>
+            <div class="bar rest" style="height: 20px"></div>
             <div class="bar-label">轻活动</div>
           </div>
           <div class="day-col" data-day="周五" onclick="selectExecDay('周五', event)">
             <div class="day-label">周五</div>
-            <div class="bar" style="height: 75px"></div>
+            <div class="bar" style="height: 64px"></div>
             <div class="bar-label">力量 B</div>
           </div>
           <div class="day-col" data-day="周六" onclick="selectExecDay('周六', event)">
             <div class="day-label">周六</div>
-            <div class="bar rest" style="height: 28px"></div>
+            <div class="bar rest" style="height: 22px"></div>
             <div class="bar-label">快走</div>
           </div>
           <div class="day-col" data-day="周日" onclick="selectExecDay('周日', event)">
             <div class="day-label">周日</div>
-            <div class="bar rest" style="height: 18px"></div>
+            <div class="bar rest" style="height: 15px"></div>
             <div class="bar-label">恢复</div>
           </div>
         </div>
@@ -1384,14 +1601,17 @@
           <button class="main-tab" data-tab="diet" onclick="switchMainTab(event)">
             饮食计划
           </button>
+          <button class="main-tab" data-tab="review" onclick="switchMainTab(event)">
+            进度复盘
+          </button>
         </div>
 
         <div id="panel-train" class="panel">
           <div class="chart-wrap">
             <div class="map-tip" id="trainMapTip">
-              今日训练与阶段关系：第1周周一属于阶段1，重点是动作学习和基础激活，不追求大重量。
+              今日执行提示：动作标准优先，使用基础重量。
             </div>
-            <div class="chart-title" id="trainDayTitle">周一训练动作（点击查看详情）</div>
+            <div class="chart-title" id="trainDayTitle">周一训练动作</div>
             <div class="action-grid" id="actionGrid"></div>
           </div>
         </div>
@@ -1399,18 +1619,39 @@
         <div id="panel-diet" class="panel" style="display: none">
           <div class="diet-grid">
             <div class="macro-card">
-              <div class="map-tip" id="dietMapTip">
-                今日饮食与阶段关系：阶段1以规律进食和蛋白达标为主，帮助适应训练和恢复。
-              </div>
-              <div class="chart-title" id="dietChartTitle">周一营养目标</div>
-              <div class="macro-summary">
-                今日总热量目标：<strong id="dietKcal">1950kcal</strong>
+              <div class="chart-title" id="dietChartTitle">营养目标</div>
+              <div class="macro-summary macro-summary-kcal">
+                <div class="kcal-label">今日总热量目标</div>
+                <div class="kcal-ring">
+                  <div class="kcal-ring-inner">
+                    <div class="kcal-ring-value" id="dietKcal">1950</div>
+                    <div class="kcal-ring-unit">kcal</div>
+                  </div>
+                </div>
               </div>
               <div class="macro-list" id="dietMacroList">
-                <div>蛋白质目标：117g</div>
-                <div>碳水目标：244g</div>
-                <div>脂肪目标：56g</div>
-                <div>饮水目标：2.0L</div>
+                <div class="target-grid">
+                  <div class="target-card target-protein">
+                    <div class="target-head"><span class="target-name">蛋白质目标</span><span class="target-value">117g</span></div>
+                    <div class="target-bar"><span style="width:24%"></span></div>
+                    <div class="target-sub">建议占比约 24%</div>
+                  </div>
+                  <div class="target-card target-carb">
+                    <div class="target-head"><span class="target-name">碳水目标</span><span class="target-value">244g</span></div>
+                    <div class="target-bar"><span style="width:50%"></span></div>
+                    <div class="target-sub">建议占比约 50%</div>
+                  </div>
+                  <div class="target-card target-fat">
+                    <div class="target-head"><span class="target-name">脂肪目标</span><span class="target-value">56g</span></div>
+                    <div class="target-bar"><span style="width:26%"></span></div>
+                    <div class="target-sub">建议占比约 26%</div>
+                  </div>
+                  <div class="target-card target-water">
+                    <div class="target-head"><span class="target-name">饮水目标</span><span class="target-value">2.0L</span></div>
+                    <div class="target-bar"><span style="width:80%"></span></div>
+                    <div class="target-sub">建议分 6-8 次补水</div>
+                  </div>
+                </div>
               </div>
               <div class="macro-summary" id="dietSummaryBox">执行策略：规律进食 + 蛋白达标，减少暴食波动。</div>
               <div class="macro-tips" id="dietTipsBox">
@@ -1419,64 +1660,39 @@
             </div>
 
             <div class="meal-card">
-              <div class="meal-head" id="mealHeadTitle">周一一日食谱（图文）</div>
+              <div class="meal-head" id="mealHeadTitle">一日食谱</div>
               <div class="meal-list" id="mealList"></div>
             </div>
           </div>
         </div>
-      </section>
-
-      <section class="card separate-module">
-        <div class="card-title"><span class="card-title-icon"></span>进度自查 / FAQ</div>
-        <div class="card-sub">每 2 周做一次复盘：先看是否达标，再一键把“调整动作”应用到本周计划。</div>
-        <div class="module-grid">
-          <div>
-            <div class="check-item">
-              <div class="check-title">第 2 周</div>
-              <div class="check-row">
-                <div class="check-tag">达标信号</div>
-                <div class="check-result">每周训练 >= 2 次，肩颈僵硬下降，睡眠更稳。</div>
+        <div id="panel-review" class="panel review-panel" style="display: none">
+          <div class="review-wrap">
+            <div class="module-grid">
+              <div class="check-item">
+                <div class="check-row">
+                  <div class="check-tag">本周应看到的变化</div>
+                  <div class="check-result" id="reviewExpected">动作更熟悉，训练后疲劳感可在 24 小时内恢复。</div>
+                </div>
+                <div class="check-row">
+                  <div class="check-tag">没看到也正常</div>
+                  <div class="check-result" id="reviewNormal">体重变化不明显属于正常，优先看动作质量与训练完成度。</div>
+                </div>
+                <div class="check-row">
+                  <div class="check-tag">建议复测时间</div>
+                  <div class="check-result" id="reviewRetest">第 2 周结束后复测：腰围、体态拍照、主观疲劳度。</div>
+                </div>
               </div>
-              <div class="check-row">
-                <div class="check-tag">未达标动作</div>
-                <div class="check-result">保留 2 次主训练，其他天补 20 分钟快走。</div>
-              </div>
-            </div>
-            <div class="check-item">
-              <div class="check-title">第 4 周</div>
-              <div class="check-row">
-                <div class="check-tag">达标信号</div>
-                <div class="check-result">腰围开始下降，衣物松紧变化明显。</div>
-              </div>
-              <div class="check-row">
-                <div class="check-tag">未达标动作</div>
-                <div class="check-result">先减晚餐油脂与零食，日热量下调 150-200kcal。</div>
-                <button class="adjust-btn" onclick="autoAdjustByWeek(4)">按此调整本周计划</button>
-                <div class="adjust-note" id="adjustStatus4">未应用</div>
+              <div class="faq-wrap">
+                <div class="review-note">
+                  <div class="review-note-title" id="reviewNoteTitle">复盘目的</div>
+                  <div class="review-note-sub" id="reviewFocus">确认本周方案是否按预期产生体感变化，避免只盯体重。</div>
+                </div>
+                <div class="review-note">
+                  <div class="review-note-title">建议关注指标</div>
+                  <div class="review-note-sub" id="reviewMetrics">腰围、体态照片、训练恢复感、睡眠稳定性。</div>
+                </div>
               </div>
             </div>
-            <div class="check-item">
-              <div class="check-title">第 8 周</div>
-              <div class="check-row">
-                <div class="check-tag">达标信号</div>
-                <div class="check-result">体脂与围度改善，恢复更快，可独立安排周计划。</div>
-              </div>
-              <div class="check-row">
-                <div class="check-tag">维持期动作</div>
-                <div class="check-result">每周保留 2 次力量 + 1 次有氧，热量回调维持水平。</div>
-              </div>
-            </div>
-          </div>
-          <div class="faq-wrap">
-            <div class="faq-brief" id="adjustSummary">自动调整记录：未触发。</div>
-            <details class="faq">
-              <summary>这周太忙只能练 1 次，计划是不是作废了？</summary>
-              <p>不会。优先保留 1 次力量训练，其余天补 20-30 分钟快走。</p>
-            </details>
-            <details class="faq">
-              <summary>体重变化不明显，为什么还说有效？</summary>
-              <p>先看体脂率、腰围和体态评分，这些指标更能反映真实进展。</p>
-            </details>
           </div>
         </div>
       </section>
@@ -1906,32 +2122,7 @@
       }
 
       function updatePhaseLink() {
-        const stage = getStageByWeek(currentWeek);
-        const adjustment = getWeekAdjustment(currentWeek);
-        document.getElementById("phaseLinkTitle").textContent = `第${currentWeek}周 · ${stage.id}`;
-        document.getElementById(
-          "phaseLinkSub"
-        ).textContent = adjustment
-          ? `本周重点：${stage.trainFocus}。已应用自动调整：${adjustment.trainText}，${adjustment.dietText}。`
-          : `本周重点：${stage.trainFocus}。你选择的当天任务会直接服务于该阶段目标。`;
-      }
-
-      function autoAdjustByWeek(week) {
-        manualAdjustments[week] = {
-          trainScale: 0.9,
-          kcalDelta: -180,
-          trainText: "训练总量下调约 10%",
-          dietText: "晚餐热量下调约 180kcal",
-        };
-        const status = document.getElementById("adjustStatus4");
-        if (status) status.textContent = `已应用：训练总量 -10%，晚餐热量 -180kcal`;
-        const summary = document.getElementById("adjustSummary");
-        if (summary) summary.textContent = `自动调整记录：第${week}周已应用“训练总量 -10% + 晚餐热量 -180kcal”。`;
-        if (currentWeek === week) {
-          updatePhaseLink();
-          renderTrainActions(currentExecDay);
-          renderDietDay(currentExecDay);
-        }
+        return;
       }
 
       function switchMainTab(event) {
@@ -1940,6 +2131,8 @@
         event.currentTarget.classList.add("active");
         document.getElementById("panel-train").style.display = target === "train" ? "block" : "none";
         document.getElementById("panel-diet").style.display = target === "diet" ? "block" : "none";
+        document.getElementById("panel-review").style.display = target === "review" ? "block" : "none";
+        document.getElementById("execDayStrip").style.display = target === "review" ? "none" : "";
       }
 
       function openAction(name, target, intensity, gear, tips) {
@@ -1965,14 +2158,9 @@
       function renderTrainActions(day) {
         const actions = trainPlan[day] || [];
         const stage = getStageByWeek(currentWeek);
-        const adjustment = getWeekAdjustment(currentWeek);
         const weekProgress = getWeekProgressText(currentWeek);
-        document.getElementById("trainDayTitle").textContent = `第${currentWeek}周 ${day}训练动作（点击查看详情）`;
-        document.getElementById(
-          "trainMapTip"
-        ).textContent = adjustment
-          ? `今日训练与阶段关系：第${currentWeek}周${day}属于${stage.id}，核心是${stage.trainFocus}。${weekProgress} 已自动应用：${adjustment.trainText}。`
-          : `今日训练与阶段关系：第${currentWeek}周${day}属于${stage.id}，核心是${stage.trainFocus}。${weekProgress}`;
+        document.getElementById("trainDayTitle").textContent = `第${currentWeek}周 ${day}训练动作`;
+        document.getElementById("trainMapTip").textContent = `执行焦点：${stage.trainFocus}。今日执行提示：${weekProgress}`;
         const grid = document.getElementById("actionGrid");
         grid.innerHTML = actions
           .map(
@@ -1982,7 +2170,7 @@
                 <div class="action-top">
                   <span class="action-name">${a.name}</span><span class="action-tag">${a.tag}</span>
                 </div>
-                <div class="action-sub">${a.sub} · ${weekProgress}${adjustment ? " · 调整版" : ""}</div>
+                <div class="action-sub">${a.sub} · ${weekProgress}</div>
               </div>
             `
           )
@@ -1993,51 +2181,69 @@
         const data = dietPlan[day];
         if (!data) return;
         const stage = getStageByWeek(currentWeek);
-        document.getElementById("dietChartTitle").textContent = `第${currentWeek}周 ${day}营养目标`;
-        document.getElementById("mealHeadTitle").textContent = `第${currentWeek}周 ${day}一日食谱（图文）`;
+        document.getElementById("dietChartTitle").textContent = "营养目标";
+        document.getElementById("mealHeadTitle").textContent = "一日食谱";
         const baseKcal = Number(String(data.kcal).replace("kcal", ""));
         const adjustment = getWeekAdjustment(currentWeek);
         let weekOffset = 0;
         if (currentWeek >= 3 && currentWeek <= 6) weekOffset = -80;
         if (currentWeek >= 7) weekOffset = -30;
         const adjustedKcal = baseKcal + weekOffset + (adjustment ? adjustment.kcalDelta : 0);
-        document.getElementById("dietKcal").textContent = `${adjustedKcal}kcal`;
+        document.getElementById("dietKcal").textContent = `${adjustedKcal}`;
         const waterTarget = currentWeek <= 2 ? 2.0 : 2.2;
         const targetProtein = Math.max(100, Math.round(adjustedKcal * 0.24 / 4));
         const targetCarb = Math.round(adjustedKcal * 0.5 / 4);
         const targetFat = Math.round(adjustedKcal * 0.26 / 9);
+        const waterBar = Math.min(100, Math.round((waterTarget / 2.5) * 100));
         document.getElementById("dietMacroList").innerHTML = `
-          <div>蛋白质目标：${targetProtein}g</div>
-          <div>碳水目标：${targetCarb}g</div>
-          <div>脂肪目标：${targetFat}g</div>
-          <div>饮水目标：${waterTarget}L</div>
+          <div class="target-grid">
+            <div class="target-card target-protein">
+              <div class="target-head"><span class="target-name">蛋白质目标</span><span class="target-value">${targetProtein}g</span></div>
+              <div class="target-bar"><span style="width:24%"></span></div>
+              <div class="target-sub">建议占比约 24%</div>
+            </div>
+            <div class="target-card target-carb">
+              <div class="target-head"><span class="target-name">碳水目标</span><span class="target-value">${targetCarb}g</span></div>
+              <div class="target-bar"><span style="width:50%"></span></div>
+              <div class="target-sub">建议占比约 50%</div>
+            </div>
+            <div class="target-card target-fat">
+              <div class="target-head"><span class="target-name">脂肪目标</span><span class="target-value">${targetFat}g</span></div>
+              <div class="target-bar"><span style="width:26%"></span></div>
+              <div class="target-sub">建议占比约 26%</div>
+            </div>
+            <div class="target-card target-water">
+              <div class="target-head"><span class="target-name">饮水目标</span><span class="target-value">${waterTarget}L</span></div>
+              <div class="target-bar"><span style="width:${waterBar}%"></span></div>
+              <div class="target-sub">建议分 6-8 次补水</div>
+            </div>
+          </div>
         `;
         document.getElementById(
           "dietSummaryBox"
-        ).textContent = `执行策略：${stage.dietFocus}${adjustment ? "（已自动下调晚餐热量）" : ""}。`;
+        ).textContent = `执行策略：${stage.dietFocus}${adjustment ? "（已自动下调晚餐热量）" : ""}；按计划完成${day}餐次，主餐优先蛋白，晚间不过量。`;
         document.getElementById("dietTipsBox").innerHTML =
           '<div class="macro-tip">说明：以上为方案目标值，不代表用户实际执行结果。</div>';
-        document.getElementById(
-          "dietMapTip"
-        ).textContent = `今日饮食与阶段关系：第${currentWeek}周${day}属于${stage.id}，本日策略是“${stage.dietFocus}”。`;
         document.getElementById("mealList").innerHTML = data.meals
           .map(
             (m, idx) => `
               <div class="meal-item" onclick="openMeal('${day}', ${idx})">
-                <div class="meal-item-top">
-                  <div class="meal-time">${m.time}</div>
-                  <div>
-                    <span class="meal-badge ${mealTypeFromTime(m.time)}">${mealLabelFromTime(m.time)}</span>
-                    <span class="meal-macro-chip">约 ${calcMealKcal(m.macro)}kcal</span>
-                  </div>
-                </div>
                 <div class="meal-content">
                   <div class="meal-photo" style="background-image:url('https://images.unsplash.com/photo-1512621776951-a57141f2eefd?auto=format&fit=crop&w=700&q=80');"><span>${m.photo}</span></div>
-                  <div class="meal-main">
-                    <div class="meal-text">${m.text}</div>
-                    <div class="meal-goal">这餐目标：${getMealGoalText(m)}</div>
+                  <div class="meal-info">
+                    <div class="meal-meta">
+                      <div class="meal-time">${m.time}</div>
+                      <div class="meal-meta-right">
+                        <span class="meal-badge ${mealTypeFromTime(m.time)}">${mealLabelFromTime(m.time)}</span>
+                        <span class="meal-macro-chip">约 ${calcMealKcal(m.macro)}kcal</span>
+                      </div>
+                    </div>
+                    <div class="meal-main">
+                      <div class="meal-text">${m.text}</div>
+                      <div class="meal-goal">${getMealGoalText(m)}</div>
+                    </div>
+                    <div class="meal-macro">${formatMacroBrief(m.macro)}</div>
                   </div>
-                  <div class="meal-macro">${formatMacroBrief(m.macro)}</div>
                 </div>
               </div>
             `
@@ -2089,6 +2295,92 @@
         return { p, c, f };
       }
 
+      function getReviewContentByWeek(week) {
+        const weekMap = {
+          1: {
+            expected: "动作更熟悉，训练后疲劳感可在 24 小时内恢复。",
+            normal: "体重变化不明显属于正常，先看动作质量和训练完成度。",
+            retest: "第 2 周结束后复测：腰围、体态拍照、主观疲劳度。",
+            focus: "建立执行节奏，不急于追求体重变化。",
+            metrics: "动作标准度、肩颈僵硬感、恢复速度、睡眠稳定性。",
+          },
+          2: {
+            expected: "训练动作更稳定，心肺不适感下降。",
+            normal: "围度变化较小属于正常，适应期以稳定完成计划为主。",
+            retest: "本周末复测：腰围、体态照片、训练后恢复感。",
+            focus: "确认适应阶段完成，为后续强化做准备。",
+            metrics: "动作流畅度、训练完成率、疲劳恢复时长。",
+          },
+          3: {
+            expected: "训练量上来后，日常体感更轻快。",
+            normal: "体重短期波动正常，重点看腰围和衣物松紧。",
+            retest: "第 4 周结束后复测：腰围、体态照片、心肺耐受。",
+            focus: "进入强化阶段，观察围度与体态早期变化。",
+            metrics: "腰围、衣物松紧、楼梯体感、训练耐受。",
+          },
+          4: {
+            expected: "腰围或体态开始出现更清晰变化。",
+            normal: "单周波动正常，不需要频繁更换方案。",
+            retest: "本周末复测：腰围、体态拍照、恢复质量。",
+            focus: "确认减脂强化阶段的首轮变化是否出现。",
+            metrics: "腰围变化、体态照片、训练后疲劳恢复。",
+          },
+          5: {
+            expected: "力量与心肺耐受继续提升，动作质量更稳定。",
+            normal: "变化速度放缓正常，属于中期平台波动。",
+            retest: "第 6 周结束后复测：围度、体态、主观强度。",
+            focus: "强化期中段，稳住执行质量和恢复节奏。",
+            metrics: "围度、动作稳定性、睡眠与疲劳感。",
+          },
+          6: {
+            expected: "围度与外观变化应更容易感知。",
+            normal: "体重并非唯一指标，围度和体态更关键。",
+            retest: "本周末复测：腰围、体脂率、体态对比照。",
+            focus: "完成强化阶段收口，准备进入巩固期。",
+            metrics: "腰围、体态对比、恢复时长、执行稳定性。",
+          },
+          7: {
+            expected: "体态稳定性提升，训练后的恢复更顺畅。",
+            normal: "变化速度降低正常，当前重点是稳住成果。",
+            retest: "第 8 周结束后复测：腰围、体态、生活习惯稳定度。",
+            focus: "巩固已获得成果，降低反弹风险。",
+            metrics: "体态稳定性、围度维持、恢复与睡眠质量。",
+          },
+          8: {
+            expected: "体态与围度成果趋于稳定，可独立执行计划。",
+            normal: "冲刺期结束后变化趋缓是正常现象。",
+            retest: "本周末完成总结复测：腰围、体脂率、体态对比照。",
+            focus: "完成阶段总结，形成长期可执行的维护方案。",
+            metrics: "腰围、体脂率、体态照片、习惯可持续性。",
+          },
+        };
+        const data = weekMap[week] || weekMap[1];
+        return {
+          title: "复盘要点",
+          expected: data.expected,
+          normal: data.normal,
+          retest: data.retest,
+          focusTitle: "复盘目的",
+          focus: data.focus,
+          metrics: data.metrics,
+        };
+      }
+
+      function renderReviewModule() {
+        const review = getReviewContentByWeek(currentWeek);
+        const setText = (id, text) => {
+          const el = document.getElementById(id);
+          if (el) el.textContent = text;
+        };
+        setText("reviewWeekTitle", review.title);
+        setText("reviewExpected", review.expected);
+        setText("reviewNormal", review.normal);
+        setText("reviewRetest", review.retest);
+        setText("reviewNoteTitle", review.focusTitle);
+        setText("reviewFocus", review.focus);
+        setText("reviewMetrics", review.metrics);
+      }
+
       function mealTypeFromTime(time) {
         const hour = parseInt(time.split(":")[0], 10);
         if (hour < 10) return "breakfast";
@@ -2119,6 +2411,7 @@
         updatePhaseLink();
         renderTrainActions(currentExecDay);
         renderDietDay(currentExecDay);
+        renderReviewModule();
       }
 
       function openMeal(day, idx) {
@@ -2160,6 +2453,7 @@
       renderTrainActions(currentExecDay);
       renderDietDay(currentExecDay);
       updatePhaseLink();
+      renderReviewModule();
     </script>
   </body>
 </html>
