@@ -1,0 +1,2728 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <title>VISBODY 训练大纲 - 深色版</title>
+    <style>
+      :root {
+        --bg-start: #0a0e27;
+        --bg-end: #131a3a;
+        --card: rgba(20, 30, 60, 0.7);
+        --card-border: rgba(100, 140, 255, 0.12);
+        --line: rgba(100, 140, 255, 0.1);
+        --text: #e8ecf4;
+        --sub: #7a8baa;
+        --primary: #00e5ff;
+        --primary-soft: rgba(0, 229, 255, 0.1);
+        --primary-glow: rgba(0, 229, 255, 0.3);
+        --green: #36cfc9;
+        --green-soft: rgba(54, 207, 201, 0.12);
+        --orange: #ff9b37;
+        --orange-soft: rgba(255, 155, 55, 0.12);
+        --purple: #a78bfa;
+        --purple-soft: rgba(167, 139, 250, 0.12);
+        --blue: #5B8FF9;
+        --blue-soft: rgba(91, 143, 249, 0.12);
+        --warm: #f59e0b;
+        --warm-soft: rgba(245, 158, 11, 0.12);
+        --red: #ff4d6a;
+        --radius-lg: 16px;
+        --radius-md: 10px;
+        --radius-sm: 8px;
+        --radius-xs: 4px;
+        --pad-card: 14px;
+        --shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+        --blur: blur(12px);
+      }
+
+      * {
+        box-sizing: border-box;
+        -webkit-tap-highlight-color: transparent;
+      }
+
+      html {
+        -webkit-text-size-adjust: 100%;
+      }
+
+      body {
+        margin: 0;
+        font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "PingFang SC",
+          "Microsoft YaHei", sans-serif;
+        background:
+          radial-gradient(ellipse at 20% 0%, rgba(0, 229, 255, 0.06) 0%, transparent 50%),
+          radial-gradient(ellipse at 80% 100%, rgba(120, 80, 255, 0.05) 0%, transparent 50%),
+          linear-gradient(170deg, #060a1e 0%, #0d1230 40%, #141e42 100%);
+        background-attachment: fixed;
+        color: var(--text);
+        min-height: 100vh;
+        overflow-x: hidden;
+      }
+
+      ::-webkit-scrollbar {
+        width: 4px;
+        height: 4px;
+      }
+      ::-webkit-scrollbar-track {
+        background: rgba(20, 30, 60, 0.4);
+      }
+      ::-webkit-scrollbar-thumb {
+        background: rgba(0, 229, 255, 0.25);
+        border-radius: var(--radius-xs);
+      }
+
+      .container {
+        max-width: 420px;
+        margin: 0 auto;
+        padding: 16px;
+        position: relative;
+      }
+
+      .container::before {
+        content: "";
+        position: absolute;
+        top: -40px;
+        right: -60px;
+        width: 180px;
+        height: 180px;
+        border-radius: 999px;
+        background: radial-gradient(circle, rgba(167, 139, 250, 0.12) 0%, rgba(255, 107, 203, 0.06) 50%, transparent 70%);
+        filter: blur(40px);
+        pointer-events: none;
+        z-index: 0;
+      }
+
+      .container::after {
+        content: "";
+        position: absolute;
+        top: 600px;
+        left: -80px;
+        width: 200px;
+        height: 200px;
+        border-radius: 999px;
+        background: radial-gradient(circle, rgba(0, 229, 255, 0.08) 0%, rgba(0, 120, 255, 0.04) 50%, transparent 70%);
+        filter: blur(50px);
+        pointer-events: none;
+        z-index: 0;
+      }
+
+      /* ===== Hero ===== */
+      .top-hero {
+        background: linear-gradient(135deg, rgba(0, 229, 255, 0.12) 0%, rgba(120, 80, 255, 0.06) 50%, rgba(20, 30, 80, 0.9) 100%);
+        border: 1px solid rgba(0, 229, 255, 0.2);
+        border-radius: var(--radius-lg);
+        color: #fff;
+        padding: 16px;
+        box-shadow: 0 0 30px rgba(0, 229, 255, 0.06), inset 0 0 0 1px rgba(255,255,255,0.03);
+        backdrop-filter: var(--blur);
+      }
+
+      .hero-row {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        gap: 8px;
+        flex-wrap: wrap;
+      }
+
+      .hero-title {
+        font-size: 22px;
+        font-weight: 800;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        background: linear-gradient(135deg, #fff 0%, #00e5ff 40%, #a78bfa 70%, #ff6bcb 100%);
+        background-size: 200% auto;
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        animation: heroShimmer 4s ease-in-out infinite alternate;
+        letter-spacing: 1px;
+        text-shadow: none;
+        position: relative;
+      }
+
+      @keyframes heroShimmer {
+        0% { background-position: 0% center; }
+        100% { background-position: 100% center; }
+      }
+
+      .hero-icon {
+        width: 28px;
+        height: 28px;
+        border-radius: 999px;
+        background: linear-gradient(135deg, #00e5ff 0%, #a78bfa 50%, #ff6bcb 100%);
+        box-shadow: 0 0 16px rgba(167, 139, 250, 0.4), 0 0 6px var(--primary-glow);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 14px;
+      }
+
+      .hero-sub {
+        margin-top: 4px;
+        color: var(--sub);
+        font-size: 12px;
+      }
+
+      .hero-badge {
+        padding: 6px 10px;
+        background: linear-gradient(135deg, rgba(0, 229, 255, 0.1), rgba(167, 139, 250, 0.08));
+        border: 1px solid rgba(167, 139, 250, 0.25);
+        border-radius: 999px;
+        font-size: 11px;
+        color: #c4b5fd;
+        white-space: nowrap;
+      }
+
+      .hero-metrics {
+        margin-top: 12px;
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 8px;
+      }
+
+      .metric {
+        background: rgba(0, 229, 255, 0.05);
+        border: 1px solid rgba(0, 229, 255, 0.12);
+        border-radius: var(--radius-md);
+        padding: 8px 10px;
+      }
+
+      .metric:nth-child(2) {
+        border-color: rgba(167, 139, 250, 0.15);
+        background: rgba(167, 139, 250, 0.05);
+      }
+
+      .metric:nth-child(2) .metric-value {
+        background: linear-gradient(90deg, #a78bfa, #c084fc);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+      }
+
+      .metric:nth-child(3) {
+        border-color: rgba(245, 158, 11, 0.15);
+        background: rgba(245, 158, 11, 0.05);
+      }
+
+      .metric:nth-child(3) .metric-value {
+        background: linear-gradient(90deg, var(--warm), #fbbf24);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+      }
+
+      .metric-label {
+        font-size: 10px;
+        color: var(--sub);
+      }
+
+      .metric-value {
+        margin-top: 3px;
+        font-size: 15px;
+        font-weight: 700;
+        background: linear-gradient(90deg, #00e5ff, #a78bfa);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+      }
+
+      /* ===== Section / Grid ===== */
+      .section {
+        margin-top: 12px;
+      }
+
+      .grid-2 {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 12px;
+      }
+
+      .card {
+        background: var(--card);
+        border: 1px solid var(--card-border);
+        border-radius: var(--radius-lg);
+        box-shadow: var(--shadow);
+        padding: var(--pad-card);
+        backdrop-filter: var(--blur);
+        position: relative;
+        overflow: hidden;
+      }
+
+      .card::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 2px;
+        background: linear-gradient(90deg, transparent 0%, rgba(0, 229, 255, 0.25) 30%, rgba(167, 139, 250, 0.2) 70%, transparent 100%);
+      }
+
+      .card-title {
+        font-size: 17px;
+        font-weight: 800;
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        padding: 0;
+        border-radius: 0;
+        background: transparent;
+        color: #fff;
+        letter-spacing: 0.5px;
+        position: relative;
+      }
+
+      .card-title::after {
+        content: "";
+        display: block;
+        position: absolute;
+        left: 0;
+        bottom: -4px;
+        width: 28px;
+        height: 3px;
+        border-radius: 2px;
+        background: linear-gradient(90deg, var(--primary), #7c5cfc);
+        box-shadow: 0 0 8px var(--primary-glow);
+      }
+
+      .card-title-icon {
+        width: 16px;
+        height: 16px;
+        border-radius: 0;
+        background-color: var(--primary);
+        -webkit-mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1024 1024'%3E%3Cpath d='M896 160H128a32 32 0 0 0-32 32v640a32 32 0 0 0 32 32h768a32 32 0 0 0 32-32V192a32 32 0 0 0-32-32zM192 736V288h640v448H192zm96-320h128v96H288v-96zm192 0h256v64H480v-64zm0 128h256v64H480v-64z'/%3E%3C/svg%3E");
+        mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1024 1024'%3E%3Cpath d='M896 160H128a32 32 0 0 0-32 32v640a32 32 0 0 0 32 32h768a32 32 0 0 0 32-32V192a32 32 0 0 0-32-32zM192 736V288h640v448H192zm96-320h128v96H288v-96zm192 0h256v64H480v-64zm0 128h256v64H480v-64z'/%3E%3C/svg%3E");
+        -webkit-mask-size: contain;
+        mask-size: contain;
+        -webkit-mask-repeat: no-repeat;
+        mask-repeat: no-repeat;
+        -webkit-mask-position: center;
+        mask-position: center;
+      }
+
+      .card-sub {
+        margin-top: 6px;
+        font-size: 12px;
+        color: var(--sub);
+      }
+
+      /* ===== Compare ===== */
+      .compare-card {
+        margin-top: 10px;
+        border: none;
+        border-radius: 0;
+        background: transparent;
+        padding: 0;
+      }
+
+      .compare-title {
+        font-size: 12px;
+        color: var(--text);
+        font-weight: 700;
+        margin-bottom: 8px;
+      }
+
+      .compare-visual {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 8px;
+      }
+
+      .compare-item {
+        border: 1px solid rgba(100, 140, 255, 0.12);
+        border-radius: 10px;
+        background: rgba(15, 22, 50, 0.6);
+        padding: 8px;
+      }
+
+      .compare-label {
+        font-size: 11px;
+        color: var(--sub);
+        margin-bottom: 6px;
+      }
+
+      .silhouette {
+        height: 80px;
+        border-radius: var(--radius-sm);
+        background-size: cover;
+        background-position: center;
+        position: relative;
+        overflow: hidden;
+      }
+
+      .silhouette::after {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(to top, rgba(6, 10, 30, 0.7) 0%, transparent 60%);
+      }
+
+      .silhouette.before {
+        background-image: url("./body-model.png");
+      }
+
+      .silhouette.after {
+        background-image: url("./body-model.png");
+      }
+
+      .compare-tags {
+        margin-top: 6px;
+        display: flex;
+        gap: 4px;
+        flex-wrap: wrap;
+      }
+
+      /* ===== Goals ===== */
+      .goal-list {
+        margin-top: 10px;
+        display: grid;
+        gap: 8px;
+      }
+
+      .goal-item {
+        border: 1px solid rgba(0, 229, 255, 0.12);
+        border-radius: var(--radius-md);
+        padding: 10px 12px;
+        background: rgba(0, 229, 255, 0.04);
+        position: relative;
+        overflow: hidden;
+      }
+
+      .goal-head {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 8px;
+      }
+
+      .goal-name {
+        font-size: 13px;
+        font-weight: 600;
+        color: var(--text);
+      }
+
+      .goal-value {
+        font-size: 11px;
+        font-weight: 600;
+        padding: 2px 8px;
+        border-radius: 999px;
+        white-space: nowrap;
+      }
+
+      .goal-item:nth-child(1) .goal-value {
+        color: var(--primary);
+        background: rgba(0, 229, 255, 0.1);
+        border: 1px solid rgba(0, 229, 255, 0.2);
+      }
+
+      .goal-item:nth-child(2) .goal-value {
+        color: var(--warm);
+        background: rgba(245, 158, 11, 0.1);
+        border: 1px solid rgba(245, 158, 11, 0.25);
+      }
+
+      .goal-item:nth-child(3) .goal-value {
+        color: var(--green);
+        background: rgba(54, 207, 201, 0.1);
+        border: 1px solid rgba(54, 207, 201, 0.2);
+      }
+
+      .goal-why {
+        margin-top: 4px;
+        font-size: 11px;
+        color: var(--sub);
+      }
+
+      /* ===== Pills ===== */
+      .pill {
+        padding: 2px 8px;
+        border-radius: 999px;
+        font-size: 10px;
+      }
+
+      .pill.blue {
+        background: var(--primary-soft);
+        color: var(--primary);
+      }
+
+      .pill.green {
+        background: var(--green-soft);
+        color: var(--green);
+      }
+
+      .pill.orange {
+        background: var(--warm-soft);
+        color: var(--warm);
+      }
+
+      /* ===== Phases (horizontal scroll + image) ===== */
+      .phase-track-scroll {
+        margin-top: 10px;
+        display: flex;
+        gap: 10px;
+        overflow-x: auto;
+        padding: 4px 2px 12px;
+        -webkit-overflow-scrolling: touch;
+        scrollbar-width: none;
+      }
+
+      .phase-track-scroll::-webkit-scrollbar {
+        display: none;
+      }
+
+      .phase-card {
+        flex: 0 0 200px;
+        width: 200px;
+        height: 120px;
+        border-radius: var(--radius-md);
+        overflow: hidden;
+        position: relative;
+      }
+
+      .phase-card-bg {
+        position: absolute;
+        inset: 0;
+        background-size: cover;
+        background-position: center;
+      }
+
+      .phase-card-1 .phase-card-bg {
+        background-image: url("https://images.unsplash.com/photo-1517963879433-6ad2b056d712?auto=format&fit=crop&w=400&q=80");
+      }
+
+      .phase-card-2 .phase-card-bg {
+        background-image: url("https://images.pexels.com/photos/1552252/pexels-photo-1552252.jpeg?auto=compress&cs=tinysrgb&w=400");
+      }
+
+      .phase-card-3 .phase-card-bg {
+        background-image: url("https://images.pexels.com/photos/1552242/pexels-photo-1552242.jpeg?auto=compress&cs=tinysrgb&w=400");
+      }
+
+      .phase-card-overlay {
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(to top, rgba(6, 10, 30, 0.92) 0%, rgba(10, 14, 39, 0.5) 45%, transparent 75%);
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-end;
+        padding: 10px;
+        gap: 4px;
+      }
+
+      .phase-card-week {
+        font-size: 10px;
+        font-weight: 600;
+        color: var(--primary);
+        padding: 1px 6px;
+        border-radius: 999px;
+        background: rgba(0, 229, 255, 0.2);
+        border: 1px solid rgba(0, 229, 255, 0.3);
+        width: fit-content;
+      }
+
+      .phase-card-2 .phase-card-week {
+        color: var(--warm);
+        background: rgba(245, 158, 11, 0.2);
+        border-color: rgba(245, 158, 11, 0.3);
+      }
+
+      .phase-card-3 .phase-card-week {
+        color: var(--purple);
+        background: rgba(167, 139, 250, 0.2);
+        border-color: rgba(167, 139, 250, 0.3);
+      }
+
+      .phase-card-name {
+        font-size: 13px;
+        font-weight: 700;
+        color: #fff;
+      }
+
+      .phase-card-brief {
+        font-size: 11px;
+        color: rgba(200, 212, 230, 0.9);
+      }
+
+      /* ===== Tabs Card ===== */
+      .tabs-card {
+        margin-top: 12px;
+      }
+
+      /* ===== Level 1: Week Picker (primary) ===== */
+      .week-picker {
+        margin-top: 0;
+        display: flex;
+        gap: 8px;
+        overflow-x: auto;
+        padding: 4px 2px 10px;
+        -webkit-overflow-scrolling: touch;
+        scrollbar-width: none;
+      }
+      .week-picker::-webkit-scrollbar {
+        display: none;
+      }
+
+      .week-chip {
+        border: 1px solid rgba(100, 140, 255, 0.2);
+        background: rgba(20, 30, 60, 0.5);
+        color: var(--sub);
+        border-radius: 999px;
+        min-width: 56px;
+        padding: 8px 12px;
+        cursor: pointer;
+        position: relative;
+        transition: 0.2s;
+        text-align: center;
+        flex: 0 0 auto;
+        backdrop-filter: var(--blur);
+      }
+
+      .week-chip.active {
+        background: linear-gradient(135deg, rgba(0, 229, 255, 0.2), rgba(120, 80, 255, 0.15));
+        color: var(--primary);
+        border-color: rgba(0, 229, 255, 0.5);
+        box-shadow: 0 0 20px var(--primary-glow), inset 0 0 0 1px rgba(0, 229, 255, 0.1);
+        font-weight: 700;
+      }
+
+      .week-chip.active::after {
+        content: "";
+        position: absolute;
+        left: 50%;
+        transform: translateX(-50%);
+        bottom: -6px;
+        border-left: 5px solid transparent;
+        border-right: 5px solid transparent;
+        border-top: 5px solid rgba(0, 229, 255, 0.6);
+      }
+
+      .week-num {
+        display: block;
+        font-size: 12px;
+        font-weight: 700;
+        line-height: 1.2;
+      }
+
+      .week-stage {
+        display: none;
+      }
+
+      .week-chip.active .week-stage {
+        color: rgba(0, 229, 255, 0.7);
+      }
+
+      .week-head {
+        display: flex;
+        align-items: center;
+        gap: 4px;
+        justify-content: center;
+      }
+
+      .week-icon {
+        width: 14px;
+        height: 14px;
+        border-radius: var(--radius-xs);
+        border: 1px solid rgba(100, 140, 255, 0.2);
+        background: rgba(0, 229, 255, 0.1);
+        display: inline-block;
+        position: relative;
+        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1024 1024'%3E%3Cpath fill='%2300e5ff' d='M512 96l320 128v224c0 198-128 373-320 480C320 821 192 646 192 448V224L512 96zm0 96l-224 90v166c0 147 88 283 224 373 136-90 224-226 224-373V282L512 192z'/%3E%3C/svg%3E");
+        background-size: 10px 10px;
+        background-position: center;
+        background-repeat: no-repeat;
+      }
+
+      .week-icon::after {
+        content: none;
+      }
+
+      .week-icon.boost {
+        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1024 1024'%3E%3Cpath fill='%2336cfc9' d='M576 64L224 576h224l-64 384 416-544H576z'/%3E%3C/svg%3E");
+      }
+
+      .week-icon.boost::after {
+        content: none;
+      }
+
+      .week-icon.hold {
+        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1024 1024'%3E%3Cpath fill='%23ff9b37' d='M512 96l320 128v224c0 198-128 373-320 480C320 821 192 646 192 448V224L512 96zm-48 450l-88-88-68 68 156 156 252-252-68-68-184 184z'/%3E%3C/svg%3E");
+      }
+
+      .week-icon.hold::after {
+        content: none;
+      }
+
+      .week-chip.active .week-icon {
+        border-color: rgba(0, 229, 255, 0.3);
+        background-color: rgba(0, 229, 255, 0.15);
+      }
+
+      .week-chip.active .week-icon::after {
+        content: none;
+      }
+
+      /* ===== Level 2: Day Strip (secondary) ===== */
+      .week-chart {
+        margin-top: 6px;
+        display: flex;
+        gap: 5px;
+        overflow-x: auto;
+        padding-bottom: 4px;
+        -webkit-overflow-scrolling: touch;
+        scrollbar-width: none;
+      }
+      .week-chart::-webkit-scrollbar {
+        display: none;
+      }
+
+      .day-col {
+        border: 1px solid rgba(100, 140, 255, 0.1);
+        border-radius: var(--radius-sm);
+        padding: 3px 3px;
+        text-align: center;
+        background: rgba(15, 22, 50, 0.3);
+        cursor: pointer;
+        transition: 0.15s;
+        flex: 1 0 0;
+        min-width: 44px;
+      }
+
+      .day-col:hover {
+        border-color: rgba(0, 229, 255, 0.25);
+        background: rgba(0, 229, 255, 0.03);
+      }
+
+      .day-col.active {
+        border-color: rgba(0, 229, 255, 0.35);
+        background: rgba(0, 229, 255, 0.06);
+        box-shadow: 0 0 8px rgba(0, 229, 255, 0.08);
+      }
+
+      .day-col.active .bar-label {
+        color: var(--primary);
+      }
+
+      .day-label {
+        font-size: 9px;
+        color: rgba(122, 139, 170, 0.85);
+      }
+
+      .bar {
+        margin: 3px auto 2px;
+        width: 6px;
+        border-radius: var(--radius-xs);
+        background: linear-gradient(180deg, #00e5ff, #7c5cfc);
+        box-shadow: 0 0 6px rgba(0, 229, 255, 0.2);
+      }
+
+      .bar.rest {
+        background: linear-gradient(180deg, rgba(100, 140, 255, 0.25), rgba(100, 140, 255, 0.1));
+        box-shadow: none;
+      }
+
+      .bar-label {
+        font-size: 9px;
+        font-weight: 600;
+        color: var(--text);
+      }
+
+      /* ===== Level 3: Main Tabs (tertiary - content type) ===== */
+      .main-tabs {
+        display: flex;
+        gap: 6px;
+        margin-top: 10px;
+        padding: 4px;
+        border-radius: var(--radius-sm);
+        background: rgba(15, 22, 50, 0.5);
+        border: 1px solid rgba(100, 140, 255, 0.08);
+      }
+
+      .main-tab {
+        flex: 1;
+        border: none;
+        background: transparent;
+        color: var(--sub);
+        border-radius: 6px;
+        font-size: 12px;
+        font-weight: 600;
+        padding: 8px 10px;
+        cursor: pointer;
+        transition: 0.2s;
+      }
+
+      .main-tab.active[data-tab="train"] {
+        background: rgba(0, 229, 255, 0.15);
+        color: var(--primary);
+        box-shadow: 0 0 0 1px rgba(0, 229, 255, 0.25);
+      }
+
+      .main-tab.active[data-tab="diet"] {
+        background: rgba(91, 143, 249, 0.15);
+        color: var(--blue);
+        box-shadow: 0 0 0 1px rgba(91, 143, 249, 0.25);
+      }
+
+      .main-tab.active[data-tab="review"] {
+        background: rgba(167, 139, 250, 0.15);
+        color: var(--purple);
+        box-shadow: 0 0 0 1px rgba(167, 139, 250, 0.25);
+      }
+
+      /* Panel content color by active tab */
+      #tabsCard[data-active="train"] #panel-train .map-tip { border-left-color: rgba(0, 229, 255, 0.25); color: rgba(200, 212, 230, 0.9); }
+      #tabsCard[data-active="train"] #panel-train .chart-title { color: var(--primary); }
+      #tabsCard[data-active="train"] #panel-train .action { border-color: rgba(0, 229, 255, 0.15); }
+      #tabsCard[data-active="train"] #panel-train .action:hover { border-color: rgba(0, 229, 255, 0.35); }
+
+      #tabsCard[data-active="diet"] #panel-diet .chart-title,
+      #tabsCard[data-active="diet"] #panel-diet .meal-head { color: var(--blue); }
+      #tabsCard[data-active="diet"] #panel-diet .macro-tip { border-left-color: rgba(91, 143, 249, 0.25); }
+      #tabsCard[data-active="diet"] #panel-diet .kcal-ring { box-shadow: 0 0 20px rgba(91, 143, 249, 0.2); }
+      #tabsCard[data-active="diet"] #panel-diet .kcal-ring-value { background: linear-gradient(90deg, var(--blue), #8ab4f8); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+
+      #tabsCard[data-active="review"] #panel-review .chart-title { color: var(--purple); }
+      #tabsCard[data-active="review"] #panel-review .check-tag { color: var(--purple); }
+      #tabsCard[data-active="review"] #panel-review .review-week-badge { border-color: rgba(167, 139, 250, 0.3); color: var(--purple); background: rgba(167, 139, 250, 0.1); }
+      #tabsCard[data-active="review"] #panel-review .check-item { border-bottom-color: rgba(167, 139, 250, 0.08); }
+
+      /* ===== Panel ===== */
+      .panel {
+        margin-top: 10px;
+      }
+
+      .chart-wrap {
+        border: none;
+        border-radius: 0;
+        padding: 0;
+        background: transparent;
+      }
+
+      .map-tip {
+        margin-bottom: 8px;
+        font-size: 12px;
+        font-weight: 500;
+        color: rgba(200, 212, 230, 0.9);
+        background: transparent;
+        border: none;
+        border-left: 3px solid rgba(100, 140, 255, 0.2);
+        border-radius: 0;
+        padding: 4px 8px;
+        line-height: 1.5;
+      }
+
+      .chart-title {
+        font-size: 14px;
+        font-weight: 700;
+        color: var(--text);
+        padding-left: 12px;
+        position: relative;
+      }
+
+      .chart-title::before {
+        content: "";
+        position: absolute;
+        left: 0;
+        top: 50%;
+        transform: translateY(-50%);
+        width: 4px;
+        height: 14px;
+        border-radius: 2px;
+        background: linear-gradient(180deg, var(--primary), var(--blue));
+      }
+
+      #dietChartTitle::before {
+        background: linear-gradient(180deg, var(--blue), var(--purple));
+      }
+
+      #trainDayTitle::before {
+        background: linear-gradient(180deg, var(--primary), var(--blue));
+      }
+
+
+      /* ===== Action Grid (single column on mobile) ===== */
+      .action-grid {
+        margin-top: 8px;
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 10px;
+      }
+
+      .action {
+        border: 1px solid var(--card-border);
+        border-radius: 12px;
+        padding: 0;
+        background: rgba(15, 22, 50, 0.6);
+        cursor: pointer;
+        transition: 0.15s;
+        overflow: hidden;
+        backdrop-filter: var(--blur);
+      }
+
+      .action:hover {
+        border-color: rgba(0, 229, 255, 0.3);
+      }
+
+      .action-top {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 6px;
+        padding: 8px 10px 0;
+      }
+
+      .action-thumb {
+        border-radius: 12px 12px 0 0;
+        height: 140px;
+        background-size: cover;
+        background-position: center;
+        position: relative;
+        overflow: hidden;
+      }
+
+      .action-thumb::after {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(to top, rgba(6, 10, 30, 0.85) 0%, rgba(10, 14, 39, 0.4) 40%, transparent 70%);
+      }
+
+      .action-thumb span {
+        position: absolute;
+        left: 8px;
+        bottom: 6px;
+        z-index: 1;
+        color: rgba(232, 236, 244, 0.8);
+        font-size: 11px;
+        font-weight: 500;
+      }
+
+      .action-name {
+        font-size: 13px;
+        font-weight: 600;
+        color: var(--text);
+      }
+
+      .action-tag {
+        font-size: 10px;
+        border-radius: 999px;
+        padding: 2px 8px;
+        border: 1px solid transparent;
+      }
+
+      .action-tag.tag-power {
+        background: rgba(0, 229, 255, 0.12);
+        color: var(--primary);
+        border-color: rgba(0, 229, 255, 0.25);
+      }
+
+      .action-tag.tag-core {
+        background: rgba(251, 191, 36, 0.15);
+        color: #fbbf24;
+        border-color: rgba(251, 191, 36, 0.3);
+      }
+
+      .action-tag.tag-cardio {
+        background: rgba(249, 115, 22, 0.15);
+        color: #f97316;
+        border-color: rgba(249, 115, 22, 0.3);
+      }
+
+      .action-tag.tag-recovery {
+        background: rgba(54, 207, 201, 0.12);
+        color: var(--green);
+        border-color: rgba(54, 207, 201, 0.25);
+      }
+
+      .action-tag.tag-stretch {
+        background: rgba(91, 143, 249, 0.12);
+        color: var(--blue);
+        border-color: rgba(91, 143, 249, 0.25);
+      }
+
+      .action-tag.tag-posture {
+        background: rgba(167, 139, 250, 0.12);
+        color: var(--purple);
+        border-color: rgba(167, 139, 250, 0.25);
+      }
+
+      .action-tag.tag-light {
+        background: rgba(148, 163, 184, 0.12);
+        color: #94a3b8;
+        border-color: rgba(148, 163, 184, 0.2);
+      }
+
+      .action-tag.tag-default {
+        background: rgba(0, 229, 255, 0.1);
+        color: var(--primary);
+        border-color: rgba(0, 229, 255, 0.2);
+      }
+
+      .action-sub {
+        margin-top: 4px;
+        font-size: 11px;
+        color: var(--sub);
+        padding: 0 10px 10px;
+      }
+
+      /* ===== Diet ===== */
+      .diet-grid {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 10px;
+      }
+
+      .day-switch {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 6px;
+        margin-bottom: 10px;
+      }
+
+      .day-chip {
+        border: 1px solid var(--card-border);
+        background: rgba(15, 22, 50, 0.5);
+        color: var(--sub);
+        border-radius: 999px;
+        font-size: 12px;
+        padding: 4px 10px;
+        cursor: pointer;
+      }
+
+      .day-chip.active {
+        background: rgba(0, 229, 255, 0.12);
+        color: var(--primary);
+        border-color: rgba(0, 229, 255, 0.3);
+      }
+
+      .macro-card {
+        border: none;
+        border-radius: 0;
+        background: transparent;
+        padding: 0;
+      }
+
+      .macro-list {
+        margin-top: 8px;
+        font-size: 12px;
+        color: var(--sub);
+        line-height: 1.6;
+      }
+
+      .target-grid {
+        display: grid;
+        gap: 6px;
+      }
+
+      .target-card {
+        border: none;
+        border-radius: 0;
+        background: transparent;
+        padding: 4px 0;
+        border-bottom: 1px solid rgba(100, 140, 255, 0.06);
+      }
+
+      .target-head {
+        display: flex;
+        justify-content: space-between;
+        gap: 8px;
+        font-size: 12px;
+        align-items: center;
+      }
+
+      .target-name {
+        color: var(--sub);
+      }
+
+      .target-value {
+        font-weight: 700;
+        color: var(--text);
+      }
+
+      .target-sub {
+        margin-top: 3px;
+        font-size: 10px;
+        color: rgba(122, 139, 170, 0.7);
+      }
+
+      .target-bar {
+        margin-top: 4px;
+        height: 4px;
+        border-radius: 999px;
+        background: rgba(100, 140, 255, 0.1);
+        overflow: hidden;
+      }
+
+      .target-bar > span {
+        height: 100%;
+        display: block;
+      }
+
+      .target-kcal > .target-bar > span {
+        background: linear-gradient(90deg, var(--primary), #0080ff);
+        box-shadow: 0 0 6px var(--primary-glow);
+      }
+
+      .target-protein > .target-bar > span {
+        background: linear-gradient(90deg, var(--primary), #40a0ff);
+        box-shadow: 0 0 6px var(--primary-glow);
+      }
+
+      .target-carb > .target-bar > span {
+        background: linear-gradient(90deg, var(--green), #20a090);
+        box-shadow: 0 0 6px rgba(54, 207, 201, 0.3);
+      }
+
+      .target-fat > .target-bar > span {
+        background: linear-gradient(90deg, var(--orange), #ffbe72);
+        box-shadow: 0 0 6px rgba(255, 155, 55, 0.3);
+      }
+
+      .target-water > .target-bar > span {
+        background: linear-gradient(90deg, #35a8ff, var(--green));
+        box-shadow: 0 0 6px rgba(53, 168, 255, 0.3);
+      }
+
+      .macro-summary {
+        margin-top: 8px;
+        border: none;
+        border-radius: 0;
+        background: transparent;
+        padding: 4px 0;
+        font-size: 12px;
+        color: var(--sub);
+      }
+
+      #dietSummaryBox {
+        font-size: 12px;
+        font-weight: 500;
+        color: rgba(200, 212, 230, 0.9);
+        line-height: 1.5;
+      }
+
+      .macro-summary-kcal {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 8px;
+        border: none;
+        background: transparent;
+        padding: 0;
+        text-align: center;
+      }
+
+      .kcal-label {
+        font-size: 12px;
+        color: var(--sub);
+        font-weight: 600;
+        width: 100%;
+        text-align: center;
+      }
+
+      .kcal-ring {
+        width: 72px;
+        height: 72px;
+        border-radius: 999px;
+        display: grid;
+        place-items: center;
+        box-shadow: 0 0 20px rgba(54, 207, 201, 0.25), 0 0 8px var(--primary-glow);
+        background: conic-gradient(#00e5ff 0deg 86deg, #36cfc9 86deg 266deg, #ff9b37 266deg 360deg);
+      }
+
+      .macro-ring-legend {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 8px 14px;
+        margin-top: 10px;
+        font-size: 11px;
+        color: var(--sub);
+      }
+
+      .legend-item {
+        display: inline-flex;
+        align-items: center;
+        gap: 4px;
+      }
+
+      .legend-dot {
+        display: inline-block;
+        width: 6px;
+        height: 6px;
+        border-radius: 999px;
+        flex-shrink: 0;
+      }
+
+      .legend-dot.protein { background: #00e5ff; }
+      .legend-dot.carb { background: var(--green); }
+      .legend-dot.fat { background: var(--orange); }
+
+      .water-target-row {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        margin-top: 10px;
+        padding: 6px 0;
+        font-size: 11px;
+        color: rgba(122, 139, 170, 0.75);
+        border-top: 1px solid rgba(100, 140, 255, 0.06);
+      }
+
+      .water-icon {
+        width: 14px;
+        height: 14px;
+        border-radius: 999px;
+        background: linear-gradient(135deg, #35a8ff, var(--green));
+        -webkit-mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23fff' stroke-width='2'%3E%3Cpath d='M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0z'/%3E%3C/svg%3E");
+        mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23fff' stroke-width='2'%3E%3Cpath d='M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0z'/%3E%3C/svg%3E");
+        -webkit-mask-size: contain;
+        mask-size: contain;
+        -webkit-mask-repeat: no-repeat;
+        mask-repeat: no-repeat;
+        -webkit-mask-position: center;
+        mask-position: center;
+      }
+
+      .kcal-ring-inner {
+        width: 52px;
+        height: 52px;
+        border-radius: 999px;
+        background: var(--bg-start);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        color: var(--text);
+        font-size: 11px;
+        font-weight: 700;
+        text-align: center;
+        line-height: 1.1;
+        padding: 2px;
+      }
+
+      .kcal-ring-value {
+        font-size: 11px;
+        font-weight: 700;
+        background: linear-gradient(90deg, #00e5ff, #a78bfa);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+      }
+
+      .kcal-ring-unit {
+        font-size: 9px;
+        color: var(--sub);
+      }
+
+      .macro-kpi-grid {
+        margin-top: 6px;
+        display: grid;
+        gap: 6px;
+      }
+
+      .macro-kpi {
+        border: none;
+        border-radius: 0;
+        background: transparent;
+        padding: 4px 0;
+        border-bottom: 1px solid rgba(100, 140, 255, 0.06);
+      }
+
+      .macro-kpi-top {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 8px;
+      }
+
+      .macro-kpi-label {
+        font-size: 11px;
+        color: var(--sub);
+      }
+
+      .macro-kpi-value {
+        font-size: 12px;
+        font-weight: 700;
+        color: var(--text);
+      }
+
+      .macro-kpi-track {
+        margin-top: 5px;
+        height: 5px;
+        border-radius: 999px;
+        background: rgba(100, 140, 255, 0.1);
+        overflow: hidden;
+      }
+
+      .macro-kpi-fill {
+        height: 100%;
+        background: linear-gradient(90deg, var(--primary), #0080ff);
+        box-shadow: 0 0 6px var(--primary-glow);
+      }
+
+      .macro-kpi-status {
+        margin-top: 4px;
+        font-size: 11px;
+        color: var(--sub);
+      }
+
+      .macro-tips {
+        margin-top: 6px;
+      }
+
+      .macro-tip {
+        border-left: 2px solid rgba(122, 139, 170, 0.2);
+        background: transparent;
+        border-radius: 0;
+        padding: 4px 8px;
+        font-size: 10px;
+        color: rgba(122, 139, 170, 0.65);
+      }
+
+      /* ===== Meal ===== */
+      .meal-card {
+        border: none;
+        border-radius: 0;
+        overflow: visible;
+      }
+
+      .meal-head {
+        background: transparent;
+        padding: 0 2px 8px;
+        padding-left: 12px;
+        font-size: 14px;
+        font-weight: 700;
+        color: var(--text);
+        position: relative;
+      }
+
+      .meal-head::before {
+        content: "";
+        position: absolute;
+        left: 0;
+        top: 50%;
+        transform: translateY(-50%);
+        width: 4px;
+        height: 14px;
+        border-radius: 2px;
+        background: linear-gradient(180deg, var(--blue), var(--purple));
+      }
+
+      .meal-list {
+        padding: 0;
+        background: transparent;
+      }
+
+      .meal-item {
+        display: flex;
+        flex-direction: column;
+        gap: 0;
+        border: 1px solid var(--card-border);
+        border-radius: 12px;
+        padding: 0;
+        background: rgba(15, 22, 50, 0.5);
+        margin-bottom: 10px;
+        overflow: hidden;
+        backdrop-filter: var(--blur);
+      }
+
+      .meal-item-top {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+
+      .meal-badge {
+        font-size: 10px;
+        padding: 2px 8px;
+        border-radius: 999px;
+        font-weight: 600;
+        flex-shrink: 0;
+      }
+
+      .meal-badge.breakfast {
+        background: rgba(0, 229, 255, 0.12);
+        color: var(--primary);
+        border: 1px solid rgba(0, 229, 255, 0.2);
+      }
+
+      .meal-badge.lunch {
+        background: rgba(91, 143, 249, 0.12);
+        color: var(--blue);
+        border: 1px solid rgba(91, 143, 249, 0.25);
+      }
+
+      .meal-badge.dinner {
+        background: rgba(167, 139, 250, 0.12);
+        color: var(--purple);
+        border: 1px solid rgba(167, 139, 250, 0.25);
+      }
+
+      .meal-goal {
+        font-size: 9px;
+        padding: 1px 6px;
+        border-radius: var(--radius-xs);
+        font-weight: 600;
+        color: rgba(122, 139, 170, 0.85);
+        background: rgba(100, 140, 255, 0.05);
+        border: 1px solid rgba(100, 140, 255, 0.08);
+        flex-shrink: 0;
+      }
+
+      .meal-macro-chip {
+        font-size: 10px;
+        padding: 2px 8px;
+        border-radius: 999px;
+        background: rgba(100, 140, 255, 0.06);
+        color: rgba(160, 168, 192, 0.9);
+        border: 1px solid rgba(100, 140, 255, 0.1);
+        margin-left: auto;
+        flex-shrink: 0;
+      }
+
+      .meal-content {
+        display: flex;
+        flex-direction: column;
+        gap: 0;
+        align-items: stretch;
+      }
+
+      .meal-photo {
+        border-radius: 12px 12px 0 0;
+        height: 110px;
+        background-size: cover;
+        background-position: center;
+        position: relative;
+        overflow: hidden;
+      }
+
+      .meal-info {
+        display: grid;
+        gap: 6px;
+        padding: 8px 10px 10px;
+      }
+
+      .meal-meta {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        flex-wrap: nowrap;
+        width: 100%;
+      }
+
+      .meal-time {
+        font-size: 13px;
+        font-weight: 700;
+        color: var(--text);
+        letter-spacing: 0.5px;
+        flex-shrink: 0;
+      }
+
+      .meal-tags {
+        display: none;
+      }
+
+      .meal-photo::after {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(to top, rgba(6, 10, 30, 0.85) 0%, rgba(10, 14, 39, 0.35) 45%, transparent 75%);
+      }
+
+      .meal-photo span {
+        position: absolute;
+        left: 8px;
+        bottom: 4px;
+        z-index: 1;
+        font-size: 10px;
+        color: rgba(232, 236, 244, 0.7);
+        font-weight: 500;
+      }
+
+      .meal-text {
+        font-size: 12px;
+        line-height: 1.4;
+        font-weight: 700;
+        color: var(--text);
+        margin-top: 6px;
+      }
+
+      .meal-macro {
+        text-align: left;
+        font-size: 11px;
+        color: var(--sub);
+        background: transparent;
+        border: none;
+        border-radius: 0;
+        padding: 0;
+        width: fit-content;
+        margin-top: 4px;
+      }
+
+      /* ===== Review Panel ===== */
+      .review-panel {
+        margin-top: 10px;
+      }
+
+      .review-wrap {
+        border: none;
+        border-radius: 0;
+        padding: 0;
+        background: transparent;
+      }
+
+      .review-week-badge {
+        font-size: 12px;
+        border: 1px solid rgba(167, 139, 250, 0.25);
+        color: #a78bfa;
+        background: rgba(167, 139, 250, 0.1);
+        border-radius: 999px;
+        padding: 3px 10px;
+        font-weight: 600;
+      }
+
+      .module-grid {
+        margin-top: 10px;
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 10px;
+      }
+
+      .check-item {
+        border: none;
+        border-radius: 0;
+        padding: 0 0 12px;
+        margin-bottom: 12px;
+        font-size: 12px;
+        color: var(--sub);
+        background: transparent;
+        border-bottom: 1px solid rgba(167, 139, 250, 0.15);
+      }
+
+      .check-title {
+        font-weight: 700;
+        color: var(--text);
+        margin-bottom: 4px;
+      }
+
+      .check-row {
+        margin-top: 0;
+        padding: 12px 0;
+        padding-left: 10px;
+        background: transparent;
+        border: none;
+        border-left: 3px solid rgba(167, 139, 250, 0.35);
+        border-bottom: none;
+        margin-bottom: 0;
+      }
+
+      .check-row:last-child {
+        border-bottom: none;
+      }
+
+      .check-tag {
+        font-size: 12px;
+        color: #c4b5fd;
+        font-weight: 700;
+        margin-bottom: 6px;
+        display: block;
+      }
+
+      .check-result {
+        font-size: 12px;
+        color: rgba(160, 168, 192, 0.9);
+        line-height: 1.55;
+      }
+
+      .faq-wrap {
+        display: grid;
+        gap: 0;
+        margin-top: 4px;
+      }
+
+      .faq-brief {
+        border: none;
+        border-radius: 0;
+        background: transparent;
+        padding: 4px 0;
+        border-bottom: 1px solid rgba(100, 140, 255, 0.06);
+        font-size: 12px;
+        color: var(--sub);
+        line-height: 1.5;
+      }
+
+      .review-note {
+        border: none;
+        border-radius: 0;
+        background: transparent;
+        padding: 10px 0;
+        border-bottom: 1px solid rgba(167, 139, 250, 0.08);
+      }
+
+      .review-note:last-child {
+        border-bottom: none;
+      }
+
+      .review-note-title {
+        font-size: 10px;
+        font-weight: 600;
+        color: rgba(167, 139, 250, 0.7);
+        margin-bottom: 4px;
+      }
+
+      .review-note-sub {
+        margin-top: 2px;
+        font-size: 11px;
+        color: rgba(160, 168, 192, 0.8);
+        line-height: 1.5;
+      }
+
+      /* ===== Modal (dark theme) ===== */
+      .modal-mask {
+        position: fixed;
+        inset: 0;
+        background: rgba(5, 8, 20, 0.75);
+        backdrop-filter: blur(6px);
+        display: none;
+        align-items: center;
+        justify-content: center;
+        z-index: 20;
+        padding: 16px;
+      }
+
+      .modal {
+        width: 100%;
+        max-width: 420px;
+        max-height: 85vh;
+        overflow-y: auto;
+        background: linear-gradient(170deg, #111833, #0d1228);
+        border: 1px solid rgba(0, 229, 255, 0.15);
+        border-radius: var(--radius-lg);
+        padding: var(--pad-card);
+        box-shadow: 0 16px 48px rgba(0, 0, 0, 0.6);
+      }
+
+      .modal::-webkit-scrollbar {
+        width: 3px;
+      }
+      .modal::-webkit-scrollbar-thumb {
+        background: rgba(0, 229, 255, 0.2);
+        border-radius: 3px;
+      }
+
+      .modal-head {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+
+      .modal-title {
+        font-size: 16px;
+        font-weight: 700;
+        color: var(--text);
+      }
+
+      .close {
+        border: none;
+        background: rgba(255, 255, 255, 0.08);
+        width: 28px;
+        height: 28px;
+        border-radius: 999px;
+        font-size: 18px;
+        cursor: pointer;
+        color: var(--sub);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .modal-media {
+        margin-top: 10px;
+        border-radius: 12px;
+        height: 160px;
+        background: linear-gradient(135deg, rgba(0, 229, 255, 0.08), rgba(0, 80, 200, 0.1));
+        border: 1px solid var(--card-border);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: var(--sub);
+        font-size: 13px;
+      }
+
+      .modal-line {
+        margin-top: 8px;
+        font-size: 12px;
+        color: var(--sub);
+      }
+
+      .modal-list {
+        margin-top: 8px;
+        border: 1px solid var(--card-border);
+        border-radius: 10px;
+        background: rgba(0, 229, 255, 0.03);
+        padding: 8px 10px;
+      }
+
+      .modal-list-title {
+        font-size: 12px;
+        color: var(--primary);
+        font-weight: 700;
+        margin-bottom: 5px;
+      }
+
+      .modal-list-item {
+        font-size: 12px;
+        color: var(--sub);
+        line-height: 1.5;
+        margin-bottom: 3px;
+      }
+
+      .modal-list-item:last-child {
+        margin-bottom: 0;
+      }
+
+      .meal-modal-media {
+        margin-top: 10px;
+        border-radius: 12px;
+        height: 140px;
+        background: linear-gradient(135deg, rgba(255, 155, 55, 0.08), rgba(0, 229, 255, 0.06));
+        border: 1px solid var(--card-border);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: var(--sub);
+        font-size: 13px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <section class="top-hero">
+        <div class="hero-row">
+          <div>
+            <div class="hero-title">你的专属训练大纲</div>
+            <div class="hero-sub">基于体成分、体态、体围与健康档案自动生成</div>
+          </div>
+          <div class="hero-badge">第 1 周 / 共 8 周 · 每周 3 次</div>
+        </div>
+        <div class="hero-metrics">
+          <div class="metric">
+            <div class="metric-label">体脂率目标</div>
+            <div class="metric-value">32% → 26%</div>
+          </div>
+          <div class="metric">
+            <div class="metric-label">腰围目标</div>
+            <div class="metric-value">90cm → 84cm</div>
+          </div>
+          <div class="metric">
+            <div class="metric-label">体态重点</div>
+            <div class="metric-value">圆肩改善</div>
+          </div>
+          <div class="metric">
+            <div class="metric-label">预计可见变化</div>
+            <div class="metric-value">4 周明显体感</div>
+          </div>
+        </div>
+      </section>
+
+      <section class="section grid-2">
+          <div class="card">
+          <div class="card-title"><span class="card-title-icon"></span>关键目标</div>
+          <div class="card-sub">不是"做动作"，而是解决你当前最影响体验的 3 件事</div>
+          <div class="compare-card">
+            <div class="compare-title">改善前 vs 改善后（预期体型变化）</div>
+            <div class="compare-visual">
+              <div class="compare-item">
+                <div class="compare-label">改善前</div>
+                <div class="silhouette before"></div>
+                <div class="compare-tags">
+                  <span class="pill orange">腰腹脂肪偏高</span>
+                  <span class="pill blue">含胸明显</span>
+                </div>
+              </div>
+              <div class="compare-item">
+                <div class="compare-label">改善后（8周目标）</div>
+                <div class="silhouette after"></div>
+                <div class="compare-tags">
+                  <span class="pill green">腰线更清晰</span>
+                  <span class="pill blue">体态更挺拔</span>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="goal-list">
+            <div class="goal-item">
+              <div class="goal-head">
+                <span class="goal-name">减脂与围度优化</span>
+                <span class="goal-value">腰围 -6cm</span>
+              </div>
+              <div class="goal-why">价值：衣物松紧和外观变化最直观，提升持续执行动力。</div>
+            </div>
+            <div class="goal-item">
+              <div class="goal-head">
+                <span class="goal-name">体态矫正（圆肩）</span>
+                <span class="goal-value">姿态评分 +18%</span>
+              </div>
+              <div class="goal-why">价值：降低肩颈疲劳、久坐不适，工作状态更稳定。</div>
+            </div>
+            <div class="goal-item">
+              <div class="goal-head">
+                <span class="goal-name">基础体能提升</span>
+                <span class="goal-value">耐力 +25%</span>
+              </div>
+              <div class="goal-why">价值：日常活动不易喘，训练恢复更快，长期更容易坚持。</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-title"><span class="card-title-icon"></span>阶段路线</div>
+          <div class="card-sub">每一阶段都对应可感知收益，避免"练了但不知道有什么变化"</div>
+          <div class="phase-track phase-track-scroll">
+            <div class="phase-card phase-card-1">
+              <div class="phase-card-bg"></div>
+              <div class="phase-card-overlay">
+                <span class="phase-card-week">第 1-2 周</span>
+                <span class="phase-card-name">阶段 1：适应激活</span>
+                <span class="phase-card-brief">每周 3 次 · 动作熟练</span>
+              </div>
+            </div>
+            <div class="phase-card phase-card-2">
+              <div class="phase-card-bg"></div>
+              <div class="phase-card-overlay">
+                <span class="phase-card-week">第 3-6 周</span>
+                <span class="phase-card-name">阶段 2：减脂强化</span>
+                <span class="phase-card-brief">力量 2 次 + 有氧 1 次 · 4 周外观变化</span>
+              </div>
+            </div>
+            <div class="phase-card phase-card-3">
+              <div class="phase-card-bg"></div>
+              <div class="phase-card-overlay">
+                <span class="phase-card-week">第 7-8 周</span>
+                <span class="phase-card-name">阶段 3：巩固定型</span>
+                <span class="phase-card-brief">体态优化 · 持续习惯</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="card tabs-card" id="tabsCard" data-active="train">
+        <div class="card-title"><span class="card-title-icon"></span>执行方案</div>
+        <div class="card-sub">按周查看阶段重点，按天查看训练与饮食安排。</div>
+
+        <div class="week-picker" id="weekPicker">
+          <button class="week-chip active" onclick="selectWeek(1, event)">
+            <span class="week-head"><span class="week-icon"></span><span class="week-num">第1周</span></span><span class="week-stage">适应期</span>
+          </button>
+          <button class="week-chip" onclick="selectWeek(2, event)">
+            <span class="week-head"><span class="week-icon"></span><span class="week-num">第2周</span></span><span class="week-stage">适应期</span>
+          </button>
+          <button class="week-chip" onclick="selectWeek(3, event)">
+            <span class="week-head"><span class="week-icon boost"></span><span class="week-num">第3周</span></span><span class="week-stage">强化期</span>
+          </button>
+          <button class="week-chip" onclick="selectWeek(4, event)">
+            <span class="week-head"><span class="week-icon boost"></span><span class="week-num">第4周</span></span><span class="week-stage">强化期</span>
+          </button>
+          <button class="week-chip" onclick="selectWeek(5, event)">
+            <span class="week-head"><span class="week-icon boost"></span><span class="week-num">第5周</span></span><span class="week-stage">强化期</span>
+          </button>
+          <button class="week-chip" onclick="selectWeek(6, event)">
+            <span class="week-head"><span class="week-icon boost"></span><span class="week-num">第6周</span></span><span class="week-stage">强化期</span>
+          </button>
+          <button class="week-chip" onclick="selectWeek(7, event)">
+            <span class="week-head"><span class="week-icon hold"></span><span class="week-num">第7周</span></span><span class="week-stage">巩固期</span>
+          </button>
+          <button class="week-chip" onclick="selectWeek(8, event)">
+            <span class="week-head"><span class="week-icon hold"></span><span class="week-num">第8周</span></span><span class="week-stage">巩固期</span>
+          </button>
+        </div>
+
+        <div class="week-chart" id="execDayStrip">
+          <div class="day-col active" data-day="周一" onclick="selectExecDay('周一', event)">
+            <div class="day-label">周一</div>
+            <div class="bar" style="height: 42px"></div>
+            <div class="bar-label">力量A</div>
+          </div>
+          <div class="day-col" data-day="周二" onclick="selectExecDay('周二', event)">
+            <div class="day-label">周二</div>
+            <div class="bar rest" style="height: 12px"></div>
+            <div class="bar-label">恢复</div>
+          </div>
+          <div class="day-col" data-day="周三" onclick="selectExecDay('周三', event)">
+            <div class="day-label">周三</div>
+            <div class="bar" style="height: 36px"></div>
+            <div class="bar-label">心肺</div>
+          </div>
+          <div class="day-col" data-day="周四" onclick="selectExecDay('周四', event)">
+            <div class="day-label">周四</div>
+            <div class="bar rest" style="height: 14px"></div>
+            <div class="bar-label">轻活动</div>
+          </div>
+          <div class="day-col" data-day="周五" onclick="selectExecDay('周五', event)">
+            <div class="day-label">周五</div>
+            <div class="bar" style="height: 44px"></div>
+            <div class="bar-label">力量B</div>
+          </div>
+          <div class="day-col" data-day="周六" onclick="selectExecDay('周六', event)">
+            <div class="day-label">周六</div>
+            <div class="bar rest" style="height: 16px"></div>
+            <div class="bar-label">快走</div>
+          </div>
+          <div class="day-col" data-day="周日" onclick="selectExecDay('周日', event)">
+            <div class="day-label">周日</div>
+            <div class="bar rest" style="height: 10px"></div>
+            <div class="bar-label">恢复</div>
+          </div>
+        </div>
+
+        <div class="main-tabs">
+          <button class="main-tab active" data-tab="train" onclick="switchMainTab(event)">
+            训练计划
+          </button>
+          <button class="main-tab" data-tab="diet" onclick="switchMainTab(event)">
+            饮食计划
+          </button>
+          <button class="main-tab" data-tab="review" onclick="switchMainTab(event)">
+            进度复盘
+          </button>
+        </div>
+
+        <div id="panel-train" class="panel">
+          <div class="chart-wrap">
+            <div class="map-tip" id="trainMapTip">
+              今日执行提示：动作标准优先，使用基础重量。
+            </div>
+            <div class="chart-title" id="trainDayTitle">训练动作</div>
+            <div class="action-grid" id="actionGrid"></div>
+          </div>
+        </div>
+
+        <div id="panel-diet" class="panel" style="display: none">
+          <div class="diet-grid">
+            <div class="macro-card">
+              <div class="chart-title" id="dietChartTitle">营养目标</div>
+              <div class="macro-summary macro-summary-kcal">
+                <div class="kcal-label">今日总热量目标</div>
+                <div class="kcal-ring" id="dietKcalRing">
+                  <div class="kcal-ring-inner">
+                    <div class="kcal-ring-value" id="dietKcal">1950</div>
+                    <div class="kcal-ring-unit">kcal</div>
+                  </div>
+                </div>
+                <div class="macro-ring-legend" id="dietMacroLegend">
+                  <span class="legend-item"><span class="legend-dot protein"></span>蛋白质 117g</span>
+                  <span class="legend-item"><span class="legend-dot carb"></span>碳水 244g</span>
+                  <span class="legend-item"><span class="legend-dot fat"></span>脂肪 56g</span>
+                </div>
+              </div>
+              <div class="water-target-row" id="dietWaterRow">
+                <span class="water-icon"></span>
+                <span>饮水目标 2.0L · 建议分 6-8 次补水</span>
+              </div>
+              <div class="macro-summary" id="dietSummaryBox">执行策略：规律进食 + 蛋白达标，减少暴食波动。</div>
+              <div class="macro-tips" id="dietTipsBox">
+                <div class="macro-tip">说明：以上为方案目标值，不代表用户实际执行结果。</div>
+              </div>
+            </div>
+
+            <div class="meal-card">
+              <div class="meal-head" id="mealHeadTitle">一日食谱</div>
+              <div class="meal-list" id="mealList"></div>
+            </div>
+          </div>
+        </div>
+        <div id="panel-review" class="panel review-panel" style="display: none">
+          <div class="review-wrap">
+            <div class="module-grid">
+              <div class="check-item">
+                <div class="check-row">
+                  <div class="check-tag">本周应看到的变化</div>
+                  <div class="check-result" id="reviewExpected">动作更熟悉，训练后疲劳感可在 24 小时内恢复。</div>
+                </div>
+                <div class="check-row">
+                  <div class="check-tag">没看到也正常</div>
+                  <div class="check-result" id="reviewNormal">体重变化不明显属于正常，优先看动作质量与训练完成度。</div>
+                </div>
+                <div class="check-row">
+                  <div class="check-tag">建议复测时间</div>
+                  <div class="check-result" id="reviewRetest">第 2 周结束后复测：腰围、体态拍照、主观疲劳度。</div>
+                </div>
+              </div>
+              <div class="faq-wrap">
+                <div class="review-note">
+                  <div class="review-note-title" id="reviewNoteTitle">复盘目的</div>
+                  <div class="review-note-sub" id="reviewFocus">确认本周方案是否按预期产生体感变化，避免只盯体重。</div>
+                </div>
+                <div class="review-note">
+                  <div class="review-note-title">建议关注指标</div>
+                  <div class="review-note-sub" id="reviewMetrics">腰围、体态照片、训练恢复感、睡眠稳定性。</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
+
+    <div class="modal-mask" id="actionModal">
+      <div class="modal">
+        <div class="modal-head">
+          <div class="modal-title" id="mName">动作详情</div>
+          <button class="close" onclick="closeAction()">x</button>
+        </div>
+        <div class="modal-media">动作图片 / 视频示范占位</div>
+        <div class="modal-line" id="mTarget"></div>
+        <div class="modal-line" id="mIntensity"></div>
+        <div class="modal-line" id="mGear"></div>
+        <div class="modal-line" id="mTips"></div>
+        <div class="modal-list">
+          <div class="modal-list-title">动作执行步骤</div>
+          <div class="modal-list-item" id="mSteps"></div>
+        </div>
+        <div class="modal-list">
+          <div class="modal-list-title">关键提示</div>
+          <div class="modal-list-item" id="mBreath"></div>
+          <div class="modal-list-item" id="mCommonError"></div>
+          <div class="modal-list-item" id="mRegression"></div>
+          <div class="modal-list-item" id="mProgression"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="modal-mask" id="mealModal">
+      <div class="modal">
+        <div class="modal-head">
+          <div class="modal-title" id="mealName">食谱详情</div>
+          <button class="close" onclick="closeMeal()">x</button>
+        </div>
+        <div class="meal-modal-media">食谱图片 / 视频示范占位</div>
+        <div class="modal-line" id="mealGoal"></div>
+        <div class="modal-line" id="mealIngredients"></div>
+        <div class="modal-line" id="mealMacro"></div>
+        <div class="modal-line" id="mealReplace"></div>
+        <div class="modal-line" id="mealTiming"></div>
+        <div class="modal-line" id="mealCaution"></div>
+        <div class="modal-list">
+          <div class="modal-list-title">烹饪与执行</div>
+          <div class="modal-list-item" id="mealSteps"></div>
+          <div class="modal-list-item" id="mealPrepTime"></div>
+          <div class="modal-list-item" id="mealOutOption"></div>
+          <div class="modal-list-item" id="mealAvoid"></div>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      const trainPlan = {
+        周一: [
+          {
+            name: "杯式深蹲",
+            tag: "力量A",
+            sub: "强度：中等 · 时长：约 8 分钟",
+            target: "臀腿与核心",
+            intensity: "3-4组 × 10-12次",
+            gear: "哑铃/壶铃",
+            tips: "膝盖方向与脚尖一致，避免塌腰",
+            steps: "1) 双脚与肩同宽站立；2) 哑铃贴近胸前下蹲到大腿接近平行；3) 脚跟发力站起；4) 全程核心收紧。",
+            breath: "下蹲吸气，起身发力呼气。",
+            commonError: "膝内扣、低头弯腰、起身时塌腰。",
+            regression: "可改徒手深蹲或减少下蹲深度。",
+            progression: "可加重量或底部停顿 1 秒。",
+          },
+          {
+            name: "臀桥/臀推",
+            tag: "力量A",
+            sub: "强度：中等 · 时长：约 7 分钟",
+            target: "臀大肌",
+            intensity: "3组 × 12-15次",
+            gear: "长凳/杠铃/弹力带",
+            tips: "顶点停顿1秒，避免腰部代偿",
+            steps: "1) 上背靠凳，双脚踩稳；2) 臀部向上推至髋膝肩一线；3) 顶点夹臀停顿；4) 控制下放。",
+            breath: "上推呼气，下放吸气。",
+            commonError: "用腰顶替臀发力、双脚过远导致腿后侧代偿。",
+            regression: "先做地面臀桥再过渡臀推。",
+            progression: "增加负重或改单腿臀桥。",
+          },
+          {
+            name: "平板支撑",
+            tag: "核心",
+            sub: "强度：中等 · 时长：约 5 分钟",
+            target: "核心稳定",
+            intensity: "3组 × 20-30秒",
+            gear: "瑜伽垫",
+            tips: "头肩臀一线，保持自然呼吸",
+            steps: "1) 前臂撑地与肩同宽；2) 双腿后伸绷紧；3) 收腹夹臀保持躯干稳定；4) 到时放松。",
+            breath: "全程小口均匀呼吸，避免憋气。",
+            commonError: "塌腰、翘臀、耸肩。",
+            regression: "缩短时长或改膝撑平板。",
+            progression: "延长时长或加抬腿变化。",
+          },
+        ],
+        周二: [
+          {
+            name: "快走恢复",
+            tag: "恢复",
+            sub: "强度：低 · 时长：30 分钟",
+            target: "低强度恢复",
+            intensity: "均速快走",
+            gear: "跑步机/户外",
+            tips: "全程保持轻微出汗、可完整说话",
+            steps: "1) 先热身 3 分钟慢走；2) 进入均速快走；3) 结束前 2 分钟降速。",
+            breath: "保持可对话呼吸节奏。",
+            commonError: "配速忽快忽慢、前倾耸肩。",
+            regression: "缩短到 20 分钟。",
+            progression: "增加坡度 1-2%。",
+          },
+          {
+            name: "髋屈肌拉伸",
+            tag: "拉伸",
+            sub: "强度：低 · 时长：约 8 分钟",
+            target: "髋部灵活度",
+            intensity: "每侧2组 × 30秒",
+            gear: "瑜伽垫",
+            tips: "保持骨盆稳定，不要耸肩",
+            steps: "1) 弓步位下沉髋部；2) 后侧腿伸展；3) 每侧保持 30 秒并换边。",
+            breath: "拉伸时慢吸慢呼。",
+            commonError: "腰椎过伸、骨盆歪斜。",
+            regression: "减少拉伸角度。",
+            progression: "每侧延长到 45 秒。",
+          },
+        ],
+        周三: [
+          {
+            name: "间歇快走/慢跑",
+            tag: "心肺",
+            sub: "强度：中高 · 时长：20 分钟",
+            target: "心肺能力",
+            intensity: "1分钟快 + 1分钟慢 × 10轮",
+            gear: "跑步机/户外",
+            tips: "保持可讲话但微喘，不追求冲刺",
+            steps: "1) 热身慢走 3 分钟；2) 按快慢交替 10 轮；3) 冷却慢走 2-3 分钟。",
+            breath: "快段深呼吸，慢段恢复呼吸。",
+            commonError: "快段过冲导致后程掉速。",
+            regression: "减少为 6-8 轮。",
+            progression: "快段提速 0.5-1km/h。",
+          },
+          {
+            name: "靠墙天使",
+            tag: "体态",
+            sub: "强度：中低 · 时长：约 8 分钟",
+            target: "肩胛稳定",
+            intensity: "3组 × 10次",
+            gear: "墙面/瑜伽垫",
+            tips: "腰背贴墙，动作慢而可控",
+            steps: "1) 背靠墙站立；2) 手臂贴墙上举下放；3) 保持下背中立位。",
+            breath: "上举呼气，下放吸气。",
+            commonError: "下背离墙、耸肩。",
+            regression: "缩小动作幅度。",
+            progression: "增加停顿时间。",
+          },
+        ],
+        周四: [
+          {
+            name: "轻松步行",
+            tag: "恢复",
+            sub: "强度：低 · 时长：35 分钟",
+            target: "促进恢复",
+            intensity: "均速步行",
+            gear: "户外",
+            tips: "步幅自然，避免久坐全天不动",
+            steps: "1) 选择平缓路线；2) 持续步行；3) 结束后做小腿拉伸。",
+            breath: "保持舒适可对话呼吸。",
+            commonError: "间断太多导致总时长不足。",
+            regression: "分两段完成。",
+            progression: "增加到 45 分钟。",
+          },
+        ],
+        周五: [
+          {
+            name: "跪姿俯卧撑",
+            tag: "力量B",
+            sub: "强度：中等 · 时长：约 6 分钟",
+            target: "胸肩与核心",
+            intensity: "3组 × 8-10次",
+            gear: "瑜伽垫/高台",
+            tips: "身体保持直线，避免耸肩",
+            steps: "1) 双膝着地手撑肩下；2) 屈肘下放胸部；3) 推回起始位。",
+            breath: "下放吸气，推起呼气。",
+            commonError: "塌腰、肘外展过大。",
+            regression: "改高位俯卧撑。",
+            progression: "过渡到标准俯卧撑。",
+          },
+          {
+            name: "弹力带划船",
+            tag: "力量B",
+            sub: "强度：中等 · 时长：约 7 分钟",
+            target: "上背与肩胛稳定",
+            intensity: "3组 × 10-12次",
+            gear: "弹力带/划船器",
+            tips: "回拉时夹肩胛，避免后仰借力",
+            steps: "1) 固定弹力带；2) 核心收紧后回拉；3) 顶点夹肩胛；4) 缓慢回放。",
+            breath: "回拉呼气，回放吸气。",
+            commonError: "后仰借力、耸肩。",
+            regression: "减小阻力。",
+            progression: "增加阻力或增加 1 组。",
+          },
+          {
+            name: "死虫训练",
+            tag: "核心",
+            sub: "强度：中等 · 时长：约 6 分钟",
+            target: "深层核心控制",
+            intensity: "3组 × 每侧10次",
+            gear: "瑜伽垫",
+            tips: "保持腰椎中立，动作慢",
+            steps: "1) 仰卧屈髋屈膝；2) 对侧手脚缓慢伸展；3) 回中位换边。",
+            breath: "伸展呼气，回中吸气。",
+            commonError: "下背离地、动作过快。",
+            regression: "缩小伸展幅度。",
+            progression: "增加停顿时间。",
+          },
+        ],
+        周六: [
+          {
+            name: "户外快走",
+            tag: "轻活动",
+            sub: "强度：低中 · 时长：40 分钟",
+            target: "代谢维持",
+            intensity: "持续有氧",
+            gear: "户外",
+            tips: "可分两段完成，累计时长即可",
+            steps: "1) 选择可持续配速；2) 分段累计时长；3) 结束补水。",
+            breath: "全程稳定呼吸。",
+            commonError: "配速过快导致中断。",
+            regression: "分 20+20 分钟。",
+            progression: "增加到 50 分钟。",
+          },
+        ],
+        周日: [
+          {
+            name: "呼吸与放松",
+            tag: "恢复",
+            sub: "强度：低 · 时长：15 分钟",
+            target: "身心恢复",
+            intensity: "腹式呼吸 + 轻拉伸",
+            gear: "瑜伽垫",
+            tips: "本日以恢复为主，不做高强度",
+            steps: "1) 仰卧做腹式呼吸 5 分钟；2) 颈肩髋部轻拉伸 10 分钟。",
+            breath: "吸气鼓腹，呼气收腹。",
+            commonError: "拉伸过猛、追求疼痛感。",
+            regression: "仅做呼吸放松。",
+            progression: "增加泡沫轴放松。",
+          },
+        ],
+      };
+
+      const dietPlan = {
+        周一: {
+          kcal: "1950kcal",
+          macros: ["蛋白质：约 122g", "碳水化合物：约 345g", "脂肪：约 61g", "饮水建议：2L+"],
+          meals: [
+            {
+              time: "07:00",
+              photo: "早餐图",
+              text: "燕麦50g + 鸡蛋1个 + 牛奶250ml + 苹果1个",
+              macro: "P18/C52/F9",
+              detail: {
+                goal: "稳定上午能量，避免早间血糖波动导致饥饿反弹。",
+                ingredients: "燕麦50g、鸡蛋1个、低脂牛奶250ml、苹果1个",
+                replace: "可替换为全麦面包2片 + 无糖酸奶200g",
+                timing: "建议起床后60分钟内完成。",
+                caution: "乳糖不耐可将牛奶替换为无糖豆浆。",
+                steps: "燕麦煮熟后加入牛奶，搭配水煮蛋与切块苹果。",
+                prepTime: "约 10 分钟",
+                outOption: "外食可选全麦三明治 + 无糖酸奶 + 整果。",
+                avoid: "避免加糖麦片和奶茶。",
+              },
+            },
+            {
+              time: "10:00",
+              photo: "加餐图",
+              text: "原味酸奶150g + 杏仁15g",
+              macro: "P8/C10/F9",
+              detail: {
+                goal: "延长饱腹感，降低午餐前高热量零食摄入。",
+                ingredients: "原味酸奶150g、杏仁15g",
+                replace: "可替换为无糖豆浆250ml + 水煮蛋1个",
+                timing: "早餐后2.5-3小时食用。",
+                caution: "坚果需控量，避免额外热量叠加。",
+                steps: "酸奶开盖即食，坚果提前称重分装。",
+                prepTime: "约 3 分钟",
+                outOption: "便利店可选无糖酸奶 + 原味坚果小包。",
+                avoid: "避免果味酸奶和糖渍坚果。",
+              },
+            },
+            {
+              time: "12:30",
+              photo: "午餐图",
+              text: "糙米饭100g + 鸡胸120g + 西兰花200g",
+              macro: "P32/C68/F12",
+              detail: {
+                goal: "补充训练前主能量，保证下午不低血糖。",
+                ingredients: "糙米100g、鸡胸120g、西兰花200g",
+                replace: "鸡胸可换鱼肉/瘦牛肉同克数。",
+                timing: "如下午训练，建议训练前2-3小时吃完。",
+                caution: "优先蒸煮炖，减少额外油脂。",
+                steps: "鸡胸煎/煮熟，糙米提前蒸好，西兰花焯水。",
+                prepTime: "约 20 分钟",
+                outOption: "外食可选轻食碗：鸡胸 + 粗粮 + 双份蔬菜。",
+                avoid: "避免酱汁重、油炸配菜。",
+              },
+            },
+            {
+              time: "19:00",
+              photo: "晚餐图",
+              text: "蒸鱼150g + 红薯100g + 清炒蔬菜",
+              macro: "P28/C45/F10",
+              detail: {
+                goal: "训练后恢复并控制晚间总热量。",
+                ingredients: "蒸鱼150g、红薯100g、时蔬200g",
+                replace: "可替换为虾仁/豆腐 + 玉米/南瓜。",
+                timing: "建议训练后60-90分钟内完成。",
+                caution: "避免重油、重辣，减少夜间胃肠负担。",
+                steps: "鱼蒸熟，红薯蒸烤，蔬菜快炒少油。",
+                prepTime: "约 18 分钟",
+                outOption: "外食可选清蒸鱼套餐，主食减半。",
+                avoid: "避免夜宵叠加和高油汤底。",
+              },
+            },
+          ],
+        },
+        周二: {
+          kcal: "1900kcal",
+          macros: ["蛋白质：约 118g", "碳水化合物：约 320g", "脂肪：约 60g", "饮水建议：2L+"],
+          meals: [
+            { time: "07:00", photo: "早餐图", text: "全麦吐司2片 + 水煮蛋2个 + 无糖豆浆", macro: "P22/C46/F11" },
+            { time: "12:30", photo: "午餐图", text: "藜麦饭100g + 牛肉120g + 彩椒沙拉", macro: "P30/C60/F14" },
+            { time: "16:00", photo: "加餐图", text: "乳清蛋白1勺 + 香蕉1根", macro: "P25/C30/F3" },
+            { time: "19:00", photo: "晚餐图", text: "虾仁150g + 南瓜120g + 生菜沙拉", macro: "P30/C40/F9" },
+          ],
+        },
+        周三: {
+          kcal: "2000kcal",
+          macros: ["蛋白质：约 125g", "碳水化合物：约 350g", "脂肪：约 62g", "训练日适度加碳水"],
+          meals: [
+            { time: "07:00", photo: "早餐图", text: "燕麦奶昔 + 鸡蛋1个 + 蓝莓", macro: "P20/C55/F8" },
+            { time: "12:30", photo: "午餐图", text: "糙米120g + 三文鱼120g + 西兰花", macro: "P34/C70/F16" },
+            { time: "16:00", photo: "加餐图", text: "酸奶200g + 坚果10g", macro: "P11/C12/F9" },
+            { time: "19:00", photo: "晚餐图", text: "鸡胸150g + 土豆100g + 蔬菜汤", macro: "P35/C48/F10" },
+          ],
+        },
+        周四: {
+          kcal: "1850kcal",
+          macros: ["蛋白质：约 115g", "碳水化合物：约 300g", "脂肪：约 58g", "恢复日控制精制糖"],
+          meals: [
+            { time: "07:00", photo: "早餐图", text: "杂粮粥 + 鸡蛋 + 苹果", macro: "P16/C48/F8" },
+            { time: "12:30", photo: "午餐图", text: "荞麦面 + 鸡腿肉去皮 + 青菜", macro: "P30/C62/F13" },
+            { time: "19:00", photo: "晚餐图", text: "豆腐200g + 菌菇 + 玉米半根", macro: "P26/C38/F10" },
+          ],
+        },
+        周五: {
+          kcal: "1980kcal",
+          macros: ["蛋白质：约 124g", "碳水化合物：约 340g", "脂肪：约 61g", "训练日保持充足蛋白"],
+          meals: [
+            { time: "07:00", photo: "早餐图", text: "全麦三明治 + 牛奶", macro: "P22/C52/F12" },
+            { time: "12:30", photo: "午餐图", text: "糙米饭 + 瘦牛肉 + 西蓝花", macro: "P33/C68/F14" },
+            { time: "16:00", photo: "加餐图", text: "蛋白粉 + 香蕉", macro: "P25/C30/F3" },
+            { time: "19:00", photo: "晚餐图", text: "鳕鱼150g + 红薯120g + 蔬菜", macro: "P30/C44/F9" },
+          ],
+        },
+        周六: {
+          kcal: "1880kcal",
+          macros: ["蛋白质：约 118g", "碳水化合物：约 310g", "脂肪：约 59g", "外出日注意总量"],
+          meals: [
+            { time: "08:00", photo: "早餐图", text: "牛奶燕麦杯 + 水果", macro: "P18/C50/F8" },
+            { time: "13:00", photo: "午餐图", text: "轻食沙拉 + 鸡胸肉", macro: "P30/C35/F12" },
+            { time: "18:30", photo: "晚餐图", text: "清蒸鱼 + 粗粮饭 + 蔬菜", macro: "P31/C45/F10" },
+          ],
+        },
+        周日: {
+          kcal: "1820kcal",
+          macros: ["蛋白质：约 112g", "碳水化合物：约 295g", "脂肪：约 57g", "休息日不过量即可"],
+          meals: [
+            { time: "08:00", photo: "早餐图", text: "全麦面包 + 鸡蛋 + 牛奶", macro: "P20/C42/F11" },
+            { time: "12:30", photo: "午餐图", text: "鸡胸肉意面 + 沙拉", macro: "P30/C58/F12" },
+            { time: "19:00", photo: "晚餐图", text: "豆腐虾仁煲 + 时蔬", macro: "P28/C34/F10" },
+          ],
+        },
+      };
+
+      let currentWeek = 1;
+      let currentExecDay = "周一";
+      const manualAdjustments = {};
+
+      function getWeekAdjustment(week) {
+        return manualAdjustments[week] || null;
+      }
+
+      function getStageByWeek(week) {
+        if (week <= 2) {
+          return {
+            id: "阶段1（适应激活）",
+            trainFocus: "建立动作质量和训练节奏",
+            dietFocus: "规律进食 + 蛋白达标，减少暴食波动",
+          };
+        }
+        if (week <= 6) {
+          return {
+            id: "阶段2（减脂强化）",
+            trainFocus: "提高训练量与强度，聚焦减脂效率",
+            dietFocus: "稳定热量缺口，强化训练日补给",
+          };
+        }
+        return {
+          id: "阶段3（巩固定型）",
+          trainFocus: "巩固成果并优化体态细节",
+          dietFocus: "防反弹，平滑过渡到长期维持",
+        };
+      }
+
+      function getWeekProgressText(week) {
+        if (week === 1) return "本周参数：动作标准优先，使用基础重量。";
+        if (week === 2) return "本周参数：每组增加 1-2 次，保持动作质量。";
+        if (week === 3) return "本周参数：主动作负重提升约 5%。";
+        if (week === 4) return "本周参数：组间休息缩短 10-15 秒。";
+        if (week === 5) return "本周参数：主动作增加 1 组或增加 5-8 分钟训练量。";
+        if (week === 6) return "本周参数：保持强化强度，避免过度疲劳。";
+        if (week === 7) return "本周参数：总量降低约 10%，优化动作控制细节。";
+        return "本周参数：巩固周，保持强度并关注恢复与睡眠。";
+      }
+
+      function updatePhaseLink() {
+        return;
+      }
+
+      function switchMainTab(event) {
+        const target = event.currentTarget.getAttribute("data-tab");
+        document.querySelectorAll(".main-tab").forEach((btn) => btn.classList.remove("active"));
+        event.currentTarget.classList.add("active");
+        document.getElementById("panel-train").style.display = target === "train" ? "block" : "none";
+        document.getElementById("panel-diet").style.display = target === "diet" ? "block" : "none";
+        document.getElementById("panel-review").style.display = target === "review" ? "block" : "none";
+        document.getElementById("execDayStrip").style.display = target === "review" ? "none" : "";
+        document.getElementById("tabsCard").setAttribute("data-active", target);
+      }
+
+      function openAction(name, target, intensity, gear, tips) {
+        const all = Object.values(trainPlan).flat();
+        const item = all.find((a) => a.name === name) || {};
+        document.getElementById("mName").textContent = name;
+        document.getElementById("mTarget").textContent = "目标部位：" + target;
+        document.getElementById("mIntensity").textContent = "建议强度/时间：" + intensity;
+        document.getElementById("mGear").textContent = "推荐器械：" + gear;
+        document.getElementById("mTips").textContent = "注意事项：" + tips;
+        document.getElementById("mSteps").textContent = item.steps || "按标准动作轨迹完成，控制节奏，先质后量。";
+        document.getElementById("mBreath").textContent = `呼吸节奏：${item.breath || "发力呼气，还原吸气。"}`;
+        document.getElementById("mCommonError").textContent = `常见错误：${item.commonError || "借力、动作过快、核心松散。"}`;
+        document.getElementById("mRegression").textContent = `回退方案：${item.regression || "降低重量或缩短时长。"}`
+        document.getElementById("mProgression").textContent = `进阶方案：${item.progression || "增加组次或提高控制难度。"}`
+        document.getElementById("actionModal").style.display = "flex";
+      }
+
+      function closeAction() {
+        document.getElementById("actionModal").style.display = "none";
+      }
+
+      function renderTrainActions(day) {
+        const actions = trainPlan[day] || [];
+        const stage = getStageByWeek(currentWeek);
+        const weekProgress = getWeekProgressText(currentWeek);
+        document.getElementById("trainDayTitle").textContent = `训练动作`;
+        document.getElementById("trainMapTip").textContent = `执行焦点：${stage.trainFocus}。今日执行提示：${weekProgress}`;
+        const grid = document.getElementById("actionGrid");
+        const tagClass = (t) => {
+          if (!t) return "tag-default";
+          if (t.startsWith("力量")) return "tag-power";
+          if (t === "核心") return "tag-core";
+          if (t === "恢复") return "tag-recovery";
+          if (t === "拉伸") return "tag-stretch";
+          if (t === "心肺") return "tag-cardio";
+          if (t === "体态") return "tag-posture";
+          if (t === "轻活动" || t === "快走") return "tag-light";
+          return "tag-default";
+        };
+        grid.innerHTML = actions
+          .map(
+            (a) => `
+              <div class="action" onclick="openAction('${a.name}','${a.target}','${a.intensity}','${a.gear}','${a.tips}')">
+                <div class="action-thumb" style="background-image:url('https://images.unsplash.com/photo-1517836357463-d25dfeac3438?auto=format&fit=crop&w=600&q=80');"><span>${a.name} 示意图</span></div>
+                <div class="action-top">
+                  <span class="action-name">${a.name}</span><span class="action-tag ${tagClass(a.tag)}">${a.tag}</span>
+                </div>
+                <div class="action-sub">${a.sub} · ${weekProgress}</div>
+              </div>
+            `
+          )
+          .join("");
+      }
+
+      function renderDietDay(day) {
+        const data = dietPlan[day];
+        if (!data) return;
+        const stage = getStageByWeek(currentWeek);
+        document.getElementById("dietChartTitle").textContent = "营养目标";
+        document.getElementById("mealHeadTitle").textContent = "一日食谱";
+        const baseKcal = Number(String(data.kcal).replace("kcal", ""));
+        const adjustment = getWeekAdjustment(currentWeek);
+        let weekOffset = 0;
+        if (currentWeek >= 3 && currentWeek <= 6) weekOffset = -80;
+        if (currentWeek >= 7) weekOffset = -30;
+        const adjustedKcal = baseKcal + weekOffset + (adjustment ? adjustment.kcalDelta : 0);
+        document.getElementById("dietKcal").textContent = `${adjustedKcal}`;
+        const waterTarget = currentWeek <= 2 ? 2.0 : 2.2;
+        const targetProtein = Math.max(100, Math.round(adjustedKcal * 0.24 / 4));
+        const targetCarb = Math.round(adjustedKcal * 0.5 / 4);
+        const targetFat = Math.round(adjustedKcal * 0.26 / 9);
+        const proteinKcal = targetProtein * 4;
+        const carbKcal = targetCarb * 4;
+        const fatKcal = targetFat * 9;
+        const totalKcal = proteinKcal + carbKcal + fatKcal;
+        const proteinDeg = Math.round((proteinKcal / totalKcal) * 360);
+        const carbDeg = Math.round((carbKcal / totalKcal) * 360);
+        const fatDeg = 360 - proteinDeg - carbDeg;
+        const ringBg = `conic-gradient(#00e5ff 0deg ${proteinDeg}deg, #36cfc9 ${proteinDeg}deg ${proteinDeg + carbDeg}deg, #ff9b37 ${proteinDeg + carbDeg}deg 360deg)`;
+        document.getElementById("dietKcalRing").style.background = ringBg;
+        document.getElementById("dietMacroLegend").innerHTML = `
+          <span class="legend-item"><span class="legend-dot protein"></span>蛋白质 ${targetProtein}g</span>
+          <span class="legend-item"><span class="legend-dot carb"></span>碳水 ${targetCarb}g</span>
+          <span class="legend-item"><span class="legend-dot fat"></span>脂肪 ${targetFat}g</span>
+        `;
+        document.getElementById("dietWaterRow").innerHTML = `
+          <span class="water-icon"></span>
+          <span>饮水目标 ${waterTarget}L · 建议分 6-8 次补水</span>
+        `;
+        document.getElementById(
+          "dietSummaryBox"
+        ).textContent = `执行策略：${stage.dietFocus}${adjustment ? "（已自动下调晚餐热量）" : ""}；按计划完成${day}餐次，主餐优先蛋白，晚间不过量。`;
+        document.getElementById("dietTipsBox").innerHTML =
+          '<div class="macro-tip">说明：以上为方案目标值，不代表用户实际执行结果。</div>';
+        document.getElementById("mealList").innerHTML = data.meals
+          .map(
+            (m, idx) => `
+              <div class="meal-item" onclick="openMeal('${day}', ${idx})">
+                <div class="meal-content">
+                  <div class="meal-photo" style="background-image:url('https://images.unsplash.com/photo-1512621776951-a57141f2eefd?auto=format&fit=crop&w=700&q=80');"><span>${m.photo}</span></div>
+                  <div class="meal-info">
+                    <div class="meal-meta">
+                      <span class="meal-time">${m.time}</span>
+                      <span class="meal-badge ${mealTypeFromTime(m.time)}">${mealLabelFromTime(m.time)}</span>
+                      <span class="meal-goal">${getMealGoalText(m)}</span>
+                      <span class="meal-macro-chip">约 ${calcMealKcal(m.macro)}kcal</span>
+                    </div>
+                    <div class="meal-text">${m.text}</div>
+                    <div class="meal-macro">${formatMacroBrief(m.macro)}</div>
+                  </div>
+                </div>
+              </div>
+            `
+          )
+          .join("");
+      }
+
+      function formatMacroText(macro) {
+        const matched = macro.match(/P(\d+)\/C(\d+)\/F(\d+)/);
+        if (!matched) return macro;
+        return `这餐约含：蛋白质 ${matched[1]}g，碳水 ${matched[2]}g，脂肪 ${matched[3]}g。作用：补充当天训练与恢复所需营养。`;
+      }
+
+      function formatMacroBrief(macro) {
+        const matched = macro.match(/P(\d+)\/C(\d+)\/F(\d+)/);
+        if (!matched) return macro;
+        return `蛋白质 ${matched[1]}g，碳水 ${matched[2]}g，脂肪 ${matched[3]}g`;
+      }
+
+      function calcMealKcal(macro) {
+        const matched = macro.match(/P(\d+)\/C(\d+)\/F(\d+)/);
+        if (!matched) return 0;
+        return Number(matched[1]) * 4 + Number(matched[2]) * 4 + Number(matched[3]) * 9;
+      }
+
+      function getMealGoalText(meal) {
+        if (meal?.detail?.goal) return summarizeMealGoal(meal.detail.goal);
+        const type = mealTypeFromTime(meal.time || "12:00");
+        if (type === "breakfast") return "稳能量";
+        if (type === "lunch") return "补主能量";
+        return "控晚间热量";
+      }
+
+      function summarizeMealGoal(goalText) {
+        const text = String(goalText || "");
+        if (text.includes("稳定") || text.includes("血糖")) return "稳能量";
+        if (text.includes("饱腹") || text.includes("零食")) return "延长饱腹";
+        if (text.includes("训练前") || text.includes("主能量")) return "训练前补给";
+        if (text.includes("训练后") || text.includes("恢复")) return "训练后恢复";
+        if (text.includes("控制")) return "热量控制";
+        return "营养补给";
+      }
+
+      function parseMacroNumbers(macros) {
+        const merged = (macros || []).join(" ");
+        const p = (merged.match(/蛋白质[：:\s]*约?\s*(\d+)/) || [0, 0])[1];
+        const c = (merged.match(/碳水(?:化合物)?[：:\s]*约?\s*(\d+)/) || [0, 0])[1];
+        const f = (merged.match(/脂肪[：:\s]*约?\s*(\d+)/) || [0, 0])[1];
+        return { p, c, f };
+      }
+
+      function getReviewContentByWeek(week) {
+        const weekMap = {
+          1: {
+            expected: "动作更熟悉，训练后疲劳感可在 24 小时内恢复。",
+            normal: "体重变化不明显属于正常，先看动作质量和训练完成度。",
+            retest: "第 2 周结束后复测：腰围、体态拍照、主观疲劳度。",
+            focus: "建立执行节奏，不急于追求体重变化。",
+            metrics: "动作标准度、肩颈僵硬感、恢复速度、睡眠稳定性。",
+          },
+          2: {
+            expected: "训练动作更稳定，心肺不适感下降。",
+            normal: "围度变化较小属于正常，适应期以稳定完成计划为主。",
+            retest: "本周末复测：腰围、体态照片、训练后恢复感。",
+            focus: "确认适应阶段完成，为后续强化做准备。",
+            metrics: "动作流畅度、训练完成率、疲劳恢复时长。",
+          },
+          3: {
+            expected: "训练量上来后，日常体感更轻快。",
+            normal: "体重短期波动正常，重点看腰围和衣物松紧。",
+            retest: "第 4 周结束后复测：腰围、体态照片、心肺耐受。",
+            focus: "进入强化阶段，观察围度与体态早期变化。",
+            metrics: "腰围、衣物松紧、楼梯体感、训练耐受。",
+          },
+          4: {
+            expected: "腰围或体态开始出现更清晰变化。",
+            normal: "单周波动正常，不需要频繁更换方案。",
+            retest: "本周末复测：腰围、体态拍照、恢复质量。",
+            focus: "确认减脂强化阶段的首轮变化是否出现。",
+            metrics: "腰围变化、体态照片、训练后疲劳恢复。",
+          },
+          5: {
+            expected: "力量与心肺耐受继续提升，动作质量更稳定。",
+            normal: "变化速度放缓正常，属于中期平台波动。",
+            retest: "第 6 周结束后复测：围度、体态、主观强度。",
+            focus: "强化期中段，稳住执行质量和恢复节奏。",
+            metrics: "围度、动作稳定性、睡眠与疲劳感。",
+          },
+          6: {
+            expected: "围度与外观变化应更容易感知。",
+            normal: "体重并非唯一指标，围度和体态更关键。",
+            retest: "本周末复测：腰围、体脂率、体态对比照。",
+            focus: "完成强化阶段收口，准备进入巩固期。",
+            metrics: "腰围、体态对比、恢复时长、执行稳定性。",
+          },
+          7: {
+            expected: "体态稳定性提升，训练后的恢复更顺畅。",
+            normal: "变化速度降低正常，当前重点是稳住成果。",
+            retest: "第 8 周结束后复测：腰围、体态、生活习惯稳定度。",
+            focus: "巩固已获得成果，降低反弹风险。",
+            metrics: "体态稳定性、围度维持、恢复与睡眠质量。",
+          },
+          8: {
+            expected: "体态与围度成果趋于稳定，可独立执行计划。",
+            normal: "冲刺期结束后变化趋缓是正常现象。",
+            retest: "本周末完成总结复测：腰围、体脂率、体态对比照。",
+            focus: "完成阶段总结，形成长期可执行的维护方案。",
+            metrics: "腰围、体脂率、体态照片、习惯可持续性。",
+          },
+        };
+        const data = weekMap[week] || weekMap[1];
+        return {
+          title: "复盘要点",
+          expected: data.expected,
+          normal: data.normal,
+          retest: data.retest,
+          focusTitle: "复盘目的",
+          focus: data.focus,
+          metrics: data.metrics,
+        };
+      }
+
+      function renderReviewModule() {
+        const review = getReviewContentByWeek(currentWeek);
+        const setText = (id, text) => {
+          const el = document.getElementById(id);
+          if (el) el.textContent = text;
+        };
+        setText("reviewWeekTitle", review.title);
+        setText("reviewExpected", review.expected);
+        setText("reviewNormal", review.normal);
+        setText("reviewRetest", review.retest);
+        setText("reviewNoteTitle", review.focusTitle);
+        setText("reviewFocus", review.focus);
+        setText("reviewMetrics", review.metrics);
+      }
+
+      function mealTypeFromTime(time) {
+        const hour = parseInt(time.split(":")[0], 10);
+        if (hour < 10) return "breakfast";
+        if (hour < 17) return "lunch";
+        return "dinner";
+      }
+
+      function mealLabelFromTime(time) {
+        const type = mealTypeFromTime(time);
+        if (type === "breakfast") return "早餐";
+        if (type === "lunch") return "午餐/加餐";
+        return "晚餐/夜间";
+      }
+
+      function selectExecDay(day, event) {
+        currentExecDay = day;
+        document.querySelectorAll("#execDayStrip .day-col").forEach((el) => {
+          el.classList.toggle("active", el.getAttribute("data-day") === day);
+        });
+        renderTrainActions(day);
+        renderDietDay(day);
+      }
+
+      function selectWeek(week, event) {
+        currentWeek = week;
+        document.querySelectorAll("#weekPicker .week-chip").forEach((el) => el.classList.remove("active"));
+        if (event && event.currentTarget) event.currentTarget.classList.add("active");
+        updatePhaseLink();
+        renderTrainActions(currentExecDay);
+        renderDietDay(currentExecDay);
+        renderReviewModule();
+      }
+
+      function openMeal(day, idx) {
+        const meal = dietPlan[day]?.meals?.[idx];
+        if (!meal) return;
+        const detail = meal.detail || {
+          goal: "控制总热量并保证蛋白摄入，帮助减脂和恢复。",
+          ingredients: meal.text,
+          replace: "可用同蛋白来源食材等量替换，避免高油烹饪。",
+          timing: "建议按固定时间进食，训练前后优先保证蛋白和碳水。",
+          caution: "过敏体质或特殊疾病人群请按医生建议调整。",
+          steps: "按食材顺序清洗、切配、蒸煮，优先少油烹饪。",
+          prepTime: "约 15 分钟",
+          outOption: "外食优先选蒸煮烤类 + 粗粮 + 蔬菜。",
+          avoid: "避免糖饮、奶油酱、油炸叠加。",
+        };
+        document.getElementById("mealName").textContent = `${day} ${meal.time} 食谱详情`;
+        document.getElementById("mealGoal").textContent = `这餐目标：${detail.goal}`;
+        document.getElementById("mealIngredients").textContent = `食材与克数：${detail.ingredients}`;
+        document.getElementById("mealMacro").textContent = `营养估算：${formatMacroText(meal.macro)} 热量约 ${Math.round(
+          (Number((meal.macro.match(/P(\d+)/) || [0, 0])[1]) * 4 +
+            Number((meal.macro.match(/C(\d+)/) || [0, 0])[1]) * 4 +
+            Number((meal.macro.match(/F(\d+)/) || [0, 0])[1]) * 9)
+        )} 千卡。`;
+        document.getElementById("mealReplace").textContent = `可替换方案：${detail.replace}`;
+        document.getElementById("mealTiming").textContent = `食用时机：${detail.timing}`;
+        document.getElementById("mealCaution").textContent = `注意事项：${detail.caution}`;
+        document.getElementById("mealSteps").textContent = `烹饪步骤：${detail.steps}`;
+        document.getElementById("mealPrepTime").textContent = `准备时长：${detail.prepTime}`;
+        document.getElementById("mealOutOption").textContent = `外食替代：${detail.outOption}`;
+        document.getElementById("mealAvoid").textContent = `尽量避免：${detail.avoid}`;
+        document.getElementById("mealModal").style.display = "flex";
+      }
+
+      function closeMeal() {
+        document.getElementById("mealModal").style.display = "none";
+      }
+
+      renderTrainActions(currentExecDay);
+      renderDietDay(currentExecDay);
+      updatePhaseLink();
+      renderReviewModule();
+    </script>
+  </body>
+</html>
