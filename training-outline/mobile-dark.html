@@ -86,7 +86,7 @@
       .container {
         max-width: 100%;
         margin: 0;
-        padding: 16px 0;
+        padding: 0 0 16px;
         position: relative;
       }
 
@@ -120,12 +120,13 @@
 
       /* ===== Hero ===== */
       .top-hero {
-        background: transparent;
-        border: none;
-        border-radius: 0;
+        background: linear-gradient(135deg, rgba(0, 229, 255, 0.12) 0%, rgba(120, 80, 255, 0.06) 50%, rgba(20, 30, 80, 0.9) 100%);
+        border: 1px solid rgba(0, 229, 255, 0.2);
+        border-radius: var(--radius-lg);
         color: #fff;
-        padding: 0 0 16px;
-        box-shadow: none;
+        padding: 16px;
+        box-shadow: 0 0 30px rgba(0, 229, 255, 0.06), inset 0 0 0 1px rgba(255,255,255,0.03);
+        backdrop-filter: var(--blur);
       }
 
       .hero-row {
@@ -594,10 +595,10 @@
       }
 
       .week-chip.active {
-        background: rgba(0, 229, 255, 0.06);
+        background: rgba(0, 229, 255, 0.15);
         color: var(--primary);
-        border: 1.5px solid rgba(0, 229, 255, 0.5);
-        box-shadow: none;
+        border: 1.5px solid rgba(0, 229, 255, 0.55);
+        box-shadow: 0 0 16px rgba(0, 229, 255, 0.25);
         font-weight: 700;
       }
 
@@ -695,11 +696,12 @@
       }
 
       .day-col.active {
-        border-color: rgba(0, 229, 255, 0.45);
-        background: rgba(0, 229, 255, 0.12);
-        box-shadow: none;
+        border-color: rgba(0, 229, 255, 0.5);
+        background: rgba(0, 229, 255, 0.18);
+        box-shadow: 0 0 14px rgba(0, 229, 255, 0.22);
       }
 
+      .day-col.active .day-label,
       .day-col.active .bar-label {
         color: var(--primary);
       }
@@ -753,21 +755,65 @@
       }
 
       .main-tab.active[data-tab="train"] {
-        background: rgba(0, 229, 255, 0.18);
+        background: rgba(0, 229, 255, 0.22);
         color: var(--primary);
-        box-shadow: none;
+        box-shadow: 0 0 16px rgba(0, 229, 255, 0.2);
       }
 
       .main-tab.active[data-tab="diet"] {
-        background: rgba(91, 143, 249, 0.18);
+        background: rgba(91, 143, 249, 0.22);
         color: var(--blue);
-        box-shadow: none;
+        box-shadow: 0 0 16px rgba(91, 143, 249, 0.2);
       }
 
       .main-tab.active[data-tab="review"] {
-        background: rgba(167, 139, 250, 0.18);
+        background: rgba(167, 139, 250, 0.22);
         color: var(--purple);
-        box-shadow: none;
+        box-shadow: 0 0 16px rgba(167, 139, 250, 0.2);
+      }
+
+      /* ===== Floating bottom bar (scroll down) ===== */
+      .float-bar {
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        z-index: 100;
+        display: flex;
+        align-items: center;
+        gap: var(--gap-sm);
+        padding: var(--gap-sm) var(--gap-md);
+        padding-bottom: calc(var(--gap-sm) + env(safe-area-inset-bottom, 0));
+        background: rgba(10, 14, 35, 0.95);
+        border-top: 1px solid rgba(100, 140, 255, 0.12);
+        backdrop-filter: var(--blur);
+        transform: translateY(100%);
+        transition: transform 0.25s ease;
+      }
+
+      .float-bar.visible {
+        transform: translateY(0);
+      }
+
+      .float-bar .main-tab {
+        flex: 1;
+        padding: 10px 8px;
+        font-size: var(--text-sm);
+      }
+
+      .float-bar .scroll-top {
+        flex-shrink: 0;
+        width: 40px;
+        height: 40px;
+        border: none;
+        border-radius: 50%;
+        background: rgba(0, 229, 255, 0.15);
+        color: var(--primary);
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 18px;
       }
 
       /* Panel content color by active tab */
@@ -2018,6 +2064,13 @@
       </div>
     </div>
 
+    <div class="float-bar" id="floatBar">
+      <button class="main-tab active" data-tab="train" onclick="switchMainTab(event)">训练计划</button>
+      <button class="main-tab" data-tab="diet" onclick="switchMainTab(event)">饮食计划</button>
+      <button class="main-tab" data-tab="review" onclick="switchMainTab(event)">进度复盘</button>
+      <button class="scroll-top" onclick="scrollToTop()" aria-label="回顶部">&#8593;</button>
+    </div>
+
     <script>
       const trainPlan = {
         周一: [
@@ -2399,8 +2452,9 @@
 
       function switchMainTab(event) {
         const target = event.currentTarget.getAttribute("data-tab");
-        document.querySelectorAll(".main-tab").forEach((btn) => btn.classList.remove("active"));
-        event.currentTarget.classList.add("active");
+        document.querySelectorAll(".main-tab").forEach((btn) => {
+          btn.classList.toggle("active", btn.getAttribute("data-tab") === target);
+        });
         document.getElementById("panel-train").style.display = target === "train" ? "block" : "none";
         document.getElementById("panel-diet").style.display = target === "diet" ? "block" : "none";
         document.getElementById("panel-review").style.display = target === "review" ? "block" : "none";
@@ -2727,6 +2781,20 @@
       renderDietDay(currentExecDay);
       updatePhaseLink();
       renderReviewModule();
+
+      (function() {
+        const floatBar = document.getElementById("floatBar");
+        const SCROLL_THRESHOLD = 280;
+        function onScroll() {
+          floatBar.classList.toggle("visible", window.scrollY > SCROLL_THRESHOLD);
+        }
+        window.addEventListener("scroll", onScroll, { passive: true });
+        onScroll();
+      })();
+
+      function scrollToTop() {
+        document.getElementById("tabsCard").scrollIntoView({ behavior: "smooth", block: "start" });
+      }
     </script>
   </body>
 </html>
