@@ -14,6 +14,15 @@ function clone(obj) {
   return JSON.parse(JSON.stringify(obj));
 }
 
+function isDebugDemo() {
+  if (typeof window === "undefined") return false;
+  try {
+    return new URLSearchParams(window.location.search).get("debug") === "1";
+  } catch {
+    return false;
+  }
+}
+
 export function App() {
   const [tab, setTab] = useState("home");
   const [route, setRoute] = useState("home"); // home | my | outline | training
@@ -105,6 +114,8 @@ export function App() {
     `;
   }, [route, tab, loading, homeData, outlineData, trainingData]);
 
+  const showDebugPills = isDebugDemo();
+
   return html`
     <main className="mx-auto min-h-screen w-full max-w-md">
       <header className="sticky top-0 z-20 border-b border-fxLine bg-[#070d1f]/85 px-4 py-3 backdrop-blur-[12px]">
@@ -116,26 +127,30 @@ export function App() {
             ${route === "training" ? "训练计划" : route === "outline" ? "训练大纲" : tab === "home" ? "首页" : "我的"}
           </span>
         </div>
-        <div className="hide-scrollbar mt-3 flex gap-2 overflow-x-auto pb-1">
-          ${[
-            ["normal", "正常数据"],
-            ["empty", "空状态"],
-            ["no3d", "无模型/无趋势"],
-          ].map(
-            ([key, label]) => html`
-              <button
-                key=${key}
-                onClick=${() => {
-                  setRoute(tab);
-                  setScenario(key);
-                }}
-                className=${`fx-pill whitespace-nowrap px-3 py-1 text-xs ${scenario === key ? "fx-pill--active" : ""}`}
-              >
-                ${label}
-              </button>
-            `,
-          )}
-        </div>
+        ${showDebugPills &&
+        html`
+          <div className="hide-scrollbar mt-3 flex gap-2 overflow-x-auto pb-1">
+            <span className="mr-1 shrink-0 self-center text-[10px] text-fxSub">debug</span>
+            ${[
+              ["normal", "正常数据"],
+              ["empty", "空状态"],
+              ["no3d", "无模型/无趋势"],
+            ].map(
+              ([key, label]) => html`
+                <button
+                  key=${key}
+                  onClick=${() => {
+                    setRoute(tab);
+                    setScenario(key);
+                  }}
+                  className=${`fx-pill whitespace-nowrap px-3 py-1 text-xs ${scenario === key ? "fx-pill--active" : ""}`}
+                >
+                  ${label}
+                </button>
+              `,
+            )}
+          </div>
+        `}
       </header>
 
       ${page}
