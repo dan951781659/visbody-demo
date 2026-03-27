@@ -1,7 +1,6 @@
 import React from "https://esm.sh/react@18.3.1";
 import htm from "https://esm.sh/htm@3.1.1";
-import { HeroSection } from "../components/home/HeroSection.js";
-import { Model3DCard } from "../components/home/Model3DCard.js";
+import { ResultHero } from "../components/home/ResultHero.js";
 import { HighlightsSection } from "../components/home/HighlightsSection.js";
 import { SubReportsSection } from "../components/home/SubReportsSection.js";
 import { TrendSection } from "../components/home/TrendSection.js";
@@ -31,14 +30,6 @@ export function HomePage({ loading, data, onNavigateOutline, onToast }) {
     `;
   }
 
-  const bodyReport = (data.subReports || []).find((r) => r.name === "身体成分") || (data.subReports || [])[1];
-  const keyMetrics = bodyReport?.detail?.keyMetrics || [
-    { label: "腰臀比", value: "0.95" },
-    { label: "中腰围", value: "98cm" },
-    { label: "体脂率", value: "28.6%" },
-    { label: "风险结论", value: "内脏脂肪偏高" },
-  ];
-
   return html`
     <div className="space-y-3 px-4 pb-24 pt-4">
       ${data.dataQuality?.hasConflict &&
@@ -47,13 +38,12 @@ export function HomePage({ loading, data, onNavigateOutline, onToast }) {
           数据冲突已自动降级处理：${(data.dataQuality.conflictNotes || []).join("；")}
         </div>
       `}
-      <${HeroSection}
+      <${ResultHero}
         user=${data.user}
         report=${data.latestReport}
-        keyMetrics=${keyMetrics}
-        onViewFullReport=${() => onToast("跳转：完整报告页")}
+        model3d=${data.model3d}
+        onViewModel=${() => onToast("跳转：3D 模型详情")}
       />
-      <${Model3DCard} model3d=${data.model3d} onViewModel=${() => onToast("跳转：3D 模型详情")} />
       <${HighlightsSection} highlights=${data.highlights} onOpenReport=${() => onToast("跳转：分报告详情")} />
       <${SubReportsSection}
         reports=${data.subReports}

@@ -7,21 +7,46 @@ export const homeMock = {
     id: "u-1001",
     name: "李若希",
     avatar: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=160&h=160&fit=crop",
+    height: "181cm",
+    age: 37,
     latestAssessmentTime: "2026-03-21 19:20",
   },
   latestReport: {
     reportId: "r-9981",
     title: "最新评估结果",
+    headline: "体态表现整体可控，但代谢风险和下肢稳定仍需优先处理",
+    oneLineConclusion: "打开首页先看到模型、评分和最关键的 3 条结果，再决定往下看哪一部分。",
+    priorityAdvice: "先做下肢稳定训练与恢复管理，再持续推进减脂与核心控制。",
     summary:
       "本次综合评分 82 分，体态控制优于上次，但核心稳定性和膝关节负荷仍有中等风险，建议优先进行下肢稳定训练与恢复管理。",
     score: 82,
+    bodyCompositionScore: 73,
+    postureScore: 84,
     riskLevel: "medium",
+    conclusionShort: "您目前体成分状况一般，体脂率偏高，体重正常。体态状况良好，但存在头前引、头侧歪、高低肩风险。",
+    quickMetrics: [
+      { icon: "⚖", label: "体重", value: "82.8 kg" },
+      { icon: "◔", label: "体脂率", value: "24 %" },
+      { icon: "💪", label: "肌肉量", value: "59.9 kg" },
+    ],
+    coreResultsText: [
+      "头前引异常（9.2°），建议优先进行颈肩放松与姿态纠正。",
+      "内脏脂肪偏高，需结合有氧与抗阻训练做减脂干预。",
+      "下肢稳定能力下降，建议增加核心与单腿控制训练。",
+    ],
+    coreResults: [
+      { id: "cr-1", label: "体态评分", value: "92 分", tone: "good", note: "较上次更稳" },
+      { id: "cr-2", label: "内脏脂肪", value: "偏高", tone: "danger", note: "腹部围度仍高" },
+      { id: "cr-3", label: "膝关节负荷", value: "中风险", tone: "warning", note: "优先稳髋膝链" },
+    ],
     fullReportUrl: "/report/full/r-9981",
   },
   model3d: {
     hasModel: true,
     coverImage: "/assets/body-model.png",
     modelUrl: "/model/r-9981",
+    focusLabel: "三维结果总览",
+    caption: "三维模型作为首页主视觉，先看整体结果，再进入具体分项。",
   },
   highlights: {
     issues: [
