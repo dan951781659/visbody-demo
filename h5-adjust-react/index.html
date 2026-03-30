@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <title>H5 调整方案 · React Demo</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            colors: {
+              fxBgStart: "#0a0e27",
+              fxBgEnd: "#131a3a",
+              fxCard: "rgba(20, 30, 60, 0.7)",
+              fxCardBorder: "rgba(100, 140, 255, 0.12)",
+              fxLine: "rgba(100, 140, 255, 0.10)",
+              fxText: "#e8ecf4",
+              fxSub: "#7a8baa",
+              fxPrimary: "#00e5ff",
+              fxPrimarySoft: "rgba(0, 229, 255, 0.10)",
+              fxPrimaryGlow: "rgba(0, 229, 255, 0.30)",
+              fxPurple: "#a78bfa",
+              fxPurpleSoft: "rgba(167, 139, 250, 0.12)",
+              fxPink: "#ff6bcb",
+              fxBlue: "#00e5ff",
+              fxGreen: "#36cfc9",
+              fxGreenSoft: "rgba(54, 207, 201, 0.12)",
+              fxOrange: "#ff9b37",
+              fxOrangeSoft: "rgba(255, 155, 55, 0.12)",
+              fxRed: "#ff4d6a",
+            },
+            borderRadius: { card: "16px" },
+            boxShadow: {
+              card: "0 8px 32px rgba(0, 0, 0, 0.40)",
+              glow: "0 0 30px rgba(0, 229, 255, 0.10)",
+            },
+          },
+        },
+      };
+    </script>
+    <link rel="stylesheet" href="./src/styles.css" />
+  </head>
+  <body class="bg-slate-950">
+    <div id="root"></div>
+    <script type="module" src="./src/main.js"></script>
+  </body>
+</html>
