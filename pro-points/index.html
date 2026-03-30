@@ -3,628 +3,2745 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>PRO权益与积分 - 维塑数字健康平台</title>
+  <title>Pro 与积分 · 维塑数字健康平台</title>
   <style>
-    * { box-sizing: border-box; margin: 0; padding: 0; }
-    body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif; font-size: 14px; color: #333; min-height: 100vh; }
-    /* 主色 #4285F4 */
     :root {
-      --primary: #4285F4;
-      --primary-hover: #3367D6;
-      --primary-light: #E8F0FE;
-      --border: #DADCE0;
-      --bg: #F8F9FA;
-      --text: #202124;
-      --text-secondary: #5F6368;
+      --line: #e8ebf3;
+      --line-2: #edf1f7;
+      --ink: #1e2433;
+      --muted: #6c7485;
+      --blue: #315dff;
+      --blue-soft: rgba(49, 93, 255, 0.1);
+      --purple-soft: rgba(170, 136, 255, 0.12);
+      --warn: #d88216;
+      --warn-soft: rgba(216, 130, 22, 0.12);
+      --green: #16a34a;
+      --green-soft: rgba(22, 163, 74, 0.12);
+      --danger: #df4c4c;
+      --danger-soft: rgba(223, 76, 76, 0.12);
+      --bg: #f5f6fb;
+      --panel: rgba(255, 255, 255, 0.9);
+      --shadow: 0 18px 50px rgba(42, 52, 82, 0.08);
     }
-
-    .header {
-      height: 56px;
-      background: #fff;
-      border-bottom: 1px solid var(--border);
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 0 24px;
-      position: fixed;
-      top: 0; left: 0; right: 0;
-      z-index: 100;
-    }
-    .header-left { display: flex; align-items: center; gap: 8px; }
-    .logo { font-weight: 700; font-size: 18px; color: var(--primary); }
-    .powered-by { font-size: 12px; color: var(--text-secondary); }
-    .header-center { font-size: 16px; font-weight: 500; color: var(--text); }
-    .header-right { display: flex; align-items: center; gap: 12px; }
-    .header-right select {
-      padding: 6px 10px;
-      border: 1px solid var(--border);
-      border-radius: 4px;
-      background: #fff;
-      color: var(--text-secondary);
-      font-size: 13px;
-      cursor: pointer;
-    }
-    .btn-header {
-      padding: 6px 16px;
-      border-radius: 4px;
-      border: none;
-      background: var(--primary);
-      color: #fff;
-      font-size: 14px;
-      cursor: pointer;
-    }
-    .btn-header:hover { background: var(--primary-hover); }
-
-    .layout { display: flex; padding-top: 56px; min-height: 100vh; }
-    .sidebar {
-      width: 220px;
-      background: #fff;
-      border-right: 1px solid var(--border);
-      padding: 16px 0;
-      position: fixed;
-      left: 0; top: 56px; bottom: 0;
-      overflow-y: auto;
-    }
-    .nav-title { padding: 8px 24px; font-size: 12px; color: var(--text-secondary); }
-    .nav-item {
-      padding: 10px 24px;
-      color: var(--text);
-      text-decoration: none;
-      display: block;
-      font-size: 14px;
-      border-left: 3px solid transparent;
-    }
-    .nav-item:hover { background: var(--bg); }
-    .nav-item.active { background: var(--primary-light); color: var(--primary); font-weight: 500; border-left-color: var(--primary); }
-    .sidebar-footer {
+    * { box-sizing: border-box; }
+    .visually-hidden {
       position: absolute;
-      bottom: 0; left: 0; right: 0;
-      padding: 16px 24px;
-      border-top: 1px solid var(--border);
-      font-size: 12px;
-      color: var(--text-secondary);
+      width: 1px;
+      height: 1px;
+      padding: 0;
+      margin: -1px;
+      overflow: hidden;
+      clip: rect(0, 0, 0, 0);
+      white-space: nowrap;
+      border: 0;
     }
-
-    .main {
-      flex: 1;
-      margin-left: 220px;
-      padding: 24px;
+    body {
+      margin: 0;
+      font-family: "PingFang SC", "Helvetica Neue", Arial, sans-serif;
+      color: var(--ink);
       background: var(--bg);
-      min-height: calc(100vh - 56px);
     }
-    .page { display: none; }
-    .page.active { display: block; }
-
-    .back-link {
-      display: inline-block;
-      color: var(--primary);
-      text-decoration: none;
-      margin-bottom: 16px;
-      font-size: 14px;
+    button, input, select {
+      font: inherit;
     }
-    .back-link:hover { text-decoration: underline; }
-    .page-title-row {
+    .app {
+      display: grid;
+      grid-template-columns: 212px 1fr;
+      min-height: 100vh;
+    }
+    .sidebar {
+      background: #fff;
+      border-right: 1px solid var(--line);
       display: flex;
-      align-items: center;
+      flex-direction: column;
+    }
+    .brand {
+      padding: 18px 20px 16px;
+      border-bottom: 1px solid var(--line);
+    }
+    .brand strong {
+      font-size: 28px;
+      letter-spacing: 0.08em;
+      color: #223252;
+    }
+    .brand span {
+      color: #bcc2d0;
+      font-size: 12px;
+      margin-left: 6px;
+    }
+    .nav-group {
+      padding: 10px 0;
+      border-bottom: 1px solid #eef1f7;
+    }
+    .nav-title {
+      padding: 12px 16px 8px;
+      font-size: 13px;
+      color: var(--muted);
+    }
+    .nav-item {
+      padding: 12px 22px;
+      color: #4a5871;
+      border-left: 3px solid transparent;
+      cursor: pointer;
+      font-size: 15px;
+    }
+    .nav-item.active {
+      color: var(--blue);
+      border-left-color: var(--blue);
+      background: linear-gradient(90deg, rgba(49, 93, 255, 0.1), transparent 90%);
+      font-weight: 700;
+    }
+    .nav-foot {
+      margin-top: auto;
+      padding: 14px 16px;
+      color: #9aa5b7;
+      font-size: 13px;
+      display: flex;
       justify-content: space-between;
-      flex-wrap: wrap;
-      gap: 16px;
-      margin-bottom: 24px;
-    }
-    .account-name {
-      font-size: 24px;
-      font-weight: 600;
-      color: var(--text);
-      display: flex;
       align-items: center;
-      gap: 8px;
     }
-    .badge-pro {
-      display: inline-block;
-      padding: 2px 8px;
-      font-size: 12px;
-      font-weight: 500;
-      color: var(--primary);
-      background: var(--primary-light);
-      border-radius: 4px;
-    }
-    .device-summary { color: var(--text-secondary); font-size: 14px; margin-top: 4px; }
-
-    /* 积分展示区 */
-    .points-bar {
+    .main {
+      min-width: 0;
       display: flex;
-      align-items: center;
-      gap: 16px;
-      padding: 12px 16px;
+      flex-direction: column;
+    }
+    .topbar {
+      height: 78px;
       background: #fff;
-      border: 1px solid var(--border);
-      border-radius: 8px;
-      margin-bottom: 20px;
-    }
-    .points-bar .label { color: var(--text-secondary); font-size: 14px; }
-    .points-bar .value { font-size: 20px; font-weight: 600; color: var(--primary); }
-    .points-bar .link {
-      margin-left: auto;
-      color: var(--primary);
-      text-decoration: none;
-      font-size: 14px;
-    }
-    .points-bar .link:hover { text-decoration: underline; }
-    .points-bar.low .value { color: #D93025; }
-    .renew-tip {
-      display: none;
-      align-items: center;
-      gap: 12px;
-      padding: 12px 16px;
-      background: #FEF7E0;
-      border: 1px solid #F9A825;
-      border-radius: 8px;
-      margin-bottom: 20px;
-    }
-    .renew-tip.show { display: flex; }
-    .renew-tip span { color: #5F6368; font-size: 14px; }
-    .btn-renew {
-      padding: 8px 20px;
-      background: var(--primary);
-      color: #fff;
-      border: none;
-      border-radius: 4px;
-      font-size: 14px;
-      cursor: pointer;
-    }
-    .btn-renew:hover { background: var(--primary-hover); }
-
-    .btn-add-pro {
-      padding: 10px 24px;
-      background: var(--primary);
-      color: #fff;
-      border: none;
-      border-radius: 4px;
-      font-size: 14px;
-      font-weight: 500;
-      cursor: pointer;
-    }
-    .btn-add-pro:hover { background: var(--primary-hover); }
-
-    .device-list { display: flex; flex-direction: column; gap: 16px; }
-    .device-card {
-      background: #fff;
-      border-radius: 8px;
-      padding: 20px;
-      border: 1px solid var(--border);
-      display: flex;
-      align-items: flex-start;
-      gap: 20px;
-    }
-    .device-thumb {
-      width: 120px; height: 120px;
-      flex-shrink: 0;
-      background: var(--bg);
-      border-radius: 8px;
+      border-bottom: 1px solid var(--line);
+      position: sticky;
+      top: 0;
+      z-index: 10;
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 11px;
-      color: var(--text-secondary);
-      text-align: center;
     }
-    .device-info { flex: 1; min-width: 0; }
-    .device-name { font-size: 16px; font-weight: 600; color: var(--primary); margin-bottom: 12px; }
-    .device-meta { display: grid; gap: 6px; font-size: 13px; color: var(--text-secondary); }
-    .device-meta .label { color: var(--text-secondary); margin-right: 4px; }
-
-    /* 积分计费规则页 */
-    .block { background: #fff; border-radius: 8px; padding: 20px 24px; margin-bottom: 20px; border: 1px solid var(--border); }
-    .block h2 { font-size: 16px; color: var(--primary); margin-bottom: 16px; padding-bottom: 8px; border-bottom: 2px solid var(--primary-light); }
-    .block h3 { font-size: 14px; color: var(--text); margin: 16px 0 8px; }
-    .tbl { width: 100%; border-collapse: collapse; font-size: 13px; }
-    .tbl th, .tbl td { border: 1px solid var(--border); padding: 10px 12px; text-align: left; }
-    .tbl th { background: var(--bg); color: var(--text); font-weight: 500; }
-    .tip { background: var(--primary-light); border-left: 4px solid var(--primary); padding: 12px 16px; margin: 12px 0; font-size: 13px; border-radius: 0 4px 4px 0; }
-    .anchor-nav { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 20px; }
-    .anchor-nav a { padding: 6px 12px; background: var(--primary-light); color: var(--primary); text-decoration: none; border-radius: 4px; font-size: 13px; }
-    .anchor-nav a:hover { background: #D2E3FC; }
-
-    /* 积分使用记录 */
-    .record-toolbar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; }
-    .record-toolbar h2 { margin: 0; border: none; padding: 0; }
-
-    /* 续费页面 */
-    .renew-card {
-      background: #fff;
-      border: 1px solid var(--border);
-      border-radius: 8px;
-      padding: 24px;
-      max-width: 560px;
-      margin-bottom: 20px;
+    .topbar h1 {
+      margin: 0;
+      font-size: 26px;
+      font-weight: 700;
     }
-    .renew-card h3 { margin: 0 0 16px; font-size: 15px; color: var(--text); }
-    .renew-row { display: flex; align-items: center; margin-bottom: 16px; }
-    .renew-row label { width: 100px; color: var(--text-secondary); font-size: 14px; }
-    .renew-row select, .renew-row input {
-      flex: 1;
-      max-width: 200px;
-      padding: 8px 12px;
-      border: 1px solid var(--border);
-      border-radius: 4px;
+    .topbar-right {
+      position: absolute;
+      right: 24px;
+      display: flex;
+      gap: 26px;
+      align-items: center;
+      color: #2f3748;
       font-size: 14px;
     }
-    .renew-summary {
-      margin-top: 20px;
+    .content {
       padding: 16px;
-      background: var(--bg);
-      border-radius: 8px;
+    }
+    .canvas {
+      min-height: calc(100vh - 110px);
+      border: 1px solid #eceff5;
+      border-radius: 22px;
+      background:
+        radial-gradient(circle at 34% 20%, rgba(255, 241, 182, 0.22), transparent 25%),
+        radial-gradient(circle at 76% 62%, rgba(228, 201, 255, 0.22), transparent 24%),
+        linear-gradient(135deg, rgba(255,255,255,0.98), rgba(250,248,255,0.98));
+      box-shadow: var(--shadow);
+      padding: 24px 28px 30px;
+      position: relative;
+      overflow: hidden;
+    }
+    .page {
+      display: none;
+    }
+    .page.active {
+      display: block;
+    }
+    .page-head {
+      display: flex;
+      justify-content: space-between;
+      gap: 16px;
+      align-items: center;
+      margin-bottom: 20px;
+      flex-wrap: wrap;
+    }
+    .back-link {
+      color: #58647e;
+      cursor: pointer;
+      font-size: 18px;
+    }
+    .top-actions {
+      display: flex;
+      gap: 12px;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+    .page-eyebrow {
+      font-size: 14px;
+      font-weight: 600;
+      color: #3d4a63;
+      padding: 8px 0;
+    }
+    .btn {
+      border-radius: 6px;
+      border: 1px solid rgba(49, 93, 255, 0.22);
+      background: #fff;
+      color: var(--blue);
+      cursor: pointer;
+      padding: 10px 18px;
       font-size: 14px;
     }
-    .renew-summary .row { display: flex; justify-content: space-between; margin-bottom: 8px; }
-    .renew-summary .total { font-weight: 600; font-size: 16px; color: var(--primary); margin-top: 12px; padding-top: 12px; border-top: 1px solid var(--border); }
-    .btn-submit {
-      margin-top: 20px;
-      padding: 10px 32px;
-      background: var(--primary);
+    .btn.primary {
+      background: var(--blue);
       color: #fff;
-      border: none;
-      border-radius: 4px;
+      border-color: var(--blue);
+    }
+    .btn.light {
+      color: #55627d;
+      border-color: var(--line);
+    }
+    .btn-outline {
+      border-radius: 2px;
+      background: #fff;
+      color: var(--blue);
+      border: 1px solid var(--blue);
+    }
+    .btn-outline:hover {
+      background: rgba(49, 93, 255, 0.06);
+    }
+    .btn.disabled,
+    .btn:disabled {
+      background: #f3f5f9;
+      color: #a5afc1;
+      border-color: #e6eaf1;
+      cursor: not-allowed;
+    }
+    .account-wrap,
+    .renew-wrap,
+    .records-wrap,
+    .detail-wrap {
+      max-width: 1320px;
+      margin: 0 auto;
+    }
+    .hero {
+      display: flex;
+      justify-content: space-between;
+      gap: 16px;
+      align-items: center;
+      flex-wrap: wrap;
+      margin-bottom: 18px;
+    }
+    .hero-title {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+    .hero-title h2 {
+      margin: 0;
+      font-size: 42px;
+      font-weight: 500;
+      letter-spacing: -0.03em;
+    }
+    .pro-badge {
+      border-radius: 999px;
+      border: 1px solid rgba(49, 93, 255, 0.22);
+      padding: 5px 12px;
+      color: var(--blue);
+      background: rgba(255,255,255,0.88);
+      font-size: 13px;
+      font-weight: 700;
+    }
+    .subline {
+      margin-top: 12px;
+      color: #4d5871;
+      font-size: 17px;
+    }
+    .subline strong {
+      color: var(--blue);
+      font-size: 22px;
+    }
+    .summary-grid {
+      display: flex;
+      flex-direction: row;
+      flex-wrap: nowrap;
+      gap: 14px;
+      margin-top: 18px;
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+    }
+    .summary-card {
+      flex: 1;
+      min-width: 0;
+      background: rgba(255,255,255,0.94);
+      border: 1px solid var(--line);
+      border-radius: 20px;
+      padding: 18px;
+    }
+    .summary-card .label {
+      color: var(--muted);
+      font-size: 13px;
+    }
+    .summary-card .value {
+      margin-top: 10px;
+      font-size: 32px;
+      font-weight: 800;
+      line-height: 1;
+    }
+    .summary-card .value small {
+      font-size: 17px;
+      font-weight: 600;
+    }
+    .summary-card .meta {
+      margin-top: 8px;
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.6;
+    }
+    .action-row {
+      margin-top: 16px;
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      background: rgba(255,255,255,0.92);
+      padding: 12px;
+      display: flex;
+      flex-direction: row;
+      flex-wrap: nowrap;
+      align-items: center;
+      gap: 10px;
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+    }
+    .action-row-main {
+      display: flex;
+      gap: 10px;
+      flex-wrap: nowrap;
+      align-items: center;
+      flex: 1;
+      min-width: 0;
+    }
+    .action-row-main .btn {
+      flex: 0 0 auto;
+      min-width: 118px;
+    }
+    .action-row-sub {
+      margin-left: auto;
+      flex: 0 0 auto;
+    }
+    .action-row-sub .btn {
+      min-width: 148px;
+    }
+    .device-panel {
+      margin-top: 20px;
+      display: grid;
+      gap: 14px;
+    }
+    .device-card {
+      display: grid;
+      grid-template-columns: 168px 1fr;
+      gap: 22px;
+      align-items: center;
+      border-radius: 16px;
+      border: 1px solid var(--line);
+      background: rgba(255,255,255,0.95);
+      padding: 18px 20px;
+    }
+    .device-card-thumb {
+      width: 168px;
+      height: 152px;
+      border-radius: 12px;
+      border: 1px solid var(--line);
+      background: linear-gradient(180deg, #f4f7ff 0%, #ffffff 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #8ba0d3;
+      font-weight: 800;
+      font-size: 26px;
+    }
+    .device-card-main h3 {
+      margin: 0 0 10px;
+      font-size: 19px;
+      color: var(--blue);
+    }
+    .device-card-main p {
+      margin: 4px 0;
+      color: #57637c;
+      font-size: 15px;
+      line-height: 1.6;
+    }
+    .device-card-main strong {
+      color: #2e374b;
+      font-weight: 600;
+    }
+    .device-card-actions {
+      margin-top: 12px;
+    }
+    .device-card-actions .btn {
+      padding: 8px 16px;
       font-size: 14px;
-      cursor: pointer;
     }
-    .btn-submit:hover { background: var(--primary-hover); }
-
-    /* 按量购买页 */
-    .buy-options { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 16px; margin: 20px 0; }
-    .buy-option {
-      border: 2px solid var(--border);
-      border-radius: 8px;
-      padding: 20px;
+    .notice {
+      margin-top: 16px;
+      border-radius: 14px;
+      padding: 14px 16px;
+      line-height: 1.7;
+      font-size: 14px;
+      display: none;
+    }
+    .notice.show { display: block; }
+    .notice.warn {
+      background: var(--warn-soft);
+      color: #8a5a10;
+      border: 1px solid rgba(216, 130, 22, 0.18);
+    }
+    .notice.info {
+      background: var(--blue-soft);
+      color: #2d4ccf;
+      border: 1px solid rgba(49, 93, 255, 0.16);
+    }
+    .feature-panel {
+      margin-top: 20px;
+      background: rgba(255,255,255,0.78);
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      overflow: hidden;
+    }
+    .feature-table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+    .feature-table th,
+    .feature-table td {
+      border-bottom: 1px solid var(--line-2);
+      padding: 16px 18px;
+      vertical-align: top;
+      text-align: left;
+    }
+    .feature-table th {
+      color: var(--muted);
+      font-size: 13px;
+      font-weight: 600;
+      background: rgba(255,255,255,0.72);
+    }
+    .feature-name {
+      color: #9b7fff;
+      font-weight: 700;
+      font-size: 14px;
+    }
+    .feature-desc {
+      color: #5c677f;
+      font-size: 13px;
+      line-height: 1.7;
+    }
+    .feature-meta {
+      margin-top: 10px;
+      display: flex;
+      gap: 8px;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+    .tag {
+      display: inline-flex;
+      align-items: center;
+      border-radius: 999px;
+      padding: 5px 10px;
+      font-size: 12px;
+      font-weight: 700;
+      background: var(--purple-soft);
+      color: #8a6fff;
+    }
+    .link-btn {
+      border: 0;
+      background: transparent;
+      color: var(--blue);
+      padding: 0;
+      cursor: pointer;
+      font-size: 12px;
+    }
+    .check {
       text-align: center;
-      cursor: pointer;
-      transition: border-color 0.2s, background 0.2s;
+      color: #c2a8ff;
+      font-size: 22px;
+      font-weight: 700;
     }
-    .buy-option:hover { border-color: var(--primary); background: var(--primary-light); }
-    .buy-option.selected { border-color: var(--primary); background: var(--primary-light); }
-    .buy-option .pts { font-size: 20px; font-weight: 600; color: var(--primary); }
-    .buy-option .price { font-size: 14px; color: var(--text-secondary); margin-top: 8px; }
-    .buy-summary { margin-top: 24px; padding: 16px; background: var(--bg); border-radius: 8px; font-size: 14px; }
-    .renew-tip .btn-buy { margin-left: auto; padding: 8px 20px; background: #fff; color: var(--primary); border: 1px solid var(--primary); border-radius: 4px; font-size: 14px; cursor: pointer; }
-    .renew-tip .btn-buy:hover { background: var(--primary-light); }
+    .renew-title {
+      text-align: center;
+      font-size: 22px;
+      font-weight: 700;
+      margin: 6px 0 22px;
+    }
+    .renew-panel {
+      max-width: 860px;
+      margin: 0 auto;
+    }
+    .device-select-head {
+      display: flex;
+      justify-content: flex-end;
+      margin-bottom: 10px;
+      color: var(--blue);
+      font-size: 14px;
+      align-items: center;
+      gap: 10px;
+    }
+    .device-list {
+      display: grid;
+      gap: 14px;
+    }
+    .device-item {
+      display: grid;
+      grid-template-columns: 58px 132px 1fr auto;
+      gap: 16px;
+      align-items: center;
+      background: rgba(255,255,255,0.92);
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      padding: 14px 18px;
+    }
+    .check-box {
+      width: 26px;
+      height: 26px;
+      accent-color: var(--blue);
+      cursor: pointer;
+      justify-self: center;
+    }
+    .device-thumb {
+      width: 132px;
+      height: 118px;
+      border-radius: 10px;
+      border: 1px solid var(--line);
+      background: linear-gradient(180deg, #f4f7ff 0%, #ffffff 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #8ba0d3;
+      font-weight: 700;
+      font-size: 20px;
+    }
+    .device-main h3 {
+      margin: 0 0 8px;
+      color: var(--blue);
+      font-size: 17px;
+    }
+    .device-main p {
+      margin: 2px 0;
+      color: #5c6880;
+      font-size: 14px;
+      line-height: 1.6;
+    }
+    .status {
+      display: inline-flex;
+      align-items: center;
+      border-radius: 999px;
+      padding: 6px 10px;
+      font-size: 13px;
+      font-weight: 700;
+    }
+    .status.green {
+      background: var(--green-soft);
+      color: var(--green);
+    }
+    .pay-section {
+      margin-top: 22px;
+    }
+    .pay-section h3 {
+      margin: 0 0 12px;
+      font-size: 18px;
+      color: #33425c;
+    }
+    .pay-cards {
+      display: flex;
+      flex-direction: row;
+      flex-wrap: nowrap;
+      gap: 14px;
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+    }
+    .pay-card-v2 {
+      position: relative;
+      flex: 1;
+      min-width: 160px;
+      min-height: 132px;
+      border-radius: 12px;
+      padding: 16px 14px 40px;
+      cursor: pointer;
+      background: #fff;
+      border: 1px solid #e2e6ef;
+      box-sizing: border-box;
+    }
+    .pay-card-v2.active {
+      border: 2px solid transparent;
+      background:
+        linear-gradient(#fff, #fff) padding-box,
+        linear-gradient(90deg, #a78bfa, #6366f1, #fb923c) border-box;
+      box-shadow: 0 8px 28px rgba(99, 102, 241, 0.12);
+    }
+    .pay-card-qty {
+      position: absolute;
+      top: 10px;
+      right: 12px;
+      font-size: 12px;
+      color: #9aa3b5;
+      font-weight: 600;
+    }
+    .pay-card-price {
+      font-size: 26px;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      color: #1e2433;
+      margin-top: 6px;
+    }
+    .pay-card-price.grad {
+      background: linear-gradient(90deg, #7c3aed, #6366f1, #ea580c);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+      -webkit-text-fill-color: transparent;
+    }
+    .pay-card-unit {
+      position: absolute;
+      right: 12px;
+      bottom: 12px;
+      font-size: 12px;
+      color: #9aa3b5;
+    }
+    .pay-card-points {
+      margin-top: 8px;
+      font-size: 12px;
+      color: #67748b;
+      line-height: 1.5;
+    }
+    .pay-card-points strong {
+      color: #3f4f6b;
+      font-weight: 700;
+    }
+    .coupon-strip {
+      margin-top: 16px;
+      display: flex;
+      justify-content: space-between;
+      gap: 16px;
+      align-items: center;
+      border-radius: 12px;
+      border: 1px solid var(--line);
+      background: rgba(255,255,255,0.92);
+      padding: 14px 16px;
+      flex-wrap: wrap;
+    }
+    .coupon-strip .left {
+      color: #48556f;
+      font-size: 14px;
+      line-height: 1.7;
+    }
+    .accordion {
+      margin-top: 14px;
+      border-radius: 12px;
+      overflow: hidden;
+      border: 1px solid var(--line);
+      background: rgba(255,255,255,0.92);
+    }
+    .accordion-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 16px 18px;
+      cursor: pointer;
+      color: #47536c;
+      font-size: 15px;
+      font-weight: 600;
+    }
+    .accordion-body {
+      display: none;
+      border-top: 1px solid var(--line);
+      padding: 16px 18px;
+      color: #5c6780;
+      line-height: 1.8;
+      font-size: 14px;
+      background: rgba(250,252,255,0.9);
+    }
+    .accordion.open .accordion-body {
+      display: block;
+    }
+    .renew-actions {
+      margin-top: 18px;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+    .renew-tip-banner {
+      margin-top: 18px;
+      margin-bottom: 12px;
+      padding: 12px 14px;
+      border-radius: 10px;
+      background: rgba(223, 76, 76, 0.14);
+      border: 1px solid rgba(223, 76, 76, 0.28);
+      color: #6b2d2d;
+      font-size: 14px;
+      line-height: 1.65;
+    }
+    .renew-tip-banner strong {
+      color: #4a1f1f;
+    }
+    .pack-wrap {
+      max-width: 860px;
+      margin: 0 auto;
+    }
+    .pack-title {
+      text-align: center;
+      font-size: 22px;
+      font-weight: 700;
+      margin: 6px 0 16px;
+    }
+    .pack-desc {
+      color: #58637b;
+      font-size: 14px;
+      line-height: 1.8;
+      margin-bottom: 14px;
+    }
+    .pack-list {
+      display: grid;
+      gap: 12px;
+    }
+    .pack-item {
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      background: rgba(255,255,255,0.94);
+      padding: 16px;
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 16px;
+      align-items: center;
+      cursor: pointer;
+    }
+    .pack-item.active {
+      border-color: rgba(49, 93, 255, 0.28);
+      background: rgba(49, 93, 255, 0.05);
+      box-shadow: inset 0 0 0 1px rgba(49, 93, 255, 0.08);
+    }
+    .pack-item h4 {
+      margin: 0 0 6px;
+      font-size: 20px;
+      color: #1f283a;
+    }
+    .pack-item p {
+      margin: 0;
+      color: #616c84;
+      font-size: 14px;
+      line-height: 1.7;
+    }
+    .pack-item .price {
+      font-size: 38px;
+      font-weight: 800;
+      color: #2e384d;
+      letter-spacing: -0.02em;
+      min-width: 130px;
+      text-align: right;
+    }
+    .records-head {
+      display: flex;
+      justify-content: space-between;
+      gap: 16px;
+      align-items: center;
+      flex-wrap: wrap;
+      margin-bottom: 14px;
+    }
+    .records-summary {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+    .mini-card {
+      border-radius: 12px;
+      border: 1px solid var(--line);
+      background: rgba(255,255,255,0.94);
+      padding: 12px 14px;
+      min-width: 170px;
+    }
+    .mini-card .label {
+      color: var(--muted);
+      font-size: 12px;
+    }
+    .mini-card .value {
+      margin-top: 6px;
+      font-size: 24px;
+      font-weight: 800;
+    }
+    .filters {
+      display: flex;
+      justify-content: space-between;
+      gap: 16px;
+      flex-wrap: wrap;
+      margin-bottom: 14px;
+    }
+    .filter-box {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+    }
+    .input,
+    .select {
+      height: 44px;
+      border-radius: 4px;
+      border: 1px solid var(--line);
+      background: rgba(255,255,255,0.92);
+      padding: 0 16px;
+      color: #58637b;
+      min-width: 250px;
+      font-size: 14px;
+    }
+    .select {
+      min-width: 180px;
+    }
+    .search-btn {
+      width: 44px;
+      height: 44px;
+      border-radius: 4px;
+      border: 0;
+      background: var(--blue);
+      color: #fff;
+      cursor: pointer;
+      font-size: 18px;
+    }
+    .table-wrap {
+      border-radius: 12px;
+      overflow: hidden;
+      border: 1px solid var(--line);
+      background: rgba(255,255,255,0.82);
+    }
+    .data-table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+    .data-table th,
+    .data-table td {
+      padding: 18px 18px;
+      border-bottom: 1px solid var(--line-2);
+      font-size: 14px;
+      text-align: left;
+    }
+    .data-table th {
+      background: rgba(245, 247, 252, 0.96);
+      color: var(--muted);
+      font-weight: 600;
+      font-size: 13px;
+    }
+    .data-table tr.active-row {
+      background: rgba(49, 93, 255, 0.08);
+    }
+    .data-table tr.row-pack {
+      background: rgba(49, 93, 255, 0.03);
+    }
+    .data-table tr.row-fail {
+      background: rgba(223, 76, 76, 0.04);
+    }
+    .chip {
+      display: inline-flex;
+      align-items: center;
+      border-radius: 999px;
+      padding: 4px 10px;
+      font-size: 12px;
+      font-weight: 700;
+    }
+    .chip-pack {
+      color: #2459d8;
+      background: rgba(49, 93, 255, 0.1);
+      border: 1px solid rgba(49, 93, 255, 0.2);
+    }
+    .chip-pro {
+      color: #0d8b65;
+      background: rgba(22, 163, 74, 0.12);
+      border: 1px solid rgba(22, 163, 74, 0.22);
+    }
+    .rules-block {
+      display: grid;
+      gap: 10px;
+    }
+    .rules-card {
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      background: rgba(255,255,255,0.8);
+      padding: 10px 12px;
+      line-height: 1.7;
+    }
+    .rules-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 6px;
+      font-size: 13px;
+    }
+    .rules-table th,
+    .rules-table td {
+      border: 1px solid var(--line);
+      padding: 8px 10px;
+      text-align: center;
+    }
+    .status-ok { color: var(--green); font-weight: 600; }
+    .status-fail { color: var(--danger); font-weight: 600; }
+    .amount.minus { color: var(--danger); font-weight: 700; }
+    .amount.plus { color: var(--green); font-weight: 700; }
+    .detail-icon {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 30px;
+      height: 24px;
+      border: 2px solid #15c23b;
+      border-radius: 3px;
+      color: #15c23b;
+      background: #fff;
+      cursor: pointer;
+    }
+    button.detail-icon {
+      font: inherit;
+      padding: 0;
+      line-height: 1;
+    }
+    .detail-box {
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      background: rgba(255,255,255,0.82);
+      padding: 26px;
+      margin-bottom: 16px;
+    }
+    .detail-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 14px 40px;
+      color: #56617a;
+      font-size: 15px;
+      line-height: 1.9;
+    }
+    .detail-grid strong {
+      font-weight: 500;
+      color: #2e374b;
+    }
+    .section-title {
+      margin: 0 0 16px;
+      font-size: 18px;
+      color: #39445c;
+      font-weight: 700;
+    }
+    .product-card {
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      background: rgba(255,255,255,0.88);
+      padding: 20px;
+    }
+    .product-main {
+      display: grid;
+      grid-template-columns: 140px 1fr;
+      gap: 18px;
+      align-items: start;
+    }
+    .thumb {
+      width: 140px;
+      height: 140px;
+      border-radius: 10px;
+      border: 1px solid var(--line);
+      background: linear-gradient(180deg, #f4f7ff 0%, #ffffff 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #8fa0c8;
+      font-weight: 700;
+      font-size: 20px;
+    }
+    .product-lines {
+      display: grid;
+      gap: 8px;
+      color: #5d6882;
+      font-size: 14px;
+    }
+    .product-row {
+      display: flex;
+      justify-content: space-between;
+      gap: 18px;
+      border-bottom: 1px dashed #edf1f6;
+      padding-bottom: 8px;
+    }
+    .product-row:last-child {
+      border-bottom: 0;
+      padding-bottom: 0;
+    }
+    .price-line,
+    .final-line {
+      margin-top: 16px;
+      border-top: 1px solid var(--line);
+      padding-top: 16px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      color: #54607b;
+    }
+    .price-line strong { font-size: 18px; color: #2f384a; }
+    .final-line strong { font-size: 24px; color: #2f384a; }
+    .footer-actions {
+      margin-top: 22px;
+      display: flex;
+      justify-content: center;
+      gap: 16px;
+    }
+    .overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(19, 28, 45, 0.42);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 22px;
+      z-index: 30;
+    }
+    .overlay.show { display: flex; }
+    .modal {
+      width: min(760px, 100%);
+      background: #fff;
+      border-radius: 20px;
+      border: 1px solid var(--line);
+      box-shadow: 0 28px 90px rgba(19, 27, 44, 0.24);
+      padding: 26px;
+    }
+    .modal h3 {
+      margin: 0 0 10px;
+      font-size: 26px;
+    }
+    .modal p {
+      margin: 0;
+      color: #5f6a82;
+      line-height: 1.8;
+      font-size: 14px;
+    }
+    .modal-list {
+      margin-top: 16px;
+      display: grid;
+      gap: 10px;
+    }
+    .modal-item {
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      background: rgba(255,255,255,0.96);
+      padding: 14px 16px;
+      display: flex;
+      justify-content: space-between;
+      gap: 14px;
+      align-items: center;
+      cursor: pointer;
+    }
+    .modal-item.active {
+      border-color: rgba(49, 93, 255, 0.24);
+      background: rgba(49, 93, 255, 0.06);
+    }
+    .modal-item strong {
+      display: block;
+      margin-bottom: 4px;
+      font-size: 15px;
+    }
+    .modal-summary {
+      margin-top: 16px;
+      border-radius: 14px;
+      border: 1px solid var(--line);
+      background: #f9fbff;
+      padding: 14px 16px;
+      color: #53607c;
+      font-size: 14px;
+      line-height: 1.8;
+    }
+    .modal-actions {
+      margin-top: 18px;
+      display: flex;
+      justify-content: flex-end;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+    .scene-dock {
+      position: fixed;
+      right: 18px;
+      bottom: 18px;
+      z-index: 24;
+      display: none;
+      gap: 10px;
+    }
+    .scene-dock.show {
+      display: grid;
+    }
+    .toast {
+      position: fixed;
+      left: 50%;
+      bottom: 32px;
+      transform: translateX(-50%);
+      z-index: 40;
+      background: rgba(30, 36, 51, 0.92);
+      color: #fff;
+      padding: 12px 20px;
+      border-radius: 10px;
+      font-size: 14px;
+      box-shadow: 0 12px 40px rgba(0,0,0,0.2);
+      display: none;
+      max-width: min(420px, 92vw);
+      text-align: center;
+    }
+    .toast.show { display: block; }
+    .dock-card {
+      border-radius: 16px;
+      border: 1px solid var(--line);
+      background: rgba(255,255,255,0.9);
+      box-shadow: var(--shadow);
+      padding: 12px;
+      width: 240px;
+    }
+    .dock-title {
+      color: #59657d;
+      font-size: 12px;
+      margin-bottom: 8px;
+    }
+    .pill-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+    .pill {
+      border-radius: 999px;
+      border: 1px solid var(--line);
+      background: #fff;
+      color: #55627d;
+      padding: 7px 10px;
+      font-size: 12px;
+      cursor: pointer;
+    }
+    .pill.active {
+      color: var(--blue);
+      background: rgba(49, 93, 255, 0.08);
+      border-color: rgba(49, 93, 255, 0.2);
+      font-weight: 700;
+    }
+    @media (max-width: 1380px) {
+      .app { grid-template-columns: 1fr; }
+      .sidebar { display: none; }
+      .detail-grid,
+      .product-main {
+        grid-template-columns: 1fr;
+      }
+      .scene-dock {
+        position: static;
+        padding: 0 16px 16px;
+      }
+      .dock-card {
+        width: auto;
+      }
+    }
   </style>
 </head>
 <body>
-  <header class="header">
-    <div class="header-left">
-      <span class="logo">VISBODY</span>
-      <span class="powered-by">Powered by Kuafu</span>
-    </div>
-    <div class="header-center">维塑数字健康平台</div>
-    <div class="header-right">
-      <select><option>简体中文</option></select>
-      <select><option>XAtest</option></select>
-      <button class="btn-header">我的账号</button>
-      <button class="btn-header">我的优惠券</button>
-    </div>
-  </header>
-
-  <div class="layout">
+  <div class="app">
     <aside class="sidebar">
-      <div class="nav-title">设备与权益</div>
-      <a class="nav-item active" href="#" data-page="pro">PRO 权益</a>
-      <a class="nav-item" href="#" data-page="points-rule">积分计费规则</a>
-      <div class="nav-title" style="margin-top:16px;">报告管理</div>
-      <a class="nav-item" href="#">报告列表</a>
-      <div class="nav-title" style="margin-top:16px;">系统设置</div>
-      <a class="nav-item" href="#">员工账号</a>
-      <div class="sidebar-footer">版本: v2.9.0</div>
+      <div class="brand">
+        <strong>VISBODY</strong><span>Powered by Kuafu</span>
+      </div>
+
+      <div class="nav-group">
+        <div class="nav-title">报告管理</div>
+        <div class="nav-item">用户信息绑定</div>
+        <div class="nav-item">报告列表</div>
+      </div>
+
+      <div class="nav-group">
+        <div class="nav-title">用户管理</div>
+        <div class="nav-item">用户管理</div>
+        <div class="nav-item">用户分配</div>
+      </div>
+
+      <div class="nav-group">
+        <div class="nav-title">门店管理</div>
+        <div class="nav-item">门店管理</div>
+        <div class="nav-item">子门店权限管理</div>
+      </div>
+
+      <div class="nav-group">
+        <div class="nav-title">设备管理</div>
+        <div class="nav-item">设备列表</div>
+      </div>
+
+      <div class="nav-group">
+        <div class="nav-title">系统设置</div>
+        <div class="nav-item">员工权限管理</div>
+        <div class="nav-item">员工账号</div>
+        <div class="nav-item" id="navProPoints">Pro 与积分</div>
+        <div class="nav-item" id="navPayments">缴费记录</div>
+      </div>
+
+      <div class="nav-foot">
+        <span>版本 v2.9.1</span>
+        <span>☰</span>
+      </div>
     </aside>
 
     <main class="main">
-      <!-- PRO 权益页 -->
-      <div id="page-pro" class="page active">
-        <a class="back-link" href="#">← 返回</a>
-        <div class="page-title-row">
-          <div>
-            <div class="account-name">XAtest <span class="badge-pro">Pro</span></div>
-            <div class="device-summary">共有 10 台设备，正在使用 Pro 权益的设备</div>
-          </div>
-          <button class="btn-add-pro">添加 Pro 设备</button>
+      <header class="topbar">
+        <h1>维塑数字健康平台</h1>
+        <div class="topbar-right">
+          <span>简体中文 ▼</span>
+          <span>XAtest ▼</span>
         </div>
+      </header>
 
-        <div class="points-bar" id="pointsBar">
-          <span class="label">当前积分</span>
-          <span class="value" id="pointsValue">1,240</span>
-          <a class="link" href="#" id="linkBuy">按量购买</a>
-          <a class="link" href="#" id="linkRecords">积分使用记录 →</a>
+      <section class="content">
+        <div class="canvas">
+          <div class="page active" id="pageAccount"></div>
+          <div class="page" id="pageRenew"></div>
+          <div class="page" id="pagePack"></div>
+          <div class="page" id="pageUsage"></div>
+          <div class="page" id="pagePayments"></div>
+          <div class="page" id="pagePaymentDetail"></div>
         </div>
-        <div class="renew-tip" id="renewTip">
-          <span>积分不足 100，可能影响 AI 功能使用，建议及时续费或按量购买积分。</span>
-          <button class="btn-renew" id="btnRenew">去续费</button>
-          <button class="btn-buy" id="btnBuyInTip">按量购买</button>
-        </div>
-
-        <div class="device-list">
-          <div class="device-card">
-            <div class="device-thumb">设备示意图</div>
-            <div class="device-info">
-              <div class="device-name">Visbody-M30</div>
-              <div class="device-meta">
-                <span><span class="label">门店:</span>[测试]西安测试</span>
-                <span><span class="label">SN:</span>MOC0123456789145</span>
-                <span><span class="label">开通时间:</span>2025-05-15 14:58:40</span>
-                <span><span class="label">到期时间:</span>2026-05-15 08:00:00</span>
-              </div>
-            </div>
-          </div>
-          <div class="device-card">
-            <div class="device-thumb">设备示意图</div>
-            <div class="device-info">
-              <div class="device-name">Visbody-S30</div>
-              <div class="device-meta">
-                <span><span class="label">门店:</span>[测试]西安测试</span>
-                <span><span class="label">SN:</span>SOC0123456789234</span>
-                <span><span class="label">开通时间:</span>2025-04-20 10:30:00</span>
-                <span><span class="label">到期时间:</span>2026-04-20 08:00:00</span>
-              </div>
-            </div>
-          </div>
-          <div class="device-card">
-            <div class="device-thumb">设备示意图</div>
-            <div class="device-info">
-              <div class="device-name">Visbody-R Explorer</div>
-              <div class="device-meta">
-                <span><span class="label">门店:</span>[测试]西安测试</span>
-                <span><span class="label">SN:</span>N1C0123456789290</span>
-                <span><span class="label">开通时间:</span>2025-03-10 09:15:22</span>
-                <span><span class="label">到期时间:</span>2026-03-10 08:00:00</span>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- 积分使用记录详情页 -->
-      <div id="page-records" class="page">
-        <a class="back-link" href="#" id="backFromRecords">← 返回 PRO 权益</a>
-        <div class="record-toolbar">
-          <h2>积分使用记录</h2>
-        </div>
-        <div class="block">
-          <table class="tbl">
-            <thead>
-              <tr><th>时间</th><th>类型</th><th>功能/说明</th><th>变动</th><th>剩余</th></tr>
-            </thead>
-            <tbody id="recordsBody">
-              <tr><td>2026-02-25 14:32</td><td>消耗</td><td>AI 报告解读</td><td>-30</td><td>1,240</td></tr>
-              <tr><td>2026-02-25 11:20</td><td>消耗</td><td>AI 个性化训练大纲</td><td>-50</td><td>1,270</td></tr>
-              <tr><td>2026-02-24 16:00</td><td>发放</td><td>Pro 月付续费</td><td>+2,000</td><td>1,320</td></tr>
-              <tr><td>2026-02-24 15:58</td><td>消耗</td><td>AI 自由对话</td><td>-10</td><td>-680</td></tr>
-            </tbody>
-          </table>
-        </div>
-      </div>
-
-      <!-- 按量购买页面 -->
-      <div id="page-buy" class="page">
-        <a class="back-link" href="#" id="backFromBuy">← 返回</a>
-        <h2 style="margin-bottom:8px;font-size:18px;color:var(--text);">按量购买积分</h2>
-        <p style="color:var(--text-secondary);font-size:14px;margin-bottom:20px;">Pro 有效期内可单独购买积分，支付成功后即时到账，与套餐赠送积分合并使用；积分有效期随 Pro 到期日清零。</p>
-        <div class="renew-card" style="max-width:640px;">
-          <h3>选择积分档位</h3>
-          <div class="buy-options" id="buyOptions">
-            <div class="buy-option" data-pts="500" data-price="5"><div class="pts">500 积分</div><div class="price">¥5</div></div>
-            <div class="buy-option" data-pts="1000" data-price="9"><div class="pts">1,000 积分</div><div class="price">¥9</div></div>
-            <div class="buy-option" data-pts="2000" data-price="16"><div class="pts">2,000 积分</div><div class="price">¥16</div></div>
-            <div class="buy-option" data-pts="5000" data-price="38"><div class="pts">5,000 积分</div><div class="price">¥38</div></div>
-          </div>
-          <div class="buy-summary">
-            <div class="row"><span>当前可用积分</span><span id="buyPagePoints">1,240</span></div>
-            <div class="row"><span>本次购买</span><span id="buySelectedText">请选择档位</span></div>
-            <div class="row total"><span>应付金额</span><span id="buyPrice">¥0</span></div>
-          </div>
-          <button class="btn-submit" id="btnSubmitBuy" disabled>确认购买</button>
-        </div>
-      </div>
-
-      <!-- 续费页面 -->
-      <div id="page-renew" class="page">
-        <a class="back-link" href="#" id="backFromRenew">← 返回</a>
-        <h2 style="margin-bottom:20px;font-size:18px;color:var(--text);">Pro 续费</h2>
-        <div class="renew-card">
-          <h3>选择续费方案</h3>
-          <div class="renew-row">
-            <label>付费周期</label>
-            <select id="renewCycle">
-              <option value="month">月付</option>
-              <option value="year">年付</option>
-              <option value="forever">永久</option>
-            </select>
-          </div>
-          <div class="renew-row">
-            <label>设备数量</label>
-            <input type="number" id="renewDevices" value="10" min="1" max="99" />
-          </div>
-          <div class="renew-summary">
-            <div class="row"><span>套餐</span><span>Pro · 月付</span></div>
-            <div class="row"><span>设备数</span><span id="summaryDevices">10</span> 台</div>
-            <div class="row"><span>单价</span><span id="summaryPrice">¥20/台/月</span></div>
-            <div class="row"><span>阶梯折扣</span><span id="summaryDiscount">9.5 折（6-10 台）</span></div>
-            <div class="row total"><span>应付金额</span><span id="summaryTotal">¥190</span></div>
-          </div>
-          <p class="tip" style="margin-top:16px;">续费成功后将按档位获得赠送积分（如 Pro-月付 2,000 积分/台），与当前积分合并使用。</p>
-          <button class="btn-submit" id="btnSubmitRenew">立即续费</button>
-        </div>
-      </div>
-
-      <!-- 积分计费规则页 -->
-      <div id="page-points-rule" class="page">
-        <a class="back-link" href="#" id="backFromRule">← 返回 PRO 权益</a>
-        <h2 style="margin-bottom:16px;font-size:18px;color:var(--text);">积分计费规则</h2>
-        <nav class="anchor-nav">
-          <a href="#obtain">积分获取</a>
-          <a href="#consume">积分消耗</a>
-          <a href="#runout">积分用尽与按量购买</a>
-          <a href="#coupon">优惠券与积分</a>
-        </nav>
-        <div id="obtain" class="block">
-          <h2>一、积分获取（档位 × 周期）</h2>
-          <p style="margin-bottom:12px;">按<strong>适用类型 + 付费周期</strong>确定档位，同一档位全球相同积分。代金券不减积分。</p>
-          <table class="tbl">
-            <tr><th>档位</th><th>赠送积分（示例）</th></tr>
-            <tr><td>Pro-月付</td><td>2,000</td></tr>
-            <tr><td>Pro-年付</td><td>20,000</td></tr>
-            <tr><td>Pro-永久</td><td>50,000</td></tr>
-          </table>
-        </div>
-        <div id="consume" class="block">
-          <h2>二、积分消耗</h2>
-          <table class="tbl">
-            <tr><th>功能</th><th>单次消耗（示例）</th></tr>
-            <tr><td>AI 个性化训练大纲</td><td>50 积分/次</td></tr>
-            <tr><td>AI 报告解读</td><td>30 积分/次</td></tr>
-            <tr><td>AI 自由对话（AI 咨询）</td><td>10 积分/次</td></tr>
-          </table>
-        </div>
-        <div id="runout" class="block">
-          <h2>三、积分用尽后</h2>
-          <p>可选择<strong>续费 Pro</strong>（按档位获得赠送积分）或<strong>按量购买积分</strong>（Pro 有效期内单独购买，即时到账）。积分随 Pro 到期清零。</p>
-        </div>
-        <div id="coupon" class="block">
-          <h2>四、优惠券与积分</h2>
-          <p><strong>免费体验券</strong>：不赠送积分，体验期内不开放耗积分 AI。</p>
-          <p style="margin-top:8px;"><strong>代金券</strong>：按档位发放固定积分，代金券不减积分。</p>
-        </div>
-      </div>
+      </section>
     </main>
   </div>
 
+  <div class="overlay" id="overlay">
+    <div class="modal" id="modal"></div>
+  </div>
+
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+  <div class="scene-dock" id="sceneDock" aria-hidden="true">
+    <div class="dock-card">
+      <div class="dock-title">内部 · 场景预设</div>
+      <div class="pill-row" id="sceneSwitch"></div>
+    </div>
+    <div class="dock-card">
+      <div class="dock-title">内部 · 模拟积分流水</div>
+      <div class="pill-row" id="simulateSwitch"></div>
+    </div>
+  </div>
+
   <script>
-    (function() {
-      var points = 1240;
-      var PREFIX = 'page-';
-      var pages = ['pro', 'records', 'renew', 'buy', 'points-rule'];
+    const plan = {
+      monthPrice: 129,
+      yearPrice: 990,
+      foreverPrice: 3999,
+      monthPoints: 500,
+      yearPoints: 5000,
+      foreverPoints: 20000,
+      packPrices: { 1000: 99, 5000: 399, 10000: 699 }
+    };
 
-      function showPage(name) {
-        pages.forEach(function(p) {
-            var el = document.getElementById(PREFIX + p);
-            var nav = document.querySelector('.nav-item[data-page="' + p + '"]');
-            if (el) el.classList.toggle('active', p === name);
-            if (nav) nav.classList.toggle('active', p === name);
+    /** 积分包列表副文案（面向门店管理员，与当前单次扣减规则一致：解读 10 / 大纲 70 / 对话 1） */
+    const packPurchaseCopy = {
+      1000:
+        '按当前规则约可支持 100 次「AI 报告解读」，或约 14 次「AI 个性化训练大纲」，或约 1000 次「AI 自由对话」场景扣减。',
+      5000:
+        '适合测量与跟练较多的门店作月度补充；也可覆盖多次训练大纲与日常报告解读组合使用。',
+      10000:
+        '适合多设备、高频使用 AI 能力的门店，减少多次下单操作；积分与套餐获赠积分合并计算。'
+    };
+
+    const devices = [
+      { id: 'm30', name: 'Visbody-M30', store: '【测试】西安测试', sn: 'M0C0123456789145', openedAt: '2025-05-15 14:58:40', proExpire: '2026-05-15 08:00:00', expire: '2026-12-24 23:59:59', status: '已激活' },
+      { id: 's30', name: 'Visbody-S30', store: '【测试】西安测试', sn: '57123456789136', openedAt: '2025-07-19 11:43:34', proExpire: '2026-08-14 08:00:00', expire: '2026-12-24 23:59:59', status: '已激活' },
+      { id: 'r1', name: 'Visbody-R Explorer', store: '【测试】西安测试', sn: '35123456789102', openedAt: '2025-05-15 14:58:29', proExpire: '2026-07-18 08:00:00', expire: '2026-12-24 23:59:59', status: '已激活' },
+      { id: 'm60', name: 'Visbody-M60', store: '子门店', sn: 'M8C0123456789092', openedAt: '2025-11-22 10:08:15', proExpire: '2026-02-10 08:00:00', expire: '2026-12-24 23:59:59', status: '已激活' }
+    ];
+
+    const coupons = {
+      none: { id: 'none', name: '不使用优惠券', discount: 0, extraDays: 0, desc: '按原价完成支付' },
+      cash50: { id: 'cash50', name: '代金券 · 立减 50 元', discount: 50, extraDays: 0, desc: '减少本次实付金额' },
+      cash120: { id: 'cash120', name: '代金券 · 立减 120 元', discount: 120, extraDays: 0, desc: '减少本次实付金额' },
+      time30: { id: 'time30', name: '时间优惠券 · 额外延长 30 天', discount: 0, extraDays: 30, desc: '延长有效期，不改变积分到账数' }
+    };
+
+    const featureDefs = [
+      { id: 'device', name: '设备管理', desc: '管理门店下的所有设备信息，及当前设备下的测量数据', basic: true, pro: true },
+      { id: 'store', name: '单门店管理', desc: '管理当前门店的信息，自定义门店中教练、学员的称呼', basic: true, pro: true },
+      { id: 'measure', name: '测量数据记录', desc: '管理门店所有设备及用户的测量报告，并可进行与上次测量数据的对比。', basic: true, pro: true },
+      { id: 'multi', name: '多账号管理', desc: '针对不同的用户配置对应的管理权限', basic: true, pro: true },
+      { id: 'd3', name: '3D可视化体测报告', desc: '全新的用户 3D 可视化模型，互动性的体测报告展示', basic: false, pro: true },
+      { id: 'sub', name: '多门店管理', desc: '帮助客户管理多个下级门店的设备、测量记录等', basic: false, pro: true },
+      {
+        id: 'consult',
+        name: 'AI自由对话',
+        desc: '在 AI 对话页继续追问报告内容，获得更细的解读建议',
+        basic: false,
+        pro: true,
+        points: 1,
+        usageTitle: 'AI 自由对话',
+        usageText: '在 AI 对话页使用。每次继续解读将消耗 1 积分。'
+      },
+      {
+        id: 'report',
+        name: 'AI报告解读',
+        desc: '在报告详情中使用 AI 报告解读，查看当前报告的关键问题与优先改善建议',
+        basic: false,
+        pro: true,
+        points: 10,
+        usageTitle: 'AI 报告解读',
+        usageText: '在报告详情页使用。每次成功解读将消耗 10 积分。'
+      },
+      {
+        id: 'outline',
+        name: 'AI个性化训练大纲',
+        desc: '在训练方案页生成个性化训练大纲，获得训练建议与里程碑计划',
+        basic: false,
+        pro: true,
+        points: 70,
+        usageTitle: 'AI 个性化训练大纲',
+        usageText: '在训练方案页使用。每次生成将消耗 70 积分。'
+      }
+    ];
+
+    const scenes = {
+      normal: {
+        label: '常规',
+        balance: 420,
+        used30: 1830,
+        expiry: '2026-05-15',
+        coupons: ['none', 'cash50'],
+        notice: ''
+      },
+      heavy: {
+        label: '高使用量',
+        balance: 86,
+        used30: 4860,
+        expiry: '2026-05-15',
+        coupons: ['none', 'cash50'],
+        notice: '当前积分较低，为避免影响后续 AI 功能使用，建议及时续费或购买积分包。'
+      },
+      key: {
+        label: '高价值客户',
+        balance: 120,
+        used30: 6520,
+        expiry: '2026-05-15',
+        coupons: ['none', 'cash120', 'time30'],
+        notice: '当前账户使用频率较高，您有可用优惠券。完成续费后，新的积分将立即到账。'
+      },
+      expired: {
+        label: '已到期',
+        balance: 0,
+        used30: 0,
+        expiry: '2026-03-10',
+        coupons: ['none', 'cash120', 'time30'],
+        notice: '当前 Pro 服务已结束，续费后即可恢复 AI 功能使用。'
+      }
+    };
+
+    function clone(data) {
+      return JSON.parse(JSON.stringify(data));
+    }
+
+    function buildUsageRows(sceneKey) {
+      const shared = {
+        normal: [
+          { time: '2026-03-24 14:32:15', feature: 'AI 报告解读', featureId: 'report', device: 'Visbody-M30', points: 10, balance: 430, status: '成功' },
+          {
+            time: '2026-03-24 11:05:33',
+            feature: 'AI 报告解读',
+            featureId: 'report',
+            device: 'Visbody-M30',
+            points: 0,
+            balance: 440,
+            status: '失败',
+            remark: '服务响应超时，未扣减积分'
+          },
+          { time: '2026-03-23 18:20:46', feature: 'AI 个性化训练大纲', featureId: 'outline', device: 'Visbody-M30', points: 70, balance: 440, status: '成功' },
+          { time: '2026-03-22 10:41:05', feature: 'AI 自由对话', featureId: 'consult', device: 'Visbody-M60', points: 1, balance: 510, status: '成功' }
+        ],
+        heavy: [
+          { time: '2026-03-24 16:02:09', feature: 'AI 个性化训练大纲', featureId: 'outline', device: 'Visbody-M30', points: 70, balance: 96, status: '成功' },
+          {
+            time: '2026-03-24 15:40:02',
+            feature: 'AI 个性化训练大纲',
+            featureId: 'outline',
+            device: 'Visbody-M30',
+            points: 0,
+            balance: 166,
+            status: '失败',
+            remark: '模型服务暂时不可用，未扣减积分'
+          },
+          { time: '2026-03-24 15:12:41', feature: 'AI 报告解读', featureId: 'report', device: 'Visbody-M30', points: 10, balance: 166, status: '成功' },
+          { time: '2026-03-24 14:08:18', feature: 'AI 报告解读', featureId: 'report', device: 'Visbody-M60', points: 10, balance: 176, status: '成功' }
+        ],
+        key: [
+          { time: '2026-03-24 18:05:42', feature: 'AI 个性化训练大纲', featureId: 'outline', device: 'Visbody-M30', points: 70, balance: 120, status: '成功' },
+          { time: '2026-03-24 17:43:18', feature: 'AI 报告解读', featureId: 'report', device: 'Visbody-M60', points: 10, balance: 190, status: '成功' },
+          { time: '2026-03-24 17:30:10', feature: 'AI 报告解读', featureId: 'report', device: 'Visbody-M30', points: 10, balance: 200, status: '成功' }
+        ],
+        expired: [
+          { time: '2026-03-09 11:18:22', feature: 'AI 报告解读', featureId: 'report', device: 'Visbody-M30', points: 10, balance: 20, status: '成功' },
+          { time: '2026-03-08 16:02:40', feature: 'AI 自由对话', featureId: 'consult', device: 'Visbody-M30', points: 1, balance: 30, status: '成功' }
+        ]
+      };
+      return clone(shared[sceneKey] || shared.normal);
+    }
+
+    function buildPaymentRows(sceneKey) {
+      const rows = {
+        normal: [
+          {
+            id: 'pro-1',
+            orderNo: '30084220260225160143189',
+            amount: '¥ 990.00',
+            packageType: 'Pro/年',
+            status: '支付成功',
+            createTime: '2026-02-25 16:01:44',
+            payTime: '2026-02-25 16:01:59',
+            type: 'pro',
+            detail: {
+              cycle: '年付',
+              points: 5000,
+              cashCoupon: '无',
+              timeCoupon: '无',
+              earlyRenewal: '是',
+              effectText: '立即到账，有效期顺延至 2027-05-15 23:59:59',
+              perPrice: '¥990.00/年',
+              subtotal: '¥990.00',
+              deviceCount: '1 台设备'
+            }
+          },
+          {
+            id: 'pack-1',
+            orderNo: '3008422026031809152231661',
+            amount: '¥ 399.00',
+            packageType: '积分包',
+            status: '支付成功',
+            createTime: '2026-03-18 09:15:02',
+            payTime: '2026-03-18 09:15:18',
+            type: 'pack',
+            detail: {
+              packSize: '5000 积分包',
+              points: 5000,
+              cashCoupon: '无',
+              timeCoupon: '无',
+              earlyRenewal: '否',
+              effectText: '积分即时到账，有效期随当前 Pro 有效期',
+              subtotal: '¥399.00'
+            }
+          }
+        ],
+        heavy: [
+          {
+            id: 'pro-h-1',
+            orderNo: '300842202603011020223001',
+            amount: '¥ 129.00',
+            packageType: 'Pro/月',
+            status: '支付成功',
+            createTime: '2026-03-01 10:20:22',
+            payTime: '2026-03-01 10:20:33',
+            type: 'pro',
+            detail: {
+              cycle: '月付',
+              points: 500,
+              cashCoupon: '无',
+              timeCoupon: '无',
+              earlyRenewal: '是',
+              effectText: '立即到账，有效期顺延至 2026-06-15 23:59:59',
+              perPrice: '¥129.00/月',
+              subtotal: '¥129.00',
+              deviceCount: '1 台设备'
+            }
+          }
+        ],
+        key: [
+          {
+            id: 'pro-k-1',
+            orderNo: '300842202603171410223900',
+            amount: '¥ 870.00',
+            packageType: 'Pro/年',
+            status: '支付成功',
+            createTime: '2026-03-17 14:10:22',
+            payTime: '2026-03-17 14:10:39',
+            type: 'pro',
+            detail: {
+              cycle: '年付',
+              points: 5000,
+              cashCoupon: '立减 120 元',
+              timeCoupon: '额外延长 30 天',
+              earlyRenewal: '是',
+              effectText: '立即到账，有效期顺延至 2027-06-14 23:59:59',
+              perPrice: '¥990.00/年',
+              subtotal: '¥990.00',
+              deviceCount: '1 台设备'
+            }
+          }
+        ],
+        expired: [
+          {
+            id: 'pro-e-1',
+            orderNo: '300842202601101531220041',
+            amount: '¥ 129.00',
+            packageType: 'Pro/月',
+            status: '支付成功',
+            createTime: '2026-01-10 15:31:22',
+            payTime: '2026-01-10 15:31:33',
+            type: 'pro',
+            detail: {
+              cycle: '月付',
+              points: 500,
+              cashCoupon: '无',
+              timeCoupon: '无',
+              earlyRenewal: '否',
+              effectText: '已于 2026-03-10 23:59:59 到期',
+              perPrice: '¥129.00/月',
+              subtotal: '¥129.00',
+              deviceCount: '1 台设备'
+            }
+          }
+        ]
+      };
+      return clone(rows[sceneKey] || rows.normal);
+    }
+
+    const state = {
+      page: 'account',
+      scene: 'normal',
+      modal: null,
+      balance: scenes.normal.balance,
+      used30: scenes.normal.used30,
+      expiry: scenes.normal.expiry,
+      notice: scenes.normal.notice,
+      availableCouponIds: clone(scenes.normal.coupons),
+      selectedCouponId: 'none',
+      selectedCycle: 'month',
+      selectedPack: 5000,
+      selectedDeviceIds: ['m30'],
+      usageRows: buildUsageRows('normal'),
+      paymentRows: buildPaymentRows('normal'),
+      activePaymentId: 'pro-1',
+      pendingFeatureId: null,
+      accordion: { detail: false, rules: false },
+      usageFilterFeature: 'all',
+      usageFilterStatus: 'all',
+      usageDatePreset: 'all',
+      usageDateStart: '',
+      usageDateEnd: '',
+      paymentFilterType: 'all',
+      paymentSearchQuery: ''
+    };
+
+    function isExpired() {
+      return new Date(state.expiry + 'T23:59:59') < new Date('2026-03-25T00:00:00');
+    }
+
+    /** 锚定「今天」：设备 Pro 到期早于今日视为已到期，展示「立即续费」 */
+    function deviceProExpired(proExpireStr) {
+      const end = new Date(proExpireStr.replace(' ', 'T'));
+      const today = new Date('2026-03-25T00:00:00');
+      return end < today;
+    }
+
+    function showToast(message) {
+      const el = document.getElementById('toast');
+      if (!el) return;
+      el.textContent = message;
+      el.classList.add('show');
+      clearTimeout(showToast._timer);
+      showToast._timer = setTimeout(() => el.classList.remove('show'), 2600);
+    }
+
+    function escAttr(s) {
+      return String(s)
+        .replace(/&/g, '&amp;')
+        .replace(/"/g, '&quot;')
+        .replace(/</g, '&lt;');
+    }
+
+    function initSceneDock() {
+      const dock = document.getElementById('sceneDock');
+      if (!dock) return;
+      if (/\bstaff=1\b/.test(window.location.search)) {
+        dock.classList.add('show');
+        dock.setAttribute('aria-hidden', 'false');
+      }
+    }
+
+    function usageRowMatchesDatePreset(row) {
+      if (state.usageDatePreset === 'all') return true;
+      const t = new Date(row.time.replace(/-/g, '/'));
+      if (Number.isNaN(t.getTime())) return true;
+      if (state.usageDatePreset === 'custom') {
+        if (!state.usageDateStart || !state.usageDateEnd) return true;
+        const start = new Date(`${state.usageDateStart}T00:00:00`);
+        const end = new Date(`${state.usageDateEnd}T23:59:59`);
+        return t >= start && t <= end;
+      }
+      const anchor = new Date('2026-03-25T23:59:59');
+      const elapsedDays = (anchor - t) / 86400000;
+      if (elapsedDays < 0) return false;
+      const windowDays = state.usageDatePreset === '7d' ? 7 : 30;
+      return elapsedDays <= windowDays;
+    }
+
+    function usageFeatureFilterOptions() {
+      const rows = state.usageRows.filter(usageRowMatchesDatePreset);
+      if (!rows.length) return [{ value: 'all', label: '全部功能' }];
+      const map = new Map();
+      rows.forEach((r) => {
+        if (r.featureId) map.set(r.featureId, r.feature);
+      });
+      const opts = [...map.entries()].map(([value, label]) => ({ value, label }));
+      if (opts.length <= 1) return opts;
+      return [{ value: 'all', label: '全部功能' }, ...opts];
+    }
+
+    function usageStatusFilterOptions() {
+      const rows = state.usageRows.filter(usageRowMatchesDatePreset);
+      if (!rows.length) return [{ value: 'all', label: '全部状态' }];
+      const arr = [...new Set(rows.map((r) => r.status))];
+      if (arr.length <= 1) return arr.map((s) => ({ value: s, label: s }));
+      return [{ value: 'all', label: '全部状态' }, ...arr.map((s) => ({ value: s, label: s }))];
+    }
+
+    function syncUsageFilters() {
+      const fo = usageFeatureFilterOptions();
+      const so = usageStatusFilterOptions();
+      const fv = fo.map((o) => o.value);
+      const sv = so.map((o) => o.value);
+      if (!fv.includes(state.usageFilterFeature)) state.usageFilterFeature = fv[0] || 'all';
+      if (!sv.includes(state.usageFilterStatus)) state.usageFilterStatus = sv[0] || 'all';
+    }
+
+    function filteredUsageRows() {
+      return state.usageRows.filter((row) => {
+        if (!usageRowMatchesDatePreset(row)) return false;
+        if (state.usageFilterFeature !== 'all' && row.featureId !== state.usageFilterFeature) return false;
+        if (state.usageFilterStatus !== 'all' && row.status !== state.usageFilterStatus) return false;
+        return true;
+      });
+    }
+
+    function paymentTypeFilterOptions() {
+      if (!state.paymentRows.length) return [{ value: 'all', label: '全部订单类型' }];
+      const types = [...new Set(state.paymentRows.map((r) => r.type))];
+      const labelMap = { pro: 'Pro 套餐 / 续费', pack: '积分包' };
+      const opts = types.map((t) => ({ value: t, label: labelMap[t] || t }));
+      if (opts.length <= 1) return opts;
+      return [{ value: 'all', label: '全部订单类型' }, ...opts];
+    }
+
+    function syncPaymentFilters() {
+      const opts = paymentTypeFilterOptions();
+      const vals = opts.map((o) => o.value);
+      if (!vals.includes(state.paymentFilterType)) state.paymentFilterType = vals[0] || 'all';
+    }
+
+    function filteredPaymentRows() {
+      const q = (state.paymentSearchQuery || '').trim().toLowerCase();
+      return state.paymentRows.filter((row) => {
+        if (state.paymentFilterType !== 'all' && row.type !== state.paymentFilterType) return false;
+        if (q && !String(row.orderNo).toLowerCase().includes(q)) return false;
+        return true;
+      });
+    }
+
+    function getSelectedCoupon() {
+      return coupons[state.selectedCouponId] || coupons.none;
+    }
+
+    function totalSelectedDevices() {
+      return state.selectedDeviceIds.length;
+    }
+
+    function renewUnitPrice() {
+      if (state.selectedCycle === 'month') return plan.monthPrice;
+      if (state.selectedCycle === 'year') return plan.yearPrice;
+      return plan.foreverPrice;
+    }
+
+    function renewUnitPoints() {
+      if (state.selectedCycle === 'month') return plan.monthPoints;
+      if (state.selectedCycle === 'year') return plan.yearPoints;
+      return plan.foreverPoints;
+    }
+
+    function renewSubtotal() {
+      return renewUnitPrice() * totalSelectedDevices();
+    }
+
+    function renewPaidAmount() {
+      return renewSubtotal();
+    }
+
+    function renewAwardPoints() {
+      return renewUnitPoints() * totalSelectedDevices();
+    }
+
+    function renewExtendedDays() {
+      if (state.selectedCycle === 'month') return 30;
+      if (state.selectedCycle === 'year') return 365;
+      return 3650;
+    }
+
+    function nextExpiry(baseDate, addDays) {
+      const date = new Date(baseDate + 'T23:59:59');
+      date.setDate(date.getDate() + addDays);
+      return date.toISOString().slice(0, 10) + ' 23:59:59';
+    }
+
+    function currentFeature(id) {
+      return featureDefs.find((item) => item.id === id);
+    }
+
+    function currentPaymentDetail() {
+      return state.paymentRows.find((item) => item.id === state.activePaymentId) || state.paymentRows[0];
+    }
+
+    function usageBalanceHint() {
+      if (isExpired()) {
+        return { type: 'warn', text: '当前 Pro 已到期，请先续费后继续使用 AI 功能。' };
+      }
+      if (state.notice) {
+        return { type: state.scene === 'key' ? 'info' : 'warn', text: state.notice };
+      }
+      return null;
+    }
+
+    function applyScene(sceneKey) {
+      const scene = scenes[sceneKey];
+      state.scene = sceneKey;
+      state.balance = scene.balance;
+      state.used30 = scene.used30;
+      state.expiry = scene.expiry;
+      state.notice = scene.notice;
+      state.availableCouponIds = clone(scene.coupons);
+      state.selectedCouponId = 'none';
+      state.selectedCycle = 'month';
+      state.selectedPack = 5000;
+      state.selectedDeviceIds = ['m30'];
+      state.usageRows = buildUsageRows(sceneKey);
+      state.paymentRows = buildPaymentRows(sceneKey);
+      state.activePaymentId = state.paymentRows[0]?.id || '';
+      state.page = 'account';
+      state.modal = null;
+      state.pendingFeatureId = null;
+      state.accordion = { detail: false, rules: false };
+      state.usageFilterFeature = 'all';
+      state.usageFilterStatus = 'all';
+      state.usageDatePreset = 'all';
+      state.usageDateStart = '';
+      state.usageDateEnd = '';
+      state.paymentFilterType = 'all';
+      state.paymentSearchQuery = '';
+      render();
+    }
+
+    function openPage(pageName) {
+      state.page = pageName;
+      render();
+    }
+
+    function openModal(type) {
+      state.modal = type;
+      renderModal();
+    }
+
+    function closeModal() {
+      state.modal = null;
+      renderModal();
+    }
+
+    function toggleAccordion(section) {
+      state.accordion[section] = !state.accordion[section];
+      renderRenewPage();
+    }
+
+    function toggleAllDevices(checked) {
+      state.selectedDeviceIds = checked ? devices.map((item) => item.id) : [];
+      renderRenewPage();
+    }
+
+    function toggleDevice(id, checked) {
+      if (checked) {
+        if (!state.selectedDeviceIds.includes(id)) state.selectedDeviceIds.push(id);
+      } else {
+        state.selectedDeviceIds = state.selectedDeviceIds.filter((item) => item !== id);
+      }
+      renderRenewPage();
+    }
+
+    function openFeatureInfo(id) {
+      state.pendingFeatureId = id;
+      openModal('feature');
+    }
+
+    function simulateFeatureUse(id) {
+      const feature = currentFeature(id);
+      if (!feature || !feature.points) return;
+      if (isExpired()) {
+        openModal('expired');
+        return;
+      }
+      if (state.balance < feature.points) {
+        state.pendingFeatureId = id;
+        openModal('insufficient');
+        return;
+      }
+      state.balance -= feature.points;
+      state.used30 += feature.points;
+      state.usageRows.unshift({
+        time: '2026-03-25 10:18:12',
+        feature: feature.usageTitle,
+        featureId: id,
+        device: 'Visbody-M30',
+        points: feature.points,
+        balance: state.balance,
+        status: '成功'
+      });
+      render();
+    }
+
+    function goRenew(deviceId) {
+      state.page = 'renew';
+      if (deviceId) state.selectedDeviceIds = [deviceId];
+      render();
+    }
+
+    function confirmRenew() {
+      if (!totalSelectedDevices()) return;
+      const awardPoints = renewAwardPoints();
+      const paid = renewPaidAmount();
+      const extendDays = renewExtendedDays();
+      const newExpiry = nextExpiry(isExpired() ? '2026-03-25' : state.expiry, extendDays);
+      const cycleLabel =
+        state.selectedCycle === 'month' ? 'Pro/月' : state.selectedCycle === 'year' ? 'Pro/年' : 'Pro/永久';
+      const cycleText =
+        state.selectedCycle === 'month' ? '月付' : state.selectedCycle === 'year' ? '年付' : '永久';
+      const perUnit =
+        state.selectedCycle === 'month' ? '月' : state.selectedCycle === 'year' ? '年' : '永久';
+      const orderNo = `${Date.now()}`.slice(-18);
+      const id = `renew-${Date.now()}`;
+
+      state.balance += awardPoints;
+      state.expiry = newExpiry.slice(0, 10);
+      state.paymentRows.unshift({
+        id,
+        orderNo,
+        amount: `¥ ${paid.toFixed(2)}`,
+        packageType: cycleLabel,
+        status: '支付成功',
+        createTime: '2026-03-25 10:22:01',
+        payTime: '2026-03-25 10:22:16',
+        type: 'pro',
+        detail: {
+          cycle: cycleText,
+          points: awardPoints,
+          cashCoupon: '无',
+          timeCoupon: '无',
+          earlyRenewal: isExpired() ? '否' : '是',
+          effectText: `立即到账，有效期顺延至 ${newExpiry}`,
+          perPrice: `¥${renewUnitPrice().toFixed(2)}/${perUnit}`,
+          subtotal: `¥${renewSubtotal().toFixed(2)}`,
+          deviceCount: `${totalSelectedDevices()} 台设备`
+        }
+      });
+      state.activePaymentId = id;
+      state.page = 'paymentDetail';
+      render();
+    }
+
+    function confirmPack() {
+      const id = `pack-${Date.now()}`;
+      const orderNo = `${Date.now()}`.slice(-18);
+      const price = plan.packPrices[state.selectedPack];
+      state.balance += state.selectedPack;
+      state.paymentRows.unshift({
+        id,
+        orderNo,
+        amount: `¥ ${price.toFixed(2)}`,
+        packageType: '积分包',
+        status: '支付成功',
+        createTime: '2026-03-25 10:28:02',
+        payTime: '2026-03-25 10:28:18',
+        type: 'pack',
+        detail: {
+          packSize: `${state.selectedPack} 积分包`,
+          points: state.selectedPack,
+          cashCoupon: '无',
+          timeCoupon: '无',
+          earlyRenewal: '否',
+          effectText: '积分即时到账，有效期随当前 Pro 有效期',
+          subtotal: `¥${price.toFixed(2)}`
+        }
+      });
+      state.activePaymentId = id;
+      closeModal();
+      state.page = 'paymentDetail';
+      render();
+    }
+
+    function renderSceneSwitch() {
+      const root = document.getElementById('sceneSwitch');
+      root.innerHTML = '';
+      Object.entries(scenes).forEach(([key, item]) => {
+        const btn = document.createElement('button');
+        btn.className = `pill ${state.scene === key ? 'active' : ''}`;
+        btn.textContent = item.label;
+        btn.onclick = () => applyScene(key);
+        root.appendChild(btn);
+      });
+    }
+
+    function renderSimulateSwitch() {
+      const root = document.getElementById('simulateSwitch');
+      root.innerHTML = '';
+      const staffTools = /\bstaff=1\b/.test(window.location.search);
+      featureDefs.filter((item) => item.points).forEach((item) => {
+        const ok = document.createElement('button');
+        ok.type = 'button';
+        ok.className = 'pill';
+        ok.textContent = `${item.name} · 成功`;
+        ok.onclick = () => simulateFeatureUse(item.id);
+        root.appendChild(ok);
+        if (staffTools) {
+          const fail = document.createElement('button');
+          fail.type = 'button';
+          fail.className = 'pill';
+          fail.textContent = `${item.name} · 失败`;
+          fail.onclick = () => simulateFeatureFail(item.id);
+          root.appendChild(fail);
+        }
+      });
+    }
+
+    function simulateFeatureFail(id) {
+      const feature = currentFeature(id);
+      if (!feature || !feature.points) return;
+      const now = new Date();
+      const pad = (n) => String(n).padStart(2, '0');
+      const ts = `${now.getFullYear()}-${pad(now.getMonth() + 1)}-${pad(now.getDate())} ${pad(now.getHours())}:${pad(now.getMinutes())}:${pad(now.getSeconds())}`;
+      state.usageRows.unshift({
+        time: ts,
+        feature: feature.usageTitle,
+        featureId: id,
+        device: 'Visbody-M30',
+        points: 0,
+        balance: state.balance,
+        status: '失败',
+        remark: '服务未返回有效结果，本次未扣减积分'
+      });
+      render();
+    }
+
+    function renderNav() {
+      const payActive = state.page === 'payments' || state.page === 'paymentDetail';
+      const proActive = state.page === 'account' || state.page === 'renew' || state.page === 'pack' || state.page === 'usage';
+      const navPay = document.getElementById('navPayments');
+      const navPro = document.getElementById('navProPoints');
+      navPay.classList.toggle('active', payActive);
+      navPro.classList.toggle('active', proActive);
+      navPay.onclick = () => {
+        state.page = 'payments';
+        render();
+      };
+      navPro.onclick = () => {
+        state.page = 'account';
+        render();
+      };
+    }
+
+    function renderAccountPage() {
+      const page = document.getElementById('pageAccount');
+      page.classList.toggle('active', state.page === 'account');
+      const notice = usageBalanceHint();
+      page.innerHTML = `
+        <div class="account-wrap">
+          <div class="page-head">
+            <div class="back-link" id="accountBack" role="button" tabindex="0">← 返回上一页</div>
+            <div class="top-actions">
+              <span class="page-eyebrow">账户与权益</span>
+              <button type="button" class="btn btn-outline" id="openCouponBtn">我的优惠券</button>
+            </div>
+          </div>
+
+          <div class="hero">
+            <div>
+              <div class="hero-title">
+                <h2>XAtest</h2>
+                <span class="pro-badge">Pro</span>
+              </div>
+              <div class="subline">您共有 <strong>10</strong> 台设备，正在使用 Pro 权益的设备</div>
+            </div>
+          </div>
+
+          <div class="summary-grid">
+            <div class="summary-card">
+              <div class="label">当前积分余额</div>
+              <div class="value">${state.balance}</div>
+              <div class="meta">可用于 AI 报告解读、AI 自由对话、AI 个性化训练大纲</div>
+            </div>
+            <div class="summary-card">
+              <div class="label">Pro 到期时间</div>
+              <div class="value" style="font-size:24px;">${state.expiry}</div>
+              <div class="meta">${isExpired() ? '当前服务已结束，请先续费后恢复 AI 能力' : '当前周期内不可提前续费；如需扩容请新增设备开通 Pro'}</div>
+            </div>
+          </div>
+
+          <div class="action-row">
+            <div class="action-row-main">
+              ${
+                isExpired()
+                  ? `<button type="button" class="btn primary" id="goRenewBtn">立即续费 Pro</button>
+                     <button type="button" class="btn disabled" disabled id="openPackBtn">购买积分包</button>`
+                  : `<button type="button" class="btn primary" id="goRenewBtn">添加 Pro 设备</button>
+                     <button type="button" class="btn light" id="openPackBtn">购买积分包</button>`
+              }
+            </div>
+            <div class="action-row-sub">
+              <button type="button" class="btn light" id="goUsageBtn">查看积分使用记录</button>
+            </div>
+          </div>
+
+          <div class="notice ${notice ? `show ${notice.type}` : ''}">${notice ? notice.text : ''}</div>
+
+          <div class="device-panel">
+            ${devices.map((device) => `
+              <div class="device-card">
+                <div class="device-card-thumb">${device.name.includes('S30') ? 'S30' : device.name.includes('Explorer') ? 'R' : device.name.includes('M60') ? 'M60' : 'M30'}</div>
+                <div class="device-card-main">
+                  <h3>${device.name}</h3>
+                  <p><strong>门店：</strong>${device.store}</p>
+                  <p><strong>SN：</strong>${device.sn}</p>
+                  <p><strong>开通时间：</strong>${device.openedAt}</p>
+                  <p><strong>到期时间：</strong>${device.proExpire}</p>
+                  ${deviceProExpired(device.proExpire) ? `
+                    <div class="device-card-actions">
+                      <button type="button" class="btn primary" data-renew-device="${device.id}">立即续费</button>
+                    </div>
+                  ` : ''}
+                </div>
+              </div>
+            `).join('')}
+          </div>
+
+          <div class="feature-panel">
+            <table class="feature-table">
+              <thead>
+                <tr>
+                  <th style="width:16%;">核心功能</th>
+                  <th>详细描述</th>
+                  <th style="width:9%; text-align:center;">Basic</th>
+                  <th style="width:9%; text-align:center;">Pro</th>
+                </tr>
+              </thead>
+              <tbody>
+                ${featureDefs.map((item) => `
+                  <tr>
+                    <td><span class="feature-name">${item.name}</span></td>
+                    <td>
+                      <div class="feature-desc">${item.desc}</div>
+                      ${item.points ? `
+                        <div class="feature-meta">
+                          <span class="tag">${item.points} 积分/次</span>
+                          <button class="link-btn" data-feature-info="${item.id}">查看说明</button>
+                        </div>
+                      ` : ''}
+                    </td>
+                    <td class="check">${item.basic ? '◉' : ''}</td>
+                    <td class="check">${item.pro ? '◉' : ''}</td>
+                  </tr>
+                `).join('')}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      `;
+
+      page.querySelectorAll('[data-feature-info]').forEach((btn) => {
+        btn.onclick = () => openFeatureInfo(btn.dataset.featureInfo);
+      });
+      document.getElementById('accountBack').onclick = () => {
+        if (window.history.length > 1) window.history.back();
+        else openPage('payments');
+      };
+      document.getElementById('openCouponBtn').onclick = () => openModal('coupon');
+      const goRenewBtn = document.getElementById('goRenewBtn');
+      if (goRenewBtn) goRenewBtn.onclick = () => goRenew();
+      page.querySelectorAll('[data-renew-device]').forEach((btn) => {
+        btn.onclick = () => goRenew(btn.getAttribute('data-renew-device'));
+      });
+      document.getElementById('goUsageBtn').onclick = () => openPage('usage');
+      if (!isExpired()) {
+        document.getElementById('openPackBtn').onclick = () => openPage('pack');
+      }
+    }
+
+    function renderRenewPage() {
+      const page = document.getElementById('pageRenew');
+      page.classList.toggle('active', state.page === 'renew');
+      const notice = usageBalanceHint();
+      const allChecked = totalSelectedDevices() === devices.length;
+      const n = totalSelectedDevices();
+      page.innerHTML = `
+        <div class="renew-wrap">
+          <div class="page-head">
+            <div class="back-link" id="renewBack">← 返回账户与权益</div>
+          </div>
+
+          <div class="renew-title">选择套餐</div>
+          ${notice ? `<div class="notice show ${notice.type}">${notice.text}</div>` : ''}
+
+          <div class="renew-panel">
+            <div class="device-select-head">
+              <label><input type="checkbox" ${allChecked ? 'checked' : ''} id="selectAllDevices" /> 全选</label>
+            </div>
+
+            <div class="device-list">
+              ${devices.map((device) => `
+                <label class="device-item">
+                  <input class="check-box" type="checkbox" ${state.selectedDeviceIds.includes(device.id) ? 'checked' : ''} data-device="${device.id}" />
+                  <div class="device-thumb">${device.name.includes('M60') ? 'M60' : 'M30'}</div>
+                  <div class="device-main">
+                    <h3>${device.name}</h3>
+                    <p>门店　${device.store}</p>
+                    <p>SN　${device.sn}</p>
+                    <p>设备到期时间　${device.expire}</p>
+                  </div>
+                  <div><span class="status green">${device.status}</span></div>
+                </label>
+              `).join('')}
+            </div>
+
+            <div class="pay-section">
+              <h3>请选择付款方式：</h3>
+              <div class="pay-cards">
+                <div class="pay-card-v2 ${state.selectedCycle === 'month' ? 'active' : ''}" data-cycle="month" role="button" tabindex="0">
+                  <span class="pay-card-qty">x${n}</span>
+                  <div class="pay-card-price ${state.selectedCycle === 'month' ? 'grad' : ''}">¥ ${plan.monthPrice}</div>
+                  <div class="pay-card-points">到账 <strong>${plan.monthPoints}</strong> 积分/台</div>
+                  <div class="pay-card-unit">台/月</div>
+                </div>
+                <div class="pay-card-v2 ${state.selectedCycle === 'year' ? 'active' : ''}" data-cycle="year" role="button" tabindex="0">
+                  <span class="pay-card-qty">x${n}</span>
+                  <div class="pay-card-price ${state.selectedCycle === 'year' ? 'grad' : ''}">¥ ${plan.yearPrice}</div>
+                  <div class="pay-card-points">到账 <strong>${plan.yearPoints}</strong> 积分/台</div>
+                  <div class="pay-card-unit">台/年</div>
+                </div>
+                <div class="pay-card-v2 ${state.selectedCycle === 'forever' ? 'active' : ''}" data-cycle="forever" role="button" tabindex="0">
+                  <span class="pay-card-qty">x${n}</span>
+                  <div class="pay-card-price ${state.selectedCycle === 'forever' ? 'grad' : ''}">¥ ${plan.foreverPrice}</div>
+                  <div class="pay-card-points">到账 <strong>${plan.foreverPoints}</strong> 积分/台</div>
+                  <div class="pay-card-unit">台/永久</div>
+                </div>
+              </div>
+
+              <div class="renew-tip-banner">
+                已选 <strong>${n}</strong> 台设备，需支付 <strong>¥${renewPaidAmount().toFixed(2)}</strong>，到账 <strong>${renewAwardPoints()}</strong> 积分。
+              </div>
+
+              <div class="renew-actions">
+                <button class="btn light" id="renewCancelBtn">取消</button>
+                <button class="btn primary ${n ? '' : 'disabled'}" ${n ? '' : 'disabled'} id="payNowBtn">立即支付</button>
+              </div>
+
+              <div class="accordion ${state.accordion.detail ? 'open' : ''}" id="accordionDetail">
+                <div class="accordion-head">
+                  <span>订阅和功能详情</span>
+                  <span>${state.accordion.detail ? '收起' : '查看详情'}</span>
+                </div>
+                <div class="accordion-body">
+                  <div class="rules-block">
+                    <div class="rules-card">
+                      <strong>核心功能与权益说明（与「核心功能」表一致）</strong>
+                      <table class="rules-table" style="margin-top:8px;">
+                        <thead>
+                          <tr>
+                            <th style="text-align:left;">核心功能</th>
+                            <th style="text-align:left;">详细描述</th>
+                            <th>Basic</th>
+                            <th>Pro</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          ${featureDefs.map((item) => `
+                            <tr>
+                              <td style="text-align:left;">${item.name}</td>
+                              <td style="text-align:left;">${item.desc}${item.points ? `（${item.points} 积分/次）` : ''}</td>
+                              <td>${item.basic ? '◉' : ''}</td>
+                              <td>${item.pro ? '◉' : ''}</td>
+                            </tr>
+                          `).join('')}
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="accordion ${state.accordion.rules ? 'open' : ''}" id="accordionRules">
+                <div class="accordion-head">
+                  <span>收费规则说明</span>
+                  <span>${state.accordion.rules ? '收起' : '查看说明'}</span>
+                </div>
+                <div class="accordion-body">
+                  <div class="rules-block">
+                    <div class="rules-card">
+                      <strong>套餐计费</strong><br />
+                      应付金额按所选套餐单价、勾选设备台数，并结合阶梯折扣计算。<br />
+                      示例：10 台设备、单价 100 元、9 折时，合计约为 10 × 100 × 0.9 = 900 元（以支付页为准）。<br />
+                      若设备 Basic 版到期早于本次升级日，仅需补缴至 Basic 有效期的差价，无额外费用。<br />
+                      阶梯折扣参考：
+                      <table class="rules-table">
+                        <thead><tr><th>1~5 台</th><th>6~10 台</th><th>11~20 台</th><th>21~30 台</th><th>31~50 台</th></tr></thead>
+                        <tbody><tr><td>无折扣</td><td>9.5 折</td><td>9 折</td><td>8.5 折</td><td>8 折</td></tr></tbody>
+                      </table>
+                      超过 50 台请联系销售获取方案（WhatsApp +852 5704 0513 / hello@visbody.com）。
+                    </div>
+                    <div class="rules-card">
+                      <strong>积分说明</strong><br />
+                      • 支付成功后，相应积分会尽快到账，具体数量以支付完成页展示为准。<br />
+                      • 部分 AI 能力按次消耗积分；使用前页面会提示本次消耗，服务未成功完成则不扣减。<br />
+                      • 积分与当前 Pro 权益周期相关；若账户内 Pro 均已结束，剩余积分将按平台规则处理。<br />
+                      • 购买积分包仅增加可用积分，不延长 Pro 到期时间；需在 Pro 有效期内购买。<br />
+                      • 使用优惠券等活动时，以订单确认页展示的应付金额与权益说明为准。
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      `;
+
+      document.getElementById('renewBack').onclick = () => openPage('account');
+      document.getElementById('selectAllDevices').onchange = (e) => toggleAllDevices(e.target.checked);
+      page.querySelectorAll('[data-device]').forEach((el) => {
+        el.onchange = (e) => toggleDevice(el.dataset.device, e.target.checked);
+      });
+      page.querySelectorAll('[data-cycle]').forEach((el) => {
+        el.onclick = () => {
+          state.selectedCycle = el.dataset.cycle;
+          renderRenewPage();
+        };
+      });
+      document.getElementById('renewCancelBtn').onclick = () => openPage('account');
+      document.getElementById('payNowBtn').onclick = confirmRenew;
+      document.getElementById('accordionDetail').querySelector('.accordion-head').onclick = () => toggleAccordion('detail');
+      document.getElementById('accordionRules').querySelector('.accordion-head').onclick = () => toggleAccordion('rules');
+    }
+
+    function renderPackPage() {
+      const page = document.getElementById('pagePack');
+      page.classList.toggle('active', state.page === 'pack');
+      page.innerHTML = `
+        <div class="pack-wrap">
+          <div class="page-head">
+            <div class="back-link" id="packBack">← 返回账户与权益</div>
+          </div>
+          <div class="pack-title">购买积分包</div>
+          <p class="pack-desc">
+            支付成功后积分立即到账，并与套餐权益合并统计。购买积分包用于补充可用积分，不延长 Pro 到期时间。
+          </p>
+
+          <div class="pack-list">
+            ${[1000, 5000, 10000].map((pack) => `
+              <div class="pack-item ${state.selectedPack === pack ? 'active' : ''}" data-pack-page="${pack}">
+                <div>
+                  <h4>${pack} 积分</h4>
+                  <p>${packPurchaseCopy[pack]}</p>
+                </div>
+                <div class="price">¥${plan.packPrices[pack]}</div>
+              </div>
+            `).join('')}
+          </div>
+
+          <div class="renew-tip-banner" style="margin-top:16px;">
+            本次到账 <strong>${state.selectedPack}</strong> 积分，应付金额 <strong>¥${plan.packPrices[state.selectedPack]}</strong>。
+          </div>
+
+          <div class="renew-actions">
+            <button class="btn light" id="packCancelPageBtn">取消</button>
+            <button class="btn primary" id="packConfirmPageBtn">确认并支付</button>
+          </div>
+        </div>
+      `;
+
+      document.getElementById('packBack').onclick = () => openPage('account');
+      page.querySelectorAll('[data-pack-page]').forEach((el) => {
+        el.onclick = () => {
+          state.selectedPack = Number(el.getAttribute('data-pack-page'));
+          renderPackPage();
+        };
+      });
+      document.getElementById('packCancelPageBtn').onclick = () => openPage('account');
+      document.getElementById('packConfirmPageBtn').onclick = confirmPack;
+    }
+
+    function renderUsagePage() {
+      const page = document.getElementById('pageUsage');
+      page.classList.toggle('active', state.page === 'usage');
+      syncUsageFilters();
+      const rows = filteredUsageRows();
+      const featureOpts = usageFeatureFilterOptions();
+      const statusOpts = usageStatusFilterOptions();
+      page.innerHTML = `
+        <div class="records-wrap">
+          <div class="page-head">
+            <div class="back-link" id="usageBack" role="button" tabindex="0">← 返回账户与权益</div>
+          </div>
+
+          <div class="records-head">
+            <div>
+              <h2 style="margin:0; font-size:28px;">积分使用记录</h2>
+              <div style="margin-top:6px; color: var(--muted); font-size:14px;">按时间查看各 AI 能力的积分扣减与失败记录（失败不扣减积分）</div>
+            </div>
+            <div class="records-summary">
+              <div class="mini-card">
+                <div class="label">当前可用积分</div>
+                <div class="value">${state.balance}</div>
+              </div>
+              <div class="mini-card">
+                <div class="label">近 30 日已消耗</div>
+                <div class="value">${state.used30}</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="filters">
+            <div class="filter-box">
+              <label class="visually-hidden" for="usageDatePreset">时间范围</label>
+              <select class="select" id="usageDatePreset" aria-label="时间范围">
+                <option value="all" ${state.usageDatePreset === 'all' ? 'selected' : ''}>全部时间</option>
+                <option value="7d" ${state.usageDatePreset === '7d' ? 'selected' : ''}>近 7 日</option>
+                <option value="30d" ${state.usageDatePreset === '30d' ? 'selected' : ''}>近 30 日</option>
+                <option value="custom" ${state.usageDatePreset === 'custom' ? 'selected' : ''}>自定义日期</option>
+              </select>
+            </div>
+            ${state.usageDatePreset === 'custom' ? `
+              <div class="filter-box">
+                <label class="visually-hidden" for="usageDateStart">开始日期</label>
+                <input class="input" id="usageDateStart" type="date" value="${escAttr(state.usageDateStart)}" style="min-width:180px;" />
+                <span style="color:var(--muted);">至</span>
+                <label class="visually-hidden" for="usageDateEnd">结束日期</label>
+                <input class="input" id="usageDateEnd" type="date" value="${escAttr(state.usageDateEnd)}" style="min-width:180px;" />
+              </div>
+            ` : ''}
+            <div class="filter-box">
+              <label class="visually-hidden" for="usageFilterFeature">功能类型</label>
+              <select class="select" id="usageFilterFeature" aria-label="按功能筛选">
+                ${featureOpts
+                  .map((o) => `<option value="${o.value}" ${state.usageFilterFeature === o.value ? 'selected' : ''}>${o.label}</option>`)
+                  .join('')}
+              </select>
+            </div>
+            <div class="filter-box">
+              <label class="visually-hidden" for="usageFilterStatus">处理状态</label>
+              <select class="select" id="usageFilterStatus" aria-label="按状态筛选">
+                ${statusOpts
+                  .map((o) => `<option value="${o.value}" ${state.usageFilterStatus === o.value ? 'selected' : ''}>${o.label}</option>`)
+                  .join('')}
+              </select>
+            </div>
+          </div>
+
+          <div class="table-wrap">
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th style="width:20%;">时间</th>
+                  <th style="width:24%;">功能</th>
+                  <th style="width:18%;">设备</th>
+                  <th style="width:12%;">消耗积分</th>
+                  <th style="width:14%;">剩余积分</th>
+                  <th style="width:12%;">状态</th>
+                </tr>
+              </thead>
+              <tbody>
+                ${
+                  rows.length
+                    ? rows
+                        .map(
+                          (row) => `
+                  <tr class="${row.status === '失败' ? 'row-fail' : ''}">
+                    <td>${row.time}</td>
+                    <td>${row.feature}</td>
+                    <td>${row.device}</td>
+                    <td class="amount ${row.status === '失败' ? '' : 'minus'}">${row.status === '失败' ? '—' : `-${row.points}`}</td>
+                    <td>${row.balance}</td>
+                    <td>
+                      <span class="${row.status === '失败' ? 'status-fail' : 'status-ok'}">${row.status}</span>
+                      ${row.remark ? `<div style="color:var(--muted);font-size:12px;margin-top:4px;line-height:1.5;">${row.remark}</div>` : ''}
+                    </td>
+                  </tr>
+                `
+                        )
+                        .join('')
+                    : `<tr><td colspan="6" style="text-align:center;padding:40px;color:var(--muted);">当前筛选条件下暂无记录，可调整时间范围或筛选条件。</td></tr>`
+                }
+              </tbody>
+            </table>
+          </div>
+        </div>
+      `;
+      document.getElementById('usageBack').onclick = () => openPage('account');
+      document.getElementById('usageDatePreset').onchange = (e) => {
+        state.usageDatePreset = e.target.value;
+        if (state.usageDatePreset !== 'custom') {
+          state.usageDateStart = '';
+          state.usageDateEnd = '';
+        }
+        render();
+      };
+      const usageDateStart = document.getElementById('usageDateStart');
+      const usageDateEnd = document.getElementById('usageDateEnd');
+      if (usageDateStart) {
+        usageDateStart.onchange = (e) => {
+          state.usageDateStart = e.target.value;
+          render();
+        };
+      }
+      if (usageDateEnd) {
+        usageDateEnd.onchange = (e) => {
+          state.usageDateEnd = e.target.value;
+          render();
+        };
+      }
+      document.getElementById('usageFilterFeature').onchange = (e) => {
+        state.usageFilterFeature = e.target.value;
+        render();
+      };
+      document.getElementById('usageFilterStatus').onchange = (e) => {
+        state.usageFilterStatus = e.target.value;
+        render();
+      };
+    }
+
+    function renderPaymentsPage() {
+      const page = document.getElementById('pagePayments');
+      page.classList.toggle('active', state.page === 'payments');
+      syncPaymentFilters();
+      const list = filteredPaymentRows();
+      const typeOpts = paymentTypeFilterOptions();
+      page.innerHTML = `
+        <div class="records-wrap">
+          <div class="page-head">
+            <div class="back-link" id="paymentsBack" role="button" tabindex="0">← 返回账户与权益</div>
+          </div>
+          <div class="records-head" style="margin-bottom:14px;">
+            <div>
+              <h2 style="margin:0; font-size:28px;">缴费记录</h2>
+              <div style="margin-top:6px; color: var(--muted); font-size:14px;">查看 Pro 续费、积分包等订单，支持按订单号搜索</div>
+            </div>
+          </div>
+          <div class="filters">
+            <div class="filter-box">
+              <label class="visually-hidden" for="paymentFilterType">订单类型</label>
+              <select class="select" id="paymentFilterType" aria-label="订单类型">
+                ${typeOpts
+                  .map((o) => `<option value="${o.value}" ${state.paymentFilterType === o.value ? 'selected' : ''}>${o.label}</option>`)
+                  .join('')}
+              </select>
+            </div>
+            <div class="filter-box">
+              <label class="visually-hidden" for="paymentSearchQuery">搜索订单</label>
+              <input class="input" id="paymentSearchQuery" type="search" autocomplete="off" placeholder="输入订单编号搜索" value="${escAttr(state.paymentSearchQuery)}" />
+              <button type="button" class="search-btn" id="paymentSearchBtn" aria-label="搜索">⌕</button>
+            </div>
+          </div>
+
+          <div class="table-wrap">
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th style="width:8%;">序号</th>
+                  <th style="width:24%;">编号</th>
+                  <th style="width:12%;">实付金额</th>
+                  <th style="width:12%;">套餐类型</th>
+                  <th style="width:12%;">状态</th>
+                  <th style="width:14%;">创建时间</th>
+                  <th style="width:14%;">支付时间</th>
+                  <th style="width:4%;">操作</th>
+                </tr>
+              </thead>
+              <tbody>
+                ${
+                  list.length
+                    ? list
+                        .map((row, index) => {
+                          const seq = index + 1;
+                          return `
+                  <tr class="${state.activePaymentId === row.id ? 'active-row' : ''} ${row.type === 'pack' ? 'row-pack' : ''}">
+                    <td>${seq}</td>
+                    <td>${row.orderNo}</td>
+                    <td>${row.amount}</td>
+                    <td>
+                      ${row.type === 'pack'
+                        ? `<span class="chip chip-pack">积分包订单</span>`
+                        : `<span class="chip chip-pro">Pro 订阅订单</span>`
+                      }
+                      <div style="margin-top:6px;color:var(--muted);font-size:12px;">${row.packageType}</div>
+                    </td>
+                    <td>${row.status}</td>
+                    <td>${row.createTime}</td>
+                    <td>${row.payTime}</td>
+                    <td><button type="button" class="detail-icon" data-detail="${row.id}" aria-label="查看订单详情">☰</button></td>
+                  </tr>
+                `;
+                        })
+                        .join('')
+                    : `<tr><td colspan="8" style="text-align:center;padding:40px;color:var(--muted);">未找到符合条件的订单，请更换类型或订单号。</td></tr>`
+                }
+              </tbody>
+            </table>
+          </div>
+        </div>
+      `;
+      document.getElementById('paymentsBack').onclick = () => openPage('account');
+      document.getElementById('paymentFilterType').onchange = (e) => {
+        state.paymentFilterType = e.target.value;
+        render();
+      };
+      const runSearch = () => {
+        const el = document.getElementById('paymentSearchQuery');
+        state.paymentSearchQuery = el ? el.value : '';
+        render();
+      };
+      document.getElementById('paymentSearchBtn').onclick = runSearch;
+      document.getElementById('paymentSearchQuery').onkeydown = (e) => {
+        if (e.key === 'Enter') runSearch();
+      };
+      page.querySelectorAll('[data-detail]').forEach((el) => {
+        el.onclick = () => {
+          state.activePaymentId = el.dataset.detail;
+          openPage('paymentDetail');
+        };
+      });
+    }
+
+    function renderPaymentDetailPage() {
+      const page = document.getElementById('pagePaymentDetail');
+      page.classList.toggle('active', state.page === 'paymentDetail');
+      const row = currentPaymentDetail();
+      if (!row) {
+        page.innerHTML = '';
+        return;
+      }
+      const detail = row.detail;
+      const isPack = row.type === 'pack';
+      page.innerHTML = `
+        <div class="detail-wrap">
+          <div class="page-head">
+            <div class="back-link" id="detailBack">← 返回缴费记录</div>
+          </div>
+
+          <div class="detail-box">
+            <div class="detail-grid">
+              <div>
+                <div><strong>客户ID：</strong>842</div>
+                <div><strong>编号：</strong>${row.orderNo}</div>
+                <div><strong>支付方式：</strong>微信支付</div>
+                <div><strong>套餐类型：</strong>${row.packageType}</div>
+              </div>
+              <div>
+                <div><strong>客户名称：</strong>【测试】西安测试</div>
+                <div><strong>支付时间：</strong>${row.payTime}</div>
+                <div><strong>状态：</strong>${row.status}</div>
+                <div><strong>${isPack ? '到账方式：' : '是否为提前续费：'}</strong>${isPack ? '支付成功后立即到账' : detail.earlyRenewal}</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="detail-box">
+            <h3 class="section-title">${isPack ? '积分包费用明细' : 'Pro费用明细'}</h3>
+            <div class="product-card">
+              <div class="product-main">
+                <div class="thumb">${isPack ? 'POINTS' : 'M30'}</div>
+                <div class="product-lines">
+                  ${isPack ? `
+                    <div class="product-row"><span>积分包档位：</span><strong>${detail.packSize}</strong></div>
+                    <div class="product-row"><span>本次到账积分：</span><strong>${detail.points}</strong></div>
+                    <div class="product-row"><span>使用的代金券：</span><strong>${detail.cashCoupon}</strong></div>
+                    <div class="product-row"><span>使用的时间优惠券：</span><strong>${detail.timeCoupon}</strong></div>
+                    <div class="product-row"><span>积分有效期说明：</span><strong>${detail.effectText}</strong></div>
+                  ` : `
+                    <div class="product-row"><span>设备型号：</span><strong>Visbody-M30</strong></div>
+                    <div class="product-row"><span>设备数量：</span><strong>${detail.deviceCount}</strong></div>
+                    <div class="product-row"><span>Pro套餐价格：</span><strong>${detail.perPrice}</strong></div>
+                    <div class="product-row"><span>本次到账积分：</span><strong>${detail.points}</strong></div>
+                    <div class="product-row"><span>使用的代金券：</span><strong>${detail.cashCoupon}</strong></div>
+                    <div class="product-row"><span>使用的时间优惠券：</span><strong>${detail.timeCoupon}</strong></div>
+                    <div class="product-row"><span>生效方式：</span><strong>${detail.effectText}</strong></div>
+                  `}
+                </div>
+              </div>
+              <div class="price-line">
+                <span>${isPack ? '积分包费用小计' : 'Pro费用小计'}</span>
+                <strong>${detail.subtotal}</strong>
+              </div>
+              <div class="final-line">
+                <span>实付金额</span>
+                <strong>${row.amount}</strong>
+              </div>
+            </div>
+
+            <div class="footer-actions">
+              <button class="btn light" id="detailCloseBtn">我已了解</button>
+              <button class="btn primary" id="detailConfirmBtn">确认收据</button>
+            </div>
+          </div>
+        </div>
+      `;
+      document.getElementById('detailBack').onclick = () => openPage('payments');
+      document.getElementById('detailCloseBtn').onclick = () => openPage('payments');
+      document.getElementById('detailConfirmBtn').onclick = () => {
+        showToast('已确认查看本笔订单，可随时在「缴费记录」中再次打开。');
+        openPage('payments');
+      };
+    }
+
+    function renderModal() {
+      const overlay = document.getElementById('overlay');
+      const modal = document.getElementById('modal');
+      if (!state.modal) {
+        overlay.classList.remove('show');
+        modal.innerHTML = '';
+        return;
+      }
+      overlay.classList.add('show');
+
+      if (state.modal === 'coupon') {
+        modal.innerHTML = `
+          <h3>我的优惠券</h3>
+          <p>选择本次续费要使用的优惠券。代金券仅减少实付金额，时间优惠券仅延长有效期，不影响本次积分到账数。</p>
+          <div class="modal-list">
+            ${state.availableCouponIds.map((id) => {
+              const item = coupons[id];
+              return `
+                <div class="modal-item ${state.selectedCouponId === id ? 'active' : ''}" data-coupon="${id}">
+                  <div>
+                    <strong>${item.name}</strong>
+                    <div style="color: var(--muted); font-size: 13px;">${item.desc}</div>
+                  </div>
+                  <div style="color: var(--muted); font-size: 13px;">${item.discount ? `-¥${item.discount}` : item.extraDays ? `+${item.extraDays} 天` : ''}</div>
+                </div>
+              `;
+            }).join('')}
+          </div>
+          <div class="modal-actions">
+            <button class="btn light" id="couponCancelBtn">取消</button>
+            <button class="btn primary" id="couponConfirmBtn">确定</button>
+          </div>
+        `;
+        modal.querySelectorAll('[data-coupon]').forEach((el) => {
+          el.onclick = () => {
+            state.selectedCouponId = el.dataset.coupon;
+            renderModal();
+          };
         });
+        document.getElementById('couponCancelBtn').onclick = closeModal;
+        document.getElementById('couponConfirmBtn').onclick = () => {
+          closeModal();
+          if (state.page === 'renew') renderRenewPage();
+        };
       }
 
-      function formatPoints(n) { return n.toLocaleString(); }
-      function updatePointsUI() {
-        var el = document.getElementById('pointsValue');
-        var bar = document.getElementById('pointsBar');
-        var tip = document.getElementById('renewTip');
-        if (el) el.textContent = formatPoints(points);
-        if (bar) bar.classList.toggle('low', points < 100);
-        if (tip) tip.classList.toggle('show', points < 100);
-      }
-
-      document.querySelectorAll('.nav-item[data-page]').forEach(function(a) {
-        a.addEventListener('click', function(e) {
-          e.preventDefault();
-          showPage(a.getAttribute('data-page'));
+      if (state.modal === 'pack') {
+        modal.innerHTML = `
+          <h3>购买积分包</h3>
+          <p>支付成功后积分立即到账，与 Pro 套餐获赠积分合并统计。积分有效期与当前账户 Pro 有效期一致，购买积分包不会延长 Pro 到期时间。</p>
+          <div class="modal-list">
+            ${[1000, 5000, 10000].map((pack) => `
+              <div class="modal-item ${state.selectedPack === pack ? 'active' : ''}" data-pack="${pack}">
+                <div>
+                  <strong>${pack} 积分</strong>
+                  <div style="color: var(--muted); font-size: 13px; line-height:1.55;">${packPurchaseCopy[pack]}</div>
+                </div>
+                <div style="font-weight: 700;">¥${plan.packPrices[pack]}</div>
+              </div>
+            `).join('')}
+          </div>
+          <div class="modal-summary">
+            本次到账积分：<strong>${state.selectedPack}</strong><br />
+            应付金额：<strong>¥${plan.packPrices[state.selectedPack]}</strong><br />
+            到账说明：<strong>支付成功后立即生效</strong>；积分在 Pro 有效期内使用，Pro 全部到期后剩余积分将清零。
+          </div>
+          <div class="modal-actions">
+            <button class="btn light" id="packCancelBtn">取消</button>
+            <button type="button" class="btn primary" id="packConfirmBtn">确认并支付</button>
+          </div>
+        `;
+        modal.querySelectorAll('[data-pack]').forEach((el) => {
+          el.onclick = () => {
+            state.selectedPack = Number(el.dataset.pack);
+            renderModal();
+          };
         });
-      });
-      document.getElementById('linkRecords').addEventListener('click', function(e) {
-        e.preventDefault();
-        showPage('records');
-      });
-      document.getElementById('btnRenew').addEventListener('click', function() {
-        showPage('renew');
-      });
-      function resetBuySelection() {
-        buySelected.pts = 0;
-        buySelected.price = 0;
-        var opts = document.getElementById('buyOptions');
-        if (opts) opts.querySelectorAll('.buy-option').forEach(function(o) { o.classList.remove('selected'); });
-        document.getElementById('buySelectedText').textContent = '请选择档位';
-        document.getElementById('buyPrice').textContent = '¥0';
-        document.getElementById('btnSubmitBuy').disabled = true;
+        document.getElementById('packCancelBtn').onclick = closeModal;
+        document.getElementById('packConfirmBtn').onclick = confirmPack;
       }
-      document.getElementById('linkBuy').addEventListener('click', function(e) {
-        e.preventDefault();
-        showPage('buy');
-        resetBuySelection();
-        updateBuyPagePoints();
-      });
-      document.getElementById('btnBuyInTip').addEventListener('click', function() {
-        showPage('buy');
-        resetBuySelection();
-        updateBuyPagePoints();
-      });
-      document.getElementById('backFromBuy').addEventListener('click', function(e) {
-        e.preventDefault();
-        showPage('pro');
-      });
-      document.getElementById('backFromRecords').addEventListener('click', function(e) {
-        e.preventDefault();
-        showPage('pro');
-      });
-      document.getElementById('backFromRenew').addEventListener('click', function(e) {
-        e.preventDefault();
-        showPage('pro');
-      });
-      document.getElementById('backFromRule').addEventListener('click', function(e) {
-        e.preventDefault();
-        showPage('pro');
-      });
 
-      var renewDevices = document.getElementById('renewDevices');
-      var renewCycle = document.getElementById('renewCycle');
-      function updateRenewSummary() {
-        var n = parseInt(renewDevices.value, 10) || 1;
-        var cycle = renewCycle.value;
-        document.getElementById('summaryDevices').textContent = n;
-        var price = cycle === 'month' ? '¥20/台/月' : cycle === 'year' ? '¥200/台/年' : '¥500/台（永久）';
-        document.getElementById('summaryPrice').textContent = price;
-        var rate = n <= 5 ? 1 : n <= 10 ? 0.95 : n <= 20 ? 0.9 : 0.85;
-        var single = cycle === 'month' ? 20 : cycle === 'year' ? 200 : 500;
-        var total = Math.round(n * single * rate);
-        document.getElementById('summaryTotal').textContent = '¥' + total;
-        document.getElementById('summaryDiscount').textContent = (rate * 100) + ' 折';
+      if (state.modal === 'feature') {
+        const feature = currentFeature(state.pendingFeatureId);
+        modal.innerHTML = `
+          <h3>${feature.usageTitle}</h3>
+          <p>${feature.usageText}</p>
+          <div class="modal-summary">
+            计费规则：每次成功使用扣减 <strong>${feature.points}</strong> 积分；调用失败不扣减。<br />
+            余额不足时，可先购买积分包；也可在「设备列表」中为设备开通或续费 Pro，按周期获得积分。
+          </div>
+          <div class="modal-actions">
+            <button class="btn primary" id="featureCloseBtn">我知道了</button>
+          </div>
+        `;
+        document.getElementById('featureCloseBtn').onclick = closeModal;
       }
-      if (renewDevices) renewDevices.addEventListener('input', updateRenewSummary);
-      if (renewCycle) renewCycle.addEventListener('change', updateRenewSummary);
-      updateRenewSummary();
 
-      document.getElementById('btnSubmitRenew').addEventListener('click', function() {
-        var n = parseInt(document.getElementById('renewDevices').value, 10) || 1;
-        points += 2000 * n;
-        updatePointsUI();
-        showPage('pro');
-        alert('续费成功，已到账 ' + (2000 * n).toLocaleString() + ' 积分。');
-      });
-
-      var buySelected = { pts: 0, price: 0 };
-      function updateBuyPagePoints() {
-        var el = document.getElementById('buyPagePoints');
-        if (el) el.textContent = formatPoints(points);
+      if (state.modal === 'insufficient') {
+        const feature = currentFeature(state.pendingFeatureId);
+        modal.innerHTML = `
+          <h3>积分不足</h3>
+          <p>当前可用积分不足以完成本次「${feature.usageTitle}」。购买积分包后积分立即到账，可马上继续使用；若您还需要为新设备开通 Pro 或延长多台设备服务周期，请前往设备管理选择套餐。</p>
+          <div class="modal-summary">
+            当前可用积分：<strong>${state.balance}</strong><br />
+            本次需要：<strong>${feature.points}</strong> 积分
+          </div>
+          <div class="modal-actions">
+            <button class="btn light" id="insufficientCancelBtn">取消</button>
+            <button type="button" class="btn" id="insufficientRenewBtn">去开通 / 续费 Pro</button>
+            <button type="button" class="btn primary" id="insufficientPackBtn">购买积分包</button>
+          </div>
+        `;
+        document.getElementById('insufficientCancelBtn').onclick = closeModal;
+        document.getElementById('insufficientRenewBtn').onclick = () => {
+          closeModal();
+          goRenew();
+        };
+        document.getElementById('insufficientPackBtn').onclick = () => {
+          closeModal();
+          openPage('pack');
+        };
       }
-      var buyOptions = document.getElementById('buyOptions');
-      if (buyOptions) {
-        buyOptions.querySelectorAll('.buy-option').forEach(function(opt) {
-          opt.addEventListener('click', function() {
-            buyOptions.querySelectorAll('.buy-option').forEach(function(o) { o.classList.remove('selected'); });
-            opt.classList.add('selected');
-            buySelected.pts = parseInt(opt.getAttribute('data-pts'), 10);
-            buySelected.price = opt.getAttribute('data-price');
-            document.getElementById('buySelectedText').textContent = buySelected.pts.toLocaleString() + ' 积分';
-            document.getElementById('buyPrice').textContent = '¥' + buySelected.price;
-            document.getElementById('btnSubmitBuy').disabled = false;
-          });
-        });
-      }
-      document.getElementById('btnSubmitBuy').addEventListener('click', function() {
-        if (buySelected.pts <= 0) return;
-        points += buySelected.pts;
-        updatePointsUI();
-        showPage('pro');
-        alert('购买成功，已到账 ' + buySelected.pts.toLocaleString() + ' 积分，当前共 ' + formatPoints(points) + ' 积分。');
-      });
 
-      updatePointsUI();
-    })();
+      if (state.modal === 'expired') {
+        modal.innerHTML = `
+          <h3>Pro 已到期</h3>
+          <p>您账户下的 Pro 服务已全部结束，消耗积分的 AI 能力暂不可用。请先完成 Pro 续费或重新开通，系统将在支付成功后按所选周期发放积分并恢复服务。</p>
+          <div class="modal-summary">
+            当前可用积分：<strong>${state.balance}</strong><br />
+            最近一笔 Pro 到期日：<strong>${state.expiry}</strong><br />
+            说明：账户内全部 Pro 到期后，剩余积分将按平台规则清零；续费成功后新周期积分按订单发放。
+          </div>
+          <div class="modal-actions">
+            <button class="btn light" id="expiredCancelBtn">取消</button>
+            <button type="button" class="btn primary" id="expiredRenewBtn">去续费 Pro</button>
+          </div>
+        `;
+        document.getElementById('expiredCancelBtn').onclick = closeModal;
+        document.getElementById('expiredRenewBtn').onclick = () => {
+          closeModal();
+          goRenew();
+        };
+      }
+    }
+
+    function render() {
+      renderSceneSwitch();
+      renderSimulateSwitch();
+      renderNav();
+      renderAccountPage();
+      renderRenewPage();
+      renderPackPage();
+      renderUsagePage();
+      renderPaymentsPage();
+      renderPaymentDetailPage();
+      renderModal();
+    }
+
+    document.getElementById('overlay').addEventListener('click', (event) => {
+      if (event.target.id === 'overlay') closeModal();
+    });
+
+    initSceneDock();
+    applyScene('normal');
   </script>
 </body>
 </html>
