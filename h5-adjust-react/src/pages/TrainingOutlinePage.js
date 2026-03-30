@@ -21,7 +21,11 @@ export function TrainingOutlinePage({ data, onBack, onGoPlan }) {
         titleIcon="🧭"
         subtitle=${`${data.outline.periodWeeks} 周周期 · 每周 ${data.outline.frequencyPerWeek} 次 · 当前第 ${data.outline.currentWeek} 周`}
       >
+<<<<<<< HEAD
         <div className="rounded-card border border-fxLine bg-white/[0.03] p-3">
+=======
+        <div className="fx-cardInner rounded-card p-3">
+>>>>>>> f1ef4b3 (Update HTML structure and styles for PRO权益与积分 page; remove unused CSS and optimize layout. Update .DS_Store files.)
           <p className="text-xs text-fxSub">核心目标</p>
           <p className="mt-1 text-[14px] leading-relaxed text-fxText">${data.outline.coreGoal}</p>
           <p className="mt-2 text-xs text-fxSub">预计可见变化：${data.outline.expectedChange}</p>
@@ -32,7 +36,11 @@ export function TrainingOutlinePage({ data, onBack, onGoPlan }) {
         <div className="space-y-2">
           ${data.outline.targets.map(
             (target) => html`
+<<<<<<< HEAD
               <article key=${target.id} className="rounded-card border border-fxLine bg-white/[0.03] p-3">
+=======
+              <article key=${target.id} className="fx-cardInner rounded-card p-3">
+>>>>>>> f1ef4b3 (Update HTML structure and styles for PRO权益与积分 page; remove unused CSS and optimize layout. Update .DS_Store files.)
                 <div className="flex items-center justify-between gap-2">
                   <p className="text-sm font-semibold text-fxText">${target.title}</p>
                   <span className="rounded-full border border-white/15 px-2 py-0.5 text-[11px] text-fxSub">${target.type}</span>
@@ -59,7 +67,11 @@ export function TrainingOutlinePage({ data, onBack, onGoPlan }) {
             `,
           )}
         </div>
+<<<<<<< HEAD
         <div className="mt-3 rounded-card border border-fxLine bg-white/[0.03] p-3">
+=======
+        <div className="fx-cardInner mt-3 rounded-card p-3">
+>>>>>>> f1ef4b3 (Update HTML structure and styles for PRO权益与积分 page; remove unused CSS and optimize layout. Update .DS_Store files.)
           <p className="text-xs text-fxSub">阶段目标</p>
           <p className="mt-1 text-sm text-fxText">${currentPhase.goal}</p>
           <p className="mt-2 text-xs text-fxSub">阶段收益：${currentPhase.benefit}</p>
@@ -83,7 +95,11 @@ export function TrainingOutlinePage({ data, onBack, onGoPlan }) {
         </div>
         ${currentWeekSummary &&
         html`
+<<<<<<< HEAD
           <div className="mt-3 rounded-card border border-fxLine bg-white/[0.03] p-3">
+=======
+          <div className="fx-cardInner mt-3 rounded-card p-3">
+>>>>>>> f1ef4b3 (Update HTML structure and styles for PRO权益与积分 page; remove unused CSS and optimize layout. Update .DS_Store files.)
             <p className="text-xs text-fxSub">本周重点</p>
             <p className="mt-1 text-sm text-fxText">${currentWeekSummary.focus}</p>
             <p className="mt-2 text-xs text-fxSub">应期待变化：${currentWeekSummary.expected}</p>
@@ -101,4 +117,7 @@ export function TrainingOutlinePage({ data, onBack, onGoPlan }) {
     </div>
   `;
 }
+<<<<<<< HEAD
 
+=======
+>>>>>>> f1ef4b3 (Update HTML structure and styles for PRO权益与积分 page; remove unused CSS and optimize layout. Update .DS_Store files.)

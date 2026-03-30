@@ -22,6 +22,16 @@ export const homeMock = {
     score: 82,
     bodyCompositionScore: 73,
     postureScore: 84,
+<<<<<<< HEAD
+=======
+    sectionScores: [
+      { label: "体态", score: 84 },
+      { label: "成分", score: 73 },
+      { label: "脊柱", score: 57 },
+      { label: "平衡", score: 84 },
+      { label: "臀型", score: 78 },
+    ],
+>>>>>>> f1ef4b3 (Update HTML structure and styles for PRO权益与积分 page; remove unused CSS and optimize layout. Update .DS_Store files.)
     riskLevel: "medium",
     conclusionShort: "您目前体成分状况一般，体脂率偏高，体重正常。体态状况良好，但存在头前引、头侧歪、高低肩风险。",
     quickMetrics: [
@@ -66,9 +76,27 @@ export const homeMock = {
     strengths: [
       {
         id: "s-1",
+<<<<<<< HEAD
         title: "训练可执行性高",
         summary: "给出了明确的有氧频次、抗阻与核心动作建议，适合直接进入训练计划执行。",
         targetReportId: "training",
+=======
+        title: "肌肉量处于正常区间",
+        summary: "肌肉量 59.9kg，基础代谢维持能力较好，建议继续保持每周 2 次抗阻训练。",
+        targetReportId: "full-report",
+      },
+      {
+        id: "s-2",
+        title: "平衡能力具备良好基础",
+        summary: "闭眼静态平衡评估等级为 A，神经-肌肉协同基础不错，建议继续巩固。",
+        targetReportId: "full-report",
+      },
+      {
+        id: "s-3",
+        title: "脊柱胸腰段整体可控",
+        summary: "胸椎轻度偏移、腰椎维持正常，说明姿势问题可通过训练持续改善。",
+        targetReportId: "full-report",
+>>>>>>> f1ef4b3 (Update HTML structure and styles for PRO权益与积分 page; remove unused CSS and optimize layout. Update .DS_Store files.)
       },
     ],
   },
@@ -176,9 +204,15 @@ export const homeMock = {
     },
   ],
   trends: [
+<<<<<<< HEAD
     { metricName: "综合评分", currentValue: "82", previousValue: "77", trend: "up" },
     { metricName: "体脂率", currentValue: "22.9%", previousValue: "24.6%", trend: "down" },
     { metricName: "骨盆前倾角", currentValue: "14.3°", previousValue: "15.8°", trend: "down" },
+=======
+    { metricName: "综合评分", currentValue: "82", previousValue: "77", trend: "up", points: [71, 74, 77, 80, 82] },
+    { metricName: "体脂率", currentValue: "22.9%", previousValue: "24.6%", trend: "down", points: [27.1, 26.2, 25.4, 24.6, 22.9] },
+    { metricName: "骨盆前倾角", currentValue: "14.3°", previousValue: "15.8°", trend: "down", points: [17.2, 16.5, 16.1, 15.8, 14.3] },
+>>>>>>> f1ef4b3 (Update HTML structure and styles for PRO权益与积分 page; remove unused CSS and optimize layout. Update .DS_Store files.)
   ],
   nextActions: [
     { id: "na-1", type: "training", title: "查看训练大纲详情", summary: "先理解阶段目标与周度路线，再进入训练计划执行。", url: "/training/outline/latest" },

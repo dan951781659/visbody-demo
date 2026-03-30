@@ -8,7 +8,11 @@ function GroupItem({ title, subtitle, onClick }) {
   return html`
     <button
       onClick=${onClick}
+<<<<<<< HEAD
       className="flex w-full items-center justify-between rounded-card border border-fxLine bg-white/[0.03] px-3 py-3 text-left transition-all hover:border-white/20"
+=======
+      className="fx-listItem flex w-full items-center justify-between px-3 py-3 text-left"
+>>>>>>> f1ef4b3 (Update HTML structure and styles for PRO权益与积分 page; remove unused CSS and optimize layout. Update .DS_Store files.)
     >
       <div>
         <p className="text-sm text-fxText">${title}</p>
@@ -63,4 +67,7 @@ export function MyPage({ data, onNavigateOutline, onNavigatePlan, onToast }) {
     </div>
   `;
 }
+<<<<<<< HEAD
 
+=======
+>>>>>>> f1ef4b3 (Update HTML structure and styles for PRO权益与积分 page; remove unused CSS and optimize layout. Update .DS_Store files.)

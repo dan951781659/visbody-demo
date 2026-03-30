@@ -10,7 +10,11 @@ function TaskRow({ task, onToggleTask }) {
   return html`
     <button
       onClick=${() => onToggleTask(task.id)}
+<<<<<<< HEAD
       className="flex w-full items-center justify-between rounded-card border border-fxLine bg-white/[0.03] p-3 text-left transition-all hover:border-white/20"
+=======
+      className="fx-listItem flex w-full items-center justify-between p-3 text-left"
+>>>>>>> f1ef4b3 (Update HTML structure and styles for PRO权益与积分 page; remove unused CSS and optimize layout. Update .DS_Store files.)
     >
       <div>
         <p className="text-sm text-fxText">${task.name}</p>
@@ -63,9 +67,15 @@ export function TrainingPlanPage({ data, onBackHome, onToast, onToggleTask }) {
       <${Card} title=${data.plan.name} titleIcon="⚡" subtitle=${data.plan.goal}>
         <div className="space-y-2">
           <p className="text-xs text-fxSub">${data.plan.duration} · ${data.plan.currentStage} · ${activeWeek}</p>
+<<<<<<< HEAD
           <div className="h-2 w-full rounded-full bg-white/10">
             <div
               className="h-2 rounded-full bg-[linear-gradient(90deg,rgba(0,229,255,0.95),rgba(167,139,250,0.95))]"
+=======
+          <div className="fx-progressTrack h-2 w-full">
+            <div
+              className="fx-progressFill h-2"
+>>>>>>> f1ef4b3 (Update HTML structure and styles for PRO权益与积分 page; remove unused CSS and optimize layout. Update .DS_Store files.)
               style=${{ width: `${progressPct}%` }}
             ></div>
           </div>
@@ -95,7 +105,11 @@ export function TrainingPlanPage({ data, onBackHome, onToast, onToggleTask }) {
             `,
           )}
         </div>
+<<<<<<< HEAD
         <div className="mt-3 rounded-card border border-fxLine bg-white/[0.03] p-3">
+=======
+        <div className="fx-cardInner mt-3 rounded-card p-3">
+>>>>>>> f1ef4b3 (Update HTML structure and styles for PRO权益与积分 page; remove unused CSS and optimize layout. Update .DS_Store files.)
           <p className="text-xs text-fxSub">${activeDay} · 计划类型</p>
           <p className="mt-1 text-sm font-semibold text-fxText">${dayTypeLabel}</p>
         </div>
@@ -122,7 +136,11 @@ export function TrainingPlanPage({ data, onBackHome, onToast, onToggleTask }) {
             ${trainList.map((t) => html`<${TaskRow} key=${t.id} task=${t} onToggleTask=${onToggleTask} />`)}
             ${trainList.map(
               (t) => html`
+<<<<<<< HEAD
                 <article key=${`${t.id}-detail`} className="rounded-card border border-fxLine bg-white/[0.03] p-3">
+=======
+                <article key=${`${t.id}-detail`} className="fx-cardInner rounded-card p-3">
+>>>>>>> f1ef4b3 (Update HTML structure and styles for PRO权益与积分 page; remove unused CSS and optimize layout. Update .DS_Store files.)
                   <p className="text-sm font-medium text-fxText">${t.name} · 动作详情</p>
                   <p className="mt-1 text-xs text-fxSub">器械：${t.equip} · ${t.sets} · ${t.duration}</p>
                   <p className="mt-1 text-xs text-fxSub">执行提示：${t.tips}</p>
@@ -136,22 +154,38 @@ export function TrainingPlanPage({ data, onBackHome, onToast, onToggleTask }) {
         html`
           <div className="mt-3 space-y-2">
             <div className="grid grid-cols-2 gap-2">
+<<<<<<< HEAD
               <div className="rounded-card border border-fxLine bg-white/[0.03] p-3">
                 <p className="text-xs text-fxSub">热量目标</p>
                 <p className="mt-1 text-lg font-extrabold fx-gradText">${diet.kcal} kcal</p>
               </div>
               <div className="rounded-card border border-fxLine bg-white/[0.03] p-3">
+=======
+              <div className="fx-cardInner rounded-card p-3">
+                <p className="text-xs text-fxSub">热量目标</p>
+                <p className="mt-1 text-lg font-extrabold fx-gradText">${diet.kcal} kcal</p>
+              </div>
+              <div className="fx-cardInner rounded-card p-3">
+>>>>>>> f1ef4b3 (Update HTML structure and styles for PRO权益与积分 page; remove unused CSS and optimize layout. Update .DS_Store files.)
                 <p className="text-xs text-fxSub">饮水目标</p>
                 <p className="mt-1 text-lg font-extrabold fx-gradText">${diet.water}</p>
               </div>
             </div>
+<<<<<<< HEAD
             <div className="rounded-card border border-fxLine bg-white/[0.03] p-3">
+=======
+            <div className="fx-cardInner rounded-card p-3">
+>>>>>>> f1ef4b3 (Update HTML structure and styles for PRO权益与积分 page; remove unused CSS and optimize layout. Update .DS_Store files.)
               <p className="text-xs text-fxSub">宏量营养素</p>
               <p className="mt-1 text-sm text-fxText">蛋白 ${diet.macro.protein}g · 碳水 ${diet.macro.carb}g · 脂肪 ${diet.macro.fat}g</p>
             </div>
             ${diet.meals.map(
               (m) => html`
+<<<<<<< HEAD
                 <article key=${m.id} className="rounded-card border border-fxLine bg-white/[0.03] p-3">
+=======
+                <article key=${m.id} className="fx-cardInner rounded-card p-3">
+>>>>>>> f1ef4b3 (Update HTML structure and styles for PRO权益与积分 page; remove unused CSS and optimize layout. Update .DS_Store files.)
                   <p className="text-sm font-medium text-fxText">${m.name}</p>
                   <p className="mt-1 text-xs text-fxSub">${m.desc}</p>
                   <p className="mt-1 text-xs text-fxSub">${m.kcal} kcal</p>
@@ -165,6 +199,7 @@ export function TrainingPlanPage({ data, onBackHome, onToast, onToggleTask }) {
         ${activeTab === "review" &&
         html`
           <div className="mt-3 space-y-2">
+<<<<<<< HEAD
             <article className="rounded-card border border-fxLine bg-white/[0.03] p-3">
               <p className="text-xs text-fxSub">本周应看到的变化</p>
               <p className="mt-1 text-sm text-fxText">${review.expected}</p>
@@ -178,6 +213,21 @@ export function TrainingPlanPage({ data, onBackHome, onToast, onToggleTask }) {
               <p className="mt-1 text-sm text-fxText">${review.retestTime}</p>
             </article>
             <article className="rounded-card border border-fxLine bg-white/[0.03] p-3">
+=======
+            <article className="fx-cardInner rounded-card p-3">
+              <p className="text-xs text-fxSub">本周应看到的变化</p>
+              <p className="mt-1 text-sm text-fxText">${review.expected}</p>
+            </article>
+            <article className="fx-cardInner rounded-card p-3">
+              <p className="text-xs text-fxSub">正常波动说明</p>
+              <p className="mt-1 text-sm text-fxText">${review.normalFluctuation}</p>
+            </article>
+            <article className="fx-cardInner rounded-card p-3">
+              <p className="text-xs text-fxSub">建议复测时间</p>
+              <p className="mt-1 text-sm text-fxText">${review.retestTime}</p>
+            </article>
+            <article className="fx-cardInner rounded-card p-3">
+>>>>>>> f1ef4b3 (Update HTML structure and styles for PRO权益与积分 page; remove unused CSS and optimize layout. Update .DS_Store files.)
               <p className="text-xs text-fxSub">建议关注指标</p>
               <p className="mt-1 text-sm text-fxText">${review.focusMetrics}</p>
             </article>
@@ -193,4 +243,7 @@ export function TrainingPlanPage({ data, onBackHome, onToast, onToggleTask }) {
     </div>
   `;
 }
+<<<<<<< HEAD
 
+=======
+>>>>>>> f1ef4b3 (Update HTML structure and styles for PRO权益与积分 page; remove unused CSS and optimize layout. Update .DS_Store files.)

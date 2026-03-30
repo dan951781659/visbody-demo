@@ -19,7 +19,11 @@ export function SubReportsSection({ reports, expandedId, onToggle, onOpenReport 
           return html`
             <article
               key=${report.id}
+<<<<<<< HEAD
               className=${`min-w-[260px] rounded-card border border-fxCardBorder bg-white/[0.03] p-3 transition-all hover:border-white/20 ${
+=======
+              className=${`fx-listItem min-w-[272px] p-3 ${
+>>>>>>> f1ef4b3 (Update HTML structure and styles for PRO权益与积分 page; remove unused CSS and optimize layout. Update .DS_Store files.)
                 expanded ? "shadow-[0_0_22px_rgba(0,229,255,0.10)]" : ""
               }`}
             >
@@ -46,7 +50,11 @@ export function SubReportsSection({ reports, expandedId, onToggle, onOpenReport 
         const detail = report?.detail;
         if (!report || !detail) {
           return html`
+<<<<<<< HEAD
             <div className="mt-3 rounded-card border border-fxLine bg-white/[0.03] p-3">
+=======
+            <div className="fx-cardInner mt-3 rounded-card p-3">
+>>>>>>> f1ef4b3 (Update HTML structure and styles for PRO权益与积分 page; remove unused CSS and optimize layout. Update .DS_Store files.)
               <div className="text-sm font-semibold text-fxText">${report?.name || "分报告"}</div>
               <div className="mt-1 text-xs text-fxSub">暂无详情结构（mock 可扩展）。</div>
               <button onClick=${() => onOpenReport(report?.url)} className="mt-2 fx-pill px-3 py-2 text-sm text-white">进入分报告</button>
@@ -61,7 +69,11 @@ export function SubReportsSection({ reports, expandedId, onToggle, onOpenReport 
         };
 
         return html`
+<<<<<<< HEAD
           <div className="mt-3 rounded-card border border-fxCardBorder bg-white/[0.03] p-3">
+=======
+          <div className="fx-cardInner mt-3 rounded-card p-3">
+>>>>>>> f1ef4b3 (Update HTML structure and styles for PRO权益与积分 page; remove unused CSS and optimize layout. Update .DS_Store files.)
             <div className="flex items-start justify-between gap-2">
               <div>
                 <div className="text-sm font-semibold text-fxText">${report.name} · 详情</div>
@@ -88,7 +100,11 @@ export function SubReportsSection({ reports, expandedId, onToggle, onOpenReport 
                 ${detail.keyMetrics.slice(0, 4).map((m) => {
                   const chip = chips[m.status] || "text-fxSub bg-white/5 border-white/10";
                   return html`
+<<<<<<< HEAD
                     <div className="rounded-[10px] border border-fxLine bg-white/[0.03] p-3">
+=======
+                    <div className="fx-cardInner rounded-[10px] p-3">
+>>>>>>> f1ef4b3 (Update HTML structure and styles for PRO权益与积分 page; remove unused CSS and optimize layout. Update .DS_Store files.)
                       <div className="text-[12px] text-fxSub">${m.label}</div>
                       <div className="mt-1 flex items-end justify-between gap-2">
                         <div className="text-[16px] font-extrabold fx-gradText">${m.value}</div>
@@ -107,7 +123,11 @@ export function SubReportsSection({ reports, expandedId, onToggle, onOpenReport 
                   const status = f.status || "warning";
                   const chip = chips[status] || "text-fxSub bg-white/5 border-white/10";
                   return html`
+<<<<<<< HEAD
                     <div className="rounded-card border border-fxLine bg-white/[0.02] p-3">
+=======
+                    <div className="fx-cardInner rounded-card p-3">
+>>>>>>> f1ef4b3 (Update HTML structure and styles for PRO权益与积分 page; remove unused CSS and optimize layout. Update .DS_Store files.)
                       <div className="flex items-center justify-between gap-2">
                         <div className="text-sm text-fxText">${f.name}</div>
                         <span className=${`rounded-full border px-2 py-0.5 text-[11px] ${chip}`}>${f.note || ""}</span>
@@ -127,14 +147,22 @@ export function SubReportsSection({ reports, expandedId, onToggle, onOpenReport 
               <div className="mt-3 grid grid-cols-1 gap-2">
                 ${detail.conclusion &&
                 html`
+<<<<<<< HEAD
                   <div className="rounded-card border border-fxLine bg-white/[0.02] p-3">
+=======
+                  <div className="fx-cardInner rounded-card p-3">
+>>>>>>> f1ef4b3 (Update HTML structure and styles for PRO权益与积分 page; remove unused CSS and optimize layout. Update .DS_Store files.)
                     <div className="text-[12px] text-fxSub">结论</div>
                     <div className="mt-1 text-[13px] leading-relaxed text-fxText/90">${detail.conclusion}</div>
                   </div>
                 `}
                 ${detail.suggestion &&
                 html`
+<<<<<<< HEAD
                   <div className="rounded-card border border-fxLine bg-white/[0.02] p-3">
+=======
+                  <div className="fx-cardInner rounded-card p-3">
+>>>>>>> f1ef4b3 (Update HTML structure and styles for PRO权益与积分 page; remove unused CSS and optimize layout. Update .DS_Store files.)
                     <div className="text-[12px] text-fxSub">建议</div>
                     <div className="mt-1 text-[13px] leading-relaxed text-fxText/90">${detail.suggestion}</div>
                   </div>

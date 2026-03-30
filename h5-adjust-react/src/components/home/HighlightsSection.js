@@ -7,10 +7,17 @@ const { useMemo, useState } = React;
 function Item({ item, type, onOpen }) {
   const chipClass =
     type === "issue" ? "text-fxRed bg-fxRed/10 border-fxRed/20" : "text-fxGreen bg-fxGreenSoft border-fxGreen/20";
+<<<<<<< HEAD
   const chipText = type === "issue" ? "问题" : "亮点";
   return html`
     <button
       className="min-w-[260px] rounded-card border border-fxCardBorder bg-white/[0.03] p-3 text-left transition-all hover:border-white/20"
+=======
+  const chipText = type === "issue" ? "关注项" : "正常/优秀";
+  return html`
+    <button
+      className="fx-listItem min-w-[272px] p-3 text-left"
+>>>>>>> f1ef4b3 (Update HTML structure and styles for PRO权益与积分 page; remove unused CSS and optimize layout. Update .DS_Store files.)
       onClick=${() => onOpen(item.targetReportId)}
     >
       <span className=${`inline-flex items-center gap-1 rounded-full border px-2 py-0.5 text-[11px] ${chipClass}`}>
@@ -31,7 +38,11 @@ export function HighlightsSection({ highlights, onOpenReport }) {
   }, [tab, highlights]);
 
   return html`
+<<<<<<< HEAD
     <${Card} title="核心问题 / 亮点" titleIcon="✨" subtitle="数据优先，点击可进入对应分报告">
+=======
+    <${Card} title="核心问题 / 亮点" titleIcon="✨" subtitle="先看最该关注的，再看你做得好的地方">
+>>>>>>> f1ef4b3 (Update HTML structure and styles for PRO权益与积分 page; remove unused CSS and optimize layout. Update .DS_Store files.)
       <div className="hide-scrollbar -mx-1 mb-3 flex gap-2 overflow-x-auto px-1">
         <button className=${`fx-pill px-3 py-1 text-xs ${tab === "issues" ? "fx-pill--active" : ""}`} onClick=${() => setTab("issues")}>
           核心问题

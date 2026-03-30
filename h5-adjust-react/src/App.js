@@ -117,6 +117,7 @@ export function App() {
   const showDebugPills = isDebugDemo();
 
   return html`
+<<<<<<< HEAD
     <main className="mx-auto min-h-screen w-full max-w-md">
       <header className="sticky top-0 z-20 border-b border-fxLine bg-[#070d1f]/85 px-4 py-3 backdrop-blur-[12px]">
         <div className="flex items-center justify-between">
@@ -124,6 +125,15 @@ export function App() {
             Fittrix-FX · H5
           </h1>
           <span className="text-xs text-fxSub">
+=======
+    <main className="fx-appShell mx-auto min-h-screen w-full max-w-md">
+      <header className="fx-headerGlass sticky top-0 z-20 px-4 py-3">
+        <div className="flex items-center justify-between">
+          <h1 className="bg-gradient-to-r from-white via-fxPrimary to-fxPurple bg-clip-text text-[15px] font-extrabold tracking-[0.08em] text-transparent">
+            Fittrix-FX · H5
+          </h1>
+          <span className="fx-routeBadge px-2.5 py-1 text-[11px]">
+>>>>>>> f1ef4b3 (Update HTML structure and styles for PRO权益与积分 page; remove unused CSS and optimize layout. Update .DS_Store files.)
             ${route === "training" ? "训练计划" : route === "outline" ? "训练大纲" : tab === "home" ? "首页" : "我的"}
           </span>
         </div>
@@ -175,4 +185,7 @@ export function App() {
     </main>
   `;
 }
+<<<<<<< HEAD
 
+=======
+>>>>>>> f1ef4b3 (Update HTML structure and styles for PRO权益与积分 page; remove unused CSS and optimize layout. Update .DS_Store files.)
