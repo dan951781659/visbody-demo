@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Pro 与积分 · 维塑数字健康平台</title>
+  <title>我的套餐 · 维塑数字健康平台</title>
   <style>
     :root {
       --line: #e8ebf3;
@@ -129,6 +129,55 @@
       align-items: center;
       color: #2f3748;
       font-size: 14px;
+    }
+    .account-menu-wrap {
+      position: relative;
+    }
+    .account-menu-trigger {
+      border: none;
+      background: none;
+      cursor: pointer;
+      font: inherit;
+      color: inherit;
+      padding: 6px 10px;
+      border-radius: 8px;
+    }
+    .account-menu-trigger:hover {
+      background: var(--blue-soft);
+    }
+    .account-dropdown {
+      display: none;
+      position: absolute;
+      right: 0;
+      top: calc(100% + 6px);
+      min-width: 168px;
+      background: #fff;
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      box-shadow: var(--shadow);
+      padding: 6px 0;
+      z-index: 30;
+    }
+    .account-dropdown.open {
+      display: block;
+    }
+    .account-dropdown button {
+      display: block;
+      width: 100%;
+      text-align: left;
+      padding: 12px 16px;
+      border: none;
+      background: none;
+      cursor: pointer;
+      font: inherit;
+      color: var(--ink);
+    }
+    .account-dropdown button:hover {
+      background: #f5f6fb;
+    }
+    .usage-snapshot-actions {
+      margin-top: 10px;
+      text-align: right;
     }
     .content {
       padding: 16px;
@@ -395,6 +444,38 @@
       color: #2d4ccf;
       border: 1px solid rgba(49, 93, 255, 0.16);
     }
+
+    .usage-snapshot {
+      margin: 0 0 20px;
+      padding: 14px 16px;
+      background: #fff;
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      box-shadow: var(--shadow);
+    }
+    .usage-snapshot-head {
+      margin-bottom: 10px;
+      display: flex;
+      align-items: baseline;
+      flex-wrap: wrap;
+    }
+    .usage-snapshot-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 13px;
+    }
+    .usage-snapshot-table th,
+    .usage-snapshot-table td {
+      border: 1px solid var(--line-2);
+      padding: 8px 10px;
+      text-align: left;
+    }
+    .usage-snapshot-table th {
+      background: #f8f9fc;
+      color: var(--muted);
+      font-weight: 600;
+    }
+
     .feature-panel {
       margin-top: 20px;
       background: rgba(255,255,255,0.78);
@@ -846,6 +927,24 @@
       background: rgba(22, 163, 74, 0.12);
       border: 1px solid rgba(22, 163, 74, 0.22);
     }
+    .chip-basic {
+      color: #9a3412;
+      background: rgba(234, 88, 12, 0.12);
+      border: 1px solid rgba(234, 88, 12, 0.22);
+    }
+    .data-table tr.row-basic {
+      background: rgba(234, 88, 12, 0.04);
+    }
+    .detail-footnote {
+      margin-top: 12px;
+      padding: 10px 12px;
+      border-radius: 10px;
+      background: rgba(49, 93, 255, 0.06);
+      border: 1px solid rgba(49, 93, 255, 0.12);
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.65;
+    }
     .rules-block {
       display: grid;
       gap: 10px;
@@ -1158,7 +1257,7 @@
         <div class="nav-title">系统设置</div>
         <div class="nav-item">员工权限管理</div>
         <div class="nav-item">员工账号</div>
-        <div class="nav-item" id="navProPoints">Pro 与积分</div>
+        <div class="nav-item" id="navProPoints">我的套餐</div>
         <div class="nav-item" id="navPayments">缴费记录</div>
       </div>
 
@@ -1173,7 +1272,14 @@
         <h1>维塑数字健康平台</h1>
         <div class="topbar-right">
           <span>简体中文 ▼</span>
-          <span>XAtest ▼</span>
+          <div class="account-menu-wrap">
+            <button type="button" class="account-menu-trigger" id="accountMenuTrigger" aria-expanded="false" aria-haspopup="true">
+              XAtest ▼
+            </button>
+            <div class="account-dropdown" id="accountMenuDropdown" role="menu">
+              <button type="button" role="menuitem" id="accountMenuMyPlan">我的套餐</button>
+            </div>
+          </div>
         </div>
       </header>
 
@@ -1365,9 +1471,59 @@
       return clone(shared[sceneKey] || shared.normal);
     }
 
+    /** 当前账户 Pro 到期展示（与「我的套餐」一致）；用于积分包订单「积分有效期」行 */
+    function formatAccountProExpiryDisplay() {
+      const e = state.expiry || '';
+      if (!e) return '—';
+      if (e.includes(':')) return e;
+      return `${e.trim()} 23:59:59`;
+    }
+
     function buildPaymentRows(sceneKey) {
       const rows = {
         normal: [
+          {
+            id: 'basic-1',
+            orderNo: '300842202602201031228805',
+            amount: '¥ 59.00',
+            packageType: 'Basic/月',
+            status: '支付成功',
+            createTime: '2026-02-20 10:31:20',
+            payTime: '2026-02-20 10:31:38',
+            type: 'basic',
+            detail: {
+              deviceModel: 'Visbody-M30',
+              deviceSn: 'M1C0123456789090',
+              deviceExpire: '2026-11-26 23:59:59',
+              planExpire: '2026-03-20 08:00:00',
+              perPrice: '¥59.00/月',
+              linePrice: '¥59.00',
+              points: 0,
+              subtotal: '¥59.00'
+            }
+          },
+          {
+            id: 'pro-m-1',
+            orderNo: '300842202602101030115503',
+            amount: '¥ 129.00',
+            packageType: 'Pro/月',
+            status: '支付成功',
+            createTime: '2026-02-10 10:30:12',
+            payTime: '2026-02-10 10:30:28',
+            type: 'pro',
+            detail: {
+              cycle: '月付',
+              points: 500,
+              earlyRenewal: '是',
+              perPrice: '¥129.00/月',
+              subtotal: '¥129.00',
+              deviceModel: 'Visbody-M30',
+              deviceSn: 'M1C0555666777888',
+              deviceExpire: '2026-12-24 23:59:59',
+              proExpire: '2026-03-12 08:00:00',
+              linePrice: '¥129.00'
+            }
+          },
           {
             id: 'pro-1',
             orderNo: '30084220260225160143189',
@@ -1380,13 +1536,14 @@
             detail: {
               cycle: '年付',
               points: 5000,
-              cashCoupon: '无',
-              timeCoupon: '无',
               earlyRenewal: '是',
-              effectText: '立即到账，有效期顺延至 2027-05-15 23:59:59',
               perPrice: '¥990.00/年',
               subtotal: '¥990.00',
-              deviceCount: '1 台设备'
+              deviceModel: 'Visbody-M30',
+              deviceSn: 'M1C0123456789090',
+              deviceExpire: '2026-11-26 23:59:59',
+              proExpire: '2026-03-27 16:01:43',
+              linePrice: '¥990.00'
             }
           },
           {
@@ -1401,11 +1558,69 @@
             detail: {
               packSize: '5000 积分包',
               points: 5000,
-              cashCoupon: '无',
-              timeCoupon: '无',
-              earlyRenewal: '否',
-              effectText: '积分即时到账，有效期随当前 Pro 有效期',
               subtotal: '¥399.00'
+            }
+          },
+          {
+            id: 'pro-f-1',
+            orderNo: '300842202601051200558812',
+            amount: '¥ 3999.00',
+            packageType: 'Pro/永久',
+            status: '支付成功',
+            createTime: '2026-01-05 12:00:33',
+            payTime: '2026-01-05 12:00:48',
+            type: 'pro',
+            detail: {
+              cycle: '永久',
+              points: 20000,
+              earlyRenewal: '否',
+              perPrice: '¥3999.00/永久',
+              subtotal: '¥3999.00',
+              deviceModel: 'Visbody-S30',
+              deviceSn: 'S3C0999888777665',
+              deviceExpire: '2026-12-24 23:59:59',
+              proExpire: '永久',
+              linePrice: '¥3999.00'
+            }
+          },
+          {
+            id: 'basic-y-1',
+            orderNo: '300842202511181415009901',
+            amount: '¥ 499.00',
+            packageType: 'Basic/年',
+            status: '支付成功',
+            createTime: '2025-11-18 14:15:01',
+            payTime: '2025-11-18 14:15:22',
+            type: 'basic',
+            detail: {
+              deviceModel: 'Visbody-M60',
+              deviceSn: 'M6C0123009988776',
+              deviceExpire: '2027-01-01 23:59:59',
+              planExpire: '2026-11-18 23:59:59',
+              perPrice: '¥499.00/年',
+              linePrice: '¥499.00',
+              points: 0,
+              subtotal: '¥499.00'
+            }
+          },
+          {
+            id: 'basic-f-1',
+            orderNo: '300842202508010916220345',
+            amount: '¥ 1999.00',
+            packageType: 'Basic/永久',
+            status: '支付成功',
+            createTime: '2025-08-01 09:16:20',
+            payTime: '2025-08-01 09:16:44',
+            type: 'basic',
+            detail: {
+              deviceModel: 'Visbody-R Explorer',
+              deviceSn: 'REX055512349876',
+              deviceExpire: '2028-06-30 23:59:59',
+              planExpire: '永久',
+              perPrice: '¥1999.00/永久',
+              linePrice: '¥1999.00',
+              points: 0,
+              subtotal: '¥1999.00'
             }
           }
         ],
@@ -1422,13 +1637,14 @@
             detail: {
               cycle: '月付',
               points: 500,
-              cashCoupon: '无',
-              timeCoupon: '无',
               earlyRenewal: '是',
-              effectText: '立即到账，有效期顺延至 2026-06-15 23:59:59',
               perPrice: '¥129.00/月',
               subtotal: '¥129.00',
-              deviceCount: '1 台设备'
+              deviceModel: 'Visbody-M30',
+              deviceSn: 'M1C0123456789090',
+              deviceExpire: '2026-12-24 23:59:59',
+              proExpire: '2026-06-15 08:00:00',
+              linePrice: '¥129.00'
             }
           }
         ],
@@ -1445,13 +1661,14 @@
             detail: {
               cycle: '年付',
               points: 5000,
-              cashCoupon: '立减 120 元',
-              timeCoupon: '额外延长 30 天',
               earlyRenewal: '是',
-              effectText: '立即到账，有效期顺延至 2027-06-14 23:59:59',
               perPrice: '¥990.00/年',
               subtotal: '¥990.00',
-              deviceCount: '1 台设备'
+              deviceModel: 'Visbody-M30',
+              deviceSn: 'M1C0123456789090',
+              deviceExpire: '2026-12-24 23:59:59',
+              proExpire: '2027-06-14 23:59:59',
+              linePrice: '¥870.00'
             }
           }
         ],
@@ -1468,13 +1685,14 @@
             detail: {
               cycle: '月付',
               points: 500,
-              cashCoupon: '无',
-              timeCoupon: '无',
               earlyRenewal: '否',
-              effectText: '已于 2026-03-10 23:59:59 到期',
               perPrice: '¥129.00/月',
               subtotal: '¥129.00',
-              deviceCount: '1 台设备'
+              deviceModel: 'Visbody-M30',
+              deviceSn: 'M1C0123456789090',
+              deviceExpire: '2026-12-24 23:59:59',
+              proExpire: '2026-03-10 23:59:59',
+              linePrice: '¥129.00'
             }
           }
         ]
@@ -1601,18 +1819,17 @@
     }
 
     function paymentTypeFilterOptions() {
-      if (!state.paymentRows.length) return [{ value: 'all', label: '全部订单类型' }];
-      const types = [...new Set(state.paymentRows.map((r) => r.type))];
-      const labelMap = { pro: 'Pro 套餐 / 续费', pack: '积分包' };
-      const opts = types.map((t) => ({ value: t, label: labelMap[t] || t }));
-      if (opts.length <= 1) return opts;
-      return [{ value: 'all', label: '全部订单类型' }, ...opts];
+      return [
+        { value: 'all', label: '全部订单类型' },
+        { value: 'pro', label: 'Pro 订阅订单' },
+        { value: 'basic', label: 'Basic 订阅订单' },
+        { value: 'pack', label: '积分包订单' }
+      ];
     }
 
     function syncPaymentFilters() {
-      const opts = paymentTypeFilterOptions();
-      const vals = opts.map((o) => o.value);
-      if (!vals.includes(state.paymentFilterType)) state.paymentFilterType = vals[0] || 'all';
+      const vals = paymentTypeFilterOptions().map((o) => o.value);
+      if (!vals.includes(state.paymentFilterType)) state.paymentFilterType = 'all';
     }
 
     function filteredPaymentRows() {
@@ -1800,6 +2017,9 @@
         state.selectedCycle === 'month' ? '月' : state.selectedCycle === 'year' ? '年' : '永久';
       const orderNo = `${Date.now()}`.slice(-18);
       const id = `renew-${Date.now()}`;
+      const firstDev =
+        devices.find((d) => state.selectedDeviceIds.includes(d.id)) || devices[0] || {};
+      const subtotalStr = `¥${renewSubtotal().toFixed(2)}`;
 
       state.balance += awardPoints;
       state.expiry = newExpiry.slice(0, 10);
@@ -1815,13 +2035,14 @@
         detail: {
           cycle: cycleText,
           points: awardPoints,
-          cashCoupon: '无',
-          timeCoupon: '无',
           earlyRenewal: isExpired() ? '否' : '是',
-          effectText: `立即到账，有效期顺延至 ${newExpiry}`,
           perPrice: `¥${renewUnitPrice().toFixed(2)}/${perUnit}`,
-          subtotal: `¥${renewSubtotal().toFixed(2)}`,
-          deviceCount: `${totalSelectedDevices()} 台设备`
+          subtotal: subtotalStr,
+          linePrice: subtotalStr,
+          deviceModel: firstDev.name || '—',
+          deviceSn: firstDev.sn || '—',
+          deviceExpire: firstDev.expire || '—',
+          proExpire: newExpiry
         }
       });
       state.activePaymentId = id;
@@ -1846,10 +2067,6 @@
         detail: {
           packSize: `${state.selectedPack} 积分包`,
           points: state.selectedPack,
-          cashCoupon: '无',
-          timeCoupon: '无',
-          earlyRenewal: '否',
-          effectText: '积分即时到账，有效期随当前 Pro 有效期',
           subtotal: `¥${price.toFixed(2)}`
         }
       });
@@ -1936,15 +2153,15 @@
       page.innerHTML = `
         <div class="account-wrap">
           <div class="page-head">
-            <div class="back-link" id="accountBack" role="button" tabindex="0">← 返回上一页</div>
+            <div class="back-link" id="accountBack" role="button" tabindex="0">← 返回</div>
             <div class="top-actions">
-              <span class="page-eyebrow">账户与权益</span>
               <button type="button" class="btn btn-outline" id="openCouponBtn">我的优惠券</button>
             </div>
           </div>
 
           <div class="hero">
             <div>
+              <div class="page-eyebrow" style="margin-bottom:6px;">我的套餐</div>
               <div class="hero-title">
                 <h2>XAtest</h2>
                 <span class="pro-badge">Pro</span>
@@ -1976,12 +2193,45 @@
                      <button type="button" class="btn light" id="openPackBtn">购买积分包</button>`
               }
             </div>
-            <div class="action-row-sub">
-              <button type="button" class="btn light" id="goUsageBtn">查看积分使用记录</button>
-            </div>
           </div>
 
           <div class="notice ${notice ? `show ${notice.type}` : ''}">${notice ? notice.text : ''}</div>
+
+          <div class="usage-snapshot">
+            <div class="usage-snapshot-head">
+              <strong>近期积分消耗</strong>
+              <span style="color: var(--muted); font-size: 13px; margin-left: 10px;">与「积分使用记录」一致口径，仅展示最近 5 条</span>
+            </div>
+            <table class="usage-snapshot-table">
+              <thead>
+                <tr>
+                  <th>时间</th>
+                  <th>功能</th>
+                  <th>设备</th>
+                  <th style="text-align:right;">消耗积分</th>
+                  <th>状态</th>
+                </tr>
+              </thead>
+              <tbody>
+                ${state.usageRows
+                  .slice(0, 5)
+                  .map(
+                    (r) => `
+                  <tr>
+                    <td>${r.time}</td>
+                    <td>${r.feature}</td>
+                    <td>${r.device}</td>
+                    <td style="text-align:right;">${r.points}</td>
+                    <td>${r.status}</td>
+                  </tr>`
+                  )
+                  .join('')}
+              </tbody>
+            </table>
+            <div class="usage-snapshot-actions">
+              <button type="button" class="btn light" id="goUsageFromSnapshot">查看全部积分使用记录</button>
+            </div>
+          </div>
 
           <div class="device-panel">
             ${devices.map((device) => `
@@ -2049,7 +2299,7 @@
       page.querySelectorAll('[data-renew-device]').forEach((btn) => {
         btn.onclick = () => goRenew(btn.getAttribute('data-renew-device'));
       });
-      document.getElementById('goUsageBtn').onclick = () => openPage('usage');
+      document.getElementById('goUsageFromSnapshot').onclick = () => openPage('usage');
       if (!isExpired()) {
         document.getElementById('openPackBtn').onclick = () => openPage('pack');
       }
@@ -2064,7 +2314,7 @@
       page.innerHTML = `
         <div class="renew-wrap">
           <div class="page-head">
-            <div class="back-link" id="renewBack">← 返回账户与权益</div>
+            <div class="back-link" id="renewBack">← 返回</div>
           </div>
 
           <div class="renew-title">选择套餐</div>
@@ -2215,7 +2465,7 @@
       page.innerHTML = `
         <div class="pack-wrap">
           <div class="page-head">
-            <div class="back-link" id="packBack">← 返回账户与权益</div>
+            <div class="back-link" id="packBack">← 返回</div>
           </div>
           <div class="pack-title">购买积分包</div>
           <p class="pack-desc">
@@ -2266,7 +2516,7 @@
       page.innerHTML = `
         <div class="records-wrap">
           <div class="page-head">
-            <div class="back-link" id="usageBack" role="button" tabindex="0">← 返回账户与权益</div>
+            <div class="back-link" id="usageBack" role="button" tabindex="0">← 返回</div>
           </div>
 
           <div class="records-head">
@@ -2403,9 +2653,6 @@
       const typeOpts = paymentTypeFilterOptions();
       page.innerHTML = `
         <div class="records-wrap">
-          <div class="page-head">
-            <div class="back-link" id="paymentsBack" role="button" tabindex="0">← 返回账户与权益</div>
-          </div>
           <div class="records-head" style="margin-bottom:14px;">
             <div>
               <h2 style="margin:0; font-size:28px;">缴费记录</h2>
@@ -2449,14 +2696,17 @@
                         .map((row, index) => {
                           const seq = index + 1;
                           return `
-                  <tr class="${state.activePaymentId === row.id ? 'active-row' : ''} ${row.type === 'pack' ? 'row-pack' : ''}">
+                  <tr class="${state.activePaymentId === row.id ? 'active-row' : ''} ${row.type === 'pack' ? 'row-pack' : ''} ${row.type === 'basic' ? 'row-basic' : ''}">
                     <td>${seq}</td>
                     <td>${row.orderNo}</td>
                     <td>${row.amount}</td>
                     <td>
-                      ${row.type === 'pack'
-                        ? `<span class="chip chip-pack">积分包订单</span>`
-                        : `<span class="chip chip-pro">Pro 订阅订单</span>`
+                      ${
+                        row.type === 'pack'
+                          ? `<span class="chip chip-pack">积分包订单</span>`
+                          : row.type === 'basic'
+                            ? `<span class="chip chip-basic">Basic 订阅订单</span>`
+                            : `<span class="chip chip-pro">Pro 订阅订单</span>`
                       }
                       <div style="margin-top:6px;color:var(--muted);font-size:12px;">${row.packageType}</div>
                     </td>
@@ -2475,7 +2725,6 @@
           </div>
         </div>
       `;
-      document.getElementById('paymentsBack').onclick = () => openPage('account');
       document.getElementById('paymentFilterType').onchange = (e) => {
         state.paymentFilterType = e.target.value;
         render();
@@ -2507,10 +2756,48 @@
       }
       const detail = row.detail;
       const isPack = row.type === 'pack';
+      const isBasic = row.type === 'basic';
+      const payMethod = '微信支付';
+      const feeTitle = isPack ? '积分包费用明细' : isBasic ? 'Basic 费用明细' : 'Pro费用明细';
+      const thumbLabel = isPack ? 'POINTS' : isBasic ? 'BASIC' : 'M30';
+      const subtotalLabel = isPack ? '积分包费用小计' : isBasic ? 'Basic费用小计' : 'Pro费用小计';
+      const packExpiryNote =
+        '与当前账户 Pro 有效期一致（与「我的套餐」展示同步；仅日期时默认至当日 23:59:59）。续费或变更套餐后 Pro 到期日会更新，本笔未使用积分随新的 Pro 有效期计算。每次打开本页将按最新账户状态刷新上述时间。';
+      const productLinesHtml = isPack
+        ? `
+                    <div class="product-row"><span>积分包档位：</span><strong>${detail.packSize}</strong></div>
+                    <div class="product-row"><span>本次到账积分：</span><strong>${detail.points}</strong></div>
+                    <div class="product-row"><span>价格：</span><strong>${detail.subtotal}</strong></div>
+                    <div class="product-row"><span>积分有效期：</span><strong>${formatAccountProExpiryDisplay()}</strong></div>
+                    <div class="detail-footnote">${packExpiryNote}</div>
+                  `
+        : isBasic
+          ? `
+                    <div class="product-row"><span>设备型号：</span><strong>${detail.deviceModel || '—'}</strong></div>
+                    <div class="product-row"><span>SN：</span><strong>${detail.deviceSn || '—'}</strong></div>
+                    <div class="product-row"><span>设备到期时间：</span><strong>${detail.deviceExpire || '—'}</strong></div>
+                    <div class="product-row"><span>套餐价格：</span><strong>${detail.perPrice || '—'}</strong></div>
+                    <div class="product-row"><span>套餐到期时间：</span><strong>${detail.planExpire || '—'}</strong></div>
+                    <div class="product-row"><span>价格：</span><strong>${detail.linePrice || detail.subtotal || '—'}</strong></div>
+                    ${
+                      detail.points > 0
+                        ? `<div class="product-row"><span>本次到账积分：</span><strong>${detail.points}</strong></div>`
+                        : ''
+                    }
+                  `
+          : `
+                    <div class="product-row"><span>设备型号：</span><strong>${detail.deviceModel || '—'}</strong></div>
+                    <div class="product-row"><span>SN：</span><strong>${detail.deviceSn || '—'}</strong></div>
+                    <div class="product-row"><span>设备到期时间：</span><strong>${detail.deviceExpire || '—'}</strong></div>
+                    <div class="product-row"><span>Pro套餐价格：</span><strong>${detail.perPrice || '—'}</strong></div>
+                    <div class="product-row"><span>Pro到期时间：</span><strong>${detail.proExpire || '—'}</strong></div>
+                    <div class="product-row"><span>价格：</span><strong>${detail.linePrice || detail.subtotal || '—'}</strong></div>
+                    <div class="product-row"><span>本次到账积分：</span><strong>${detail.points ?? '—'}</strong></div>
+                  `;
       page.innerHTML = `
         <div class="detail-wrap">
           <div class="page-head">
-            <div class="back-link" id="detailBack">← 返回缴费记录</div>
+            <div class="back-link" id="detailBack">← 返回</div>
           </div>
 
           <div class="detail-box">
@@ -2518,43 +2805,28 @@
               <div>
                 <div><strong>客户ID：</strong>842</div>
                 <div><strong>编号：</strong>${row.orderNo}</div>
-                <div><strong>支付方式：</strong>微信支付</div>
+                <div><strong>支付方式：</strong>${payMethod}</div>
                 <div><strong>套餐类型：</strong>${row.packageType}</div>
               </div>
               <div>
                 <div><strong>客户名称：</strong>【测试】西安测试</div>
                 <div><strong>支付时间：</strong>${row.payTime}</div>
                 <div><strong>状态：</strong>${row.status}</div>
-                <div><strong>${isPack ? '到账方式：' : '是否为提前续费：'}</strong>${isPack ? '支付成功后立即到账' : detail.earlyRenewal}</div>
               </div>
             </div>
           </div>
 
           <div class="detail-box">
-            <h3 class="section-title">${isPack ? '积分包费用明细' : 'Pro费用明细'}</h3>
+            <h3 class="section-title">${feeTitle}</h3>
             <div class="product-card">
               <div class="product-main">
-                <div class="thumb">${isPack ? 'POINTS' : 'M30'}</div>
+                <div class="thumb">${thumbLabel}</div>
                 <div class="product-lines">
-                  ${isPack ? `
-                    <div class="product-row"><span>积分包档位：</span><strong>${detail.packSize}</strong></div>
-                    <div class="product-row"><span>本次到账积分：</span><strong>${detail.points}</strong></div>
-                    <div class="product-row"><span>使用的代金券：</span><strong>${detail.cashCoupon}</strong></div>
-                    <div class="product-row"><span>使用的时间优惠券：</span><strong>${detail.timeCoupon}</strong></div>
-                    <div class="product-row"><span>积分有效期说明：</span><strong>${detail.effectText}</strong></div>
-                  ` : `
-                    <div class="product-row"><span>设备型号：</span><strong>Visbody-M30</strong></div>
-                    <div class="product-row"><span>设备数量：</span><strong>${detail.deviceCount}</strong></div>
-                    <div class="product-row"><span>Pro套餐价格：</span><strong>${detail.perPrice}</strong></div>
-                    <div class="product-row"><span>本次到账积分：</span><strong>${detail.points}</strong></div>
-                    <div class="product-row"><span>使用的代金券：</span><strong>${detail.cashCoupon}</strong></div>
-                    <div class="product-row"><span>使用的时间优惠券：</span><strong>${detail.timeCoupon}</strong></div>
-                    <div class="product-row"><span>生效方式：</span><strong>${detail.effectText}</strong></div>
-                  `}
+                  ${productLinesHtml}
                 </div>
               </div>
               <div class="price-line">
-                <span>${isPack ? '积分包费用小计' : 'Pro费用小计'}</span>
+                <span>${subtotalLabel}</span>
                 <strong>${detail.subtotal}</strong>
               </div>
               <div class="final-line">
@@ -2740,6 +3012,30 @@
       if (event.target.id === 'overlay') closeModal();
     });
 
+    function initTopAccountMenu() {
+      const trigger = document.getElementById('accountMenuTrigger');
+      const dd = document.getElementById('accountMenuDropdown');
+      const myPlan = document.getElementById('accountMenuMyPlan');
+      if (!trigger || !dd || !myPlan) return;
+      trigger.addEventListener('click', (e) => {
+        e.stopPropagation();
+        const open = !dd.classList.contains('open');
+        dd.classList.toggle('open', open);
+        trigger.setAttribute('aria-expanded', String(open));
+      });
+      myPlan.addEventListener('click', (e) => {
+        e.stopPropagation();
+        dd.classList.remove('open');
+        trigger.setAttribute('aria-expanded', 'false');
+        openPage('account');
+      });
+      document.addEventListener('click', () => {
+        dd.classList.remove('open');
+        trigger.setAttribute('aria-expanded', 'false');
+      });
+    }
+
+    initTopAccountMenu();
     initSceneDock();
     applyScene('normal');
   </script>
