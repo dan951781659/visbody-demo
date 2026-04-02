@@ -22,18 +22,15 @@ export const homeMock = {
     score: 82,
     bodyCompositionScore: 73,
     postureScore: 84,
-<<<<<<< HEAD
-=======
     sectionScores: [
       { label: "体态", score: 84 },
-      { label: "成分", score: 73 },
-      { label: "脊柱", score: 57 },
-      { label: "平衡", score: 84 },
-      { label: "臀型", score: 78 },
+      { label: "体成分", score: 73 },
+      { label: "脊柱评估", score: 57 },
+      { label: "平衡能力", score: 84 },
+      { label: "臀型评估", score: 78 },
     ],
->>>>>>> f1ef4b3 (Update HTML structure and styles for PRO权益与积分 page; remove unused CSS and optimize layout. Update .DS_Store files.)
     riskLevel: "medium",
-    conclusionShort: "您目前体成分状况一般，体脂率偏高，体重正常。体态状况良好，但存在头前引、头侧歪、高低肩风险。",
+    conclusionShort: "体成分一般、体脂偏高；体态整体良好，需关注头前引与高低肩。",
     quickMetrics: [
       { icon: "⚖", label: "体重", value: "82.8 kg" },
       { icon: "◔", label: "体脂率", value: "24 %" },
@@ -53,10 +50,40 @@ export const homeMock = {
   },
   model3d: {
     hasModel: true,
+    useInteractiveViewer: true,
     coverImage: "/assets/body-model.png",
-    modelUrl: "/model/r-9981",
+    modelUrl: "assets/models/skin.obj",
     focusLabel: "三维结果总览",
-    caption: "三维模型作为首页主视觉，先看整体结果，再进入具体分项。",
+    caption: "切换体成分 / 体态 / 体围，查看模型周边关键异常指标并点击进入。",
+    modelViewModes: {
+      composition: {
+        defaultSubReportId: "sr-2",
+        metrics: [
+          { label: "内脏脂肪", value: "偏高", status: "danger", top: "18%", left: "22%" },
+          { label: "体脂率", value: "24%", status: "danger", top: "18%", left: "78%" },
+          { label: "BMI", value: "25.2", status: "warning", top: "50%", left: "14%" },
+          { label: "腰臀比", value: "0.95", status: "danger", top: "50%", left: "86%" },
+        ],
+      },
+      posture: {
+        defaultSubReportId: "sr-1",
+        metrics: [
+          { label: "头前引", value: "9.2°", status: "danger", top: "12%", left: "20%" },
+          { label: "高低肩", value: "左高", status: "warning", top: "20%", left: "80%" },
+          { label: "圆肩", value: "轻度", status: "warning", top: "46%", left: "14%" },
+          { label: "骨盆前移", value: "3.0", status: "warning", top: "46%", left: "86%" },
+        ],
+      },
+      girth: {
+        defaultSubReportId: "sr-9",
+        metrics: [
+          { label: "高腰围", value: "100.8cm", status: "danger", top: "24%", left: "18%" },
+          { label: "中腰围", value: "98cm", status: "danger", top: "24%", left: "82%" },
+          { label: "腰臀比", value: "0.95", status: "danger", top: "56%", left: "16%" },
+          { label: "臀围", value: "100.8cm", status: "warning", top: "56%", left: "84%", subReportId: "sr-6" },
+        ],
+      },
+    },
   },
   highlights: {
     issues: [
@@ -76,11 +103,6 @@ export const homeMock = {
     strengths: [
       {
         id: "s-1",
-<<<<<<< HEAD
-        title: "训练可执行性高",
-        summary: "给出了明确的有氧频次、抗阻与核心动作建议，适合直接进入训练计划执行。",
-        targetReportId: "training",
-=======
         title: "肌肉量处于正常区间",
         summary: "肌肉量 59.9kg，基础代谢维持能力较好，建议继续保持每周 2 次抗阻训练。",
         targetReportId: "full-report",
@@ -96,13 +118,13 @@ export const homeMock = {
         title: "脊柱胸腰段整体可控",
         summary: "胸椎轻度偏移、腰椎维持正常，说明姿势问题可通过训练持续改善。",
         targetReportId: "full-report",
->>>>>>> f1ef4b3 (Update HTML structure and styles for PRO权益与积分 page; remove unused CSS and optimize layout. Update .DS_Store files.)
       },
     ],
   },
   subReports: [
     {
       id: "sr-1",
+      reportTypeId: "posture",
       name: "体态评估",
       status: "warning",
       summary: "头前引异常，骨盆前移需关注",
@@ -122,6 +144,7 @@ export const homeMock = {
     },
     {
       id: "sr-2",
+      reportTypeId: "body_composition",
       name: "身体成分",
       status: "danger",
       summary: "内脏脂肪偏高，需重点干预",
@@ -140,6 +163,7 @@ export const homeMock = {
     },
     {
       id: "sr-3",
+      reportTypeId: "joint_function",
       name: "关节功能",
       status: "warning",
       summary: "下肢稳定性需加强，注意负荷管理",
@@ -156,6 +180,7 @@ export const homeMock = {
     },
     {
       id: "sr-4",
+      reportTypeId: "spine",
       name: "脊柱评估",
       status: "normal",
       summary: "生理曲度整体可控，建议维持",
@@ -172,6 +197,7 @@ export const homeMock = {
     },
     {
       id: "sr-5",
+      reportTypeId: "balance",
       name: "平衡能力",
       status: "warning",
       summary: "静态平衡下降，建议纳入周计划",
@@ -188,6 +214,7 @@ export const homeMock = {
     },
     {
       id: "sr-6",
+      reportTypeId: "hip_shape",
       name: "围度与臀型",
       status: "danger",
       summary: "腹部围度偏高，需持续减脂管理",
@@ -202,30 +229,93 @@ export const homeMock = {
         suggestion: "优先有氧+抗阻组合，并 2 周复测围度变化。",
       },
     },
+    {
+      id: "sr-9",
+      reportTypeId: "waist_girth",
+      name: "腰腹围度报告",
+      status: "danger",
+      summary: "高腰围、中腰围均超参考范围",
+      url: "/report/waist",
+      detail: {
+        keyMetrics: [
+          { label: "高腰围", value: "100.8cm", status: "danger" },
+          { label: "中腰围", value: "98cm", status: "danger" },
+        ],
+        conclusion: "与体成分、臀型结论一致，建议统一减脂策略。",
+        suggestion: "记录每周围度，配合有氧与饮食管理。",
+      },
+    },
   ],
   trends: [
-<<<<<<< HEAD
-    { metricName: "综合评分", currentValue: "82", previousValue: "77", trend: "up" },
-    { metricName: "体脂率", currentValue: "22.9%", previousValue: "24.6%", trend: "down" },
-    { metricName: "骨盆前倾角", currentValue: "14.3°", previousValue: "15.8°", trend: "down" },
-=======
-    { metricName: "综合评分", currentValue: "82", previousValue: "77", trend: "up", points: [71, 74, 77, 80, 82] },
-    { metricName: "体脂率", currentValue: "22.9%", previousValue: "24.6%", trend: "down", points: [27.1, 26.2, 25.4, 24.6, 22.9] },
-    { metricName: "骨盆前倾角", currentValue: "14.3°", previousValue: "15.8°", trend: "down", points: [17.2, 16.5, 16.1, 15.8, 14.3] },
->>>>>>> f1ef4b3 (Update HTML structure and styles for PRO权益与积分 page; remove unused CSS and optimize layout. Update .DS_Store files.)
+    {
+      metricName: "综合评分",
+      currentValue: "82",
+      previousValue: "77",
+      trend: "up",
+      points: [69, 71, 74, 76, 77, 80, 82],
+      history: [
+        { day: "03-01", value: 69 },
+        { day: "03-05", value: 71 },
+        { day: "03-09", value: 74 },
+        { day: "03-12", value: 76 },
+        { day: "03-15", value: 77 },
+        { day: "03-18", value: 80 },
+        { day: "03-21", value: 82 },
+      ],
+    },
+    {
+      metricName: "体脂率",
+      currentValue: "22.9%",
+      previousValue: "24.6%",
+      trend: "down",
+      points: [27.8, 27.1, 26.2, 25.6, 24.6, 23.7, 22.9],
+      history: [
+        { day: "03-01", value: 27.8 },
+        { day: "03-05", value: 27.1 },
+        { day: "03-09", value: 26.2 },
+        { day: "03-12", value: 25.6 },
+        { day: "03-15", value: 24.6 },
+        { day: "03-18", value: 23.7 },
+        { day: "03-21", value: 22.9 },
+      ],
+    },
+    {
+      metricName: "骨盆前倾角",
+      currentValue: "14.3°",
+      previousValue: "15.8°",
+      trend: "down",
+      points: [17.9, 17.2, 16.5, 16.1, 15.8, 14.9, 14.3],
+      history: [
+        { day: "03-01", value: 17.9 },
+        { day: "03-05", value: 17.2 },
+        { day: "03-09", value: 16.5 },
+        { day: "03-12", value: 16.1 },
+        { day: "03-15", value: 15.8 },
+        { day: "03-18", value: 14.9 },
+        { day: "03-21", value: 14.3 },
+      ],
+    },
   ],
   nextActions: [
     { id: "na-1", type: "training", title: "查看训练大纲详情", summary: "先理解阶段目标与周度路线，再进入训练计划执行。", url: "/training/outline/latest" },
     { id: "na-2", type: "diet", title: "控制日摄入结构", summary: "每日蛋白优先，减少高糖零食和夜宵摄入。", url: "/tips/diet" },
     { id: "na-3", type: "retest", title: "建议 2 周后复测", summary: "用于验证关节功能阶段性改善情况。", url: "/retest" },
   ],
+  nextStepsAdviceWhenNoOutline:
+    "结合本次结果：内脏脂肪与腰围偏高、存在头前引与下肢稳定不足。下一步请优先安排「低冲击有氧 + 核心/髋膝稳定」训练，每周至少 3 次、单次 30–45 分钟；同步做颈肩放松与臀中肌激活。饮食侧控制精制糖与夜宵、保证蛋白质。联系教练生成训练大纲后，按阶段加入抗阻与体态纠正，4 周内复测围度与体脂验证改善。",
   trainingEntry: {
     status: "outline_only",
     planId: "plan-202603",
     stageName: "训练大纲已生成",
     progressText: "先看目标与路线，再开始执行",
+    outlineSummary: "当前重点：先稳髋膝链，再推进减脂与核心稳定，建议第2周复测围度与体脂。",
     entryText: "查看训练大纲",
     url: "/training/outline/latest",
+    outlinePhases: [
+      { title: "基础适应期", weeksLabel: "2周", desc: "建立运动习惯，提升基础体能" },
+      { title: "强化训练期", weeksLabel: "4周", desc: "针对性训练，改善核心力量" },
+      { title: "巩固提升期", weeksLabel: "2周", desc: "稳固成果，优化体态表现" },
+    ],
   },
 };
 
@@ -234,20 +324,33 @@ export const myMock = {
     name: "李若希",
     avatar: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=160&h=160&fit=crop",
     phone: "138****1792",
-    memberLevel: "Pro Member",
   },
-  training: {
-    outlineUrl: "/training/outline",
-    planUrl: "/training/plan-202603",
-    progressSummary: "已生成 8 周训练大纲，计划执行进度 57%",
+  assessment: {
+    totalCount: 32,
+    latest: {
+      time: "2025-05-23 12:56",
+      device: "VA Pro6",
+      modules: [
+        { id: "body", label: "身体成分", accent: "rose" },
+        { id: "posture", label: "体态评估", accent: "violet" },
+        { id: "girth", label: "身体围度", accent: "emerald" },
+        { id: "shoulder", label: "肩部功能", accent: "rose" },
+      ],
+    },
   },
-  reports: { historyUrl: "/reports/history", latestCount: 32 },
-  tools: [
-    { name: "健康档案", url: "/profile/health" },
-    { name: "设置", url: "/settings" },
-    { name: "测试帮助", url: "/help/test" },
-    { name: "意见反馈", url: "/feedback" },
-  ],
+  healthProfileEntry: {
+    title: "身体档案",
+    subtitle: "与你相关的身体健康数据：身高体重、目标与历史测量摘要等",
+  },
+  settingsEntry: {
+    title: "设置",
+    subtitle: "账号安全、语言、公英制单位、常见问题等系统偏好",
+  },
+  helpEntry: {
+    eyebrow: "体测设备",
+    title: "测试帮助",
+    subtitle: "站姿与动作要点、常见姿态问题与排错，让测量更可靠",
+  },
 };
 
 export const outlineMock = {

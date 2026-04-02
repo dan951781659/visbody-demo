@@ -1,6 +1,7 @@
 import React from "https://esm.sh/react@18.3.1";
 import htm from "https://esm.sh/htm@3.1.1";
 import { Card } from "../common/Card.js";
+
 const html = htm.bind(React.createElement);
 
 const statusText = {
@@ -11,85 +12,86 @@ const statusText = {
   unavailable: "暂不可用",
 };
 
-export function NextActionSection({ trainingEntry, nextActions, expandedId, onToggle, onStartTraining, onOpenAction }) {
-<<<<<<< HEAD
-  return html`
-    <${Card} title="下一步建议" titleIcon="⚡" subtitle="看完结果后，直接进入行动">
-      <div className="rounded-card border border-fxLine bg-white/[0.03] p-3">
-        <div className="flex items-start justify-between gap-2">
-          <div>
-            <p className="text-xs text-fxSub">${statusText[trainingEntry.status]}</p>
-            <h4 className="mt-1 text-sm font-semibold text-fxText">${trainingEntry.stageName}</h4>
-            <p className="mt-1 text-xs text-fxSub">${trainingEntry.progressText}</p>
-          </div>
-          <button
-            onClick=${onStartTraining}
-            className="fx-cta px-4 py-2 text-sm font-semibold"
-          >
-            ${trainingEntry.entryText}
-          </button>
-        </div>
-=======
-  const noOutline = !trainingEntry || trainingEntry.status === "unavailable";
+const defaultPhases = [
+  { title: "基础适应期", weeksLabel: "2周", desc: "建立运动习惯，提升基础体能" },
+  { title: "强化训练期", weeksLabel: "4周", desc: "针对性训练，改善核心力量" },
+  { title: "巩固提升期", weeksLabel: "2周", desc: "稳固成果，优化体态表现" },
+];
+
+function hasTrainingOutline(entry) {
+  return entry && entry.status !== "unavailable" && entry.status !== "not_started";
+}
+
+export function NextActionSection({ trainingEntry, nextStepsAdvice, onStartTraining, selected, onActivate }) {
+  const noOutline = !hasTrainingOutline(trainingEntry);
+  const phases = trainingEntry?.outlinePhases?.length ? trainingEntry.outlinePhases : defaultPhases;
+  const advice =
+    nextStepsAdvice ||
+    "结合评估异常：优先安排低冲击有氧与核心/髋膝稳定训练，每周至少 3 次；穿插颈肩放松与臀中肌激活；饮食控糖控夜宵并保证蛋白。联系教练生成训练大纲后按阶段执行，4 周内复测验证改善。";
+
+  const stop = (e) => e.stopPropagation();
+
+  if (noOutline) {
+    return html`
+      <${Card}
+        title="下一步建议"
+        titleIcon="bolt"
+        subtitle="暂无训练大纲时的行动参考"
+        selected=${selected}
+        onClick=${onActivate}
+      >
+        <p className="text-[13px] leading-relaxed text-fxText/90">${advice}</p>
+      </${Card}>
+    `;
+  }
 
   return html`
-    <${Card} title="下一步建议" titleIcon="⚡" subtitle="看完结果后，直接进入行动">
-      <div className="fx-cardInner rounded-card p-3">
-        ${noOutline
-          ? html`
-              <div>
-                <p className="text-xs text-fxSub">训练大纲暂未生成</p>
-                <h4 className="mt-1 text-sm font-semibold text-fxText">先执行通用干预方案</h4>
-                <p className="mt-1 text-xs text-fxSub">
-                  建议每周至少 150 分钟中等强度有氧 + 2 次全身抗阻训练，并保持每天 10 分钟颈肩与髋部拉伸；2 周后复测核心指标。
-                </p>
-              </div>
-            `
-          : html`
-              <div className="flex items-start justify-between gap-2">
-                <div>
-                  <p className="text-xs text-fxSub">${statusText[trainingEntry.status]}</p>
-                  <h4 className="mt-1 text-sm font-semibold text-fxText">${trainingEntry.stageName}</h4>
-                  <p className="mt-1 text-xs text-fxSub">${trainingEntry.progressText}</p>
-                </div>
-                <button
-                  onClick=${onStartTraining}
-                  className="fx-cta px-4 py-2 text-sm font-semibold"
-                >
-                  ${trainingEntry.entryText}
-                </button>
-              </div>
-            `}
->>>>>>> f1ef4b3 (Update HTML structure and styles for PRO权益与积分 page; remove unused CSS and optimize layout. Update .DS_Store files.)
-      </div>
-
-      <div className="mt-3 space-y-2">
-        ${nextActions.map(
-          (action) => html`
-<<<<<<< HEAD
-            <article key=${action.id} className="rounded-card border border-fxLine bg-white/[0.03] p-3 transition-colors hover:border-white/20">
-=======
-            <article key=${action.id} className="fx-listItem p-3">
->>>>>>> f1ef4b3 (Update HTML structure and styles for PRO权益与积分 page; remove unused CSS and optimize layout. Update .DS_Store files.)
-              <button className="w-full text-left" onClick=${() => onToggle(action.id)}>
-                <h4 className="text-sm font-medium text-fxText">${action.title}</h4>
-                <p className="mt-1 text-xs text-fxSub">${action.summary}</p>
-              </button>
-              ${expandedId === action.id &&
-              html`
-                <div className="mt-2 border-t border-fxLine pt-2">
-                  <button
-                    onClick=${() => onOpenAction(action.url)}
-                    className="text-xs text-fxText underline decoration-white/25 underline-offset-2"
+    <${Card}
+      title="训练大纲"
+      titleIcon="clipboard"
+      subtitle="基于您的测量报告、身体档案。AI 解读数据生成专属训练大纲"
+      selected=${selected}
+      onClick=${onActivate}
+    >
+      <div className="mt-1 rounded-[14px] border border-white/[0.07] bg-white/[0.05] px-3 py-4 backdrop-blur-sm">
+        <p className="mb-3 text-[11px] text-fxSub">${statusText[trainingEntry.status]}</p>
+        <div className="space-y-0">
+          ${phases.map(
+            (phase, i) => html`
+              <div key=${`${phase.title}-${i}`} className="flex gap-3">
+                <div className="flex w-8 shrink-0 flex-col items-center">
+                  <div
+                    className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full border-2 border-[#3b9eff] bg-[rgba(8,14,32,0.9)] text-[12px] font-bold text-[#5eb0ff]"
+                    style=${{ boxShadow: "0 0 0 1px rgba(59,158,255,0.25)" }}
                   >
-                    查看详情与执行说明
-                  </button>
+                    ${i + 1}
+                  </div>
+                  ${i < phases.length - 1 &&
+                  html`<div className="min-h-[28px] w-[2px] flex-1 bg-gradient-to-b from-[#3b9eff]/75 to-[#3b9eff]/12" />`}
                 </div>
-              `}
-            </article>
-          `,
-        )}
+                <div className=${`min-w-0 flex-1 ${i < phases.length - 1 ? "pb-5" : ""}`}>
+                  <div className="text-[14px] font-semibold leading-snug text-white">
+                    ${phase.title}
+                    <span className="font-normal text-white/45"> | ${phase.weeksLabel}</span>
+                  </div>
+                  <p className="mt-1 text-[12px] leading-relaxed text-white/55">${phase.desc}</p>
+                </div>
+              </div>
+            `,
+          )}
+        </div>
       </div>
+      <button
+        type="button"
+        onClick=${(e) => {
+          stop(e);
+          onStartTraining?.();
+        }}
+        className="fx-cta-training mt-4 flex w-full items-center justify-center gap-2 rounded-[14px] py-3.5 text-[14px] font-semibold text-white shadow-[0_8px_24px_rgba(43,140,255,0.28)]"
+      >
+        查看完整训练大纲
+        <span className="text-base leading-none" aria-hidden="true">→</span>
+      </button>
     </${Card}>
   `;
 }

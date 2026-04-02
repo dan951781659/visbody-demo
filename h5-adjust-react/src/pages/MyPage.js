@@ -1,73 +1,165 @@
 import React from "https://esm.sh/react@18.3.1";
 import htm from "https://esm.sh/htm@3.1.1";
-import { Card } from "../components/common/Card.js";
+import { FxIconFilled, FxIconLinear } from "../components/common/FxIcons.js";
 
 const html = htm.bind(React.createElement);
 
-function GroupItem({ title, subtitle, onClick }) {
+const accentBar = {
+  rose: "border-l-rose-400/90",
+  violet: "border-l-violet-400/90",
+  emerald: "border-l-emerald-400/90",
+};
+
+function AssessmentRecordsCard({ assessment, onOpenList }) {
+  const { totalCount, latest } = assessment || {};
+  const mods = latest?.modules || [];
+
   return html`
-    <button
-      onClick=${onClick}
-<<<<<<< HEAD
-      className="flex w-full items-center justify-between rounded-card border border-fxLine bg-white/[0.03] px-3 py-3 text-left transition-all hover:border-white/20"
-=======
-      className="fx-listItem flex w-full items-center justify-between px-3 py-3 text-left"
->>>>>>> f1ef4b3 (Update HTML structure and styles for PRO权益与积分 page; remove unused CSS and optimize layout. Update .DS_Store files.)
+    <section
+      className="overflow-hidden rounded-[16px] border border-emerald-400/28 shadow-[0_12px_36px_rgba(0,0,0,0.22)] ring-1 ring-emerald-500/12"
     >
-      <div>
-        <p className="text-sm text-fxText">${title}</p>
-        ${subtitle && html`<p className="mt-0.5 text-xs text-fxSub">${subtitle}</p>`}
+      <button
+        type="button"
+        onClick=${onOpenList}
+        className="flex w-full items-center justify-between border-b border-emerald-500/25 bg-[linear-gradient(145deg,rgba(8,115,82,0.48),rgba(10,22,52,0.94))] px-4 py-3.5 text-left text-white transition hover:brightness-[1.06] active:brightness-95"
+      >
+        <div className="flex items-center gap-3">
+          <span className="inline-flex h-10 w-10 items-center justify-center rounded-xl bg-white/18 ring-1 ring-white/20">
+            <${FxIconFilled} name="doc" className="h-5 w-5 text-white" />
+          </span>
+          <span className="text-[15px] font-semibold tracking-tight">评估记录</span>
+        </div>
+        <span className="text-[13px] font-medium text-emerald-50/95">${totalCount ?? 0} 条记录 ›</span>
+      </button>
+      <div className="border-t border-white/[0.08] bg-white/[0.04] px-3 py-3 backdrop-blur-sm">
+        <div className="flex items-center justify-between gap-2 text-[12px]">
+          <div className="flex min-w-0 items-center gap-1.5 text-fxSub">
+            <${FxIconLinear} name="lineTrend" className="h-4 w-4 shrink-0 opacity-80" />
+            <span className="truncate text-fxText/90">${latest?.time || "--"}</span>
+          </div>
+          <span className="shrink-0 font-medium text-fxPrimary">${latest?.device || "--"}</span>
+        </div>
+        <div className="mt-3 rounded-[12px] border border-white/[0.07] bg-white/[0.03] px-2 py-2.5">
+          <div className="flex flex-wrap gap-x-3 gap-y-2 text-[11px] text-fxText/88">
+            ${mods.map(
+              (m) => html`
+                <span key=${m.id} className=${`inline-flex border-l-2 pl-2 ${accentBar[m.accent] || "border-l-white/30"}`}>${m.label}</span>
+              `,
+            )}
+          </div>
+        </div>
       </div>
-      <span className="text-fxSub">›</span>
-    </button>
+    </section>
   `;
 }
 
-export function MyPage({ data, onNavigateOutline, onNavigatePlan, onToast }) {
+/** 身体档案：次级入口，交互与「设置」行一致（面板内 hover:bg-white/[0.04]） */
+function BodyDataPanel({ title, subtitle, onClick }) {
   return html`
-    <div className="space-y-3 px-4 pb-24 pt-4">
-      <${Card} title="我的" titleIcon="◎" subtitle="低频能力统一收纳" className="bg-[linear-gradient(135deg,rgba(0,229,255,0.10),rgba(167,139,250,0.08))]">
-        <div className="flex items-center gap-3">
-          <img src=${data.user.avatar} alt=${data.user.name} className="h-12 w-12 rounded-full object-cover ring-2 ring-white/20" />
-          <div>
-            <h2 className="text-lg font-semibold text-white">${data.user.name}</h2>
-            <p className="text-xs text-fxText/80">${data.user.phone}</p>
-            <p className="mt-1 text-[11px] text-fxText/70">${data.user.memberLevel}</p>
-          </div>
+    <div className="overflow-hidden rounded-[14px] border border-white/[0.09] bg-white/[0.025] shadow-[inset_0_1px_0_rgba(255,255,255,0.04)]">
+      <button
+        type="button"
+        onClick=${onClick}
+        className="flex w-full items-center gap-3 px-3 py-3.5 text-left transition hover:bg-white/[0.04]"
+      >
+        <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-emerald-500/14 ring-1 ring-emerald-400/18">
+          <${FxIconFilled} name="clipboard" className="h-5 w-5 text-emerald-100/90" />
+        </span>
+        <div className="min-w-0 flex-1">
+          <p className="text-[14px] font-semibold text-fxText">${title}</p>
+          ${subtitle && html`<p className="mt-0.5 text-[11px] leading-relaxed text-fxSub">${subtitle}</p>`}
         </div>
-      </${Card}>
-
-      <${Card} title="我的训练" titleIcon="⚡" subtitle=${data.training.progressSummary}>
-        <div className="space-y-2">
-          <${GroupItem} title="训练大纲" subtitle="目标与阶段路线" onClick=${onNavigateOutline} />
-          <${GroupItem} title="训练计划" subtitle="每日训练、饮食与复盘" onClick=${onNavigatePlan} />
-          <${GroupItem} title="训练记录" subtitle="查看完成情况与反馈" onClick=${() => onToast("跳转：训练记录")} />
-        </div>
-      </${Card}>
-
-      <${Card} title="我的报告" titleIcon="📄" subtitle="评估记录与重点回顾">
-        <div className="space-y-2">
-          <${GroupItem}
-            title="评估记录"
-            subtitle=${`累计 ${data.reports.latestCount} 条`}
-            onClick=${() => onToast("跳转：评估记录")}
-          />
-          <${GroupItem} title="历史报告" subtitle="查看全部报告详情" onClick=${() => onToast("跳转：历史报告")} />
-          <${GroupItem} title="重点指标回顾" subtitle="追踪关键风险变化" onClick=${() => onToast("跳转：重点指标")} />
-        </div>
-      </${Card}>
-
-      <${Card} title="工具与设置" titleIcon="⚙" subtitle="低频功能统一收纳">
-        <div className="space-y-2">
-          ${data.tools.map(
-            (tool) => html`<${GroupItem} key=${tool.name} title=${tool.name} onClick=${() => onToast(`跳转：${tool.name}`)} />`,
-          )}
-        </div>
-      </${Card}>
+        <span className="shrink-0 text-fxSub/75">›</span>
+      </button>
     </div>
   `;
 }
-<<<<<<< HEAD
 
-=======
->>>>>>> f1ef4b3 (Update HTML structure and styles for PRO权益与积分 page; remove unused CSS and optimize layout. Update .DS_Store files.)
+/** 系统类入口：收进同一面板，表示「配置与说明」而非个人数据中心 */
+function SystemServicePanel({ settingsTitle, settingsSubtitle, helpEyebrow, helpTitle, helpSubtitle, onSettings, onHelp }) {
+  return html`
+    <div className="overflow-hidden rounded-[14px] border border-white/[0.09] bg-white/[0.025] shadow-[inset_0_1px_0_rgba(255,255,255,0.04)]">
+      <button
+        type="button"
+        onClick=${onSettings}
+        className="flex w-full items-center gap-3 border-b border-white/[0.07] px-3 py-3.5 text-left transition hover:bg-white/[0.04]"
+      >
+        <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-violet-500/14 ring-1 ring-violet-400/18">
+          <${FxIconFilled} name="gear" className="h-5 w-5 text-violet-100/90" />
+        </span>
+        <div className="min-w-0 flex-1">
+          <p className="text-[14px] font-semibold text-fxText">${settingsTitle}</p>
+          ${settingsSubtitle && html`<p className="mt-0.5 text-[11px] leading-relaxed text-fxSub">${settingsSubtitle}</p>`}
+        </div>
+        <span className="shrink-0 text-fxSub/75">›</span>
+      </button>
+      <button
+        type="button"
+        onClick=${onHelp}
+        className="flex w-full items-center gap-3 px-3 py-3.5 text-left transition hover:bg-amber-500/[0.06]"
+      >
+        <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-amber-500/12 ring-1 ring-amber-400/20">
+          <${FxIconLinear} name="docHelp" className="h-5 w-5 text-amber-100/88" />
+        </span>
+        <div className="min-w-0 flex-1">
+          <p className="text-[10px] font-medium uppercase tracking-wider text-amber-200/75">${helpEyebrow}</p>
+          <p className="mt-0.5 text-[14px] font-semibold text-fxText">${helpTitle}</p>
+          ${helpSubtitle && html`<p className="mt-0.5 text-[11px] leading-relaxed text-fxSub">${helpSubtitle}</p>`}
+        </div>
+        <span className="shrink-0 self-center text-fxSub/75">›</span>
+      </button>
+    </div>
+  `;
+}
+
+export function MyPage({ data, onOpenAssessmentList, onOpenHelp, onOpenHealthProfile, onOpenSettings, onToast }) {
+  const openList = onOpenAssessmentList || (() => onToast?.("跳转：评估记录列表"));
+  const openHelp = onOpenHelp || (() => onToast?.("跳转：测试帮助"));
+  const openHealth = onOpenHealthProfile || (() => onToast?.("跳转：身体档案"));
+  const openSettings = onOpenSettings || (() => onToast?.("跳转：设置"));
+
+  return html`
+    <div className="space-y-4 px-4 pb-4 pt-4">
+      <div className="rounded-card border border-fxCardBorder bg-[linear-gradient(180deg,rgba(20,30,60,0.72),rgba(14,22,46,0.74))] p-4 shadow-[0_14px_38px_rgba(0,0,0,0.22)]">
+        <div className="flex items-center gap-3">
+          <img src=${data.user.avatar} alt="" className="h-14 w-14 rounded-full object-cover ring-2 ring-white/15" />
+          <div className="min-w-0">
+            <h2 className="text-[16px] font-semibold text-white">${data.user.name}</h2>
+            <p className="mt-0.5 text-[13px] text-fxSub">${data.user.phone}</p>
+          </div>
+        </div>
+      </div>
+
+      <div>
+        <p className="mb-2 px-0.5 text-[12px] font-medium text-fxSub/95">测量与报告</p>
+        <p className="mb-2.5 px-0.5 text-[11px] leading-snug text-fxSub/70">最常查看：历史评估、各模块结果摘要</p>
+        <${AssessmentRecordsCard} assessment=${data.assessment} onOpenList=${openList} />
+      </div>
+
+      <div className="space-y-5">
+        <div>
+          <p className="mb-2 px-0.5 text-[12px] font-medium text-fxSub/95">身体数据</p>
+          <p className="mb-2.5 px-0.5 text-[11px] leading-snug text-fxSub/70">身高体重、目标等基础信息，按需维护</p>
+          <${BodyDataPanel}
+            title=${data.healthProfileEntry.title}
+            subtitle=${data.healthProfileEntry.subtitle}
+            onClick=${openHealth}
+          />
+        </div>
+        <div>
+          <p className="mb-2 px-0.5 text-[12px] font-medium text-fxSub/95">系统与服务</p>
+          <p className="mb-2.5 px-0.5 text-[11px] leading-snug text-fxSub/70">应用偏好与实体设备上的使用说明</p>
+          <${SystemServicePanel}
+            settingsTitle=${data.settingsEntry.title}
+            settingsSubtitle=${data.settingsEntry.subtitle}
+            helpEyebrow=${data.helpEntry.eyebrow}
+            helpTitle=${data.helpEntry.title}
+            helpSubtitle=${data.helpEntry.subtitle}
+            onSettings=${openSettings}
+            onHelp=${openHelp}
+          />
+        </div>
+      </div>
+    </div>
+  `;
+}
