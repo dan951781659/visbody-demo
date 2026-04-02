@@ -15,13 +15,11 @@ function AssessmentRecordsCard({ assessment, onOpenList }) {
   const mods = latest?.modules || [];
 
   return html`
-    <section
-      className="overflow-hidden rounded-[16px] border border-emerald-400/28 shadow-[0_12px_36px_rgba(0,0,0,0.22)] ring-1 ring-emerald-500/12"
-    >
+    <section className="overflow-hidden rounded-none border-x-0 border-b border-t-0 border-emerald-500/20 bg-[linear-gradient(180deg,rgba(8,22,28,0.35),rgba(10,18,40,0.25))] shadow-none">
       <button
         type="button"
         onClick=${onOpenList}
-        className="flex w-full items-center justify-between border-b border-emerald-500/25 bg-[linear-gradient(145deg,rgba(8,115,82,0.48),rgba(10,22,52,0.94))] px-4 py-3.5 text-left text-white transition hover:brightness-[1.06] active:brightness-95"
+        className="flex w-full items-center justify-between border-b border-emerald-500/25 bg-[linear-gradient(145deg,rgba(8,115,82,0.48),rgba(10,22,52,0.94))] px-3 py-3.5 text-left text-white transition hover:brightness-[1.06] active:brightness-95"
       >
         <div className="flex items-center gap-3">
           <span className="inline-flex h-10 w-10 items-center justify-center rounded-xl bg-white/18 ring-1 ring-white/20">
@@ -39,7 +37,7 @@ function AssessmentRecordsCard({ assessment, onOpenList }) {
           </div>
           <span className="shrink-0 font-medium text-fxPrimary">${latest?.device || "--"}</span>
         </div>
-        <div className="mt-3 rounded-[12px] border border-white/[0.07] bg-white/[0.03] px-2 py-2.5">
+        <div className="mt-3 rounded-xl border-0 bg-white/[0.05] px-2 py-2.5">
           <div className="flex flex-wrap gap-x-3 gap-y-2 text-[11px] text-fxText/88">
             ${mods.map(
               (m) => html`
@@ -56,13 +54,13 @@ function AssessmentRecordsCard({ assessment, onOpenList }) {
 /** 身体档案：次级入口，交互与「设置」行一致（面板内 hover:bg-white/[0.04]） */
 function BodyDataPanel({ title, subtitle, onClick }) {
   return html`
-    <div className="overflow-hidden rounded-[14px] border border-white/[0.09] bg-white/[0.025] shadow-[inset_0_1px_0_rgba(255,255,255,0.04)]">
+    <div className="overflow-hidden rounded-none border-x-0 border-b border-t-0 border-white/[0.06] bg-white/[0.02]">
       <button
         type="button"
         onClick=${onClick}
         className="flex w-full items-center gap-3 px-3 py-3.5 text-left transition hover:bg-white/[0.04]"
       >
-        <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-emerald-500/14 ring-1 ring-emerald-400/18">
+        <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-emerald-500/14">
           <${FxIconFilled} name="clipboard" className="h-5 w-5 text-emerald-100/90" />
         </span>
         <div className="min-w-0 flex-1">
@@ -78,13 +76,13 @@ function BodyDataPanel({ title, subtitle, onClick }) {
 /** 系统类入口：收进同一面板，表示「配置与说明」而非个人数据中心 */
 function SystemServicePanel({ settingsTitle, settingsSubtitle, helpEyebrow, helpTitle, helpSubtitle, onSettings, onHelp }) {
   return html`
-    <div className="overflow-hidden rounded-[14px] border border-white/[0.09] bg-white/[0.025] shadow-[inset_0_1px_0_rgba(255,255,255,0.04)]">
+    <div className="overflow-hidden rounded-none border-x-0 border-b border-t-0 border-white/[0.06] bg-white/[0.02]">
       <button
         type="button"
         onClick=${onSettings}
-        className="flex w-full items-center gap-3 border-b border-white/[0.07] px-3 py-3.5 text-left transition hover:bg-white/[0.04]"
+        className="flex w-full items-center gap-3 border-b border-white/[0.06] px-3 py-3.5 text-left transition hover:bg-white/[0.04]"
       >
-        <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-violet-500/14 ring-1 ring-violet-400/18">
+        <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-violet-500/14">
           <${FxIconFilled} name="gear" className="h-5 w-5 text-violet-100/90" />
         </span>
         <div className="min-w-0 flex-1">
@@ -98,7 +96,7 @@ function SystemServicePanel({ settingsTitle, settingsSubtitle, helpEyebrow, help
         onClick=${onHelp}
         className="flex w-full items-center gap-3 px-3 py-3.5 text-left transition hover:bg-amber-500/[0.06]"
       >
-        <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-amber-500/12 ring-1 ring-amber-400/20">
+        <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-amber-500/12">
           <${FxIconLinear} name="docHelp" className="h-5 w-5 text-amber-100/88" />
         </span>
         <div className="min-w-0 flex-1">
@@ -119,8 +117,8 @@ export function MyPage({ data, onOpenAssessmentList, onOpenHelp, onOpenHealthPro
   const openSettings = onOpenSettings || (() => onToast?.("跳转：设置"));
 
   return html`
-    <div className="space-y-4 px-4 pb-4 pt-4">
-      <div className="rounded-card border border-fxCardBorder bg-[linear-gradient(180deg,rgba(20,30,60,0.72),rgba(14,22,46,0.74))] p-4 shadow-[0_14px_38px_rgba(0,0,0,0.22)]">
+    <div className="space-y-4 px-0 pb-4 pt-2">
+      <div className="border-x-0 border-b border-t-0 border-white/[0.07] bg-[linear-gradient(180deg,rgba(20,30,60,0.5),rgba(14,22,46,0.45))] px-3 py-4 shadow-none">
         <div className="flex items-center gap-3">
           <img src=${data.user.avatar} alt="" className="h-14 w-14 rounded-full object-cover ring-2 ring-white/15" />
           <div className="min-w-0">
@@ -131,15 +129,15 @@ export function MyPage({ data, onOpenAssessmentList, onOpenHelp, onOpenHealthPro
       </div>
 
       <div>
-        <p className="mb-2 px-0.5 text-[12px] font-medium text-fxSub/95">测量与报告</p>
-        <p className="mb-2.5 px-0.5 text-[11px] leading-snug text-fxSub/70">最常查看：历史评估、各模块结果摘要</p>
+        <p className="mb-2 px-3 text-[12px] font-medium text-fxSub/95">测量与报告</p>
+        <p className="mb-2.5 px-3 text-[11px] leading-snug text-fxSub/70">最常查看：历史评估、各模块结果摘要</p>
         <${AssessmentRecordsCard} assessment=${data.assessment} onOpenList=${openList} />
       </div>
 
       <div className="space-y-5">
         <div>
-          <p className="mb-2 px-0.5 text-[12px] font-medium text-fxSub/95">身体数据</p>
-          <p className="mb-2.5 px-0.5 text-[11px] leading-snug text-fxSub/70">身高体重、目标等基础信息，按需维护</p>
+          <p className="mb-2 px-3 text-[12px] font-medium text-fxSub/95">身体数据</p>
+          <p className="mb-2.5 px-3 text-[11px] leading-snug text-fxSub/70">身高体重、目标等基础信息，按需维护</p>
           <${BodyDataPanel}
             title=${data.healthProfileEntry.title}
             subtitle=${data.healthProfileEntry.subtitle}
@@ -147,8 +145,8 @@ export function MyPage({ data, onOpenAssessmentList, onOpenHelp, onOpenHealthPro
           />
         </div>
         <div>
-          <p className="mb-2 px-0.5 text-[12px] font-medium text-fxSub/95">系统与服务</p>
-          <p className="mb-2.5 px-0.5 text-[11px] leading-snug text-fxSub/70">应用偏好与实体设备上的使用说明</p>
+          <p className="mb-2 px-3 text-[12px] font-medium text-fxSub/95">系统与服务</p>
+          <p className="mb-2.5 px-3 text-[11px] leading-snug text-fxSub/70">应用偏好与实体设备上的使用说明</p>
           <${SystemServicePanel}
             settingsTitle=${data.settingsEntry.title}
             settingsSubtitle=${data.settingsEntry.subtitle}

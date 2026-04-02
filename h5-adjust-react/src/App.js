@@ -84,7 +84,7 @@ export function App() {
 
   return html`
     <main className="fx-appShell mx-auto min-h-screen w-full max-w-md pb-[max(5.5rem,env(safe-area-inset-bottom))]">
-      <header className="fx-headerGlass sticky top-0 z-20 px-4 py-3">
+      <header className="fx-headerGlass sticky top-0 z-20 px-3 py-3">
         <div className="flex items-center justify-between">
           <h1 className="bg-gradient-to-r from-white via-fxPrimary to-fxPurple bg-clip-text text-[15px] font-extrabold tracking-[0.08em] text-transparent">
             Fittrix-FX · H5

@@ -17,7 +17,7 @@ export function HomePage({ loading, data, onNavigateOutline, onToast }) {
 
   if (!data) {
     return html`
-      <div className="px-4 pb-4 pt-4">
+      <div className="px-0 pb-4 pt-4">
         <${EmptyState}
           title="暂无最新评估报告"
           desc="完成首次评估后，这里将展示你的结论、变化与训练建议。"
@@ -29,7 +29,7 @@ export function HomePage({ loading, data, onNavigateOutline, onToast }) {
   }
 
   return html`
-    <div className="space-y-4 px-4 pb-4 pt-4">
+    <div className="space-y-3 px-0 pb-4 pt-2">
       <${ResultHero}
         user=${data.user}
         report=${data.latestReport}

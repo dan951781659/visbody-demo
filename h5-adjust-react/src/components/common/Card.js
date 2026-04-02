@@ -57,8 +57,8 @@ export function Card({
   return html`
     <section
       onClick=${onClick}
-      className=${`group relative overflow-hidden rounded-card border border-fxCardBorder bg-[linear-gradient(180deg,rgba(20,30,60,0.72),rgba(14,22,46,0.74))] p-4 shadow-[0_14px_38px_rgba(0,0,0,0.26)] backdrop-blur-[14px] transition-all duration-300 hover:-translate-y-0.5 hover:border-white/20 hover:shadow-glow ${
-        selected ? "ring-2 ring-fxPrimary/45 shadow-[0_0_22px_rgba(0,229,255,0.12)]" : ""
+      className=${`group relative overflow-hidden rounded-none border-x-0 border-b border-t-0 border-white/[0.06] bg-[linear-gradient(180deg,rgba(20,30,60,0.55),rgba(14,22,46,0.5))] px-3 py-4 shadow-none backdrop-blur-[12px] transition-all duration-300 hover:bg-[linear-gradient(180deg,rgba(22,34,68,0.62),rgba(16,26,52,0.55))] ${
+        selected ? "ring-0 ring-transparent shadow-[inset_0_0_0_1px_rgba(0,229,255,0.22)]" : ""
       } ${onClick ? "cursor-pointer" : ""} ${className}`}
     >
       <div className="pointer-events-none absolute inset-x-0 top-0 h-[1px] bg-gradient-to-r from-transparent via-fxPrimary/34 to-transparent opacity-90"></div>
@@ -88,7 +88,7 @@ export function Card({
         </header>
       `}
       <div>${children}</div>
-      ${footer && html`<footer className="mt-3 border-t border-fxLine pt-3">${footer}</footer>`}
+      ${footer && html`<footer className="mt-3 border-t border-white/[0.06] pt-3">${footer}</footer>`}
     </section>
   `;
 }

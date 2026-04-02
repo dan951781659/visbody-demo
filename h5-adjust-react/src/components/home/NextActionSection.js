@@ -53,7 +53,7 @@ export function NextActionSection({ trainingEntry, nextStepsAdvice, onStartTrain
       selected=${selected}
       onClick=${onActivate}
     >
-      <div className="mt-1 rounded-[14px] border border-white/[0.07] bg-white/[0.05] px-3 py-4 backdrop-blur-sm">
+      <div className="mt-1 rounded-2xl border-0 bg-white/[0.06] px-3 py-4 backdrop-blur-sm">
         <p className="mb-3 text-[11px] text-fxSub">${statusText[trainingEntry.status]}</p>
         <div className="space-y-0">
           ${phases.map(
@@ -61,8 +61,8 @@ export function NextActionSection({ trainingEntry, nextStepsAdvice, onStartTrain
               <div key=${`${phase.title}-${i}`} className="flex gap-3">
                 <div className="flex w-8 shrink-0 flex-col items-center">
                   <div
-                    className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full border-2 border-[#3b9eff] bg-[rgba(8,14,32,0.9)] text-[12px] font-bold text-[#5eb0ff]"
-                    style=${{ boxShadow: "0 0 0 1px rgba(59,158,255,0.25)" }}
+                    className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-[rgba(12,28,52,0.95)] text-[12px] font-bold text-[#5eb0ff]"
+                    style=${{ boxShadow: "inset 0 0 0 1px rgba(59,158,255,0.35)" }}
                   >
                     ${i + 1}
                   </div>

@@ -132,7 +132,7 @@ export function TrendSection({ trends, onOpenHistory }) {
             <div key=${trend.metricName} className="fx-cardInner rounded-card px-3 py-3">
               <div className="flex items-start justify-between gap-3">
                 <div className="flex min-w-0 items-center gap-2">
-                  <span className="inline-flex h-7 w-7 shrink-0 items-center justify-center rounded-full border border-white/12 bg-white/[0.03]">
+                  <span className="inline-flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-white/[0.06]">
                     <${FxIconLinear}
                       name=${trendLinearIconForMetric(trend.metricName)}
                       className="h-4 w-4 text-fxPrimary/85"

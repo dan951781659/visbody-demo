@@ -8,7 +8,7 @@ export function SkeletonBlock({ className = "" }) {
 
 export function HomeSkeleton() {
   return html`
-    <div className="space-y-3 px-4 pt-4">
+    <div className="space-y-3 px-0 pt-4">
       <${SkeletonBlock} className="h-20 w-full" />
       <${SkeletonBlock} className="h-28 w-full" />
       <${SkeletonBlock} className="h-40 w-full" />

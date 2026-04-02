@@ -129,6 +129,20 @@ body {
   border-color: rgba(255, 255, 255, 0.18);
 }
 
+/** 横向滑动条内卡片：弱线框，避免与外层卡片叠线框 */
+.fx-listItem--flat {
+  border: none;
+  background:
+    radial-gradient(circle at 100% 0%, rgba(167, 139, 250, 0.06), transparent 32%),
+    linear-gradient(180deg, rgba(255, 255, 255, 0.055), rgba(255, 255, 255, 0.02));
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.04);
+}
+
+.fx-listItem--flat:hover {
+  border-color: transparent;
+  box-shadow: inset 0 0 0 1px rgba(0, 229, 255, 0.12);
+}
+
 .fx-routeBadge {
   border-radius: 999px;
   border: 1px solid rgba(255, 255, 255, 0.08);

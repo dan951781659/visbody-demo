@@ -50,12 +50,12 @@ function Item({ item, type, onOpen }) {
   const thumb = buildAreaThumb(area, type);
 
   return html`
-    <button className="fx-listItem min-w-[272px] p-3 text-left" onClick=${() => onOpen(item.targetReportId)}>
+    <button className="fx-listItem fx-listItem--flat min-w-[272px] p-3 text-left" onClick=${() => onOpen(item.targetReportId)}>
       <span className=${`inline-flex items-center gap-1 rounded-full border px-2 py-0.5 text-[11px] ${chipClass}`}>
         ${type === "issue" ? "!" : "✓"} ${chipText}
       </span>
       <div className="mt-3 flex w-full flex-col gap-2">
-        <img src=${thumb} alt=${`${area}示意`} className="h-[100px] w-full rounded-[12px] border border-white/10 object-cover" />
+        <img src=${thumb} alt=${`${area}示意`} className="h-[100px] w-full rounded-xl object-cover" />
         <div className="min-w-0 text-left">
           <h4 className="text-sm font-medium text-fxText">${item.title}</h4>
           <p className="mt-1 text-xs leading-relaxed text-fxSub">${item.summary}</p>
@@ -83,7 +83,7 @@ export function HighlightsSection({ highlights, onOpenReport }) {
           核心亮点
         </button>
       </div>
-      <div className="hide-scrollbar -mx-4 flex gap-3 overflow-x-auto px-4 pb-1">
+      <div className="hide-scrollbar -mx-3 flex gap-3 overflow-x-auto px-3 pb-1">
         ${list.map(({ it, type }) => html`<${Item} key=${it.id} item=${it} type=${type} onOpen=${onOpenReport} />`)}
       </div>
     </${Card}>

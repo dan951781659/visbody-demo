@@ -97,10 +97,10 @@ export function ResultHero({
   const adviceText = (report.priorityAdvice || report.oneLineConclusion || "").replace(/\s+/g, " ").trim();
 
   return html`
-    <section className="relative overflow-hidden rounded-[28px] border border-fxPrimary/20 bg-[linear-gradient(180deg,#1a244b_0%,#131d3d_45%,#0e1733_100%)] shadow-[0_18px_48px_rgba(0,0,0,0.35)]">
+    <section className="relative overflow-hidden rounded-none border-x-0 border-b border-t-0 border-white/[0.07] bg-[linear-gradient(180deg,#1a244b_0%,#131d3d_45%,#0e1733_100%)] shadow-none">
       <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_15%_12%,rgba(0,229,255,0.16),transparent_32%),radial-gradient(circle_at_88%_0%,rgba(167,139,250,0.16),transparent_28%)]"></div>
 
-      <div className="relative p-3.5 pb-3.5">
+      <div className="relative px-3 pb-3.5 pt-3">
         <div className="flex items-start justify-between gap-3">
           <div className="min-w-0">
             <div className="mt-0.5 text-[14px] font-semibold text-white">${user.name}</div>
@@ -123,7 +123,7 @@ export function ResultHero({
             modelRegionSelected ? "ring-2 ring-fxPrimary/45 shadow-[0_0_24px_rgba(0,229,255,0.14)]" : "ring-2 ring-transparent"
           }`}
         >
-          <div className="relative overflow-hidden rounded-[22px] border border-white/10 bg-white/[0.03]">
+          <div className="relative overflow-hidden rounded-2xl border-0 bg-white/[0.06]">
             ${useInteractive3d
               ? html`
                   <${InteractiveBodyModel}
@@ -151,7 +151,7 @@ export function ResultHero({
           </div>
         </div>
 
-        <div className="mt-3 rounded-[20px] border border-white/10 bg-white/[0.04] p-3 backdrop-blur-[12px]">
+        <div className="mt-3 rounded-2xl border-0 bg-white/[0.06] p-3 backdrop-blur-[12px]">
           <div className="flex items-start justify-between gap-3">
             <h2 className="flex min-w-0 items-center gap-1.5 text-left">
               <span className="inline-flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-gradient-to-br from-fxPrimary/90 via-fxPurple/80 to-fxPink/70">
@@ -192,14 +192,14 @@ export function ResultHero({
           </div>
           <div className="grid grid-cols-2 gap-2">
             ${reportCards.length === 0 &&
-            html`<p className="col-span-2 rounded-[18px] border border-white/10 bg-white/[0.03] px-3 py-4 text-center text-[12px] text-fxSub">暂无可展示分项报告。</p>`}
+            html`<p className="col-span-2 rounded-2xl border-0 bg-white/[0.05] px-3 py-4 text-center text-[12px] text-fxSub">暂无可展示分项报告。</p>`}
             ${visibleCards.map(
               (rep) => html`
                 <button
                   type="button"
                   key=${rep.id}
                   onClick=${() => onOpenSubReport?.(rep)}
-                  className="rounded-[16px] border border-white/10 bg-[linear-gradient(150deg,rgba(6,14,40,0.82),rgba(7,20,56,0.62))] p-2.5 text-left backdrop-blur-[10px] transition hover:border-fxPrimary/40 hover:bg-[linear-gradient(150deg,rgba(7,18,52,0.86),rgba(9,24,62,0.7))]"
+                  className="rounded-2xl border-0 bg-[linear-gradient(150deg,rgba(10,18,44,0.75),rgba(8,16,40,0.55))] p-2.5 text-left backdrop-blur-[10px] transition hover:bg-[linear-gradient(150deg,rgba(12,22,52,0.82),rgba(10,20,48,0.65))]"
                 >
                   <div className="flex items-center justify-between gap-2">
                     <div className="min-w-0 text-[13px] font-semibold leading-snug text-white">${rep.name}</div>
@@ -216,7 +216,7 @@ export function ResultHero({
           html`
             <button
               type="button"
-              className="mt-2 w-full rounded-[12px] border border-white/10 bg-white/[0.04] py-2 text-[12px] font-semibold text-fxText"
+              className="mt-2 w-full rounded-xl border-0 bg-white/[0.06] py-2 text-[12px] font-semibold text-fxText"
               onClick=${() => setExpandReports((v) => !v)}
             >
               ${expandReports ? "收起分项报告" : `展开全部分项（+${hiddenCount}）`}
