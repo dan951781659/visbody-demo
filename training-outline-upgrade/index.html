@@ -1,0 +1,685 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <title>训练大纲详情 - 框架升级 Demo</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <style>
+    :root {
+      --primary: #4f46e5;
+      --primary-soft: #eef2ff;
+      --primary-border: #c7d2fe;
+      --bg-page: #f5f7fb;
+      --bg-card: #ffffff;
+      --text-main: #111827;
+      --text-sub: #6b7280;
+      --border-soft: #e5e7eb;
+      --shadow-soft: 0 10px 30px rgba(15, 23, 42, 0.08);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Microsoft YaHei", sans-serif;
+      background: radial-gradient(circle at top left, #e0e7ff 0, #f5f7fb 40%, #f9fafb 100%);
+      color: var(--text-main);
+    }
+
+    .layout {
+      display: flex;
+      min-height: 100vh;
+    }
+
+    .sidebar {
+      width: 230px;
+      background: #020617;
+      color: #e5e7eb;
+      padding: 20px 18px;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .logo-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 24px;
+    }
+
+    .logo-mark {
+      width: 26px;
+      height: 26px;
+      border-radius: 8px;
+      background: radial-gradient(circle at 20% 20%, #60a5fa, #4f46e5 60%, #0f172a 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 14px;
+      font-weight: 600;
+    }
+
+    .logo-text-main {
+      font-size: 17px;
+      font-weight: 600;
+      letter-spacing: 0.03em;
+    }
+
+    .logo-text-sub {
+      font-size: 11px;
+      color: #6b7280;
+      margin-top: -2px;
+    }
+
+    .sidebar-section-title {
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      color: #6b7280;
+      margin-bottom: 8px;
+    }
+
+    .sidebar-nav {
+      list-style: none;
+      padding: 0;
+      margin: 0 0 18px;
+      font-size: 14px;
+    }
+
+    .sidebar-nav li {
+      padding: 8px 10px;
+      border-radius: 8px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      color: #9ca3af;
+      margin-bottom: 4px;
+    }
+
+    .sidebar-nav li span {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .sidebar-nav li.active {
+      background: linear-gradient(135deg, rgba(79, 70, 229, 0.18), rgba(37, 99, 235, 0.05));
+      border: 1px solid rgba(129, 140, 248, 0.7);
+      color: #e5e7eb;
+    }
+
+    .sidebar-nav li.active small {
+      background: rgba(15, 23, 42, 0.9);
+      padding: 1px 6px;
+      border-radius: 999px;
+      font-size: 11px;
+      color: #e5e7eb;
+    }
+
+    .sidebar-footer {
+      margin-top: auto;
+      font-size: 11px;
+      color: #6b7280;
+      border-top: 1px dashed #1f2937;
+      padding-top: 10px;
+    }
+
+    .sidebar-footer strong {
+      color: #e5e7eb;
+    }
+
+    .main {
+      flex: 1;
+      padding: 20px 26px 32px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .top-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+    }
+
+    .top-bar-left {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .top-title {
+      font-size: 20px;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .pill {
+      font-size: 11px;
+      padding: 2px 8px;
+      border-radius: 999px;
+      border: 1px solid rgba(34, 197, 94, 0.5);
+      color: #16a34a;
+      background: rgba(22, 163, 74, 0.06);
+    }
+
+    .top-subtitle {
+      font-size: 12px;
+      color: var(--text-sub);
+    }
+
+    .top-bar-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .btn {
+      border-radius: 999px;
+      border: 1px solid #d1d5db;
+      padding: 6px 14px;
+      font-size: 13px;
+      background: rgba(255, 255, 255, 0.85);
+      color: #111827;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      backdrop-filter: blur(12px);
+    }
+
+    .btn.primary {
+      background: linear-gradient(135deg, #4f46e5, #6366f1);
+      color: #ffffff;
+      border-color: transparent;
+      box-shadow: 0 10px 18px rgba(79, 70, 229, 0.35);
+    }
+
+    .btn.outline {
+      background: rgba(255, 255, 255, 0.95);
+    }
+
+    .btn-icon {
+      font-size: 14px;
+    }
+
+    .content-row {
+      display: grid;
+      grid-template-columns: minmax(0, 2.1fr) minmax(0, 1.1fr);
+      gap: 16px;
+      align-items: flex-start;
+    }
+
+    .card {
+      background: rgba(255, 255, 255, 0.96);
+      border-radius: 14px;
+      box-shadow: var(--shadow-soft);
+      padding: 18px 20px 20px;
+      border: 1px solid rgba(226, 232, 240, 0.9);
+    }
+
+    .card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 10px;
+    }
+
+    .card-title {
+      font-size: 16px;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .card-tag {
+      font-size: 11px;
+      padding: 2px 8px;
+      border-radius: 999px;
+      background: #f3f4f6;
+      color: #6b7280;
+    }
+
+    .badge-readonly {
+      font-size: 11px;
+      padding: 1px 8px;
+      border-radius: 999px;
+      border: 1px dashed #9ca3af;
+      color: #6b7280;
+      background: #f9fafb;
+    }
+
+    .alert {
+      position: relative;
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      background: var(--primary-soft);
+      border: 1px solid var(--primary-border);
+      border-radius: 11px;
+      padding: 12px 14px 12px 14px;
+      margin-bottom: 14px;
+    }
+
+    .alert-icon {
+      width: 22px;
+      height: 22px;
+      border-radius: 999px;
+      background: linear-gradient(135deg, #4f46e5, #6366f1);
+      color: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 13px;
+      margin-top: 2px;
+      flex-shrink: 0;
+    }
+
+    .alert-content {
+      flex: 1;
+      font-size: 13px;
+      color: var(--text-main);
+    }
+
+    .alert-content strong {
+      font-size: 14px;
+      font-weight: 600;
+      display: block;
+      margin-bottom: 2px;
+    }
+
+    .alert-content p {
+      margin: 0;
+      line-height: 1.5;
+    }
+
+    .alert-content p + p {
+      margin-top: 2px;
+      color: var(--text-sub);
+    }
+
+    .alert-actions {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      gap: 6px;
+      margin-left: 4px;
+    }
+
+    .alert-button {
+      background: linear-gradient(135deg, #4f46e5, #6366f1);
+      color: #fff;
+      border: none;
+      border-radius: 999px;
+      padding: 6px 12px;
+      font-size: 12px;
+      cursor: pointer;
+      white-space: nowrap;
+      box-shadow: 0 6px 14px rgba(79, 70, 229, 0.3);
+    }
+
+    .alert-close {
+      border: none;
+      background: transparent;
+      color: #9ca3af;
+      cursor: pointer;
+      font-size: 14px;
+      line-height: 1;
+      padding: 4px;
+    }
+
+    .section {
+      margin-top: 6px;
+      border-radius: 10px;
+      border: 1px solid var(--border-soft);
+      padding: 10px 12px;
+      font-size: 13px;
+      color: #374151;
+      background: #f9fafb;
+    }
+
+    .section h3 {
+      margin: 0 0 4px;
+      font-size: 14px;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .section h3 span {
+      font-size: 11px;
+      color: #9ca3af;
+      font-weight: 400;
+    }
+
+    .section p {
+      margin: 2px 0;
+    }
+
+    .readonly-tip {
+      margin-top: 5px;
+      font-size: 12px;
+      color: #9ca3af;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .readonly-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 999px;
+      background: #9ca3af;
+    }
+
+    .timeline {
+      margin-top: 4px;
+      border-left: 1px dashed #d1d5db;
+      padding-left: 10px;
+    }
+
+    .timeline-item {
+      margin: 4px 0;
+      font-size: 12px;
+      color: #4b5563;
+    }
+
+    .timeline-item strong {
+      font-size: 12px;
+    }
+
+    .right-panel-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 10px;
+    }
+
+    .right-panel-title {
+      font-size: 14px;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .tag {
+      font-size: 11px;
+      padding: 1px 8px;
+      border-radius: 999px;
+      border: 1px solid rgba(79, 70, 229, 0.4);
+      color: #4f46e5;
+      background: rgba(239, 246, 255, 0.9);
+    }
+
+    .status-pill {
+      font-size: 11px;
+      padding: 2px 8px;
+      border-radius: 999px;
+      background: rgba(34, 197, 94, 0.06);
+      color: #16a34a;
+    }
+
+    .status-pill.gray {
+      background: #f3f4f6;
+      color: #6b7280;
+    }
+
+    .log-list {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+      font-size: 12px;
+      color: #4b5563;
+    }
+
+    .log-list li {
+      padding: 5px 0;
+      border-bottom: 1px dashed #e5e7eb;
+    }
+
+    .log-time {
+      color: #9ca3af;
+      font-size: 11px;
+      margin-left: 4px;
+    }
+
+    .tip-box {
+      margin-top: 10px;
+      font-size: 12px;
+      color: #6b7280;
+      padding: 8px 10px;
+      border-radius: 8px;
+      background: #f9fafb;
+      border: 1px dashed #e5e7eb;
+    }
+
+    @media (max-width: 960px) {
+      .layout {
+        flex-direction: column;
+      }
+
+      .sidebar {
+        width: 100%;
+        flex-direction: row;
+        align-items: center;
+        justify-content: space-between;
+        padding: 10px 16px;
+      }
+
+      .sidebar-footer {
+        display: none;
+      }
+
+      .sidebar-nav {
+        display: flex;
+        gap: 4px;
+      }
+
+      .sidebar-nav li {
+        margin-bottom: 0;
+      }
+
+      .main {
+        padding: 14px 14px 22px;
+      }
+
+      .content-row {
+        grid-template-columns: minmax(0, 1fr);
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="layout">
+    <aside class="sidebar">
+      <div>
+        <div class="logo-row">
+          <div class="logo-mark">V</div>
+          <div>
+            <div class="logo-text-main">VISBODY</div>
+            <div class="logo-text-sub">Digital Health Platform</div>
+          </div>
+        </div>
+
+        <div>
+          <div class="sidebar-section-title">报告管理</div>
+          <ul class="sidebar-nav">
+            <li><span><span>报告列表</span></span></li>
+            <li class="active">
+              <span><span>训练大纲详情</span></span>
+              <small>Demo</small>
+            </li>
+            <li><span><span>体态分析</span></span></li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="sidebar-footer">
+        <div><strong>训练大纲框架升级 Demo</strong></div>
+        <div>展示「旧大纲只读 + 新框架跳转提示」的交互。</div>
+      </div>
+    </aside>
+
+    <main class="main">
+      <header class="top-bar">
+        <div class="top-bar-left">
+          <div class="top-title">
+            训练大纲详情
+            <span class="pill">AI 生成 · 已发布</span>
+          </div>
+          <div class="top-subtitle">tanjie ｜ 178cm ｜ 2026-02-25 20:37 ｜ Kuafu AI 为你定制的健康方案</div>
+        </div>
+        <div class="top-bar-actions">
+          <button class="btn outline">
+            <span class="btn-icon">←</span>
+            返回报告
+          </button>
+          <button class="btn">
+            <span class="btn-icon">🖨</span>
+            打印 / 下载
+          </button>
+          <button class="btn primary" onclick="goToNewOutline()">
+            <span class="btn-icon">✨</span>
+            去生成新版训练大纲
+          </button>
+        </div>
+      </header>
+
+      <section class="content-row">
+        <section class="card">
+          <div class="card-header">
+            <div class="card-title">
+              方案概述
+              <span class="card-tag">历史训练大纲</span>
+            </div>
+            <span class="badge-readonly">当前内容仅支持查看</span>
+          </div>
+
+          <div class="alert" id="upgradeAlert">
+            <div class="alert-icon">AI</div>
+            <div class="alert-content">
+              <strong>训练大纲已全新升级</strong>
+              <p>当前页面仅用于查看历史训练大纲。为了给你提供更智能、更个性化的训练体验，生成新版训练大纲将跳转到升级后的生成页面。</p>
+              <p>你可以随时在这里继续查看过往训练大纲内容，不会被删除。</p>
+            </div>
+            <div class="alert-actions">
+              <button class="alert-button" onclick="goToNewOutline()">去生成新版训练大纲</button>
+              <button class="alert-close" onclick="closeAlert()" aria-label="关闭提示">×</button>
+            </div>
+          </div>
+
+          <div class="section">
+            <h3>目标与周期 <span>只读示例</span></h3>
+            <p>目标：在 8 周内改善体脂率与肌肉平衡，重点强化臀部与核心稳定性。</p>
+            <p>周期：每周训练 3 次，每次 45–60 分钟。</p>
+            <div class="readonly-tip">
+              <span class="readonly-dot"></span>
+              当前内容为历史训练大纲，仅支持查看。
+            </div>
+          </div>
+
+          <div class="section">
+            <h3>周训练安排 <span>只读示例</span></h3>
+            <div class="timeline">
+              <div class="timeline-item">
+                <strong>第 1–2 周：</strong>基础激活与动作模式重建，包含臀部激活、核心稳定训练、基础拉伸。
+              </div>
+              <div class="timeline-item">
+                <strong>第 3–4 周：</strong>力量提升与稳定性训练，增加杠铃深蹲、罗马尼亚硬拉等复合动作。
+              </div>
+              <div class="timeline-item">
+                <strong>第 5–8 周：</strong>进阶力量 + 功能性训练，强化运动表现与日常功能。
+              </div>
+            </div>
+            <div class="readonly-tip">
+              <span class="readonly-dot"></span>
+              如需根据最新评估结果生成新版训练大纲，请使用上方按钮前往新页面。
+            </div>
+          </div>
+        </section>
+
+        <aside class="card">
+          <div class="right-panel-header">
+            <div class="right-panel-title">
+              训练大纲状态
+              <span class="tag">框架升级说明</span>
+            </div>
+            <span class="status-pill gray" id="statusPill">当前查看：历史版本</span>
+          </div>
+
+          <ul class="log-list" id="logList">
+            <li>
+              已生成历史训练大纲
+              <span class="log-time">2026-02-25 20:37</span>
+            </li>
+            <li>
+              训练大纲框架升级完成，新版支持更细颗粒度的周期与动作推荐。
+              <span class="log-time">2026-03-01 10:12</span>
+            </li>
+            <li>
+              你可以在保留历史版本的同时，基于最新评估结果生成新版训练大纲。
+              <span class="log-time">说明</span>
+            </li>
+          </ul>
+
+          <div class="tip-box" id="tipBox">
+            当前 Demo 中，「去生成新版训练大纲」按钮会模拟跳转到新框架页面，并在右侧状态中记录一次操作日志。
+          </div>
+        </aside>
+      </section>
+    </main>
+  </div>
+
+  <script>
+    function closeAlert() {
+      var alert = document.getElementById('upgradeAlert');
+      if (alert) {
+        alert.style.display = 'none';
+      }
+    }
+
+    function goToNewOutline() {
+      var confirmed = window.confirm(
+        '将前往新版训练大纲生成页面，生成完成后可在本报告中查看新版内容。\n\n此操作不会删除历史训练大纲。是否继续？'
+      );
+      if (!confirmed) return;
+
+      var statusPill = document.getElementById('statusPill');
+      var logList = document.getElementById('logList');
+      var tipBox = document.getElementById('tipBox');
+
+      if (statusPill) {
+        statusPill.textContent = '准备前往：新版训练大纲页面';
+        statusPill.classList.remove('gray');
+      }
+
+      if (logList) {
+        var li = document.createElement('li');
+        li.innerHTML =
+          '你点击了「去生成新版训练大纲」按钮，系统将跳转至新框架页面生成大纲。' +
+          '<span class="log-time">模拟记录</span>';
+        logList.insertBefore(li, logList.firstChild);
+      }
+
+      if (tipBox) {
+        tipBox.textContent =
+          '在真实环境中，此处会通过路由或新窗口跳转到新版训练大纲生成页面。生成完成后，报告中会新增一个「新版训练大纲」入口。';
+      }
+
+      setTimeout(function () {
+        alert('【Demo 提示】这里本应跳转到新版训练大纲页面，实际项目中请替换为真实地址或路由。');
+      }, 400);
+    }
+  </script>
+</body>
+</html>
+

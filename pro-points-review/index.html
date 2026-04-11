@@ -1,0 +1,758 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Pro 积分规则评审演示</title>
+  <style>
+    :root {
+      --bg: #f5f7fb;
+      --panel: rgba(255, 255, 255, 0.96);
+      --panel-strong: #ffffff;
+      --line: #e8ecf4;
+      --ink: #1f2740;
+      --muted: #667085;
+      --blue: #315dff;
+      --blue-soft: rgba(49, 93, 255, 0.10);
+      --green: #0f9d58;
+      --green-soft: rgba(15, 157, 88, 0.12);
+      --warn: #d97706;
+      --warn-soft: rgba(217, 119, 6, 0.12);
+      --shadow: 0 22px 64px rgba(40, 53, 88, 0.10);
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: "PingFang SC", "Helvetica Neue", Arial, sans-serif;
+      color: var(--ink);
+      background:
+        radial-gradient(circle at 18% 14%, rgba(255, 221, 159, 0.18), transparent 24%),
+        radial-gradient(circle at 82% 18%, rgba(167, 180, 255, 0.16), transparent 20%),
+        linear-gradient(180deg, #fbfcff 0%, #f5f7fb 100%);
+    }
+    .topbar {
+      height: 70px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: rgba(255,255,255,0.84);
+      border-bottom: 1px solid var(--line);
+      backdrop-filter: blur(10px);
+      position: sticky;
+      top: 0;
+      z-index: 10;
+    }
+    .topbar h1 {
+      margin: 0;
+      font-size: 24px;
+      font-weight: 700;
+    }
+    .topbar .meta {
+      position: absolute;
+      right: 24px;
+      color: var(--muted);
+      font-size: 14px;
+    }
+    .shell {
+      width: min(1440px, calc(100vw - 40px));
+      margin: 18px auto 36px;
+    }
+    .hero {
+      border-radius: 30px;
+      border: 1px solid var(--line);
+      background:
+        radial-gradient(circle at 30% 35%, rgba(255, 239, 187, 0.22), transparent 24%),
+        radial-gradient(circle at 72% 68%, rgba(214, 196, 255, 0.18), transparent 22%),
+        linear-gradient(135deg, rgba(255,255,255,0.98), rgba(248,250,255,0.98));
+      box-shadow: var(--shadow);
+      padding: 34px;
+    }
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 14px;
+      border-radius: 999px;
+      background: var(--blue-soft);
+      color: var(--blue);
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: 0.04em;
+    }
+    .hero-grid {
+      margin-top: 18px;
+      display: grid;
+      grid-template-columns: 1.15fr 0.85fr;
+      gap: 22px;
+      align-items: start;
+    }
+    .hero h2 {
+      margin: 0;
+      font-size: 42px;
+      line-height: 1.08;
+      letter-spacing: -0.03em;
+    }
+    .lead {
+      margin: 14px 0 0;
+      font-size: 16px;
+      line-height: 1.8;
+      color: #4f5d78;
+      max-width: 820px;
+    }
+    .control-panel {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 24px;
+      padding: 20px;
+    }
+    .control-title {
+      font-size: 14px;
+      color: var(--muted);
+      margin-bottom: 10px;
+    }
+    .toggle-row {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-bottom: 18px;
+    }
+    .toggle {
+      border: 1px solid var(--line);
+      background: #fff;
+      color: #44516a;
+      padding: 11px 16px;
+      border-radius: 999px;
+      cursor: pointer;
+      font-size: 14px;
+      transition: 0.2s ease;
+    }
+    .toggle.active {
+      color: var(--blue);
+      border-color: rgba(49, 93, 255, 0.22);
+      background: rgba(49, 93, 255, 0.08);
+      font-weight: 700;
+      box-shadow: inset 0 0 0 1px rgba(49, 93, 255, 0.08);
+    }
+    .metrics {
+      margin-top: 22px;
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 14px;
+    }
+    .metric {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 20px;
+      padding: 18px;
+    }
+    .metric .label {
+      color: var(--muted);
+      font-size: 13px;
+    }
+    .metric .value {
+      margin-top: 10px;
+      font-size: 30px;
+      font-weight: 800;
+      letter-spacing: -0.03em;
+    }
+    .metric .meta {
+      margin-top: 8px;
+      color: var(--muted);
+      line-height: 1.65;
+      font-size: 13px;
+    }
+    .section {
+      margin-top: 22px;
+      display: grid;
+      gap: 22px;
+    }
+    .two-col {
+      display: grid;
+      grid-template-columns: 1.15fr 0.85fr;
+      gap: 22px;
+    }
+    .card {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 26px;
+      padding: 24px;
+      box-shadow: 0 12px 36px rgba(28, 41, 74, 0.05);
+    }
+    .card h3 {
+      margin: 0 0 8px;
+      font-size: 22px;
+    }
+    .card p {
+      margin: 0;
+      color: var(--muted);
+      line-height: 1.8;
+    }
+    .summary-list {
+      margin-top: 16px;
+      display: grid;
+      gap: 12px;
+    }
+    .summary-item {
+      padding: 16px;
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      background: #fff;
+    }
+    .summary-item strong {
+      display: block;
+      margin-bottom: 8px;
+      font-size: 16px;
+    }
+    .cost-grid {
+      margin-top: 18px;
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 12px;
+    }
+    .cost-card {
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      background: #fff;
+      padding: 16px;
+    }
+    .cost-card strong {
+      display: block;
+      margin: 8px 0;
+      font-size: 24px;
+    }
+    .subtle {
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.7;
+    }
+    .dist-grid {
+      margin-top: 18px;
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 12px;
+    }
+    .dist-card {
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      background: #fff;
+      padding: 16px;
+    }
+    .dist-card strong {
+      display: block;
+      margin-top: 8px;
+      font-size: 26px;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 18px;
+      font-size: 14px;
+    }
+    th, td {
+      padding: 12px 10px;
+      border-bottom: 1px solid var(--line);
+      text-align: left;
+    }
+    th {
+      color: var(--muted);
+      font-weight: 600;
+    }
+    .bar {
+      width: 100%;
+      height: 10px;
+      background: #eef2fb;
+      border-radius: 999px;
+      overflow: hidden;
+    }
+    .bar span {
+      display: block;
+      height: 100%;
+      background: linear-gradient(90deg, #315dff, #89a3ff);
+      border-radius: 999px;
+    }
+    .path-list {
+      display: grid;
+      gap: 12px;
+      margin-top: 18px;
+    }
+    .path-card {
+      border-radius: 20px;
+      border: 1px solid var(--line);
+      background: #fff;
+      padding: 18px;
+      cursor: pointer;
+      transition: 0.18s ease;
+    }
+    .path-card.active {
+      border-color: rgba(49, 93, 255, 0.25);
+      background: rgba(49, 93, 255, 0.06);
+      box-shadow: inset 0 0 0 1px rgba(49, 93, 255, 0.08);
+    }
+    .path-card strong {
+      display: block;
+      margin-bottom: 8px;
+      font-size: 17px;
+    }
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      padding: 6px 10px;
+      border-radius: 999px;
+      font-size: 12px;
+      font-weight: 700;
+      margin-bottom: 10px;
+    }
+    .badge.green {
+      background: var(--green-soft);
+      color: var(--green);
+    }
+    .badge.warn {
+      background: var(--warn-soft);
+      color: var(--warn);
+    }
+    .detail-box {
+      margin-top: 18px;
+      border-radius: 22px;
+      border: 1px solid var(--line);
+      background: #fff;
+      padding: 22px;
+    }
+    .detail-grid {
+      margin-top: 16px;
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+    }
+    .mini-card {
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      padding: 16px;
+      background: #fdfefe;
+    }
+    .mini-card strong {
+      display: block;
+      margin-top: 8px;
+      font-size: 24px;
+    }
+    .footer-card {
+      border-radius: 24px;
+      border: 1px solid rgba(49, 93, 255, 0.16);
+      background: linear-gradient(135deg, rgba(49, 93, 255, 0.08), rgba(255,255,255,0.96));
+      padding: 24px;
+    }
+    .footer-card h3 {
+      margin: 0 0 10px;
+      font-size: 22px;
+    }
+    .footer-card .decision {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 12px;
+      border-radius: 999px;
+      background: rgba(49, 93, 255, 0.12);
+      color: var(--blue);
+      font-size: 13px;
+      font-weight: 700;
+      margin-top: 10px;
+    }
+    @media (max-width: 1200px) {
+      .hero-grid, .two-col, .metrics, .cost-grid, .dist-grid, .detail-grid {
+        grid-template-columns: 1fr;
+      }
+      .hero h2 {
+        font-size: 34px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header class="topbar">
+    <h1>维塑数字健康平台 · Pro 积分规则评审演示</h1>
+    <div class="meta">面向管理层 / 方案评审</div>
+  </header>
+
+  <main class="shell">
+    <section class="hero">
+      <span class="eyebrow">PRO POINTS REVIEW</span>
+      <div class="hero-grid">
+        <div>
+          <h2>用最短时间讲清楚为什么默认上线方案 A，以及重点客户如何在不增加系统复杂度的前提下被稳定承接。</h2>
+          <p class="lead">
+            这份 demo 只回答管理层真正关心的 5 个问题：成本是否可控、不同方案覆盖差异在哪里、当前价格能否覆盖成本、重点客户为什么不能直接抬高全体档位、以及为什么“提前续费 + 代金券 / 时间优惠券”是一期最平衡的做法。
+          </p>
+        </div>
+
+        <div class="control-panel">
+          <div class="control-title">方案切换</div>
+          <div class="toggle-row" id="planToggles"></div>
+          <div class="control-title">用户分布视图</div>
+          <div class="toggle-row" id="regionToggles"></div>
+          <div class="subtle" id="controlHint"></div>
+        </div>
+      </div>
+
+      <div class="metrics" id="topMetrics"></div>
+    </section>
+
+    <section class="section">
+      <div class="two-col">
+        <article class="card">
+          <h3>方案总览</h3>
+          <p id="planNarrative"></p>
+          <div class="summary-list" id="planSummary"></div>
+        </article>
+
+        <article class="card">
+          <h3>成本覆盖</h3>
+          <p>积分锚点统一为 <strong>100 积分 = 1 元理论成本</strong>。下方展示当前选中方案下，不同市场价格与理论成本的覆盖倍数。</p>
+          <div class="cost-grid" id="costGrid"></div>
+        </article>
+      </div>
+
+      <div class="two-col">
+        <article class="card">
+          <h3>真实商用客户分布</h3>
+          <p id="distributionNarrative"></p>
+          <div class="dist-grid" id="distributionCards"></div>
+          <table>
+            <thead>
+              <tr>
+                <th>区间</th>
+                <th>客户数</th>
+                <th>占当前视图比例</th>
+                <th>分布条</th>
+              </tr>
+            </thead>
+            <tbody id="bucketTable"></tbody>
+          </table>
+        </article>
+
+        <article class="card">
+          <h3>重点客户处理取舍</h3>
+          <p>这部分客户确实是使用频率最高的一批，但一期如果直接为他们新做“补充积分逻辑”，会把实现复杂度拉高。这里对比三条路，明确为什么推荐复用现有续费和优惠券能力。</p>
+          <div class="path-list" id="pathCards"></div>
+          <div class="detail-box">
+            <span class="badge green" id="pathBadge"></span>
+            <h3 id="pathTitle"></h3>
+            <p id="pathDescription"></p>
+            <div class="detail-grid" id="pathMetrics"></div>
+          </div>
+        </article>
+      </div>
+
+      <article class="footer-card">
+        <h3>最终建议</h3>
+        <p id="finalDecisionText"></p>
+        <div class="decision" id="decisionPill"></div>
+      </article>
+    </section>
+  </main>
+
+  <script>
+    const state = {
+      plan: 'a',
+      region: 'all',
+      path: 'renew'
+    };
+
+    const plans = {
+      a: {
+        label: '方案 A',
+        subtitle: '95% 覆盖方案',
+        monthly: 500,
+        yearly: 5000,
+        monthlyCost: 5,
+        yearlyCost: 50,
+        coverage: { cn: '99.4%', overseas: '95.5%', all: '97.8%' },
+        complexity: '低',
+        narrative: '方案 A 把基础套餐控制在“覆盖绝大多数真实商用客户”这一目标上，整体成本轻、解释清楚、且仍保留按量购买和提前续费的运营空间。',
+        summary: [
+          ['发放值', 'Pro 月付 500 / 年付 5000'],
+          ['适用目标', '覆盖大多数真实商用客户，而不是把所有极端客户直接吸收到公共档位'],
+          ['适合上线原因', '成本安全、用户更容易理解、对现有系统改动最少']
+        ]
+      },
+      b: {
+        label: '方案 B',
+        subtitle: '最大覆盖方案',
+        monthly: 2500,
+        yearly: 25000,
+        monthlyCost: 25,
+        yearlyCost: 250,
+        coverage: { cn: '接近 100%', overseas: '接近 100%', all: '接近 100%' },
+        complexity: '中',
+        narrative: '方案 B 的核心是“最大客户也直接被基础档位覆盖”。它在成本上仍成立，但会把大量本不需要这么高积分的普通客户一起抬高，运营上会变得粗。',
+        summary: [
+          ['发放值', 'Pro 月付 2500 / 年付 25000'],
+          ['适用目标', '不依赖补量，尽量用基础档位直接覆盖极高使用客户'],
+          ['主要问题', '超发明显，弱化后续的按量购买与提前续费路径']
+        ]
+      }
+    };
+
+    const regions = {
+      cn: {
+        label: '国内',
+        total: 155,
+        p90: 1700,
+        p95: 2850,
+        p99: 4760,
+        max: 5420,
+        buckets: [
+          ['0-2000', 136],
+          ['2001-5000', 14],
+          ['5001-10000', 5],
+          ['10001+', 0]
+        ],
+        narrative: '国内样本整体更集中，方案 A 已经覆盖绝大多数真实商用客户，只有少量客户落在 5000 积分以上。'
+      },
+      overseas: {
+        label: '海外',
+        total: 112,
+        p90: 1490,
+        p95: 4870,
+        p99: 21950,
+        max: 24590,
+        buckets: [
+          ['0-2000', 101],
+          ['2001-5000', 4],
+          ['5001-10000', 5],
+          ['10001+', 2]
+        ],
+        narrative: '海外样本里头部客户更尖，最大客户会把方案 B 拉得很高，因此更需要一个“只服务高频客户、不抬高所有人”的处理路径。'
+      },
+      all: {
+        label: '全部',
+        total: 267,
+        p90: 1660,
+        p95: 3600,
+        p99: 7610,
+        max: 24590,
+        buckets: [
+          ['0-2000', 237],
+          ['2001-5000', 18],
+          ['5001-10000', 10],
+          ['10001+', 2]
+        ],
+        narrative: '从全量真实商用客户看，大多数客户都在 2000 积分以内。是否为最后极少数超高客户抬高全体基础档，是管理层最核心的取舍。'
+      }
+    };
+
+    const markets = [
+      { label: 'China 本地市场', month: 129, year: 990, currency: 'CNY' },
+      { label: 'Base 新兴市场', month: 69, year: 690, currency: 'CNY 近似' },
+      { label: 'Core 中端市场', month: 138, year: 1380, currency: 'CNY 近似' },
+      { label: 'Prime 高端市场', month: 207, year: 2070, currency: 'CNY 近似' }
+    ];
+
+    const paths = {
+      renew: {
+        label: '提前续费 + 优惠券（推荐）',
+        badge: '推荐的一期方案',
+        badgeClass: 'green',
+        description: '重点客户不新增补积分逻辑，而是允许未到期 Pro 提前续费。续费后新周期积分立即到账，有效期在原基础上顺延；销售和运营只需要复用代金券、时间优惠券去解决价格与权益感知问题。',
+        metrics: [
+          ['开发复杂度', '最低'],
+          ['是否能直接补足积分', '能，通过正常续费发放'],
+          ['是否需要新发积分逻辑', '不需要']
+        ]
+      },
+      logic: {
+        label: '新增补充积分逻辑',
+        badge: '可行但偏重',
+        badgeClass: 'warn',
+        description: '这条路可以更精细地补足重点客户权益，但要新增后台发放入口、单独流水、甚至审批与风控规则，一期对研发和测试都更重。',
+        metrics: [
+          ['开发复杂度', '高'],
+          ['是否能直接补足积分', '能'],
+          ['是否需要新发积分逻辑', '需要']
+        ]
+      },
+      b: {
+        label: '直接上方案 B',
+        badge: '备选口径',
+        badgeClass: 'warn',
+        description: '方案 B 最直接，但它解决重点客户问题的方式是把所有客户都一起抬高。这在成本上成立，在策略上也简单，但会明显超发普通客户积分。',
+        metrics: [
+          ['开发复杂度', '中'],
+          ['是否能直接覆盖最大客户', '能'],
+          ['对普通客户是否超发', '明显超发']
+        ]
+      }
+    };
+
+    function renderToggles() {
+      const planRoot = document.getElementById('planToggles');
+      const regionRoot = document.getElementById('regionToggles');
+      planRoot.innerHTML = '';
+      regionRoot.innerHTML = '';
+
+      Object.entries(plans).forEach(([key, plan]) => {
+        const btn = document.createElement('button');
+        btn.className = `toggle ${state.plan === key ? 'active' : ''}`;
+        btn.textContent = `${plan.label} · ${plan.subtitle}`;
+        btn.onclick = () => {
+          state.plan = key;
+          render();
+        };
+        planRoot.appendChild(btn);
+      });
+
+      Object.entries(regions).forEach(([key, region]) => {
+        const btn = document.createElement('button');
+        btn.className = `toggle ${state.region === key ? 'active' : ''}`;
+        btn.textContent = region.label;
+        btn.onclick = () => {
+          state.region = key;
+          render();
+        };
+        regionRoot.appendChild(btn);
+      });
+    }
+
+    function renderMetrics() {
+      const plan = plans[state.plan];
+      const region = regions[state.region];
+      const root = document.getElementById('topMetrics');
+      root.innerHTML = '';
+      const items = [
+        ['当前查看方案', `${plan.label}`, plan.subtitle],
+        ['本次年付积分', `${plan.yearly}`, `月付 ${plan.monthly} · 理论成本 ${plan.yearlyCost} 元/年`],
+        ['当前视图覆盖率', `${plan.coverage[state.region]}`, `${region.label}真实商用客户`],
+        ['重点客户承接建议', '提前续费', '复用代金券 / 时间优惠券']
+      ];
+      items.forEach(([label, value, meta]) => {
+        const el = document.createElement('div');
+        el.className = 'metric';
+        el.innerHTML = `<div class="label">${label}</div><div class="value">${value}</div><div class="meta">${meta}</div>`;
+        root.appendChild(el);
+      });
+      document.getElementById('controlHint').textContent =
+        `当前正在查看 ${plan.label} 在 ${region.label} 样本下的覆盖、成本和重点客户处理取舍。`;
+    }
+
+    function renderPlanSummary() {
+      const plan = plans[state.plan];
+      document.getElementById('planNarrative').textContent = plan.narrative;
+      const root = document.getElementById('planSummary');
+      root.innerHTML = '';
+      plan.summary.forEach(([title, text]) => {
+        const item = document.createElement('div');
+        item.className = 'summary-item';
+        item.innerHTML = `<strong>${title}</strong><div class="subtle">${text}</div>`;
+        root.appendChild(item);
+      });
+    }
+
+    function renderCosts() {
+      const plan = plans[state.plan];
+      const root = document.getElementById('costGrid');
+      root.innerHTML = '';
+      markets.forEach((market) => {
+        const yearlyMultiple = (market.year / plan.yearlyCost).toFixed(1);
+        const monthlyMultiple = (market.month / plan.monthlyCost).toFixed(1);
+        const card = document.createElement('div');
+        card.className = 'cost-card';
+        card.innerHTML = `
+          <div class="subtle">${market.label}</div>
+          <strong>${yearlyMultiple}x</strong>
+          <div class="subtle">年付覆盖倍数 · 月付约 ${monthlyMultiple}x</div>
+        `;
+        root.appendChild(card);
+      });
+    }
+
+    function renderDistribution() {
+      const region = regions[state.region];
+      document.getElementById('distributionNarrative').textContent = region.narrative;
+
+      const cards = document.getElementById('distributionCards');
+      cards.innerHTML = '';
+      [
+        ['P90', region.p90],
+        ['P95', region.p95],
+        ['P99', region.p99],
+        ['Max', region.max]
+      ].forEach(([label, value]) => {
+        const card = document.createElement('div');
+        card.className = 'dist-card';
+        card.innerHTML = `<div class="subtle">${label}</div><strong>${value}</strong><div class="subtle">积分需求</div>`;
+        cards.appendChild(card);
+      });
+
+      const table = document.getElementById('bucketTable');
+      table.innerHTML = '';
+      region.buckets.forEach(([label, count]) => {
+        const percent = region.total === 0 ? 0 : ((count / region.total) * 100).toFixed(1);
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+          <td>${label}</td>
+          <td>${count}</td>
+          <td>${percent}%</td>
+          <td><div class="bar"><span style="width:${percent}%"></span></div></td>
+        `;
+        table.appendChild(tr);
+      });
+    }
+
+    function renderPaths() {
+      const root = document.getElementById('pathCards');
+      root.innerHTML = '';
+      Object.entries(paths).forEach(([key, path]) => {
+        const card = document.createElement('div');
+        card.className = `path-card ${state.path === key ? 'active' : ''}`;
+        card.innerHTML = `<strong>${path.label}</strong><div class="subtle">${path.description}</div>`;
+        card.onclick = () => {
+          state.path = key;
+          renderPathDetail();
+          renderPaths();
+        };
+        root.appendChild(card);
+      });
+      renderPathDetail();
+    }
+
+    function renderPathDetail() {
+      const path = paths[state.path];
+      document.getElementById('pathBadge').className = `badge ${path.badgeClass}`;
+      document.getElementById('pathBadge').textContent = path.badge;
+      document.getElementById('pathTitle').textContent = path.label;
+      document.getElementById('pathDescription').textContent = path.description;
+      const root = document.getElementById('pathMetrics');
+      root.innerHTML = '';
+      path.metrics.forEach(([label, value]) => {
+        const card = document.createElement('div');
+        card.className = 'mini-card';
+        card.innerHTML = `<div class="subtle">${label}</div><strong>${value}</strong>`;
+        root.appendChild(card);
+      });
+    }
+
+    function renderDecision() {
+      const plan = plans[state.plan];
+      const region = regions[state.region];
+      const text = state.plan === 'a'
+        ? `当前推荐继续采用方案 A 作为公共默认规则。它在 ${region.label} 视图下已覆盖 ${plan.coverage[state.region]}，重点客户不通过新增补积分逻辑来承接，而是通过“未到期可提前续费、续费后积分立即到账、销售叠加代金券或时间优惠券”的方式来解决高频客户权益。`
+        : `方案 B 在 ${region.label} 视图下的覆盖最直接，但它把极少数超高客户的问题吸收到所有客户的公共档位里。管理层可以把它保留为评审参考口径，但不建议作为一期默认实现。`;
+      document.getElementById('finalDecisionText').textContent = text;
+      document.getElementById('decisionPill').textContent =
+        state.plan === 'a'
+          ? '默认上线：方案 A；重点客户：提前续费 + 代金券 / 时间优惠券'
+          : '管理层备选：方案 B；不建议作为一期公开规则';
+    }
+
+    function render() {
+      renderToggles();
+      renderMetrics();
+      renderPlanSummary();
+      renderCosts();
+      renderDistribution();
+      renderPaths();
+      renderDecision();
+    }
+
+    render();
+  </script>
+</body>
+</html>
