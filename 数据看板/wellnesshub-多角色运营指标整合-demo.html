@@ -1,0 +1,439 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>WellnessHub 多角色运营指标看板</title>
+  <style>
+    :root { --bg:#f2f6ff; --panel:#fff; --text:#172338; --muted:#62708a; --line:rgba(22,93,255,.12); --primary:#165dff; --primary-soft:rgba(22,93,255,.08); --ok:#18a058; --warn:#d77b12; --risk:#d64545; }
+    *{box-sizing:border-box} body{margin:0;background:var(--bg);font-family:"PingFang SC","Helvetica Neue",Arial,sans-serif;color:var(--text)}
+    .layout{display:grid;grid-template-columns:224px 1fr;min-height:100vh}
+    .side{background:#fff;border-right:1px solid var(--line);display:flex;flex-direction:column}
+    .brand{padding:16px 14px;border-bottom:1px solid var(--line)} .brand-wrap{display:flex;gap:10px;align-items:center}
+    .logo{width:34px;height:34px;border-radius:10px;background:var(--primary);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:800}
+    .side strong{font-size:14px;color:#213255}.side small{display:block;font-size:11px;color:#8f9bb4;margin-top:2px}
+    .nav{padding:10px 8px;display:grid;gap:4px}.nav button{border:1px solid transparent;border-radius:10px;background:transparent;padding:9px 10px;font-size:13px;color:#5a6783;text-align:left;cursor:pointer}
+    .nav button.active{background:var(--primary-soft);color:var(--primary);border-color:rgba(22,93,255,.16);font-weight:700}
+    .side-foot{margin-top:auto;padding:12px;color:#98a4bd;font-size:11px;border-top:1px solid var(--line)}
+    .main{display:grid;grid-template-rows:74px 1fr}
+    .topbar{background:#fff;border-bottom:1px solid var(--line);padding:0 16px;display:flex;align-items:center;justify-content:space-between}
+    .topbar h1{margin:0;font-size:15px}.sub{font-size:11px;color:var(--muted);margin-top:2px}
+    .ops{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+    .switch{display:inline-flex;border:1px solid var(--line);border-radius:10px;padding:3px;background:#fff}
+    .switch button{height:30px;border:0;border-radius:8px;background:transparent;color:#4f5b73;padding:0 10px;font-size:12px;cursor:pointer}
+    .switch button.active{background:var(--primary-soft);color:var(--primary);font-weight:700}
+    .btn,.control{height:36px;border:1px solid var(--line);border-radius:8px;background:#fff;color:#4f5b73;padding:0 11px;font-size:12px}
+    .btn{cursor:pointer}.btn.primary{background:var(--primary);border-color:var(--primary);color:#fff}
+    .page{padding:12px;display:grid;grid-template-columns:1fr 320px;gap:12px}
+    .workspace{border:1px solid var(--line);border-radius:16px;background:linear-gradient(180deg,#fff,#f8fbff);padding:12px;min-width:0}
+    .panel{border:1px solid var(--line);border-radius:12px;background:#fff;padding:12px}
+    .head{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:10px}
+    .head h3{margin:0;font-size:15px}.hint{font-size:12px;color:var(--muted)}
+    .filters{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:10px}
+    .kpis{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px;margin-bottom:10px}
+    .kpi{border:1px solid var(--line);border-radius:12px;padding:10px;background:#fff;cursor:pointer}
+    .kpi:hover{box-shadow:0 8px 20px rgba(49,93,255,.08)}
+    .kpi .t{font-size:12px;color:var(--muted)} .kpi .v{margin-top:6px;font-size:23px;font-weight:800} .kpi .m{margin-top:4px;font-size:12px;color:#8b96af}
+    .tabs{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:10px}
+    .tab{border:1px solid var(--line);background:#fff;color:#51607d;padding:6px 10px;border-radius:999px;font-size:12px;cursor:pointer}
+    .tab.active{border-color:rgba(49,93,255,.26);background:var(--primary-soft);color:var(--primary);font-weight:700}
+    .grid2{display:grid;grid-template-columns:1fr 1fr;gap:8px}.grid3{display:grid;grid-template-columns:1.4fr 1fr 1fr;gap:8px}
+    .chart{height:220px;border:1px solid var(--line);border-radius:12px;background:#fcfdff;padding:8px}
+    .mini{height:180px}
+    table{width:100%;border-collapse:collapse;font-size:12px} th,td{border-bottom:1px solid var(--line);padding:8px 6px;text-align:left} th{font-size:11px;color:var(--muted);font-weight:600} tr:hover td{background:#f8faff}
+    .chip{font-size:12px;border:1px solid var(--line);border-radius:999px;padding:5px 10px;background:#fff;cursor:pointer}
+    .chip.ok{color:var(--ok);background:rgba(24,160,88,.1);border-color:rgba(24,160,88,.2)} .chip.warn{color:var(--warn);background:rgba(215,123,18,.12);border-color:rgba(215,123,18,.18)} .chip.risk{color:var(--risk);background:rgba(214,69,69,.12);border-color:rgba(214,69,69,.2)}
+    .chips{display:flex;gap:8px;flex-wrap:wrap}
+    .note{border:1px dashed #ced8f0;border-radius:10px;padding:8px 10px;background:#f8faff;font-size:12px;color:#5a6783;line-height:1.65}
+    .aside{border:1px solid var(--line);border-radius:12px;background:#fff;padding:12px;height:fit-content}
+    .aside h4{margin:0 0 10px;font-size:14px}
+    .drawer,.modal{position:fixed;left:50%;top:50%;transform:translate(-50%,-50%);background:#fff;border:1px solid var(--line);border-radius:14px;box-shadow:0 25px 70px rgba(16,28,52,.28);display:none;z-index:60}
+    .drawer.show,.modal.show{display:block}
+    .drawer{width:min(920px,95vw);height:min(86vh,760px);display:none;grid-template-rows:56px 1fr}
+    .drawer.show{display:grid}
+    .headbar{padding:12px 14px;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;align-items:center}
+    .body{padding:12px 14px;overflow:auto}
+    .overlay{position:fixed;inset:0;background:rgba(15,23,42,.45);display:none;z-index:50}
+    .overlay.show{display:block}
+    .checks{display:grid;grid-template-columns:1fr 1fr;gap:8px;font-size:12px;color:#53607a}
+    .step{border:1px solid var(--line);border-radius:10px;padding:10px;margin-bottom:10px}
+    .row{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap}
+    .task{border:1px solid var(--line);border-radius:10px;padding:10px;margin-bottom:8px;display:grid;grid-template-columns:1fr auto;gap:10px;align-items:center}
+    .task-meta{font-size:12px;color:#60708f;line-height:1.7}
+    .badge{font-size:11px;padding:2px 8px;border-radius:999px;border:1px solid transparent}
+    .b-ok{color:var(--ok);background:rgba(24,160,88,.1);border-color:rgba(24,160,88,.2)}
+    .b-warn{color:var(--warn);background:rgba(215,123,18,.1);border-color:rgba(215,123,18,.2)}
+    .b-risk{color:var(--risk);background:rgba(214,69,69,.1);border-color:rgba(214,69,69,.2)}
+    .toast{position:fixed;left:50%;bottom:26px;transform:translateX(-50%);background:#111827;color:#fff;padding:9px 14px;border-radius:8px;font-size:12px;z-index:90;display:none}
+    .toast.show{display:block}
+    @media (max-width:1360px){.layout{grid-template-columns:1fr}.side{display:none}.page{grid-template-columns:1fr}.kpis{grid-template-columns:repeat(2,minmax(0,1fr))}.grid2,.grid3{grid-template-columns:1fr}}
+  </style>
+</head>
+<body>
+  <div class="layout">
+    <aside class="side">
+      <div class="brand"><div class="brand-wrap"><span class="logo">W</span><div><strong>WellnessHub</strong><small id="roleText">总部端（PC）</small></div></div></div>
+      <div class="nav" id="nav"></div>
+      <div class="side-foot">版本 v2.9.3 · 多角色运营指标整合</div>
+    </aside>
+    <main class="main">
+      <header class="topbar">
+        <div><h1>多角色运营指标看板</h1><div class="sub">面向总部、馆主、教练的统一运营看板</div></div>
+        <div class="ops">
+          <div class="switch" id="roleSwitch">
+            <button data-role="hq" class="active">总部端（PC）</button>
+            <button data-role="owner">馆主端（PC）</button>
+            <button data-role="coach">教练端（PC）</button>
+          </div>
+          <button class="btn" id="openTask">导出任务</button>
+          <button class="btn primary" id="exportCurrent">导出当前视图</button>
+        </div>
+      </header>
+      <section class="page">
+        <div class="workspace">
+          <div class="head"><h3 id="pageTitle">经营总览</h3><span class="hint" id="scopeText"></span></div>
+          <div class="filters" id="filters"></div>
+          <div class="kpis" id="kpis"></div>
+          <div class="tabs" id="tabs"></div>
+          <div id="content"></div>
+        </div>
+        <aside class="aside">
+          <h4>统计口径提醒</h4>
+          <ul style="margin:0;padding-left:16px;color:#52607b;font-size:12px;line-height:1.7">
+            <li>导入历史数据不计入测评次数、复测和漏斗。</li>
+            <li>活跃用户口径：近30天测评/执行中大纲/AI解读/AI对话命中任一行为。</li>
+            <li>所有主 KPI 支持下钻名单与导出。</li>
+          </ul>
+          <div class="note" style="margin-top:10px">当前页面为生产标准交互版本：支持角色化筛选、指标下钻、导出任务闭环。</div>
+        </aside>
+      </section>
+    </main>
+  </div>
+
+  <div class="overlay" id="overlay"></div>
+
+  <div class="drawer" id="drillDrawer">
+    <div class="headbar"><strong id="drillTitle">指标明细</strong><button class="btn" id="closeDrill">关闭</button></div>
+    <div class="body">
+      <div class="row" style="margin-bottom:8px"><div style="font-size:12px;color:#62708a" id="drillMeta"></div><button class="btn" id="drillExport">导出该明细</button></div>
+      <table><thead><tr id="drillHead"></tr></thead><tbody id="drillBody"></tbody></table>
+    </div>
+  </div>
+
+  <div class="modal" id="exportModal" style="width:min(760px,94vw)">
+    <div class="headbar"><strong>导出当前视图</strong><button class="btn" id="closeExport">关闭</button></div>
+    <div class="body">
+      <div class="step">
+        <h4 style="margin:0 0 8px;font-size:13px">1) 导出范围确认</h4>
+        <div id="exportScope" style="font-size:12px;color:#53607a;line-height:1.7"></div>
+      </div>
+      <div class="step">
+        <h4 style="margin:0 0 8px;font-size:13px">2) 字段选择</h4>
+        <div class="checks" id="fieldChecks"></div>
+      </div>
+      <div class="step">
+        <h4 style="margin:0 0 8px;font-size:13px">3) 导出设置</h4>
+        <div class="row">
+          <label style="font-size:12px;color:#53607a"><input type="checkbox" id="maskPhone" checked /> 手机号脱敏（138****1234）</label>
+          <select class="control" id="fileType"><option value="csv">CSV</option><option value="xlsx">XLSX</option></select>
+        </div>
+      </div>
+      <div class="row"><button class="btn" id="cancelExport">取消</button><button class="btn primary" id="submitExport">确认导出</button></div>
+    </div>
+  </div>
+
+  <div class="modal" id="taskModal" style="width:min(820px,94vw)">
+    <div class="headbar"><strong>导出任务中心</strong><button class="btn" id="closeTask">关闭</button></div>
+    <div class="body" id="taskBody"></div>
+  </div>
+  <div class="toast" id="toast"></div>
+
+  <script>
+    const state = { role: "hq", page: "overview", tab: "trend", filters: {} };
+    const roleNames = { hq: "总部端（PC）", owner: "馆主端（PC）", coach: "教练端（PC）" };
+    const pageNames = { overview: "经营总览", analysis: "门店分析", ai: "AI助手" };
+
+    const filterOptions = {
+      time: ["近7天","近30天","近90天","累计","自定义"],
+      store: ["全部子门店","上海静安店","杭州西湖店","深圳南山店"],
+      coach: ["全部教练","王教练","刘教练","陈教练"],
+      device: ["全部设备","Visbody-R Pro5","Visbody-A Pro5","Visbody-E260"],
+      report: ["全部报告","体成分","体态","围度","平衡风险"],
+      goal: ["全部目标","减脂","体态改善","健康管理","康复提升"],
+      risk: ["全部风险","流失风险","待复测","高潜转化"],
+      pro: ["全部门店","仅Pro门店","仅Basic门店"],
+      sort: ["按复测达成率","按流失风险","按AI覆盖率","按设备健康率"]
+    };
+
+    const filterSchema = {
+      hq: { overview: ["time","store","device","report"], analysis: ["time","store","device","pro","sort"], ai: ["time","store","report"] },
+      owner: { overview: ["time","coach","report"], analysis: ["time","coach","device","report","goal"], ai: ["time","coach","report"] },
+      coach: { overview: ["time","report","goal"], analysis: ["time","report","goal","risk"], ai: ["time","report","risk"] }
+    };
+
+    const tabsByPage = {
+      overview: [["trend","趋势与效率"],["funnel","服务转化"],["action","今日行动"]],
+      analysis: [["portrait","用户画像"],["layer","重点人群"],["quality","数据质量与设备"]],
+      ai: [["assistant","AI分析"],["suggest","建议动作"]]
+    };
+
+    const kpiByRolePage = {
+      hq: {
+        overview: [["累计测评用户","4,821","M01"],["活跃用户","1,926","M03"],["复测达成率","37%","M06"],["高风险门店数","6","M22"]],
+        analysis: [["子门店对比","30店","M24"],["设备健康率","91%","M20"],["AI渗透门店占比","57%","M23"],["门店达标率","68%","M21"]],
+        ai: [["高风险门店命中","6","M22"],["建议动作","3","M25"],["引用透明指标","8","M24"],["AI问答命中率","92%","M16"]]
+      },
+      owner: {
+        overview: [["累计测评用户","1,642","M01"],["待分配用户","74","M14"],["执行中大纲占比","52%","M13"],["今日重点行动","96","M25"]],
+        analysis: [["性别分布","女67%","M26"],["年龄主段","25-34","M27"],["问题标签Top1","体脂偏高","M29"],["设备利用率","68%","M19"]],
+        ai: [["待复测用户","541","M09"],["流失风险用户","228","M10"],["AI解读覆盖率","63%","M15"],["待绑定报告","64","M17"]]
+      },
+      coach: {
+        overview: [["累计测评用户","132","M01"],["执行中大纲用户","37","M12"],["待复测用户","31","M09"],["流失风险用户","19","M10"]],
+        analysis: [["高潜转化用户","17","M08"],["持续改善用户","9","M11"],["AI解读覆盖率","54%","M15"],["问题标签Top1","姿态异常","M29"]],
+        ai: [["今日优先动作","12","M25"],["复测推进","8","M09"],["风险唤醒","4","M10"],["高潜跟进","3","M08"]]
+      }
+    };
+
+    const drillBaseRows = Array.from({ length: 12 }).map((_, i) => ({
+      id: `U-${String(i + 1001)}`,
+      name: ["王敏","李倩","陈晨","赵宇","吴佳","刘峰","周洋","何婷","唐浩","张越","孙楠","杨帆"][i],
+      gender: i % 2 === 0 ? "女" : "男",
+      age: 22 + (i % 20),
+      height: 160 + (i % 18),
+      weight: 48 + (i % 26),
+      store: ["上海静安店","杭州西湖店","深圳南山店"][i % 3],
+      coach: ["王教练","刘教练","陈教练"][i % 3],
+      phone: `138${String(10000000 + i).slice(0,8)}`,
+      action: ["1天前测评","2天前AI解读","3天前更新大纲"][i % 3]
+    }));
+
+    const exportTasks = [];
+    let exportDraft = null;
+
+    const navEl = document.getElementById("nav");
+    const roleTextEl = document.getElementById("roleText");
+    const pageTitleEl = document.getElementById("pageTitle");
+    const scopeTextEl = document.getElementById("scopeText");
+    const filtersEl = document.getElementById("filters");
+    const kpisEl = document.getElementById("kpis");
+    const tabsEl = document.getElementById("tabs");
+    const contentEl = document.getElementById("content");
+    const overlayEl = document.getElementById("overlay");
+    const toastEl = document.getElementById("toast");
+
+    function toast(msg) {
+      toastEl.textContent = msg;
+      toastEl.classList.add("show");
+      clearTimeout(toastEl._timer);
+      toastEl._timer = setTimeout(() => toastEl.classList.remove("show"), 1600);
+    }
+
+    function metricFields(metric) {
+      if (/门店|M2[0-4]/.test(metric)) return ["门店","测评用户数","活跃用户数","复测达成率","流失风险用户数","AI解读覆盖率","设备健康率"];
+      if (/报告|AI解读/.test(metric)) return ["报告ID","用户","门店","报告类型","设备来源","扫描时间","AI解读状态"];
+      return ["用户ID","姓名","性别","年龄","身高(cm)","体重(kg)","手机号","门店","归属教练","最近行为"];
+    }
+
+    function openModal(el) { overlayEl.classList.add("show"); el.classList.add("show"); }
+    function closeModal(el) { overlayEl.classList.remove("show"); el.classList.remove("show"); }
+
+    function renderNav() {
+      navEl.innerHTML = [["overview","经营总览"],["analysis","门店分析"],["ai","AI助手"]].map(([k,n]) =>
+        `<button data-page="${k}" class="${state.page===k?"active":""}">${n}</button>`).join("");
+      navEl.querySelectorAll("button").forEach(btn => btn.onclick = () => { state.page = btn.dataset.page; state.tab = tabsByPage[state.page][0][0]; render(); });
+    }
+
+    function renderFilters() {
+      const keys = filterSchema[state.role][state.page];
+      filtersEl.innerHTML = keys.map(key => {
+        const val = state.filters[key] || filterOptions[key][0];
+        return `<select class="control" data-filter="${key}">${filterOptions[key].map(opt=>`<option ${opt===val?"selected":""}>${opt}</option>`).join("")}</select>`;
+      }).join("") + `<button class="btn" id="refreshBtn">刷新</button>`;
+      filtersEl.querySelectorAll("select").forEach(el => {
+        el.onchange = () => { state.filters[el.dataset.filter] = el.value; updateScope(); };
+      });
+      document.getElementById("refreshBtn").onclick = () => renderContent();
+      updateScope();
+    }
+
+    function updateScope() {
+      const kv = Object.entries(state.filters).filter(([k]) => filterSchema[state.role][state.page].includes(k)).map(([,v]) => v);
+      scopeTextEl.textContent = `统计范围：${roleNames[state.role]} · ${pageNames[state.page]} · ${kv.join(" · ") || "默认筛选"}`;
+    }
+
+    function renderKpis() {
+      const arr = kpiByRolePage[state.role][state.page];
+      kpisEl.innerHTML = arr.map(([t,v,m]) => `<div class="kpi" data-metric="${m}"><div class="t">${t}</div><div class="v">${v}</div><div class="m">${m}</div></div>`).join("");
+      kpisEl.querySelectorAll(".kpi").forEach((k, i) => k.onclick = () => openDrill(arr[i][2], arr[i][0]));
+    }
+
+    function renderTabs() {
+      tabsEl.innerHTML = tabsByPage[state.page].map(([k,n]) => `<button class="tab ${state.tab===k?"active":""}" data-tab="${k}">${n}</button>`).join("");
+      tabsEl.querySelectorAll(".tab").forEach(btn => btn.onclick = () => { state.tab = btn.dataset.tab; renderContent(); renderTabs(); });
+    }
+
+    function svgLine(values, color) {
+      const max = Math.max(...values), w = 600, h = 180, step = w / (values.length - 1);
+      const points = values.map((v, i) => `${i * step},${h - (v / max) * 150 - 10}`).join(" ");
+      const circles = values.map((v, i) => `<circle cx="${i*step}" cy="${h - (v/max)*150 -10}" r="4" fill="${color}" />`).join("");
+      return `<svg viewBox="0 0 ${w} ${h}" width="100%" height="100%"><polyline points="${points}" fill="none" stroke="${color}" stroke-width="3"/>${circles}</svg>`;
+    }
+    function svgBars(values, color) {
+      const max = Math.max(...values), w = 600, h = 180, bw = 52, gap = 24;
+      return `<svg viewBox="0 0 ${w} ${h}" width="100%" height="100%">` + values.map((v,i)=>{
+        const x = 20 + i*(bw+gap), bh = (v/max)*140, y = h-bh-10;
+        return `<rect x="${x}" y="${y}" width="${bw}" height="${bh}" rx="8" fill="${color}" opacity="${0.45 + i*0.06}"/>`;
+      }).join("") + `</svg>`;
+    }
+
+    function renderOverview(role) {
+      if (state.tab === "funnel") {
+        return `<div class="panel"><div class="head"><h3>服务转化进度</h3><span class="hint">已测评 -> 已生成训练大纲 -> 已复测</span></div><div class="chart">${svgBars([4821,2792,1547], "#165dff")}</div><div class="note">点击任一阶段可下钻名单，导入历史数据不计入漏斗节点。</div></div>`;
+      }
+      if (state.tab === "action") {
+        return `<div class="panel"><div class="head"><h3>今日重点行动名单</h3><span class="hint">按流失风险 > 待复测 > 高潜转化排序</span></div><table><thead><tr><th>优先级</th><th>用户ID</th><th>动作类型</th><th>建议动作</th><th>归属教练</th><th>操作</th></tr></thead><tbody>
+        <tr><td>P1</td><td>U-10231</td><td>流失风险</td><td>48小时内触达</td><td>王教练</td><td><button class="btn open-drill" data-metric="M25" data-title="U-10231 用户明细">查看</button></td></tr>
+        <tr><td>P1</td><td>U-08319</td><td>待复测</td><td>安排复测档期</td><td>刘教练</td><td><button class="btn open-drill" data-metric="M25" data-title="U-08319 用户明细">查看</button></td></tr>
+        <tr><td>P2</td><td>U-06111</td><td>高潜转化</td><td>推进大纲执行</td><td>陈教练</td><td><button class="btn open-drill" data-metric="M25" data-title="U-06111 用户明细">查看</button></td></tr>
+        </tbody></table></div>`;
+      }
+      return `<div class="grid3"><div class="panel"><div class="head"><h3>用户变化趋势</h3><span class="hint">测评/活跃/复测趋势</span></div><div class="chart">${svgLine([320,360,382,401,376,415,438], "#165dff")}</div></div>
+        <div class="panel"><div class="head"><h3>${role==="coach"?"本人服务效率":"教练服务效率"}</h3><span class="hint">${role==="coach"?"本人用户池":"管理者视角"}</span></div><table><thead><tr><th>教练</th><th>名下用户</th><th>活跃</th><th>复测</th></tr></thead><tbody><tr><td>王教练</td><td>214</td><td>88</td><td>31</td></tr><tr><td>刘教练</td><td>198</td><td>73</td><td>27</td></tr><tr><td>陈教练</td><td>165</td><td>60</td><td>22</td></tr></tbody></table></div>
+        <div class="panel"><div class="head"><h3>AI与执行情况</h3><span class="hint">点击指标可下钻</span></div><div class="chips"><span class="chip ok open-drill" data-metric="M15" data-title="AI解读覆盖率明细">AI解读覆盖率 63%</span><span class="chip ok open-drill" data-metric="M16" data-title="AI对话占比明细">AI对话占比 41%</span><span class="chip warn open-drill" data-metric="M13" data-title="执行中大纲占比明细">执行中大纲占比 52%</span></div><div class="note" style="margin-top:8px">口径：AI解读覆盖率=已解读报告/可解读报告；AI对话占比=期内有对话用户/活跃用户。</div></div></div>`;
+    }
+
+    function renderAnalysis(role) {
+      if (state.tab === "layer") {
+        return `<div class="grid2"><div class="panel"><div class="head"><h3>重点人群池</h3><span class="hint">门店可配置阈值</span></div><div class="chips"><span class="chip warn open-drill" data-metric="M09" data-title="待复测用户清单">待复测 541</span><span class="chip risk open-drill" data-metric="M10" data-title="流失风险用户清单">流失风险 228</span><span class="chip ok open-drill" data-metric="M11" data-title="持续改善用户清单">持续改善 174</span></div></div><div class="panel"><div class="head"><h3>趋势分布</h3><span class="hint">近4周人群变动</span></div><div class="chart mini">${svgBars([220,248,276,228], "#3b82f6")}</div></div></div>`;
+      }
+      if (state.tab === "quality") {
+        return `<div class="panel"><div class="head"><h3>数据质量与设备运营</h3><span class="hint">馆主端和总部端重点模块</span></div><table><thead><tr><th>指标</th><th>当前值</th><th>状态</th><th>说明</th></tr></thead><tbody>
+          <tr><td>M17 待绑定报告数</td><td>64</td><td><span class="badge b-warn">需处理</span></td><td>上传24h未绑定用户</td></tr>
+          <tr><td>M18 健康档案完整度</td><td>74%</td><td><span class="badge b-warn">待提升</span></td><td>关键字段缺失较多</td></tr>
+          <tr><td>M19 设备利用率</td><td>68%</td><td><span class="badge b-ok">正常</span></td><td>活跃天/应开机天</td></tr>
+          <tr><td>M20 设备健康率</td><td>91%</td><td><span class="badge b-ok">正常</span></td><td>近7天在线心跳</td></tr></tbody></table></div>`;
+      }
+      if (role === "hq") {
+        return `<div class="panel"><div class="head"><h3>门店对比排行</h3><span class="hint">支持按透明指标排序</span></div><table><thead><tr><th>门店</th><th>测评用户</th><th>活跃用户</th><th>复测达成率</th><th>流失风险</th><th>AI解读覆盖率</th><th>设备健康率</th><th>操作</th></tr></thead><tbody>
+        <tr><td>朝阳旗舰店</td><td>1642</td><td>612</td><td>38.2%</td><td>96</td><td>63%</td><td>92%</td><td><button class="btn open-drill" data-metric="M24" data-title="朝阳旗舰店对比明细">查看</button></td></tr>
+        <tr><td>杭州西湖店</td><td>1390</td><td>505</td><td>34.9%</td><td>82</td><td>57%</td><td>88%</td><td><button class="btn open-drill" data-metric="M24" data-title="杭州西湖店对比明细">查看</button></td></tr>
+        <tr><td>深圳南山店</td><td>1121</td><td>408</td><td>32.7%</td><td>70</td><td>48%</td><td>84%</td><td><button class="btn open-drill" data-metric="M24" data-title="深圳南山店对比明细">查看</button></td></tr>
+        </tbody></table></div>`;
+      }
+      return `<div class="grid2"><div class="panel"><div class="head"><h3>用户画像</h3><span class="hint">性别/年龄/目标/问题标签</span></div><div class="grid2"><div class="chart mini">${svgBars([67,33], "#165dff")}</div><div class="chart mini">${svgBars([12,22,39,18,9], "#3b82f6")}</div></div></div><div class="panel"><div class="head"><h3>标签分布</h3><span class="hint">点击下钻名单</span></div><div class="chips"><span class="chip open-drill" data-metric="M28" data-title="减脂目标用户清单">减脂 34%</span><span class="chip open-drill" data-metric="M29" data-title="体脂偏高用户清单">体脂偏高 26%</span><span class="chip open-drill" data-metric="M29" data-title="姿态异常用户清单">姿态异常 21%</span></div></div></div>`;
+    }
+
+    function renderAi() {
+      if (state.tab === "suggest") {
+        return `<div class="panel"><div class="head"><h3>建议动作</h3><span class="hint">基于透明指标回链明细</span></div><table><thead><tr><th>问题</th><th>结论</th><th>动作</th></tr></thead><tbody>
+        <tr><td>本周优先干预对象</td><td>先处理待复测与流失风险重叠用户</td><td><button class="btn open-drill" data-metric="M25" data-title="重叠人群名单">查看名单</button></td></tr>
+        <tr><td>门店差异</td><td>朝阳店复测率高，南山店风险池较大</td><td><button class="btn open-drill" data-metric="M24" data-title="门店差异明细">查看明细</button></td></tr>
+        </tbody></table></div>`;
+      }
+      return `<div class="panel"><div class="head"><h3>AI 分析助手</h3><span class="hint">结论、依据、下钻入口一体化</span></div><div class="chips"><span class="chip">哪些人需要优先触达？</span><span class="chip">本周复测推进差在哪里？</span><span class="chip">AI使用渗透差异是什么？</span></div><div class="note" style="margin-top:10px">建议优先干预海淀大学店：复测达成率低于门店均值11.3pct，且流失风险用户连续两周上升。可在“门店分析 > 门店对比排行”中回链验证。</div></div>`;
+    }
+
+    function renderContent() {
+      const role = state.role;
+      if (state.page === "overview") contentEl.innerHTML = renderOverview(role);
+      else if (state.page === "analysis") contentEl.innerHTML = renderAnalysis(role);
+      else contentEl.innerHTML = renderAi();
+      contentEl.querySelectorAll(".open-drill").forEach(btn => btn.onclick = () => openDrill(btn.dataset.metric || "M01", btn.dataset.title || "明细"));
+    }
+
+    function openDrill(metric, title) {
+      const fields = metricFields(metric);
+      document.getElementById("drillTitle").textContent = title;
+      document.getElementById("drillMeta").textContent = `指标：${metric} ｜ 角色：${roleNames[state.role]} ｜ 页面：${pageNames[state.page]} ｜ 范围：${Object.values(state.filters).join(" / ")}`;
+      document.getElementById("drillHead").innerHTML = fields.map(f => `<th>${f}</th>`).join("");
+      document.getElementById("drillBody").innerHTML = drillBaseRows.map(r => {
+        const map = {
+          "用户ID": r.id, "姓名": r.name, "性别": r.gender, "年龄": r.age, "身高(cm)": r.height, "体重(kg)": r.weight,
+          "手机号": r.phone, "门店": r.store, "归属教练": r.coach, "最近行为": r.action,
+          "报告ID": `R-${r.id}`, "用户": r.name, "报告类型": ["体成分","体态","围度"][Math.floor(Math.random()*3)],
+          "设备来源": ["Visbody-R Pro5","Visbody-A Pro5"][Math.floor(Math.random()*2)], "扫描时间": "2026-04-02 10:20",
+          "AI解读状态": ["已解读","待解读"][Math.floor(Math.random()*2)], "测评用户数": 120 + Math.floor(Math.random() * 40),
+          "活跃用户数": 50 + Math.floor(Math.random() * 30), "复测达成率": `${20 + Math.floor(Math.random() * 30)}%`,
+          "流失风险用户数": 10 + Math.floor(Math.random() * 20), "AI解读覆盖率": `${40 + Math.floor(Math.random() * 40)}%`,
+          "设备健康率": `${75 + Math.floor(Math.random() * 20)}%`
+        };
+        return `<tr>${fields.map(f => `<td>${map[f] ?? "-"}</td>`).join("")}</tr>`;
+      }).join("");
+      openModal(document.getElementById("drillDrawer"));
+    }
+
+    function renderTaskCenter() {
+      const body = document.getElementById("taskBody");
+      if (!exportTasks.length) { body.innerHTML = `<div class="note">暂无导出任务。</div>`; return; }
+      body.innerHTML = exportTasks.map(t => `<div class="task"><div class="task-meta">任务号：${t.id}<br/>范围：${t.scope}<br/>字段：${t.fields.join("、")}<br/>格式：${t.type}${t.mask ? "（手机号脱敏）" : ""}<br/>时间：${t.time}</div><div>${t.status === "已完成" ? `<button class="btn primary" data-download="${t.id}">下载</button>` : `<span class="badge ${t.status === "处理中" ? "b-warn" : "b-risk"}">${t.status}</span>`}</div></div>`).join("");
+      body.querySelectorAll("[data-download]").forEach(btn => btn.onclick = () => {
+        const task = exportTasks.find(t => t.id === btn.dataset.download);
+        toast(`开始下载 ${btn.dataset.download}.${task.type}`);
+      });
+    }
+
+    function openExportFlow(fromMetric) {
+      const fields = metricFields(fromMetric || "M01");
+      exportDraft = { metric: fromMetric || "M01", fields: [...fields], mask: true, type: "csv" };
+      document.getElementById("exportScope").textContent = `${roleNames[state.role]} / ${pageNames[state.page]} / ${Object.values(state.filters).join(" · ") || "默认筛选"} / 指标：${exportDraft.metric}`;
+      document.getElementById("fieldChecks").innerHTML = fields.map(f => `<label><input type="checkbox" checked value="${f}" /> ${f}</label>`).join("");
+      document.getElementById("maskPhone").checked = true;
+      document.getElementById("fileType").value = "csv";
+      openModal(document.getElementById("exportModal"));
+    }
+
+    function submitExportTask() {
+      const checked = Array.from(document.querySelectorAll("#fieldChecks input:checked")).map(i => i.value);
+      if (!checked.length) { toast("至少选择一个导出字段"); return; }
+      const task = {
+        id: `EXP-${Date.now().toString().slice(-6)}`,
+        scope: `${roleNames[state.role]} / ${pageNames[state.page]} / ${Object.values(state.filters).join(" · ") || "默认筛选"}`,
+        fields: checked, mask: document.getElementById("maskPhone").checked,
+        type: document.getElementById("fileType").value, status: "排队中", time: new Date().toLocaleString()
+      };
+      exportTasks.unshift(task);
+      closeModal(document.getElementById("exportModal"));
+      setTimeout(() => { task.status = "处理中"; renderTaskCenter(); }, 1200);
+      setTimeout(() => { task.status = "已完成"; renderTaskCenter(); }, 3200);
+      renderTaskCenter();
+      openModal(document.getElementById("taskModal"));
+      toast("已创建导出任务");
+    }
+
+    function bindEvents() {
+      document.getElementById("roleSwitch").querySelectorAll("button").forEach(btn => btn.onclick = () => {
+        document.querySelectorAll("#roleSwitch button").forEach(b => b.classList.remove("active"));
+        btn.classList.add("active");
+        state.role = btn.dataset.role; state.page = "overview"; state.tab = "trend"; state.filters = {};
+        render();
+      });
+      document.getElementById("exportCurrent").onclick = () => openExportFlow();
+      document.getElementById("openTask").onclick = () => { renderTaskCenter(); openModal(document.getElementById("taskModal")); };
+      document.getElementById("closeDrill").onclick = () => closeModal(document.getElementById("drillDrawer"));
+      document.getElementById("closeExport").onclick = () => closeModal(document.getElementById("exportModal"));
+      document.getElementById("cancelExport").onclick = () => closeModal(document.getElementById("exportModal"));
+      document.getElementById("submitExport").onclick = submitExportTask;
+      document.getElementById("closeTask").onclick = () => closeModal(document.getElementById("taskModal"));
+      document.getElementById("drillExport").onclick = () => openExportFlow("M01");
+      overlayEl.onclick = () => {
+        ["drillDrawer","exportModal","taskModal"].forEach(id => document.getElementById(id).classList.remove("show"));
+        overlayEl.classList.remove("show");
+      };
+    }
+
+    function render() {
+      roleTextEl.textContent = roleNames[state.role];
+      pageTitleEl.textContent = pageNames[state.page];
+      renderNav();
+      renderFilters();
+      renderKpis();
+      renderTabs();
+      renderContent();
+    }
+
+    bindEvents();
+    render();
+  </script>
+</body>
+</html>
