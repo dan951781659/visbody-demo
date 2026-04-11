@@ -655,6 +655,53 @@
         padding: 8px 8px 0;
       }
 
+      .action--no-media .action-top {
+        padding: 12px 8px 0;
+      }
+
+      .demo-media-row {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        flex-wrap: wrap;
+        gap: 8px;
+        margin-bottom: 10px;
+        padding: 8px 10px;
+        background: #f0f5ff;
+        border: 1px solid #dce8ff;
+        border-radius: 10px;
+      }
+
+      .demo-media-row-label {
+        font-size: 12px;
+        color: var(--sub);
+        font-weight: 600;
+      }
+
+      .demo-media-seg {
+        display: flex;
+        gap: 0;
+        border-radius: 8px;
+        overflow: hidden;
+        border: 1px solid #c5d6ff;
+      }
+
+      .demo-media-btn {
+        border: none;
+        background: #fff;
+        color: #5a6f94;
+        font-size: 11px;
+        font-weight: 600;
+        padding: 8px 12px;
+        cursor: pointer;
+        transition: 0.15s;
+      }
+
+      .demo-media-btn.active {
+        background: #e8efff;
+        color: #165dff;
+      }
+
       .action-thumb {
         margin-bottom: 0;
         border-radius: 12px 12px 0 0;
@@ -681,6 +728,26 @@
         color: #f9fafb;
         font-size: 11px;
         font-weight: 500;
+      }
+
+      .action-thumb--video {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: linear-gradient(135deg, #dbe7ff, #c6f2e3);
+      }
+
+      .action-thumb--video::after {
+        opacity: 0.4;
+      }
+
+      .action-thumb--video span {
+        position: relative;
+        left: auto;
+        bottom: auto;
+        color: #1e3250;
+        text-align: center;
+        padding: 0 10px;
       }
 
       .action-name {
@@ -1258,6 +1325,33 @@
         justify-content: center;
         color: #2f4f8f;
         font-size: 13px;
+        background-size: cover;
+        background-position: center;
+        background-repeat: no-repeat;
+      }
+
+      .modal-media--thumb {
+        color: transparent;
+      }
+
+      .modal-media--video {
+        padding: 0;
+        height: auto;
+        min-height: 160px;
+        max-height: 260px;
+        overflow: hidden;
+        background: #0f172a;
+      }
+
+      .modal-media--video video {
+        width: 100%;
+        display: block;
+        max-height: 260px;
+        object-fit: contain;
+      }
+
+      .modal-media-wrap.is-hidden {
+        display: none;
       }
 
       .modal-line {
@@ -1612,6 +1706,13 @@
               今日执行提示：动作标准优先，使用基础重量。
             </div>
             <div class="chart-title" id="trainDayTitle">周一训练动作</div>
+            <div class="demo-media-row">
+              <span class="demo-media-row-label">演示：动作素材</span>
+              <div class="demo-media-seg">
+                <button type="button" class="demo-media-btn active" data-demo="on" onclick="setDemoActionMedia(true)">有图/视频</button>
+                <button type="button" class="demo-media-btn" data-demo="off" onclick="setDemoActionMedia(false)">无图/视频</button>
+              </div>
+            </div>
             <div class="action-grid" id="actionGrid"></div>
           </div>
         </div>
@@ -1704,7 +1805,9 @@
           <div class="modal-title" id="mName">动作详情</div>
           <button class="close" onclick="closeAction()">×</button>
         </div>
-        <div class="modal-media">动作图片 / 视频示范占位</div>
+        <div class="modal-media-wrap" id="actionModalMediaWrap">
+          <div class="modal-media" id="actionModalMedia"></div>
+        </div>
         <div class="modal-line" id="mTarget"></div>
         <div class="modal-line" id="mIntensity"></div>
         <div class="modal-line" id="mGear"></div>
@@ -1751,6 +1854,7 @@
         周一: [
           {
             name: "杯式深蹲",
+            thumb: "https://images.unsplash.com/photo-1517836357463-d25dfeac3438?auto=format&fit=crop&w=600&q=80",
             tag: "力量A",
             sub: "强度：中等 · 时长：约 8 分钟",
             target: "臀腿与核心",
@@ -1825,6 +1929,7 @@
         周三: [
           {
             name: "间歇快走/慢跑",
+            thumb: "https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?auto=format&fit=crop&w=600&q=80",
             tag: "心肺",
             sub: "强度：中高 · 时长：20 分钟",
             target: "心肺能力",
@@ -1871,6 +1976,7 @@
         周五: [
           {
             name: "跪姿俯卧撑",
+            thumb: "https://images.unsplash.com/photo-1534438327276-14e5300c3a48?auto=format&fit=crop&w=600&q=80",
             tag: "力量B",
             sub: "强度：中等 · 时长：约 6 分钟",
             target: "胸肩与核心",
@@ -2082,6 +2188,9 @@
 
       let currentWeek = 1;
       let currentExecDay = "周一";
+      let demoShowActionMedia = true;
+      const demoFallbackActionThumb =
+        "https://images.unsplash.com/photo-1517963879433-6ad2b056d712?auto=format&fit=crop&w=600&q=80";
       const manualAdjustments = {};
 
       function getWeekAdjustment(week) {
@@ -2135,19 +2244,66 @@
         document.getElementById("execDayStrip").style.display = target === "review" ? "none" : "";
       }
 
-      function openAction(name, target, intensity, gear, tips) {
-        const all = Object.values(trainPlan).flat();
-        const item = all.find((a) => a.name === name) || {};
+      function getActionMedia(a) {
+        if (!demoShowActionMedia) return { thumb: "", videoUrl: "" };
+        const thumb = typeof a.thumb === "string" && a.thumb.trim();
+        const videoUrl = typeof a.videoUrl === "string" && a.videoUrl.trim();
+        if (thumb || videoUrl) return { thumb: thumb || "", videoUrl: videoUrl || "" };
+        return { thumb: demoFallbackActionThumb, videoUrl: "" };
+      }
+
+      function hasActionMedia(a) {
+        const media = getActionMedia(a);
+        return !!(media.thumb || media.videoUrl);
+      }
+
+      function setDemoActionMedia(show) {
+        demoShowActionMedia = !!show;
+        document.querySelectorAll(".demo-media-btn").forEach((btn) => {
+          const isOn = btn.getAttribute("data-demo") === "on";
+          btn.classList.toggle("active", demoShowActionMedia ? isOn : !isOn);
+        });
+        renderTrainActions(currentExecDay);
+        const modal = document.getElementById("actionModal");
+        if (modal && modal.style.display === "flex") {
+          const name = document.getElementById("mName").textContent;
+          if (name) openAction(name);
+        }
+      }
+
+      function openAction(name) {
+        const item = Object.values(trainPlan).flat().find((a) => a.name === name) || {};
         document.getElementById("mName").textContent = name;
-        document.getElementById("mTarget").textContent = "目标部位：" + target;
-        document.getElementById("mIntensity").textContent = "建议强度/时间：" + intensity;
-        document.getElementById("mGear").textContent = "推荐器械：" + gear;
-        document.getElementById("mTips").textContent = "注意事项：" + tips;
+        document.getElementById("mTarget").textContent = "目标部位：" + (item.target || "—");
+        document.getElementById("mIntensity").textContent = "建议强度/时间：" + (item.intensity || "—");
+        document.getElementById("mGear").textContent = "推荐器械：" + (item.gear || "—");
+        document.getElementById("mTips").textContent = "注意事项：" + (item.tips || "—");
         document.getElementById("mSteps").textContent = item.steps || "按标准动作轨迹完成，控制节奏，先质后量。";
         document.getElementById("mBreath").textContent = `呼吸节奏：${item.breath || "发力呼气，还原吸气。"}`;
         document.getElementById("mCommonError").textContent = `常见错误：${item.commonError || "借力、动作过快、核心松散。"}`;
-        document.getElementById("mRegression").textContent = `回退方案：${item.regression || "降低重量或缩短时长。"}`
-        document.getElementById("mProgression").textContent = `进阶方案：${item.progression || "增加组次或提高控制难度。"}`
+        document.getElementById("mRegression").textContent = `回退方案：${item.regression || "降低重量或缩短时长。"}`;
+        document.getElementById("mProgression").textContent = `进阶方案：${item.progression || "增加组次或提高控制难度。"}`;
+        const wrap = document.getElementById("actionModalMediaWrap");
+        const mediaEl = document.getElementById("actionModalMedia");
+        mediaEl.replaceChildren();
+        mediaEl.style.backgroundImage = "";
+        const media = getActionMedia(item);
+        if (media.thumb) {
+          wrap.classList.remove("is-hidden");
+          mediaEl.className = "modal-media modal-media--thumb";
+          mediaEl.style.backgroundImage = "url(" + JSON.stringify(media.thumb) + ")";
+        } else if (media.videoUrl) {
+          wrap.classList.remove("is-hidden");
+          mediaEl.className = "modal-media modal-media--video";
+          const vid = document.createElement("video");
+          vid.setAttribute("controls", "");
+          vid.setAttribute("playsinline", "");
+          vid.src = media.videoUrl;
+          mediaEl.appendChild(vid);
+        } else {
+          wrap.classList.add("is-hidden");
+          mediaEl.className = "modal-media";
+        }
         document.getElementById("actionModal").style.display = "flex";
       }
 
@@ -2164,15 +2320,24 @@
         const grid = document.getElementById("actionGrid");
         grid.innerHTML = actions
           .map(
-            (a) => `
-              <div class="action" onclick="openAction('${a.name}','${a.target}','${a.intensity}','${a.gear}','${a.tips}')">
-                <div class="action-thumb" style="background-image:url('https://images.unsplash.com/photo-1517836357463-d25dfeac3438?auto=format&fit=crop&w=600&q=80');"><span>${a.name} 示意图</span></div>
+            (a) => {
+              const media = getActionMedia(a);
+              const hasMedia = !!(media.thumb || media.videoUrl);
+              const thumbHtml = hasMedia
+                ? media.thumb
+                  ? `<div class="action-thumb" style="background-image:url(${JSON.stringify(media.thumb)});"><span>${a.name} 示意图</span></div>`
+                  : `<div class="action-thumb action-thumb--video"><span>${a.name} · 视频示范</span></div>`
+                : "";
+              return `
+              <div class="action${hasMedia ? "" : " action--no-media"}" onclick="openAction(${JSON.stringify(a.name)})">
+                ${thumbHtml}
                 <div class="action-top">
                   <span class="action-name">${a.name}</span><span class="action-tag">${a.tag}</span>
                 </div>
                 <div class="action-sub">${a.sub} · ${weekProgress}</div>
               </div>
-            `
+            `;
+            }
           )
           .join("");
       }
