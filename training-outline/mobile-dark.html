@@ -2666,7 +2666,7 @@
                   : `<div class="action-thumb action-thumb--video"><span>${a.name} · 视频示范</span></div>`
                 : "";
               return `
-              <div class="action${hasMedia ? "" : " action--no-media"}" onclick="openAction(${JSON.stringify(a.name)})">
+              <div class="action${hasMedia ? "" : " action--no-media"}" data-action-name=${JSON.stringify(a.name)}>
                 ${thumbHtml}
                 <div class="action-top">
                   <span class="action-name">${a.name}</span><span class="action-tag ${tagClass(a.tag)}">${a.tag}</span>
@@ -2677,6 +2677,12 @@
             }
           )
           .join("");
+        grid.querySelectorAll(".action").forEach((card) => {
+          card.addEventListener("click", () => {
+            const actionName = card.getAttribute("data-action-name");
+            if (actionName) openAction(actionName);
+          });
+        });
       }
 
       function renderDietDay(day) {
