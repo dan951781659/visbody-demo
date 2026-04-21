@@ -10,6 +10,9 @@
         --card: rgba(255, 255, 255, 0.86);
         --line: rgba(22, 93, 255, 0.12);
         --text: #172338;
+        --text-heading: #0f172a;
+        --text-body: #374151;
+        --text-muted: #62708a;
         --sub: #62708a;
         --primary: #165dff;
         --primary-soft: rgba(22, 93, 255, 0.08);
@@ -20,6 +23,14 @@
         --radius-lg: 18px;
         --radius-md: 12px;
         --shadow: 0 18px 45px rgba(15, 35, 95, 0.16);
+        /* 与 ai-report-interpretation-slim-demo.html 对齐：层级字号与区块间距 */
+        --fs-h1: 20px;
+        --fs-h2: 16px;
+        --fs-h3: 14px;
+        --fs-body: 13px;
+        --fs-label: 12px;
+        --space-section: 14px;
+        --space-card-gap: 12px;
       }
 
       * {
@@ -58,6 +69,22 @@
         align-items: center;
         gap: 10px;
         flex-wrap: wrap;
+      }
+
+      .hero-back-link {
+        display: inline-flex;
+        align-items: center;
+        gap: 4px;
+        margin-bottom: 6px;
+        font-size: var(--fs-label);
+        color: #d6e4ff;
+        text-decoration: none;
+        font-weight: 500;
+      }
+
+      .hero-back-link:hover {
+        text-decoration: underline;
+        color: #fff;
       }
 
       .hero-title {
@@ -120,13 +147,13 @@
       }
 
       .section {
-        margin-top: 14px;
+        margin-top: var(--space-section);
       }
 
       .grid-2 {
         display: grid;
         grid-template-columns: 1.1fr 1.3fr;
-        gap: 12px;
+        gap: var(--space-card-gap);
       }
 
       .card {
@@ -299,12 +326,49 @@
       .phase-top {
         display: flex;
         justify-content: space-between;
-        align-items: center;
+        align-items: flex-start;
+        gap: 10px;
+      }
+
+      .phase-top-main {
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+        min-width: 0;
       }
 
       .phase-name {
         font-size: 13px;
         font-weight: 700;
+      }
+
+      .phase-dispatch-tag {
+        flex-shrink: 0;
+        font-size: 11px;
+        font-weight: 600;
+        padding: 3px 8px;
+        border-radius: 999px;
+        line-height: 1.3;
+        border: 1px solid transparent;
+        white-space: nowrap;
+      }
+
+      .phase-dispatch-tag--pending {
+        color: #92400e;
+        background: #fffbeb;
+        border-color: #fcd34d;
+      }
+
+      .phase-dispatch-tag--done {
+        color: #0f766e;
+        background: #ecfdf5;
+        border-color: #6ee7b7;
+      }
+
+      .phase-dispatch-tag--sync {
+        color: #1d4ed8;
+        background: #eef4ff;
+        border-color: #bfdbfe;
       }
 
       .phase-week {
@@ -686,6 +750,12 @@
         border: 1px solid #c5d6ff;
       }
 
+      .demo-media-actions {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+      }
+
       .demo-media-btn {
         border: none;
         background: #fff;
@@ -700,6 +770,160 @@
       .demo-media-btn.active {
         background: #e8efff;
         color: #165dff;
+      }
+
+      .train-dispatch-toolbar {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+        margin-top: 8px;
+      }
+
+      .train-dispatch-row {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 8px;
+      }
+
+      .train-dispatch-hint {
+        font-size: 11px;
+        line-height: 1.55;
+        color: var(--sub);
+        margin: 0;
+        padding: 8px 10px;
+        background: #fff;
+        border: 1px solid #dce8ff;
+        border-radius: 10px;
+      }
+
+      .btn-dispatch {
+        border-radius: 8px;
+        font-size: 12px;
+        font-weight: 700;
+        padding: 8px 14px;
+        cursor: pointer;
+        transition: 0.15s;
+        white-space: nowrap;
+        border: 1px solid transparent;
+      }
+
+      .btn-dispatch--primary {
+        background: linear-gradient(120deg, #165dff, #3d7dff);
+        color: #fff;
+        border-color: rgba(22, 93, 255, 0.35);
+        box-shadow: 0 6px 14px rgba(22, 93, 255, 0.22);
+      }
+
+      .btn-dispatch--primary:hover:not(:disabled) {
+        filter: brightness(1.03);
+      }
+
+      .btn-dispatch--secondary {
+        background: #fff;
+        color: #165dff;
+        border-color: #c5d6ff;
+      }
+
+      .btn-dispatch--secondary:hover:not(:disabled) {
+        background: #f4f8ff;
+      }
+
+      .btn-dispatch--ghost {
+        background: transparent;
+        color: #5a6f94;
+        border-color: #d7e2f5;
+        font-weight: 600;
+      }
+
+      .btn-dispatch--ghost:hover {
+        background: #f7f9ff;
+      }
+
+      .btn-dispatch:disabled {
+        opacity: 0.55;
+        cursor: not-allowed;
+        box-shadow: none;
+      }
+
+      .train-dispatch-meta {
+        font-size: 11px;
+        color: var(--sub);
+      }
+
+      .toast {
+        position: fixed;
+        left: 50%;
+        bottom: 28px;
+        transform: translateX(-50%) translateY(12px);
+        z-index: 40;
+        max-width: min(420px, 92vw);
+        padding: 10px 14px;
+        border-radius: 12px;
+        background: rgba(15, 23, 42, 0.92);
+        color: #f8fafc;
+        font-size: 12px;
+        line-height: 1.55;
+        box-shadow: 0 12px 30px rgba(15, 35, 95, 0.28);
+        opacity: 0;
+        pointer-events: none;
+        transition: opacity 0.2s, transform 0.2s;
+      }
+
+      .toast.is-show {
+        opacity: 1;
+        transform: translateX(-50%) translateY(0);
+        pointer-events: auto;
+      }
+
+      .dispatch-modal-body {
+        margin-top: 10px;
+        display: grid;
+        gap: 10px;
+      }
+
+      .dispatch-option {
+        display: flex;
+        align-items: flex-start;
+        gap: 10px;
+        padding: 10px 10px;
+        border-radius: 10px;
+        border: 1px solid #e5ebf2;
+        background: #fafcff;
+      }
+
+      .dispatch-option input {
+        margin-top: 3px;
+      }
+
+      .dispatch-option-label {
+        font-size: 13px;
+        font-weight: 700;
+        color: #0f172a;
+      }
+
+      .dispatch-option-sub {
+        margin-top: 2px;
+        font-size: 11px;
+        color: var(--sub);
+        line-height: 1.45;
+      }
+
+      .dispatch-modal-foot {
+        margin-top: 14px;
+        display: flex;
+        justify-content: flex-end;
+        gap: 8px;
+        flex-wrap: wrap;
+      }
+
+      .dispatch-demo-fail {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        font-size: 11px;
+        color: #64748b;
+        margin-right: auto;
       }
 
       .action-thumb {
@@ -1485,6 +1709,12 @@
       <section class="top-hero">
         <div class="hero-row">
           <div>
+            <a
+              class="hero-back-link"
+              id="link-ai-report"
+              href="../ai-report-interpretation-slim-demo.html"
+              aria-label="返回 AI 报告解读页"
+              >← 返回 AI 报告解读</a>
             <div class="hero-title">你的专属训练大纲</div>
             <div class="hero-sub">基于体成分、体态、体围与健康档案自动生成</div>
           </div>
@@ -1567,8 +1797,11 @@
             <div class="phase">
               <div>
                 <div class="phase-top">
-                  <div class="phase-name">阶段 1：适应激活</div>
-                  <div class="phase-week">第 1–2 周</div>
+                  <div class="phase-top-main">
+                    <div class="phase-name">阶段 1：适应激活</div>
+                    <div class="phase-week">第 1–2 周</div>
+                  </div>
+                  <span class="phase-dispatch-tag phase-dispatch-tag--pending" id="phaseDispatchTag0">待下发</span>
                 </div>
                 <div class="phase-target">目标：建立动作基础，缓解久坐僵硬，养成固定训练节奏。</div>
                 <div class="phase-value">
@@ -1584,8 +1817,11 @@
             <div class="phase">
               <div>
                 <div class="phase-top">
-                  <div class="phase-name">阶段 2：减脂强化</div>
-                  <div class="phase-week">第 3–6 周</div>
+                  <div class="phase-top-main">
+                    <div class="phase-name">阶段 2：减脂强化</div>
+                    <div class="phase-week">第 3–6 周</div>
+                  </div>
+                  <span class="phase-dispatch-tag phase-dispatch-tag--pending" id="phaseDispatchTag1">待下发</span>
                 </div>
                 <div class="phase-target">目标：提高消耗与力量，重点改善腰腹围度和含胸圆肩。</div>
                 <div class="phase-value">
@@ -1601,8 +1837,11 @@
             <div class="phase">
               <div>
                 <div class="phase-top">
-                  <div class="phase-name">阶段 3：巩固定型</div>
-                  <div class="phase-week">第 7–8 周</div>
+                  <div class="phase-top-main">
+                    <div class="phase-name">阶段 3：巩固定型</div>
+                    <div class="phase-week">第 7–8 周</div>
+                  </div>
+                  <span class="phase-dispatch-tag phase-dispatch-tag--pending" id="phaseDispatchTag2">待下发</span>
                 </div>
                 <div class="phase-target">目标：巩固结果，减少反弹风险，形成可长期执行的生活方式。</div>
                 <div class="phase-value">
@@ -1708,10 +1947,26 @@
             <div class="chart-title" id="trainDayTitle">周一训练动作</div>
             <div class="demo-media-row">
               <span class="demo-media-row-label">演示：动作素材</span>
-              <div class="demo-media-seg">
-                <button type="button" class="demo-media-btn active" data-demo="on" onclick="setDemoActionMedia(true)">有图/视频</button>
-                <button type="button" class="demo-media-btn" data-demo="off" onclick="setDemoActionMedia(false)">无图/视频</button>
+              <div class="demo-media-actions">
+                <div class="demo-media-seg">
+                  <button type="button" class="demo-media-btn active" data-demo="on" onclick="setDemoActionMedia(true)">有图/视频</button>
+                  <button type="button" class="demo-media-btn" data-demo="off" onclick="setDemoActionMedia(false)">无图/视频</button>
+                </div>
               </div>
+            </div>
+            <div class="train-dispatch-toolbar">
+              <p class="train-dispatch-hint">
+                设备端仅展示当前训练周期（最多 4 周），后续计划将根据训练进度自动更新。
+              </p>
+              <div class="train-dispatch-row">
+                <button type="button" class="btn-dispatch btn-dispatch--primary" id="dispatchPlanBtn" onclick="openDispatchModal()">
+                  下发训练计划
+                </button>
+                <button type="button" class="btn-dispatch btn-dispatch--ghost" onclick="simulateRollReady()">
+                  演示：满足自动更新条件
+                </button>
+              </div>
+              <div class="train-dispatch-meta" id="deviceDispatchMeta"></div>
             </div>
             <div class="action-grid" id="actionGrid"></div>
           </div>
@@ -1848,6 +2103,28 @@
         </div>
       </div>
     </div>
+
+    <div class="modal-mask" id="dispatchModal" onclick="if (event.target === this) closeDispatchModal()">
+      <div class="modal" role="dialog" aria-modal="true" aria-labelledby="dispatchModalTitle" onclick="event.stopPropagation()">
+        <div class="modal-head">
+          <div class="modal-title" id="dispatchModalTitle">下发训练计划</div>
+          <button class="close" type="button" onclick="closeDispatchModal()" aria-label="关闭">×</button>
+        </div>
+        <div class="dispatch-modal-body" id="dispatchModalBody"></div>
+        <label class="dispatch-demo-fail">
+          <input type="checkbox" id="dispatchFailDemo" />
+          演示：模拟下发失败
+        </label>
+        <div class="dispatch-modal-foot">
+          <button type="button" class="btn-dispatch btn-dispatch--secondary" onclick="closeDispatchModal()">取消</button>
+          <button type="button" class="btn-dispatch btn-dispatch--primary" id="dispatchConfirmBtn" onclick="confirmDispatch()">
+            确认下发
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
     <script>
       const trainPlan = {
@@ -2193,6 +2470,22 @@
         "https://images.unsplash.com/photo-1517963879433-6ad2b056d712?auto=format&fit=crop&w=600&q=80";
       const manualAdjustments = {};
 
+      const DISPATCH_WINDOWS = [
+        { key: "1-2", label: "第 1–2 周", startWeek: 1, endWeek: 2, phaseIdx: 0 },
+        { key: "3-4", label: "第 3–4 周", startWeek: 3, endWeek: 4, phaseIdx: 1 },
+        { key: "5-6", label: "第 5–6 周", startWeek: 5, endWeek: 6, phaseIdx: 1 },
+        { key: "7-8", label: "第 7–8 周", startWeek: 7, endWeek: 8, phaseIdx: 2 },
+      ];
+      const deviceDispatchPlanId = "TO-20260312-001";
+      const deviceDispatchUserId = "U-20260312-021358";
+      const deviceDispatchDeviceId = "MS-DEVICE-001";
+
+      let dispatchedWindows = new Set();
+      let dispatchUiSending = false;
+      let dispatchSendingKey = "";
+      let rollReady = false;
+      let toastTimer = null;
+
       function getWeekAdjustment(week) {
         return manualAdjustments[week] || null;
       }
@@ -2269,6 +2562,199 @@
           const name = document.getElementById("mName").textContent;
           if (name) openAction(name);
         }
+      }
+
+      function getDispatchWindowByKey(key) {
+        return DISPATCH_WINDOWS.find((w) => w.key === key) || null;
+      }
+
+      function nextDispatchWindowKey() {
+        return DISPATCH_WINDOWS.map((w) => w.key).find((k) => !dispatchedWindows.has(k)) || null;
+      }
+
+      function allDispatchWindowsDone() {
+        return DISPATCH_WINDOWS.every((w) => dispatchedWindows.has(w.key));
+      }
+
+      function showToast(message) {
+        const el = document.getElementById("toast");
+        if (!el) return;
+        el.textContent = message;
+        el.classList.add("is-show");
+        window.clearTimeout(toastTimer);
+        toastTimer = window.setTimeout(() => el.classList.remove("is-show"), 3200);
+      }
+
+      function setPhaseDispatchTag(phaseIdx, mode) {
+        const el = document.getElementById("phaseDispatchTag" + phaseIdx);
+        if (!el) return;
+        el.classList.remove("phase-dispatch-tag--pending", "phase-dispatch-tag--done", "phase-dispatch-tag--sync");
+        if (mode === "done") {
+          el.textContent = "已下发";
+          el.classList.add("phase-dispatch-tag--done");
+        } else if (mode === "sync") {
+          el.textContent = "自动更新中";
+          el.classList.add("phase-dispatch-tag--sync");
+        } else {
+          el.textContent = "待下发";
+          el.classList.add("phase-dispatch-tag--pending");
+        }
+      }
+
+      function renderPhaseDispatchTags() {
+        const sending = dispatchUiSending ? dispatchSendingKey : "";
+        const phase0Sync = sending === "1-2";
+        const phase0Done = dispatchedWindows.has("1-2");
+        setPhaseDispatchTag(0, phase0Sync ? "sync" : phase0Done ? "done" : "pending");
+
+        const phase1Sync = sending === "3-4" || sending === "5-6";
+        const phase1Done = dispatchedWindows.has("3-4") && dispatchedWindows.has("5-6");
+        setPhaseDispatchTag(1, phase1Sync ? "sync" : phase1Done ? "done" : "pending");
+
+        const phase2Sync = sending === "7-8";
+        const phase2Done = dispatchedWindows.has("7-8");
+        setPhaseDispatchTag(2, phase2Sync ? "sync" : phase2Done ? "done" : "pending");
+      }
+
+      function renderDispatchModalOptions() {
+        const body = document.getElementById("dispatchModalBody");
+        if (!body) return;
+        const remaining = DISPATCH_WINDOWS.filter((w) => !dispatchedWindows.has(w.key));
+        const show = remaining.slice(0, 2);
+        const intro =
+          '<p style="margin:0;font-size:12px;color:#475569;line-height:1.55">请选择要下发到 MotionStation 的训练周期（设备端最多展示 4 周；完整计划将按阶段自动滚动下发）。</p>';
+        if (!show.length) {
+          body.innerHTML = intro + '<p style="margin:0;font-size:12px;color:#64748b">暂无可下发周期。</p>';
+          return;
+        }
+        body.innerHTML =
+          intro +
+          show
+            .map((w, idx) => {
+              const checked = idx === 0 ? "checked" : "";
+              const rec = idx === 0 ? "（推荐）" : "";
+              return `
+          <label class="dispatch-option">
+            <input type="radio" name="dispatchWindow" value="${w.key}" ${checked} />
+            <div>
+              <div class="dispatch-option-label">${w.label}${rec}</div>
+              <div class="dispatch-option-sub">对应计划周次：第 ${w.startWeek} 周 - 第 ${w.endWeek} 周</div>
+            </div>
+          </label>`;
+            })
+            .join("");
+      }
+
+      function openDispatchModal() {
+        if (dispatchUiSending) return;
+        if (allDispatchWindowsDone()) {
+          showToast("当前训练计划已全部同步到 MotionStation");
+          return;
+        }
+        renderDispatchModalOptions();
+        const fail = document.getElementById("dispatchFailDemo");
+        if (fail) fail.checked = false;
+        document.getElementById("dispatchModal").style.display = "flex";
+      }
+
+      function closeDispatchModal() {
+        document.getElementById("dispatchModal").style.display = "none";
+      }
+
+      function confirmDispatch() {
+        const selected = document.querySelector('input[name="dispatchWindow"]:checked');
+        if (!selected) {
+          showToast("请选择下发范围");
+          return;
+        }
+        const key = selected.value;
+        if (dispatchedWindows.has(key)) {
+          showToast("当前阶段已下发，请勿重复操作");
+          return;
+        }
+        const expected = nextDispatchWindowKey();
+        if (key !== expected) {
+          showToast("请按阶段顺序依次下发");
+          return;
+        }
+        const win = getDispatchWindowByKey(key);
+        if (!win) return;
+        const failDemo = document.getElementById("dispatchFailDemo")?.checked;
+        const payload = {
+          user_id: deviceDispatchUserId,
+          device_id: deviceDispatchDeviceId,
+          plan_id: deviceDispatchPlanId,
+          phase_start_week: win.startWeek,
+          phase_end_week: win.endWeek,
+        };
+        closeDispatchModal();
+        dispatchUiSending = true;
+        dispatchSendingKey = key;
+        rollReady = false;
+        refreshDispatchUi();
+        window.setTimeout(() => {
+          dispatchUiSending = false;
+          dispatchSendingKey = "";
+          if (failDemo) {
+            showToast("下发失败，请检查设备连接状态");
+          } else {
+            dispatchedWindows.add(key);
+            showToast(`已下发 ${win.label} 训练计划到 MotionStation`);
+            console.log("POST /training/dispatch", payload);
+          }
+          refreshDispatchUi();
+        }, 900);
+      }
+
+      function simulateRollReady() {
+        if (dispatchedWindows.size === 0) {
+          showToast("请先完成首次下发");
+          return;
+        }
+        if (allDispatchWindowsDone()) {
+          showToast("训练计划已全部下发");
+          return;
+        }
+        rollReady = true;
+        showToast("已模拟：本阶段完成度 ≥80%，可继续下发下一阶段。");
+        refreshDispatchUi();
+      }
+
+      function refreshDispatchUi() {
+        const btn = document.getElementById("dispatchPlanBtn");
+        const meta = document.getElementById("deviceDispatchMeta");
+        if (!btn || !meta) return;
+        if (dispatchUiSending) {
+          const next = nextDispatchWindowKey();
+          const loadingText = next === "1-2" ? "下发中..." : "更新中...";
+          btn.disabled = true;
+          btn.textContent = loadingText;
+          btn.className = "btn-dispatch btn-dispatch--primary";
+          meta.textContent = "设备端：同步请求发送中…";
+          renderPhaseDispatchTags();
+          return;
+        }
+        if (allDispatchWindowsDone()) {
+          btn.disabled = true;
+          btn.textContent = "已下发";
+          btn.className = "btn-dispatch btn-dispatch--secondary";
+          meta.textContent = "设备端：全部训练周期已下发，后续可在 MotionStation 查看执行进度。";
+          renderPhaseDispatchTags();
+          return;
+        }
+        const next = nextDispatchWindowKey();
+        const isFirst = next === "1-2";
+        btn.disabled = false;
+        btn.textContent = isFirst ? "下发训练计划" : "更新训练计划";
+        btn.className = "btn-dispatch " + (isFirst ? "btn-dispatch--primary" : "btn-dispatch--secondary");
+        const doneList = DISPATCH_WINDOWS.filter((w) => dispatchedWindows.has(w.key))
+          .map((w) => w.label)
+          .join("、");
+        const rollHint = rollReady && next ? "系统判断：待自动更新（亦可手动点击「更新训练计划」）。" : "";
+        meta.textContent =
+          (doneList ? `设备端已下发：${doneList}。` : "设备端：尚未下发训练计划。") +
+          (rollHint ? " " + rollHint : "");
+        renderPhaseDispatchTags();
       }
 
       function openAction(name) {
@@ -2579,6 +3065,8 @@
         currentWeek = week;
         document.querySelectorAll("#weekPicker .week-chip").forEach((el) => el.classList.remove("active"));
         if (event && event.currentTarget) event.currentTarget.classList.add("active");
+        rollReady = false;
+        refreshDispatchUi();
         updatePhaseLink();
         renderTrainActions(currentExecDay);
         renderDietDay(currentExecDay);
@@ -2625,6 +3113,22 @@
       renderDietDay(currentExecDay);
       updatePhaseLink();
       renderReviewModule();
+      refreshDispatchUi();
+    </script>
+    <script>
+      (function resolveAiReportHref() {
+        var el = document.getElementById("link-ai-report");
+        if (!el) return;
+        var from = "";
+        try {
+          from = sessionStorage.getItem("wh-ai-report-parent") || "";
+        } catch (e) {}
+        var rel =
+          from === "demos"
+            ? "../demos/ai-report-interpretation-slim-demo.html"
+            : "../ai-report-interpretation-slim-demo.html";
+        el.setAttribute("href", new URL(rel, window.location.href).href);
+      })();
     </script>
   </body>
 </html>
