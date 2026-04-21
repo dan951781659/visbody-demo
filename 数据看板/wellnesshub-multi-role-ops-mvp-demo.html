@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>WellnessHub 多角色运营看板</title>
+  <style>
+    :root{
+      --bg:#f5f7fb;--panel:#fff;--line:#e5ebf3;--line-strong:#d8e1ee;
+      --text:#172033;--sub:#667085;--muted:#98a2b3;--blue:#2563eb;
+      --blue-soft:#edf4ff;--green:#16a34a;--green-soft:#ecfdf3;--orange:#d97706;
+      --orange-soft:#fff6e7;--red:#dc2626;--red-soft:#fff1f1;--teal:#0f766e;
+      --teal-soft:#ecfdfb;--purple:#7c3aed;--purple-soft:#f4f0ff;--shadow:0 14px 36px rgba(15,23,42,.06);
+      --chart-blue:#3b82f6;--chart-cyan:#14b8a6;--chart-emerald:#22c55e;--chart-amber:#f59e0b;
+      --chart-violet:#8b5cf6;--chart-rose:#fb7185;--chart-slate:#64748b;--chart-indigo:#6366f1;
+    }
+    *{box-sizing:border-box}
+    body{
+      margin:0;
+      background:
+        radial-gradient(circle at top left, rgba(59,130,246,.09), transparent 24%),
+        radial-gradient(circle at top right, rgba(20,184,166,.08), transparent 18%),
+        linear-gradient(180deg,#f7faff 0%, #f4f7fb 100%);
+      color:var(--text);
+      font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Noto Sans SC",sans-serif
+    }
+    button,input,select{font:inherit}
+    button{cursor:pointer}
+    .app{display:grid;grid-template-columns:248px minmax(0,1fr);min-height:100vh}
+    .sidebar{background:linear-gradient(180deg,#fff 0%, #fbfcff 100%);border-right:1px solid var(--line);padding:22px 16px;display:flex;flex-direction:column;gap:24px}
+    .brand{display:flex;gap:12px;align-items:center;padding:8px}
+    .brand-mark{width:40px;height:40px;border-radius:10px;background:linear-gradient(135deg,#2563eb,#38bdf8);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:800;box-shadow:0 12px 22px rgba(37,99,235,.22)}
+    .brand-title{font-size:15px;font-weight:800;line-height:1.2}.brand-sub{margin-top:3px;font-size:12px;color:var(--sub)}
+    .side-title{font-size:12px;color:var(--muted);padding:0 8px;margin-bottom:8px}
+    .nav-list{display:flex;flex-direction:column;gap:6px}
+    .side-btn{width:100%;border:0;background:transparent;color:#475467;border-radius:8px;padding:12px;display:flex;align-items:center;justify-content:space-between;text-align:left}
+    .side-btn:hover{background:#f3f6fb}.side-btn.active{background:var(--blue-soft);color:var(--blue);font-weight:700}
+    .side-left{display:flex;align-items:center;gap:10px}.dot{width:8px;height:8px;border-radius:50%;background:currentColor}
+    .main{min-width:0}
+    .global-bar{height:56px;background:rgba(255,255,255,.88);backdrop-filter:saturate(180%) blur(10px);border-bottom:1px solid rgba(229,235,243,.9);padding:0 26px;display:flex;align-items:center;justify-content:space-between;gap:16px}
+    .crumbs{font-size:13px;color:#667085}.global-right,.toolbar,.filters,.top-meta{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+    .tiny-pill,.pill{display:inline-flex;align-items:center;border-radius:999px;font-weight:700}
+    .tiny-pill{height:28px;padding:0 11px;border:1px solid var(--line);background:#fff;color:#667085;font-size:12px}
+    .segmented{display:inline-flex;border:1px solid var(--line);background:#f7f9fd;border-radius:10px;overflow:hidden;box-shadow:inset 0 1px 0 rgba(255,255,255,.8)}
+    .segmented button{border:0;background:transparent;color:#667085;height:36px;padding:0 14px;font-weight:700}
+    .segmented .active{background:#fff;color:#172033;box-shadow:0 1px 2px rgba(15,23,42,.05)}
+    .ghost-btn,.primary-btn{height:38px;padding:0 16px;border-radius:8px;border:1px solid var(--line);background:#fff;color:#172033;font-weight:700}
+    .primary-btn{border-color:#2563eb;background:#2563eb;color:#fff;box-shadow:0 8px 18px rgba(37,99,235,.18)}
+    .topbar{background:linear-gradient(180deg,#fff 0%, #fbfdff 100%);border-bottom:1px solid var(--line);padding:18px 26px;display:flex;flex-direction:column;gap:14px}
+    .page-title{margin:0;font-size:24px;font-weight:800}.page-sub{margin:5px 0 0;color:#667085;font-size:13px}
+    .search-box,.select-box{height:40px;border:1px solid var(--line);border-radius:8px;background:#fff;padding:0 14px;outline:none;color:#172033}
+    .search-box{min-width:420px;flex:1}.select-box{min-width:170px}
+    .content{padding:22px 26px 32px}
+    .stat-strip{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px;margin-bottom:16px}
+    .stat-card{
+      border:1px solid #dde6f0;
+      background:
+        linear-gradient(180deg, rgba(255,255,255,.98) 0%, rgba(250,252,255,.98) 100%);
+      border-radius:18px;
+      min-height:128px;
+      padding:16px 16px 14px 18px;
+      text-align:left;
+      box-shadow:0 10px 24px rgba(15,23,42,.045);
+      display:flex;
+      flex-direction:column;
+      justify-content:space-between;
+      position:relative;
+      overflow:hidden;
+      transition:transform .16s ease, box-shadow .16s ease, border-color .16s ease, background .16s ease;
+    }
+    .stat-card::before{
+      content:"";
+      position:absolute;
+      left:0;
+      top:16px;
+      bottom:16px;
+      width:4px;
+      border-radius:0 999px 999px 0;
+      background:var(--accent,#2563eb);
+      opacity:.72;
+    }
+    .stat-card::after{
+      content:"";
+      position:absolute;
+      right:-20px;
+      top:-18px;
+      width:88px;
+      height:88px;
+      border-radius:50%;
+      background:radial-gradient(circle, rgba(37,99,235,.06) 0%, rgba(37,99,235,0) 70%);
+      pointer-events:none;
+    }
+    .stat-card:hover{transform:translateY(-2px);border-color:#c8d9ff;box-shadow:0 16px 30px rgba(15,23,42,.075);background:#fff}
+    .stat-card.active{outline:2px solid rgba(37,99,235,.14);border-color:#c8d9ff;transform:translateY(-1px)}
+    .stat-card[data-tone="blue"]{--accent:#2563eb}
+    .stat-card[data-tone="green"]{--accent:#16a34a}
+    .stat-card[data-tone="orange"]{--accent:#d97706}
+    .stat-card[data-tone="red"]{--accent:#dc2626}
+    .stat-card[data-tone="teal"]{--accent:#0f766e}
+    .stat-card[data-tone="purple"]{--accent:#7c3aed}
+    .stat-card[data-tone="gray"]{--accent:#64748b}
+    .stat-head{display:flex;justify-content:space-between;gap:10px;align-items:flex-start}
+    .stat-label{font-size:13px;color:#475467;font-weight:800;letter-spacing:.01em}
+    .stat-value{font-size:34px;font-weight:900;margin-top:12px;letter-spacing:-.02em;line-height:1}
+    .stat-sub{margin-top:10px;font-size:12px;color:#667085;line-height:1.4}
+    .pill{height:24px;padding:0 10px;font-size:12px;border:1px solid transparent;box-shadow:0 6px 12px rgba(15,23,42,.04)}
+    .pill.gray{background:#f2f4f7;color:#475467}
+    .pill.blue{background:var(--blue-soft);color:#2563eb}
+    .pill.green{background:var(--green-soft);color:#16a34a}
+    .pill.orange{background:var(--orange-soft);color:#d97706}
+    .pill.red{background:var(--red-soft);color:#dc2626}
+    .pill.teal{background:var(--teal-soft);color:#0f766e}
+    .pill.purple{background:var(--purple-soft);color:#7c3aed}
+    .grid{display:grid;grid-template-columns:minmax(0,1.35fr) minmax(340px,.9fr);gap:16px;align-items:start}.stack{display:flex;flex-direction:column;gap:16px}
+    .panel{background:linear-gradient(180deg,#fff 0%, #fcfdff 100%);border:1px solid rgba(229,235,243,.95);border-radius:14px;box-shadow:var(--shadow);overflow:hidden}
+    .panel-title{padding:18px 18px 0;display:flex;align-items:flex-start;justify-content:space-between;gap:12px}
+    .panel-title h3{margin:0;font-size:18px}.panel-title p{margin:6px 0 0;color:#667085;font-size:13px}
+    .panel-body{padding:18px}.panel-body.flush{padding:0}
+    .table-wrap{overflow:auto}table{width:100%;border-collapse:collapse}th,td{border-bottom:1px solid var(--line);padding:14px 18px;text-align:left;font-size:13px;white-space:nowrap}th{background:linear-gradient(180deg,#f8fbff 0%, #f4f7fb 100%);color:#475467;font-weight:800}tbody tr{cursor:pointer}tbody tr:hover,tbody tr.selected{background:#f5f9ff}
+    .detail{position:sticky;top:16px;background:linear-gradient(180deg,#fff 0%, #fcfdff 100%);border:1px solid rgba(229,235,243,.95);border-radius:14px;box-shadow:var(--shadow);padding:18px}
+    .detail h3{margin:0;font-size:20px}.subline{margin-top:5px;color:#667085;font-size:13px}.detail-section{margin-top:16px;padding-top:16px;border-top:1px solid var(--line)}
+    .kv{display:flex;justify-content:space-between;gap:12px;padding:10px 0;border-bottom:1px dashed #edf1f7}.kv:last-child{border-bottom:0}.kv span{font-size:13px;color:#667085}.kv strong{text-align:right;font-size:13px}
+    .action-list{display:flex;flex-direction:column;gap:8px}.action-line{display:flex;gap:9px;font-size:13px;line-height:1.6}.action-line i{width:7px;height:7px;border-radius:50%;background:#2563eb;margin-top:8px;flex:none}
+    .mini-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}.mini{border:1px solid var(--line);border-radius:14px;background:linear-gradient(180deg,#fff 0%, #fbfdff 100%);padding:16px;text-align:left;box-shadow:0 8px 20px rgba(15,23,42,.03);position:relative;overflow:hidden}.mini::before{content:"";position:absolute;inset:0 auto auto 0;width:100%;height:3px;background:linear-gradient(90deg, rgba(37,99,235,.9), rgba(20,184,166,.7));opacity:.18}.mini.clickable{cursor:pointer}.mini.clickable:hover{border-color:#c8d9ff;background:#f8fbff;transform:translateY(-1px)}.mini h4{margin:0;font-size:16px}.mini p{margin:8px 0 0;color:#667085;font-size:13px}
+    .chart-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
+    .bar-list{display:flex;flex-direction:column;gap:12px}
+    .bar-row{display:grid;grid-template-columns:92px minmax(0,1fr) 34px;align-items:center;gap:10px;cursor:pointer;padding:2px 0}
+    .bar-row:hover .bar{filter:saturate(1.08) brightness(1.01)}
+    .bar-label{font-size:13px;font-weight:700;display:flex;align-items:center;gap:8px}
+    .bar-label::before{content:"";width:8px;height:8px;border-radius:999px;background:var(--swatch,var(--chart-blue));box-shadow:0 0 0 4px rgba(37,99,235,.08)}
+    .bar-track{height:12px;background:linear-gradient(90deg,#eef3f9,#f5f8fc);border-radius:999px;overflow:hidden;position:relative}
+    .bar-track::after{content:"";position:absolute;inset:0;background:linear-gradient(90deg, rgba(255,255,255,.18), transparent);pointer-events:none}
+    .bar{height:100%;border-radius:999px;background:var(--bar-color,var(--chart-blue));box-shadow:0 8px 16px color-mix(in srgb, var(--bar-color,var(--chart-blue)) 22%, transparent);position:relative;overflow:hidden}
+    .bar::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg, rgba(255,255,255,.16), transparent 55%);pointer-events:none}
+    .trend-wrap{display:flex;flex-direction:column;gap:10px}
+    .trend-topline{display:flex;align-items:center;justify-content:space-between;gap:12px;color:#667085;font-size:12px;padding:0 2px}
+    .trend{display:flex;align-items:flex-end;gap:9px;height:176px;padding-top:18px;padding-bottom:4px}
+    .trend-btn{flex:1;border:0;background:transparent;height:100%;display:flex;align-items:flex-end;padding:0}
+    .trend-bar{width:100%;border-radius:12px 12px 6px 6px;background:var(--series,var(--chart-blue));position:relative;box-shadow:0 10px 20px color-mix(in srgb, var(--series,var(--chart-blue)) 18%, transparent);overflow:hidden}
+    .trend-bar::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg, rgba(255,255,255,.14), transparent 55%);pointer-events:none}
+    .trend-bar span{
+      position:absolute;
+      top:10px;
+      left:50%;
+      transform:translateX(-50%);
+      font-size:12px;
+      font-weight:800;
+      color:#fff;
+      background:rgba(15,23,42,.18);
+      padding:2px 8px;
+      border-radius:999px;
+      line-height:1.4;
+      backdrop-filter:blur(4px);
+      white-space:nowrap;
+    }
+    .trend-axis{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:9px;font-size:12px;color:#667085}
+    .trend-axis span{text-align:center}
+    .pie-grid{display:grid;grid-template-columns:220px minmax(0,1fr);gap:16px;align-items:center}
+    .pie-wrap{display:flex;align-items:center;justify-content:center}
+    .pie-chart{width:168px;height:168px;border-radius:50%;position:relative;box-shadow:0 16px 28px rgba(15,23,42,.08)}
+    .pie-chart::after{content:"";position:absolute;inset:28px;border-radius:50%;background:#fff;box-shadow:inset 0 0 0 1px rgba(229,235,243,.95)}
+    .pie-center{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;flex-direction:column;z-index:1;text-align:center;pointer-events:none}
+    .pie-center strong{font-size:24px;line-height:1}
+    .pie-center span{margin-top:4px;font-size:12px;color:#667085}
+    .legend-list{display:flex;flex-direction:column;gap:10px}
+    .legend-item{display:grid;grid-template-columns:16px minmax(0,1fr) auto;gap:10px;align-items:center;font-size:13px;cursor:pointer;padding:6px 0}
+    .legend-dot{width:10px;height:10px;border-radius:999px;box-shadow:0 0 0 4px rgba(37,99,235,.08);background:var(--legend,#2563eb)}
+    .legend-item:hover{color:#172033}
+    .legend-item strong{font-size:13px}
+    .legend-item span{color:#667085;font-size:12px}
+    .status-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}.status-card{border:1px solid var(--line);border-radius:12px;padding:15px;background:linear-gradient(180deg,#fff 0%, #fcfdff 100%);cursor:pointer;box-shadow:0 8px 20px rgba(15,23,42,.03)}.status-card:hover{border-color:#c8d9ff;background:#f8fbff}.status-card strong{display:block;font-size:13px;color:#475467}.status-card span{display:block;margin-top:10px;font-size:24px;font-weight:850}
+    .empty{padding:24px;color:#667085}
+    .pager{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:12px 18px;border-top:1px solid var(--line);background:#fbfcff;color:#667085;font-size:13px}
+    .pager-actions{display:flex;gap:8px}
+    .pager button{height:32px;border:1px solid var(--line);background:#fff;border-radius:8px;padding:0 12px;font-weight:700}
+    .pager button:disabled{opacity:.45;cursor:not-allowed}
+    .date-range{display:flex;align-items:center;gap:8px;border:1px solid var(--line);background:#fff;border-radius:8px;padding:0 10px;height:40px}
+    .date-range input{border:0;outline:0;color:#172033;background:transparent}
+    .date-range span{color:#98a2b3}
+    .export-list{display:flex;flex-direction:column;gap:10px}
+    .export-item{display:flex;align-items:flex-start;gap:10px;border:1px solid var(--line);border-radius:12px;padding:12px 14px;background:#fff}
+    .export-item input{margin-top:3px}
+    .export-item strong{display:block;font-size:14px}
+    .export-item span{display:block;margin-top:4px;color:#667085;font-size:12px}
+    .modal-mask{position:fixed;inset:0;background:rgba(15,23,42,.32);display:none;align-items:center;justify-content:center;padding:20px;z-index:50}
+    .modal-mask.show{display:flex}
+    .modal{width:min(1100px,100%);max-height:88vh;background:#fff;border-radius:16px;box-shadow:0 24px 48px rgba(15,23,42,.18);overflow:hidden;display:flex;flex-direction:column}
+    .modal-head,.modal-foot{padding:16px 20px;border-bottom:1px solid var(--line)}
+    .modal-head{display:flex;align-items:center;justify-content:space-between;gap:12px}
+    .modal-foot{border-bottom:0;border-top:1px solid var(--line);display:flex;justify-content:flex-end;gap:10px}
+    .modal-body{padding:16px 20px;overflow:auto}
+    .export-layout{display:grid;grid-template-columns:minmax(0,1.35fr) 320px;gap:16px;align-items:start}
+    .export-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+    .export-summary{position:sticky;top:0;border:1px solid var(--line);border-radius:14px;background:#fbfcff;padding:14px}
+    .export-summary h4{margin:0 0 10px;font-size:15px}
+    .export-summary .kv{padding:9px 0}
+    .export-format{display:inline-flex;border:1px solid var(--line);border-radius:10px;overflow:hidden;background:#f7f9fd}
+    .export-format label{padding:8px 12px;font-weight:700;color:#667085;display:flex;align-items:center;gap:6px;cursor:pointer}
+    .export-format input{margin:0}
+    .export-format .active{background:#fff;color:#172033}
+    .drawer-mask{position:fixed;inset:0;background:rgba(15,23,42,.28);display:none;z-index:54}
+    .drawer-mask.show{display:block}
+    .drawer{position:absolute;right:0;top:0;bottom:0;width:min(1180px,calc(100vw - 48px));background:#fff;box-shadow:-24px 0 48px rgba(15,23,42,.18);display:flex;flex-direction:column}
+    .drawer-head{padding:18px 22px;border-bottom:1px solid var(--line);display:flex;align-items:flex-start;justify-content:space-between;gap:16px}
+    .drawer-head h3{margin:0;font-size:22px}
+    .drawer-head p{margin:6px 0 0;color:#667085;font-size:13px}
+    .drawer-actions{display:flex;gap:10px;flex:none}
+    .drawer-body{padding:18px 22px;overflow:auto;flex:1}
+    .drawer .table-wrap{max-height:none}
+    .rule-box{border:1px solid var(--line);border-radius:14px;background:#fbfcff;padding:14px 16px;margin-bottom:16px}
+    .rule-box h4{margin:0 0 8px;font-size:15px}
+    .rule-box p{margin:0;color:#475467;line-height:1.7;font-size:13px}
+    .task-list{display:flex;flex-direction:column;gap:12px}
+    .task-item{border:1px solid var(--line);border-radius:14px;background:#fff;padding:14px 16px;display:flex;justify-content:space-between;gap:16px;align-items:flex-start}
+    .task-meta{display:flex;flex-direction:column;gap:6px}
+    .task-meta strong{font-size:15px}
+    .task-meta span{font-size:12px;color:#667085}
+    .task-right{display:flex;align-items:center;gap:8px;flex:none}
+    .toast{position:fixed;right:24px;bottom:24px;background:#111827;color:#fff;padding:12px 15px;border-radius:8px;opacity:0;transform:translateY(8px);transition:.2s;z-index:60}.toast.show{opacity:1;transform:translateY(0)}
+    @media(max-width:1280px){.stat-strip{grid-template-columns:repeat(3,minmax(0,1fr))}.grid,.chart-grid{grid-template-columns:1fr}.detail{position:relative;top:auto}}
+    @media(max-width:900px){.app{grid-template-columns:1fr}.sidebar{display:none}.stat-strip,.mini-grid,.status-grid{grid-template-columns:1fr}.search-box{min-width:100%}.global-bar{height:auto;padding:14px 18px;align-items:flex-start;flex-direction:column}}
+  </style>
+</head>
+<body>
+  <div id="app"></div>
+  <div id="toast" class="toast"></div>
+  <div id="modalMask" class="modal-mask"></div>
+  <div id="drawerMask" class="drawer-mask"></div>
+  <script>
+    const roles={hq:{label:"总门店端 PC",pages:[{key:"overview",label:"经营总览",subtitle:"总门店承接、教练服务和风险总览"}]},owner:{label:"子门店端 PC",pages:[{key:"overview",label:"经营总览",subtitle:"子门店承接、复测和用户画像"}]},coach:{label:"教练端 PC",pages:[{key:"workbench",label:"工作台",subtitle:"会员跟进、转化和服务状态"}]}};
+    const groupOptions=["全部门店组","华东","华北","华南","西南"],coachOptions=["全部教练","陈教练","李教练","王教练","未分配"];
+    const proKeys=["healthOutline","aiReport","aiTraining","aiConsult"];
+    const headerMap={name:"门店",group:"门店组",cumulative:"累计测评",new:"本期新增",active:"活跃用户",retest:"复测用户",ratio:"复测达成率",risk:"沉默用户数",unassigned:"待分配",pendingRetest:"待复测",pendingBind:"待绑定",user:"用户",coach:"教练",status:"状态",latest:"最近测评",reason:"触发原因",action:"建议动作",goal:"目标",tag:"问题标签",gender:"性别",age:"年龄",priority:"优先级",healthOutline:"健康档案",aiReport:"AI 报告解读",aiTraining:"AI 训练大纲",aiConsult:"AI 咨询",label:"分类",value:"数量"};
+    const chartThemes={
+      gender:["#3b82f6","#14b8a6"],
+      age:["#3b82f6","#60a5fa","#93c5fd","#bfdbfe"],
+      goal:["#10b981","#34d399","#6ee7b7","#a7f3d0"],
+      tag:["#f59e0b","#fbbf24","#fdba74","#fb7185","#f97316"]
+    };
+    const state={role:"hq",tier:"pro",dateStart:"2026-03-01",dateEnd:"2026-04-14",search:"",group:"全部门店组",coach:"全部教练",rowId:"",pageNo:1,pageSize:20,exportFormat:"excel"};
+    const metricRules={
+      cumulative:"当前筛选范围内按角色口径聚合的去重用户资产。总门店端按下级门店累计测评求和；子门店按当前门店有效测评去重用户数；教练按当前归属给本人的去重用户数。",
+      new:"当前日期范围内首次完成有效测评的去重用户数，不含导入历史数据。",
+      active:"近 30 天内存在有效测评、查看报告、复测预约、服务跟进等有效行为的去重用户数。",
+      count:"当前归属给本人的去重用户数。",
+      assign:"已测评但未分配负责人用户数。",
+      retest:"已进入可复测池但当前周期未完成复测的用户数。",
+      risk:"门店沉默用户数 / 门店活跃用户数 >= 15% 的门店数；总门店场景下按下级门店统计。",
+      potential:"近 7 天新增测评且未分配负责人的用户数。",
+      ratio:"复测用户数 / 可复测池用户数，分母为 0 时展示 0% 或“—”。",
+      silent:"命中 30 天无行为规则的用户数；总门店场景下对应高风险门店的沉默用户规模。",
+      pendingRetest:"已进入可复测池但当前周期尚未完成复测的用户数。",
+      pendingBind:"用户在设备上测量后未绑定用户信息的去重记录数，超过 30 天未绑定自动删除。",
+      healthOutline:"已生成健康档案用户数 / 当前统计用户池。",
+      aiReport:"已生成 AI 解读用户数 / 当前统计用户池。",
+      aiTraining:"已生成训练大纲用户数 / 当前统计用户池。",
+      aiConsult:"当前筛选范围内有 AI 咨询记录的用户或门店数。"
+    };
+    const chartRules={
+      "性别分布":"当前筛选范围内按性别分组统计去重用户数。",
+      "年龄分布":"当前筛选范围内按年龄段分组统计去重用户数。",
+      "目标分布":"当前筛选范围内按目标分组统计去重用户数。",
+      "问题标签分布":"当前筛选范围内按主要问题标签分组统计去重用户数。",
+      "会员状态分布":"当前负责会员池按状态分组统计去重用户数。",
+      "近 6 期趋势":"按当前筛选范围统计最近 6 个完整统计周期的新增测评、活跃用户、复测用户快照；本期 demo 默认按周展示，即 1 期 = 1 周。",
+      "教练服务及时性趋势":"最近 6 周待分配处理、待复测推进、风险回访的周度快照。",
+      "负责会员趋势":"最近 6 周当前归属给本人的去重负责会员数快照。"
+    };
+    const issueRules={assign:"当前门店待分配用户数高于固定阈值时提示。",retest:"当前门店待复测用户数高于固定阈值时提示。",risk:"当前门店沉默用户数高于固定阈值时提示。"};
+    const exportTasks=[{id:"task-seed-001",title:"经营总览导出",format:"Excel",scope:"总门店端 PC / 经营总览",rows:9,status:"已完成",time:"2026-04-15 10:05",keys:["main"]}];
+    let drawerState=null;
+    const data={
+      hq:{cards:[["cumulative","累计测评用户","18,640","+8.4%","总门店累计（含总门店自身与下级门店）"],["new","本期新增测评","1,248","+12.3%","当前周期"],["active","活跃用户","7,860","+6.1%","近 30 天"],["retest","复测用户","2,316","+9.2%","当前周期"],["ratio","复测达成率","18.6%","+2.4pp","复测用户 / 可复测池"],["unassigned","待分配用户","312","需处理","已测评未分配"],["pendingRetest","待复测用户","428","优先推进","可复测未完成"],["risk","高风险门店","6","需介入","沉默用户 / 活跃用户 >= 15%"],["silent","沉默用户","1,126","需回访","30 天无行为"],["pendingBind","待绑定用户","84","非 Pro","测后未绑定"],["healthOutline","健康档案生成率","64.8%","非 Pro","已生成健康档案 / 用户池"],["aiReport","AI 报告解读率","58.2%","Pro","已解读报告 / 用户池"],["aiTraining","AI 训练大纲生成率","42.6%","Pro","已生成训练大纲 / 用户池"],["aiConsult","AI 咨询使用门店","18","Pro","有 AI 咨询记录的门店"]],
+        rows:[{id:"s1",name:"静安旗舰店",group:"华东",cumulative:4820,new:312,active:1280,retest:248,ratio:"19.4%",risk:8,unassigned:4,pendingRetest:18,pendingBind:9,silent:8,status:"标杆",healthOutline:"72%",aiReport:"68%",aiTraining:"51%",aiConsult:486},{id:"s2",name:"海淀大学店",group:"华北",cumulative:3100,new:146,active:820,retest:86,ratio:"10.5%",risk:18,unassigned:14,pendingRetest:31,pendingBind:16,silent:18,status:"高风险",healthOutline:"58%",aiReport:"44%",aiTraining:"29%",aiConsult:172},{id:"s3",name:"天河店",group:"华南",cumulative:3920,new:228,active:1060,retest:182,ratio:"17.2%",risk:11,unassigned:6,pendingRetest:23,pendingBind:11,silent:11,status:"稳态增长",healthOutline:"66%",aiReport:"61%",aiTraining:"43%",aiConsult:316},{id:"s4",name:"高新店",group:"西南",cumulative:2830,new:196,active:910,retest:142,ratio:"15.6%",risk:10,unassigned:9,pendingRetest:27,pendingBind:10,silent:10,status:"承接偏弱",healthOutline:"62%",aiReport:"53%",aiTraining:"38%",aiConsult:225},{id:"s5",name:"滨江店",group:"华东",cumulative:3970,new:266,active:980,retest:212,ratio:"21.6%",risk:12,unassigned:5,pendingRetest:22,pendingBind:12,silent:12,status:"复测优秀",healthOutline:"74%",aiReport:"70%",aiTraining:"54%",aiConsult:392}],trend:[{label:"第1期",value:62},{label:"第2期",value:68},{label:"第3期",value:74},{label:"第4期",value:81},{label:"第5期",value:88},{label:"第6期",value:95}]},
+      owner:{cards:[["cumulative","累计测评用户","4,620","+7.6%","当前门店"],["new","本期新增测评","368","+14.2%","当前周期"],["active","活跃用户","1,482","+5.4%","近 30 天"],["assign","待分配用户","52","待处理","已测评未分配"],["pendingRetest","待复测用户","86","优先推进","可复测未完成"],["risk","沉默用户","41","需回访","30 天无行为"],["pendingBind","待绑定用户","14","非 Pro","测后未绑定"],["healthOutline","健康档案生成率","69.5%","非 Pro","已生成健康档案 / 用户池"],["aiReport","AI 报告解读率","61.3%","Pro","已解读报告 / 用户池"],["aiTraining","AI 训练大纲生成率","45.7%","Pro","已生成训练大纲 / 用户池"],["aiConsult","AI 咨询用户数","216","Pro","有 AI 咨询记录用户"]],
+        rows:[{id:"o1",user:"李梦瑶",coach:"陈教练",status:"待复测",latest:"2026-03-14",reason:"距上次测评 28 天",action:"安排复测",priority:"P1",goal:"减脂塑形",tag:"体脂偏高",gender:"女",age:"25-34",healthOutline:"已生成",aiReport:"已解读",aiTraining:"已生成",aiConsult:12,pendingBind:0},{id:"o2",user:"王哲",coach:"李教练",status:"沉默用户",latest:"2026-02-24",reason:"30 天无行为",action:"优先回访",priority:"P1",goal:"健康管理",tag:"运动能力弱",gender:"男",age:"35-44",healthOutline:"已生成",aiReport:"已解读",aiTraining:"未生成",aiConsult:4,pendingBind:0},{id:"o3",user:"陈可欣",coach:"陈教练",status:"高潜转化",latest:"2026-04-05",reason:"近 7 天新增测评且未分配",action:"推进承接",priority:"P2",goal:"体态改善",tag:"圆肩驼背",gender:"女",age:"18-24",healthOutline:"未生成",aiReport:"未解读",aiTraining:"未生成",aiConsult:0,pendingBind:1},{id:"o4",user:"赵晨",coach:"王教练",status:"待分配用户",latest:"2026-03-30",reason:"已测评但未分配负责人",action:"先分配",priority:"P1",goal:"增肌",tag:"体重偏低",gender:"男",age:"25-34",healthOutline:"已生成",aiReport:"未解读",aiTraining:"未生成",aiConsult:2,pendingBind:0},{id:"o5",user:"吴桐",coach:"王教练",status:"沉睡用户",latest:"2026-03-02",reason:"近 30 天无服务跟进",action:"唤醒触达",priority:"P3",goal:"减脂塑形",tag:"腰围偏高",gender:"男",age:"35-44",healthOutline:"已生成",aiReport:"已解读",aiTraining:"已生成",aiConsult:7,pendingBind:0},{id:"o6",user:"林澈",coach:"李教练",status:"待分配用户",latest:"2026-04-08",reason:"近 7 天新增测评未分配",action:"优先分配",priority:"P1",goal:"健康管理",tag:"核心稳定性弱",gender:"女",age:"25-34",healthOutline:"已生成",aiReport:"未解读",aiTraining:"未生成",aiConsult:1,pendingBind:1},{id:"o7",user:"周然",coach:"陈教练",status:"活跃用户",latest:"2026-04-10",reason:"近 30 天有服务跟进",action:"持续跟进",priority:"P2",goal:"体态改善",tag:"骨盆前倾",gender:"女",age:"35-44",healthOutline:"已生成",aiReport:"已解读",aiTraining:"已生成",aiConsult:6,pendingBind:0}],issues:[{key:"assign",title:"待分配偏高",text:"52 人待分配"},{key:"retest",title:"复测偏低",text:"86 人待复测"},{key:"risk",title:"沉默偏高",text:"41 人需回访"}],trend:[{label:"第1周",value:24},{label:"第2周",value:28},{label:"第3周",value:31},{label:"第4周",value:35},{label:"第5周",value:39},{label:"第6周",value:42}]},
+      coach:{cards:[["count","负责会员数","186","+9.3%","当前归属"],["assign","待分配用户","11","P1","已测评未分配"],["pendingRetest","待复测用户","14","P1","可复测未完成"],["risk","沉默用户","9","需唤醒","30 天无行为"],["potential","高潜转化用户","7","P2","近 7 天新增测评 + 未分配"],["active","活跃会员","82","+4.1%","近 30 天"],["pendingBind","待绑定用户","6","非 Pro","测后未绑定"],["healthOutline","健康档案生成率","71.4%","非 Pro","已生成健康档案 / 负责会员"],["aiReport","AI 报告解读率","63.8%","Pro","已解读报告 / 负责会员"],["aiTraining","AI 训练大纲生成率","48.2%","Pro","已生成训练大纲 / 负责会员"],["aiConsult","AI 咨询用户数","38","Pro","有 AI 咨询记录会员"]],
+        rows:[{id:"c1",user:"李梦瑶",goal:"减脂塑形",status:"待复测",latest:"2026-03-14",reason:"待复测",action:"安排复测",priority:"P1",gender:"女",age:"25-34",tag:"体脂偏高",healthOutline:"已生成",aiReport:"已解读",aiTraining:"已生成",aiConsult:12,pendingBind:0},{id:"c2",user:"王哲",goal:"健康管理",status:"沉默用户",latest:"2026-02-24",reason:"30 天无行为",action:"优先回访",priority:"P1",gender:"男",age:"35-44",tag:"运动能力弱",healthOutline:"已生成",aiReport:"已解读",aiTraining:"未生成",aiConsult:4,pendingBind:0},{id:"c3",user:"陈可欣",goal:"体态改善",status:"高潜转化",latest:"2026-04-05",reason:"近 7 天新增测评",action:"推进承接",priority:"P2",gender:"女",age:"18-24",tag:"圆肩驼背",healthOutline:"未生成",aiReport:"未解读",aiTraining:"未生成",aiConsult:0,pendingBind:1},{id:"c4",user:"赵晨",goal:"增肌",status:"沉睡用户",latest:"2026-03-30",reason:"沉睡用户",action:"唤醒触达",priority:"P3",gender:"男",age:"25-34",tag:"体重偏低",healthOutline:"已生成",aiReport:"未解读",aiTraining:"未生成",aiConsult:2,pendingBind:0},{id:"c5",user:"林澈",goal:"健康管理",status:"待分配用户",latest:"2026-04-08",reason:"近 7 天新增测评未分配",action:"先分配",priority:"P1",gender:"女",age:"25-34",tag:"核心稳定性弱",healthOutline:"已生成",aiReport:"未解读",aiTraining:"未生成",aiConsult:1,pendingBind:1},{id:"c6",user:"周然",goal:"体态改善",status:"活跃会员",latest:"2026-04-10",reason:"近 30 天有服务跟进",action:"持续跟进",priority:"P2",gender:"女",age:"35-44",tag:"骨盆前倾",healthOutline:"已生成",aiReport:"已解读",aiTraining:"已生成",aiConsult:6,pendingBind:0}],trend:[{label:"第1周",value:12},{label:"第2周",value:14},{label:"第3周",value:16},{label:"第4周",value:18},{label:"第5周",value:20},{label:"第6周",value:22}]}
+    };
+    const app=document.getElementById("app"),toast=document.getElementById("toast"),modalMask=document.getElementById("modalMask"),drawerMask=document.getElementById("drawerMask");
+    const esc=(v)=>String(v??"").replace(/[&<>"']/g,s=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[s]));
+    const isProKey=(key)=>proKeys.includes(key),roleData=()=>data[state.role],roleMeta=()=>roles[state.role],pageMeta=()=>roleMeta().pages[0];
+    const chartTheme=(title)=>title.includes("性别")?chartThemes.gender:title.includes("年龄")?chartThemes.age:title.includes("目标")?chartThemes.goal:title.includes("问题标签")?chartThemes.tag:["#2563eb","#14b8a6","#f59e0b","#8b5cf6","#fb7185"];
+    function inDate(row){if(!row.latest)return true;return row.latest>=state.dateStart&&row.latest<=state.dateEnd}
+    function globalRows(){let rows=[...roleData().rows].filter(inDate);if(state.search)rows=rows.filter(row=>Object.values(row).some(v=>String(v).includes(state.search)));if(state.role==="hq"&&state.group!=="全部门店组")rows=rows.filter(row=>row.group===state.group);if(state.role==="owner"&&state.coach!=="全部教练")rows=rows.filter(row=>row.coach===state.coach);return rows}
+    function drillRows(key,source=globalRows()){if(key==="cumulative"||key==="count")return source;if(key==="new")return source.filter(row=>Number(row.new)>0||row.reason?.includes("新增"));if(key==="active")return source.filter(row=>Number(row.active)>0||row.status!=="沉睡用户");if(key==="retest")return source.filter(row=>Number(row.retest)>0||row.status==="待复测");if(key==="ratio")return source;if(key==="risk")return source.filter(row=>Number(row.risk)>0||row.status==="沉默用户");if(key==="silent")return source.filter(row=>Number(row.silent)>0||row.status==="沉默用户");if(key==="assign")return source.filter(row=>Number(row.unassigned)>0||row.status==="待分配用户");if(key==="pendingRetest")return source.filter(row=>Number(row.pendingRetest)>0||row.status==="待复测");if(key==="pendingBind")return source.filter(row=>Number(row.pendingBind)>0||row.status==="待绑定用户");if(key==="potential")return source.filter(row=>row.status==="高潜转化");if(key==="healthOutline")return source.filter(row=>row.healthOutline==="已生成"||String(row.healthOutline).includes("%"));if(key==="aiReport")return source.filter(row=>row.aiReport==="已解读"||String(row.aiReport).includes("%"));if(key==="aiTraining")return source.filter(row=>row.aiTraining==="已生成"||String(row.aiTraining).includes("%"));if(key==="aiConsult")return source.filter(row=>Number(row.aiConsult)>0);return source}
+    function mainRows(){const rows=globalRows();return state.role==="hq"?rows:rows.sort((a,b)=>String(a.priority||"P9").localeCompare(String(b.priority||"P9")))}
+    function visibleCards(){
+      const serviceKeys=new Set(["unassigned","pendingRetest","silent","pendingBind"]);
+      return roleData().cards.filter(card=>{
+        if(state.role==="hq"&&serviceKeys.has(card[0]))return false;
+        return state.tier==="pro"||!isProKey(card[0]);
+      })
+    }
+    function showToast(text){toast.textContent=text;toast.classList.add("show");clearTimeout(showToast.timer);showToast.timer=setTimeout(()=>toast.classList.remove("show"),1800)}
+    function tone(key){if(key==="risk")return"red";if(key==="silent")return"orange";if(key==="assign"||key==="retest"||key==="pendingRetest")return"orange";if(key==="potential"||key==="aiReport")return"blue";if(key==="healthOutline")return"teal";if(key==="aiTraining")return"purple";if(key==="active")return"green";if(key==="pendingBind")return"gray";return"gray"}
+    function metricRule(key){return metricRules[key]||"按当前筛选范围与页面口径统计。"}
+    function columns(){if(state.role==="hq")return["name","group","cumulative","new","active","retest","ratio","unassigned","pendingRetest","risk","pendingBind"];if(state.role==="owner")return["user","coach","status","latest","reason","action","pendingBind"];return["user","goal","status","latest","reason","action","pendingBind"]}
+    function table(cols,tableRows=mainRows(),selectable=true){return `<div class="table-wrap"><table><thead><tr>${cols.map(c=>`<th>${headerMap[c]||c}</th>`).join("")}</tr></thead><tbody>${tableRows.map(row=>`<tr class="${state.rowId===row.id?"selected":""}" ${selectable?`data-row="${row.id}"`:""}>${cols.map(c=>`<td>${esc(row[c])}</td>`).join("")}</tr>`).join("")}</tbody></table></div>`}
+    function pagedRows(){const start=(state.pageNo-1)*state.pageSize;return mainRows().slice(start,start+state.pageSize)}
+    function selectedRow(){return mainRows().find(row=>row.id===state.rowId)||mainRows()[0]||null}
+    function detail(row){if(!row)return `<aside class="detail"><h3>暂无数据</h3><div class="subline">当前条件下没有明细。</div></aside>`;const title=row.name||row.user,sub=row.group||row.coach||row.goal;let pairs=state.role==="hq"?[["累计测评",row.cumulative],["本期新增",row.new],["活跃用户",row.active],["复测用户",row.retest],["复测达成率",row.ratio],["待分配",row.unassigned],["待复测",row.pendingRetest],["沉默用户",row.risk],["待绑定",row.pendingBind],["健康档案",row.healthOutline],["AI 报告解读",row.aiReport],["AI 训练大纲",row.aiTraining],["AI 咨询",row.aiConsult]]:[["当前状态",row.status],["最近测评",row.latest],["触发原因",row.reason],["建议动作",row.action],["目标",row.goal],["问题标签",row.tag],["待绑定",row.pendingBind],["健康档案",row.healthOutline],["AI 报告解读",row.aiReport],["AI 训练大纲",row.aiTraining],["AI 咨询次数",row.aiConsult]];if(state.tier!=="pro")pairs=pairs.filter(([label])=>!label.includes("AI"));return `<aside class="detail"><h3>${esc(title)}</h3><div class="subline">${esc(sub)}</div><div class="detail-section">${pairs.map(([k,v])=>`<div class="kv"><span>${esc(k)}</span><strong>${esc(v)}</strong></div>`).join("")}</div></aside>`}
+    function renderCards(){return `<section class="stat-strip">${visibleCards().map(([key,label,value,delta,hint])=>`<button class="stat-card" data-metric="${key}" data-title="${esc(label)}" data-tone="${tone(key)}"><div><div class="stat-head"><div class="stat-label">${esc(label)}</div><span class="pill ${tone(key)}">${esc(delta)}</span></div><div class="stat-value">${esc(value)}</div></div><div class="stat-sub">${esc(hint)}</div></button>`).join("")}</section>`}
+    function servicePanel(){
+      if(state.role!=="hq")return "";
+      const serviceKeys=["unassigned","pendingRetest","silent","pendingBind"],items=roleData().cards.filter(card=>serviceKeys.includes(card[0])).filter(card=>state.tier==="pro"||!isProKey(card[0]));
+      return `<section class="panel"><div class="panel-title"><div><h3>教练服务数据</h3><p>观察总门店与下级门店在教练承接、复测推进、沉默回访和测后绑定上的处理情况。</p></div><span class="pill orange">基础服务指标</span></div><div class="panel-body"><div class="mini-grid">${items.map(([key,label,value,delta,hint])=>`<button class="mini clickable" data-metric="${key}" data-title="${esc(label)}" data-tone="${tone(key)}"><div class="stat-head"><div class="stat-label">${esc(label)}</div><span class="pill ${tone(key)}">${esc(delta)}</span></div><div class="stat-value">${esc(value)}</div><div class="stat-sub">${esc(hint)}</div></button>`).join("")}</div></div></section>`
+    }
+    function countBy(key,source=globalRows()){return source.reduce((acc,row)=>{acc[row[key]]=Number(acc[row[key]]||0)+1;return acc},{})}
+    function countItems(key){return Object.entries(countBy(key)).map(([label,value])=>({label,value}))}
+    function barPanel(title,items){const max=Math.max(...items.map(i=>i.value),1),palette=chartTheme(title);return `<section class="panel"><div class="panel-title"><h3>${esc(title)}</h3></div><div class="panel-body"><div class="bar-list">${items.map((item,idx)=>{const color=palette[idx%palette.length];return `<div class="bar-row" data-chart-key="${esc(item.label)}" data-chart-title="${esc(title)}" data-chart-rule="${esc(chartRules[title]||"")}" style="--swatch:${color}"><div class="bar-label">${esc(item.label)}</div><div class="bar-track"><div class="bar" style="width:${Math.max(8,item.value/max*100)}%;--bar-color:${color}"></div></div><div class="bar-value">${item.value}</div></div>`}).join("")}</div></div></section>`}
+    function trendPanel(title){const vals=roleData().trend,max=Math.max(...vals.map(v=>v.value),1);const sub=chartRules[title]||"";const theme=state.role==="hq"?"#3b82f6":state.role==="owner"?"#14b8a6":"#6366f1";return `<section class="panel"><div class="panel-title"><div><h3>${esc(title)}</h3><p>${esc(sub)}${title.includes("趋势")?"，横轴显示周期，柱顶显示数值。":""}</p></div></div><div class="panel-body"><div class="trend-wrap"><div class="trend-topline"><span>单位：人</span><span>横轴：最近 6 期</span></div><div class="trend">${vals.map((item)=>`<button class="trend-btn" data-trend="${esc(item.label)}" data-trend-rule="${esc(sub)}"><div class="trend-bar" style="height:${Math.max(18,item.value/max*100)}%;--series:${theme};--series-soft:${theme}1f"><span>${item.value}</span></div></button>`).join("")}</div><div class="trend-axis">${vals.map(item=>`<span>${esc(item.label)}</span>`).join("")}</div></div></div></section>`}
+    function ownerIssues(){return `<section class="panel"><div class="panel-title"><h3>运营问题提示</h3></div><div class="panel-body"><div class="mini-grid">${roleData().issues.map(item=>`<button class="mini clickable" data-issue="${item.key}" data-title="${esc(item.title)}" data-issue-rule="${esc(issueRules[item.key]||"")}"><h4>${esc(item.title)}</h4><p>${esc(item.text)}</p></button>`).join("")}</div></div></section>`}
+    function statusPalette(label,idx){const map={"待分配":"#f59e0b","待复测":"#3b82f6","沉默用户":"#ef4444","高潜转化":"#8b5cf6","活跃会员":"#10b981","活跃用户":"#10b981","沉睡用户":"#94a3b8"};return map[label]||["#2563eb","#14b8a6","#f59e0b","#8b5cf6","#fb7185"][idx%5]}
+    function statusPanel(){const items=countItems("status");return `<section class="panel"><div class="panel-title"><h3>会员状态分布</h3></div><div class="panel-body"><div class="status-grid">${items.map((item,idx)=>{const color=statusPalette(item.label,idx);return `<button class="status-card" data-status="${esc(item.label)}" data-status-rule="${esc(chartRules["会员状态分布"]||"")}" style="border-top:3px solid ${color};box-shadow:0 10px 22px ${color}14"><strong>${esc(item.label)}</strong><span style="color:${color}">${item.value}</span></button>`}).join("")}</div></div></section>`}
+    function piePanel(title,items){const total=Math.max(items.reduce((sum,item)=>sum+item.value,0),1);const colors=chartTheme(title);let acc=0;const parts=items.map((item,idx)=>{const start=acc,totalPct=(item.value/total)*100;acc+=totalPct;return `${colors[idx%colors.length]} ${start}% ${acc}%`}).join(", ");const first=items[0]||{label:"-",value:0};return `<section class="panel"><div class="panel-title"><h3>${esc(title)}</h3></div><div class="panel-body"><div class="pie-grid"><div class="pie-wrap"><div class="pie-chart" style="background:conic-gradient(${parts});"><div class="pie-center"><strong>${total}</strong><span>总计</span></div></div></div><div class="legend-list">${items.map((item,idx)=>`<div class="legend-item" data-chart-key="${esc(item.label)}" data-chart-title="${esc(title)}" data-chart-rule="${esc(chartRules[title]||"")}" style="--legend:${colors[idx%colors.length]}"><span class="legend-dot"></span><strong>${esc(item.label)}</strong><span>${item.value}</span></div>`).join("")}</div></div></div></section>`}
+    function structurePanels(){if(state.role==="hq")return "";return `<section class="chart-grid">${piePanel("性别分布",countItems("gender"))}${barPanel("年龄分布",countItems("age"))}${barPanel("目标分布",countItems("goal"))}${barPanel("问题标签分布",countItems("tag"))}</section>`}
+    function listTitle(){if(state.role==="hq")return"门店对比与风险";if(state.role==="owner")return"待处理用户列表";return"待跟进会员列表"}
+    function trendTitle(){if(state.role==="hq")return"近 6 期趋势";if(state.role==="owner")return"教练服务及时性趋势";return"负责会员趋势"}
+    function pager(){const total=mainRows().length,pages=Math.max(1,Math.ceil(total/state.pageSize));return `<div class="pager"><span>共 ${total} 条，每页 ${state.pageSize} 条，第 ${state.pageNo} / ${pages} 页</span><div class="pager-actions"><button data-page-prev ${state.pageNo<=1?"disabled":""}>上一页</button><button data-page-next ${state.pageNo>=pages?"disabled":""}>下一页</button></div></div>`}
+    function mainPage(){return `${renderCards()}${servicePanel()}<div class="grid"><div class="stack"><section class="panel"><div class="panel-title"><h3>${listTitle()}</h3><span class="pill ${state.role==="hq"?"blue":"orange"}">${state.role==="hq"?"门店明细":"可执行名单"}</span></div><div class="panel-body flush">${mainRows().length?table(columns(),pagedRows()):`<div class="empty">暂无数据</div>`}${pager()}</div></section>${state.role==="owner"?ownerIssues():""}${state.role==="coach"?statusPanel():""}${trendPanel(trendTitle())}${structurePanels()}</div>${detail(selectedRow())}</div>`}
+    function renderTopbar(){return `<div class="topbar"><div class="toolbar"><div><h1 class="page-title">${pageMeta().label}</h1><div class="page-sub">${pageMeta().subtitle}</div></div><div class="top-meta"><span class="tiny-pill">${state.tier==="pro"?"Pro":"非 Pro"}</span></div></div><div class="filters"><input class="search-box" data-search value="${esc(state.search)}" placeholder="${state.role==="hq"?"搜索门店":"搜索会员"}" /><div class="date-range"><input type="date" data-date-start value="${state.dateStart}" /><span>至</span><input type="date" data-date-end value="${state.dateEnd}" /></div>${state.role==="hq"?`<select class="select-box" data-group>${groupOptions.map(item=>`<option ${state.group===item?"selected":""}>${item}</option>`).join("")}</select>`:""}${state.role==="owner"?`<select class="select-box" data-coach>${coachOptions.map(item=>`<option ${state.coach===item?"selected":""}>${item}</option>`).join("")}</select>`:""}<button class="primary-btn" data-export>导出数据</button></div></div>`}
+    function exportOptions(){
+      const metricOptions=visibleCards().map(([key,label])=>({key:`metric:${key}`,title:`${label}明细`,desc:"指标卡下钻明细"}));
+      const serviceOptions=state.role==="hq"?roleData().cards.filter(card=>["unassigned","pendingRetest","silent","pendingBind"].includes(card[0])).map(([key,label])=>({key:`metric:${key}`,title:`${label}明细`,desc:"教练服务数据卡区明细"})):[];
+      const common=[{key:"main",title:listTitle(),desc:"当前页面主列表"},...metricOptions,...serviceOptions,{key:"trend",title:trendTitle(),desc:"当前时间范围趋势数据"}];
+      if(state.role!=="hq")common.push({key:"structure",title:"用户结构分布",desc:"性别、年龄、目标、问题标签"});
+      if(state.role==="coach")common.push({key:"status",title:"会员状态分布",desc:"当前会员状态统计"});
+      if(state.tier==="pro")common.push({key:"pro",title:"Pro 能力指标",desc:"AI 报告解读、AI 训练大纲、AI 咨询"});
+      return common
+    }
+    function exportDataset(key){
+      if(key.startsWith("metric:")){
+        const metricKey=key.split(":")[1],card=visibleCards().find(item=>item[0]===metricKey);
+        return{key,title:`${card?.[1]||"指标"}明细`,rule:metricRule(metricKey),cols:columns(),rows:drillRows(metricKey)}
+      }
+      if(key==="main")return{key,title:listTitle(),rule:"当前页面主列表数据，受顶部搜索、日期范围和角色专属筛选影响。",cols:columns(),rows:mainRows()}
+      if(key==="trend")return{key,title:trendTitle(),rule:chartRules[trendTitle()]||"",cols:["label","value"],rows:roleData().trend}
+      if(key==="structure")return{key,title:"用户结构分布",rule:"当前筛选范围内按性别、年龄、目标、问题标签进行去重统计。",cols:["label","value"],rows:[...countItems("gender"),...countItems("age"),...countItems("goal"),...countItems("tag")]}
+      if(key==="status")return{key,title:"会员状态分布",rule:chartRules["会员状态分布"],cols:["label","value"],rows:countItems("status")}
+      return{key,title:"Pro 能力指标",rule:"AI 报告解读、AI 训练大纲、AI 咨询相关指标。",cols:state.role==="hq"?["name","aiReport","aiTraining","aiConsult"]:["user","aiReport","aiTraining","aiConsult"],rows:globalRows()}
+    }
+    function exportSections(keys){return (keys.length?keys:["main"]).map(key=>exportDataset(key))}
+    function timeLabel(){const d=new Date(),z=n=>String(n).padStart(2,"0");return `${d.getFullYear()}-${z(d.getMonth()+1)}-${z(d.getDate())} ${z(d.getHours())}:${z(d.getMinutes())}`}
+    function filenameStamp(){const d=new Date(),z=n=>String(n).padStart(2,"0");return `${d.getFullYear()}${z(d.getMonth()+1)}${z(d.getDate())}-${z(d.getHours())}${z(d.getMinutes())}`}
+    function downloadBlob(blob,filename){const url=URL.createObjectURL(blob),a=document.createElement("a");a.href=url;a.download=filename;a.click();setTimeout(()=>URL.revokeObjectURL(url),500)}
+    function buildCsv(sections){const lines=[];sections.forEach(set=>{lines.push([set.title]);lines.push(["统计规则",set.rule||""]);lines.push(["页面",`${roleMeta().label} / ${pageMeta().label}`]);lines.push(["日期范围",`${state.dateStart} 至 ${state.dateEnd}`]);lines.push(["导出时间",timeLabel()]);lines.push([""]);lines.push(set.cols.map(c=>headerMap[c]||c));set.rows.forEach(row=>lines.push(set.cols.map(c=>row[c])));lines.push([""])}) ;return lines.map(line=>line.map(v=>`"${String(v??"").replace(/"/g,'""')}"`).join(",")).join("\n")}
+    function buildExcel(sections){const tables=sections.map(set=>`<section style="margin:0 0 28px"><h2 style="margin:0 0 8px;font-size:18px">${esc(set.title)}</h2><div style="color:#667085;font-size:12px;margin-bottom:6px">统计规则：${esc(set.rule||"")}</div><div style="color:#667085;font-size:12px;margin-bottom:10px">页面：${esc(`${roleMeta().label} / ${pageMeta().label}`)} · 日期范围：${esc(`${state.dateStart} 至 ${state.dateEnd}`)} · 导出时间：${esc(timeLabel())}</div><table border="1" cellspacing="0" cellpadding="6" style="border-collapse:collapse;width:100%;font-size:12px"><thead><tr>${set.cols.map(c=>`<th style="background:#f5f7fb;text-align:left">${esc(headerMap[c]||c)}</th>`).join("")}</tr></thead><tbody>${set.rows.map(row=>`<tr>${set.cols.map(c=>`<td>${esc(row[c])}</td>`).join("")}</tr>`).join("")}</tbody></table></section>`).join("");return `<!doctype html><html><head><meta charset="utf-8"><title>导出</title></head><body style="font-family:Arial,'PingFang SC','Microsoft YaHei',sans-serif;padding:16px">${tables}</body></html>`}
+    function triggerDownload(format,sections,baseName){if(format==="excel"){downloadBlob(new Blob(["\ufeff"+buildExcel(sections)],{type:"application/vnd.ms-excel;charset=utf-8;"}),`${baseName}.xls`)}else{downloadBlob(new Blob(["\ufeff"+buildCsv(sections)],{type:"text/csv;charset=utf-8;"}),`${baseName}.csv`)}showToast("导出已开始")}
+    function createExportTask(keys,format){const sections=exportSections(keys),task={id:`task-${Date.now()}`,title:sections.map(s=>s.title).join("、"),format:format==="excel"?"Excel":"CSV",scope:`${roleMeta().label} / ${pageMeta().label}`,rows:sections.reduce((sum,set)=>sum+set.rows.length,0),status:"已完成",time:timeLabel(),keys:[...((keys.length?keys:["main"]))],fileBase:`${roleMeta().label}-${state.dateStart}_${state.dateEnd}-${filenameStamp()}`};exportTasks.unshift(task);triggerDownload(format,sections,task.fileBase);render()}
+    function openDrawer(title,tableRows=mainRows(),tableCols=columns(),rule="",key="main"){drawerState={mode:"detail",title,rows:[...tableRows],cols:tableCols,rule:rule||metricRule(key),key,pageNo:1,pageSize:4,format:state.exportFormat};renderDrawer()}
+    function openTaskDrawer(){drawerState={mode:"tasks",rows:[...exportTasks],pageNo:1,pageSize:6};renderDrawer()}
+    function renderDrawer(){if(!drawerState){drawerMask.classList.remove("show");drawerMask.innerHTML="";return}
+      if(drawerState.mode==="tasks"){drawerMask.innerHTML=`<aside class="drawer"><div class="drawer-head"><div><h3>导出任务列表</h3><p>记录最近导出任务，支持按任务重新下载。</p></div><div class="drawer-actions"><button class="ghost-btn" data-drawer-close>关闭</button></div></div><div class="drawer-body">${drawerState.rows.length?`<div class="task-list">${drawerState.rows.map(task=>`<div class="task-item"><div class="task-meta"><strong>${esc(task.title)}</strong><span>${esc(task.scope)} · ${esc(task.format)} · ${task.rows} 行 · ${esc(task.time)}</span><span>状态：${esc(task.status)}</span></div><div class="task-right"><button class="ghost-btn" data-task-download="${esc(task.id)}">重新下载</button></div></div>`).join("")}</div>`:`<div class="empty">暂无导出任务</div>`}</div></aside>`;drawerMask.classList.add("show");return}
+      const total=drawerState.rows.length,pages=Math.max(1,Math.ceil(total/drawerState.pageSize)),start=(drawerState.pageNo-1)*drawerState.pageSize,slice=drawerState.rows.slice(start,start+drawerState.pageSize),exportName=`${drawerState.title}-${state.dateStart}_${state.dateEnd}-${filenameStamp()}`;
+      drawerMask.dataset.exportName=exportName;drawerMask.dataset.exportFormat=drawerState.format||state.exportFormat;
+      drawerMask.innerHTML=`<aside class="drawer"><div class="drawer-head"><div><h3>${esc(drawerState.title)}</h3><p>共 ${total} 条 · 第 ${drawerState.pageNo} / ${pages} 页</p></div><div class="drawer-actions"><button class="primary-btn" data-drawer-export>导出明细</button><button class="ghost-btn" data-drawer-close>关闭</button></div></div><div class="drawer-body"><section class="rule-box"><h4>统计规则</h4><p>${esc(drawerState.rule||"按当前筛选范围与页面口径统计。")}</p></section>${slice.length?table(drawerState.cols,slice,false):`<div class="empty">暂无数据</div>`}<div class="pager"><span>共 ${total} 条，每页 ${drawerState.pageSize} 条，第 ${drawerState.pageNo} / ${pages} 页</span><div class="pager-actions"><button data-drawer-prev ${drawerState.pageNo<=1?"disabled":""}>上一页</button><button data-drawer-next ${drawerState.pageNo>=pages?"disabled":""}>下一页</button></div></div></div></aside>`;drawerMask.classList.add("show")}
+    function openExportModal(){const opts=exportOptions();modalMask.innerHTML=`<div class="modal"><div class="modal-head"><div><h3>导出数据</h3><p>可多选数据集，支持 Excel / CSV 两种格式。</p></div><div class="export-format" role="tablist"><label class="${state.exportFormat==="excel"?"active":""}"><input type="radio" name="export-format" value="excel" ${state.exportFormat==="excel"?"checked":""} data-export-format>Excel</label><label class="${state.exportFormat==="csv"?"active":""}"><input type="radio" name="export-format" value="csv" ${state.exportFormat==="csv"?"checked":""} data-export-format>CSV</label></div></div><div class="modal-body export-layout"><div class="export-main"><div class="export-grid">${opts.map(opt=>{const set=exportDataset(opt.key);return `<label class="export-item"><input type="checkbox" data-export-key="${opt.key}" checked><div><strong>${opt.title}</strong><span>${opt.desc} · ${set.rows.length} 行</span></div></label>`}).join("")}</div></div><aside class="export-summary"><h4>导出摘要</h4><div class="kv"><span>数据集数量</span><strong id="export-selected-count">${opts.length}</strong></div><div class="kv"><span>格式</span><strong id="export-selected-format">${state.exportFormat==="excel"?"Excel":"CSV"}</strong></div><div class="kv"><span>导出范围</span><strong>${esc(`${roleMeta().label} / ${pageMeta().label}`)}</strong></div><div class="kv"><span>文件名</span><strong id="export-selected-file">${esc(`${roleMeta().label}-${state.dateStart}_${state.dateEnd}-${filenameStamp()}.${state.exportFormat==="excel"?"xls":"csv"}`)}</strong></div><div class="kv"><span>导出任务</span><strong>会同步写入导出任务列表</strong></div></aside></div><div class="modal-foot"><button class="ghost-btn" data-close>取消</button><button class="primary-btn" data-confirm-export>确认导出</button></div></div>`;modalMask.classList.add("show");refreshExportSummary()}
+    function refreshExportSummary(){const checked=[...modalMask.querySelectorAll("[data-export-key]:checked")],format=(modalMask.querySelector("[data-export-format]:checked")||{}).value||state.exportFormat;state.exportFormat=format;const count=modalMask.querySelector("#export-selected-count"),fmt=modalMask.querySelector("#export-selected-format"),file=modalMask.querySelector("#export-selected-file");if(count)count.textContent=String(checked.length);if(fmt)fmt.textContent=format==="excel"?"Excel":"CSV";if(file)file.textContent=`${roleMeta().label}-${state.dateStart}_${state.dateEnd}-${filenameStamp()}.${format==="excel"?"xls":"csv"}`;modalMask.querySelectorAll(".export-format label").forEach(label=>label.classList.toggle("active",label.querySelector("input").checked))}
+    function render(){app.innerHTML=`<div class="app"><aside class="sidebar"><div class="brand"><div class="brand-mark">W</div><div><div class="brand-title">Visbody WellnessHub</div><div class="brand-sub">运营分析</div></div></div><div><div class="side-title">角色视图</div><div class="nav-list">${Object.entries(roles).map(([key,item])=>`<button class="side-btn ${state.role===key?"active":""}" data-role="${key}"><span class="side-left"><span class="dot"></span>${item.label}</span><span>${state.role===key?"当前":""}</span></button>`).join("")}</div></div><div><div class="side-title">页面</div><div class="nav-list">${roleMeta().pages.map(page=>`<button class="side-btn active"><span class="side-left"><span class="dot"></span>${page.label}</span></button>`).join("")}</div></div></aside><main class="main"><div class="global-bar"><div class="crumbs">Visbody WellnessHub / 运营分析 / ${pageMeta().label}</div><div class="global-right"><span class="tiny-pill">${roleMeta().label}</span><div class="segmented"><button class="${state.tier==="basic"?"active":""}" data-tier="basic">非 Pro</button><button class="${state.tier==="pro"?"active":""}" data-tier="pro">Pro</button></div><button class="ghost-btn" data-refresh>刷新</button><button class="ghost-btn" data-export-tasks>导出任务 ${exportTasks.length?`(${exportTasks.length})`:""}</button></div></div>${renderTopbar()}<div class="content">${mainPage()}</div></main></div>`;bind()}
+    function resetList(){state.rowId="";state.pageNo=1}
+    function bind(){document.querySelectorAll("[data-role]").forEach(btn=>btn.onclick=()=>{state.role=btn.dataset.role;state.search="";state.group="全部门店组";state.coach="全部教练";resetList();render()});document.querySelectorAll("[data-tier]").forEach(btn=>btn.onclick=()=>{state.tier=btn.dataset.tier;showToast(state.tier==="pro"?"已切换到 Pro":"已切换到非 Pro");resetList();render()});document.querySelectorAll("[data-metric]").forEach(btn=>btn.onclick=()=>{const key=btn.dataset.metric;openDrawer(`${btn.dataset.title}明细`,drillRows(key),columns(),metricRule(key),key)});document.querySelectorAll("[data-row]").forEach(tr=>tr.onclick=()=>{state.rowId=tr.dataset.row;render()});const start=document.querySelector("[data-date-start]"),end=document.querySelector("[data-date-end]");if(start)start.onchange=()=>{state.dateStart=start.value||state.dateStart;resetList();render()};if(end)end.onchange=()=>{state.dateEnd=end.value||state.dateEnd;resetList();render()};const search=document.querySelector("[data-search]");if(search)search.oninput=()=>{state.search=search.value.trimStart();resetList();render()};const group=document.querySelector("[data-group]");if(group)group.onchange=()=>{state.group=group.value;resetList();render()};const coach=document.querySelector("[data-coach]");if(coach)coach.onchange=()=>{state.coach=coach.value;resetList();render()};const exportBtn=document.querySelector("[data-export]");if(exportBtn)exportBtn.onclick=openExportModal;const taskBtn=document.querySelector("[data-export-tasks]");if(taskBtn)taskBtn.onclick=openTaskDrawer;const refreshBtn=document.querySelector("[data-refresh]");if(refreshBtn)refreshBtn.onclick=()=>showToast("数据已刷新");document.querySelectorAll("[data-issue]").forEach(btn=>btn.onclick=()=>{const title=btn.dataset.issue==="risk"?"沉默用户":btn.dataset.title;openDrawer(`${title}明细`,drillRows(btn.dataset.issue),columns(),btn.dataset.issueRule||issueRules[btn.dataset.issue]||"",btn.dataset.issue)});document.querySelectorAll("[data-status]").forEach(btn=>btn.onclick=()=>openDrawer(`${btn.dataset.status}会员`,globalRows().filter(row=>row.status===btn.dataset.status),columns(),btn.dataset.statusRule||chartRules["会员状态分布"],"status"));document.querySelectorAll("[data-chart-key]").forEach(btn=>btn.onclick=()=>{const map=btn.dataset.chartTitle.includes("性别")?"gender":btn.dataset.chartTitle.includes("年龄")?"age":btn.dataset.chartTitle.includes("目标")?"goal":"tag";openDrawer(`${btn.dataset.chartTitle} - ${btn.dataset.chartKey}`,globalRows().filter(row=>String(row[map])===btn.dataset.chartKey),columns(),btn.dataset.chartRule||chartRules[btn.dataset.chartTitle]||"",btn.dataset.chartTitle)});document.querySelectorAll("[data-trend]").forEach(btn=>btn.onclick=()=>openDrawer(`${btn.dataset.trend}明细`,roleData().trend,["label","value"],btn.dataset.trendRule||chartRules[trendTitle()]||"",trendTitle()));document.querySelector("[data-page-prev]")?.addEventListener("click",()=>{const pages=Math.max(1,Math.ceil(mainRows().length/state.pageSize));state.pageNo=Math.max(1,state.pageNo-1);state.pageNo=Math.min(state.pageNo,pages);render()});document.querySelector("[data-page-next]")?.addEventListener("click",()=>{const pages=Math.max(1,Math.ceil(mainRows().length/state.pageSize));state.pageNo=Math.min(pages,state.pageNo+1);render()})}
+    modalMask.addEventListener("click",e=>{if(e.target===modalMask||e.target.closest("[data-close]")){modalMask.classList.remove("show");modalMask.innerHTML="";return}if(e.target.closest("[data-confirm-export]")){const keys=[...modalMask.querySelectorAll("[data-export-key]:checked")].map(node=>node.dataset.exportKey),format=modalMask.querySelector("[data-export-format]:checked")?.value||state.exportFormat;modalMask.classList.remove("show");modalMask.innerHTML="";createExportTask(keys,format)}});
+    modalMask.addEventListener("change",e=>{if(e.target.closest("[data-export-key]")||e.target.closest("[data-export-format]"))refreshExportSummary()});
+    drawerMask.addEventListener("click",e=>{if(e.target===drawerMask||e.target.closest("[data-drawer-close]")){drawerState=null;drawerMask.classList.remove("show");drawerMask.innerHTML="";return}if(e.target.closest("[data-drawer-export]")){const format=drawerMask.dataset.exportFormat||state.exportFormat;triggerDownload(format,[{title:drawerState.title,rule:drawerState.rule,cols:drawerState.cols,rows:drawerState.rows}],drawerMask.dataset.exportName||`${drawerState?.title||"导出"}-${filenameStamp()}`);return}if(e.target.closest("[data-drawer-prev]")){const pages=Math.max(1,Math.ceil(drawerState.rows.length/drawerState.pageSize));drawerState.pageNo=Math.max(1,drawerState.pageNo-1);drawerState.pageNo=Math.min(drawerState.pageNo,pages);renderDrawer();return}if(e.target.closest("[data-drawer-next]")){const pages=Math.max(1,Math.ceil(drawerState.rows.length/drawerState.pageSize));drawerState.pageNo=Math.min(pages,drawerState.pageNo+1);renderDrawer();return}if(e.target.closest("[data-task-download]")){const node=e.target.closest("[data-task-download]"),task=exportTasks.find(item=>item.id===node.dataset.taskDownload);if(task)triggerDownload(task.format==="Excel"?"excel":"csv",exportSections(task.keys),task.fileBase)}});
+    render();
+  </script>
+</body>
+</html>
