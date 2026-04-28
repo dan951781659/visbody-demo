@@ -261,7 +261,7 @@
     const roles={hq:{label:"总门店端 PC",pages:[{key:"overview",label:"经营总览",subtitle:"总门店承接、教练服务和风险总览"}]},owner:{label:"子门店端 PC",pages:[{key:"overview",label:"经营总览",subtitle:"子门店承接、复测和用户画像"}]},coach:{label:"教练端 PC",pages:[{key:"workbench",label:"工作台",subtitle:"会员跟进、转化和服务状态"}]}};
     const coachOptions=["全部教练","陈教练","李教练","王教练","未分配"];
     const proKeys=["healthOutline","aiReport","aiTraining","aiConsult"];
-    const headerMap={name:"门店",group:"门店组",cumulative:"累计测评",new:"本期新增",active:"活跃用户",retest:"复测用户",ratio:"复测达成率",risk:"高风险门店数",silent:"沉默用户",unassigned:"待分配",pendingRetest:"待复测",pendingBind:"待绑定",user:"用户",coach:"教练",status:"状态",currentState:"当前状态",latest:"最近测评",latestAssessmentTime:"最近测评时间",scheduledRetestTime:"最近应复测时间",recentActiveTime:"最近有效行为",recentStoreActiveTime:"最近活跃时间",recentMeasureTime:"最近测量时间",measureTime:"测量时间",reason:"触发原因",action:"建议动作",goal:"目标",tag:"问题标签",gender:"性别",age:"年龄",healthOutline:"健康档案",aiReport:"AI 报告解读",aiTraining:"AI 训练大纲",aiConsult:"AI 咨询次数",aiConsultUsage:"AI 咨询使用",label:"分类",value:"数量",assigned:"分配池",timelyDone:"24h内承接",timelyDelay:"超时承接",timelyRate:"及时率",retestPool:"待复测池",retestDone:"已推进复测",retestOverdue:"超期未复测",retestRate:"推进率",silentPool:"沉默池",recalled:"已回访",unrecalled:"未回访",silentRate:"回访率",bindPool:"待绑定池",boundDone:"已绑定",unbound:"未绑定",bindRate:"绑定率",problem:"主要问题",retestUsers:"复测用户数",ratioPool:"可复测池",ratioMiss:"未复测",ratioValue:"复测达成率值",outlineDone:"已生成健康档案",outlinePool:"用户池",outlineMiss:"未生成",outlineValue:"健康档案生成率",outlineState:"健康档案状态",reportDone:"已解读报告",reportPool:"报告池",reportMiss:"未解读",reportValue:"AI 报告解读率",reportState:"AI 报告状态",trainingDone:"已生成训练大纲",trainingPool:"可生成池",trainingMiss:"未生成",trainingValue:"AI 训练大纲生成率",trainingState:"AI 训练大纲状态",sourceType:"来源类型",activeTag:"活跃标签",unassignedDuration:"未分配时长",retestAgingDays:"距上次测评天数",retestBand:"复测周期档位",pendingBindDays:"待绑定天数",bindOver7d:"超过 7 天未绑定记录数",riskRate:"沉默占比",riskLevel:"风险等级",recordId:"记录ID",userRecord:"用户/记录ID",trainingCount:"训练大纲生成次数",count:"负责会员数",silentDays:"沉默天数"};
+    const headerMap={name:"门店",group:"门店组",cumulative:"累计测评",new:"本期新增",active:"活跃用户",retest:"复测用户",ratio:"复测达成率",risk:"高风险门店数",silent:"沉默用户",unassigned:"待分配",pendingRetest:"待复测",pendingBind:"待绑定",user:"用户",coach:"教练",status:"状态",currentState:"当前状态",latest:"最近测评",latestAssessmentTime:"最近测评时间",recentActiveTime:"最近有效行为",recentStoreActiveTime:"最近活跃时间",recentMeasureTime:"最近测量时间",measureTime:"测量时间",reason:"触发原因",goal:"目标",tag:"问题标签",gender:"性别",age:"年龄",healthOutline:"健康档案",aiReport:"AI 报告解读",aiTraining:"AI 训练大纲",aiConsult:"AI 咨询次数",aiConsultUsage:"AI 咨询使用",label:"分类",value:"数量",assigned:"分配池",timelyDone:"24h内承接",timelyDelay:"超时承接",timelyRate:"及时率",retestPool:"待复测池",retestDone:"已推进复测",retestOverdue:"超期未复测",retestRate:"推进率",silentPool:"沉默池",recalled:"已回访",unrecalled:"未回访",silentRate:"回访率",bindPool:"待绑定池",boundDone:"已绑定",unbound:"未绑定",bindRate:"绑定率",problem:"主要问题",retestUsers:"复测用户数",ratioPool:"可复测池",ratioMiss:"未复测",ratioValue:"复测达成率值",outlineDone:"已生成健康档案",outlinePool:"用户池",outlineMiss:"未生成",outlineValue:"健康档案生成率",outlineState:"健康档案状态",reportDone:"已解读报告",reportPool:"报告池",reportMiss:"未解读",reportValue:"AI 报告解读率",reportState:"AI 报告状态",trainingDone:"已生成训练大纲",trainingPool:"可生成池",trainingMiss:"未生成",trainingValue:"AI 训练大纲生成率",trainingState:"AI 训练大纲状态",sourceType:"来源类型",activeTag:"活跃标签",unassignedDuration:"未分配时长",retestAgingDays:"距上次测评天数",retestBand:"复测周期档位",pendingBindDays:"待绑定天数",riskRate:"沉默占比",riskLevel:"风险等级",recordId:"记录ID",userRecord:"用户/记录ID",trainingCount:"训练大纲生成次数",count:"负责会员数",silentDays:"沉默天数"};
     const chartThemes={
       gender:["#3b82f6","#14b8a6"],
       age:["#3b82f6","#60a5fa","#93c5fd","#bfdbfe"],
@@ -271,7 +271,7 @@
     const state={role:"hq",tier:"pro",dateStart:"2026-03-01",dateEnd:"2026-04-14",search:"",group:"全部门店组",coach:"全部教练",rowId:"",pageNo:1,pageSize:20,exportFormat:"excel",ownerCoachSearch:"",ownerCoachPageNo:1,ownerCoachPageSize:10};
     const baseDateEnd="2026-04-14";
     const defaultWindowDays=45;
-    const defaultHqParams={retestCycleDays:28,silentDays:30,bindRetentionDays:30,acceptHours:24};
+    const defaultHqParams={retestCycleDays:28,silentDays:30,acceptHours:24};
     let hqParams=(()=>{try{return {...defaultHqParams,...JSON.parse(localStorage.getItem("wh-hq-params")||"{}")} }catch{return {...defaultHqParams}}})();
     function persistHqParams(){try{localStorage.setItem("wh-hq-params",JSON.stringify(hqParams))}catch{}}
     function ruleText(value){return typeof value==="function"?value():value}
@@ -284,7 +284,7 @@
       hq:{
         cumulative:{metricType:"object",timeEffectType:"none"},
         new:{metricType:"object",timeEffectType:"range"},
-        active:{metricType:"status",timeEffectType:"end_snapshot"},
+        active:{metricType:"status",timeEffectType:"none"},
         retest:{metricType:"object",timeEffectType:"range"},
         ratio:{metricType:"rate",timeEffectType:"end_snapshot"},
         unassigned:{metricType:"status",timeEffectType:"end_snapshot"},
@@ -300,7 +300,7 @@
       owner:{
         cumulative:{metricType:"object",timeEffectType:"none"},
         new:{metricType:"object",timeEffectType:"range"},
-        active:{metricType:"status",timeEffectType:"end_snapshot"},
+        active:{metricType:"status",timeEffectType:"none"},
         assign:{metricType:"status",timeEffectType:"end_snapshot"},
         pendingRetest:{metricType:"status",timeEffectType:"end_snapshot"},
         risk:{metricType:"status",timeEffectType:"end_snapshot"},
@@ -316,7 +316,7 @@
         pendingRetest:{metricType:"status",timeEffectType:"end_snapshot"},
         risk:{metricType:"status",timeEffectType:"end_snapshot"},
         pendingBind:{metricType:"status",timeEffectType:"none"},
-        active:{metricType:"status",timeEffectType:"end_snapshot"},
+        active:{metricType:"status",timeEffectType:"none"},
         healthOutline:{metricType:"rate",timeEffectType:"end_snapshot"},
         aiReport:{metricType:"rate",timeEffectType:"end_snapshot"},
         aiTraining:{metricType:"rate",timeEffectType:"end_snapshot"},
@@ -360,7 +360,7 @@
     const metricRules={
       cumulative:"当前筛选范围内按角色口径聚合的去重用户资产。总门店端按下级门店累计测评求和；子门店按当前门店有效测评去重用户数；教练按当前归属给本人的去重用户数。",
       new:"当前日期范围内首次完成有效测评的去重用户数，不含导入历史数据。",
-      active:()=>`当前筛选范围内存在有效测评、查看报告、复测预约、服务跟进等有效行为的去重用户数；+x% = 当前窗口相对之前一个同长度时间窗口的变化率。`,
+      active:"近 30 天内有有效测评、查看报告、AI 解读、训练大纲更新、复测等任意有效行为的去重用户数。",
       count:"当前归属给本人的去重用户数。",
       assign:"当前筛选范围内按最新有效测评 / 归属状态判断为待分配的去重用户数，不按首次记录累计，不按多条记录重复累加。",
       unassigned:"当前筛选范围内按最新有效测评 / 归属状态判断为待分配的去重用户数，不按首次记录累计，不按多条记录重复累加。",
@@ -370,7 +370,7 @@
       ratio:"复测达成率 = 复测用户数 / 可复测池用户数 × 100%。复测用户数按当前筛选范围内已完成复测的去重用户数统计；可复测池用户数按当前筛选范围内已进入可复测池的去重用户数统计；未复测数 = 可复测池用户数 - 复测用户数；分母为 0 时展示 0% 或“—”。",
       silent:()=>`命中 ${hqParams.silentDays} 天无行为规则的用户数；总门店场景下对应高风险门店的沉默用户规模。按当前筛选范围内最新有效状态快照判断，不按首次记录累计。`,
       pendingRetest:()=>`已进入可复测池但当前周期尚未完成复测的用户数；复测周期由总门店参数配置，当前为 ${hqParams.retestCycleDays} 天；按当前筛选范围内最新有效状态快照判断。`,
-      pendingBind:()=>`用户在设备上测量后未绑定用户信息的去重记录数，超过 ${hqParams.bindRetentionDays} 天未绑定自动删除；当前页面只展示仍在保留期内的有效待绑定记录。`,
+      pendingBind:"用户在设备上测量后未绑定用户信息的去重记录数；超过 30 天未绑定自动删除；当前页面只展示仍在保留期内的有效待绑定记录。",
       healthOutline:"健康档案生成率 = 已生成健康档案用户数 / 当前统计用户池 × 100%。已生成健康档案用户数按当前筛选范围内已生成健康档案的去重用户数统计；当前统计用户池按页面角色对应的当前筛选范围内用户数或门店数统计；未生成数 = 当前统计用户池 - 已生成健康档案用户数；分母为 0 时展示 0% 或“—”。",
       aiReport:"AI 报告解读率 = 已解读报告数 / 当前统计报告池 × 100%。已解读报告数按当前筛选范围内已完成 AI 报告解读的报告数统计；当前统计报告池按当前筛选范围内可进行 AI 报告解读的报告数统计；未解读数 = 当前统计报告池 - 已解读报告数；分母为 0 时展示 0% 或“—”。",
       aiTraining:"AI 训练大纲生成率 = 已生成训练大纲用户数 / 当前统计可生成池 × 100%。已生成训练大纲用户数按当前筛选范围内已生成训练大纲的去重用户数统计；当前统计可生成池按页面角色对应的当前筛选范围内满足 Pro 设备 + 有效测评 + 未排除且尚未生成训练大纲的用户集合统计；未生成数 = 当前统计可生成池 - 已生成训练大纲用户数；分母为 0 时展示 0% 或“—”。",
@@ -394,8 +394,8 @@
         searchHint:()=>state.role==="hq"?"搜索门店、已生成健康档案、用户池、未生成":"搜索用户、教练、当前状态",
         rule:metricRules.healthOutline,
         build(sourceRows=snapshotRows()){if(state.role==="hq"){const rows=sourceRows.map(row=>{const pool=Number(row.cumulative||0);const rate=Number(String(row.healthOutline||"").replace("%",""))||0;const done=rate>0?Math.round(pool*(rate/100)):0;const miss=Math.max(0,pool-done);return{name:row.name,outlineDone:done,outlinePool:pool,outlineMiss:miss,outlineValue:row.healthOutline}});return{cols:["name","outlineDone","outlinePool","outlineMiss","outlineValue"],rows};}
-          const rows=sourceRows.map(row=>({user:row.user,coach:row.coach,currentState:row.currentState||row.status,latest:row.latest,outlineState:row.healthOutline,reason:row.reason,action:row.action}));
-          const cols=state.role==="coach"?["user","currentState","latest","reason","action"]:["user","coach","currentState","latest","reason","action"];
+          const rows=sourceRows.map(row=>({user:row.user,coach:row.coach,currentState:row.currentState||row.status,latest:row.latest,outlineState:row.healthOutline,reason:row.reason}));
+          const cols=state.role==="coach"?["user","currentState","latest","reason"]:["user","coach","currentState","latest","reason"];
           return{cols,rows};},
         summary(rows){if(state.role==="hq"){const done=rows.reduce((sum,row)=>sum+Number(row.outlineDone||0),0);const pool=rows.reduce((sum,row)=>sum+Number(row.outlinePool||0),0);const miss=rows.reduce((sum,row)=>sum+Number(row.outlineMiss||0),0);return[{label:"已生成健康档案",value:done},{label:"用户池",value:pool},{label:"未生成",value:miss},{label:"健康档案生成率",value:pool?`${(done/pool*100).toFixed(1)}%`:"—"}]}
           const done=rows.filter(row=>String(row.outlineState)=="已生成").length;const pool=rows.length;const miss=Math.max(0,pool-done);return[{label:"已生成健康档案",value:done},{label:"会员池",value:pool},{label:"未生成",value:miss},{label:"健康档案生成率",value:pool?`${(done/pool*100).toFixed(1)}%`:"—"}]}
@@ -405,8 +405,8 @@
         searchHint:()=>state.role==="hq"?"搜索门店、已解读报告、报告池、未解读":"搜索用户、教练、当前状态",
         rule:metricRules.aiReport,
         build(sourceRows=snapshotRows()){if(state.role==="hq"){const rows=sourceRows.map(row=>{const pool=Number(row.cumulative||0);const rate=Number(String(row.aiReport||"").replace("%",""))||0;const done=rate>0?Math.round(pool*(rate/100)):0;const miss=Math.max(0,pool-done);return{name:row.name,reportDone:done,reportPool:pool,reportMiss:miss,reportValue:row.aiReport}});return{cols:["name","reportDone","reportPool","reportMiss","reportValue"],rows};}
-          const rows=sourceRows.map(row=>({user:row.user,coach:row.coach,currentState:row.currentState||row.status,latest:row.latest,reportState:row.aiReport,reason:row.reason,action:row.action}));
-          const cols=state.role==="coach"?["user","currentState","latest","reason","action"]:["user","coach","currentState","latest","reason","action"];
+          const rows=sourceRows.map(row=>({user:row.user,coach:row.coach,currentState:row.currentState||row.status,latest:row.latest,reportState:row.aiReport,reason:row.reason}));
+          const cols=state.role==="coach"?["user","currentState","latest","reason"]:["user","coach","currentState","latest","reason"];
           return{cols,rows};},
         summary(rows){if(state.role==="hq"){const done=rows.reduce((sum,row)=>sum+Number(row.reportDone||0),0);const pool=rows.reduce((sum,row)=>sum+Number(row.reportPool||0),0);const miss=rows.reduce((sum,row)=>sum+Number(row.reportMiss||0),0);return[{label:"已解读报告",value:done},{label:"报告池",value:pool},{label:"未解读",value:miss},{label:"AI 报告解读率",value:pool?`${(done/pool*100).toFixed(1)}%`:"—"}]}
           const done=rows.filter(row=>String(row.reportState)=="已解读").length;const pool=rows.length;const miss=Math.max(0,pool-done);return[{label:"已解读报告",value:done},{label:"会员池",value:pool},{label:"未解读",value:miss},{label:"AI 报告解读率",value:pool?`${(done/pool*100).toFixed(1)}%`:"—"}]}
@@ -416,8 +416,8 @@
         searchHint:()=>state.role==="hq"?"搜索门店、已生成训练大纲、可生成池、未生成":"搜索用户、教练、训练大纲生成次数",
         rule:metricRules.aiTraining,
         build(sourceRows=snapshotRows()){if(state.role==="hq"){const rows=sourceRows.map(row=>{const pool=Number(row.cumulative||0);const rate=Number(String(row.aiTraining||"").replace("%",""))||0;const done=rate>0?Math.round(pool*(rate/100)):0;const miss=Math.max(0,pool-done);return{name:row.name,trainingDone:done,trainingPool:pool,trainingMiss:miss,trainingValue:row.aiTraining}});return{cols:["name","trainingDone","trainingPool","trainingMiss","trainingValue"],rows};}
-          const rows=sourceRows.map(row=>({user:row.user,coach:row.coach,currentState:row.currentState||row.status,latest:row.latest,trainingState:row.aiTraining,trainingCount:row.trainingCount,reason:row.reason,action:row.action}));
-          const cols=state.role==="coach"?["user","currentState","latest","trainingCount","reason","action"]:["user","coach","currentState","latest","trainingCount","reason","action"];
+          const rows=sourceRows.map(row=>({user:row.user,coach:row.coach,currentState:row.currentState||row.status,latest:row.latest,trainingState:row.aiTraining,trainingCount:row.trainingCount,reason:row.reason}));
+          const cols=state.role==="coach"?["user","currentState","latest","trainingCount","reason"]:["user","coach","currentState","latest","trainingCount","reason"];
           return{cols,rows};},
         summary(rows){if(state.role==="hq"){const done=rows.reduce((sum,row)=>sum+Number(row.trainingDone||0),0);const pool=rows.reduce((sum,row)=>sum+Number(row.trainingPool||0),0);const miss=rows.reduce((sum,row)=>sum+Number(row.trainingMiss||0),0);return[{label:"已生成训练大纲",value:done},{label:"可生成池",value:pool},{label:"未生成",value:miss},{label:"AI 训练大纲生成率",value:pool?`${(done/pool*100).toFixed(1)}%`:"—"}]}
           const done=rows.filter(row=>String(row.trainingState)=="已生成").length;const pool=rows.length;const miss=Math.max(0,pool-done);return[{label:"已生成训练大纲",value:done},{label:"会员池",value:pool},{label:"未生成",value:miss},{label:"AI 训练大纲生成率",value:pool?`${(done/pool*100).toFixed(1)}%`:"—"}]}
@@ -438,30 +438,30 @@
       timely:{
         title:"教练承接及时率",
         rule:"教练承接及时率 = 24h内承接数 / 分配池数 × 100%。分配池数 = 当前筛选范围内已分配到该教练的会员数；24h内承接数 = 分配后 24 小时内完成承接的会员数；超时承接数 = 分配池数 - 24h内承接数。",
-        searchHint:"搜索教练、24h内承接、超时承接、干预措施",
-        cols:["coach","assigned","timelyDone","timelyDelay","timelyRate","problem","action"],
-        rows:()=>roleData().coachService.rows.map((row,idx)=>{const timelyDone=Math.max(0,row.assigned-10+idx);const timelyDelay=Math.max(0,row.assigned-timelyDone);return{coach:row.coach,assigned:row.assigned,timelyDone,timelyDelay,timelyRate:row.assigned?`${(timelyDone/row.assigned*100).toFixed(1)}%`:"—",problem:row.problem,action:row.action}})
+        searchHint:"搜索教练、24h内承接、超时承接、主要问题",
+        cols:["coach","assigned","timelyDone","timelyDelay","timelyRate","problem"],
+        rows:()=>roleData().coachService.rows.map((row,idx)=>{const timelyDone=Math.max(0,row.assigned-10+idx);const timelyDelay=Math.max(0,row.assigned-timelyDone);return{coach:row.coach,assigned:row.assigned,timelyDone,timelyDelay,timelyRate:row.assigned?`${(timelyDone/row.assigned*100).toFixed(1)}%`:"—",problem:row.problem}})
       },
       retest:{
         title:"复测推进及时率",
         rule:()=>`复测推进及时率 = 已推进复测数 / 待复测池数 × 100%。待复测池数 = 当前筛选范围内已进入可复测池但未完成复测的会员数；可复测周期默认由总门店参数控制，当前为 ${hqParams.retestCycleDays} 天；已推进复测数 = 当前周期内完成复测的会员数；超期未复测数 = 待复测池数 - 已推进复测数。`,
-        searchHint:"搜索教练、待复测池、已推进复测、干预措施",
-        cols:["coach","retestPool","retestDone","retestOverdue","retestRate","problem","action"],
-        rows:()=>roleData().coachService.rows.map((row,idx)=>{const retestPool=row.retest;const retestDone=Math.max(0,retestPool-2+idx%2);const retestOverdue=Math.max(0,retestPool-retestDone);return{coach:row.coach,retestPool,retestDone,retestOverdue,retestRate:retestPool?`${(retestDone/retestPool*100).toFixed(1)}%`:"—",problem:row.problem,action:row.action}})
+        searchHint:"搜索教练、待复测池、已推进复测、主要问题",
+        cols:["coach","retestPool","retestDone","retestOverdue","retestRate","problem"],
+        rows:()=>roleData().coachService.rows.map((row,idx)=>{const retestPool=row.retest;const retestDone=Math.max(0,retestPool-2+idx%2);const retestOverdue=Math.max(0,retestPool-retestDone);return{coach:row.coach,retestPool,retestDone,retestOverdue,retestRate:retestPool?`${(retestDone/retestPool*100).toFixed(1)}%`:"—",problem:row.problem}})
       },
       silent:{
         title:"沉默回访及时率",
         rule:()=>`沉默回访及时率 = 已回访数 / 沉默池数 × 100%。沉默池数 = 当前筛选范围内命中 ${hqParams.silentDays} 天无行为规则的会员数；已回访数 = 沉默池内完成首次有效回访的会员数；未回访数 = 沉默池数 - 已回访数；分母为 0 时展示“—”。`,
-        searchHint:"搜索教练、沉默池、已回访、干预措施",
-        cols:["coach","silentPool","recalled","unrecalled","silentRate","problem","action"],
-        rows:()=>roleData().coachService.rows.map((row,idx)=>{const silentPool=row.silent;const recalled=Math.max(0,silentPool-1-idx%2);const unrecalled=Math.max(0,silentPool-recalled);return{coach:row.coach,silentPool,recalled,unrecalled,silentRate:silentPool?`${(recalled/silentPool*100).toFixed(1)}%`:"—",problem:row.problem,action:row.action}})
+        searchHint:"搜索教练、沉默池、已回访、主要问题",
+        cols:["coach","silentPool","recalled","unrecalled","silentRate","problem"],
+        rows:()=>roleData().coachService.rows.map((row,idx)=>{const silentPool=row.silent;const recalled=Math.max(0,silentPool-1-idx%2);const unrecalled=Math.max(0,silentPool-recalled);return{coach:row.coach,silentPool,recalled,unrecalled,silentRate:silentPool?`${(recalled/silentPool*100).toFixed(1)}%`:"—",problem:row.problem}})
       },
       bind:{
         title:"测后绑定及时率",
-        rule:()=>`测后绑定及时率 = 已绑定数 / 待绑定池数 × 100%。待绑定池数 = 当前筛选范围内设备测后尚未绑定用户信息且仍在保留周期内的记录数；当前默认按照总门店参数中的待绑定保留 ${hqParams.bindRetentionDays} 天处理；已绑定数仅统计同一待绑定池内在当前周期完成绑定的记录；未绑定数 = 待绑定池数 - 已绑定数；绑定率不得超过 100%。`,
-        searchHint:"搜索教练、待绑定池、已绑定、干预措施",
-        cols:["coach","bindPool","boundDone","unbound","bindRate","problem","action"],
-        rows:()=>roleData().coachService.rows.map((row,idx)=>{const bindPool=row.bind;const boundDone=Math.max(0,bindPool-1-idx%2);const unbound=Math.max(0,bindPool-boundDone);return{coach:row.coach,bindPool,boundDone,unbound,bindRate:bindPool?`${(boundDone/bindPool*100).toFixed(1)}%`:"—",problem:row.problem,action:row.action}})
+        rule:"测后绑定及时率 = 已绑定数 / 待绑定池数 × 100%。待绑定池数 = 当前筛选范围内设备测后尚未绑定用户信息且仍在保留周期内的记录数；当前按 30 天保留期处理；已绑定数仅统计同一待绑定池内在当前周期完成绑定的记录；未绑定数 = 待绑定池数 - 已绑定数；绑定率不得超过 100%。",
+        searchHint:"搜索教练、待绑定池、已绑定、主要问题",
+        cols:["coach","bindPool","boundDone","unbound","bindRate","problem"],
+        rows:()=>roleData().coachService.rows.map((row,idx)=>{const bindPool=row.bind;const boundDone=Math.max(0,bindPool-1-idx%2);const unbound=Math.max(0,bindPool-boundDone);return{coach:row.coach,bindPool,boundDone,unbound,bindRate:bindPool?`${(boundDone/bindPool*100).toFixed(1)}%`:"—",problem:row.problem}})
       }
     };
     function isRateMetric(key){return Boolean(rateDrawerConfigs[key])}
@@ -478,18 +478,16 @@
     const data={
       hq:{cards:[["cumulative","累计测评用户","18,640","","总门店累计（含总门店自身与下级门店）"],["new","本期新增测评","1,248","+12.3%","当前筛选范围内新增测评"],["active","活跃用户","7,860","+6.1%","当前筛选范围内活跃用户"],["unassigned","待分配用户","312","需处理","当前筛选范围内已测评未分配"],["pendingRetest","待复测用户","428","优先推进","当前筛选范围内可复测未完成"],["risk","高风险门店","6","需介入","沉默用户 / 活跃用户 >= 15%"],["silent","沉默用户","1,126","需回访","当前筛选范围内 30 天无行为"],["pendingBind","待绑定用户","84","","当前筛选范围内测后未绑定"],["healthOutline","健康档案生成率","64.8%","","已生成健康档案 / 用户池"],["aiReport","AI 报告解读率","58.2%","Pro","已解读报告 / 报告池"],["aiTraining","AI 训练大纲生成率","42.6%","Pro","已生成训练大纲 / 可生成池"],["aiConsult","AI 咨询使用门店","18","","有 AI 咨询记录的门店"]],
         rows:[{id:"s1",name:"静安旗舰店",group:"华东",cumulative:4820,new:312,active:1280,retest:248,ratio:"19.4%",risk:8,unassigned:4,pendingRetest:18,pendingBind:9,silent:8,status:"标杆",reason:"测评后承接及时，复测和绑定完成度高",healthOutline:"72%",aiReport:"68%",aiTraining:"51%",aiConsult:486},{id:"s2",name:"海淀大学店",group:"华北",cumulative:3100,new:146,active:820,retest:86,ratio:"10.5%",risk:18,unassigned:14,pendingRetest:31,pendingBind:16,silent:18,status:"高风险",reason:"沉默用户偏高，复测闭环推进不足",healthOutline:"58%",aiReport:"44%",aiTraining:"29%",aiConsult:172},{id:"s3",name:"天河店",group:"华南",cumulative:3920,new:228,active:1060,retest:182,ratio:"17.2%",risk:11,unassigned:6,pendingRetest:23,pendingBind:11,silent:11,status:"稳态增长",reason:"整体指标平稳，服务节奏正常",healthOutline:"66%",aiReport:"61%",aiTraining:"43%",aiConsult:316},{id:"s4",name:"高新店",group:"西南",cumulative:2830,new:196,active:910,retest:142,ratio:"15.6%",risk:10,unassigned:9,pendingRetest:27,pendingBind:10,silent:10,status:"承接偏弱",reason:"测后分配和待复测推进偏慢",healthOutline:"62%",aiReport:"53%",aiTraining:"38%",aiConsult:225},{id:"s5",name:"滨江店",group:"华东",cumulative:3970,new:266,active:980,retest:212,ratio:"21.6%",risk:12,unassigned:5,pendingRetest:22,pendingBind:12,silent:12,status:"复测优秀",reason:"复测推进和用户沉默回访表现较好",healthOutline:"74%",aiReport:"70%",aiTraining:"54%",aiConsult:392}],trend:[{label:"第1期",value:62},{label:"第2期",value:68},{label:"第3期",value:74},{label:"第4期",value:81},{label:"第5期",value:88},{label:"第6期",value:95}]},
-      owner:{cards:[["cumulative","累计测评用户","4,620","","当前门店"],["new","本期新增测评","368","+14.2%","当前筛选范围内新增测评"],["active","活跃用户","1,482","+5.4%","当前筛选范围内活跃用户"],["assign","待分配用户","52","待处理","已测评未分配"],["pendingRetest","待复测用户","86","优先推进","可复测未完成"],["risk","沉默用户","41","需回访","当前筛选范围内 30 天无行为"],["pendingBind","待绑定用户","14","","当前筛选范围内测后未绑定"],["healthOutline","健康档案生成率","69.5%","","已生成健康档案 / 用户池"],["aiReport","AI 报告解读率","61.3%","Pro","已解读报告 / 报告池"],["aiTraining","AI 训练大纲生成率","45.7%","Pro","已生成训练大纲 / 可生成池"],["aiConsult","AI 咨询次数","216","Pro","有 AI 咨询记录"]],coachService:{rows:[{id:"svc1",coach:"陈教练",assigned:82,retest:18,silent:6,bind:2,latest:"2026-04-12",problem:"复测推进偏慢",action:"增加复测提醒和到期督办"},{id:"svc2",coach:"李教练",assigned:74,retest:14,silent:4,bind:3,latest:"2026-04-10",problem:"沉默回访偏慢",action:"优先回访沉默用户并复盘触达节奏"},{id:"svc3",coach:"王教练",assigned:68,retest:10,silent:5,bind:1,latest:"2026-04-08",problem:"测后绑定偏低",action:"强化测后立即绑定流程"},{id:"svc4",coach:"赵教练",assigned:59,retest:8,silent:3,bind:0,latest:"2026-04-06",problem:"承接及时性波动",action:"提升分配后 24h 响应"}]},
-        rows:[{id:"o1",user:"李梦瑶",coach:"陈教练",status:"待复测",latest:"2026-03-14",reason:"距上次测评 28 天",action:"安排复测",priority:"P1",goal:"减脂塑形",tag:"体脂偏高",gender:"女",age:"25-34",healthOutline:"已生成",aiReport:"已解读",aiTraining:"已生成",aiConsult:12,pendingBind:0},{id:"o2",user:"王哲",coach:"李教练",status:"沉默用户",latest:"2026-02-24",reason:"30 天无行为",action:"优先回访",priority:"P1",goal:"健康管理",tag:"运动能力弱",gender:"男",age:"35-44",healthOutline:"已生成",aiReport:"已解读",aiTraining:"未生成",aiConsult:4,pendingBind:0},{id:"o3",user:"陈可欣",coach:"陈教练",status:"高潜转化",latest:"2026-04-05",reason:"近 7 天新增测评且未分配",action:"推进承接",priority:"P2",goal:"体态改善",tag:"圆肩驼背",gender:"女",age:"18-24",healthOutline:"未生成",aiReport:"未解读",aiTraining:"未生成",aiConsult:0,pendingBind:1},{id:"o4",user:"赵晨",coach:"王教练",status:"待分配用户",latest:"2026-03-30",reason:"已测评但未分配负责人",action:"先分配",priority:"P1",goal:"增肌",tag:"体重偏低",gender:"男",age:"25-34",healthOutline:"已生成",aiReport:"未解读",aiTraining:"未生成",aiConsult:2,pendingBind:0},{id:"o5",user:"吴桐",coach:"王教练",status:"沉睡用户",latest:"2026-03-02",reason:"近 30 天无服务跟进",action:"唤醒触达",priority:"P3",goal:"减脂塑形",tag:"腰围偏高",gender:"男",age:"35-44",healthOutline:"已生成",aiReport:"已解读",aiTraining:"已生成",aiConsult:7,pendingBind:0},{id:"o6",user:"林澈",coach:"李教练",status:"待分配用户",latest:"2026-04-08",reason:"近 7 天新增测评未分配",action:"优先分配",priority:"P1",goal:"健康管理",tag:"核心稳定性弱",gender:"女",age:"25-34",healthOutline:"已生成",aiReport:"未解读",aiTraining:"未生成",aiConsult:1,pendingBind:1},{id:"o7",user:"周然",coach:"陈教练",status:"活跃用户",latest:"2026-04-10",reason:"近 30 天有服务跟进",action:"持续跟进",priority:"P2",goal:"体态改善",tag:"骨盆前倾",gender:"女",age:"35-44",healthOutline:"已生成",aiReport:"已解读",aiTraining:"已生成",aiConsult:6,pendingBind:0}],problems:[{key:"assign",title:"待分配偏高",text:"52 人待分配"},{key:"retest",title:"复测偏低",text:"86 人待复测"},{key:"risk",title:"沉默偏高",text:"41 人需回访"}],trend:[{label:"第1周",value:24},{label:"第2周",value:28},{label:"第3周",value:31},{label:"第4周",value:35},{label:"第5周",value:39},{label:"第6周",value:42}]},
+      owner:{cards:[["cumulative","累计测评用户","4,620","","当前门店"],["new","本期新增测评","368","+14.2%","当前筛选范围内新增测评"],["active","活跃用户","1,482","+5.4%","当前筛选范围内活跃用户"],["assign","待分配用户","52","待处理","已测评未分配"],["pendingRetest","待复测用户","86","优先推进","可复测未完成"],["risk","沉默用户","41","需回访","当前筛选范围内 30 天无行为"],["pendingBind","待绑定用户","14","","当前筛选范围内测后未绑定"],["healthOutline","健康档案生成率","69.5%","","已生成健康档案 / 用户池"],["aiReport","AI 报告解读率","61.3%","Pro","已解读报告 / 报告池"],["aiTraining","AI 训练大纲生成率","45.7%","Pro","已生成训练大纲 / 可生成池"],["aiConsult","AI 咨询次数","216","Pro","有 AI 咨询记录"]],coachService:{rows:[{id:"svc1",coach:"陈教练",assigned:82,retest:18,silent:6,bind:2,latest:"2026-04-12",problem:"复测推进偏慢"},{id:"svc2",coach:"李教练",assigned:74,retest:14,silent:4,bind:3,latest:"2026-04-10",problem:"沉默回访偏慢"},{id:"svc3",coach:"王教练",assigned:68,retest:10,silent:5,bind:1,latest:"2026-04-08",problem:"测后绑定偏低"},{id:"svc4",coach:"赵教练",assigned:59,retest:8,silent:3,bind:0,latest:"2026-04-06",problem:"承接及时性波动"}]},
+        rows:[{id:"o1",user:"李梦瑶",coach:"陈教练",status:"待复测",latest:"2026-03-14",reason:"距上次测评 28 天",priority:"P1",goal:"减脂塑形",tag:"体脂偏高",gender:"女",age:"25-34",healthOutline:"已生成",aiReport:"已解读",aiTraining:"已生成",aiConsult:12,pendingBind:0},{id:"o2",user:"王哲",coach:"李教练",status:"沉默用户",latest:"2026-02-24",reason:"30 天无行为",priority:"P1",goal:"健康管理",tag:"运动能力弱",gender:"男",age:"35-44",healthOutline:"已生成",aiReport:"已解读",aiTraining:"未生成",aiConsult:4,pendingBind:0},{id:"o3",user:"陈可欣",coach:"陈教练",status:"高潜转化",latest:"2026-04-05",reason:"近 7 天新增测评且未分配",priority:"P2",goal:"体态改善",tag:"圆肩驼背",gender:"女",age:"18-24",healthOutline:"未生成",aiReport:"未解读",aiTraining:"未生成",aiConsult:0,pendingBind:1},{id:"o4",user:"赵晨",coach:"王教练",status:"待分配用户",latest:"2026-03-30",reason:"已测评但未分配负责人",priority:"P1",goal:"增肌",tag:"体重偏低",gender:"男",age:"25-34",healthOutline:"已生成",aiReport:"未解读",aiTraining:"未生成",aiConsult:2,pendingBind:0},{id:"o5",user:"吴桐",coach:"王教练",status:"沉睡用户",latest:"2026-03-02",reason:"近 30 天无服务跟进",priority:"P3",goal:"减脂塑形",tag:"腰围偏高",gender:"男",age:"35-44",healthOutline:"已生成",aiReport:"已解读",aiTraining:"已生成",aiConsult:7,pendingBind:0},{id:"o6",user:"林澈",coach:"李教练",status:"待分配用户",latest:"2026-04-08",reason:"近 7 天新增测评未分配",priority:"P1",goal:"健康管理",tag:"核心稳定性弱",gender:"女",age:"25-34",healthOutline:"已生成",aiReport:"未解读",aiTraining:"未生成",aiConsult:1,pendingBind:1},{id:"o7",user:"周然",coach:"陈教练",status:"活跃用户",latest:"2026-04-10",reason:"近 30 天有服务跟进",priority:"P2",goal:"体态改善",tag:"骨盆前倾",gender:"女",age:"35-44",healthOutline:"已生成",aiReport:"已解读",aiTraining:"已生成",aiConsult:6,pendingBind:0}],problems:[{key:"assign",title:"待分配偏高",text:"52 人待分配"},{key:"retest",title:"复测偏低",text:"86 人待复测"},{key:"risk",title:"沉默偏高",text:"41 人需回访"}],trend:[{label:"第1周",value:24},{label:"第2周",value:28},{label:"第3周",value:31},{label:"第4周",value:35},{label:"第5周",value:39},{label:"第6周",value:42}]},
       coach:{cards:[["count","负责会员数","186","","当前归属"],["pendingRetest","待复测用户","14","优先推进","可复测未完成"],["risk","沉默用户","9","需唤醒","30 天无行为"],["pendingBind","待绑定用户","6","需绑定","测后未绑定且仍在保留周期"],["active","活跃会员","82","+4.1%","当前筛选范围内活跃会员"],["healthOutline","健康档案生成率","71.4%","","已生成健康档案 / 负责会员"],["aiReport","AI 报告解读率","63.8%","Pro","已解读报告 / 负责会员"],["aiTraining","AI 训练大纲生成率","48.2%","Pro","已生成训练大纲 / 负责会员"],["aiConsult","AI 咨询次数","38","Pro","有 AI 咨询记录"]],
-        rows:[{id:"c1",user:"李梦瑶",goal:"减脂塑形",status:"待复测",latest:"2026-03-14",reason:"待复测",action:"安排复测",priority:"P1",gender:"女",age:"25-34",tag:"体脂偏高",healthOutline:"已生成",aiReport:"已解读",aiTraining:"已生成",aiConsult:12,pendingBind:0},{id:"c2",user:"王哲",goal:"健康管理",status:"沉默用户",latest:"2026-02-24",reason:"30 天无行为",action:"优先回访",priority:"P1",gender:"男",age:"35-44",tag:"运动能力弱",healthOutline:"已生成",aiReport:"已解读",aiTraining:"未生成",aiConsult:4,pendingBind:0},{id:"c3",user:"陈可欣",goal:"体态改善",status:"待绑定用户",latest:"2026-04-05",reason:"测后未绑定",action:"优先绑定",priority:"P2",gender:"女",age:"18-24",tag:"圆肩驼背",healthOutline:"未生成",aiReport:"未解读",aiTraining:"未生成",aiConsult:0,pendingBind:1},{id:"c4",user:"赵晨",goal:"增肌",status:"沉睡用户",latest:"2026-03-30",reason:"沉睡用户",action:"唤醒触达",priority:"P3",gender:"男",age:"25-34",tag:"体重偏低",healthOutline:"已生成",aiReport:"未解读",aiTraining:"未生成",aiConsult:2,pendingBind:0},{id:"c5",user:"林澈",goal:"健康管理",status:"待绑定用户",latest:"2026-04-08",reason:"测后未绑定",action:"先绑定",priority:"P1",gender:"女",age:"25-34",tag:"核心稳定性弱",healthOutline:"已生成",aiReport:"未解读",aiTraining:"未生成",aiConsult:1,pendingBind:1},{id:"c6",user:"周然",goal:"体态改善",status:"活跃会员",latest:"2026-04-10",reason:"近 30 天有服务跟进",action:"持续跟进",priority:"P2",gender:"女",age:"35-44",tag:"骨盆前倾",healthOutline:"已生成",aiReport:"已解读",aiTraining:"已生成",aiConsult:6,pendingBind:0}],trend:[{label:"第1周",value:12},{label:"第2周",value:14},{label:"第3周",value:16},{label:"第4周",value:18},{label:"第5周",value:20},{label:"第6周",value:22}]}
+        rows:[{id:"c1",user:"李梦瑶",goal:"减脂塑形",status:"待复测",latest:"2026-03-14",reason:"待复测",priority:"P1",gender:"女",age:"25-34",tag:"体脂偏高",healthOutline:"已生成",aiReport:"已解读",aiTraining:"已生成",aiConsult:12,pendingBind:0},{id:"c2",user:"王哲",goal:"健康管理",status:"沉默用户",latest:"2026-02-24",reason:"30 天无行为",priority:"P1",gender:"男",age:"35-44",tag:"运动能力弱",healthOutline:"已生成",aiReport:"已解读",aiTraining:"未生成",aiConsult:4,pendingBind:0},{id:"c3",user:"陈可欣",goal:"体态改善",status:"待绑定用户",latest:"2026-04-05",reason:"测后未绑定",priority:"P2",gender:"女",age:"18-24",tag:"圆肩驼背",healthOutline:"未生成",aiReport:"未解读",aiTraining:"未生成",aiConsult:0,pendingBind:1},{id:"c4",user:"赵晨",goal:"增肌",status:"沉睡用户",latest:"2026-03-30",reason:"沉睡用户",priority:"P3",gender:"男",age:"25-34",tag:"体重偏低",healthOutline:"已生成",aiReport:"未解读",aiTraining:"未生成",aiConsult:2,pendingBind:0},{id:"c5",user:"林澈",goal:"健康管理",status:"待绑定用户",latest:"2026-04-08",reason:"测后未绑定",priority:"P1",gender:"女",age:"25-34",tag:"核心稳定性弱",healthOutline:"已生成",aiReport:"未解读",aiTraining:"未生成",aiConsult:1,pendingBind:1},{id:"c6",user:"周然",goal:"体态改善",status:"活跃会员",latest:"2026-04-10",reason:"近 30 天有服务跟进",priority:"P2",gender:"女",age:"35-44",tag:"骨盆前倾",healthOutline:"已生成",aiReport:"已解读",aiTraining:"已生成",aiConsult:6,pendingBind:0}],trend:[{label:"第1周",value:12},{label:"第2周",value:14},{label:"第3周",value:16},{label:"第4周",value:18},{label:"第5周",value:20},{label:"第6周",value:22}]}
     };
     data.hq.rows=data.hq.rows.map((row,idx)=>({
       ...row,
       latestAssessmentTime:["2026-04-12","2026-04-11","2026-04-10","2026-04-09","2026-04-08"][idx],
-      scheduledRetestTime:["2026-04-18","2026-04-15","2026-04-17","2026-04-16","2026-04-14"][idx],
       recentStoreActiveTime:["2026-04-14","2026-03-11","2026-04-13","2026-04-09","2026-04-12"][idx],
       recentMeasureTime:["2026-04-13","2026-04-10","2026-04-12","2026-04-08","2026-04-11"][idx],
-      bindOver7d:[3,9,4,5,6][idx],
       riskRate:[`${((row.silent/row.active)*100).toFixed(1)}%`,`18.0%`,`10.4%`,`11.0%`,`12.2%`][idx],
       riskLevel:row.status==="高风险"?"高":row.status==="承接偏弱"?"中":"低",
       aiConsultUsage:Number(row.aiConsult)>0?"已使用":"未使用"
@@ -527,11 +525,11 @@
     function inEndSnapshot(row){if(!row.latest)return true;return row.latest<=state.dateEnd}
     function searchFieldsForRole(){
       if(state.role==="hq")return ["name"];
-      return ["user","coach","goal","tag","action"];
+      return ["user","coach","goal","tag","reason"];
     }
     function searchFieldsForDrawer(title,cols){
       const list=cols.filter(c=>!["status","reason"].includes(c));
-      if(title.includes("教练服务"))return ["coach","problem","action"];
+      if(title.includes("教练服务"))return ["coach","problem"];
       if(title.includes("会员状态"))return cols.includes("coach")?["user","coach","goal","tag"]:["user","goal","tag"];
       if(title.includes("性别")||title.includes("年龄")||title.includes("目标")||title.includes("问题标签"))return cols.includes("coach")?["label","user","coach","goal","tag"]:["label","user","goal","tag"];
       return list.length?list:cols;
@@ -583,57 +581,56 @@
     }
     function drawerSearchHint(title,cols){
       const names=cols.map(c=>headerMap[c]||c);
-      if(title.includes("教练服务"))return "搜索教练、主要问题、干预措施";
+      if(title.includes("教练服务"))return "搜索教练、主要问题";
       if(title.includes("会员状态"))return "搜索用户、教练、目标";
       if(title.includes("性别"))return "搜索用户、教练、目标";
       if(title.includes("年龄"))return "搜索用户、教练、目标";
       if(title.includes("目标"))return "搜索用户、教练、目标";
       if(title.includes("问题标签"))return "搜索用户、教练、目标";
-      if(names.includes("主要问题")&&names.includes("干预措施"))return "搜索教练、主要问题、干预措施";
       if(title.includes("待绑定"))return "搜索用户/记录ID、教练、测量时间";
-      if(names.includes("教练"))return "搜索用户、教练、建议动作";
+      if(names.includes("教练"))return `搜索${names.filter(n=>!["状态","触发原因"].includes(n)).slice(0,3).join("、")}`;
       if(names.includes("门店"))return "搜索门店名称";
       if(names.includes("用户"))return "搜索用户姓名、教练、目标";
       return `搜索${names.filter(n=>!["状态","原因"].includes(n)).slice(0,3).join("、")}`;
     }
-    function columns(){if(state.role==="hq")return["name","cumulative","new","active","unassigned","pendingRetest","silent","pendingBind","healthOutline","aiReport","aiTraining","aiConsultUsage"];if(state.role==="owner")return["user","coach","status","latest","reason","action","pendingBind"];return["user","goal","status","latest","reason","action"]}
+    function columns(){if(state.role==="hq")return["name","cumulative","new","active","unassigned","pendingRetest","silent","pendingBind","healthOutline","aiReport","aiTraining","aiConsultUsage"];if(state.role==="owner")return["user","coach","status","latest","reason","pendingBind"];return["user","goal","status","latest","reason"]}
     function drawerColsForMetric(key){
       if(state.role==="hq"){
         if(["cumulative","new","active","aiConsult"].includes(key))return ["name","cumulative","new","active","unassigned","pendingRetest","silent","pendingBind","healthOutline","aiReport","aiTraining","aiConsultUsage"];
-        if(key==="unassigned")return ["name","unassigned","latestAssessmentTime","reason","action"];
-        if(key==="pendingRetest")return ["name","pendingRetest","scheduledRetestTime","reason","action"];
-        if(key==="silent")return ["name","silent","recentStoreActiveTime","reason","action"];
-        if(key==="pendingBind")return ["name","pendingBind","recentMeasureTime","bindOver7d","reason","action"];
-        if(key==="risk")return ["name","active","silent","riskRate","riskLevel","action"];
+        if(key==="unassigned")return ["name","unassigned","latestAssessmentTime","reason"];
+        if(key==="pendingRetest")return ["name","pendingRetest","reason"];
+        if(key==="silent")return ["name","silent","recentStoreActiveTime","reason"];
+        if(key==="pendingBind")return ["name","pendingBind","recentMeasureTime","reason"];
+        if(key==="risk")return ["name","active","silent","riskRate","riskLevel"];
       }
       if(state.role==="owner"){
-        if(key==="new")return ["user","coach","latest","sourceType","reason","action"];
-        if(key==="active")return ["user","coach","recentActiveTime","activeTag","reason","action"];
-        if(key==="assign")return ["user","latest","unassignedDuration","reason","action","pendingBind"];
-        if(key==="pendingRetest"||key==="retest")return ["user","coach","latest","retestAgingDays","retestBand","reason","action"];
-        if(key==="risk"||key==="silent")return ["user","coach","recentActiveTime","silentDays","reason","action"];
-        if(key==="pendingBind")return ["userRecord","coach","measureTime","pendingBindDays","reason","action"];
-        if(["aiConsult","cumulative"].includes(key))return ["user","coach","currentState","latest","reason","action"];
+        if(key==="new")return ["user","coach","latest","sourceType","reason"];
+        if(key==="active")return ["user","coach","recentActiveTime","activeTag","reason"];
+        if(key==="assign")return ["user","latest","unassignedDuration","reason","pendingBind"];
+        if(key==="pendingRetest"||key==="retest")return ["user","coach","latest","retestAgingDays","retestBand","reason"];
+        if(key==="risk"||key==="silent")return ["user","coach","recentActiveTime","silentDays","reason"];
+        if(key==="pendingBind")return ["userRecord","coach","measureTime","pendingBindDays","reason"];
+        if(["aiConsult","cumulative"].includes(key))return ["user","coach","currentState","latest","reason"];
       }
       if(state.role==="coach"){
-        if(key==="count")return ["user","goal","currentState","latest","reason","action"];
-        if(key==="pendingRetest")return ["user","goal","currentState","latest","reason","action"];
-        if(key==="risk")return ["user","goal","currentState","latest","reason","action"];
-        if(key==="pendingBind")return ["userRecord","measureTime","pendingBindDays","reason","action"];
-        if(key==="active")return ["user","goal","currentState","latest","reason","action"];
-        if(["healthOutline","aiReport","aiTraining","aiConsult"].includes(key))return ["user","goal","currentState","latest","reason","action"];
+        if(key==="count")return ["user","goal","currentState","latest","reason"];
+        if(key==="pendingRetest")return ["user","goal","currentState","latest","reason"];
+        if(key==="risk")return ["user","goal","currentState","latest","reason"];
+        if(key==="pendingBind")return ["userRecord","measureTime","pendingBindDays","reason"];
+        if(key==="active")return ["user","goal","currentState","latest","reason"];
+        if(["healthOutline","aiReport","aiTraining","aiConsult"].includes(key))return ["user","goal","currentState","latest","reason"];
       }
       return columns();
     }
     function table(cols,tableRows=mainRows(),selectable=true){return `<div class="table-wrap"><table><thead><tr>${cols.map(c=>`<th>${headerMap[c]||c}</th>`).join("")}</tr></thead><tbody>${tableRows.map(row=>`<tr class="${state.rowId===row.id?"selected":""}" ${selectable?`data-row="${row.id}"`:""}>${cols.map(c=>`<td>${esc(row[c])}</td>`).join("")}</tr>`).join("")}</tbody></table></div>`}
     function pagedRows(){const start=(state.pageNo-1)*state.pageSize;return mainRows().slice(start,start+state.pageSize)}
     function selectedRow(){return mainRows().find(row=>row.id===state.rowId)||mainRows()[0]||null}
-    function detail(row){if(!row)return `<aside class="detail"><h3>暂无数据</h3><div class="subline">当前条件下没有明细。</div></aside>`;const title=row.name||row.user,sub=state.role==="hq"?[row.status,row.reason].filter(Boolean).join(" · "):(row.coach||row.goal||"");let pairs=state.role==="hq"?[["当前状态",row.status],["主要原因",row.reason],["累计测评",row.cumulative],["本期新增",row.new],["活跃用户",row.active],["待分配",row.unassigned],["待复测",row.pendingRetest],["沉默用户",row.silent],["待绑定",row.pendingBind],["健康档案生成率",row.healthOutline],["AI 报告解读率",row.aiReport],["AI 训练大纲生成率",row.aiTraining],["AI 咨询使用",row.aiConsultUsage]]:[["当前状态",row.currentState||row.status],["最近测评",row.latest],["触发原因",row.reason],["建议动作",row.action],["目标",row.goal],["问题标签",row.tag],["待绑定",row.pendingBind],["健康档案",row.healthOutline],["AI 报告解读",row.aiReport],["AI 训练大纲",row.aiTraining],["AI 咨询次数",row.aiConsult]];if(state.tier!=="pro")pairs=pairs.filter(([label])=>!label.includes("AI"));return `<aside class="detail"><h3>${esc(title)}</h3><div class="subline">${esc(sub)}</div><div class="detail-section">${pairs.map(([k,v])=>`<div class="kv"><span>${esc(k)}</span><strong>${esc(v)}</strong></div>`).join("")}</div></aside>`}
-    function renderCardsByKeys(keys,scope="snapshot"){const cards=visibleCards().filter(card=>keys.includes(card[0]));return `<section class="stat-strip">${cards.map(([key,label,value,delta,hint])=>{const showPill=delta&&delta!=="非 Pro"&&!/^P\d+$/.test(String(delta))&&key!=="pendingBind"&&key!=="healthOutline";const shownValue=displayCardMetric(key,value,scope);return `<button class="stat-card" data-metric="${key}" data-title="${esc(label)}" data-tone="${tone(key)}"><div><div class="stat-head"><div class="stat-label">${esc(label)}</div>${showPill?`<span class="pill ${tone(key)}">${esc(delta)}</span>`:""}</div><div class="stat-value">${esc(shownValue)}</div></div><div class="stat-sub">${esc(hint)}</div></button>`}).join("")}</section>`}
+    function detail(row){if(!row)return `<aside class="detail"><h3>暂无数据</h3><div class="subline">当前条件下没有明细。</div></aside>`;const title=row.name||row.user,sub=state.role==="hq"?[row.status,row.reason].filter(Boolean).join(" · "):(row.coach||row.goal||"");let pairs=state.role==="hq"?[["当前状态",row.status],["主要原因",row.reason],["累计测评",row.cumulative],["本期新增",row.new],["活跃用户",row.active],["待分配",row.unassigned],["待复测",row.pendingRetest],["沉默用户",row.silent],["待绑定",row.pendingBind],["健康档案生成率",row.healthOutline],["AI 报告解读率",row.aiReport],["AI 训练大纲生成率",row.aiTraining],["AI 咨询使用",row.aiConsultUsage]]:[["当前状态",row.currentState||row.status],["最近测评",row.latest],["触发原因",row.reason],["目标",row.goal],["问题标签",row.tag],["待绑定",row.pendingBind],["健康档案",row.healthOutline],["AI 报告解读",row.aiReport],["AI 训练大纲",row.aiTraining],["AI 咨询次数",row.aiConsult]];if(state.tier!=="pro")pairs=pairs.filter(([label])=>!label.includes("AI"));return `<aside class="detail"><h3>${esc(title)}</h3><div class="subline">${esc(sub)}</div><div class="detail-section">${pairs.map(([k,v])=>`<div class="kv"><span>${esc(k)}</span><strong>${esc(v)}</strong></div>`).join("")}</div></aside>`}
+    function renderCardsByKeys(keys,scope="snapshot"){const cards=visibleCards().filter(card=>keys.includes(card[0]));return `<section class="stat-strip">${cards.map(([key,label,value,delta,hint])=>{const showPill=metricTimeEffectType(key)!=="none"&&delta&&delta!=="非 Pro"&&!/^P\d+$/.test(String(delta))&&key!=="pendingBind"&&key!=="healthOutline";const shownValue=displayCardMetric(key,value,scope);return `<button class="stat-card" data-metric="${key}" data-title="${esc(label)}" data-tone="${tone(key)}"><div><div class="stat-head"><div class="stat-label">${esc(label)}</div>${showPill?`<span class="pill ${tone(key)}">${esc(delta)}</span>`:""}</div><div class="stat-value">${esc(shownValue)}</div></div><div class="stat-sub">${esc(hint)}</div></button>`}).join("")}</section>`}
     function renderUnifiedCards(){
       const keys=[...cardKeys("snapshot"),...cardKeys("time")];
       const cards=visibleCards().filter(card=>keys.includes(card[0]));
-      return `<section class="stat-strip">${cards.map(([key,label,value,delta,hint])=>{const showPill=delta&&delta!=="非 Pro"&&!/^P\d+$/.test(String(delta))&&key!=="pendingBind"&&key!=="healthOutline";const scope=metricTimeEffectType(key)==="none"?"snapshot":"time";const shownValue=displayCardMetric(key,value,scope);return `<button class="stat-card" data-metric="${key}" data-title="${esc(label)}" data-tone="${tone(key)}"><div><div class="stat-head"><div class="stat-label">${esc(label)}</div>${showPill?`<span class="pill ${tone(key)}">${esc(delta)}</span>`:""}</div><div class="stat-value">${esc(shownValue)}</div></div><div class="stat-sub">${esc(hint)}</div></button>`}).join("")}</section>`
+      return `<section class="stat-strip">${cards.map(([key,label,value,delta,hint])=>{const showPill=metricTimeEffectType(key)!=="none"&&delta&&delta!=="非 Pro"&&!/^P\d+$/.test(String(delta))&&key!=="pendingBind"&&key!=="healthOutline";const scope=metricTimeEffectType(key)==="none"?"snapshot":"time";const shownValue=displayCardMetric(key,value,scope);return `<button class="stat-card" data-metric="${key}" data-title="${esc(label)}" data-tone="${tone(key)}"><div><div class="stat-head"><div class="stat-label">${esc(label)}</div>${showPill?`<span class="pill ${tone(key)}">${esc(delta)}</span>`:""}</div><div class="stat-value">${esc(shownValue)}</div></div><div class="stat-sub">${esc(hint)}</div></button>`}).join("")}</section>`
     }
     function coachServiceRows(){
       const factor=currentWindowFactor();
@@ -642,7 +639,7 @@
     function coachServiceFilteredRows(){
       const query=state.ownerCoachSearch.trim();
       const rows=coachServiceRows();
-      return query?rows.filter(row=>[row.coach,row.problem,row.action].some(v=>String(v).includes(query))):rows
+      return query?rows.filter(row=>[row.coach,row.problem].some(v=>String(v).includes(query))):rows
     }
     function coachServicePagedRows(rows){const start=(state.ownerCoachPageNo-1)*state.ownerCoachPageSize;return rows.slice(start,start+state.ownerCoachPageSize)}
     function coachServicePager(total){const pages=Math.max(1,Math.ceil(total/state.ownerCoachPageSize));return `<div class="pager"><span>共 ${total} 条，每页 ${state.ownerCoachPageSize} 条，第 ${state.ownerCoachPageNo} / ${pages} 页</span><div class="pager-actions"><button data-coach-service-prev ${state.ownerCoachPageNo<=1?"disabled":""}>上一页</button><button data-coach-service-next ${state.ownerCoachPageNo>=pages?"disabled":""}>下一页</button></div></div>`}
@@ -654,12 +651,12 @@
         ["timely","教练承接及时率",rows.reduce((acc,row,idx)=>{const timelyDone=Math.max(0,row.assigned-10+idx);return acc+timelyDone},0),sum("assigned"),"+3.4pp",`分配后 ${hqParams.acceptHours}h 内完成承接`],
         ["retest","复测推进及时率",rows.reduce((acc,row,idx)=>{const retestDone=Math.max(0,row.retest-2+idx%2);return acc+retestDone},0),sum("retest"),"-1.8pp",`距上次测评 ${hqParams.retestCycleDays} 天内推进复测`],
         ["silent","沉默回访及时率",rows.reduce((acc,row,idx)=>{const recalled=Math.max(0,row.silent-1-idx%2);return acc+recalled},0),sum("silent"),"+2.1pp",`连续 ${hqParams.silentDays} 天无行为回访`],
-        ["bind","测后绑定及时率",rows.reduce((acc,row,idx)=>{const boundDone=Math.max(0,row.bind-1-idx%2);return acc+boundDone},0),sum("bind"),"+4.0pp",`测后 ${hqParams.bindRetentionDays} 天内完成绑定`]
+        ["bind","测后绑定及时率",rows.reduce((acc,row,idx)=>{const boundDone=Math.max(0,row.bind-1-idx%2);return acc+boundDone},0),sum("bind"),"+4.0pp","测后 30 天内完成绑定"]
       ];
       const filtered=coachServiceFilteredRows();
       const rowsPage=coachServicePagedRows(filtered);
       const pages=Math.max(1,Math.ceil(filtered.length/state.ownerCoachPageSize));
-      return `<section class="panel"><div class="panel-title"><div><h3>教练服务分析</h3></div><span class="pill orange">服务及时性</span></div><div class="panel-body"><div class="mini-grid service-grid">${cardMetrics.map(([key,label,done,pool,delta,hint])=>{const rate=pool?`${(done/pool*100).toFixed(1)}%`:"—";return `<button class="mini clickable" data-service-metric="${key}" data-service-title="${esc(label)}"><div class="stat-head"><div class="stat-label">${esc(label)}</div><span class="pill ${tone(key)}">${esc(delta)}</span></div><div class="stat-value">${esc(rate)}</div><div class="stat-sub">${esc(hint)}</div></button>`}).join("")}</div><div class="section-gap"></div><div class="drawer-search" style="padding:0 0 12px"><input data-coach-service-search value="${esc(state.ownerCoachSearch)}" placeholder="搜索教练姓名、主要问题、干预措施" /></div><div class="table-wrap"><table><thead><tr><th>教练</th><th>负责会员</th><th>待复测</th><th>沉默</th><th>待绑定</th><th>主要问题</th><th>干预措施</th></tr></thead><tbody>${rowsPage.map(row=>`<tr><td>${esc(row.coach)}</td><td>${esc(row.assigned)}</td><td>${esc(row.retest)}</td><td>${esc(row.silent)}</td><td>${esc(row.bind)}</td><td>${esc(row.problem)}</td><td>${esc(row.action)}</td></tr>`).join("")}</tbody></table></div>${coachServicePager(filtered.length)}</div></section>`
+      return `<section class="panel"><div class="panel-title"><div><h3>教练服务分析</h3></div><span class="pill orange">服务及时性</span></div><div class="panel-body"><div class="mini-grid service-grid">${cardMetrics.map(([key,label,done,pool,delta,hint])=>{const rate=pool?`${(done/pool*100).toFixed(1)}%`:"—";return `<button class="mini clickable" data-service-metric="${key}" data-service-title="${esc(label)}"><div class="stat-head"><div class="stat-label">${esc(label)}</div><span class="pill ${tone(key)}">${esc(delta)}</span></div><div class="stat-value">${esc(rate)}</div><div class="stat-sub">${esc(hint)}</div></button>`}).join("")}</div><div class="section-gap"></div><div class="drawer-search" style="padding:0 0 12px"><input data-coach-service-search value="${esc(state.ownerCoachSearch)}" placeholder="搜索教练姓名、主要问题" /></div><div class="table-wrap"><table><thead><tr><th>教练</th><th>负责会员</th><th>待复测</th><th>沉默</th><th>待绑定</th><th>主要问题</th></tr></thead><tbody>${rowsPage.map(row=>`<tr><td>${esc(row.coach)}</td><td>${esc(row.assigned)}</td><td>${esc(row.retest)}</td><td>${esc(row.silent)}</td><td>${esc(row.bind)}</td><td>${esc(row.problem)}</td></tr>`).join("")}</tbody></table></div>${coachServicePager(filtered.length)}</div></section>`
     }
     function countBy(key,source=timeRows()){return source.reduce((acc,row)=>{acc[row[key]]=Number(acc[row[key]]||0)+1;return acc},{})}
     function countItems(key){return Object.entries(countBy(key)).map(([label,value])=>({label,value}))}
@@ -718,12 +715,11 @@
     function mainPage(){return `${renderMetricZone()}${renderRolePanels()}`}
     function renderTopbar(){return `<div class="topbar"><div class="toolbar"><div><h1 class="page-title">${pageMeta().label}</h1><div class="page-sub">${pageMeta().subtitle}</div></div><div class="top-meta"><span class="tiny-pill">${state.tier==="pro"?"Pro":"非 Pro"}</span></div></div><div class="filters"><button class="primary-btn" data-export>导出数据</button></div></div>`}
     function exportOptions(){
-      const metricOptions=visibleCards().map(([key,label])=>({key:`metric:${key}`,title:`${label}明细`,desc:"指标卡下钻明细"}));
-      const serviceOptions=state.role==="hq"?roleData().cards.filter(card=>["unassigned","pendingRetest","silent","pendingBind"].includes(card[0])).map(([key,label])=>({key:`metric:${key}`,title:`${label}明细`,desc:"相关指标明细"})):[];
+      const metricOptions=visibleCards().map(([key,label])=>({key:`metric:${key}`,title:metricDrawerTitle(key,label),desc:"指标卡下钻明细"}));
+      const serviceOptions=state.role==="hq"?roleData().cards.filter(card=>["unassigned","pendingRetest","risk","silent","pendingBind"].includes(card[0])).map(([key,label])=>({key:`metric:${key}`,title:metricDrawerTitle(key,label),desc:"相关指标明细"})):[];
       const common=[{key:"main",title:listTitle(),desc:"当前页面主列表"},...metricOptions,...serviceOptions,{key:"trend",title:trendTitle(),desc:"当前时间范围趋势数据"}];
       if(state.role!=="hq")common.push({key:"structure",title:"用户结构分布",desc:"性别、年龄、目标、问题标签"});
       if(state.role==="coach")common.push({key:"status",title:"会员状态分布",desc:"当前会员状态统计"});
-      if(state.tier==="pro")common.push({key:"pro",title:"Pro 能力指标",desc:"AI 报告解读、AI 训练大纲、AI 咨询次数"});
       return [...new Map(common.map(opt=>[opt.key,opt])).values()]
     }
     function exportDataset(key){
@@ -736,11 +732,11 @@
         }
         return{key,title:metricDrawerTitle(metricKey,card?.[1]||"指标"),rule:metricRule(metricKey),cols:drawerColsForMetric(metricKey),rows:drillRows(metricKey,metricSourceRows(metricKey))}
       }
-      if(key==="main")return{key,title:listTitle(),rule:"当前页面主列表数据，受模块搜索和角色专属筛选影响；状态类列表按结束日期快照，区间类统计按开始-结束日期。",cols:columns(),rows:mainRows()}
+      if(key==="main")return{key,title:listTitle(),rule:"当前页面主列表数据，受模块搜索和角色专属筛选影响；A 类指标按当前有效状态统计，不随日期范围变化；区间类指标按开始-结束日期统计。",cols:columns(),rows:mainRows()}
       if(key==="trend")return{key,title:trendTitle(),rule:chartRules[trendTitle()]||"",cols:["label","value"],rows:currentTrendRows()}
       if(key==="structure")return{key,title:"用户结构分布",rule:"当前筛选范围内按性别、年龄、目标、问题标签进行去重统计。",cols:["label","value"],rows:[...countItems("gender"),...countItems("age"),...countItems("goal"),...countItems("tag")]}
       if(key==="status")return{key,title:"会员状态分布",rule:chartRules["会员状态分布"],cols:["label","value"],rows:countItems("status")}
-      return{key,title:"Pro 能力指标",rule:"AI 报告解读、AI 训练大纲、AI 咨询次数相关指标。",cols:state.role==="hq"?["name","aiReport","aiTraining","aiConsult"]:["user","aiReport","aiTraining","aiConsult"],rows:snapshotRows()}
+      return{key,title:listTitle(),rule:"当前页面主列表数据。",cols:columns(),rows:mainRows()}
     }
     function exportSections(keys){return (keys.length?keys:["main"]).map(key=>exportDataset(key))}
     function timeLabel(){const d=new Date(),z=n=>String(n).padStart(2,"0");return `${d.getFullYear()}-${z(d.getMonth()+1)}-${z(d.getDate())} ${z(d.getHours())}:${z(d.getMinutes())}`}
@@ -768,14 +764,13 @@
     function openTaskDrawer(){drawerState={mode:"tasks",rows:[...exportTasks],pageNo:1,pageSize:6};renderDrawer()}
     function openParamModal(){
       if(state.role!=="hq")return;
-      modalMask.innerHTML=`<div class="modal"><div class="modal-head"><div><h3>总门店参数配置</h3></div><button class="ghost-btn" data-close-param-config>关闭</button></div><div class="modal-body"><div class="export-grid" style="grid-template-columns:1fr;gap:12px"><label class="export-item" style="align-items:center"><div style="flex:1"><strong>复测周期（天）</strong></div><input data-param-field="retestCycleDays" type="number" min="1" value="${hqParams.retestCycleDays}" style="width:100px;height:36px;border:1px solid var(--line);border-radius:8px;padding:0 10px"></label><label class="export-item" style="align-items:center"><div style="flex:1"><strong>沉默判定周期（天）</strong></div><input data-param-field="silentDays" type="number" min="1" value="${hqParams.silentDays}" style="width:100px;height:36px;border:1px solid var(--line);border-radius:8px;padding:0 10px"></label><label class="export-item" style="align-items:center"><div style="flex:1"><strong>待绑定保留周期（天）</strong></div><input data-param-field="bindRetentionDays" type="number" min="1" value="${hqParams.bindRetentionDays}" style="width:100px;height:36px;border:1px solid var(--line);border-radius:8px;padding:0 10px"></label><label class="export-item" style="align-items:center"><div style="flex:1"><strong>承接时限（小时）</strong></div><input data-param-field="acceptHours" type="number" min="1" value="${hqParams.acceptHours}" style="width:100px;height:36px;border:1px solid var(--line);border-radius:8px;padding:0 10px"></label></div></div><div class="modal-foot"><button class="ghost-btn" data-close-param-config>取消</button><button class="primary-btn" data-save-param-config>保存配置</button></div></div>`;modalMask.classList.add("show")}
+      modalMask.innerHTML=`<div class="modal"><div class="modal-head"><div><h3>总门店参数配置</h3></div><button class="ghost-btn" data-close-param-config>关闭</button></div><div class="modal-body"><div class="export-grid" style="grid-template-columns:1fr;gap:12px"><label class="export-item" style="align-items:center"><div style="flex:1"><strong>复测周期（天）</strong></div><input data-param-field="retestCycleDays" type="number" min="1" value="${hqParams.retestCycleDays}" style="width:100px;height:36px;border:1px solid var(--line);border-radius:8px;padding:0 10px"></label><label class="export-item" style="align-items:center"><div style="flex:1"><strong>沉默判定周期（天）</strong></div><input data-param-field="silentDays" type="number" min="1" value="${hqParams.silentDays}" style="width:100px;height:36px;border:1px solid var(--line);border-radius:8px;padding:0 10px"></label><label class="export-item" style="align-items:center"><div style="flex:1"><strong>承接时限（小时）</strong></div><input data-param-field="acceptHours" type="number" min="1" value="${hqParams.acceptHours}" style="width:100px;height:36px;border:1px solid var(--line);border-radius:8px;padding:0 10px"></label></div></div><div class="modal-foot"><button class="ghost-btn" data-close-param-config>取消</button><button class="primary-btn" data-save-param-config>保存配置</button></div></div>`;modalMask.classList.add("show")}
     function drawerFilteredRows(){const query=(drawerState?.search||"").trim();if(!query)return drawerState.rows;const fields=drawerState.searchFields||drawerState.cols||[];return drawerState.rows.filter(row=>fields.some(field=>String(row[field]??"").includes(query)))}
     function trendDecisionInsight(rows,title){
       if(!rows.length){
         return {
           summary:`${title}当前暂无可分析数据。`,
-          cards:[{label:"当前值",value:"—"},{label:"较首期变化",value:"—"},{label:"趋势判断",value:"数据不足"}],
-          actions:["补齐统计周期后再判断趋势。"]
+          cards:[{label:"当前值",value:"—"},{label:"较首期变化",value:"—"},{label:"趋势判断",value:"数据不足"}]
         };
       }
       const first=Number(rows[0].value||0);
@@ -783,21 +778,17 @@
       const diff=last-first;
       const pct=first?`${(diff/first*100).toFixed(1)}%`:"—";
       const trend=diff>0?"上升":diff<0?"下降":"持平";
-      const actions=diff<0
-        ?["优先排查本期新增承接与复测推进环节，避免继续下滑。","针对关键对象建立当日跟进清单。"]
-        :["保持当前推进节奏，先处理关键对象防止反弹。","复盘普通对象转化动作，提升整体效率。"];
       return {
         summary:`${title}最近周期从 ${first} 变化到 ${last}，整体${trend}（${diff>=0?"+":""}${diff}，${pct}）。`,
         cards:[
           {label:"当前值",value:last},
           {label:"较首期变化",value:`${diff>=0?"+":""}${diff}`},
           {label:"趋势判断",value:trend}
-        ],
-        actions
+        ]
       };
     }
     function renderTrendDecisionBlock(insight){
-      return `<section class="rule-box"><h4>结论摘要</h4><p>${esc(insight.summary)}</p></section><div class="decision-grid">${insight.cards.map(card=>`<div class="decision-card"><span>${esc(card.label)}</span><strong>${esc(card.value)}</strong></div>`).join("")}</div><section class="decision-list"><h4>建议动作</h4><ul>${insight.actions.map(item=>`<li>${esc(item)}</li>`).join("")}</ul></section>`;
+      return `<section class="rule-box"><h4>结论摘要</h4><p>${esc(insight.summary)}</p></section><div class="decision-grid">${insight.cards.map(card=>`<div class="decision-card"><span>${esc(card.label)}</span><strong>${esc(card.value)}</strong></div>`).join("")}</div>`;
     }
     function renderDrawer(){if(!drawerState){drawerMask.classList.remove("show");drawerMask.innerHTML="";return}
       if(drawerState.mode==="tasks"){drawerMask.innerHTML=`<aside class="drawer"><div class="drawer-head"><div><h3>导出任务列表</h3></div><div class="drawer-actions"><button class="ghost-btn" data-drawer-close>关闭</button></div></div><div class="drawer-body">${drawerState.rows.length?`<div class="task-list">${drawerState.rows.map(task=>`<div class="task-item"><div class="task-meta"><strong>${esc(task.title)}</strong><span>${esc(task.scope)} · ${esc(task.format)} · ${task.rows} 行 · ${esc(task.time)}</span><span>状态：${esc(task.status)}</span></div><div class="task-right"><button class="ghost-btn" data-task-download="${esc(task.id)}">重新下载</button></div></div>`).join("")}</div>`:`<div class="empty">暂无导出任务</div>`}</div></aside>`;drawerMask.classList.add("show");return}
