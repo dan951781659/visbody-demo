@@ -14,6 +14,13 @@
 
 ---
 
+## 2026-05-16 · Git 首次提交
+
+- 仓库根目录：`体测线`。已添加根目录 `.gitignore`（忽略 `.DS_Store`）。
+- 首次提交包含整个 `device-library/`（含 VAPro7 `demo/` v1.5.0、`VERSION_HISTORY.md`、`CHANGELOG`、`assets`、历史 `versions/` 快照等）。
+
+---
+
 ## 2026-05-16 · 文档与仓库
 
 - 新增本文档 `VERSION_HISTORY.md`，约定后续每次修改都登记。
