@@ -1,0 +1,34 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>开始测量</title>
+    <link rel="stylesheet" href="./shared.css" />
+  </head>
+  <body>
+    <main class="device-stage">
+      <section class="device">
+        <div class="status-bar"><span>18:32</span><span>开始测量</span></div>
+        <div class="topbar">
+          <a class="back-link" href="./standard-position.html">← 返回</a>
+          <span class="text-link">请保持静止</span>
+        </div>
+        <div
+          style="padding-top:120px; text-align:center;"
+          data-stage-next="./standard-measuring.html"
+          data-stage-delay="3200"
+          data-stage-seconds-start="3"
+          data-demo-countdown-target
+          data-voice-text="请保持静止，测量即将开始。"
+        >
+          <div class="section-label">完整测量</div>
+          <h1 class="screen-title">3 秒后开始</h1>
+          <div class="headline" style="font-size:132px; margin:0;" data-stage-seconds>3</div>
+          <p class="screen-subtitle">请保持当前动作</p>
+        </div>
+      </section>
+    </main>
+    <script src="./shared.js"></script>
+  </body>
+</html>

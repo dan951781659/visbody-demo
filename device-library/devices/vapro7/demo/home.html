@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>VAPro7 首页</title>
+    <link rel="stylesheet" href="./shared.css" />
+  </head>
+  <body>
+    <main class="device-stage">
+      <section class="device">
+        <div class="status-bar">
+          <span>18:32</span>
+          <span>网络正常 打印已连接</span>
+        </div>
+        <div class="topbar">
+          <a class="back-link" href="./index.html">← 评审入口</a>
+          <span class="text-link">请站上转台后操作</span>
+        </div>
+        <div class="section-label">VAPro7</div>
+        <h1 class="screen-title">请选择测量项目</h1>
+        <p class="screen-subtitle">请选择要开始的测量项目。</p>
+        <p class="field order-preview-line">
+          预设流程顺序（可在运营设置调整）：<span data-order-preview></span>
+        </p>
+
+        <div class="choice-grid compact" data-choice-group data-default-index="0">
+          <a class="choice-card" href="./standard-position.html" data-choice-item data-choice-label="完整测量" data-action-link="start-session">
+            <div class="tag">推荐</div>
+            <div class="card-title">完整测量</div>
+            <div class="card-desc">一圈完成体重、体成分、体围、身高与体态。</div>
+          </a>
+          <a class="choice-card" href="./pro-prepare.html" data-choice-item data-choice-label="体态精测" data-show-if="proModeEnabled">
+            <div class="card-title">体态精测</div>
+            <div class="card-desc">自然站立，完成更细的体态测量。</div>
+          </a>
+          <a class="choice-card" href="./single-select.html" data-choice-item data-choice-label="单项测量" data-show-if="singleModeEnabled">
+            <div class="card-title">单项测量</div>
+            <div class="card-desc">肩部、颈部、平衡单独测量。</div>
+          </a>
+          <a class="choice-card" href="#" data-choice-item data-choice-label="快捷单项" data-quick-item hidden>
+            <div class="tag">快捷入口</div>
+            <div class="card-title" data-quick-title>肩部测量</div>
+            <div class="card-desc" data-quick-desc>抬手完成肩部活动测量。</div>
+          </a>
+        </div>
+      </section>
+    </main>
+    <script src="./shared.js"></script>
+  </body>
+</html>

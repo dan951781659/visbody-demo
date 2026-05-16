@@ -1,0 +1,163 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>完整测量已完成</title>
+    <link rel="stylesheet" href="./shared.css" />
+  </head>
+  <body>
+    <main class="device-stage">
+      <section
+        class="device device--scheme-three"
+        data-voice-text="完整测量已完成，请举手或点击选择下一步。"
+      >
+        <div class="status-bar"><span>18:32</span><span>测量完成</span><span class="demo-version-badge" data-demo-version>v1.4.0</span></div>
+        <div class="topbar">
+          <a class="back-link" href="./standard-measuring.html">← 返回</a>
+          <span class="text-link">请选择下一步</span>
+        </div>
+        <div class="section-label">完整测量</div>
+        <div class="scheme-one-title">
+          <h1 class="screen-title">完整测量已完成</h1>
+          <p class="screen-subtitle">
+            顶部为本次已采集摘要；中部为取景与手势示意。也可直接点击选项完成下一步。
+          </p>
+        </div>
+
+        <div class="scheme-three-summary" aria-label="本次已采集项">
+          <div class="summary-check-row"><span class="summary-check-name">体重</span><span class="summary-check-mark" aria-label="已采集">✓</span></div>
+          <div class="summary-check-row"><span class="summary-check-name">体成分</span><span class="summary-check-mark" aria-label="已采集">✓</span></div>
+          <div class="summary-check-row"><span class="summary-check-name">身高体围</span><span class="summary-check-mark" aria-label="已采集">✓</span></div>
+          <div class="summary-check-row"><span class="summary-check-name">体态</span><span class="summary-check-mark" aria-label="已采集">✓</span></div>
+        </div>
+
+        <div class="scheme-three-camera is-camera-off" data-scheme-three-live>
+          <div class="live-stage">
+            <video class="scheme-three-video" autoplay muted playsinline></video>
+            <div class="scheme-three-overlay" aria-hidden="true"></div>
+            <div class="live-status">
+              <span class="live-chip ok">取景中</span>
+              <span class="live-chip">举手选择</span>
+            </div>
+            <span class="camera-corner tl"></span>
+            <span class="camera-corner tr"></span>
+            <span class="camera-corner bl"></span>
+            <span class="camera-corner br"></span>
+            <div class="scheme-three-stage">
+              <div class="human pose-down" aria-hidden="true">
+                <div class="head"></div>
+                <div class="torso"></div>
+                <div class="limb arm left"></div>
+                <div class="limb arm right"></div>
+                <div class="limb leg left"></div>
+                <div class="limb leg right"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <p class="scheme-three-decision-line">
+          也可点击选择下一步操作；或使用 +/- 切换后按电源键确认。
+        </p>
+
+        <div
+          class="scheme-three-flow"
+          data-choice-group
+          data-default-index="0"
+          data-finish-group
+          data-finish-flow="standard"
+          data-finish-current="standard"
+          data-countdown="3" data-countdown-start="manual"
+        >
+          <div class="scheme-three-action-row">
+            <a
+              class="scheme-three-action-card"
+              href="./standard-generating.html"
+              data-choice-item
+              data-choice-label="结束测量（查看报告）"
+              data-finish-option="report"
+            >
+              <strong>结束测量</strong>
+              <span>生成报告</span>
+            </a>
+            <a
+              class="scheme-three-action-card"
+              href="#"
+              data-choice-item
+              data-choice-label="继续下一项测量"
+              data-finish-option="next"
+            >
+              <strong data-next-title>继续下一项测量</strong>
+              <span data-next-desc>按测量顺序推荐</span>
+            </a>
+          </div>
+
+          <div class="scheme-one-gesture">
+            <div class="scheme-one-bubble">
+              <strong>左手势</strong>
+              举起左手确认「结束测量」（保持约 2 秒）
+            </div>
+            <div class="human pose-down" aria-hidden="true">
+              <div class="head"></div>
+              <div class="torso"></div>
+              <div class="limb arm left"></div>
+              <div class="limb arm right"></div>
+              <div class="limb leg left"></div>
+              <div class="limb leg right"></div>
+            </div>
+            <div class="scheme-one-bubble right">
+              <strong>右手势</strong>
+              举起右手确认「继续下一项测量」（保持约 2 秒）
+            </div>
+          </div>
+
+          <div class="scheme-one-weak scheme-one-weak--minimal">
+            <a href="./standard-position.html">重新测量</a>
+          </div>
+
+          <div class="scheme-one-footer footer-hint">
+            <div class="auto-hint demo-click-zone" data-auto-hint-click tabindex="0" role="button">
+              <strong
+                ><span data-auto-prefix>请点击上方选项继续</span>
+                <span data-auto-label>继续下一项测量</span></strong
+              >
+              <span class="count-badge" data-auto-countdown hidden>3</span>
+            </div>
+</div>
+        </div>
+      </section>
+    </main>
+    <script src="./shared.js"></script>
+    <script>
+      (function () {
+        var wrap = document.querySelector("[data-scheme-three-live]");
+        var video = document.querySelector(".scheme-three-video");
+        if (!wrap || !video) return;
+
+        function setCameraOff() {
+          wrap.classList.add("is-camera-off");
+        }
+
+        function setCameraOn() {
+          wrap.classList.remove("is-camera-off");
+        }
+
+        if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
+          setCameraOff();
+          return;
+        }
+
+        navigator.mediaDevices
+          .getUserMedia({ video: { facingMode: "user" }, audio: false })
+          .then(function (stream) {
+            video.srcObject = stream;
+            setCameraOn();
+          })
+          .catch(function () {
+            setCameraOff();
+          });
+      })();
+    </script>
+  </body>
+</html>

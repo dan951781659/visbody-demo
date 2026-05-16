@@ -1,0 +1,62 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>平衡测量完成</title>
+    <link rel="stylesheet" href="./shared.css" />
+  </head>
+  <body>
+    <main class="device-stage">
+      <section class="device" data-voice-text="平衡测量已完成，请选择下一步。">
+        <div class="status-bar"><span>18:32</span><span>测量完成</span><span class="demo-version-badge" data-demo-version>v1.5.0</span></div>
+        <div class="topbar">
+          <a class="back-link" href="./single-measuring-balance.html">← 返回</a>
+          <span class="text-link">请查看结果</span>
+        </div>
+        <div class="section-label">平衡测量</div>
+        <h1 class="screen-title">平衡测量完成</h1>
+        <p class="screen-subtitle">平衡结果已生成，请扫码查看详细报告或继续下一项。</p>
+        <div class="result-grid">
+          <div class="result-card"><strong>重心偏移</strong><div class="field">轻微偏左</div></div>
+          <div class="result-card"><strong>稳定性</strong><div class="field">正常范围</div></div>
+          <div class="result-card"><strong>摆动轨迹</strong><div class="field">已采集</div></div>
+          <div class="result-card"><strong>建议</strong><div class="field">单腿站立训练可加强本体感觉</div></div>
+        </div>
+        <div class="qr-box" style="margin-top:18px;">
+          <strong>扫码查看详细报告</strong>
+          <div class="qr-wrap">
+            <div class="qr"></div>
+            <div class="field">手机扫码后可查看平衡分项详情与趋势。</div>
+          </div>
+        </div>
+        <div class="footer-hint">
+          <div
+            class="choice-grid compact"
+            data-choice-group
+            data-default-index="0"
+            data-finish-group
+            data-finish-flow="single"
+            data-finish-current="singleBalance"
+          >
+            <a class="choice-card" href="#" data-choice-item data-choice-label="扫码查看详细报告" data-action-link="open-report" data-finish-option="report">
+              <div class="card-title">扫码查看详细报告</div>
+            </a>
+            <a class="choice-card" href="#" data-choice-item data-choice-label="继续下一项测量" data-finish-option="next">
+              <div class="card-title" data-next-title>继续下一项测量</div>
+              <div class="card-desc" data-next-desc>按测量顺序推荐</div>
+            </a>
+            <a class="choice-card" href="./home.html" data-choice-item data-choice-label="完成">
+              <div class="card-title">完成</div>
+            </a>
+          </div>
+          <div class="auto-hint">
+            <strong><span data-auto-prefix>请点击上方选项</span> <span data-auto-label>扫码查看详细报告</span></strong>
+          </div>
+          <p class="single-result-weak"><a href="./single-prepare-balance.html">重新测量平衡</a></p>
+        </div>
+      </section>
+    </main>
+    <script src="./shared.js"></script>
+  </body>
+</html>

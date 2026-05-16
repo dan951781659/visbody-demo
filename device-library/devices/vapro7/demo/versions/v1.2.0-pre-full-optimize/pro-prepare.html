@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>体态精测准备</title>
+    <link rel="stylesheet" href="./shared.css" />
+  </head>
+  <body>
+    <main class="device-stage">
+      <section class="device">
+        <div class="status-bar"><span>18:32</span><span>体态精测</span></div>
+        <div class="topbar">
+          <a class="back-link" href="./home.html">← 返回</a>
+          <span class="text-link">自然站立</span>
+        </div>
+        <div class="section-label">体态精测</div>
+        <h1 class="screen-title">请双手自然下垂</h1>
+        <p class="screen-subtitle" data-live-voice>面向屏幕站稳，动作正确后自动开始。</p>
+        <div class="device-visual">
+          <div class="live-stage" data-stage-next="./pro-measuring.html" data-stage-delay="2600" data-voice-text="请双手自然下垂，面向屏幕站稳。">
+            <div class="camera-corner tl"></div><div class="camera-corner tr"></div><div class="camera-corner bl"></div><div class="camera-corner br"></div>
+            <div class="live-glow"></div>
+            <div class="live-status">
+              <span class="live-chip ok">姿势正确</span>
+              <span class="live-chip">头部保持正直</span>
+            </div>
+            <div class="guide-line circle"></div>
+            <div class="guide-line feet"></div>
+            <div class="human pose-down">
+              <div class="head"></div><div class="torso"></div>
+              <div class="limb arm left"></div><div class="limb arm right"></div>
+              <div class="limb leg left"></div><div class="limb leg right"></div>
+            </div>
+            <div class="live-focus">请保持静止</div>
+          </div>
+        </div>
+        <div class="footer-hint">
+          <div class="auto-hint auto-hint-clickable" data-demo-next="./pro-measuring.html">
+            <strong>动作正确后自动开始</strong>
+            <span class="count-badge">OK</span>
+          </div>
+        </div>
+      </section>
+    </main>
+    <script src="./shared.js"></script>
+  </body>
+</html>
