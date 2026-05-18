@@ -14,6 +14,67 @@
 
 ---
 
+## 2026-05-18 · v1.5.5（信息架构 · 倒计时姿势示意 · 体成分举手）
+
+- **体成分准备**：四宫格完成后 **举右手** 进入扶手（`setupPrepGestureAdvance`）；Demo 模拟键与弱链兜底。
+- **倒计时页**：`standard-countdown` / `pro-countdown` / `single-countdown-shoulder` 增加 **上示意、下倒计时** 布局（人偶与上一准备页一致）。
+- **首页**：专业测量降为 `tag--tier`，主标题「体态测量」；单项与快捷肩部收入 `home-entry-group--single` 嵌套展示。
+- **测量设置**：肩/颈/平衡开关收入「单项测量」`settings-subgroup`；专业测量描述同步。
+- **`shared.css`**：`.device--countdown`、`.home-entry-group`、`.prep-gesture-block` 等。
+- **`version.json`**：**v1.5.5**。
+
+---
+
+## 2026-05-18 · v1.5.4（设置分组 · 单项独立显隐 · 准备流程串联）
+
+- **`settings-modes.html`**：去掉冗余 `section-label`；按 **首页入口 / 顺序 / 快捷 / 综合准备 / 播报报告** 分组；肩部、颈部、平衡各自开关（替代「显示单项测量」总开关）。
+- **`shared.js`**：`singleShoulderEnabled` / `singleNeckEnabled` / `singleBalanceEnabled`；`isAnySingleEnabled`；快捷项与顺序池联动；**`DEMO_VERSION_FALLBACK` 1.5.4**。
+- **`standard-bodycomp-prep.html`**：完成四宫格后进入 **`standard-position.html`**（扶手），再进倒计时。
+- **`home.html` / `single-select.html`**：单项入口与分项卡片随开关显隐。
+
+---
+
+## 2026-05-18 · v1.5.3（测量设置 · 体成分四宫格 · 综合/专业测量文案）
+
+- **`shared.js`**：恢复 **`voiceEnabled`**、**`bodyCompositionPrepEnabled`**（默认开）；**`speakText`** 总闸；**`getStandardFlowEntryHref`** + **`renderState`** 写 **`[data-standard-flow-entry]`**；URL **`voice` / `bodyCompPrep`**；**`MEASUREMENT_ITEMS`**：`standard` → 综合测量 + 体成分准备入口，`pro` → 专业测量；**`DEMO_VERSION_FALLBACK` 1.5.3**。
+- **`settings-modes.html`**：更名 **测量设置**；卡片顺序：显隐 → 顺序池 → 快捷单项 → 外链 → **语音播报** → **体成分测量准备引导**；顺序池 **+ 综合测量 / + 专业测量**。
+- **`standard-bodycomp-prep.html`**（新）：2×2 四宫格准备 → **`standard-countdown.html`**；资源 **`assets/bodycomp-prep/grid-reference.png`**。
+- **`standard-position.html`**：关闭体成分准备时仅 **扶手阶段**（`data-guide-initial-phase="2"`）。
+- **`home.html`**：综合测量 / 专业测量 · 体态测量文案；**`device--home`** + 底部运营位 + **`home-promo-schematic.png`**；去掉顺序预览行；**`data-standard-flow-entry`**。
+- **`shared.css`**：**`.device--home`**、**`.home-promo-block`**、**`.card-subtitle`**、**`.bodycomp-prep-grid`** 等。
+- **文案扫尾**：`index.html`、`pro-*`、`report-detail`；综合测量链路 **`section-label`**；运营设置 → 测量设置。
+- **`version.json`**：**v1.5.3**。
+
+---
+
+## 2026-05-16 · v1.5.2（方案 A 手势与完成页对齐 · 颈/平衡占位 · 首页运营位）
+
+- **`standard-next-step.html` / `standard-next-step-touch.html`**：手势/触控页 Demo 预期写清；缩短 **`scheme-three-gesture-panel`**（方案 A）；触控页去掉长篇对照副标题。
+- **`shared.js`**：恢复 **`singleNeck` / `singleBalance`**（`MEASUREMENT_ITEMS`、`NEXT_RECOMMEND_DESC`、`completedGroups`）；首页快捷项 **`neck` / `balance`** 指向 **`single-flow-placeholder.html?item=`**；**`setupChoiceHighlight`** 跳过 **`[data-finish-group]`**；**`bindDemoPlaceholders`**；快捷卡 **`href`** 经 **`withStateQuery`**；**`DEMO_VERSION_FALLBACK` 1.5.2**。
+- **`standard-result.html` / `single-result-shoulder.html` / `pro-result.html`**：footer 改为 **`scheme-three-flow`** 双 **`scheme-three-action-card`** + 「完成」弱链接；去掉与二维码重复的副标题。
+- **`single-select.html`**：肩 / 颈 / 平衡并列；颈、平衡 **`data-demo-placeholder`**。
+- **`single-flow-placeholder.html`**：颈、平衡占位中转页（Query **`item=neck|balance`**）。
+- **`settings-modes.html`**：`+ 颈部` `+ 平衡`；快捷下拉含颈、平衡；顶栏长副标题移除（说明下沉至卡片）。
+- **`home.html`**：**`home-promo-slot`** + **`assets/home-promo.png`**（**`data-demo-placeholder`** 防止 `#` 跳转）；去掉重复副标题。
+- **`shared.css`**：**`.scheme-three-gesture-panel*`** 收紧；**`.scheme-three-flow--result-completion`** / **`.home-promo-slot`**。
+- **其它**：`report-detail`、`standard-weight`、`standard-prepare`、`结果方案三` 等去掉解释性 **`screen-subtitle`**。
+- **`version.json`**：**v1.5.2**。
+
+---
+
+## 2026-05-16 · v1.5.1（Demo 收口 UX：肩页规范 · idle 点击开始 · 颈/平衡下架 · 体态倒计时）
+
+- **`shared.js`**：`MEASUREMENT_ITEMS` / 顺序预设收口为「完整测量 → 体态精测 → 肩部」；`normalizeState` 迁移旧预设与快捷项 `neck`/`balance`；**`setupFinishAutoAdvance`** 支持 `data-idle-start="on-first-click"`（先点后倒计时）；`DEMO_VERSION_FALLBACK` **1.5.1**。
+- **`shared.css`**：肩部采集页 `.device--shoulder-measure` / `.single-shoulder-*`（顶进度卡、黑底取景叠层、底说明卡）；**`.scheme-three-idle-footer`** 分层与等待点击态 **`.is-idle-waiting-click`**；**`.scheme-three-gesture-panel`** 手势合一模块样式。
+- **`single-measuring-shoulder-left/right.html`**：按规范纵向重排（外展上举示意文案与角度叠层）。
+- **`standard-next-step.html`**：手势指引收敛为 **`scheme-three-gesture-panel`**；方案 A/B 完成流增加 **`data-idle-start="on-first-click"`**。
+- **下架 Demo 内颈部、平衡**：删除 `single-prepare-neck.html`、`single-measuring-neck.html`、`single-result-neck.html`、`single-prepare-balance.html`、`single-measuring-balance.html`、`single-result-balance.html`；**`single-select.html`** 仅肩部入口；**`home.html` / `index.html` / `settings-modes.html`** 文案与控件同步。
+- **体态链路**：新建 **`pro-countdown.html`**（比照 `standard-countdown`）；**`pro-prepare.html`** 跳转改为 **`pro-countdown.html`**。
+- **`single-result-shoulder.html`**：与 **`standard-result.html`** footer 结构对齐（去掉额外弱链接段落）。
+- **`version.json`**：**v1.5.1**。
+
+---
+
 ## 2026-05-16 · Git 首次提交
 
 - 仓库根目录：`体测线`。已添加根目录 `.gitignore`（忽略 `.DS_Store`）。

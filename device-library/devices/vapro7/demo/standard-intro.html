@@ -1,9 +1,14 @@
 <!doctype html>
 <html lang="zh-CN">
-  <head>
-    <meta charset="UTF-8" />
-    <meta http-equiv="refresh" content="0; url=./standard-position.html" />
-    <title>跳转中</title>
-  </head>
-  <body></body>
+<head><meta charset="UTF-8" /><meta name="viewport" content="width=device-width, initial-scale=1.0" /><title>跳转中</title></head>
+<body>
+<script src="./shared.js"></script>
+<script>
+(function () {
+  var state = window.VAProDemo.loadState();
+  var target = window.VAProDemo.withStateQuery(window.VAProDemo.getStandardFlowEntryHref(state), state);
+  window.location.replace(target);
+})();
+</script>
+</body>
 </html>

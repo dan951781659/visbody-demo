@@ -11,19 +11,16 @@
       <section
         class="device device--scheme-three"
         data-gesture-demo-a
-        data-voice-text="完整测量已完成。请举左手结束测量，或举右手继续下一项；也可点击取景区左右半边或下方卡片演示。"
+        data-voice-text="完整测量已完成。请举右手示意继续下一项，或点下方卡片选择；Demo 可按键盘 L 或 R。"
       >
         <div class="status-bar"><span>18:32</span><span>测量完成</span><span class="demo-version-badge" data-demo-version>v1.5.0</span></div>
         <div class="topbar">
           <a class="back-link" href="./standard-measuring.html">← 返回</a>
           <span class="text-link">手势引导 · 主流程</span>
         </div>
-        <div class="section-label">完整测量 · 方案 A</div>
+        <div class="section-label">综合测量 · 方案 A</div>
         <div class="scheme-one-title">
           <h1 class="screen-title">完整测量已完成</h1>
-          <p class="screen-subtitle">
-            取景区内为<strong>手势引导（Demo 模拟）</strong>：点击左右半边或按键盘 <kbd class="kbd-soft">L</kbd> / <kbd class="kbd-soft">R</kbd> 模拟识别；真机由视觉识别举手。
-          </p>
         </div>
 
         <div class="scheme-three-summary" aria-label="本次已采集项">
@@ -33,44 +30,28 @@
           <div class="summary-check-row"><span class="summary-check-name">体态</span><span class="summary-check-mark" aria-hidden="true">✓</span></div>
         </div>
 
-        <div class="scheme-three-gesture-guide">
-          <strong>举手示意（示意）</strong>
-          <span>左侧区域 · 左手抬高 ≈ 肩平 · 保持约 2 秒 → 结束测量</span>
-          <span>右侧区域 · 右手抬高 ≈ 肩平 · 保持约 2 秒 → 继续下一项</span>
+        <div class="scheme-three-gesture-panel" aria-label="手势指引">
+          <div class="scheme-three-gesture-panel-title">手势指引</div>
+          <p class="scheme-three-gesture-panel-lead">
+            请<strong>举右手</strong>示意继续下一项；结束测量请点下方「结束测量」卡片。Demo 可按 <kbd class="kbd-soft">R</kbd> / <kbd class="kbd-soft">L</kbd> 快捷触发。
+          </p>
         </div>
 
-        <div class="scheme-three-camera is-camera-off" data-scheme-three-live>
-          <div class="live-stage">
-            <video class="scheme-three-video" autoplay muted playsinline></video>
-            <div class="scheme-three-overlay scheme-three-overlay--split" aria-hidden="false">
-              <button type="button" class="scheme-three-sim-zone scheme-three-sim-zone--left" data-gesture-simulate="report">
-                <span>Demo 左手区</span>
-              </button>
-              <button type="button" class="scheme-three-sim-zone scheme-three-sim-zone--right" data-gesture-simulate="next">
-                <span>Demo 右手区</span>
-              </button>
-            </div>
-            <div class="live-status">
-              <span class="live-chip ok" data-scheme-chip-a>取景</span>
-              <span class="live-chip" data-scheme-chip-b>等待手势或点击</span>
-            </div>
-            <span class="camera-corner tl"></span><span class="camera-corner tr"></span>
-            <span class="camera-corner bl"></span><span class="camera-corner br"></span>
-            <div class="scheme-three-stage">
-              <div class="human pose-down" aria-hidden="true">
-                <div class="head"></div><div class="torso"></div>
-                <div class="limb arm left"></div><div class="limb arm right"></div>
-                <div class="limb leg left"></div><div class="limb leg right"></div>
-              </div>
+        <div class="scheme-three-gesture-figure" data-scheme-three-figure>
+          <div class="scheme-three-gesture-figure-stage">
+            <div class="human pose-shoulder-right" aria-hidden="true">
+              <div class="head"></div>
+              <div class="torso"></div>
+              <div class="limb arm left"></div>
+              <div class="limb arm right"></div>
+              <div class="limb leg left"></div>
+              <div class="limb leg right"></div>
             </div>
           </div>
+          <p class="scheme-three-gesture-figure-caption">举右手 · 继续下一项</p>
         </div>
 
         <div class="scheme-three-toast" data-gesture-toast hidden role="status"></div>
-
-        <p class="scheme-three-decision-line">
-          下方两张卡片与手势<strong>一一对应</strong>，可直接触控完成（无障碍与演示保底）。
-        </p>
 
         <div
           class="scheme-three-flow"
@@ -80,6 +61,7 @@
           data-finish-flow="standard"
           data-finish-current="standard"
           data-idle-default-next="1"
+          data-idle-start="on-first-click"
           data-idle-seconds="18"
           data-countdown="3"
         >
@@ -107,7 +89,7 @@
           </div>
 
           <div class="scheme-one-weak scheme-one-weak--minimal">
-            <a href="./standard-next-step-touch.html">对比：触控优先演示页</a>
+            <a href="./standard-position.html" data-action-link="start-session" data-standard-flow-entry>重新测量</a>
           </div>
 
           <div class="scheme-one-footer footer-hint scheme-three-idle-footer">
@@ -123,31 +105,5 @@
       </section>
     </main>
     <script src="./shared.js"></script>
-    <script>
-      (function () {
-        var wrap = document.querySelector("[data-scheme-three-live]");
-        var video = document.querySelector(".scheme-three-video");
-        if (!wrap || !video) return;
-        function setCameraOff() {
-          wrap.classList.add("is-camera-off");
-        }
-        function setCameraOn() {
-          wrap.classList.remove("is-camera-off");
-        }
-        if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
-          setCameraOff();
-          return;
-        }
-        navigator.mediaDevices
-          .getUserMedia({ video: { facingMode: "user" }, audio: false })
-          .then(function (stream) {
-            video.srcObject = stream;
-            setCameraOn();
-          })
-          .catch(function () {
-            setCameraOff();
-          });
-      })();
-    </script>
   </body>
 </html>

@@ -1,5 +1,56 @@
 # VAPro7 Demo 变更记录
 
+## v1.5.5（信息架构 · 倒计时姿势示意 · 体成分举手）
+
+- **体成分四宫格**：看完引导后举右手进入扶手准备（`R` / Demo 模拟 / 弱链兜底）。
+- **倒计时**：综合 / 体态 / 肩部三页增加保持姿势人偶示意，避免倒计时阶段动作走形。
+- **首页**：体态测量为主标题，「专业测量」为小标签；快捷肩部嵌套在「单项测量」组内。
+- **测量设置**：单项肩/颈/平衡收入「单项测量」二级分组。
+
+---
+
+## v1.5.4（设置分组 · 单项独立显隐 · 准备两步串联）
+
+- **测量设置**：去掉与一级标题重复的小标签；同类配置分组展示；肩部 / 颈部 / 平衡可分别控制首页与顺序池。
+- **综合测量流程（准备引导开启）**：体成分四宫格 → 扶手准备 → 倒计时 → 测量。
+- **首页**：至少开启一项单项时才显示「单项测量」入口；快捷单项仅可选已开启项。
+
+---
+
+## v1.5.3（测量设置 · 体成分准备四宫格 · 综合/专业测量命名）
+
+- **测量设置**：`settings-modes.html` 更名并重排；恢复 **语音播报**、新增 **体成分测量准备引导**（关则综合测量跳过四宫格，仅扶手准备）。
+- **综合测量入口**：`getStandardFlowEntryHref` → `standard-bodycomp-prep.html` 或 `standard-position.html`；首页与「重新测量」经 **`data-standard-flow-entry`** 同步。
+- **体成分准备页**：新建 `standard-bodycomp-prep.html`（2×2 宫格 + `grid-reference.png` 裁切背景）。
+- **首页**：综合测量 / 专业测量 · 体态测量文案；`card-subtitle`；底部运营位贴底 + 示意图 `home-promo-schematic.png`。
+- **命名**：完整测量 → **综合测量**（链路标签）；体态精测 → **专业测量** / **体态测量**；运营设置 → **测量设置**。
+
+---
+
+## v1.5.2（手势页 Demo 标注 · 完成页 scheme-three footer · 颈/平衡占位恢复 · 首页运营位）
+
+- **手势页**：`standard-next-step` 缩短手势面板与语音文案；叠层分区标注「点击模拟」；取景芯片标注 Demo。
+- **方案 B 触控页**：去掉对照说明类副标题，脚注收敛为一行。
+- **完成页**：`standard-result`、`single-result-shoulder`、`pro-result` 底部改为 **`scheme-three-action-row` 双卡 + 「完成」弱链接**，与方案 A 决策区一致。
+- **脚本**：`setupChoiceHighlight` 跳过带 **`data-finish-group`** 的容器，避免与 `setupFinishAutoAdvance` 争抢 `is-active`。
+- **单项 / 运营**：恢复 **`singleNeck` / `singleBalance`**（`MEASUREMENT_ITEMS`、`NEXT_RECOMMEND_DESC`、顺序池、「首页快捷单项」颈/平衡）；新建 **`single-flow-placeholder.html`**；`single-select` 三项并列（颈/平衡占位卡 **`data-demo-placeholder`**）。
+- **首页**：底部 **`home-promo-slot`** + **`assets/home-promo.png`**（客户可替换该静态资源）。
+- **文案**：剔除多页解释性 **`screen-subtitle`**（保留测量指令 / `data-live-voice` 等例外）。
+- **样式**：手势面板更紧凑；完成页内 footer 间距；运营位样式。
+
+---
+
+## v1.5.1（Demo 收口：肩部规范布局 · idle 点击后开始 · 体态倒计时 · 移除颈/平衡）
+
+- **肩部采集**：`single-measuring-shoulder-left/right` 改为顶蓝框进度卡 + 黑底取景区（角度 / 弧线 / 对钩叠层）+ 底栏橙色要点说明卡（`shared.css` `.single-shoulder-*`）。
+- **方案 A/B 完成页**：`data-idle-start="on-first-click"`，空闲倒计时在用户首次点击/按键后开始；idle 区样式分层。
+- **手势页**：`standard-next-step` 使用单一 `scheme-three-gesture-panel`，精简副文案。
+- **流程收口**：`shared.js` 测量顺序仅保留完整测量 / 体态精测 / 肩部；移除颈部、平衡页面文件与设置项；`single-select` 仅肩部。
+- **体态精测**：新增 `pro-countdown.html`，`pro-prepare` → 倒计时 → `pro-measuring`。
+- **结果页**：`single-result-shoulder` 与 `standard-result` footer 结构对齐。
+
+---
+
 ## v1.5.0（设置收口 · 转台 10s · 单项与肩部六屏）
 
 - **运营设置**：移除「音效 / 语音播报 / 自动下一项」开关；Demo 中文案固定为默认开启语音与音效、完成页仅手动点选；`buildStateQuery` / URL 不再携带 `voice`、`sound`、`autoNext`。

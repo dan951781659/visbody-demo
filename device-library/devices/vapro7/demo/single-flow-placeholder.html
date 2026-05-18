@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>单项占位</title>
+    <link rel="stylesheet" href="./shared.css" />
+  </head>
+  <body>
+    <main class="device-stage">
+      <section class="device">
+        <div class="status-bar"><span>18:32</span><span>单项测量</span></div>
+        <div class="topbar">
+          <a class="back-link" href="./home.html" data-stateful-link="./home.html">← 返回</a>
+          <span class="text-link">占位</span>
+        </div>
+        <div class="section-label">单项测量</div>
+        <h1 class="screen-title" id="flow-placeholder-title">敬请期待</h1>
+        <p class="field" id="flow-placeholder-desc" style="margin-top:12px;line-height:1.6;">
+          本 Demo 未接入该分项完整流程，仅供评审占位。
+        </p>
+        <div class="footer-hint" style="margin-top:28px;">
+          <div class="button-row">
+            <a class="button primary" href="./single-select.html" data-stateful-link="./single-select.html">返回单项列表</a>
+            <a class="button secondary" href="./home.html" data-stateful-link="./home.html">返回首页</a>
+          </div>
+        </div>
+      </section>
+    </main>
+    <script src="./shared.js"></script>
+    <script>
+      (function () {
+        var titles = { neck: "颈部测量 · 占位", balance: "平衡测量 · 占位" };
+        var descs = {
+          neck: "颈部分项尚未在本 Demo 中实现测量链路，后续可替换为正式页面。",
+          balance: "平衡分项尚未在本 Demo 中实现测量链路，后续可替换为正式页面。"
+        };
+        var q = new URLSearchParams(window.location.search).get("item") || "";
+        var t = document.getElementById("flow-placeholder-title");
+        var d = document.getElementById("flow-placeholder-desc");
+        if (titles[q]) {
+          t.textContent = titles[q];
+          d.textContent = descs[q];
+        }
+      })();
+    </script>
+  </body>
+</html>
