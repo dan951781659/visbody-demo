@@ -1,0 +1,84 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>测量项目设置</title>
+    <link rel="stylesheet" href="./shared.css" />
+  </head>
+  <body>
+    <main class="device-stage">
+      <section class="device device--settings">
+        <div class="status-bar">
+          <span>18:32</span>
+          <span>运营设置</span>
+          <span class="demo-version-badge" data-demo-version>v1.3.1</span>
+        </div>
+        <div class="topbar">
+          <a class="back-link" href="./index.html">← 返回评审入口</a>
+          <span class="text-link">设备配置</span>
+        </div>
+        <div class="section-label">运营设置</div>
+        <h1 class="screen-title">测量项目设置</h1>
+        <p class="screen-subtitle">配置首页入口、测量顺序与演示选项。「下一项推荐」由下方顺序列表决定。</p>
+        <div class="config-list">
+          <div class="setting-card">
+            <div><div class="card-title">显示体态精测</div><div class="card-desc">首页显示体态精测入口。</div></div>
+            <label class="toggle"><input type="checkbox" data-config-key="proModeEnabled" /><span></span></label>
+          </div>
+          <div class="setting-card">
+            <div><div class="card-title">显示单项测量</div><div class="card-desc">首页显示单项测量入口。</div></div>
+            <label class="toggle"><input type="checkbox" data-config-key="singleModeEnabled" /><span></span></label>
+          </div>
+          <div class="setting-card">
+            <div><div class="card-title">语音播报</div><div class="card-desc">倒计时数字与测量提示语音。</div></div>
+            <label class="toggle"><input type="checkbox" data-config-key="voiceEnabled" /><span></span></label>
+          </div>
+          <div class="setting-card">
+            <div><div class="card-title">自动进入下一个项目</div><div class="card-desc">开启后，测量完成页可演示倒计时自动进入推荐下一步。</div></div>
+            <label class="toggle"><input type="checkbox" data-config-key="autoAdvanceToNextMeasurement" /><span></span></label>
+          </div>
+          <div class="setting-card">
+            <div><div class="card-title">音效</div><div class="card-desc">测量中转台旋转演示音效。</div></div>
+            <label class="toggle"><input type="checkbox" data-config-key="soundEffectsEnabled" /><span></span></label>
+          </div>
+          <div class="setting-card setting-card--stack">
+            <div><div class="card-title">测量项目顺序</div><div class="card-desc">拖拽调整推荐顺序；可从下方添加项目。完整测量完成后，下一项按此列表向后查找。</div></div>
+            <ul class="order-sort-list" data-order-sort-list></ul>
+            <div class="order-pool" data-order-pool>
+              <button type="button" class="button ghost" data-order-add="standard">+ 完整测量</button>
+              <button type="button" class="button ghost" data-order-add="pro">+ 体态精测</button>
+              <button type="button" class="button ghost" data-order-add="singleShoulder">+ 肩部</button>
+              <button type="button" class="button ghost" data-order-add="singleBalance">+ 平衡</button>
+              <button type="button" class="button ghost" data-order-add="singleNeck">+ 颈部</button>
+            </div>
+            <div class="order-preview-inline">
+              <div class="section-label">当前循环顺序</div>
+              <div class="field" data-order-preview>完整测量 → 体态精测 → 肩部 → 平衡 → 颈部</div>
+            </div>
+          </div>
+          <div class="setting-card setting-card--stack">
+            <div><div class="card-title">外链报告地址</div><div class="card-desc">留空则使用 Demo 内报告详情页。</div></div>
+            <input class="setting-input" type="url" data-config-key="reportExternalUrl" placeholder="https:// 或 ./report-detail.html" />
+          </div>
+          <div class="setting-card">
+            <div><div class="card-title">首页快捷单项</div><div class="card-desc">只在首页显示一个快捷入口。</div></div>
+            <select class="setting-select" data-config-key="homepageQuickSingleItem">
+              <option value="none">不显示</option>
+              <option value="shoulder">肩部测量</option>
+              <option value="neck">颈部测量</option>
+              <option value="balance">平衡测量</option>
+            </select>
+          </div>
+        </div>
+        <div class="footer-hint">
+          <div class="button-row">
+            <a class="button primary" href="./home.html" data-stateful-link="./home.html">返回首页查看效果</a>
+            <a class="button secondary" href="./report-detail.html" data-stateful-link="./report-detail.html">查看报告详情</a>
+          </div>
+        </div>
+      </section>
+    </main>
+    <script src="./shared.js"></script>
+  </body>
+</html>

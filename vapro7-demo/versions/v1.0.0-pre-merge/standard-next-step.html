@@ -1,0 +1,101 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>完整测量完成</title>
+    <link rel="stylesheet" href="./shared.css" />
+  </head>
+  <body>
+    <main class="device-stage">
+      <section class="device device--scheme-one" data-voice-text="完整测量已完成，请选择下一步。">
+        <div class="status-bar"><span>18:32</span><span>测量完成</span></div>
+        <div class="topbar">
+          <a class="back-link" href="./standard-measuring.html">← 返回</a>
+          <span class="text-link">请选择下一步</span>
+        </div>
+        <div class="section-label">完整测量</div>
+        <div class="scheme-one-title">
+          <h1 class="screen-title">完整测量完成</h1>
+          <p class="screen-subtitle">结果已采集完成，请继续测量或结束测量。</p>
+        </div>
+
+        <div class="scheme-one-result-shell">
+          <div class="scheme-one-result-head">
+            <strong>本次测量结果</strong>
+            <span>已完成采集</span>
+          </div>
+          <div class="scheme-one-result-grid">
+            <div class="scheme-one-metric"><strong>体重</strong><div class="field">56.8 kg</div></div>
+            <div class="scheme-one-metric"><strong>体成分</strong><div class="field">体脂率 24.8%</div></div>
+            <div class="scheme-one-metric"><strong>身高 / 体围</strong><div class="field">168.2 cm</div></div>
+            <div class="scheme-one-metric"><strong>体态</strong><div class="field">已生成</div></div>
+          </div>
+        </div>
+
+        <div class="scheme-one-decision">
+          <div class="scheme-one-decision-head">
+            <strong>请选择下一步</strong>
+            <span>左手继续测量，右手结束测量。</span>
+          </div>
+
+          <div
+            class="choice-grid compact scheme-one-choice-grid"
+            data-finish-group
+            data-finish-flow="standard"
+            data-finish-current="standard"
+            data-countdown="3"
+            data-countdown-start="manual"
+            data-countdown-idle-prefix="点击后开始演示倒计时"
+          >
+            <a class="choice-card" href="./pro-prepare.html" data-choice-item data-choice-label="继续测量" data-finish-option="next">
+              <div class="card-title" data-next-title>继续测量</div>
+              <div class="card-desc">进入系统推荐的下一个测量项目</div>
+            </a>
+            <a class="choice-card" href="./standard-generating.html" data-choice-item data-choice-label="结束测量" data-finish-option="report">
+              <div class="card-title">结束测量</div>
+              <div class="card-desc">生成报告并进入结果查看</div>
+            </a>
+          </div>
+
+          <div class="scheme-one-gesture">
+            <div class="scheme-one-bubble">
+              <strong>左手势</strong>
+              举起左手确认「继续测量」
+            </div>
+            <div class="human pose-down" aria-hidden="true">
+              <div class="head"></div>
+              <div class="torso"></div>
+              <div class="limb arm left"></div>
+              <div class="limb arm right"></div>
+              <div class="limb leg left"></div>
+              <div class="limb leg right"></div>
+            </div>
+            <div class="scheme-one-bubble right">
+              <strong>右手势</strong>
+              举起右手确认「结束测量」
+            </div>
+          </div>
+
+          <div class="scheme-one-weak">
+            <span class="scheme-one-weak-label">弱化入口</span>
+            <a href="./standard-position.html">重新测量完整流程</a>
+          </div>
+        </div>
+
+        <div class="scheme-one-footer footer-hint">
+          <button type="button" class="scheme-one-start-demo" data-finish-countdown-start>开始倒计时（演示）</button>
+          <div class="auto-hint demo-click-zone" data-auto-hint-click tabindex="0" role="button">
+            <strong><span data-auto-prefix>点击后开始演示倒计时</span> <span data-auto-label>继续测量</span></strong>
+            <span class="count-badge" data-auto-countdown>3</span>
+          </div>
+          <div class="button-row inline">
+            <a class="button secondary" href="#">打印报告</a>
+            <a class="button ghost" href="./home.html">完成</a>
+          </div>
+        </div>
+      </section>
+    </main>
+    <script src="./shared.js"></script>
+  </body>
+</html>

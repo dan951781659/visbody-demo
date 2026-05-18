@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>模型生成中</title>
+    <link rel="stylesheet" href="./shared.css" />
+  </head>
+  <body>
+    <main class="device-stage">
+      <section
+        class="device"
+        data-generating-flow
+        data-generating-next="./report-detail.html"
+        data-generating-delay="3000"
+        data-voice-text="正在生成三维模型，请稍候。"
+      >
+        <div class="status-bar"><span>18:32</span><span>模型生成</span><span class="demo-version-badge" data-demo-version>v1.4.0</span></div>
+        <div class="topbar">
+          <a class="back-link" href="./standard-next-step.html">← 返回</a>
+          <span class="text-link">请稍候</span>
+        </div>
+        <div class="section-label">完整测量</div>
+        <h1 class="screen-title">模型生成中</h1>
+        <p class="screen-subtitle" data-live-voice>正在构建三维人体模型…</p>
+        <div class="generating-panel">
+          <div class="generating-orbit" aria-hidden="true"></div>
+          <p class="generating-label" data-generating-label>模型生成中 0%</p>
+          <div class="progress-track generating-track">
+            <div class="progress-fill" data-generating-progress style="width:0%;"></div>
+          </div>
+          <p class="field">生成完成后将自动进入报告详情页。</p>
+        </div>
+      </section>
+    </main>
+    <script src="./shared.js"></script>
+  </body>
+</html>

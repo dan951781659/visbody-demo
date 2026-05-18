@@ -1,0 +1,29 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>结果生成中</title>
+    <link rel="stylesheet" href="./shared.css" />
+  </head>
+  <body>
+    <main class="device-stage">
+      <section class="device">
+        <div class="status-bar"><span>18:32</span><span>结果生成中</span></div>
+        <div class="topbar">
+          <a class="back-link" href="./standard-next-step.html">← 返回</a>
+          <span class="text-link">请稍候</span>
+        </div>
+        <div class="section-label">完整测量</div>
+        <h1 class="screen-title">正在生成结果</h1>
+        <p class="screen-subtitle" data-live-voice>请稍候，即将显示测量结果。</p>
+        <div class="progress-steps demo-click-zone" data-stage-next="./standard-result.html" data-stage-delay="3200" data-stage-complete-group="standard" data-voice-text="正在生成测量结果。" data-demo-next="./standard-result.html">
+          <div class="step"><strong>模型生成</strong><span>已完成</span></div>
+          <div class="step"><strong>数据计算</strong><span>进行中</span></div>
+        </div>
+        <div class="footer-hint"><div class="auto-hint auto-hint-clickable" data-demo-next="./standard-result.html"><strong>结果生成完成后自动进入报告</strong><span class="count-badge">OK</span></div></div>
+      </section>
+    </main>
+    <script src="./shared.js"></script>
+  </body>
+</html>

@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>单项测量</title>
+    <link rel="stylesheet" href="./shared.css" />
+  </head>
+  <body>
+    <main class="device-stage">
+      <section class="device">
+        <div class="status-bar"><span>18:32</span><span>单项测量</span></div>
+        <div class="topbar">
+          <a class="back-link" href="./home.html">← 返回</a>
+          <span class="text-link">单项测量</span>
+        </div>
+        <div class="section-label">单项测量</div>
+        <h1 class="screen-title">请选择分项</h1>
+        <p class="settings-group-hint" data-show-if-no-single hidden>当前未开启任何单项，请先在测量设置中开启肩部、颈部或平衡。</p>
+        <div class="choice-grid compact" data-choice-group data-default-index="0">
+          <a class="choice-card" href="./single-prepare-shoulder.html" data-choice-item data-choice-label="开始肩部测量" data-show-if-single-key="singleShoulder">
+            <div class="tag">专项</div>
+            <div class="card-title">肩部测量</div>
+            <div class="card-desc">外展上举双侧采集，生成肩部活动度示意结果。</div>
+          </a>
+          <a
+            class="choice-card"
+            href="./single-flow-placeholder.html?item=neck"
+            data-choice-item
+            data-choice-label="颈部测量（占位）"
+            data-show-if-single-key="singleNeck"
+            data-stateful-link="./single-flow-placeholder.html?item=neck"
+            data-demo-placeholder
+          >
+            <div class="tag">占位</div>
+            <div class="card-title">颈部测量</div>
+            <div class="card-desc">演示占位，未接入流程。</div>
+          </a>
+          <a
+            class="choice-card"
+            href="./single-flow-placeholder.html?item=balance"
+            data-choice-item
+            data-choice-label="平衡测量（占位）"
+            data-show-if-single-key="singleBalance"
+            data-stateful-link="./single-flow-placeholder.html?item=balance"
+            data-demo-placeholder
+          >
+            <div class="tag">占位</div>
+            <div class="card-title">平衡测量</div>
+            <div class="card-desc">演示占位，未接入流程。</div>
+          </a>
+        </div>
+      </section>
+    </main>
+    <script src="./shared.js"></script>
+  </body>
+</html>

@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>VAPro7 Demo</title>
+    <link rel="stylesheet" href="./shared.css" />
+  </head>
+  <body>
+    <main class="demo-shell index-grid">
+      <section class="panel index-panel stack">
+        <div class="eyebrow">VAPro7 Device Demo <span class="demo-version-badge" data-demo-version>v1.3.1</span></div>
+        <h1 class="headline">设备端测量流程</h1>
+        <p class="summary">本组页面用于评审 VAPro7 设备端用户流程：首页选项目、两阶段测量准备、点击后继续、测量完成后扫码进入 H5 详细报告。</p>
+        <div class="info-box">
+          <div class="section-label">推荐查看顺序</div>
+          <ol class="route-list">
+            <li><strong>首页</strong>：查看 3 主卡和快捷单项入口。</li>
+            <li><strong>完整测量</strong>：两阶段准备 → 倒计时 → 一圈测量 → 测量完成页。</li>
+            <li><strong>体态精测</strong>：自然站立、测量、结果页。</li>
+            <li><strong>单项测量</strong>：肩部、颈部、平衡独立流程。</li>
+            <li><strong>运营设置</strong>：调整首页快捷单项、入口显隐与自动跳转。</li>
+          </ol>
+        </div>
+        <div class="button-row">
+          <a class="button primary" href="./home.html">打开首页</a>
+          <a class="button secondary" href="./settings-modes.html">打开运营设置</a>
+          <a class="button ghost" href="./index.html" data-action-link="reset-demo">重置状态</a>
+        </div>
+      </section>
+      <section class="panel index-panel stack">
+        <div class="section-label">页面入口</div>
+        <div class="link-grid">
+          <a class="nav-card" href="./home.html"><div class="nav-title">首页</div><div class="nav-desc">完整测量、体态精测、单项测量、快捷单项。</div></a>
+          <a class="nav-card" href="./standard-position.html"><div class="nav-title">完整测量准备</div><div class="nav-desc">两阶段准备：上台前 / 扶手姿势；演示需确认阶段一。</div></a>
+          <a class="nav-card" href="./standard-next-step.html"><div class="nav-title">测量完成页</div><div class="nav-desc">主流程：摄像头舞台、双选项；默认需点击后开始倒计时。</div></a>
+          <a class="nav-card" href="./pro-prepare.html"><div class="nav-title">体态精测</div><div class="nav-desc">自然站立完成体态精测。</div></a>
+          <a class="nav-card" href="./single-select.html"><div class="nav-title">单项测量</div><div class="nav-desc">肩部、颈部、平衡单项流程。</div></a>
+          <a class="nav-card" href="./standard-generating.html"><div class="nav-title">结果生成中</div><div class="nav-desc">模型生成进度，完成后自动进入报告详情。</div></a>
+          <a class="nav-card" href="./report-detail.html"><div class="nav-title">报告详情</div><div class="nav-desc">分段加载演示；可配置外链 H5。</div></a>
+          <a class="nav-card" href="./settings-modes.html"><div class="nav-title">运营设置</div><div class="nav-desc">控制首页入口、快捷单项与自动跳转。</div></a>
+          <a class="nav-card" href="./结果方案二.html"><div class="nav-title">方案一备选（清单布局）</div><div class="nav-desc">测量完成页备选布局，演示需手动点开始倒计时。</div></a>
+        </div>
+      </section>
+    </main>
+    <script src="./shared.js"></script>
+  </body>
+</html>
