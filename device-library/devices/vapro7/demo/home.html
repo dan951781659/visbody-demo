@@ -20,13 +20,15 @@
         <div class="section-label">VAPro7</div>
         <h1 class="screen-title">请选择测量项目</h1>
 
-        <div class="choice-grid compact home-choice-grid" data-choice-group data-default-index="0">
+        <div class="choice-grid compact home-choice-grid" data-choice-group data-default-index="0" data-show-if-any-primary>
           <a
             class="choice-card"
             href="./standard-bodycomp-prep.html"
             data-choice-item
             data-choice-label="综合测量"
             data-action-link="start-session"
+            data-measurement-mode="standard"
+            data-show-if="comprehensiveEnabled"
             data-standard-flow-entry
           >
             <div class="tag">推荐</div>
@@ -38,25 +40,71 @@
             href="./pro-prepare.html"
             data-choice-item
             data-choice-label="体态测量"
-            data-show-if="proModeEnabled"
+            data-show-if="postureModeEnabled"
+            data-action-link="start-session"
+            data-measurement-mode="pro"
           >
             <div class="tag tag--tier">专业测量</div>
             <div class="card-title">体态测量</div>
             <div class="card-desc">IPose：双手自然垂放，减少上肢代偿与遮挡，体态结果更准。</div>
           </a>
+          <a
+            class="choice-card"
+            href="./legacy-bodycomp-girth-prep.html"
+            data-choice-item
+            data-choice-label="体成分 + 体围"
+            data-show-if="bodycompGirthModeEnabled"
+            data-action-link="start-session"
+            data-measurement-mode="bodycompGirth"
+          >
+            <div class="tag tag--tier">经典分体</div>
+            <div class="card-title">体成分 + 体围</div>
+            <div class="card-desc">一次转台采集体成分与体围，适配老客户的分体测量习惯。</div>
+          </a>
+          <a
+            class="choice-card"
+            href="./legacy-girth-prep.html"
+            data-choice-item
+            data-choice-label="体围测量"
+            data-show-if="girthOnlyModeEnabled"
+            data-action-link="start-session"
+            data-measurement-mode="girthOnly"
+          >
+            <div class="tag tag--tier">经典分体</div>
+            <div class="card-title">体围测量</div>
+            <div class="card-desc">独立体围流程，占位演示版本；用于兼容门店旧方案。</div>
+          </a>
+          <a
+            class="choice-card"
+            href="./single-flow-placeholder.html?item=balance"
+            data-choice-item
+            data-choice-label="平衡测量"
+            data-show-if="balanceModeEnabled"
+            data-stateful-link="./single-flow-placeholder.html?item=balance"
+            data-action-link="start-session"
+            data-measurement-mode="balance"
+            data-demo-placeholder
+          >
+            <div class="tag tag--tier">主测量模式</div>
+            <div class="card-title">平衡测量</div>
+            <div class="card-desc">平衡测量已迁移到主测量目录，专项列表不再展示。</div>
+          </a>
+        </div>
 
-          <div class="home-entry-group home-entry-group--single" data-show-if-any-single>
-            <a class="choice-card" href="./single-select.html" data-choice-item data-choice-label="单项测量">
-              <div class="card-title">单项测量</div>
-              <div class="card-desc">按部位测量；Demo 仅肩部可走完整流程。</div>
-            </a>
-            <a class="choice-card choice-card--nested" href="#" data-choice-item data-choice-label="快捷单项" data-quick-item hidden>
-              <div class="tag">快捷</div>
-              <div class="card-title" data-quick-title>肩部测量</div>
-              <p class="card-meta">单项测量 · 快捷入口</p>
-              <div class="card-desc" data-quick-desc>抬手完成肩部活动测量。</div>
-            </a>
-          </div>
+        <p class="settings-group-hint" data-show-if-no-primary hidden>当前未开启任何主测量模式，请先在测量设置中选择门店方案或手动开启。</p>
+
+        <div class="home-entry-group home-entry-group--single" data-show-if-any-single>
+          <div class="section-label">专项测量</div>
+          <a class="choice-card" href="./single-select.html" data-choice-item data-choice-label="单项测量">
+            <div class="card-title">单项测量</div>
+            <div class="card-desc">按部位测量；当前包含肩部流程与颈部占位演示。</div>
+          </a>
+          <a class="choice-card choice-card--nested" href="#" data-choice-item data-choice-label="快捷单项" data-quick-item hidden>
+            <div class="tag">快捷</div>
+            <div class="card-title" data-quick-title>肩部测量</div>
+            <p class="card-meta">单项测量 · 快捷入口</p>
+            <div class="card-desc" data-quick-desc>抬手完成肩部活动测量。</div>
+          </a>
         </div>
 
         <div class="home-promo-block">

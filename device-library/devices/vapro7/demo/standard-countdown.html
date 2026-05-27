@@ -1,44 +1,55 @@
 <!doctype html>
 <html lang="zh-CN">
-<head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>开始测量</title>
-<link rel="stylesheet" href="./shared.css" />
-</head>
-<body>
-<main class="device-stage">
-<section class="device device--countdown">
-<div class="status-bar"><span>18:32</span><span>开始测量</span></div>
-<div class="topbar">
-<a class="back-link" href="./standard-position.html">← 返回</a>
-<span class="text-link">请保持静止</span>
-</div>
-<div class="countdown-layout"
-  data-stage-next="./standard-measuring.html"
-  data-stage-delay="3200"
-  data-stage-seconds-start="3"
-  data-demo-countdown-target
-  data-voice-text="请握住扶手，双臂展开约四十五度，保持静止，测量即将开始。">
-  <div class="device-visual countdown-pose-wrap">
-    <div class="live-stage countdown-pose-stage">
-      <div class="human pose-hold" aria-hidden="true">
-<div class="head"></div><div class="torso"></div>
-<div class="limb arm left"></div><div class="limb arm right"></div>
-<div class="limb leg left"></div><div class="limb leg right"></div>
-</div>
-    </div>
-    <p class="countdown-pose-caption">请保持：握住扶手，双臂约 45°，身体静止</p>
-  </div>
-  <div class="countdown-digit-block">
-    <div class="section-label">综合测量</div>
-    <h1 class="screen-title">3 秒后开始</h1>
-    <div class="headline countdown-seconds" data-stage-seconds>3</div>
-    <p class="screen-subtitle">请保持以上动作</p>
-  </div>
-</div>
-</section>
-</main>
-<script src="./shared.js"></script>
-</body>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>开始测量</title>
+    <link rel="stylesheet" href="./shared.css" />
+  </head>
+  <body>
+    <main class="device-stage">
+      <section class="device device--countdown">
+        <div class="status-bar"><span>18:32</span><span>开始测量</span><span class="demo-version-badge" data-demo-version>v1.6.0</span></div>
+        <div class="topbar">
+          <a class="back-link" href="./standard-position.html" data-stateful-link="./standard-position.html">← 返回</a>
+          <span class="text-link">请保持静止</span>
+        </div>
+        <div
+          class="countdown-layout"
+          data-stage-next="./standard-measuring.html"
+          data-stage-delay="3200"
+          data-stage-seconds-start="3"
+          data-stage-auto-start
+          data-voice-text="请保持姿态，测量即将开始。"
+        >
+          <div class="device-visual countdown-pose-wrap">
+            <div class="live-stage countdown-pose-stage">
+              <div class="human pose-hold" aria-hidden="true">
+                <div class="head"></div><div class="torso"></div>
+                <div class="limb arm left"></div><div class="limb arm right"></div>
+                <div class="limb leg left"></div><div class="limb leg right"></div>
+              </div>
+            </div>
+            <p class="countdown-pose-caption">请保持：握住扶手，双臂约 45°，身体静止</p>
+          </div>
+          <div class="countdown-digit-block">
+            <div class="section-label">综合测量</div>
+            <h1 class="screen-title">3 秒后开始</h1>
+            <div class="headline countdown-seconds" data-stage-seconds>3</div>
+            <p class="screen-subtitle">请保持以上动作</p>
+          </div>
+          <div class="measurement-tips-carousel" data-tip-carousel data-tip-interval="2600">
+            <p class="measurement-tips-title">测量注意事项</p>
+            <p class="measurement-tip-item is-active" data-tip-item>建议尽量空腹或饭后 2 小时测量。</p>
+            <p class="measurement-tip-item" data-tip-item>请穿紧身或轻薄衣物，避免厚重外套影响识别。</p>
+            <p class="measurement-tip-item" data-tip-item>运动或沐浴后请休息片刻再测量。</p>
+          </div>
+        </div>
+        <div class="footer-hint">
+          <a class="button primary" href="./standard-measuring.html" data-demo-next="./standard-measuring.html" data-stateful-link="./standard-measuring.html">点击跳到下一步</a>
+        </div>
+      </section>
+    </main>
+    <script src="./shared.js"></script>
+  </body>
 </html>

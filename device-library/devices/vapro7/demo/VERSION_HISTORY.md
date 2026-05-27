@@ -14,6 +14,15 @@
 
 ---
 
+## 2026-05-27 · v1.6.0（综合测量流程重构 · 测量准备页）
+
+- **新页面**：`standard-user-prep.html`（测量准备页）、`standard-grip-prep.html`（扶手接触识别）。
+- **流程改造**：`standard-bodycomp-prep`（站姿）、`standard-position`（45°）、`standard-countdown`、`standard-measuring`、`standard-next-step`。
+- **`shared.js`**：`getStandardFlowEntryHref`、`setupAutoDetectAdvance`、`setupTipCarousel`、倒计时 `data-stage-auto-start`。
+- **设置/入口**：`settings-modes.html`、`index.html` 文案同步；`version.json` **v1.6.0**。
+
+---
+
 ## 2026-05-18 · v1.5.5（信息架构 · 倒计时姿势示意 · 体成分举手）
 
 - **体成分准备**：四宫格完成后 **举右手** 进入扶手（`setupPrepGestureAdvance`）；Demo 模拟键与弱链兜底。
@@ -25,12 +34,30 @@
 
 ---
 
+## 2026-05-27 · v1.6.0（综合测量流程重构 · 测量准备页）
+
+- **新页面**：`standard-user-prep.html`（测量准备页）、`standard-grip-prep.html`（扶手接触识别）。
+- **流程改造**：`standard-bodycomp-prep`（站姿）、`standard-position`（45°）、`standard-countdown`、`standard-measuring`、`standard-next-step`。
+- **`shared.js`**：`getStandardFlowEntryHref`、`setupAutoDetectAdvance`、`setupTipCarousel`、倒计时 `data-stage-auto-start`。
+- **设置/入口**：`settings-modes.html`、`index.html` 文案同步；`version.json` **v1.6.0**。
+
+---
+
 ## 2026-05-18 · v1.5.4（设置分组 · 单项独立显隐 · 准备流程串联）
 
 - **`settings-modes.html`**：去掉冗余 `section-label`；按 **首页入口 / 顺序 / 快捷 / 综合准备 / 播报报告** 分组；肩部、颈部、平衡各自开关（替代「显示单项测量」总开关）。
 - **`shared.js`**：`singleShoulderEnabled` / `singleNeckEnabled` / `singleBalanceEnabled`；`isAnySingleEnabled`；快捷项与顺序池联动；**`DEMO_VERSION_FALLBACK` 1.5.4**。
 - **`standard-bodycomp-prep.html`**：完成四宫格后进入 **`standard-position.html`**（扶手），再进倒计时。
 - **`home.html` / `single-select.html`**：单项入口与分项卡片随开关显隐。
+
+---
+
+## 2026-05-27 · v1.6.0（综合测量流程重构 · 测量准备页）
+
+- **新页面**：`standard-user-prep.html`（测量准备页）、`standard-grip-prep.html`（扶手接触识别）。
+- **流程改造**：`standard-bodycomp-prep`（站姿）、`standard-position`（45°）、`standard-countdown`、`standard-measuring`、`standard-next-step`。
+- **`shared.js`**：`getStandardFlowEntryHref`、`setupAutoDetectAdvance`、`setupTipCarousel`、倒计时 `data-stage-auto-start`。
+- **设置/入口**：`settings-modes.html`、`index.html` 文案同步；`version.json` **v1.6.0**。
 
 ---
 

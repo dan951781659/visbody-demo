@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>测量准备页</title>
+    <link rel="stylesheet" href="./shared.css" />
+  </head>
+  <body>
+    <main class="device-stage">
+      <section class="device device--bodycomp-prep" data-prep-gesture-advance="./standard-bodycomp-prep.html" data-prep-auto-delay="2600">
+        <div class="status-bar"><span>18:32</span><span>综合测量</span><span class="demo-version-badge" data-demo-version>v1.6.0</span></div>
+        <div class="topbar">
+          <a class="back-link" href="./home.html" data-stateful-link="./home.html">← 返回</a>
+          <span class="text-link">测量准备页</span>
+        </div>
+        <div class="section-label">综合测量</div>
+        <h1 class="screen-title">测量准备页</h1>
+        <p class="screen-subtitle">请先完成以下准备，以保证测量结果稳定准确。</p>
+        <div class="summary-box">
+          <ul class="hint-list">
+            <li>请扎起头发，露出颈肩与背部轮廓。</li>
+            <li>请保持赤脚，摘下手表、手环与较大金属饰品。</li>
+            <li>建议空腹或饭后 2 小时测量，尽量穿紧身或轻薄衣物。</li>
+            <li>请勿在剧烈运动、沐浴后立即测量。</li>
+          </ul>
+        </div>
+        <div class="prep-gesture-block" aria-label="进入站姿识别">
+          <div class="scheme-three-gesture-panel scheme-three-gesture-panel--compact">
+            <div class="scheme-three-gesture-panel-title">看完引导后</div>
+            <p class="scheme-three-gesture-panel-lead">请举右手进入下一步。</p>
+          </div>
+          <div class="scheme-three-gesture-figure" data-prep-gesture-figure>
+            <div class="scheme-three-gesture-figure-stage">
+              <div class="human pose-shoulder-right" aria-hidden="true">
+                <div class="head"></div><div class="torso"></div>
+                <div class="limb arm left"></div><div class="limb arm right"></div>
+                <div class="limb leg left"></div><div class="limb leg right"></div>
+              </div>
+            </div>
+            <p class="scheme-three-gesture-figure-caption">识别通过后自动进入下一步</p>
+          </div>
+          <div class="scheme-three-toast" data-gesture-toast hidden role="status"></div>
+          <p class="prep-gesture-fallback">
+            <a href="./standard-bodycomp-prep.html" data-stateful-link="./standard-bodycomp-prep.html">点击跳到下一步</a>
+          </p>
+        </div>
+      </section>
+    </main>
+    <script src="./shared.js"></script>
+  </body>
+</html>

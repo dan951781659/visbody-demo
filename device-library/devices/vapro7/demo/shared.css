@@ -273,6 +273,32 @@ a { color: inherit; text-decoration: none; }
   line-height: 1;
   margin: 4px 0 8px;
 }
+.measurement-tips-carousel {
+  margin-top: 6px;
+  padding: 12px 14px;
+  border-radius: 16px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  min-height: 98px;
+}
+.measurement-tips-title {
+  margin: 0 0 8px;
+  font-size: 12px;
+  color: #9eb8e8;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+.measurement-tip-item {
+  margin: 0;
+  color: var(--muted);
+  font-size: 13px;
+  line-height: 1.5;
+  display: none;
+}
+.measurement-tip-item.is-active {
+  display: block;
+  color: #dbe7ff;
+}
 .bodycomp-prep-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;

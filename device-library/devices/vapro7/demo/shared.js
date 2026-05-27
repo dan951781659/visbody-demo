@@ -1,27 +1,34 @@
 const STORAGE_KEY = "vapro7-demo-state";
 const REPORT_URL = "./report-detail.html";
-const DEMO_VERSION_FALLBACK = "1.5.5";
+const DEMO_VERSION_FALLBACK = "1.6.0";
 
 const SINGLE_FLOW_PLACEHOLDER_HREF = "./single-flow-placeholder.html";
+const LEGACY_BODYCOMP_GIRTH_HREF = "./legacy-bodycomp-girth-prep.html";
+const LEGACY_GIRTH_ONLY_HREF = "./legacy-girth-prep.html";
 
 const NEXT_RECOMMEND_DESC = {
   standard: "一圈综合采集",
   pro: "IPose 体态专项",
+  bodycompGirth: "一次转台 · 体成分与体围",
+  girthOnly: "单体围流程",
+  balance: "平衡专项",
   singleShoulder: "肩部专项",
-  singleNeck: "颈部占位演示",
-  singleBalance: "平衡占位演示"
+  singleNeck: "颈部占位演示"
 };
 
 const MEASUREMENT_ITEMS = {
-  standard: { key: "standard", title: "综合测量", href: "./standard-bodycomp-prep.html", group: "standard" },
+  standard: { key: "standard", title: "综合测量", href: "./standard-user-prep.html", group: "standard" },
   pro: { key: "pro", title: "专业测量", href: "./pro-prepare.html", group: "pro" },
+  bodycompGirth: { key: "bodycompGirth", title: "体成分 + 体围", href: LEGACY_BODYCOMP_GIRTH_HREF, group: "bodycompGirth" },
+  girthOnly: { key: "girthOnly", title: "体围测量", href: LEGACY_GIRTH_ONLY_HREF, group: "girthOnly" },
+  balance: { key: "balance", title: "平衡测量", href: `${SINGLE_FLOW_PLACEHOLDER_HREF}?item=balance`, group: "balance" },
   singleShoulder: { key: "singleShoulder", title: "肩部测量", href: "./single-prepare-shoulder.html", group: "single" },
-  singleNeck: { key: "singleNeck", title: "颈部测量", href: `${SINGLE_FLOW_PLACEHOLDER_HREF}?item=neck`, group: "single" },
-  singleBalance: { key: "singleBalance", title: "平衡测量", href: `${SINGLE_FLOW_PLACEHOLDER_HREF}?item=balance`, group: "single" }
+  singleNeck: { key: "singleNeck", title: "颈部测量", href: `${SINGLE_FLOW_PLACEHOLDER_HREF}?item=neck`, group: "single" }
 };
 
 const ORDER_PRESET_KEYS = {
   "standard-pro-shoulder": ["standard", "pro", "singleShoulder"],
+  "legacy-split": ["pro", "bodycompGirth", "girthOnly", "balance"],
   "shoulder-standard-pro": ["singleShoulder", "standard", "pro"],
   "pro-shoulder-standard": ["pro", "singleShoulder", "standard"]
 };
@@ -49,10 +56,14 @@ function toBoolean(value) {
 
 function defaultState() {
   return {
-    proModeEnabled: true,
+    measurementProfile: "custom",
+    comprehensiveEnabled: true,
+    postureModeEnabled: true,
+    bodycompGirthModeEnabled: false,
+    girthOnlyModeEnabled: false,
+    balanceModeEnabled: false,
     singleShoulderEnabled: true,
     singleNeckEnabled: true,
-    singleBalanceEnabled: true,
     showProEntryAfterStandard: true,
     showSingleEntryAfterStandard: true,
     measurementOrderPreset: "standard-pro-shoulder",
@@ -62,12 +73,15 @@ function defaultState() {
     voiceEnabled: true,
     bodyCompositionPrepEnabled: true,
     currentSessionId: null,
+    currentMeasurementMode: "standard",
     completedGroups: {
       standard: false,
       pro: false,
+      bodycompGirth: false,
+      girthOnly: false,
+      balance: false,
       singleShoulder: false,
-      singleNeck: false,
-      singleBalance: false
+      singleNeck: false
     }
   };
 }
@@ -96,6 +110,22 @@ function normalizeState(state) {
   delete merged.soundEffectsEnabled;
   if (typeof merged.voiceEnabled !== "boolean") merged.voiceEnabled = true;
   if (typeof merged.bodyCompositionPrepEnabled !== "boolean") merged.bodyCompositionPrepEnabled = true;
+  if (typeof merged.measurementProfile !== "string" || !merged.measurementProfile) {
+    merged.measurementProfile = "custom";
+  }
+  if (typeof merged.comprehensiveEnabled !== "boolean") merged.comprehensiveEnabled = true;
+  if (typeof merged.postureModeEnabled !== "boolean") {
+    merged.postureModeEnabled =
+      typeof merged.proModeEnabled === "boolean" ? merged.proModeEnabled : true;
+  }
+  if (typeof merged.bodycompGirthModeEnabled !== "boolean") merged.bodycompGirthModeEnabled = false;
+  if (typeof merged.girthOnlyModeEnabled !== "boolean") merged.girthOnlyModeEnabled = false;
+  if (typeof merged.balanceModeEnabled !== "boolean") {
+    merged.balanceModeEnabled =
+      typeof merged.singleBalanceEnabled === "boolean" ? merged.singleBalanceEnabled : false;
+  }
+  delete merged.proModeEnabled;
+  delete merged.singleBalanceEnabled;
   const legacySingle =
     typeof merged.singleModeEnabled === "boolean" ? merged.singleModeEnabled : true;
   if (typeof merged.singleShoulderEnabled !== "boolean") {
@@ -104,33 +134,44 @@ function normalizeState(state) {
   if (typeof merged.singleNeckEnabled !== "boolean") {
     merged.singleNeckEnabled = legacySingle;
   }
-  if (typeof merged.singleBalanceEnabled !== "boolean") {
-    merged.singleBalanceEnabled = legacySingle;
-  }
   delete merged.singleModeEnabled;
   if (!ORDER_PRESET_KEYS[merged.measurementOrderPreset]) {
     merged.measurementOrderPreset = "standard-pro-shoulder";
   }
   if (merged.homepageQuickSingleItem === "singleNeck") merged.homepageQuickSingleItem = "neck";
-  if (merged.homepageQuickSingleItem === "singleBalance") merged.homepageQuickSingleItem = "balance";
-  const validQuick = ["none", "shoulder", "neck", "balance"];
+  if (merged.homepageQuickSingleItem === "singleBalance" || merged.homepageQuickSingleItem === "balance") {
+    merged.homepageQuickSingleItem = "none";
+  }
+  const validQuick = ["none", "shoulder", "neck"];
   if (!validQuick.includes(merged.homepageQuickSingleItem)) {
     merged.homepageQuickSingleItem = "none";
   }
-  const orderKeys = resolveOrderKeys(merged);
+  const orderKeys = resolveOrderKeys(merged).map((key) => (key === "singleBalance" ? "balance" : key));
+  const uniqOrderKeys = [...new Set(orderKeys)];
+  const completedGroups = {
+    ...base.completedGroups,
+    ...((state && state.completedGroups) || {})
+  };
+  if (completedGroups.singleBalance && !completedGroups.balance) {
+    completedGroups.balance = true;
+  }
+  delete completedGroups.singleBalance;
   return {
     ...merged,
-    measurementOrderKeys: orderKeys,
-    completedGroups: {
-      ...base.completedGroups,
-      ...((state && state.completedGroups) || {})
-    }
+    measurementOrderKeys: sanitizeOrderKeys(uniqOrderKeys),
+    completedGroups
   };
 }
 
 function getQueryOverrides() {
   const params = new URLSearchParams(window.location.search);
   const overrides = {};
+  const profile = params.get("profile");
+  const comprehensive = toBoolean(params.get("comprehensive"));
+  const posture = toBoolean(params.get("posture"));
+  const bodycompGirth = toBoolean(params.get("bodycompGirth"));
+  const girthOnly = toBoolean(params.get("girthOnly"));
+  const balance = toBoolean(params.get("balance"));
   const quick = params.get("quick");
   const pro = toBoolean(params.get("pro"));
   const single = toBoolean(params.get("single"));
@@ -143,20 +184,28 @@ function getQueryOverrides() {
   const voice = toBoolean(params.get("voice"));
   const bodyCompPrep = toBoolean(params.get("bodyCompPrep"));
 
-  if (quick && ["none", "shoulder", "neck", "balance"].includes(quick)) {
+  if (profile) {
+    overrides.measurementProfile = profile;
+  }
+  if (typeof comprehensive === "boolean") overrides.comprehensiveEnabled = comprehensive;
+  if (typeof posture === "boolean") overrides.postureModeEnabled = posture;
+  if (typeof bodycompGirth === "boolean") overrides.bodycompGirthModeEnabled = bodycompGirth;
+  if (typeof girthOnly === "boolean") overrides.girthOnlyModeEnabled = girthOnly;
+  if (typeof balance === "boolean") overrides.balanceModeEnabled = balance;
+
+  if (quick && ["none", "shoulder", "neck"].includes(quick)) {
     overrides.homepageQuickSingleItem = quick;
   }
   if (typeof pro === "boolean") {
-    overrides.proModeEnabled = pro;
+    overrides.postureModeEnabled = pro;
   }
   if (typeof single === "boolean") {
     overrides.singleShoulderEnabled = single;
     overrides.singleNeckEnabled = single;
-    overrides.singleBalanceEnabled = single;
   }
   if (typeof singleShoulder === "boolean") overrides.singleShoulderEnabled = singleShoulder;
   if (typeof singleNeck === "boolean") overrides.singleNeckEnabled = singleNeck;
-  if (typeof singleBalance === "boolean") overrides.singleBalanceEnabled = singleBalance;
+  if (typeof singleBalance === "boolean") overrides.balanceModeEnabled = singleBalance;
   if (typeof showProAfterStandard === "boolean") {
     overrides.showProEntryAfterStandard = showProAfterStandard;
   }
@@ -238,16 +287,36 @@ function completeGroup(groupKey) {
   });
 }
 
+function isPrimaryItemEnabled(state, itemKey) {
+  const s = state || loadState();
+  if (itemKey === "standard") return !!s.comprehensiveEnabled;
+  if (itemKey === "pro") return !!s.postureModeEnabled;
+  if (itemKey === "bodycompGirth") return !!s.bodycompGirthModeEnabled;
+  if (itemKey === "girthOnly") return !!s.girthOnlyModeEnabled;
+  if (itemKey === "balance") return !!s.balanceModeEnabled;
+  return false;
+}
+
+function isAnyPrimaryEnabled(state) {
+  const s = state || loadState();
+  return !!(
+    s.comprehensiveEnabled ||
+    s.postureModeEnabled ||
+    s.bodycompGirthModeEnabled ||
+    s.girthOnlyModeEnabled ||
+    s.balanceModeEnabled
+  );
+}
+
 function isAnySingleEnabled(state) {
   const s = state || loadState();
-  return !!(s.singleShoulderEnabled || s.singleNeckEnabled || s.singleBalanceEnabled);
+  return !!(s.singleShoulderEnabled || s.singleNeckEnabled);
 }
 
 function isSingleItemEnabled(state, itemKey) {
   const s = state || loadState();
   if (itemKey === "singleShoulder") return !!s.singleShoulderEnabled;
   if (itemKey === "singleNeck") return !!s.singleNeckEnabled;
-  if (itemKey === "singleBalance") return !!s.singleBalanceEnabled;
   return false;
 }
 
@@ -255,7 +324,6 @@ function isQuickSingleAvailable(state, quick) {
   if (!quick || quick === "none") return true;
   if (quick === "shoulder") return !!state.singleShoulderEnabled;
   if (quick === "neck") return !!state.singleNeckEnabled;
-  if (quick === "balance") return !!state.singleBalanceEnabled;
   return false;
 }
 
@@ -265,8 +333,7 @@ function getQuickItemMeta(value) {
   const map = {
     none: null,
     shoulder: { title: "肩部测量", desc: "抬手完成肩部活动测量", href: "./single-prepare-shoulder.html" },
-    neck: { title: "颈部测量", desc: "演示占位，未接入流程", href: `${SINGLE_FLOW_PLACEHOLDER_HREF}?item=neck` },
-    balance: { title: "平衡测量", desc: "演示占位，未接入流程", href: `${SINGLE_FLOW_PLACEHOLDER_HREF}?item=balance` }
+    neck: { title: "颈部测量", desc: "演示占位，未接入流程", href: `${SINGLE_FLOW_PLACEHOLDER_HREF}?item=neck` }
   };
   return map[value] || null;
 }
@@ -283,12 +350,13 @@ function formatOrderPreview(state) {
 
 function isMeasurementAvailable(item, state) {
   if (!item) return false;
-  if (item.key === "pro") {
-    if (!state.proModeEnabled) return false;
-  }
+  if (item.key === "standard") return !!state.comprehensiveEnabled;
+  if (item.key === "pro") return !!state.postureModeEnabled;
+  if (item.key === "bodycompGirth") return !!state.bodycompGirthModeEnabled;
+  if (item.key === "girthOnly") return !!state.girthOnlyModeEnabled;
+  if (item.key === "balance") return !!state.balanceModeEnabled;
   if (item.key === "singleShoulder") return !!state.singleShoulderEnabled;
   if (item.key === "singleNeck") return !!state.singleNeckEnabled;
-  if (item.key === "singleBalance") return !!state.singleBalanceEnabled;
   return true;
 }
 
@@ -308,16 +376,21 @@ function getNextMeasurementRecommendation(currentKey, flow, state) {
 
 function getStandardFlowEntryHref(state) {
   const s = state || loadState();
-  return s.bodyCompositionPrepEnabled ? "./standard-bodycomp-prep.html" : "./standard-position.html";
+  return s.bodyCompositionPrepEnabled ? "./standard-user-prep.html" : "./standard-bodycomp-prep.html";
 }
 
 function buildStateQuery(state) {
   const params = new URLSearchParams();
+  params.set("profile", state.measurementProfile || "custom");
+  params.set("comprehensive", state.comprehensiveEnabled ? "1" : "0");
+  params.set("posture", state.postureModeEnabled ? "1" : "0");
+  params.set("bodycompGirth", state.bodycompGirthModeEnabled ? "1" : "0");
+  params.set("girthOnly", state.girthOnlyModeEnabled ? "1" : "0");
+  params.set("balance", state.balanceModeEnabled ? "1" : "0");
   params.set("quick", state.homepageQuickSingleItem || "none");
-  params.set("pro", state.proModeEnabled ? "1" : "0");
+  params.set("pro", state.postureModeEnabled ? "1" : "0");
   params.set("singleShoulder", state.singleShoulderEnabled ? "1" : "0");
   params.set("singleNeck", state.singleNeckEnabled ? "1" : "0");
-  params.set("singleBalance", state.singleBalanceEnabled ? "1" : "0");
   params.set("showProAfterStandard", state.showProEntryAfterStandard ? "1" : "0");
   params.set("showSingleAfterStandard", state.showSingleEntryAfterStandard ? "1" : "0");
   params.set("voice", state.voiceEnabled ? "1" : "0");
@@ -337,12 +410,49 @@ function withStateQuery(target, state) {
   return `${basePath}${query ? `?${query}` : ""}${hash ? `#${hash}` : ""}`;
 }
 
+function applyMeasurementProfile(profileId) {
+  const profiles = {
+    "comprehensive-default": {
+      comprehensiveEnabled: true,
+      postureModeEnabled: true,
+      bodycompGirthModeEnabled: false,
+      girthOnlyModeEnabled: false,
+      balanceModeEnabled: false
+    },
+    "legacy-split": {
+      comprehensiveEnabled: false,
+      postureModeEnabled: true,
+      bodycompGirthModeEnabled: true,
+      girthOnlyModeEnabled: true,
+      balanceModeEnabled: true
+    },
+    "comprehensive-posture": {
+      comprehensiveEnabled: true,
+      postureModeEnabled: true,
+      bodycompGirthModeEnabled: false,
+      girthOnlyModeEnabled: false,
+      balanceModeEnabled: false
+    },
+    custom: null
+  };
+  const profile = profiles[profileId];
+  if (!profile) return patchState({ measurementProfile: "custom" });
+  return patchState({
+    measurementProfile: profileId,
+    ...profile
+  });
+}
+
 function bindConfigControls() {
   document.querySelectorAll("[data-config-key]").forEach((el) => {
     const key = el.getAttribute("data-config-key");
     function onChange() {
       const value = el.type === "checkbox" ? el.checked : el.value;
-      patchState({ [key]: value });
+      if (key === "measurementProfile") {
+        applyMeasurementProfile(value);
+        return;
+      }
+      patchState({ [key]: value, measurementProfile: "custom" });
     }
     el.addEventListener("change", onChange);
     if (el.tagName === "INPUT" && el.type !== "checkbox") {
@@ -727,6 +837,9 @@ function setupStageAdvance() {
           finishStage();
         }
       });
+      if (el.hasAttribute("data-stage-auto-start") && secondsEl) {
+        window.setTimeout(() => startStage(), 420);
+      }
       return;
     }
 
@@ -748,6 +861,7 @@ function bindActionLinks() {
       const action = el.dataset.actionLink;
       const target = el.getAttribute("href") || el.dataset.next;
       const complete = el.dataset.completeGroup;
+      const measurementMode = el.dataset.measurementMode;
 
       if (action === "reset-demo") {
         saveState(defaultState());
@@ -756,6 +870,9 @@ function bindActionLinks() {
 
       if (action === "start-session") {
         startSession();
+      }
+      if (measurementMode) {
+        patchState({ currentMeasurementMode: measurementMode });
       }
 
       if (action === "open-report") {
@@ -970,9 +1087,10 @@ function setupPrepGestureAdvance() {
   const root = document.querySelector("[data-prep-gesture-advance]");
   if (!root) return;
 
-  const target = root.dataset.prepGestureAdvance || "./standard-position.html";
+  const target = root.dataset.prepGestureAdvance || "./standard-bodycomp-prep.html";
   const toast = root.querySelector("[data-gesture-toast]");
   const figure = root.querySelector("[data-prep-gesture-figure]");
+  const autoDelay = Number(root.dataset.prepAutoDelay || 2600);
   let toastTimer = null;
   let advancing = false;
 
@@ -1000,30 +1118,59 @@ function setupPrepGestureAdvance() {
     if (advancing) return;
     advancing = true;
     const state = loadState();
-    showToast("已识别 · 进入扶手准备");
+    showToast("已识别 · 正在进入下一步");
     pulseGestureTarget();
     window.setTimeout(() => {
       navigateToTarget(withStateQuery(target, state));
     }, 320);
   }
 
-  root.querySelectorAll("[data-gesture-simulate]").forEach((btn) => {
-    btn.addEventListener("click", (event) => {
-      event.preventDefault();
-      advance();
-    });
-  });
+  speakText(root.dataset.voiceText || "请举右手进入下一步。");
+  window.setTimeout(advance, autoDelay);
+}
 
-  root.addEventListener(
-    "keydown",
-    (event) => {
-      if (event.key.toLowerCase() === "r") {
-        event.preventDefault();
-        advance();
-      }
-    },
-    true
-  );
+
+function setupAutoDetectAdvance() {
+  document.querySelectorAll("[data-auto-detect-next]").forEach((root) => {
+    const next = root.dataset.autoDetectNext;
+    if (!next) return;
+    const delay = Number(root.dataset.autoDetectDelay || 2600);
+    const statusEl = root.querySelector("[data-auto-detect-status]");
+    let done = false;
+
+    if (statusEl) statusEl.textContent = "正在识别...";
+    speakText(root.dataset.voiceText || "正在识别姿态，请保持不动。");
+
+    const finish = () => {
+      if (done) return;
+      done = true;
+      if (statusEl) statusEl.textContent = "识别通过，正在进入下一步...";
+      window.setTimeout(() => navigateToTarget(withStateQuery(next, loadState())), 260);
+    };
+
+    window.setTimeout(finish, delay);
+  });
+}
+
+function setupTipCarousel() {
+  document.querySelectorAll("[data-tip-carousel]").forEach((root) => {
+    const items = [...root.querySelectorAll("[data-tip-item]")];
+    if (items.length < 2) return;
+    let idx = 0;
+    const intervalMs = Number(root.dataset.tipInterval || 2600);
+
+    function render() {
+      items.forEach((item, i) => {
+        item.classList.toggle("is-active", i === idx);
+      });
+    }
+
+    render();
+    window.setInterval(() => {
+      idx = (idx + 1) % items.length;
+      render();
+    }, intervalMs);
+  });
 }
 
 function setupSchemeThreeGestureDemo() {
@@ -1129,7 +1276,13 @@ function renderState(nextState) {
   });
 
   document.querySelectorAll("[data-show-if-pro-entry]").forEach((el) => {
-    el.hidden = !state.proModeEnabled;
+    el.hidden = !state.postureModeEnabled;
+  });
+  document.querySelectorAll("[data-show-if-any-primary]").forEach((el) => {
+    el.hidden = !isAnyPrimaryEnabled(state);
+  });
+  document.querySelectorAll("[data-show-if-no-primary]").forEach((el) => {
+    el.hidden = isAnyPrimaryEnabled(state);
   });
   document.querySelectorAll("[data-show-if-any-single]").forEach((el) => {
     el.hidden = !isAnySingleEnabled(state);
@@ -1276,10 +1429,15 @@ function setupOrderSortList() {
         const inList = keys.includes(key);
         const singleDisabled =
           (key === "singleShoulder" && !state.singleShoulderEnabled) ||
-          (key === "singleNeck" && !state.singleNeckEnabled) ||
-          (key === "singleBalance" && !state.singleBalanceEnabled);
-        btn.hidden = inList || singleDisabled;
-        btn.disabled = inList || singleDisabled;
+          (key === "singleNeck" && !state.singleNeckEnabled);
+        const primaryDisabled =
+          (key === "standard" && !state.comprehensiveEnabled) ||
+          (key === "pro" && !state.postureModeEnabled) ||
+          (key === "bodycompGirth" && !state.bodycompGirthModeEnabled) ||
+          (key === "girthOnly" && !state.girthOnlyModeEnabled) ||
+          (key === "balance" && !state.balanceModeEnabled);
+        btn.hidden = inList || singleDisabled || primaryDisabled;
+        btn.disabled = inList || singleDisabled || primaryDisabled;
       });
     }
   }
@@ -1526,6 +1684,8 @@ document.addEventListener("DOMContentLoaded", () => {
   setupFinishAutoAdvance();
   setupSchemeThreeGestureDemo();
   setupPrepGestureAdvance();
+  setupAutoDetectAdvance();
+  setupTipCarousel();
   setupGuideSequence();
   setupDemoAdvance();
   setupStageAdvance();
@@ -1545,6 +1705,7 @@ window.VAProDemo = {
   completeGroup,
   getQuickItemMeta,
   getStandardFlowEntryHref,
+  isAnyPrimaryEnabled,
   isAnySingleEnabled,
   isSingleItemEnabled,
   isQuickSingleAvailable,
