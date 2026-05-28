@@ -1,6 +1,6 @@
 const STORAGE_KEY = "vapro7-demo-state";
 const REPORT_URL = "./report-detail.html";
-const DEMO_VERSION_FALLBACK = "1.6.0";
+const DEMO_VERSION_FALLBACK = "1.6.1";
 
 const SINGLE_FLOW_PLACEHOLDER_HREF = "./single-flow-placeholder.html";
 const LEGACY_BODYCOMP_GIRTH_HREF = "./legacy-bodycomp-girth-prep.html";
@@ -732,6 +732,16 @@ function setupGuideSequenceLegacyLoop(stage) {
   });
 }
 
+let activePageDemo = null;
+
+function setActivePageDemo(controller) {
+  activePageDemo = controller || null;
+}
+
+function cancelActivePageDemo() {
+  if (activePageDemo?.cancel) activePageDemo.cancel();
+}
+
 function setupDemoAdvance() {
   document.querySelectorAll("[data-demo-next]").forEach((el) => {
     const target = el.dataset.demoNext;
@@ -740,6 +750,7 @@ function setupDemoAdvance() {
     function trigger(event) {
       if (el.disabled) return;
       if (event) event.preventDefault();
+      cancelActivePageDemo();
       navigateToTarget(withStateQuery(target, loadState()));
     }
 
@@ -773,16 +784,29 @@ function setupStageAdvance() {
     const delay = Number(el.dataset.stageDelay || 3000);
     const completeKey = el.dataset.stageCompleteGroup;
     const requiresClick = el.hasAttribute("data-demo-countdown-target");
+    const manualNext = el.hasAttribute("data-stage-manual-next");
     const secondsEl = el.querySelector("[data-stage-seconds]");
+    const doneHintEl = el.querySelector("[data-stage-done-hint]");
     let timer = null;
     let hasStarted = false;
     let remainingSeconds = Number(el.dataset.stageSecondsStart || secondsEl?.textContent || Math.ceil(delay / 1000));
 
-    function finishStage() {
+    function clearStageTimer() {
       if (timer) {
         window.clearInterval(timer);
         timer = null;
       }
+    }
+
+    function completeStageDemo() {
+      clearStageTimer();
+      if (secondsEl) secondsEl.textContent = "0";
+      if (doneHintEl) doneHintEl.textContent = "倒计时结束，请点击下方「下一步」";
+      speakText("倒计时结束，请点击下一步。");
+    }
+
+    function finishStage() {
+      clearStageTimer();
       if (completeKey) {
         completeGroup(completeKey);
       }
@@ -797,6 +821,10 @@ function setupStageAdvance() {
       }
       speakCountdownDigit(remainingSeconds);
       if (delay <= 0) {
+        if (manualNext) {
+          completeStageDemo();
+          return;
+        }
         finishStage();
         return;
       }
@@ -809,9 +837,21 @@ function setupStageAdvance() {
           speakCountdownDigit(remainingSeconds);
         }
         if (remainingSeconds <= 0) {
+          if (manualNext) {
+            completeStageDemo();
+            return;
+          }
           finishStage();
         }
       }, 1000);
+    }
+
+    if (manualNext) {
+      setActivePageDemo({ cancel: clearStageTimer });
+      if (el.hasAttribute("data-stage-auto-start") && secondsEl) {
+        window.setTimeout(() => startStage(), 420);
+      }
+      return;
     }
 
     const autoAdvance = el.hasAttribute("data-stage-auto");
@@ -1087,12 +1127,12 @@ function setupPrepGestureAdvance() {
   const root = document.querySelector("[data-prep-gesture-advance]");
   if (!root) return;
 
-  const target = root.dataset.prepGestureAdvance || "./standard-bodycomp-prep.html";
   const toast = root.querySelector("[data-gesture-toast]");
   const figure = root.querySelector("[data-prep-gesture-figure]");
+  const caption = root.querySelector(".scheme-three-gesture-figure-caption");
   const autoDelay = Number(root.dataset.prepAutoDelay || 2600);
   let toastTimer = null;
-  let advancing = false;
+  let demoTimer = null;
 
   function showToast(message) {
     if (!toast) return;
@@ -1114,41 +1154,56 @@ function setupPrepGestureAdvance() {
     window.setTimeout(() => figure.classList.remove("is-gesture-pulse"), 600);
   }
 
-  function advance() {
-    if (advancing) return;
-    advancing = true;
-    const state = loadState();
-    showToast("已识别 · 正在进入下一步");
+  function cancelDemo() {
+    if (demoTimer) {
+      window.clearTimeout(demoTimer);
+      demoTimer = null;
+    }
+    if (toastTimer) {
+      window.clearTimeout(toastTimer);
+      toastTimer = null;
+    }
+  }
+
+  function completeDemo() {
+    showToast("已识别");
     pulseGestureTarget();
-    window.setTimeout(() => {
-      navigateToTarget(withStateQuery(target, state));
-    }, 320);
+    if (caption) caption.textContent = "识别通过";
+    speakText("识别通过。");
   }
 
   speakText(root.dataset.voiceText || "请举右手进入下一步。");
-  window.setTimeout(advance, autoDelay);
+  demoTimer = window.setTimeout(completeDemo, autoDelay);
+  setActivePageDemo({ cancel: cancelDemo });
 }
 
 
 function setupAutoDetectAdvance() {
   document.querySelectorAll("[data-auto-detect-next]").forEach((root) => {
-    const next = root.dataset.autoDetectNext;
-    if (!next) return;
     const delay = Number(root.dataset.autoDetectDelay || 2600);
     const statusEl = root.querySelector("[data-auto-detect-status]");
-    let done = false;
+    let demoTimer = null;
 
     if (statusEl) statusEl.textContent = "正在识别...";
     speakText(root.dataset.voiceText || "正在识别姿态，请保持不动。");
 
-    const finish = () => {
-      if (done) return;
-      done = true;
-      if (statusEl) statusEl.textContent = "识别通过，正在进入下一步...";
-      window.setTimeout(() => navigateToTarget(withStateQuery(next, loadState())), 260);
-    };
+    function cancelDemo() {
+      if (demoTimer) {
+        window.clearTimeout(demoTimer);
+        demoTimer = null;
+      }
+    }
 
-    window.setTimeout(finish, delay);
+    function completeDemo() {
+      root.classList.add("is-aligned");
+      const scene = root.querySelector(".bodycomp-prep-scene");
+      if (scene) scene.classList.add("is-aligned");
+      if (statusEl) statusEl.textContent = "识别通过";
+      speakText("识别通过。");
+    }
+
+    demoTimer = window.setTimeout(completeDemo, delay);
+    setActivePageDemo({ cancel: cancelDemo });
   });
 }
 
@@ -1504,11 +1559,9 @@ function setupMeasuringTurntable() {
   if (!root) return;
 
   const durationMs = Number(root.dataset.measuringDuration || 10000);
-  const nextTarget = root.dataset.measuringNext || "./standard-next-step.html";
   const progressFill = root.querySelector("[data-measuring-progress]");
   const focusEl = root.querySelector("[data-measuring-focus]");
   const chipEl = root.querySelector("[data-measuring-chip]");
-  const footer = root.querySelector("[data-measuring-footer]");
   const audioEl = root.querySelector("[data-turntable-audio]");
   const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
   let finaleSpoken = false;
@@ -1626,14 +1679,16 @@ function setupMeasuringTurntable() {
 
   const finaleThresholdMs = Math.min(3000, durationMs * 0.35);
 
-  function goMeasuringNext() {
+  function cancelMeasuringDemo() {
     if (rafId) {
       window.cancelAnimationFrame(rafId);
       rafId = null;
     }
     stopSound();
-    navigateToTarget(withStateQuery(nextTarget, loadState()));
+    spinComplete = true;
   }
+
+  setActivePageDemo({ cancel: cancelMeasuringDemo });
 
   function tick() {
     const elapsed = performance.now() - started;
@@ -1655,21 +1710,12 @@ function setupMeasuringTurntable() {
     spinComplete = true;
     stopSound();
     if (progressFill) progressFill.style.width = "100%";
-    if (focusEl) focusEl.textContent = "转台已停，可进入下一步";
+    if (focusEl) focusEl.textContent = "转台已停，请点击「下一步」";
     if (chipEl) chipEl.textContent = "转台已停";
+    speakText("测量完成，请点击下一步。");
   }
 
   rafId = window.requestAnimationFrame(tick);
-
-  if (footer) {
-    footer.addEventListener("click", goMeasuringNext);
-    footer.addEventListener("keydown", (event) => {
-      if (event.key === "Enter" || event.key === " ") {
-        event.preventDefault();
-        goMeasuringNext();
-      }
-    });
-  }
 
   window.addEventListener("beforeunload", stopSound);
 }

@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 360" role="img" aria-label="转台脚印与电极片对准示意">
+  <defs>
+    <linearGradient id="platformTop" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#3d4a5c"/>
+      <stop offset="100%" stop-color="#252d3a"/>
+    </linearGradient>
+    <linearGradient id="platformSide" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#2a3344"/>
+      <stop offset="100%" stop-color="#1a2029"/>
+    </linearGradient>
+    <linearGradient id="electrodeMetal" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#c8d4e8"/>
+      <stop offset="50%" stop-color="#8fa3c4"/>
+      <stop offset="100%" stop-color="#5c6d88"/>
+    </linearGradient>
+    <linearGradient id="electrodeGlow" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#6eb0ff"/>
+      <stop offset="100%" stop-color="#2b7cff"/>
+    </linearGradient>
+    <filter id="glow" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="3" result="blur"/>
+      <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+    <style>
+      .label { font-family: system-ui, sans-serif; font-size: 11px; fill: #b8c9e8; }
+      .label-bg { fill: rgba(0,0,0,0.45); }
+      .align-guide { fill: none; stroke: rgba(43,124,255,0.45); stroke-width: 1.5; stroke-dasharray: 6 4; }
+      .footprint { fill: rgba(43,124,255,0.12); stroke: rgba(110,176,255,0.55); stroke-width: 1.2; }
+      .electrode { fill: url(#electrodeMetal); stroke: rgba(200,212,232,0.6); stroke-width: 0.8; }
+      .electrode-glow { fill: url(#electrodeGlow); stroke: #6eb0ff; stroke-width: 1.2; filter: url(#glow); }
+      .platform-edge { stroke: rgba(255,255,255,0.08); stroke-width: 1; }
+    </style>
+  </defs>
+  <rect width="400" height="360" fill="#0a0c10"/>
+  <ellipse cx="200" cy="300" rx="120" ry="28" fill="rgba(43,124,255,0.06)"/>
+  <g class="turntable-platform">
+    <path d="M 182.7,160.0 L 96.1,210.0 L 96.1,224.0 L 182.7,174.0 Z" fill="url(#platformSide)" class="platform-edge"/>
+    <path d="M 303.9,230.0 L 217.3,280.0 L 217.3,294.0 L 303.9,244.0 Z" fill="url(#platformSide)" class="platform-edge"/>
+    <path d="M 96.1,210.0 L 217.3,280.0 L 217.3,294.0 L 96.1,224.0 Z" fill="#1e2530" class="platform-edge"/>
+    <path d="M 182.7,160.0 L 303.9,230.0 L 217.3,280.0 L 96.1,210.0 Z" fill="url(#platformTop)" class="platform-edge"/>
+  </g>
+  <path d="M 187.9,174.0 L 277.9,226.0 L 212.1,264.0 L 122.1,212.0 Z" class="align-guide" data-align-zone="true"/>
+  <g class="electrodes" data-electrodes="true">
+        <path d="M 183.5,190.5 L 197.4,198.5 L 188.7,203.5 L 174.9,195.5 Z" class="electrode"/>
+    <path d="M 161.9,204.0 L 174.0,211.0 L 165.4,216.0 L 153.2,209.0 Z" class="electrode"/>
+    <path d="M 232.0,218.5 L 245.9,226.5 L 237.2,231.5 L 223.4,223.5 Z" class="electrode"/>
+    <path d="M 210.4,232.0 L 222.5,239.0 L 213.9,244.0 L 201.7,237.0 Z" class="electrode"/>
+    <path d="M 173.2,198.5 L 183.5,204.5 L 176.6,208.5 L 166.2,202.5 Z" class="electrode"/>
+    <path d="M 221.7,226.5 L 232.0,232.5 L 225.1,236.5 L 214.7,230.5 Z" class="electrode"/>
+  </g>
+  <g class="footprints" data-footprints="true">
+    <path d="M 183.9,191.6 L 197.2,199.3 L 172.2,215.3 L 160.0,213.1 L 156.2,206.0 Z" class="footprint"/>
+    <path d="M 245.7,227.3 L 232.4,219.6 L 204.7,234.0 L 208.5,241.1 L 220.7,243.3 Z" class="footprint"/>
+  </g>
+  <g class="labels">
+    <rect x="118" y="72" width="36" height="18" rx="6" class="label-bg"/>
+    <text x="136" y="85" text-anchor="middle" class="label">脚印</text>
+    <rect x="246" y="248" width="44" height="18" rx="6" class="label-bg"/>
+    <text x="268" y="261" text-anchor="middle" class="label">电极片</text>
+  </g>
+  <g class="aligned-overlay" opacity="0" data-aligned-overlay="true">
+        <path d="M 183.5,190.5 L 197.4,198.5 L 188.7,203.5 L 174.9,195.5 Z" class="electrode-glow"/>
+    <path d="M 161.9,204.0 L 174.0,211.0 L 165.4,216.0 L 153.2,209.0 Z" class="electrode-glow"/>
+    <path d="M 232.0,218.5 L 245.9,226.5 L 237.2,231.5 L 223.4,223.5 Z" class="electrode-glow"/>
+    <path d="M 210.4,232.0 L 222.5,239.0 L 213.9,244.0 L 201.7,237.0 Z" class="electrode-glow"/>
+    <path d="M 173.2,198.5 L 183.5,204.5 L 176.6,208.5 L 166.2,202.5 Z" class="electrode-glow"/>
+    <path d="M 221.7,226.5 L 232.0,232.5 L 225.1,236.5 L 214.7,230.5 Z" class="electrode-glow"/>
+  </g>
+</svg>

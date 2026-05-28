@@ -14,6 +14,15 @@
 
 ---
 
+## 2026-05-27 · v1.6.1（站姿页 · 脚印对准电极片示意图）
+
+- **`standard-bodycomp-prep.html`**：移除 2×2 四宫格，改为与扶手/45° 页一致的单主视觉布局。
+- **资源**：`scripts/generate-footprint-turntable-svg.py` → `assets/bodycomp-prep/footprint-turntable-alignment.svg`。
+- **`shared.css`**：`.bodycomp-prep-scene`、识别完成 `.is-aligned` 脉冲高亮。
+- **`shared.js`**：`setupAutoDetectAdvance` 识别完成时添加 `is-aligned`；`version.json` **v1.6.1**。
+
+---
+
 ## 2026-05-27 · v1.6.0（综合测量流程重构 · 测量准备页）
 
 - **新页面**：`standard-user-prep.html`（测量准备页）、`standard-grip-prep.html`（扶手接触识别）。

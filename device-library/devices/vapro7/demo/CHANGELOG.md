@@ -1,5 +1,13 @@
 # VAPro7 Demo 变更记录
 
+## v1.6.1（站姿页 · 脚印对准电极片示意图）
+
+- **站姿识别页**：`standard-bodycomp-prep.html` 由失效四宫格改为单主视觉 `live-stage`，展示转台脚印与电极片对准示意。
+- **资源**：新增 `scripts/generate-footprint-turntable-svg.py` 与 `assets/bodycomp-prep/footprint-turntable-alignment.svg`（等距透视 SVG，可重复生成）。
+- **样式/交互**：`shared.css` 增加 `.bodycomp-prep-scene`；识别通过后 `is-aligned` 高亮；保留手动「下一步」跳转。
+
+---
+
 ## v1.6.0（综合测量流程重构 · 测量准备页 · 真实用户文案）
 
 - **综合测量流程**：测量准备页 → 站姿识别 → 扶手接触 → 手臂 45° → 倒计时 → 测量 → 完成页（每步自动识别，底部保留跳步兜底）。

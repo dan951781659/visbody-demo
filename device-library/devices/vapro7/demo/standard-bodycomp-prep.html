@@ -9,39 +9,39 @@
   <body>
     <main class="device-stage">
       <section
-        class="device device--bodycomp-prep"
+        class="device device--guide"
         data-auto-detect-next="./standard-grip-prep.html"
         data-auto-detect-delay="2600"
         data-voice-text="请站上转台，并确保足底与金属脚印充分接触。"
       >
-        <div class="status-bar"><span>18:32</span><span>综合测量</span><span class="demo-version-badge" data-demo-version>v1.6.0</span></div>
+        <div class="status-bar"><span>18:32</span><span>综合测量</span><span class="demo-version-badge" data-demo-version>v1.6.1</span></div>
         <div class="topbar">
           <a class="back-link" href="./standard-user-prep.html" data-stateful-link="./standard-user-prep.html">← 返回</a>
           <span class="text-link">测量准备页</span>
         </div>
         <div class="section-label">综合测量</div>
         <h1 class="screen-title">站上转台并对准脚印</h1>
-        <p class="screen-subtitle">请确保双脚足底与金属脚印充分接触，身体自然站立。</p>
-        <div class="bodycomp-prep-grid" role="list">
-          <article class="bodycomp-prep-cell bodycomp-prep-cell--1 is-highlight" role="listitem">
-            <div class="bodycomp-prep-visual bodycomp-prep-visual--feet" aria-hidden="true"></div>
-            <p class="bodycomp-prep-caption">双脚完整踩在脚印区域，足底贴合金属片。</p>
-          </article>
-          <article class="bodycomp-prep-cell bodycomp-prep-cell--2" role="listitem">
-            <div class="bodycomp-prep-visual bodycomp-prep-visual--hands" aria-hidden="true"></div>
-            <p class="bodycomp-prep-caption">面向屏幕站稳，等待系统识别站姿。</p>
-          </article>
-          <article class="bodycomp-prep-cell bodycomp-prep-cell--3" role="listitem">
-            <div class="bodycomp-prep-visual bodycomp-prep-visual--arms" aria-hidden="true"></div>
-            <p class="bodycomp-prep-caption">保持肩部放松，双臂自然下垂。</p>
-          </article>
-          <article class="bodycomp-prep-cell bodycomp-prep-cell--4" role="listitem">
-            <div class="bodycomp-prep-visual bodycomp-prep-visual--still" aria-hidden="true"></div>
-            <p class="bodycomp-prep-caption" data-auto-detect-status>正在识别站姿，识别通过后将自动进入下一步。</p>
-          </article>
+        <p class="screen-subtitle">请确保双脚足底与金属脚印充分接触，并对准转台电极片位置。</p>
+        <div class="device-visual guide-visual">
+          <div class="live-stage guide-scene-wrap bodycomp-prep-scene">
+            <div class="camera-corner tl"></div>
+            <div class="camera-corner tr"></div>
+            <div class="camera-corner bl"></div>
+            <div class="camera-corner br"></div>
+            <div class="live-glow"></div>
+            <div class="live-status live-status--single"><span class="live-chip ok">站姿识别中</span></div>
+            <img
+              class="bodycomp-prep-hero-svg"
+              src="./assets/bodycomp-prep/footprint-turntable-alignment.svg"
+              alt="转台脚印与电极片对准示意"
+              width="400"
+              height="360"
+            />
+            <div class="live-focus" data-auto-detect-status>正在识别站姿，请保持站立不动。</div>
+          </div>
         </div>
         <div class="footer-hint">
-          <a class="button primary" href="./standard-grip-prep.html" data-demo-next="./standard-grip-prep.html" data-stateful-link="./standard-grip-prep.html">点击跳到下一步</a>
+          <a class="button primary" href="./standard-grip-prep.html" data-demo-next="./standard-grip-prep.html" data-stateful-link="./standard-grip-prep.html">下一步</a>
         </div>
       </section>
     </main>
