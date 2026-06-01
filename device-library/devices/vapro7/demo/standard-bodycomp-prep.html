@@ -10,16 +10,16 @@
     <main class="device-stage">
       <section
         class="device device--guide"
-        data-auto-detect-next="./standard-grip-prep.html"
+        data-turntable-anthropometry
+        data-anthropometry-next="./standard-grip-prep.html"
         data-auto-detect-delay="2600"
         data-voice-text="请站上转台，并确保足底与金属脚印充分接触。"
       >
-        <div class="status-bar"><span>18:32</span><span>综合测量</span><span class="demo-version-badge" data-demo-version>v1.6.1</span></div>
+        <div class="status-bar"><span>18:32</span><span>站姿准备</span></div>
         <div class="topbar">
           <a class="back-link" href="./standard-user-prep.html" data-stateful-link="./standard-user-prep.html">← 返回</a>
           <span class="text-link">测量准备页</span>
         </div>
-        <div class="section-label">综合测量</div>
         <h1 class="screen-title">站上转台并对准脚印</h1>
         <p class="screen-subtitle">请确保双脚足底与金属脚印充分接触，并对准转台电极片位置。</p>
         <div class="device-visual guide-visual">
@@ -41,7 +41,12 @@
           </div>
         </div>
         <div class="footer-hint">
-          <a class="button primary" href="./standard-grip-prep.html" data-demo-next="./standard-grip-prep.html" data-stateful-link="./standard-grip-prep.html">下一步</a>
+          <a
+            class="button primary"
+            href="./standard-grip-prep.html"
+            data-anthropometry-next-btn
+            data-stateful-link="./standard-grip-prep.html"
+          >下一步</a>
         </div>
       </section>
     </main>

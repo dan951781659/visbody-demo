@@ -1,0 +1,129 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>体重测量</title>
+    <link rel="stylesheet" href="./shared.css" />
+  </head>
+  <body>
+    <main class="device-stage">
+      <section
+        class="device device--weight-standalone weight-measure-flow"
+        data-weight-standalone-measuring
+        data-weight-next="./weight-standalone-result.html"
+        data-weight-phase="stand"
+      >
+        <div class="status-bar"><span>18:32</span><span>体重测量</span></div>
+        <div class="topbar">
+          <a class="back-link" href="./standby.html" data-stateful-link="./standby.html">← 首页</a>
+        </div>
+        <h1 class="screen-title">体重测量</h1>
+
+        <div class="weight-measure-main">
+          <div class="weight-phase weight-phase--stand" data-weight-phase-panel="stand">
+            <div class="weight-measure-visual weight-measure-visual--stand">
+              <img
+                class="weight-measure-hero"
+                src="./assets/weight-measure/turntable-figure.svg"
+                alt=""
+                width="280"
+                height="220"
+              />
+            </div>
+            <div class="weight-measure-tip-card" aria-label="操作说明">
+              <span class="weight-measure-tip-card__badge" aria-hidden="true">i</span>
+              <ul class="weight-measure-tip-list">
+                <li>请站上转台</li>
+                <li>双手垂放，自然站立，保持静止</li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="weight-phase weight-phase--gauge" data-weight-phase-panel="gauge-idle" hidden>
+            <div class="weight-measure-visual weight-measure-visual--gauge">
+              <svg class="weight-gauge-svg" viewBox="0 0 240 140" aria-hidden="true">
+                <path
+                  class="weight-gauge-track"
+                  d="M 28 118 A 92 92 0 0 1 212 118"
+                  fill="none"
+                  stroke="rgba(255,255,255,0.12)"
+                  stroke-width="10"
+                  stroke-linecap="round"
+                />
+                <path
+                  class="weight-gauge-fill"
+                  d="M 28 118 A 92 92 0 0 1 212 118"
+                  fill="none"
+                  stroke="url(#weightGaugeGrad)"
+                  stroke-width="10"
+                  stroke-linecap="round"
+                  pathLength="100"
+                  stroke-dasharray="100"
+                  stroke-dashoffset="100"
+                />
+                <defs>
+                  <linearGradient id="weightGaugeGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+                    <stop offset="0%" stop-color="#1a5fd4" />
+                    <stop offset="100%" stop-color="#5ca0ff" />
+                  </linearGradient>
+                </defs>
+                <polygon class="weight-gauge-pointer" points="118,18 122,18 120,8" fill="#ff5c5c" />
+                <line x1="120" y1="18" x2="120" y2="36" stroke="#ff5c5c" stroke-width="2" />
+              </svg>
+            </div>
+            <div class="weight-measure-tip-card">
+              <span class="weight-measure-tip-card__badge" aria-hidden="true">i</span>
+              <ul class="weight-measure-tip-list">
+                <li>站在转台上，双手垂放，自然站立</li>
+                <li>保持静止</li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="weight-phase weight-phase--gauge weight-phase--measuring" data-weight-phase-panel="gauge-measuring" hidden>
+            <div class="weight-measure-visual weight-measure-visual--gauge">
+              <svg class="weight-gauge-svg weight-gauge-svg--active" viewBox="0 0 240 140" aria-hidden="true">
+                <path
+                  class="weight-gauge-track"
+                  d="M 28 118 A 92 92 0 0 1 212 118"
+                  fill="none"
+                  stroke="rgba(255,255,255,0.12)"
+                  stroke-width="10"
+                  stroke-linecap="round"
+                />
+                <path
+                  class="weight-gauge-fill weight-gauge-fill--animate"
+                  d="M 28 118 A 92 92 0 0 1 212 118"
+                  fill="none"
+                  stroke="url(#weightGaugeGrad2)"
+                  stroke-width="10"
+                  stroke-linecap="round"
+                  pathLength="100"
+                  stroke-dasharray="100"
+                  stroke-dashoffset="100"
+                />
+                <defs>
+                  <linearGradient id="weightGaugeGrad2" x1="0%" y1="0%" x2="100%" y2="0%">
+                    <stop offset="0%" stop-color="#1a5fd4" />
+                    <stop offset="100%" stop-color="#5ca0ff" />
+                  </linearGradient>
+                </defs>
+                <polygon class="weight-gauge-pointer" points="118,18 122,18 120,8" fill="#ff5c5c" />
+                <line x1="120" y1="18" x2="120" y2="36" stroke="#ff5c5c" stroke-width="2" />
+              </svg>
+            </div>
+            <div class="weight-measure-tip-card">
+              <span class="weight-measure-tip-card__badge" aria-hidden="true">i</span>
+              <ul class="weight-measure-tip-list">
+                <li>站在转台上，双手垂放，自然站立</li>
+                <li>保持静止</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+    <script src="./shared.js"></script>
+  </body>
+</html>

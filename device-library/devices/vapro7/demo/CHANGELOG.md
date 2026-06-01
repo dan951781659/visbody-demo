@@ -1,5 +1,99 @@
 # VAPro7 Demo 变更记录
 
+## v1.9.2（WellnessHub 配置 Demo：重启后生效提示）
+
+- **`wellnesshub-measurement-config-demo.html`**：页头常驻说明「量产须重启体测设备后生效」；保存成功 Toast 补充量产与本 Demo 的差异提示。
+- **综合 PRD v1.3.4**：§7.7.2 设备侧生效时机、后台必带提示文案；§7.9 / §16 / §17 / §15.3 同步；删除「清除覆盖」二次确认建议。
+
+---
+
+## v1.9.1（完成页空闲 20s · 下一项顺序与首页一致）
+
+- **`standard-next-step.html`**：主链路完成页增加「首次点击后 **20 秒**无操作默认继续下一项」空闲底栏（`data-idle-default-next` 等，与 `setupFinishAutoAdvance` 一致）。
+- **`standard-next-step-touch.html`**：空闲倒计时统一为 **20** 秒。
+- **`shared.js`**：`resolveFinishOrderKeys` / `homeTileKeysToFinishOrderKeys`；有 `homeMeasurementOrderKeys` 时「继续下一项」顺序与首页卡片顺序一致；`DEMO_VERSION_FALLBACK` **1.9.1**。
+- **文档**：`PRD-综合测量与WellnessHub配置.md` v1.3.3、`PRD.md` §9.1 首页顺序说明。
+
+---
+
+## v1.9.0（结束测量支路 · B1 互斥 · 扫码页）
+
+- **结束测量主链路**：`standard-next-step.html`（及触控版、结果方案三）「结束测量」→ `report-scan-login.html`（扫码绑定，不可跳过）→ `standard-generating.html`（人体三维模型）→ `report-detail.html`（报告详情，**无**与扫码页重复的报告二维码）。
+- **`shared.js`**：`REPORT_URL` 默认改为 `./report-scan-login.html`（`openReport` 内置落地）；综合开启时**不再**与体态单项互斥（路 B / B1）；互斥仍约束综合与身体成分、体围单项。
+- **WellnessHub 测量配置 Demo**：互斥与首页/下发 payload 与 B1 一致；预览区增加设备端结束测量顺序说明。
+- **文档**：`PRD-综合测量与WellnessHub配置.md` v1.2、`PRD.md` §9.1 / §10。
+
+---
+
+## v1.8.6（设备页 section-label）
+
+- **设备 Demo**：凡位于 `section.device` 内的 `.section-label` 一律隐藏（如「专业测量 · 体态测量」「完整测量」等）；`index.html` 总览等非设备区仍保留顶注样式。
+
+---
+
+## v1.8.5（项目选择无 idle 回待机）
+
+- **测量项目选择**：移除 `setupMeasureSelectIdle` 及 `data-measure-select-idle` 等属性；不再出现「N 秒后返回首页」底栏，也不再静默定时跳转待机。
+
+---
+
+## v1.8.4（首页卡 · 身体成分入口 · 身高确认 · 去掉返回倒计时文案）
+
+- **测量项目选择**：去掉顶栏「手势或点击选择」；大卡文案区顶对齐、压缩留白，插图区改为上对齐。
+- **身体成分单项**：首页入口改为先进 `standard-user-prep.html`（测量准备），再进 `standard-bodycomp-prep.html`。
+- **身高确认**（`height-confirm.html`）：主按钮「确认设置」；cm 输入与 ±；**20 秒无操作**自动进入 `standard-next-step`；去掉「N 秒无操作返回首页」提示；标题与状态栏为「身高确认」；读数区下方提示输入方式。
+- **全局**：去掉项目选择底栏、体重结果页等处的「N 秒（无操作）返回首页」**文案与进度条**；体重结果页改为仅手动「立即返回」。（项目选择的静默回待机已在 v1.8.5 完全移除。）
+
+---
+
+## v1.8.3（待机体重全自动 · 结果精简）
+
+- **待机体重测量**：三态仍按时间线自动切换，无需底部按钮与「N 秒后将结束测量」会话条；读数动画结束后自动进结果页。
+- **体重结果页**：仅保留体重数值与测量时间；移除测量方式、数据说明、与上次对比及副文案；顶栏去掉「身体成分围度测量」链。
+
+---
+
+## v1.8.2（手动跳页 · 体重三态 · 结果页）
+
+- **Demo 默认手动换页**：`isDemoManualAdvance()`；URL `?demoAuto=1` 时站姿页恢复全自动 Toast 并跳转。
+- **站上转台**（`standard-bodycomp-prep.html`）：识别通过后需第一次点「下一步」播放身高/体重 Toast，第二次点「继续测量」进扶手；`data-anthropometry-next-btn` 替代 `data-demo-next`。
+- **测量项目选择**：手势静止不再自动 `click` 卡片，须手动点击。
+- **待机体重测量**：三态 UI（站转台 / 表盘 / 读数动画）；会话与手动进结果在 v1.8.3 改为全自动并去掉底部会话条。
+- **体重结果页**：大号数值 + 多信息卡（v1.8.3 起仅体重与测量时间）。
+- **状态**：`lastStandaloneWeightAt`（ISO 时间戳）。
+
+---
+
+## v1.8.1（交互链路 · 设置合并 · Demo 往返）
+
+- **待机 → 项目选择**：透明全屏 `<a>` 兜底 + 可点击层叠；无项目时待机提示。
+- **设备设置持久化**：`height*` / `weightStandalone` / `voice` / `bodyCompositionPrep` 以 localStorage 覆盖陈旧 URL；`patchState` 同步 `replaceState`；`localStorage` 不可用时内存兜底。
+- **统一设置页**：`settings.html` 分组（测量能力 / 测量流程 / 系统）；`settings-modes.html` 跳转至 `settings.html#measurement-flow`。
+- **Demo 总览**：`returnTo=./index.html`、顶栏 `data-back-link`、`navigateToTarget` 保留 `returnTo`。
+
+---
+
+## v1.8.0（待机 · 测量项目大卡 · 身高/体重 · 设备设置）
+
+- **待机页** `standby.html`：VISBODY 风格；时钟；可选「体重测量」入口（`weightStandaloneEnabled`）。
+- **测量项目选择** `home.html`：真机风大卡（标题/利益描述/动作提示/剪影）；手势静止 2 秒或点击；60 秒无操作回待机。
+- **转台采集**：`standard-bodycomp-prep.html` 识别通过后 Toast「身高测量完成」「体重测量已完成」，**手动点击**进入下一步（`?demoAuto=1` 时全自动）。
+- **身高延后确认**：设置 `heightConfirmRequired` 开启时，测量结束先进 `height-confirm.html` 再进完成页。
+- **设备设置**：`settings.html` 分页壳 + `settings-height.html`（身高测量/确认/显示）+ 体重待机入口开关。
+- **独立体重**：`weight-standalone-measuring.html` → 结果页 30 秒回待机。
+- **状态键**：`heightMeasurementEnabled`、`heightConfirmRequired`、`heightResultVisible`、`weightStandaloneEnabled`、`sessionHeightCm`、`sessionWeightKg`。
+
+---
+
+## v1.7.0（首页 IA · 动态实验室 · 准备页 · 倒计时）
+
+- **首页**：同级平铺主项目（综合、体态、体成分体围、体围、动态实验室、平衡）；移除单项测量与快捷嵌套卡；2 列紧凑网格。
+- **动态实验室**：肩+颈合并为 1 个主入口；子项可分别启用，仅一项时直达准备页，两项时进分项页。
+- **测量准备页**：2×2 图文准备网格；手势左右手说明；识别通过后自动跳转。
+- **倒计时页**：移除 section-label 与「倒计时结束请点击下一步」提示文案。
+
+---
+
 ## v1.6.1（站姿页 · 脚印对准电极片示意图）
 
 - **站姿识别页**：`standard-bodycomp-prep.html` 由失效四宫格改为单主视觉 `live-stage`，展示转台脚印与电极片对准示意。

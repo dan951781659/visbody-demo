@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>身高确认</title>
+    <link rel="stylesheet" href="./shared.css" />
+  </head>
+  <body>
+    <main class="device-stage">
+      <section
+        class="device device--height-confirm"
+        data-height-confirm-page
+        data-auto-advance-seconds="20"
+      >
+        <div class="status-bar"><span>18:32</span><span>身高确认</span></div>
+        <div class="topbar">
+          <a class="back-link" href="./standard-measuring.html" data-stateful-link="./standard-measuring.html">← 返回</a>
+        </div>
+        <h1 class="screen-title">身高确认</h1>
+        <p class="screen-subtitle">测量成功！身高数值可进行手动调整。</p>
+
+        <div class="height-adjust-panel">
+          <button type="button" class="height-adjust-btn" data-height-minus aria-label="减少身高">−</button>
+          <div class="height-adjust-value">
+            <div class="height-adjust-editable" data-height-editable-wrap>
+              <input
+                id="height-demo-input"
+                type="number"
+                class="height-adjust-inline-input"
+                data-height-input
+                min="130"
+                max="200"
+                step="1"
+                inputmode="numeric"
+                autocomplete="off"
+                aria-describedby="height-input-hint"
+              />
+              <span class="height-adjust-unit" aria-hidden="true">cm</span>
+            </div>
+          </div>
+          <button type="button" class="height-adjust-btn" data-height-plus aria-label="增加身高">+</button>
+        </div>
+        <p id="height-input-hint" class="height-adjust-value-hint height-adjust-value-hint--below-readout">
+          您可以直接输入数字，或使用 −、+ 微调数值。
+        </p>
+
+        <div class="footer-hint">
+          <a class="button primary" href="./standard-next-step.html" data-height-confirm data-stateful-link="./standard-next-step.html">
+            确认设置
+          </a>
+        </div>
+      </section>
+    </main>
+    <script src="./shared.js"></script>
+  </body>
+</html>

@@ -1,0 +1,72 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>颈部测量中</title>
+    <link rel="stylesheet" href="./shared.css" />
+  </head>
+  <body>
+    <main class="device-stage">
+      <section
+        class="device device--measurement"
+        data-measuring-flow
+        data-measuring-duration="9200"
+        data-measuring-next="./single-result-neck.html"
+        data-voice-text="颈部测量中，请缓慢转头并保持稳定。"
+      >
+        <audio class="turntable-audio" data-turntable-audio preload="auto" loop playsinline hidden>
+          <source src="./assets/turntable-loop.wav" type="audio/wav" />
+        </audio>
+        <div class="status-bar"><span>18:32</span><span>测量中</span></div>
+        <div class="topbar">
+          <a class="back-link" href="./single-countdown-neck.html">← 返回</a>
+          <span class="text-link">颈部采集中</span>
+        </div>
+        <div class="section-label section-label--stack">
+          <span class="section-label__kicker">动态实验室</span>
+          <span class="section-label__title">颈部测量</span>
+        </div>
+        <h1 class="screen-title">请保持头颈稳定</h1>
+        <p class="screen-subtitle" data-live-voice>正在采集颈部活动度，请保持头部稳定。</p>
+        <div class="device-visual">
+          <div class="live-stage measuring-stage">
+            <div class="live-glow"></div>
+            <div class="live-status">
+              <span class="live-chip ok">姿态正确</span>
+              <span class="live-chip" data-measuring-chip>颈部采集中</span>
+            </div>
+            <div class="turntable-plate" aria-hidden="true"></div>
+            <div class="guide-line circle"></div>
+            <div class="human pose-neck measuring-human">
+              <div class="head"></div>
+              <div class="torso"></div>
+              <div class="limb arm left"></div>
+              <div class="limb arm right"></div>
+              <div class="limb leg left"></div>
+              <div class="limb leg right"></div>
+            </div>
+            <div class="scan-line"></div>
+            <div class="live-focus" data-measuring-focus>请缓慢转头</div>
+          </div>
+        </div>
+        <div class="progress-track"><div class="progress-fill" data-measuring-progress style="width:0%;"></div></div>
+        <div class="measurement-tips-carousel" data-tip-carousel data-tip-interval="2600">
+          <p class="measurement-tips-title">测量注意事项</p>
+          <p class="measurement-tip-item is-active" data-tip-item>请面向屏幕，保持肩部放松。</p>
+          <p class="measurement-tip-item" data-tip-item>转头时不要耸肩，避免影响识别结果。</p>
+          <p class="measurement-tip-item" data-tip-item>如有不适，请先暂停并重新调整姿势。</p>
+        </div>
+        <div class="footer-hint">
+          <div class="button-row">
+            <a class="button primary" href="./single-result-neck.html" data-action-link="noop" data-complete-group="singleNeck">查看颈部结果</a>
+          </div>
+          <div class="button-row" style="margin-top:12px">
+            <a class="button secondary" href="./single-measuring-neck.html?autoDetectMode=warning">姿势异常示例</a>
+          </div>
+        </div>
+      </section>
+    </main>
+    <script src="./shared.js"></script>
+  </body>
+</html>

@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>扫码登录</title>
+    <link rel="stylesheet" href="./shared.css" />
+  </head>
+  <body>
+    <main class="device-stage">
+      <section class="device device--scheme-three" data-report-scan-page>
+        <div class="status-bar"><span>18:32</span><span>扫码登录</span></div>
+        <div class="topbar">
+          <a class="back-link" href="./standard-next-step.html" data-stateful-link="./standard-next-step.html">← 返回</a>
+          <span class="text-link">绑定账号</span>
+        </div>
+        <h1 class="screen-title">请扫码登录</h1>
+        <p class="screen-subtitle">
+          须使用微信扫描下方二维码完成登录后，系统才能获取用户信息并继续生成<strong>人体三维模型</strong>与报告详情。生产环境<strong>不可跳过</strong>本步骤，亦无自动倒计时跳过。
+        </p>
+        <div class="qr-box" style="margin-top: 18px">
+          <strong>微信扫码登录</strong>
+          <div class="qr-wrap"><div class="qr"></div></div>
+        </div>
+        <p class="settings-group-hint" style="margin-top: 16px">
+          本页二维码与「报告详情」页原二维码为<strong>同一枚</strong>；报告详情页已不再展示二维码，避免重复扫码。
+        </p>
+        <div class="footer-hint" style="margin-top: 24px">
+          <div class="button-row">
+            <a
+              class="button primary"
+              href="./standard-generating.html"
+              data-stateful-link="./standard-generating.html"
+              >演示：已完成扫码并登录</a
+            >
+          </div>
+          <p class="settings-group-hint" style="margin-top: 10px">
+            以上为静态 Demo 专用按钮，用于模拟扫码成功；量产由扫码回调驱动跳转。
+          </p>
+        </div>
+      </section>
+    </main>
+    <script src="./shared.js"></script>
+  </body>
+</html>

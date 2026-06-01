@@ -9,11 +9,12 @@
   <body>
     <main class="device-stage">
       <section class="device device--countdown">
-        <div class="status-bar"><span>18:32</span><span>开始测量</span><span class="demo-version-badge" data-demo-version>v1.6.0</span></div>
+        <div class="status-bar"><span>18:32</span><span>开始测量</span></div>
         <div class="topbar">
           <a class="back-link" href="./standard-position.html" data-stateful-link="./standard-position.html">← 返回</a>
           <span class="text-link">请保持静止</span>
         </div>
+        <h1 class="screen-title">即将开始测量</h1>
         <div
           class="countdown-layout"
           data-stage-next="./standard-measuring.html"
@@ -34,16 +35,16 @@
             <p class="countdown-pose-caption">请保持：握住扶手，双臂约 45°，身体静止</p>
           </div>
           <div class="countdown-digit-block">
-            <div class="section-label">综合测量</div>
-            <h1 class="screen-title">3 秒后开始</h1>
-            <div class="headline countdown-seconds" data-stage-seconds>3</div>
-            <p class="screen-subtitle" data-stage-done-hint>请保持以上动作</p>
+            <div class="headline countdown-seconds" data-stage-seconds aria-label="倒计时秒数">3</div>
+            <p class="countdown-soon-caption">秒后开始</p>
+            <p class="screen-subtitle countdown-done-hint" data-stage-done-hint>请保持以上动作</p>
           </div>
           <div class="measurement-tips-carousel" data-tip-carousel data-tip-interval="2600">
             <p class="measurement-tips-title">测量注意事项</p>
-            <p class="measurement-tip-item is-active" data-tip-item>建议尽量空腹或饭后 2 小时测量。</p>
-            <p class="measurement-tip-item" data-tip-item>请穿紧身或轻薄衣物，避免厚重外套影响识别。</p>
-            <p class="measurement-tip-item" data-tip-item>运动或沐浴后请休息片刻再测量。</p>
+            <p class="measurement-tip-item is-active" data-tip-item>扎起头发，避免遮挡头颈与肩带区域。</p>
+            <p class="measurement-tip-item" data-tip-item>保持赤脚站立，足底贴合站板。</p>
+            <p class="measurement-tip-item" data-tip-item>尽量空腹或餐后满 2 小时再测量，数据更稳定。</p>
+            <p class="measurement-tip-item" data-tip-item>测量前避免剧烈运动；运动后请休息片刻再上转台。</p>
           </div>
         </div>
         <div class="footer-hint">

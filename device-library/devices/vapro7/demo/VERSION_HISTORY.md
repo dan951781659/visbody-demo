@@ -14,6 +14,57 @@
 
 ---
 
+## 2026-06-03 · v1.9.2（WellnessHub Demo：配置须重启提示 · PRD v1.3.4）
+
+- **`wellnesshub-measurement-config-demo.html`**：页头 `restart-hint`；保存 Toast 文案含「量产请重启设备 / Demo 请刷新设备端页」。
+- **`shared.js`**：`DEMO_VERSION_FALLBACK` **1.9.2**。
+- **文档**：`PRD-综合测量与WellnessHub配置.md` v1.3.4（§7.7.2 生效时机、§7.9 Demo 差异、`PRD.md` §9.1 一条）。
+
+---
+
+## 2026-06-02 · v1.9.1（完成页空闲 20s · 下一项与首页顺序对齐）
+
+- **`standard-next-step.html`** / **`standard-next-step-touch.html`**：空闲默认下一项 **20 秒**；主链路补 idle 底栏与 `data-idle-*`。
+- **`shared.js`**：`resolveFinishOrderKeys`、`getMeasurementOrder` 与 `homeMeasurementOrderKeys` 对齐；`DEMO_VERSION_FALLBACK` 1.9.1。
+- **文档**：综合 PRD v1.3.3、`PRD.md` §9.1。
+
+---
+
+## 2026-06-01 · v1.9.0（结束测量支路 · B1 互斥 · 扫码页）
+
+- **新页**：`report-scan-login.html`（扫码登录/绑定 → 链到模型生成）。
+- **链路**：`standard-next-step.html`、`standard-next-step-touch.html`、`结果方案三.html`「结束测量」→ 扫码页；`standard-generating.html` 顶栏返回扫码页；`report-detail.html` 无重复二维码。
+- **`shared.js`**：`REPORT_URL` → `report-scan-login.html`；综合 + 体态可并存；综合仍关身体成分/体围单项。
+- **`wellnesshub-measurement-config-demo.html`**：`COMPREHENSIVE_EXCLUSIVE_SINGLE_IDS`、互斥与 `toDevicePayload` / 预览文案与 B1 一致；预览底部增加结束测量顺序说明。
+- **文档**：`PRD-综合测量与WellnessHub配置.md` v1.2、`PRD.md`；`CHANGELOG.md`、`version.json` **v1.9.0**；`LOCAL-DEMO.md` 联调页列举。
+
+---
+
+## 2026-05-31 · v1.8.1（交互链路 · 设置合并 · Demo 往返）
+
+- **`shared.js`**：`DEVICE_PERSISTED_KEYS`、`loadState` 设备键覆盖 URL；`saveState` try/catch + 内存兜底；`patchState` 同步 `history.replaceState`；`appendReturnToFromPage`、`resolveDemoBackHref`、`data-back-link`；`navigateToTarget` 附加 `returnTo`；`setupMeasurementWarningState` 空节点保护。
+- **`standby.html` / `shared.css`**：全屏 `standby-home-hit` + `standby-tap-zone__surface` 点击穿透；Hub 无项目提示；页脚「返回 Demo 总览」。
+- **`settings.html`**：合并原 `settings-modes`（准备页、语音）；分组「测量能力 / 测量流程 / 系统」；`data-back-link`。
+- **`settings-height.html`**：返回链 `data-back-link` + `returnTo` 透传。
+- **`settings-modes.html`**：跳转 `settings.html#measurement-flow`。
+- **`index.html`**：`returnTo=./index.html` 与 `data-stateful-link`；移除独立「演示选项」入口。
+- **文档**：`PRD.md` §11/§12、`CHANGELOG.md`、`version.json`。
+
+---
+
+## 2026-05-29 · v1.7.0（首页 IA · 动态实验室 · 准备页 · 倒计时文案）
+
+- **`home.html`**：改为动态 `#home-measure-grid`；移除 VAPro7、单项测量、快捷嵌套卡。
+- **`shared.js`**：`dynamicLab` 主项目、`renderHomeMeasurementEntries`、`resolveDynamicLabEntryHref`；`setupPrepGestureAdvance` 识别后自动跳转；`completeStageDemo` 去掉结束提示文案；**`DEMO_VERSION_FALLBACK` 1.7.0**。
+- **`shared.css`**：`.home-measure-grid`、`.choice-card--compact`、`.prep-checklist-grid`。
+- **`single-select.html`**：改版为「动态实验室 · 请选择测量部位」。
+- **`standard-user-prep.html`**：2×2 图文准备网格 + 左右手手势说明 + 识别状态 chip。
+- **资源**：`assets/prep/*.svg`（4 项准备示意）。
+- **倒计时页**：`standard-countdown`、`pro-countdown`、`single-countdown-*` 移除 `section-label`。
+- **`index.html`** / **`version.json`**：导航与版本 **v1.7.0**。
+
+---
+
 ## 2026-05-27 · v1.6.1（站姿页 · 脚印对准电极片示意图）
 
 - **`standard-bodycomp-prep.html`**：移除 2×2 四宫格，改为与扶手/45° 页一致的单主视觉布局。

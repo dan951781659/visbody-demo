@@ -2,167 +2,20 @@
 <html lang="zh-CN">
   <head>
     <meta charset="UTF-8" />
+    <meta http-equiv="refresh" content="0; url=./settings.html#measurement-flow" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>测量设置</title>
+    <title>正在跳转…</title>
     <link rel="stylesheet" href="./shared.css" />
+    <script>
+      window.location.replace("./settings.html#measurement-flow");
+    </script>
   </head>
   <body>
     <main class="device-stage">
-      <section class="device device--settings">
-        <div class="status-bar">
-          <span>18:32</span>
-          <span>测量设置</span>
-          <span class="demo-version-badge" data-demo-version>v1.5.0</span>
-        </div>
-        <div class="topbar">
-          <a class="back-link" href="./index.html">← 返回评审入口</a>
-          <span class="text-link">设备配置</span>
-        </div>
-        <h1 class="screen-title">测量设置</h1>
-
-        <div class="config-list">
-          <section class="settings-group" aria-labelledby="settings-group-profile">
-            <h2 class="settings-group-title" id="settings-group-profile">门店测量方案</h2>
-            <div class="settings-group-body">
-              <div class="setting-card">
-                <div>
-                  <div class="card-title">快速应用方案</div>
-                  <div class="card-desc">先选预设再微调：标准综合 / 经典分体 / 综合+体态 / 自定义。</div>
-                </div>
-                <select class="setting-select" data-config-key="measurementProfile">
-                  <option value="comprehensive-default">标准综合（默认）</option>
-                  <option value="legacy-split">经典分体（含平衡）</option>
-                  <option value="comprehensive-posture">综合 + 体态</option>
-                  <option value="custom">自定义</option>
-                </select>
-              </div>
-            </div>
-          </section>
-
-          <section class="settings-group" aria-labelledby="settings-group-home">
-            <h2 class="settings-group-title" id="settings-group-home">首页测量入口</h2>
-            <div class="settings-group-body">
-              <div class="setting-card">
-                <div><div class="card-title">显示综合测量</div><div class="card-desc">首页显示综合测量主入口。</div></div>
-                <label class="toggle"><input type="checkbox" data-config-key="comprehensiveEnabled" /><span></span></label>
-              </div>
-              <div class="setting-card">
-                <div><div class="card-title">显示体态测量（专业测量）</div><div class="card-desc">首页显示体态测量卡片，保留「专业测量」标签。</div></div>
-                <label class="toggle"><input type="checkbox" data-config-key="postureModeEnabled" /><span></span></label>
-              </div>
-              <div class="setting-card">
-                <div><div class="card-title">显示体成分 + 体围</div><div class="card-desc">经典分体模式主入口，一次转台采集。</div></div>
-                <label class="toggle"><input type="checkbox" data-config-key="bodycompGirthModeEnabled" /><span></span></label>
-              </div>
-              <div class="setting-card">
-                <div><div class="card-title">显示体围测量</div><div class="card-desc">经典分体模式独立体围入口（Demo 占位）。</div></div>
-                <label class="toggle"><input type="checkbox" data-config-key="girthOnlyModeEnabled" /><span></span></label>
-              </div>
-              <div class="setting-card">
-                <div><div class="card-title">显示平衡测量</div><div class="card-desc">平衡已归入主测量模式，不再属于专项列表。</div></div>
-                <label class="toggle"><input type="checkbox" data-config-key="balanceModeEnabled" /><span></span></label>
-              </div>
-              <div class="settings-subgroup" aria-labelledby="settings-subgroup-single">
-                <h3 class="settings-subgroup-title" id="settings-subgroup-single">专项测量（肩/颈）</h3>
-                <p class="settings-subgroup-desc">控制单项列表、测量顺序池与首页快捷入口可选项。</p>
-                <div class="settings-subgroup-body">
-                  <div class="setting-card setting-card--nested">
-                    <div><div class="card-title">显示肩部测量</div><div class="card-desc">在单项列表与顺序池中可用。</div></div>
-                    <label class="toggle"><input type="checkbox" data-config-key="singleShoulderEnabled" /><span></span></label>
-                  </div>
-                  <div class="setting-card setting-card--nested">
-                    <div><div class="card-title">显示颈部测量</div><div class="card-desc">占位演示，在单项列表中可用。</div></div>
-                    <label class="toggle"><input type="checkbox" data-config-key="singleNeckEnabled" /><span></span></label>
-                  </div>
-                </div>
-                <p class="settings-group-hint">至少开启一项时，首页才显示「单项测量」入口。</p>
-              </div>
-            </div>
-          </section>
-
-          <section class="settings-group" aria-labelledby="settings-group-order">
-            <h2 class="settings-group-title" id="settings-group-order">测量项目顺序</h2>
-            <div class="settings-group-body">
-              <div class="setting-card setting-card--stack">
-                <div>
-                  <div class="card-title">推荐循环顺序</div>
-                  <div class="card-desc">
-                    拖拽调整顺序；可从下方添加主测量与专项。已关闭的项目不会进入推荐下一项。
-                  </div>
-                </div>
-                <ul class="order-sort-list" data-order-sort-list></ul>
-                <div class="order-pool" data-order-pool>
-                  <button type="button" class="button ghost" data-order-add="standard">+ 综合测量</button>
-                  <button type="button" class="button ghost" data-order-add="pro">+ 体态测量</button>
-                  <button type="button" class="button ghost" data-order-add="bodycompGirth">+ 体成分+体围</button>
-                  <button type="button" class="button ghost" data-order-add="girthOnly">+ 体围测量</button>
-                  <button type="button" class="button ghost" data-order-add="balance">+ 平衡测量</button>
-                  <button type="button" class="button ghost" data-order-add="singleShoulder">+ 肩部</button>
-                  <button type="button" class="button ghost" data-order-add="singleNeck">+ 颈部</button>
-                </div>
-                <div class="order-preview-inline">
-                  <div class="section-label">当前循环顺序</div>
-                  <div class="field" data-order-preview>综合测量 → 专业测量 → 肩部</div>
-                </div>
-              </div>
-            </div>
-          </section>
-
-          <section class="settings-group" aria-labelledby="settings-group-quick">
-            <h2 class="settings-group-title" id="settings-group-quick">首页快捷入口</h2>
-            <div class="settings-group-body">
-              <div class="setting-card">
-                <div>
-                  <div class="card-title">快捷单项</div>
-                  <div class="card-desc">在首页额外显示一个专项快捷卡；仅可选已开启的肩部/颈部。</div>
-                </div>
-                <select class="setting-select" data-config-key="homepageQuickSingleItem">
-                  <option value="none">不显示</option>
-                  <option value="shoulder">肩部测量</option>
-                  <option value="neck">颈部测量（占位）</option>
-                </select>
-              </div>
-            </div>
-          </section>
-
-          <section class="settings-group" aria-labelledby="settings-group-prep">
-            <h2 class="settings-group-title" id="settings-group-prep">综合测量准备</h2>
-            <div class="settings-group-body">
-              <div class="setting-card">
-                <div>
-                  <div class="card-title">显示测量准备页</div>
-                  <div class="card-desc">
-                    开启：测量准备页 → 站姿识别 → 扶手接触 → 手臂 45° → 倒计时 → 测量。关闭：跳过测量准备页，从站姿识别开始。
-                  </div>
-                </div>
-                <label class="toggle"><input type="checkbox" data-config-key="bodyCompositionPrepEnabled" /><span></span></label>
-              </div>
-            </div>
-          </section>
-
-          <section class="settings-group" aria-labelledby="settings-group-other">
-            <h2 class="settings-group-title" id="settings-group-other">播报与报告</h2>
-            <div class="settings-group-body">
-              <div class="setting-card setting-card--stack">
-                <div><div class="card-title">外链报告地址</div><div class="card-desc">留空则使用 Demo 内报告详情页。</div></div>
-                <input class="setting-input" type="url" data-config-key="reportExternalUrl" placeholder="https:// 或 ./report-detail.html" />
-              </div>
-              <div class="setting-card">
-                <div><div class="card-title">语音播报</div><div class="card-desc">关闭后 Demo 全站不播放语音。</div></div>
-                <label class="toggle"><input type="checkbox" data-config-key="voiceEnabled" /><span></span></label>
-              </div>
-            </div>
-          </section>
-        </div>
-
-        <div class="footer-hint">
-          <div class="button-row">
-            <a class="button primary" href="./home.html" data-stateful-link="./home.html">返回首页查看效果</a>
-            <a class="button secondary" href="./report-detail.html" data-stateful-link="./report-detail.html">查看报告详情</a>
-          </div>
-        </div>
-      </section>
+      <p style="padding: 24px; color: #8a9bb8; text-align: center">
+        测量流程设置已合并到「设备设置」。若未自动跳转，请
+        <a href="./settings.html#measurement-flow">点此打开设备设置</a>。
+      </p>
     </main>
-    <script src="./shared.js"></script>
   </body>
 </html>
