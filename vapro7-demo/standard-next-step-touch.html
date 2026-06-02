@@ -3,20 +3,19 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>完整测量已完成 · 触控优先</title>
+    <title>测量已完成</title>
     <link rel="stylesheet" href="./shared.css" />
   </head>
   <body>
     <main class="device-stage">
-      <section class="device device--scheme-three device--scheme-three-touch" data-voice-text="完整测量已完成，请触控选择下一步。">
-        <div class="status-bar"><span>18:32</span><span>测量完成</span><span class="demo-version-badge" data-demo-version>v1.5.0</span></div>
+      <section class="device device--scheme-three device--scheme-three-touch" data-voice-text="测量已完成。请触控选择下一步。">
+        <div class="status-bar"><span>18:32</span><span>测量完成</span></div>
         <div class="topbar">
           <a class="back-link" href="./standard-measuring.html">← 返回</a>
-          <span class="text-link">触控优先 · 方案 B</span>
+          <span class="text-link">测量完成</span>
         </div>
-        <div class="section-label">综合测量 · 方案 B</div>
         <div class="scheme-one-title">
-          <h1 class="screen-title">完整测量已完成</h1>
+          <h1 class="screen-title">测量已完成</h1>
         </div>
 
         <div class="scheme-three-summary" aria-label="本次已采集项">
@@ -32,7 +31,6 @@
             <div class="scheme-three-overlay" aria-hidden="true"></div>
             <div class="live-status">
               <span class="live-chip ok">取景预览</span>
-              <span class="live-chip">示意</span>
             </div>
             <span class="camera-corner tl"></span><span class="camera-corner tr"></span>
             <span class="camera-corner bl"></span><span class="camera-corner br"></span>
@@ -48,13 +46,13 @@
           data-finish-current="standard"
           data-idle-default-next="1"
           data-idle-start="on-first-click"
-          data-idle-seconds="18"
+          data-idle-seconds="20"
           data-countdown="3"
         >
           <div class="scheme-three-action-row scheme-three-action-row--touch">
             <a
               class="scheme-three-action-card"
-              href="./standard-generating.html"
+              href="./report-scan-login.html"
               data-choice-item
               data-choice-label="结束测量（查看报告）"
               data-finish-option="report"
@@ -75,18 +73,18 @@
           </div>
 
           <div class="scheme-one-weak scheme-one-weak--minimal">
-            <a href="./standard-next-step.html">返回方案 A · 手势引导主流程</a>
+            <a href="./standard-user-prep.html" data-action-link="start-session" data-standard-flow-entry>重新测量当前项目</a>
           </div>
 
           <div class="scheme-one-footer footer-hint scheme-three-idle-footer touch-footnote-wrap">
             <div class="auto-hint">
               <strong><span data-idle-label>空闲倒计时</span></strong>
-              <span class="count-badge" data-idle-countdown>18</span>
+              <span class="count-badge" data-idle-countdown>20</span>
             </div>
             <div class="auto-hint">
               <strong><span data-auto-prefix>空闲默认：</span><span data-auto-label>继续下一项测量</span></strong>
             </div>
-            <p class="touch-footnote">触控优先；取景为小窗示意。</p>
+            <p class="touch-footnote">长时间无操作将按默认选项继续。</p>
           </div>
         </div>
       </section>

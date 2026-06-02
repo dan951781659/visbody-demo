@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>颈部测量准备</title>
+    <link rel="stylesheet" href="./shared.css" />
+  </head>
+  <body>
+    <main class="device-stage">
+      <section
+        class="device device--guide"
+        data-auto-detect-next="./single-countdown-neck.html"
+        data-auto-detect-delay="2600"
+        data-voice-text="请缓慢转头，保持肩部稳定。"
+      >
+        <div class="status-bar"><span>18:32</span><span>颈部测量</span></div>
+        <div class="topbar">
+          <a class="back-link" href="./home.html" data-dynamic-lab-back data-stateful-link="./home.html">← 返回</a>
+          <span class="text-link">测量准备页</span>
+        </div>
+        <div class="section-label section-label--stack">
+          <span class="section-label__kicker">动态实验室</span>
+          <span class="section-label__title">颈部测量</span>
+        </div>
+        <h1 class="screen-title">请缓慢转头</h1>
+        <p class="screen-subtitle guide-caption">左右缓慢转头并保持肩部稳定，准备完成后进入倒计时。</p>
+        <div class="device-visual guide-visual">
+          <div class="live-stage guide-scene-wrap phase-stage-rails demo-click-zone">
+            <div class="camera-corner tl"></div><div class="camera-corner tr"></div><div class="camera-corner bl"></div><div class="camera-corner br"></div>
+            <div class="live-glow"></div>
+            <div class="live-status live-status--single"><span class="live-chip ok">姿态识别中</span></div>
+            <div class="guide-line circle"></div>
+            <div class="human pose-neck">
+              <div class="head"></div><div class="torso"></div>
+              <div class="limb arm left"></div><div class="limb arm right"></div>
+              <div class="limb leg left"></div><div class="limb leg right"></div>
+            </div>
+            <p class="guide-arm-hint">缓慢向左、向右转头，幅度不宜过大</p>
+            <div class="live-focus" data-auto-detect-status>正在识别头颈姿态...</div>
+          </div>
+        </div>
+        <div class="footer-hint guide-footer">
+          <div class="button-row">
+            <a class="button primary guide-phase-btn" href="./single-countdown-neck.html" data-demo-next="./single-countdown-neck.html" data-stateful-link="./single-countdown-neck.html">准备完成 · 进入倒计时</a>
+            <a class="button secondary" href="./single-prepare-neck.html?autoDetectMode=warning">姿势异常示例</a>
+          </div>
+        </div>
+      </section>
+    </main>
+    <script src="./shared.js"></script>
+  </body>
+</html>

@@ -3,69 +3,32 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>VAPro7 首页</title>
+    <title>测量项目</title>
     <link rel="stylesheet" href="./shared.css" />
   </head>
   <body>
     <main class="device-stage">
-      <section class="device device--home">
+      <section class="device device--home device--measure-select">
         <div class="status-bar">
           <span>18:32</span>
-          <span>网络正常 打印已连接</span>
+          <span>请站上转台</span>
         </div>
         <div class="topbar">
-          <a class="back-link" href="./index.html">← 评审入口</a>
-          <span class="text-link">请站上转台后操作</span>
+          <a class="back-link" href="./standby.html" data-stateful-link="./standby.html">← 首页</a>
         </div>
-        <div class="section-label">VAPro7</div>
-        <h1 class="screen-title">请选择测量项目</h1>
+        <h1 class="screen-title screen-title--measure-select">请按图示动作进入测量项目</h1>
 
-        <div class="choice-grid compact home-choice-grid" data-choice-group data-default-index="0">
-          <a
-            class="choice-card"
-            href="./standard-bodycomp-prep.html"
-            data-choice-item
-            data-choice-label="综合测量"
-            data-action-link="start-session"
-            data-standard-flow-entry
-          >
-            <div class="tag">推荐</div>
-            <div class="card-title">综合测量</div>
-            <div class="card-desc">综合测量：体重、体成分、围度、身高、体态一次出结果。</div>
-          </a>
-          <a
-            class="choice-card"
-            href="./pro-prepare.html"
-            data-choice-item
-            data-choice-label="体态测量"
-            data-show-if="proModeEnabled"
-          >
-            <div class="tag tag--tier">专业测量</div>
-            <div class="card-title">体态测量</div>
-            <div class="card-desc">IPose：双手自然垂放，减少上肢代偿与遮挡，体态结果更准。</div>
-          </a>
+        <div
+          class="measure-select-stack"
+          data-home-measure-grid
+          data-choice-group
+          data-default-index="0"
+          data-gesture-hold-ms="2000"
+        ></div>
 
-          <div class="home-entry-group home-entry-group--single" data-show-if-any-single>
-            <a class="choice-card" href="./single-select.html" data-choice-item data-choice-label="单项测量">
-              <div class="card-title">单项测量</div>
-              <div class="card-desc">按部位测量；Demo 仅肩部可走完整流程。</div>
-            </a>
-            <a class="choice-card choice-card--nested" href="#" data-choice-item data-choice-label="快捷单项" data-quick-item hidden>
-              <div class="tag">快捷</div>
-              <div class="card-title" data-quick-title>肩部测量</div>
-              <p class="card-meta">单项测量 · 快捷入口</p>
-              <div class="card-desc" data-quick-desc>抬手完成肩部活动测量。</div>
-            </a>
-          </div>
-        </div>
-
-        <div class="home-promo-block">
-          <a class="home-promo-slot" href="#" data-demo-placeholder aria-label="运营展示位（演示占位）">
-            <img src="./assets/home-promo.png" alt="" />
-          </a>
-          <p class="home-promo-schematic-caption">底部运营位示意图</p>
-          <img class="home-promo-schematic" src="./assets/home-promo-schematic.png" alt="首页底部运营位位置示意" />
-        </div>
+        <p class="settings-group-hint" data-show-if-no-home-tiles hidden>
+          当前未开启任何测量项目，请联系门店工作人员。
+        </p>
       </section>
     </main>
     <script src="./shared.js"></script>

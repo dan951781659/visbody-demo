@@ -14,6 +14,92 @@
 
 ---
 
+## 2026-06-03 · v1.9.4（四步准备：脚印并入清单 · 转台自动采 · 扶手语音 +3s）
+
+- **`standard-user-prep.html`** / **`shared.css`**：第 5 项脚印准备（`.prep-check-cell--wide`）；副文案「站上转台…」。
+- **`standard-bodycomp-prep.html`**：`data-anthropometry-auto`、`turntable-figure.svg`、隐藏底部按钮。
+- **`shared.js`**：`speakTextThen`、`data-voice-advance-*`、`setupVoice` 与 `[data-auto-detect-next]` 去重；转台状态「即将进入扶手准备」；`DEMO_VERSION_FALLBACK` 1.9.4。
+- **`standard-grip-prep.html`** / **`standard-position.html`** / **`assets/bodycomp-prep/hand-grip-metal.svg`**。
+- **`PRD.md`**、**`PRD-综合测量与WellnessHub配置.md`** v1.3.6、**`CHANGELOG.md`**、**`index.html`** 注释、**`standard-weight.html`** 按钮文案。
+
+---
+
+## 2026-06-03 · v1.9.3（青少年成长报告 · youthGrowthReport）
+
+- **`wellnesshub-measurement-config-demo.html`** / **`shared.js`** / **`report-detail.html`**：`youthGrowthReport` 显隐与预览；`DEMO_VERSION_FALLBACK` 1.9.3。
+- **文档**：综合 PRD v1.3.5 §7.5、`PRD.md` §9.1。
+
+---
+
+## 2026-06-03 · v1.9.2（WellnessHub Demo：配置须重启提示 · PRD v1.3.4）
+
+- **`wellnesshub-measurement-config-demo.html`**：页头 `restart-hint`；保存 Toast 文案含「量产请重启设备 / Demo 请刷新设备端页」。
+- **`shared.js`**：`DEMO_VERSION_FALLBACK` **1.9.2**。
+- **文档**：`PRD-综合测量与WellnessHub配置.md` v1.3.4（§7.7.2 生效时机、§7.9 Demo 差异、`PRD.md` §9.1 一条）。
+
+---
+
+## 2026-06-02 · v1.9.1（完成页空闲 20s · 下一项与首页顺序对齐）
+
+- **`standard-next-step.html`** / **`standard-next-step-touch.html`**：空闲默认下一项 **20 秒**；主链路补 idle 底栏与 `data-idle-*`。
+- **`shared.js`**：`resolveFinishOrderKeys`、`getMeasurementOrder` 与 `homeMeasurementOrderKeys` 对齐；`DEMO_VERSION_FALLBACK` 1.9.1。
+- **文档**：综合 PRD v1.3.3、`PRD.md` §9.1。
+
+---
+
+## 2026-06-01 · v1.9.0（结束测量支路 · B1 互斥 · 扫码页）
+
+- **新页**：`report-scan-login.html`（扫码登录/绑定 → 链到模型生成）。
+- **链路**：`standard-next-step.html`、`standard-next-step-touch.html`、`结果方案三.html`「结束测量」→ 扫码页；`standard-generating.html` 顶栏返回扫码页；`report-detail.html` 无重复二维码。
+- **`shared.js`**：`REPORT_URL` → `report-scan-login.html`；综合 + 体态可并存；综合仍关身体成分/体围单项。
+- **`wellnesshub-measurement-config-demo.html`**：`COMPREHENSIVE_EXCLUSIVE_SINGLE_IDS`、互斥与 `toDevicePayload` / 预览文案与 B1 一致；预览底部增加结束测量顺序说明。
+- **文档**：`PRD-综合测量与WellnessHub配置.md` v1.2、`PRD.md`；`CHANGELOG.md`、`version.json` **v1.9.0**；`LOCAL-DEMO.md` 联调页列举。
+
+---
+
+## 2026-05-31 · v1.8.1（交互链路 · 设置合并 · Demo 往返）
+
+- **`shared.js`**：`DEVICE_PERSISTED_KEYS`、`loadState` 设备键覆盖 URL；`saveState` try/catch + 内存兜底；`patchState` 同步 `history.replaceState`；`appendReturnToFromPage`、`resolveDemoBackHref`、`data-back-link`；`navigateToTarget` 附加 `returnTo`；`setupMeasurementWarningState` 空节点保护。
+- **`standby.html` / `shared.css`**：全屏 `standby-home-hit` + `standby-tap-zone__surface` 点击穿透；Hub 无项目提示；页脚「返回 Demo 总览」。
+- **`settings.html`**：合并原 `settings-modes`（准备页、语音）；分组「测量能力 / 测量流程 / 系统」；`data-back-link`。
+- **`settings-height.html`**：返回链 `data-back-link` + `returnTo` 透传。
+- **`settings-modes.html`**：跳转 `settings.html#measurement-flow`。
+- **`index.html`**：`returnTo=./index.html` 与 `data-stateful-link`；移除独立「演示选项」入口。
+- **文档**：`PRD.md` §11/§12、`CHANGELOG.md`、`version.json`。
+
+---
+
+## 2026-05-29 · v1.7.0（首页 IA · 动态实验室 · 准备页 · 倒计时文案）
+
+- **`home.html`**：改为动态 `#home-measure-grid`；移除 VAPro7、单项测量、快捷嵌套卡。
+- **`shared.js`**：`dynamicLab` 主项目、`renderHomeMeasurementEntries`、`resolveDynamicLabEntryHref`；`setupPrepGestureAdvance` 识别后自动跳转；`completeStageDemo` 去掉结束提示文案；**`DEMO_VERSION_FALLBACK` 1.7.0**。
+- **`shared.css`**：`.home-measure-grid`、`.choice-card--compact`、`.prep-checklist-grid`。
+- **`single-select.html`**：改版为「动态实验室 · 请选择测量部位」。
+- **`standard-user-prep.html`**：2×2 图文准备网格 + 左右手手势说明 + 识别状态 chip。
+- **资源**：`assets/prep/*.svg`（4 项准备示意）。
+- **倒计时页**：`standard-countdown`、`pro-countdown`、`single-countdown-*` 移除 `section-label`。
+- **`index.html`** / **`version.json`**：导航与版本 **v1.7.0**。
+
+---
+
+## 2026-05-27 · v1.6.1（站姿页 · 脚印对准电极片示意图）
+
+- **`standard-bodycomp-prep.html`**：移除 2×2 四宫格，改为与扶手/45° 页一致的单主视觉布局。
+- **资源**：`scripts/generate-footprint-turntable-svg.py` → `assets/bodycomp-prep/footprint-turntable-alignment.svg`。
+- **`shared.css`**：`.bodycomp-prep-scene`、识别完成 `.is-aligned` 脉冲高亮。
+- **`shared.js`**：`setupAutoDetectAdvance` 识别完成时添加 `is-aligned`；`version.json` **v1.6.1**。
+
+---
+
+## 2026-05-27 · v1.6.0（综合测量流程重构 · 测量准备页）
+
+- **新页面**：`standard-user-prep.html`（测量准备页）、`standard-grip-prep.html`（扶手接触识别）。
+- **流程改造**：`standard-bodycomp-prep`（站姿）、`standard-position`（45°）、`standard-countdown`、`standard-measuring`、`standard-next-step`。
+- **`shared.js`**：`getStandardFlowEntryHref`、`setupAutoDetectAdvance`、`setupTipCarousel`、倒计时 `data-stage-auto-start`。
+- **设置/入口**：`settings-modes.html`、`index.html` 文案同步；`version.json` **v1.6.0**。
+
+---
+
 ## 2026-05-18 · v1.5.5（信息架构 · 倒计时姿势示意 · 体成分举手）
 
 - **体成分准备**：四宫格完成后 **举右手** 进入扶手（`setupPrepGestureAdvance`）；Demo 模拟键与弱链兜底。
@@ -25,12 +111,30 @@
 
 ---
 
+## 2026-05-27 · v1.6.0（综合测量流程重构 · 测量准备页）
+
+- **新页面**：`standard-user-prep.html`（测量准备页）、`standard-grip-prep.html`（扶手接触识别）。
+- **流程改造**：`standard-bodycomp-prep`（站姿）、`standard-position`（45°）、`standard-countdown`、`standard-measuring`、`standard-next-step`。
+- **`shared.js`**：`getStandardFlowEntryHref`、`setupAutoDetectAdvance`、`setupTipCarousel`、倒计时 `data-stage-auto-start`。
+- **设置/入口**：`settings-modes.html`、`index.html` 文案同步；`version.json` **v1.6.0**。
+
+---
+
 ## 2026-05-18 · v1.5.4（设置分组 · 单项独立显隐 · 准备流程串联）
 
 - **`settings-modes.html`**：去掉冗余 `section-label`；按 **首页入口 / 顺序 / 快捷 / 综合准备 / 播报报告** 分组；肩部、颈部、平衡各自开关（替代「显示单项测量」总开关）。
 - **`shared.js`**：`singleShoulderEnabled` / `singleNeckEnabled` / `singleBalanceEnabled`；`isAnySingleEnabled`；快捷项与顺序池联动；**`DEMO_VERSION_FALLBACK` 1.5.4**。
 - **`standard-bodycomp-prep.html`**：完成四宫格后进入 **`standard-position.html`**（扶手），再进倒计时。
 - **`home.html` / `single-select.html`**：单项入口与分项卡片随开关显隐。
+
+---
+
+## 2026-05-27 · v1.6.0（综合测量流程重构 · 测量准备页）
+
+- **新页面**：`standard-user-prep.html`（测量准备页）、`standard-grip-prep.html`（扶手接触识别）。
+- **流程改造**：`standard-bodycomp-prep`（站姿）、`standard-position`（45°）、`standard-countdown`、`standard-measuring`、`standard-next-step`。
+- **`shared.js`**：`getStandardFlowEntryHref`、`setupAutoDetectAdvance`、`setupTipCarousel`、倒计时 `data-stage-auto-start`。
+- **设置/入口**：`settings-modes.html`、`index.html` 文案同步；`version.json` **v1.6.0**。
 
 ---
 

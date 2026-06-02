@@ -1,0 +1,137 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>测量准备</title>
+    <link rel="stylesheet" href="./shared.css" />
+  </head>
+  <body>
+    <main class="device-stage">
+      <section
+        class="device device--bodycomp-prep"
+        data-prep-gesture-advance="./standard-bodycomp-prep.html"
+        data-prep-exit="./home.html"
+        data-prep-auto-delay="2600"
+        data-prep-hold-ms="2000"
+        data-prep-manual-next
+        data-voice-text="请确认准备事项。举右手进入下一步，举左手退出测量。"
+      >
+        <div class="status-bar"><span>18:32</span><span>测量准备</span></div>
+        <div class="topbar">
+          <a class="back-link" href="./home.html" data-stateful-link="./home.html">← 返回</a>
+          <span class="text-link">测量准备</span>
+        </div>
+        <h1 class="screen-title screen-title--home">测量准备</h1>
+        <p class="screen-subtitle">请确认以下事项。举右手进入下一步，举左手退出测量。</p>
+
+        <div class="prep-checklist-grid" aria-label="测量准备事项">
+          <div class="prep-check-cell">
+            <img class="prep-check-visual" src="./assets/prep/hair-tied.svg" alt="" width="40" height="40" />
+            <p class="prep-check-label">扎起头发</p>
+          </div>
+          <div class="prep-check-cell">
+            <img class="prep-check-visual" src="./assets/prep/barefoot.svg" alt="" width="40" height="40" />
+            <p class="prep-check-label">保持赤脚</p>
+          </div>
+          <div class="prep-check-cell">
+            <img class="prep-check-visual" src="./assets/prep/fasting.svg" alt="" width="40" height="40" />
+            <p class="prep-check-label">空腹测量</p>
+          </div>
+          <div class="prep-check-cell">
+            <img class="prep-check-visual" src="./assets/prep/no-exercise.svg" alt="" width="40" height="40" />
+            <p class="prep-check-label">避免剧烈运动</p>
+          </div>
+          <div class="prep-check-cell prep-check-cell--wide">
+            <img
+              class="prep-check-visual"
+              src="./assets/bodycomp-prep/footprint-turntable-alignment.svg"
+              alt=""
+              width="40"
+              height="40"
+            />
+            <p class="prep-check-label">足底对准转台脚印，与电极片充分接触</p>
+          </div>
+        </div>
+
+        <div class="prep-gesture-block" aria-label="手势确认">
+          <div
+            class="gesture-ring-module"
+            data-gesture-ring
+            data-gesture-hand="both"
+            role="region"
+            aria-label="举手确认"
+          >
+            <div class="gesture-ring-row">
+              <div class="gesture-ring-stage" data-gesture-stage tabindex="0">
+                <div class="human pose-down" data-gesture-human aria-hidden="true">
+                  <div class="head"></div><div class="torso"></div>
+                  <div class="limb arm left"></div><div class="limb arm right"></div>
+                  <div class="limb leg left"></div><div class="limb leg right"></div>
+                </div>
+                <svg class="gesture-ring-svg" viewBox="0 0 200 220" aria-hidden="true" data-gesture-ring-svg>
+                  <circle
+                    class="gesture-ring-track"
+                    cx="142"
+                    cy="70"
+                    r="38"
+                    fill="none"
+                    stroke="rgba(255,255,255,0.14)"
+                    stroke-width="7"
+                  />
+                  <circle
+                    class="gesture-ring-progress"
+                    data-gesture-ring-progress
+                    cx="142"
+                    cy="70"
+                    r="38"
+                    fill="none"
+                    stroke="#2b7cff"
+                    stroke-width="7"
+                    stroke-linecap="round"
+                    transform="rotate(-90 142 70)"
+                    stroke-dasharray="238.76"
+                    stroke-dashoffset="238.76"
+                  />
+                </svg>
+              </div>
+              <div class="gesture-ring-callout">
+                <p class="gesture-ring-hold" data-gesture-hold-hint hidden>*请保持当前动作</p>
+                <p class="gesture-ring-bubble" data-gesture-bubble>请举手确认下方操作。</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="footer-hint finish-touch-footer prep-touch-footer" data-prep-choice-group data-choice-group data-default-index="1">
+          <div class="scheme-three-action-row">
+            <a
+              class="scheme-three-action-card"
+              href="./home.html"
+              data-stateful-link="./home.html"
+              data-prep-option="exit"
+              data-choice-item
+              data-choice-label="退出测量"
+            >
+              <strong>退出测量</strong>
+              <span>返回测量项目</span>
+            </a>
+            <a
+              class="scheme-three-action-card"
+              href="./standard-bodycomp-prep.html"
+              data-stateful-link="./standard-bodycomp-prep.html"
+              data-demo-next="./standard-bodycomp-prep.html"
+              data-prep-option="next"
+              data-choice-item
+              data-choice-label="进入下一步"
+            >
+              <strong>进入下一步</strong>
+              <span>站上转台，开始身高与体重采集</span>
+            </a>
+          </div>
+        </div>
+      </section>
+    </main>
+    <script src="./shared.js"></script>
+  </body>
+</html>

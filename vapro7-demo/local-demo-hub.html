@@ -1,0 +1,99 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>本地联调入口 · VAPro7 + WellnessHub Demo</title>
+    <style>
+      :root {
+        color-scheme: light dark;
+        font-family: system-ui, -apple-system, "Segoe UI", Roboto, "PingFang SC", sans-serif;
+        line-height: 1.5;
+      }
+      body {
+        margin: 0;
+        padding: 24px 20px 48px;
+        max-width: 640px;
+        margin-inline: auto;
+      }
+      h1 {
+        font-size: 1.25rem;
+        margin: 0 0 8px;
+      }
+      .lead {
+        margin: 0 0 20px;
+        color: #555;
+        font-size: 0.95rem;
+      }
+      .note {
+        padding: 12px 14px;
+        border-radius: 10px;
+        background: #f3ecff;
+        border: 1px solid #dcc9f5;
+        font-size: 0.9rem;
+        margin-bottom: 24px;
+      }
+      .note strong {
+        display: block;
+        margin-bottom: 6px;
+      }
+      section {
+        margin-bottom: 28px;
+      }
+      section h2 {
+        font-size: 1rem;
+        margin: 0 0 10px;
+      }
+      ul {
+        margin: 0;
+        padding-left: 1.15rem;
+      }
+      li {
+        margin: 8px 0;
+      }
+      a {
+        color: #5b2db3;
+        font-weight: 600;
+      }
+      code {
+        font-size: 0.88em;
+        padding: 2px 6px;
+        border-radius: 6px;
+        background: rgba(0, 0, 0, 0.06);
+      }
+    </style>
+  </head>
+  <body>
+    <h1>本地联调入口</h1>
+    <p class="lead">
+      本目录同时托管 <strong>VAPro7 设备端静态页</strong>与 <strong>WellnessHub「测量项目与报告配置」单页 Demo</strong>，请用<strong>同一协议、主机、端口</strong>访问（见 <code>LOCAL-DEMO.md</code>）。
+    </p>
+    <div class="note">
+      <strong>无需单独起第二个「管理后台服务」</strong>
+      在 <code>demo/</code> 下执行 <code>npx --yes serve . -l 5173</code> 后，下面两个入口已是同一站点；另开端口会导致 <code>localStorage</code> 与设备端不同源，联调会失效。
+    </div>
+
+    <section>
+      <h2>WellnessHub（门店后台 · Demo）</h2>
+      <ul>
+        <li><a href="./wellnesshub-measurement-config-demo.html">测量项目与报告配置</a>（<code>wellnesshub-measurement-config-demo.html</code>）</li>
+      </ul>
+    </section>
+
+    <section>
+      <h2>VAPro7 设备端（Demo）</h2>
+      <ul>
+        <li><a href="./index.html">入口（默认进待机）</a></li>
+        <li><a href="./standby.html">待机</a> · <a href="./home.html">项目选择</a></li>
+        <li><a href="./settings.html">设备设置</a></li>
+      </ul>
+    </section>
+
+    <section>
+      <h2>启动命令（终端）</h2>
+      <pre style="margin:0;padding:12px 14px;border-radius:10px;background:rgba(0,0,0,.06);overflow:auto;font-size:0.85rem">cd device-library/devices/vapro7/demo
+npx --yes serve . -l 5173</pre>
+      <p style="margin:10px 0 0;font-size:0.9rem;color:#555">本页地址示例：<code>http://127.0.0.1:5173/local-demo-hub.html</code></p>
+    </section>
+  </body>
+</html>

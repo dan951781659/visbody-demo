@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>综合测量中</title>
+    <title>测量中</title>
     <link rel="stylesheet" href="./shared.css" />
   </head>
   <body>
@@ -13,7 +13,7 @@
         data-measuring-flow
         data-measuring-duration="10000"
         data-measuring-next="./standard-next-step.html"
-        data-voice-text="测量中，请不要移动。"
+        data-voice-text="测量中，请保持静止。"
       >
         <audio
           class="turntable-audio"
@@ -25,14 +25,13 @@
         >
           <source src="./assets/turntable-loop.wav" type="audio/wav" />
         </audio>
-        <div class="status-bar"><span>18:32</span><span>测量中</span><span class="demo-version-badge" data-demo-version>v1.5.0</span></div>
+        <div class="status-bar"><span>18:32</span><span>测量中</span></div>
         <div class="topbar">
           <a class="back-link" href="./standard-countdown.html">← 返回</a>
           <span class="text-link">转台旋转中</span>
         </div>
-        <div class="section-label">综合测量</div>
         <h1 class="screen-title">请保持静止</h1>
-        <p class="screen-subtitle" data-live-voice>转台旋转采集中，请不要移动。</p>
+        <p class="screen-subtitle" data-live-voice>转台旋转采集中，请保持身体稳定。</p>
         <div class="device-visual">
           <div class="live-stage measuring-stage">
             <div class="live-glow"></div>
@@ -55,18 +54,18 @@
           </div>
         </div>
         <div class="progress-track"><div class="progress-fill" data-measuring-progress style="width:0%;"></div></div>
-        <div
-          class="footer-hint auto-hint-clickable demo-click-zone measuring-footer-interrupt"
-          data-measuring-footer
-          role="button"
-          tabindex="0"
-        >
-          <strong>可随时点击打断演示 · 跳过等待并进入下一步</strong>
-          <span class="count-badge measuring-footer-badge">→</span>
+        <div class="measurement-tips-carousel" data-tip-carousel data-tip-interval="2600">
+          <p class="measurement-tips-title">测量注意事项</p>
+          <p class="measurement-tip-item is-active" data-tip-item>扎起头发，避免遮挡头颈与肩带区域。</p>
+          <p class="measurement-tip-item" data-tip-item>保持赤脚站立，足底贴合站板。</p>
+          <p class="measurement-tip-item" data-tip-item>尽量空腹或餐后满 2 小时再测量，数据更稳定。</p>
+          <p class="measurement-tip-item" data-tip-item>测量前避免剧烈运动；运动后请休息片刻再上转台。</p>
         </div>
-        <p class="measuring-touch-footnote">
-          <a href="./standard-next-step-touch.html">对照打开 · 方案 B 触控优先演示页</a>
-        </p>
+        <div class="footer-hint">
+          <div class="button-row">
+            <a class="button primary" href="./standard-next-step.html" data-demo-next="./standard-next-step.html" data-stateful-link="./standard-next-step.html" data-measuring-next>下一步</a>
+          </div>
+        </div>
       </section>
     </main>
     <script src="./shared.js"></script>

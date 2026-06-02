@@ -1,0 +1,2460 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>WellnessHub - 编辑门店 - 设备配置</title>
+  <style>
+    :root {
+      --bg: #f6f8fc;
+      --panel: #ffffff;
+      --panel-soft: #f8fbff;
+      --line: #e5ebf2;
+      --line-strong: #d9e3ef;
+      --text: #1f2733;
+      --muted: #667085;
+      --blue: #2f6bff;
+      --blue-weak: #e8f1ff;
+      --green: #12a36d;
+      --green-weak: #e8f8ef;
+      --red: #d23d3d;
+      --red-weak: #fff0f0;
+      --amber: #d97706;
+      --amber-weak: #fff6e9;
+      --shadow: 0 14px 34px rgba(17, 32, 56, 0.06);
+      --shadow-soft: 0 8px 20px rgba(17, 32, 56, 0.05);
+      --radius: 16px;
+    }
+    * { box-sizing: border-box; }
+    html, body { height: 100%; }
+    body {
+      margin: 0;
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+      color: var(--text);
+      background:
+        radial-gradient(circle at 100% 0%, rgba(47, 107, 255, 0.08), transparent 20%),
+        radial-gradient(circle at 100% 100%, rgba(163, 128, 255, 0.05), transparent 18%),
+        linear-gradient(180deg, #fbfcff 0%, #f5f8fd 100%);
+    }
+    button, input, select { font: inherit; }
+    button {
+      border: 0;
+      background: none;
+      cursor: pointer;
+    }
+    .app {
+      min-height: 100vh;
+      display: flex;
+    }
+    .sidebar {
+      width: 214px;
+      background: #fff;
+      border-right: 1px solid rgba(15, 23, 42, 0.08);
+      padding: 16px 0;
+      display: flex;
+      flex-direction: column;
+    }
+    .brand {
+      padding: 8px 20px 14px;
+      border-bottom: 1px solid var(--line);
+    }
+    .brand-logo {
+      font-size: 30px;
+      font-weight: 800;
+      letter-spacing: 0.04em;
+      color: #101828;
+      line-height: 1;
+    }
+    .brand-sub {
+      margin-top: 10px;
+      font-size: 12px;
+      color: #c3c9d4;
+      white-space: nowrap;
+    }
+    .nav {
+      padding: 10px 0;
+      overflow: auto;
+    }
+    .nav-group {
+      padding: 10px 0 4px;
+    }
+    .nav-title {
+      padding: 0 20px 8px;
+      font-size: 13px;
+      color: #5c6678;
+    }
+    .nav-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px 20px;
+      color: #5b6679;
+      font-size: 13px;
+      border-left: 3px solid transparent;
+    }
+    .nav-item::before {
+      content: "";
+      width: 16px;
+      height: 16px;
+      border-radius: 5px;
+      border: 1.6px solid currentColor;
+      opacity: 0.55;
+      flex: 0 0 auto;
+    }
+    .nav-item.active {
+      background: linear-gradient(90deg, rgba(47, 107, 255, 0.08), rgba(47, 107, 255, 0.02));
+      color: var(--blue);
+      border-left-color: var(--blue);
+      font-weight: 600;
+    }
+    .nav-item.active::before {
+      opacity: 1;
+      border-color: var(--blue);
+    }
+    .nav-sep {
+      height: 1px;
+      margin: 12px 16px;
+      background: var(--line);
+    }
+    .nav-footer {
+      margin-top: auto;
+      padding: 14px 20px 8px;
+      border-top: 1px solid var(--line);
+      color: #94a0b2;
+      font-size: 12px;
+      line-height: 1.6;
+    }
+    .main {
+      flex: 1;
+      min-width: 0;
+      display: flex;
+      flex-direction: column;
+    }
+    .topbar {
+      position: relative;
+      height: 68px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 28px;
+      background: rgba(255, 255, 255, 0.82);
+      border-bottom: 1px solid rgba(15, 23, 42, 0.08);
+      backdrop-filter: blur(12px);
+    }
+    .topbar-center {
+      position: absolute;
+      left: 50%;
+      transform: translateX(-50%);
+      font-size: 17px;
+      font-weight: 700;
+      color: #111827;
+      letter-spacing: 0.02em;
+    }
+    .topbar-actions {
+      margin-left: auto;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      color: #1f2937;
+      font-size: 13px;
+    }
+    .topbar-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      color: #111827;
+    }
+    .topbar-chip .arrow {
+      font-size: 10px;
+      color: #6b7280;
+    }
+    .workspace {
+      width: 100%;
+      max-width: 1320px;
+      margin: 0 auto;
+      padding: 18px 18px 22px;
+      display: grid;
+      gap: 18px;
+    }
+    .page-head {
+      display: flex;
+      align-items: flex-start;
+      gap: 18px;
+      padding: 4px 8px 0;
+    }
+    .back-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      color: #5d6778;
+      font-size: 13px;
+      margin-top: 4px;
+      text-decoration: none;
+    }
+    .page-title h1 {
+      margin: 0;
+      font-size: 24px;
+      line-height: 1.2;
+      letter-spacing: 0.01em;
+    }
+    .page-title p {
+      margin: 10px 0 0;
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.6;
+      max-width: 960px;
+    }
+    .tabs {
+      display: inline-flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      padding: 4px 8px 0;
+    }
+    .tab {
+      min-width: 180px;
+      height: 34px;
+      padding: 0 18px;
+      border-radius: 3px;
+      border: 1px solid var(--blue);
+      color: var(--blue);
+      background: #fff;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 13px;
+    }
+    .tab.active {
+      background: var(--blue);
+      color: #fff;
+      box-shadow: 0 8px 20px rgba(47, 107, 255, 0.18);
+    }
+    .editor-frame {
+      background: rgba(255, 255, 255, 0.72);
+      border: 1px solid rgba(15, 23, 42, 0.08);
+      border-radius: 18px;
+      box-shadow: var(--shadow);
+      padding: 18px;
+    }
+    .editor-shell {
+      max-width: 980px;
+      margin: 0 auto;
+      display: grid;
+      gap: 14px;
+    }
+    .editor-summary {
+      padding: 14px 16px;
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      background: linear-gradient(180deg, #fff 0%, #fbfdff 100%);
+      box-shadow: var(--shadow-soft);
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.7;
+    }
+    .editor-config {
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      background: linear-gradient(180deg, #fff 0%, #fbfdff 100%);
+      box-shadow: var(--shadow-soft);
+      padding: 16px 18px 18px;
+      display: grid;
+      gap: 14px;
+    }
+    .scope-bar {
+      display: grid;
+      gap: 10px;
+    }
+    .scope-row {
+      display: flex;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+    .scope-label {
+      font-size: 13px;
+      font-weight: 600;
+      color: #344054;
+      margin-right: 4px;
+    }
+    .segmented {
+      display: inline-flex;
+      border: 1px solid var(--line-strong);
+      border-radius: 12px;
+      overflow: hidden;
+      background: #fff;
+      box-shadow: inset 0 1px 0 rgba(255,255,255,0.82);
+    }
+    .segmented button {
+      min-width: 132px;
+      height: 38px;
+      padding: 0 18px;
+      color: #475467;
+      background: #fff;
+      border-right: 1px solid var(--line-strong);
+      transition: all 0.18s ease;
+    }
+    .segmented button:last-child { border-right: 0; }
+    .segmented button.active {
+      background: linear-gradient(180deg, #3b74ff 0%, var(--blue) 100%);
+      color: #fff;
+      font-weight: 600;
+    }
+    .scope-tip {
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.6;
+    }
+    .config-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 1.15fr) minmax(340px, 0.85fr);
+      gap: 14px;
+      align-items: start;
+    }
+    .panel {
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      background: #fff;
+      overflow: hidden;
+      box-shadow: 0 10px 24px rgba(17, 32, 56, 0.04);
+    }
+    .panel-head {
+      padding: 16px 16px 12px;
+      border-bottom: 1px solid var(--line);
+    }
+    .panel-head h3 {
+      margin: 0;
+      font-size: 16px;
+      line-height: 1.3;
+    }
+    .panel-head p {
+      margin: 8px 0 0;
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.6;
+    }
+    .panel-body {
+      padding: 14px 16px 16px;
+      display: grid;
+      gap: 12px;
+    }
+    .panel-body--detail {
+      min-height: 100%;
+      align-content: start;
+    }
+    .device-row {
+      display: flex;
+      flex-direction: column;
+      align-items: stretch;
+      gap: 10px;
+    }
+    .device-row[hidden] { display: none; }
+    .device-label {
+      font-size: 13px;
+      font-weight: 600;
+      color: #344054;
+    }
+    .device-unit-wrap {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+    .unit-group-title {
+      font-size: 12px;
+      font-weight: 650;
+      color: #475467;
+      letter-spacing: 0.02em;
+    }
+    .unit-group-chips {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      align-items: center;
+    }
+    .unit-group-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      padding-top: 2px;
+    }
+    .device-picker-toolbar {
+      display: grid;
+      gap: 10px;
+      margin-bottom: 4px;
+    }
+    .device-picker-filters {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      align-items: center;
+    }
+    .device-picker-filters input[type='search'] {
+      min-width: 200px;
+      flex: 1 1 220px;
+      height: 36px;
+      padding: 0 12px;
+      border: 1px solid var(--line-strong);
+      border-radius: 10px;
+      font-size: 13px;
+    }
+    .device-picker-filters select {
+      height: 36px;
+      padding: 0 10px;
+      border-radius: 10px;
+      border: 1px solid var(--line-strong);
+      font-size: 13px;
+      min-width: 160px;
+    }
+    .device-picker-meta {
+      font-size: 12px;
+      color: #667085;
+      line-height: 1.5;
+    }
+    .device-picker-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      align-items: center;
+    }
+    .device-picker-list {
+      max-height: min(320px, 42vh);
+      overflow-y: auto;
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      background: #fbfcfe;
+    }
+    .device-picker-row {
+      display: grid;
+      grid-template-columns: 36px 1fr;
+      gap: 10px;
+      align-items: center;
+      padding: 10px 12px;
+      border-bottom: 1px solid var(--line);
+      cursor: pointer;
+      font-size: 13px;
+    }
+    .device-picker-row:last-child {
+      border-bottom: 0;
+    }
+    .device-picker-row:hover {
+      background: rgba(47, 107, 255, 0.04);
+    }
+    .device-picker-row.is-selected {
+      background: rgba(231, 240, 255, 0.55);
+    }
+    .device-picker-row-sn {
+      font-weight: 650;
+      color: #1f2733;
+    }
+    .device-picker-row-sub {
+      font-size: 11px;
+      color: #667085;
+      margin-top: 2px;
+    }
+    .device-picker-row-check {
+      width: 22px;
+      height: 22px;
+      border-radius: 6px;
+      border: 2px solid var(--line-strong);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 11px;
+      font-weight: 700;
+    }
+    .device-picker-row.is-selected .device-picker-row-check {
+      border-color: var(--blue);
+      background: var(--blue);
+      color: #fff;
+    }
+    .device-picker-pager {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      margin-top: 10px;
+      font-size: 12px;
+      color: #475467;
+      flex-wrap: wrap;
+    }
+    .device-picker-selected-strip {
+      margin-top: 8px;
+      padding: 8px 10px;
+      border-radius: 10px;
+      background: #f8fafc;
+      border: 1px solid var(--line);
+      font-size: 12px;
+      color: #344054;
+      max-height: 76px;
+      overflow-y: auto;
+      line-height: 1.45;
+    }
+    .chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      height: 34px;
+      padding: 0 12px;
+      border: 1px solid var(--line-strong);
+      border-radius: 999px;
+      background: #fff;
+      color: #344054;
+      font-size: 12px;
+      transition: all 0.18s ease;
+    }
+    .chip::before {
+      content: "";
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      border: 1.5px solid currentColor;
+      opacity: 0.45;
+    }
+    .chip.active {
+      border-color: rgba(47, 107, 255, 0.22);
+      background: rgba(231, 240, 255, 0.9);
+      color: var(--blue);
+    }
+    .chip.active::before {
+      background: var(--blue);
+      border-color: var(--blue);
+      opacity: 1;
+    }
+    .chip:hover { transform: translateY(-1px); }
+    .project-list,
+    .report-list {
+      display: grid;
+      gap: 10px;
+    }
+    .project-row,
+    .report-row {
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      background: #fff;
+      padding: 14px;
+      transition: all 0.18s ease;
+    }
+    .project-row { cursor: default; }
+    .project-row:hover,
+    .report-row:hover {
+      border-color: rgba(47, 107, 255, 0.24);
+      box-shadow: 0 6px 20px rgba(17, 32, 56, 0.06);
+      transform: translateY(-1px);
+    }
+    .report-top {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 12px;
+    }
+    .project-title,
+    .report-title {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+      font-size: 15px;
+      font-weight: 700;
+    }
+    .project-desc,
+    .report-desc {
+      margin: 8px 0 0;
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.7;
+    }
+    .project-meta {
+      margin-top: 12px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+    .project-group {
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      background: linear-gradient(180deg, rgba(248, 250, 252, 0.95) 0%, #fff 100%);
+      padding: 14px;
+      display: grid;
+      gap: 10px;
+    }
+    .project-group-header {
+      display: grid;
+      gap: 6px;
+      padding-bottom: 4px;
+      border-bottom: 1px dashed var(--line);
+    }
+    .project-group-title {
+      margin: 0;
+      font-size: 14px;
+      font-weight: 700;
+      color: #1d2939;
+      letter-spacing: 0.02em;
+    }
+    .project-group-desc {
+      margin: 0;
+      font-size: 12px;
+      line-height: 1.65;
+      color: var(--muted);
+    }
+    .project-group-meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      align-items: center;
+    }
+    .project-group-body {
+      display: grid;
+      gap: 10px;
+    }
+    .project-row--nested {
+      background: #fff;
+    }
+    .project-row--nested .project-title > span:first-child {
+      font-size: 14px;
+    }
+    .tag {
+      display: inline-flex;
+      align-items: center;
+      min-height: 24px;
+      padding: 0 9px;
+      border-radius: 999px;
+      font-size: 11px;
+      border: 1px solid var(--line);
+      color: #526071;
+      background: #f8fafc;
+    }
+    .tag.blue { color: var(--blue); background: var(--blue-weak); border-color: rgba(47, 107, 255, 0.12); }
+    .tag.green { color: var(--green); background: var(--green-weak); border-color: rgba(18, 163, 109, 0.12); }
+    .tag.red { color: var(--red); background: var(--red-weak); border-color: rgba(210, 61, 61, 0.12); }
+    .tag.gray { color: #667085; background: #f5f7fb; }
+    .tag.amber { color: var(--amber); background: var(--amber-weak); border-color: rgba(217, 119, 6, 0.12); }
+    .project-badge-row,
+    .report-control {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+    }
+    .switch {
+      position: relative;
+      width: 44px;
+      height: 24px;
+      border-radius: 999px;
+      border: 1px solid var(--line-strong);
+      background: #e9eef6;
+      display: inline-flex;
+      align-items: center;
+      padding: 0 2px;
+      transition: all 0.18s ease;
+      flex: 0 0 auto;
+    }
+    .switch::after {
+      content: "";
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      background: #fff;
+      box-shadow: 0 4px 12px rgba(15, 23, 42, 0.14);
+      transform: translateX(0);
+      transition: transform 0.18s ease, background 0.18s ease;
+    }
+    .switch.on {
+      background: var(--blue);
+      border-color: var(--blue);
+    }
+    .switch.on::after { transform: translateX(20px); }
+    .switch.disabled {
+      background: #edf1f7;
+      border-color: #dfe5ee;
+      opacity: 0.7;
+      cursor: not-allowed;
+    }
+    .switch.disabled::after { background: #fff; }
+    .report-row.disabled {
+      background: #f5f7fb;
+      border-color: #e8edf5;
+      opacity: 0.75;
+    }
+    .report-row.disabled .report-title {
+      color: #7b8798;
+      text-decoration: line-through;
+    }
+    .report-group {
+      display: grid;
+      gap: 10px;
+    }
+    .report-group + .report-group {
+      margin-top: 4px;
+      padding-top: 12px;
+      border-top: 1px dashed var(--line);
+    }
+    .report-group-title {
+      font-size: 12px;
+      font-weight: 700;
+      color: #475467;
+      letter-spacing: 0.02em;
+    }
+    .report-group-title-row {
+      display: flex;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-bottom: 2px;
+    }
+    .report-group-linked {
+      font-size: 11px;
+      font-weight: 600;
+    }
+    .preview-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 12px;
+    }
+    .preview-panel {
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      background: linear-gradient(180deg, #f8fbff 0%, #f3f7ff 100%);
+      padding: 14px;
+    }
+    .preview-panel__head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+    }
+    .preview-panel__head h4 {
+      margin: 0;
+      font-size: 14px;
+    }
+    .preview-panel__body {
+      display: grid;
+      gap: 10px;
+      margin-top: 12px;
+    }
+    .preview-card {
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      background: linear-gradient(180deg, #fbfdff 0%, #f4f8ff 100%);
+      padding: 14px;
+    }
+    .preview-card h4 {
+      margin: 0;
+      font-size: 14px;
+    }
+    .preview-card p {
+      margin: 8px 0 0;
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.6;
+    }
+    .preview-card__row {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 12px;
+    }
+    .preview-card__row p {
+      max-width: 100%;
+    }
+    .preview-section {
+      padding: 12px 0 0;
+      border-top: 1px solid rgba(15, 23, 42, 0.06);
+      display: grid;
+      gap: 8px;
+    }
+    .preview-section__title {
+      font-size: 12px;
+      color: #6b7280;
+      font-weight: 600;
+    }
+    .preview-badges {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+    .preview-chip {
+      display: inline-flex;
+      align-items: center;
+      min-height: 28px;
+      padding: 0 10px;
+      border-radius: 10px;
+      border: 1px solid var(--line);
+      font-size: 12px;
+      background: #fff;
+      color: #445164;
+    }
+    .preview-chip.visible {
+      background: rgba(232, 241, 255, 0.85);
+      color: var(--blue);
+      border-color: rgba(47, 107, 255, 0.18);
+    }
+    .preview-chip.hidden {
+      background: #f7f9fc;
+      color: #9aa5b5;
+      text-decoration: line-through;
+    }
+    .home-order-block {
+      margin-top: 12px;
+      padding-top: 12px;
+      border-top: 1px dashed var(--line);
+    }
+    .home-order-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      margin-bottom: 8px;
+      flex-wrap: wrap;
+    }
+    .home-order-list {
+      display: grid;
+      gap: 6px;
+    }
+    .home-order-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      padding: 8px 10px;
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      background: var(--panel-soft);
+      font-size: 13px;
+    }
+    .home-order-row-main {
+      min-width: 0;
+      flex: 1 1 auto;
+    }
+    .home-order-row-parts {
+      font-size: 11px;
+      color: #667085;
+      margin-top: 2px;
+      padding-left: 1.35em;
+    }
+    .home-order-row-actions {
+      display: flex;
+      gap: 6px;
+    }
+    .btn-tiny {
+      padding: 4px 10px;
+      border-radius: 8px;
+      border: 1px solid var(--line-strong);
+      background: #fff;
+      font-size: 12px;
+      color: #344054;
+      cursor: pointer;
+    }
+    .btn-tiny:hover:not(:disabled) {
+      border-color: rgba(47, 107, 255, 0.28);
+    }
+    .btn-tiny:disabled {
+      cursor: not-allowed;
+      opacity: 0.4;
+    }
+    .preview-empty {
+      border: 1px dashed #d5deea;
+      border-radius: 14px;
+      padding: 18px;
+      background: #fbfcfe;
+      color: #7d8798;
+      font-size: 13px;
+      line-height: 1.7;
+    }
+    .footer-actions {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      padding: 8px 0 2px;
+    }
+    .btn {
+      min-width: 150px;
+      height: 40px;
+      border-radius: 10px;
+      padding: 0 18px;
+      font-size: 14px;
+      transition: all 0.18s ease;
+    }
+    .btn.ghost {
+      background: #f0f4f9;
+      color: #475467;
+      border: 1px solid var(--line);
+    }
+    .btn.primary {
+      background: linear-gradient(180deg, #3b74ff 0%, #165dff 100%);
+      color: #fff;
+      box-shadow: 0 10px 22px rgba(47, 107, 255, 0.24);
+    }
+    .btn:hover { transform: translateY(-1px); }
+    .btn:active { transform: translateY(0); }
+    .toast {
+      position: fixed;
+      right: 24px;
+      bottom: 24px;
+      min-width: 240px;
+      max-width: 380px;
+      padding: 12px 14px;
+      border-radius: 14px;
+      background: rgba(17, 24, 39, 0.9);
+      color: #fff;
+      box-shadow: 0 16px 36px rgba(17, 24, 39, 0.26);
+      opacity: 0;
+      transform: translateY(14px);
+      pointer-events: none;
+      transition: all 0.2s ease;
+      z-index: 50;
+    }
+    .toast.show {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    .toast .title {
+      font-size: 13px;
+      font-weight: 700;
+      margin-bottom: 4px;
+    }
+    .toast .desc {
+      font-size: 12px;
+      line-height: 1.6;
+      color: rgba(255,255,255,0.78);
+    }
+    @media (max-width: 1180px) {
+      .config-grid {
+        grid-template-columns: 1fr;
+      }
+      .preview-panel__head {
+        align-items: flex-start;
+        flex-direction: column;
+      }
+    }
+    @media (max-width: 1280px) {
+      .sidebar { display: none; }
+      .topbar-center { position: static; transform: none; margin: 0 auto; }
+      .preview-grid { grid-template-columns: 1fr; }
+    }
+
+    .restart-hint {
+      margin: 12px 0 0;
+      padding: 10px 12px;
+      font-size: 13px;
+      line-height: 1.5;
+      color: #3d2f55;
+      background: #f3ecff;
+      border: 1px solid #dcc9f5;
+      border-radius: 8px;
+    }
+    .restart-hint strong { font-weight: 600; }
+  </style>
+</head>
+<body>
+  <div class="app">
+    <aside class="sidebar">
+      <div class="brand">
+        <div class="brand-logo">VISBODY</div>
+        <div class="brand-sub">Powered by Kuafu</div>
+      </div>
+
+      <nav class="nav">
+        <div class="nav-group">
+          <div class="nav-title">报告管理</div>
+          <div class="nav-item">用户信息绑定</div>
+          <div class="nav-item">报告列表</div>
+        </div>
+        <div class="nav-sep"></div>
+        <div class="nav-group">
+          <div class="nav-title">用户管理</div>
+          <div class="nav-item">用户管理</div>
+          <div class="nav-item">用户分配</div>
+        </div>
+        <div class="nav-sep"></div>
+        <div class="nav-group">
+          <div class="nav-title">门店管理</div>
+          <div class="nav-item active">门店管理</div>
+          <div class="nav-item">子门店权限管理</div>
+        </div>
+        <div class="nav-sep"></div>
+        <div class="nav-group">
+          <div class="nav-title">设备管理</div>
+          <div class="nav-item">设备列表</div>
+        </div>
+        <div class="nav-sep"></div>
+        <div class="nav-group">
+          <div class="nav-title">系统设置</div>
+          <div class="nav-item">员工权限管理</div>
+          <div class="nav-item">员工账号</div>
+          <div class="nav-item">缴费记录</div>
+        </div>
+      </nav>
+
+      <div class="nav-footer">
+        <div>版本 v2.10.4</div>
+      </div>
+    </aside>
+
+    <main class="main">
+      <header class="topbar">
+        <div class="topbar-center">维塑数字健康平台</div>
+        <div class="topbar-actions">
+          <span class="topbar-chip">简体中文 <span class="arrow">▼</span></span>
+          <span style="width: 26px; height: 26px; border-radius: 50%; border: 2px solid #c59cff; box-shadow: inset 0 0 0 4px #f7efff;"></span>
+          <span class="topbar-chip">tibohui2026 <span class="arrow">▼</span></span>
+        </div>
+      </header>
+
+      <section class="workspace">
+        <div class="page-head">
+          <a class="back-link" href="javascript:void(0)">← 返回</a>
+          <div class="page-title">
+            <h1>编辑门店</h1>
+            <p>配置测量项目开关与报告显隐。综合测量与身体成分、体态、体围单项互斥。</p>
+            <p class="restart-hint" role="note">
+              <strong>设备端生效（量产）</strong>：保存成功后请<strong>重启门店内对应体测设备</strong>，新配置在设备重启后生效。本 Demo 为同源浏览器存储，保存后<strong>刷新设备端演示页</strong>即可读取最新配置。
+            </p>
+          </div>
+        </div>
+
+        <div class="tabs" aria-label="门店编辑页签">
+          <button class="tab" type="button">门店基础信息</button>
+          <button class="tab" type="button">平台配置</button>
+          <button class="tab active" type="button">设备配置</button>
+        </div>
+
+        <section class="editor-frame">
+          <div class="editor-shell">
+            <div class="editor-config">
+              <div class="scope-bar">
+                <div class="scope-row">
+                  <span class="scope-label">生效方式</span>
+                  <div class="segmented" id="scopeSwitch" role="tablist" aria-label="配置范围">
+                    <button type="button" data-scope="store" class="active">门店默认</button>
+                    <button type="button" data-scope="device">指定设备覆盖</button>
+                  </div>
+                </div>
+                <div class="scope-tip">门店默认为基础配置；指定设备覆盖仅作用于勾选的设备，不回写门店默认。</div>
+                <div class="device-row" id="deviceRow" hidden aria-live="polite"></div>
+              </div>
+
+              <div class="config-grid">
+                <section class="panel panel--projects">
+                  <div class="panel-head">
+                    <div>
+                      <h3>测量项目配置</h3>
+                      <p>开启或关闭各测量项目。</p>
+                    </div>
+                  </div>
+                  <div class="panel-body">
+                    <div class="project-list" id="projectList"></div>
+                  </div>
+                </section>
+
+                <section class="panel panel--detail">
+                  <div class="panel-head">
+                    <div>
+                      <h3 id="reportTitle">报告显示配置</h3>
+                      <p>以下为当前已开启测量项目的报告显隐；开启或关闭左侧项目后，本区域会即时更新。</p>
+                    </div>
+                  </div>
+                  <div class="panel-body panel-body--detail">
+                    <div class="report-list" id="reportList"></div>
+                    <div class="preview-panel">
+                      <div class="preview-panel__head">
+                        <h4>显示预览</h4>
+                        <span class="tag blue" id="scopeLabel">门店默认</span>
+                      </div>
+                      <div class="preview-panel__body" id="previewPanel"></div>
+                    </div>
+                  </div>
+                </section>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <div class="footer-actions">
+          <button class="btn ghost" type="button" id="cancelBtn">取消</button>
+          <button class="btn primary" type="button" id="saveBtn">确定</button>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <div class="toast" id="toast">
+    <div class="title" id="toastTitle">已保存</div>
+    <div class="desc" id="toastDesc">配置已保存。</div>
+  </div>
+
+  <script>
+    const STORAGE_KEY = 'wellnesshub_measurement_config_demo_v6';
+    const STORAGE_KEY_LEGACY = 'wellnesshub_measurement_config_demo_v5';
+    const DEVICE_PAYLOAD_KEY = 'vapro7-measurement-config';
+
+    const CORE_MUTEX_IDS = ['comprehensive', 'bodyComp', 'posture', 'circumference'];
+    const CORE_SINGLE_IDS = ['bodyComp', 'posture', 'circumference'];
+    /** 与「综合测量」不能同时开启的单项（体态单项 B1 除外，可与综合顺序加测） */
+    const COMPREHENSIVE_EXCLUSIVE_SINGLE_IDS = ['bodyComp', 'circumference'];
+    /** B1：综合与体态单项同开时，以下 3 份报告在两处存储中保持一致（以综合内为准 reconcile） */
+    const POSTURE_LINKED_REPORT_IDS = ['postureReport', 'spine', 'hip'];
+    const DYNAMIC_LAB_PROJECT_IDS = ['shoulder', 'neck'];
+    const DYNAMIC_LAB_GROUP = {
+      id: 'dynamicLab',
+      name: '动态实验室',
+      desc: '设备端合并为一张入口；肩、颈可分别开关。',
+    };
+
+    /** 综合测量开启时，结果页可单独配置显隐的 7 份报告（写入 projects.comprehensive.reports） */
+    const COMPREHENSIVE_REPORT_DEFS = [
+      { id: 'postureReport', label: '体态报告', hint: '设备端报告页显示体态卡片。', defaultVisible: true, group: 'posture' },
+      { id: 'spine', label: '脊柱报告', hint: '设备端报告页显示脊柱卡片。', defaultVisible: true, group: 'posture' },
+      { id: 'hip', label: '臀型报告', hint: '设备端报告页显示臀型卡片。', defaultVisible: false, group: 'posture' },
+      { id: 'bodyCompReport', label: '身体成分报告', hint: '设备端结果页显示身体成分报告卡片。', defaultVisible: true, group: 'bodyComp' },
+      {
+        id: 'youthGrowthReport',
+        label: '青少年成长报告',
+        hint: '设备端结果页显示青少年成长类报告卡片；与身体成分同属一组开关。',
+        defaultVisible: true,
+        group: 'bodyComp',
+      },
+      { id: 'circumferenceReport', label: '体围报告', hint: '设备端结果页显示体围报告卡片。', defaultVisible: true, group: 'circumference' },
+      { id: 'waistAbdomenReport', label: '腰腹维度报告', hint: '设备端结果页显示腰腹维度报告卡片。', defaultVisible: true, group: 'circumference' },
+    ];
+
+    const REPORT_DEFS_BY_SOURCE = {
+      bodyComp: COMPREHENSIVE_REPORT_DEFS.filter((r) => r.group === 'bodyComp'),
+      posture: COMPREHENSIVE_REPORT_DEFS.filter((r) => r.group === 'posture'),
+      circumference: COMPREHENSIVE_REPORT_DEFS.filter((r) => r.group === 'circumference'),
+    };
+
+    const projectCatalog = [
+      {
+        id: 'comprehensive',
+        type: 'composite',
+        mutexGroup: 'core-trio',
+        includes: ['bodyComp', 'posture', 'circumference'],
+        name: '综合测量',
+        desc: '一轮完成身体成分、体态、体围测量；与身体成分/体围单项互斥；体态单项可与综合同时开启用于顺序加测。',
+        reports: [].concat(
+          REPORT_DEFS_BY_SOURCE.bodyComp,
+          REPORT_DEFS_BY_SOURCE.posture,
+          REPORT_DEFS_BY_SOURCE.circumference,
+        ),
+      },
+      {
+        id: 'bodyComp',
+        type: 'single',
+        mutexGroup: 'core-trio',
+        name: '身体成分',
+        desc: '单项测量：仅身体成分；与综合测量互斥。',
+        reports: [...REPORT_DEFS_BY_SOURCE.bodyComp],
+      },
+      {
+        id: 'posture',
+        type: 'single',
+        mutexGroup: 'core-trio',
+        name: '体态',
+        desc: '单项测量：体态专项（双手下垂）；可与综合同时开启，建议综合后经「继续下一项」加测。',
+        reports: [...REPORT_DEFS_BY_SOURCE.posture],
+      },
+      {
+        id: 'circumference',
+        type: 'single',
+        mutexGroup: 'core-trio',
+        name: '体围',
+        desc: '单项测量：体围；与综合测量互斥。',
+        reports: [...REPORT_DEFS_BY_SOURCE.circumference],
+      },
+      {
+        id: 'balance',
+        type: 'single',
+        name: '平衡评估',
+        desc: '控制平衡入口与报告是否显示。',
+        reports: [
+          { id: 'balanceReport', label: '平衡报告', hint: '设备端结果页显示平衡报告卡片。', defaultVisible: true },
+        ],
+      },
+      {
+        id: 'shoulder',
+        type: 'single',
+        parentGroup: 'dynamicLab',
+        name: '肩部',
+        desc: '控制肩部测量入口与肩部报告显示。',
+        reports: [
+          { id: 'shoulderReport', label: '肩部报告', hint: '设备端结果页显示肩部报告卡片。', defaultVisible: true },
+        ],
+      },
+      {
+        id: 'neck',
+        type: 'single',
+        parentGroup: 'dynamicLab',
+        name: '颈部',
+        desc: '控制颈部测量入口与颈部报告显示。',
+        reports: [
+          { id: 'neckReport', label: '颈部报告', hint: '设备端结果页显示颈部报告卡片。', defaultVisible: true },
+        ],
+      },
+    ];
+
+    const DEVICE_PICKER_PAGE_SIZE = 20;
+    const DEMO_STORE_NAMES = ['体测线旗舰店', '体测线朝阳店', '体测线海淀店'];
+
+    function buildDemoStoreUnits() {
+      const models = [
+        { id: 'visbody-e260', name: 'Visbody-E260 (V260)', snPrefix: 'VP260' },
+        { id: 'visbody-dpro3', name: 'Visbody-DPro3', snPrefix: 'VD320' },
+        { id: 'visbody-rpro5', name: 'Visbody-RPro5', snPrefix: 'VR510' },
+        { id: 'visbody-apro6', name: 'Visbody-APro6', snPrefix: 'VA600' },
+      ];
+      const counts = [28, 22, 8, 6];
+      const units = [];
+      let seq = 0;
+      models.forEach((m, mi) => {
+        const count = counts[mi] || 6;
+        for (let i = 0; i < count; i++) {
+          seq += 1;
+          const sn = `${m.snPrefix}-${String(10000 + seq).slice(1)}`;
+          units.push({
+            id: `u-${m.id}-${i + 1}`,
+            modelId: m.id,
+            modelName: m.name,
+            sn,
+            storeName: DEMO_STORE_NAMES[(seq - 1) % DEMO_STORE_NAMES.length],
+          });
+        }
+      });
+      return units;
+    }
+
+    /** 门店已绑定设备：按 SN 唯一（演示数据约 60+ 台，用于验证大量设备下的筛选与分页） */
+    const STORE_DEVICE_UNITS = buildDemoStoreUnits();
+
+    const LEGACY_MODEL_IDS = ['visbody-e260', 'visbody-dpro3', 'visbody-rpro5', 'visbody-apro6'];
+
+    const deepClone = (obj) => JSON.parse(JSON.stringify(obj));
+
+    function escapeHtml(str) {
+      return String(str)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/"/g, '&quot;');
+    }
+
+    function getUnitById(unitId) {
+      return STORE_DEVICE_UNITS.find((u) => u.id === unitId) || null;
+    }
+
+    function migrateLegacyDeviceOverrides(raw) {
+      if (!raw || typeof raw !== 'object') return {};
+      const out = {};
+      Object.entries(raw).forEach(([key, cfg]) => {
+        if (!cfg || typeof cfg !== 'object') return;
+        const asUnit = getUnitById(key);
+        if (asUnit) {
+          out[key] = cfg;
+          return;
+        }
+        if (LEGACY_MODEL_IDS.includes(key)) {
+          STORE_DEVICE_UNITS.filter((u) => u.modelId === key).forEach((u) => {
+            out[u.id] = deepClone(cfg);
+          });
+        }
+      });
+      return out;
+    }
+
+    function mergeSelectedUnitIdsFromPayload(data) {
+      const valid = (ids) =>
+        (Array.isArray(ids) ? ids : []).filter((id) => STORE_DEVICE_UNITS.some((u) => u.id === id));
+      let selected = valid(data.selectedUnitIds);
+      if (selected.length) return selected;
+      const legacy = Array.isArray(data.selectedDeviceIds) ? data.selectedDeviceIds : [];
+      const expanded = legacy.flatMap((mid) =>
+        LEGACY_MODEL_IDS.includes(mid) ? STORE_DEVICE_UNITS.filter((u) => u.modelId === mid).map((u) => u.id) : []
+      );
+      if (expanded.length) return expanded;
+      return [STORE_DEVICE_UNITS[0].id];
+    }
+
+    const HOME_TILE_POOL_HUB = [
+      'standard',
+      'pro',
+      'bodyCompSingle',
+      'circumferenceSingle',
+      'bodycompGirth',
+      'girthOnly',
+      'dynamicLab',
+      'balance',
+    ];
+    const HOME_TILE_META_HUB = {
+      standard: '综合测量',
+      pro: '体态测量',
+      bodyCompSingle: '身体成分测量',
+      circumferenceSingle: '体围测量',
+      bodycompGirth: '体成分 + 体围',
+      girthOnly: '体围（单体围）',
+      dynamicLab: '动态实验室',
+      balance: '平衡测量',
+    };
+
+    function sanitizeHubHomeOrder(keys) {
+      const allowed = new Set(HOME_TILE_POOL_HUB);
+      const out = [];
+      const seen = new Set();
+      (Array.isArray(keys) ? keys : []).forEach((k) => {
+        if (!allowed.has(k) || seen.has(k)) return;
+        seen.add(k);
+        out.push(k);
+      });
+      return out;
+    }
+
+    function computeEnabledHomeKeysFromProjects(projects) {
+      const keys = [];
+      if (projects.comprehensive?.enabled) {
+        keys.push('standard');
+        if (projects.posture?.enabled) keys.push('pro');
+      } else {
+        if (projects.bodyComp?.enabled) keys.push('bodyCompSingle');
+        if (projects.posture?.enabled) keys.push('pro');
+        if (projects.circumference?.enabled) keys.push('circumferenceSingle');
+      }
+      if (projects.balance?.enabled) keys.push('balance');
+      if (projects.shoulder?.enabled || projects.neck?.enabled) keys.push('dynamicLab');
+      return keys;
+    }
+
+    function mergeUserHomeOrder(savedOrder, enabledKeys) {
+      const enabled = new Set(enabledKeys);
+      const out = [];
+      const seen = new Set();
+      (Array.isArray(savedOrder) ? savedOrder : []).forEach((k) => {
+        if (!enabled.has(k) || seen.has(k)) return;
+        if (!HOME_TILE_POOL_HUB.includes(k)) return;
+        seen.add(k);
+        out.push(k);
+      });
+      HOME_TILE_POOL_HUB.forEach((k) => {
+        if (enabled.has(k) && !seen.has(k)) {
+          seen.add(k);
+          out.push(k);
+        }
+      });
+      return out;
+    }
+
+    function formatDynamicLabParts(projects) {
+      const parts = [];
+      if (projects?.shoulder?.enabled) parts.push('肩部');
+      if (projects?.neck?.enabled) parts.push('颈部');
+      return parts.join(' · ');
+    }
+
+    function createProjectState(def) {
+      return {
+        id: def.id,
+        enabled: def.id !== 'neck',
+        reports: Object.fromEntries(def.reports.map((report) => [report.id, report.defaultVisible])),
+      };
+    }
+
+    function createConfigState() {
+      const projects = Object.fromEntries(projectCatalog.map((def) => [def.id, createProjectState(def)]));
+      projects.comprehensive.enabled = true;
+      projects.bodyComp.enabled = false;
+      projects.posture.enabled = true;
+      projects.circumference.enabled = false;
+      return {
+        scope: 'store',
+        selectedUnitIds: [STORE_DEVICE_UNITS[0].id],
+        devicePickerSearch: '',
+        devicePickerModel: 'all',
+        devicePickerPage: 0,
+        store: { projects, homeMeasurementOrderKeys: null },
+        deviceOverrides: {},
+      };
+    }
+
+    function mergeProjectsLayer(targetProjects, sourceProjects) {
+      if (!sourceProjects || typeof sourceProjects !== 'object') return;
+      projectCatalog.forEach((def) => {
+        const item = sourceProjects[def.id];
+        if (!item) return;
+        const current = targetProjects[def.id];
+        current.enabled = Boolean(item.enabled);
+        def.reports.forEach((report) => {
+          if (Object.prototype.hasOwnProperty.call(item.reports || {}, report.id)) {
+            current.reports[report.id] = Boolean(item.reports[report.id]);
+          }
+        });
+      });
+    }
+
+    function repairMutexProjects(projects) {
+      if (!projects?.comprehensive) return;
+      if (projects.comprehensive.enabled) {
+        COMPREHENSIVE_EXCLUSIVE_SINGLE_IDS.forEach((id) => {
+          if (projects[id]) projects[id].enabled = false;
+        });
+        return;
+      }
+      const anySingle = CORE_SINGLE_IDS.some((id) => projects[id]?.enabled);
+      if (anySingle) projects.comprehensive.enabled = false;
+    }
+
+    function isPostureDualOpen(projects) {
+      return !!(projects?.comprehensive?.enabled && projects?.posture?.enabled);
+    }
+
+    /** 双开时把体态 3 份从 comprehensive 复制到 posture，消除不一致 */
+    function reconcilePostureLinkedReports(projects) {
+      if (!isPostureDualOpen(projects)) return;
+      const comp = projects.comprehensive;
+      const post = projects.posture;
+      if (!comp?.reports || !post?.reports) return;
+      POSTURE_LINKED_REPORT_IDS.forEach((id) => {
+        post.reports[id] = !!comp.reports[id];
+      });
+    }
+
+    function setPostureLinkedReportValue(projects, reportId, value) {
+      if (!POSTURE_LINKED_REPORT_IDS.includes(reportId)) return;
+      const v = !!value;
+      if (isPostureDualOpen(projects)) {
+        projects.comprehensive.reports[reportId] = v;
+        projects.posture.reports[reportId] = v;
+      }
+    }
+
+    function reconcileAllBuckets() {
+      reconcilePostureLinkedReports(state.store.projects);
+      Object.values(state.deviceOverrides).forEach((ov) => {
+        if (ov?.projects) reconcilePostureLinkedReports(ov.projects);
+      });
+    }
+
+    function migrateV5StoreShape(oldStore) {
+      const next = createConfigState();
+      const op = oldStore?.projects || {};
+      if (op.comprehensive) {
+        mergeProjectsLayer(next.store.projects, op);
+        repairMutexProjects(next.store.projects);
+        reconcilePostureLinkedReports(next.store.projects);
+        return next;
+      }
+      const legacyIds = ['bodyComp', 'posture', 'circumference', 'shoulder', 'neck', 'balance'];
+      legacyIds.forEach((id) => {
+        if (!op[id]) return;
+        const cur = next.store.projects[id];
+        cur.enabled = Boolean(op[id].enabled);
+        const def = projectCatalog.find((p) => p.id === id);
+        if (!def) return;
+        def.reports.forEach((report) => {
+          if (Object.prototype.hasOwnProperty.call(op[id].reports || {}, report.id)) {
+            cur.reports[report.id] = Boolean(op[id].reports[report.id]);
+          }
+        });
+      });
+      const bc = next.store.projects.bodyComp.enabled;
+      const po = next.store.projects.posture.enabled;
+      const ci = next.store.projects.circumference.enabled;
+      if (bc && po && ci) {
+        const comp = next.store.projects.comprehensive;
+        comp.enabled = true;
+        next.store.projects.bodyComp.enabled = false;
+        next.store.projects.posture.enabled = false;
+        next.store.projects.circumference.enabled = false;
+        const compDef = projectCatalog.find((p) => p.id === 'comprehensive');
+        compDef.reports.forEach((report) => {
+          let src = 'bodyComp';
+          if (['postureReport', 'spine', 'hip'].includes(report.id)) src = 'posture';
+          if (['circumferenceReport', 'waistAbdomenReport'].includes(report.id)) src = 'circumference';
+          if (op[src]?.reports && Object.prototype.hasOwnProperty.call(op[src].reports, report.id)) {
+            comp.reports[report.id] = Boolean(op[src].reports[report.id]);
+          }
+        });
+      } else {
+        next.store.projects.comprehensive.enabled = false;
+      }
+      repairMutexProjects(next.store.projects);
+      reconcilePostureLinkedReports(next.store.projects);
+      return next;
+    }
+
+    function normalizeConfig(data) {
+      const base = createConfigState();
+      if (!data || typeof data !== 'object') return base;
+
+      const next = deepClone(base);
+      if (data.scope === 'device') next.scope = 'device';
+      next.selectedUnitIds = mergeSelectedUnitIdsFromPayload(data);
+      if (typeof data.devicePickerSearch === 'string') {
+        next.devicePickerSearch = data.devicePickerSearch;
+      }
+      if (data.devicePickerModel === 'all' || STORE_DEVICE_UNITS.some((u) => u.modelId === data.devicePickerModel)) {
+        next.devicePickerModel = data.devicePickerModel || 'all';
+      }
+      if (Number.isFinite(data.devicePickerPage) && data.devicePickerPage >= 0) {
+        next.devicePickerPage = data.devicePickerPage;
+      }
+      if (data.store?.projects) {
+        mergeProjectsLayer(next.store.projects, data.store.projects);
+      }
+      if (Array.isArray(data.store?.homeMeasurementOrderKeys) && data.store.homeMeasurementOrderKeys.length) {
+        next.store.homeMeasurementOrderKeys = sanitizeHubHomeOrder(data.store.homeMeasurementOrderKeys);
+      }
+      repairMutexProjects(next.store.projects);
+      reconcilePostureLinkedReports(next.store.projects);
+      const migratedOverrides = migrateLegacyDeviceOverrides(data.deviceOverrides || {});
+      Object.entries(migratedOverrides).forEach(([unitId, cfg]) => {
+        if (!getUnitById(unitId)) return;
+        next.deviceOverrides[unitId] = {
+          projects: Object.fromEntries(
+            projectCatalog.map((def) => {
+              const src = cfg.projects?.[def.id];
+              const fallback = createProjectState(def);
+              return [def.id, {
+                enabled: src ? Boolean(src.enabled) : fallback.enabled,
+                reports: Object.fromEntries(
+                  def.reports.map((report) => [
+                    report.id,
+                    src?.reports && Object.prototype.hasOwnProperty.call(src.reports, report.id)
+                      ? Boolean(src.reports[report.id])
+                      : fallback.reports[report.id],
+                  ])
+                ),
+              }];
+            })
+          ),
+          homeMeasurementOrderKeys: null,
+        };
+        if (Array.isArray(cfg.homeMeasurementOrderKeys) && cfg.homeMeasurementOrderKeys.length) {
+          next.deviceOverrides[unitId].homeMeasurementOrderKeys = sanitizeHubHomeOrder(cfg.homeMeasurementOrderKeys);
+        }
+        repairMutexProjects(next.deviceOverrides[unitId].projects);
+        reconcilePostureLinkedReports(next.deviceOverrides[unitId].projects);
+      });
+      return next;
+    }
+
+    function loadState() {
+      try {
+        let raw = localStorage.getItem(STORAGE_KEY);
+        if (!raw) {
+          const legacy = localStorage.getItem(STORAGE_KEY_LEGACY);
+          if (legacy) {
+            const parsed = JSON.parse(legacy);
+            return normalizeConfig(migrateV5StoreShape(parsed.store ? parsed : { store: parsed }));
+          }
+        }
+        if (!raw) return createConfigState();
+        const parsed = JSON.parse(raw);
+        if (
+          parsed?.store?.projects
+          && !Object.prototype.hasOwnProperty.call(parsed.store.projects, 'comprehensive')
+        ) {
+          return normalizeConfig(migrateV5StoreShape(parsed));
+        }
+        return normalizeConfig(parsed);
+      } catch (err) {
+        return createConfigState();
+      }
+    }
+
+    let state = loadState();
+    reconcileAllBuckets();
+    let savedState = deepClone(state);
+    const els = {
+      scopeSwitch: document.getElementById('scopeSwitch'),
+      deviceRow: document.getElementById('deviceRow'),
+      scopeLabel: document.getElementById('scopeLabel'),
+      projectList: document.getElementById('projectList'),
+      reportList: document.getElementById('reportList'),
+      reportTitle: document.getElementById('reportTitle'),
+      previewPanel: document.getElementById('previewPanel'),
+      cancelBtn: document.getElementById('cancelBtn'),
+      saveBtn: document.getElementById('saveBtn'),
+      toast: document.getElementById('toast'),
+      toastTitle: document.getElementById('toastTitle'),
+      toastDesc: document.getElementById('toastDesc'),
+    };
+
+    function activeUnitId() {
+      return state.selectedUnitIds[0] || null;
+    }
+
+    function getProjectConfig(projectId, unitId = null) {
+      const source = unitId ? state.deviceOverrides[unitId] : state.store;
+      if (!source?.projects?.[projectId]) {
+        return createProjectState(projectCatalog.find((item) => item.id === projectId));
+      }
+      return source.projects[projectId];
+    }
+
+    function ensureDeviceOverride(unitId) {
+      if (!state.deviceOverrides[unitId]) {
+        state.deviceOverrides[unitId] = deepClone(state.store);
+      }
+      return state.deviceOverrides[unitId];
+    }
+
+    function projectsForPreview() {
+      if (state.scope === 'store') return state.store.projects;
+      const id = activeUnitId();
+      if (!id) return state.store.projects;
+      if (state.deviceOverrides[id]) return state.deviceOverrides[id].projects;
+      return state.store.projects;
+    }
+
+    function scopeLabel() {
+      if (state.scope === 'store') return '门店默认';
+      const n = state.selectedUnitIds.length;
+      return n ? `指定设备（SN）· 已选 ${n} 台` : '指定设备（SN）· 未选择';
+    }
+
+    function toast(title, desc) {
+      els.toastTitle.textContent = title;
+      els.toastDesc.textContent = desc;
+      els.toast.classList.add('show');
+      clearTimeout(toast._timer);
+      toast._timer = setTimeout(() => els.toast.classList.remove('show'), 2200);
+    }
+
+    function assertMutexValid(projects) {
+      if (!projects?.comprehensive) return true;
+      if (!projects.comprehensive.enabled) return true;
+      return !COMPREHENSIVE_EXCLUSIVE_SINGLE_IDS.some((id) => projects[id]?.enabled);
+    }
+
+    function toDevicePayloadFromProjects(projects, orderBucket) {
+      const reportVisibility = {};
+      const addReports = (projId) => {
+        const p = projects[projId];
+        if (!p?.enabled) return;
+        Object.entries(p.reports || {}).forEach(([k, v]) => {
+          reportVisibility[k] = !!v;
+        });
+      };
+      if (projects.comprehensive?.enabled) {
+        addReports('comprehensive');
+        if (projects.posture?.enabled) {
+          const p = projects.posture;
+          Object.entries(p.reports || {}).forEach(([k, v]) => {
+            if (POSTURE_LINKED_REPORT_IDS.includes(k)) return;
+            reportVisibility[k] = !!v;
+          });
+        }
+      } else {
+        addReports('bodyComp');
+        addReports('posture');
+        addReports('circumference');
+      }
+      addReports('balance');
+      addReports('shoulder');
+      addReports('neck');
+      const enabledHome = computeEnabledHomeKeysFromProjects(projects);
+      const hasCustomHomeOrder =
+        Array.isArray(orderBucket?.homeMeasurementOrderKeys) && orderBucket.homeMeasurementOrderKeys.length > 0;
+      const payload = {
+        version: 1,
+        comprehensiveEnabled: !!projects.comprehensive?.enabled,
+        bodyCompSingleEnabled: !!projects.bodyComp?.enabled,
+        postureModeEnabled: !!projects.posture?.enabled,
+        circumferenceSingleEnabled: !!projects.circumference?.enabled,
+        balanceModeEnabled: !!projects.balance?.enabled,
+        singleShoulderEnabled: !!projects.shoulder?.enabled,
+        singleNeckEnabled: !!projects.neck?.enabled,
+        reportVisibility,
+      };
+      if (hasCustomHomeOrder) {
+        const homeOrder = mergeUserHomeOrder(orderBucket.homeMeasurementOrderKeys, enabledHome);
+        if (homeOrder.length) payload.homeMeasurementOrderKeys = homeOrder;
+        else payload.homeMeasurementOrderKeys = null;
+      } else {
+        payload.homeMeasurementOrderKeys = null;
+      }
+      return payload;
+    }
+
+    function orderPayloadBucket() {
+      if (state.scope === 'store') return state.store;
+      const id = activeUnitId();
+      if (!id) return state.store;
+      return ensureDeviceOverride(id);
+    }
+
+    function syncDeviceDemoFromState() {
+      const projects = projectsForPreview();
+      const bucket = orderPayloadBucket();
+      const payload = toDevicePayloadFromProjects(projects, bucket);
+      try {
+        localStorage.setItem(DEVICE_PAYLOAD_KEY, JSON.stringify(payload));
+      } catch (err) {
+        console.warn('sync device demo payload failed', err);
+      }
+    }
+
+    function applyHomeOrderToTargets(keys) {
+      const value = keys && keys.length ? keys : null;
+      if (state.scope === 'store') {
+        state.store.homeMeasurementOrderKeys = value;
+        return;
+      }
+      if (!state.selectedUnitIds.length) return;
+      state.selectedUnitIds.forEach((uid) => {
+        ensureDeviceOverride(uid).homeMeasurementOrderKeys = value ? [...value] : null;
+      });
+    }
+
+    function applyHomeOrderMove(index, dir) {
+      const projects = projectsForPreview();
+      const bucket = orderPayloadBucket();
+      const enabled = computeEnabledHomeKeysFromProjects(projects);
+      const keys = mergeUserHomeOrder(bucket.homeMeasurementOrderKeys, enabled);
+      const j = index + dir;
+      if (j < 0 || j >= keys.length) return;
+      const next = [...keys];
+      [next[index], next[j]] = [next[j], next[index]];
+      applyHomeOrderToTargets(next);
+    }
+
+    function applyHomeOrderReset() {
+      applyHomeOrderToTargets(null);
+    }
+
+    function saveToStorage(messageTitle = '已保存配置', messageDesc = '配置已保存。') {
+      repairMutexProjects(state.store.projects);
+      Object.values(state.deviceOverrides).forEach((ov) => repairMutexProjects(ov.projects));
+      reconcileAllBuckets();
+      if (!assertMutexValid(state.store.projects)) {
+        toast('配置冲突', '综合测量与身体成分/体围单项不能同时开启，已自动修正。');
+      }
+      try {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+      } catch (err) {
+        console.warn('localStorage unavailable, skip persist.', err);
+      }
+      syncDeviceDemoFromState();
+      savedState = deepClone(state);
+      toast(messageTitle, messageDesc);
+    }
+
+    function projectStats(projectId) {
+      const cfg = getProjectConfig(projectId, state.scope === 'device' ? activeUnitId() : null);
+      const def = projectCatalog.find((item) => item.id === projectId);
+      const pv = projectsForPreview();
+      if (isPostureDualOpen(pv) && projectId === 'posture') {
+        const visibleCount = def.reports.filter((report) => pv.comprehensive.reports[report.id]).length;
+        return {
+          visibleCount,
+          totalCount: def.reports.length,
+          enabled: cfg.enabled,
+        };
+      }
+      return {
+        visibleCount: def.reports.filter((report) => cfg.reports[report.id]).length,
+        totalCount: def.reports.length,
+        enabled: cfg.enabled,
+      };
+    }
+
+    function filterDeviceUnits() {
+      const q = (state.devicePickerSearch || '').trim().toLowerCase();
+      const mf = state.devicePickerModel || 'all';
+      return STORE_DEVICE_UNITS.filter((u) => {
+        if (mf !== 'all' && u.modelId !== mf) return false;
+        if (!q) return true;
+        const hay = `${u.sn} ${u.modelName} ${u.storeName || ''} ${u.id}`.toLowerCase();
+        return hay.includes(q);
+      });
+    }
+
+    function sortUnitsForDisplay(units, modelFilter) {
+      if (modelFilter !== 'all' || units.length <= 1) return units;
+      const modelOrder = [...new Set(units.map((u) => u.modelId))];
+      const queues = Object.fromEntries(
+        modelOrder.map((mid) => [mid, units.filter((u) => u.modelId === mid)])
+      );
+      const out = [];
+      let hasMore = true;
+      while (hasMore) {
+        hasMore = false;
+        modelOrder.forEach((mid) => {
+          const q = queues[mid];
+          if (q && q.length) {
+            out.push(q.shift());
+            hasMore = true;
+          }
+        });
+      }
+      return out;
+    }
+
+    function renderDeviceUnitPicker() {
+      if (!els.deviceRow) return;
+      if (state.scope === 'store') {
+        els.deviceRow.innerHTML = '';
+        return;
+      }
+      const filtered = sortUnitsForDisplay(filterDeviceUnits(), state.devicePickerModel || 'all');
+      const totalFiltered = filtered.length;
+      const totalAll = STORE_DEVICE_UNITS.length;
+      const totalPages = Math.max(1, Math.ceil(totalFiltered / DEVICE_PICKER_PAGE_SIZE) || 1);
+      let page = Number(state.devicePickerPage) || 0;
+      if (page > totalPages - 1) page = totalPages - 1;
+      if (page < 0) page = 0;
+      state.devicePickerPage = page;
+      const start = page * DEVICE_PICKER_PAGE_SIZE;
+      const pageUnits = filtered.slice(start, start + DEVICE_PICKER_PAGE_SIZE);
+
+      const modelOrder = [...new Set(STORE_DEVICE_UNITS.map((u) => u.modelId))];
+      const modelOptions = [
+        `<option value="all" ${state.devicePickerModel === 'all' ? 'selected' : ''}>全部型号</option>`,
+        ...modelOrder.map((mid) => {
+          const name = STORE_DEVICE_UNITS.find((u) => u.modelId === mid)?.modelName || mid;
+          const c = STORE_DEVICE_UNITS.filter((u) => u.modelId === mid).length;
+          return `<option value="${escapeHtml(mid)}" ${state.devicePickerModel === mid ? 'selected' : ''}>${escapeHtml(name)}（${c} 台）</option>`;
+        }),
+      ].join('');
+
+      const selectedCount = state.selectedUnitIds.length;
+      const selectedUnitsOrdered = state.selectedUnitIds.map((id) => getUnitById(id)).filter(Boolean);
+      const previewSn = selectedUnitsOrdered.slice(0, 8).map((u) => u.sn);
+      const stripText =
+        selectedCount === 0
+          ? '当前未选择设备。'
+          : `${previewSn.join('、')}${selectedCount > 8 ? ` … 等共 ${selectedCount} 台` : `（共 ${selectedCount} 台）`}`;
+
+      const rows = pageUnits
+        .map((u) => {
+          const sel = state.selectedUnitIds.includes(u.id);
+          return `<div class="device-picker-row${sel ? ' is-selected' : ''}" data-unit-row data-unit-id="${escapeHtml(
+            u.id
+          )}" role="checkbox" aria-checked="${sel}">
+            <span class="device-picker-row-check">${sel ? '✓' : ''}</span>
+            <div>
+              <div class="device-picker-row-sn">${escapeHtml(u.sn)}</div>
+              <div class="device-picker-row-sub">${escapeHtml(u.modelName)} · ${escapeHtml(u.storeName || '')}</div>
+            </div>
+          </div>`;
+        })
+        .join('');
+
+      const pagerPrevDisabled = page <= 0 ? ' disabled' : '';
+      const pagerNextDisabled = page >= totalPages - 1 ? ' disabled' : '';
+
+      const emptyHint =
+        totalFiltered === 0
+          ? '<div class="device-picker-row" style="grid-template-columns:1fr;cursor:default;padding:16px"><div style="color:#667085;font-size:13px">无匹配设备，请放宽搜索条件或切换型号。</div></div>'
+          : '';
+
+      const paginationHint = '';
+
+      els.deviceRow.innerHTML = `
+        <span class="device-label">选择设备（SN）</span>
+        <p class="scope-tip" style="margin:0;">可通过型号筛选与搜索定位设备。</p>
+        <div class="device-unit-wrap">
+          <div class="device-picker-toolbar">
+            <div class="device-picker-filters">
+              <input type="search" id="devicePickerSearchInput" placeholder="搜索 SN、型号、门店名称…" value="${escapeHtml(
+                state.devicePickerSearch
+              )}" autocomplete="off" />
+              <button type="button" class="btn-tiny" data-device-picker-apply-search>应用筛选</button>
+              <select id="devicePickerModelSelect" aria-label="型号筛选">${modelOptions}</select>
+            </div>
+            <div class="device-picker-meta">
+              全店共 <strong>${totalAll}</strong> 台；当前筛选 <strong>${totalFiltered}</strong> 台；已选 <strong>${selectedCount}</strong> 台。
+              ${totalFiltered ? `本页第 <strong>${start + 1}</strong>–<strong>${Math.min(start + DEVICE_PICKER_PAGE_SIZE, totalFiltered)}</strong> 条。` : ''}
+              ${paginationHint ? `<br>${paginationHint}` : ''}
+            </div>
+            <div class="device-picker-selected-strip">${escapeHtml(stripText)}</div>
+            <div class="device-picker-actions">
+              <button type="button" class="chip" data-device-action="all-filtered">全选当前筛选结果</button>
+              <button type="button" class="chip" data-device-action="clear">清空已选</button>
+              <button type="button" class="chip"${pagerPrevDisabled} data-device-picker-page="prev">上一页</button>
+              <button type="button" class="chip"${pagerNextDisabled} data-device-picker-page="next">下一页</button>
+            </div>
+          </div>
+          <div class="device-picker-list">${rows || emptyHint}</div>
+          <div class="device-picker-pager">
+            <span>第 ${page + 1} / ${totalPages} 页</span>
+            <span>每页 ${DEVICE_PICKER_PAGE_SIZE} 台</span>
+          </div>
+        </div>
+      `;
+    }
+
+    function renderScope() {
+      els.scopeSwitch.querySelectorAll('button[data-scope]').forEach((btn) => {
+        btn.classList.toggle('active', btn.dataset.scope === state.scope);
+      });
+      els.deviceRow.hidden = state.scope === 'store';
+      if (els.scopeLabel) els.scopeLabel.textContent = scopeLabel();
+      renderDeviceUnitPicker();
+    }
+
+    function renderProjects() {
+      const pv = projectsForPreview();
+      const compOn = !!pv.comprehensive?.enabled;
+      const unitId = state.scope === 'device' ? activeUnitId() : null;
+
+      function renderProjectRow(project, nested = false) {
+        const stats = projectStats(project.id);
+        const cfg = getProjectConfig(project.id, unitId);
+        let mutexHint = '';
+        let switchDisabled = false;
+        if (project.mutexGroup === 'core-trio') {
+          const compBlockSingles = COMPREHENSIVE_EXCLUSIVE_SINGLE_IDS.some((id) => pv[id]?.enabled);
+          if (project.id === 'comprehensive' && compBlockSingles) {
+            mutexHint = '<span class="tag amber">与身体成分/体围单项互斥</span>';
+          } else if (project.id === 'comprehensive' && compOn && pv.posture?.enabled) {
+            mutexHint = '<span class="tag blue">体态单项已开 · 顺序加测</span>';
+          } else if ((project.id === 'bodyComp' || project.id === 'circumference') && compOn) {
+            mutexHint = '<span class="tag amber">与综合测量互斥</span>';
+            switchDisabled = true;
+          } else if (project.id === 'posture' && compOn) {
+            mutexHint = '<span class="tag blue">可与综合同时开</span>';
+          }
+        }
+        const compositeTag = project.type === 'composite' ? '<span class="tag blue">复合测量</span>' : '';
+        const includesMeta = project.type === 'composite'
+          ? '<div class="project-meta"><span class="tag gray">含：身体成分 · 体态 · 体围</span></div>'
+          : '';
+        const nestedClass = nested ? ' project-row--nested' : '';
+        const reportTagVisible = (rid) => {
+          if (isPostureDualOpen(pv) && project.id === 'posture' && POSTURE_LINKED_REPORT_IDS.includes(rid)) {
+            return !!pv.comprehensive.reports[rid];
+          }
+          return !!cfg.reports[rid];
+        };
+        return `
+          <div class="project-row${nestedClass}" data-project-id="${project.id}">
+            <div class="project-top">
+              <div style="min-width:0">
+                <div class="project-title">
+                  <span>${project.name}</span>
+                  ${compositeTag}
+                  <span class="tag ${stats.enabled ? 'green' : 'red'}">${stats.enabled ? '已开启' : '已关闭'}</span>
+                  <span class="tag ${state.scope === 'store' ? 'blue' : 'amber'}">${state.scope === 'store' ? '门店默认' : '指定设备'}</span>
+                  ${mutexHint}
+                </div>
+                <p class="project-desc">${project.desc}</p>
+              </div>
+              <div class="project-badge-row">
+                <span class="tag gray">${stats.visibleCount}/${stats.totalCount} 报告显示</span>
+                <button class="switch ${cfg.enabled ? 'on' : ''} ${switchDisabled ? 'disabled' : ''}" type="button" data-role="project-switch" data-project-id="${project.id}" aria-label="项目开关" ${switchDisabled ? 'disabled' : ''}></button>
+              </div>
+            </div>
+            ${project.type === 'composite' ? includesMeta : `
+            <div class="project-meta">
+              ${project.reports.map((report) => {
+                const visible = reportTagVisible(report.id);
+                return `<span class="tag ${visible ? 'blue' : 'gray'}">${report.label} ${visible ? '显示' : '隐藏'}</span>`;
+              }).join('')}
+            </div>`}
+          </div>
+        `;
+      }
+
+      const primaryHtml = projectCatalog
+        .filter((p) => !DYNAMIC_LAB_PROJECT_IDS.includes(p.id))
+        .map((p) => renderProjectRow(p))
+        .join('');
+
+      const dynamicProjects = projectCatalog.filter((p) => DYNAMIC_LAB_PROJECT_IDS.includes(p.id));
+      const enabledDynamic = dynamicProjects.filter((p) => projectStats(p.id).enabled).length;
+      const homeEntryOn = !!(pv.shoulder?.enabled || pv.neck?.enabled);
+      const dynamicGroupHtml = `
+        <section class="project-group" aria-labelledby="project-group-dynamic-lab">
+          <div class="project-group-header">
+            <h4 class="project-group-title" id="project-group-dynamic-lab">${DYNAMIC_LAB_GROUP.name}</h4>
+            <p class="project-group-desc">${DYNAMIC_LAB_GROUP.desc}</p>
+            <div class="project-group-meta">
+              <span class="tag ${homeEntryOn ? 'green' : 'gray'}">首页入口 ${homeEntryOn ? '已显示' : '未显示'}</span>
+              <span class="tag gray">子项 ${enabledDynamic}/${dynamicProjects.length} 已开启</span>
+            </div>
+          </div>
+          <div class="project-group-body">
+            ${dynamicProjects.map((p) => renderProjectRow(p, true)).join('')}
+          </div>
+        </section>
+      `;
+
+      els.projectList.innerHTML = primaryHtml + dynamicGroupHtml;
+    }
+
+    function renderReportSwitchRow(report, projectId, reportsRef, rowEnabled) {
+      const visible = !!reportsRef[report.id];
+      const disClass = rowEnabled ? '' : ' disabled';
+      const disAttr = rowEnabled ? '' : ' disabled';
+      return `
+                <div class="report-row${disClass}">
+                  <div class="report-top">
+                    <div style="min-width:0">
+                      <div class="report-title">${report.label}</div>
+                      <p class="report-desc">${rowEnabled ? report.hint : '请先开启对应测量项目。'}</p>
+                    </div>
+                    <div class="report-control">
+                      <span class="tag ${visible ? 'blue' : 'gray'}">${visible ? '显示' : '隐藏'}</span>
+                      <button
+                        class="switch ${visible ? 'on' : ''}${disClass ? ' disabled' : ''}"
+                        type="button"
+                        data-role="report-switch"
+                        data-project-id="${projectId}"
+                        data-report-id="${report.id}"
+                        ${disAttr}
+                      ></button>
+                    </div>
+                  </div>
+                </div>`;
+    }
+
+    function renderAggregatedReports() {
+      const pv = projectsForPreview();
+      els.reportTitle.textContent = '报告显示配置';
+      const dualPosture = isPostureDualOpen(pv);
+      const anyProject =
+        pv.comprehensive?.enabled ||
+        pv.bodyComp?.enabled ||
+        pv.posture?.enabled ||
+        pv.circumference?.enabled ||
+        pv.balance?.enabled ||
+        pv.shoulder?.enabled ||
+        pv.neck?.enabled;
+      if (!anyProject) {
+        els.reportList.innerHTML = '<p class="scope-tip" style="margin:0">请先开启至少一项测量项目。</p>';
+        return;
+      }
+      const sections = [];
+
+      if (pv.comprehensive?.enabled) {
+        const comp = pv.comprehensive;
+        sections.push('<div class="report-group" data-report-group="comprehensive">');
+        sections.push('<div class="report-group-title">综合测量</div>');
+        ['bodyComp', 'posture', 'circumference'].forEach((srcId) => {
+          const srcName = projectCatalog.find((p) => p.id === srcId)?.name || srcId;
+          const linkedNote =
+            dualPosture && srcId === 'posture'
+              ? '<span class="tag blue report-group-linked">与体态单项共用</span>'
+              : '';
+          const rows = REPORT_DEFS_BY_SOURCE[srcId]
+            .map((report) => renderReportSwitchRow(report, 'comprehensive', comp.reports, true))
+            .join('');
+          sections.push(
+            `<div class="report-group" data-report-group-sub="${srcId}"><div class="report-group-title-row"><span class="report-group-title">${srcName}</span>${linkedNote}</div>${rows}</div>`
+          );
+        });
+        sections.push('</div>');
+      }
+
+      if (!pv.comprehensive?.enabled && pv.posture?.enabled) {
+        const cfg = pv.posture;
+        const rows = REPORT_DEFS_BY_SOURCE.posture
+          .map((report) => renderReportSwitchRow(report, 'posture', cfg.reports, true))
+          .join('');
+        sections.push(`<div class="report-group" data-report-group="posture"><div class="report-group-title">体态</div>${rows}</div>`);
+      }
+
+      if (!pv.comprehensive?.enabled && pv.bodyComp?.enabled) {
+        const cfg = pv.bodyComp;
+        const def = projectCatalog.find((p) => p.id === 'bodyComp');
+        const rows = def.reports
+          .map((report) => renderReportSwitchRow(report, 'bodyComp', cfg.reports, true))
+          .join('');
+        sections.push(`<div class="report-group" data-report-group="bodyComp"><div class="report-group-title">身体成分</div>${rows}</div>`);
+      }
+
+      if (!pv.comprehensive?.enabled && pv.circumference?.enabled) {
+        const cfg = pv.circumference;
+        const def = projectCatalog.find((p) => p.id === 'circumference');
+        const rows = def.reports
+          .map((report) => renderReportSwitchRow(report, 'circumference', cfg.reports, true))
+          .join('');
+        sections.push(`<div class="report-group" data-report-group="circumference"><div class="report-group-title">体围</div>${rows}</div>`);
+      }
+
+      if (pv.balance?.enabled) {
+        const cfg = pv.balance;
+        const def = projectCatalog.find((p) => p.id === 'balance');
+        const rows = def.reports
+          .map((report) => renderReportSwitchRow(report, 'balance', cfg.reports, true))
+          .join('');
+        sections.push(`<div class="report-group" data-report-group="balance"><div class="report-group-title">平衡评估</div>${rows}</div>`);
+      }
+
+      if (pv.shoulder?.enabled) {
+        const cfg = pv.shoulder;
+        const def = projectCatalog.find((p) => p.id === 'shoulder');
+        const rows = def.reports
+          .map((report) => renderReportSwitchRow(report, 'shoulder', cfg.reports, true))
+          .join('');
+        sections.push(
+          `<div class="report-group" data-report-group="shoulder"><div class="report-group-title">${DYNAMIC_LAB_GROUP.name} · 肩部</div>${rows}</div>`
+        );
+      }
+
+      if (pv.neck?.enabled) {
+        const cfg = pv.neck;
+        const def = projectCatalog.find((p) => p.id === 'neck');
+        const rows = def.reports
+          .map((report) => renderReportSwitchRow(report, 'neck', cfg.reports, true))
+          .join('');
+        sections.push(
+          `<div class="report-group" data-report-group="neck"><div class="report-group-title">${DYNAMIC_LAB_GROUP.name} · 颈部</div>${rows}</div>`
+        );
+      }
+
+      els.reportList.innerHTML = sections.join('');
+    }
+
+    function collectVisibleReportLabels(projects) {
+      const labels = [];
+      const pushFrom = (projId) => {
+        const p = projects[projId];
+        if (!p?.enabled) return;
+        const def = projectCatalog.find((x) => x.id === projId);
+        if (!def) return;
+        def.reports.forEach((r) => {
+          if (p.reports[r.id]) labels.push(r.label);
+        });
+      };
+      if (projects.comprehensive?.enabled) {
+        pushFrom('comprehensive');
+      } else {
+        pushFrom('bodyComp');
+        pushFrom('posture');
+        pushFrom('circumference');
+      }
+      pushFrom('balance');
+      pushFrom('shoulder');
+      pushFrom('neck');
+      return labels;
+    }
+
+    function collectHomeEntryChips(projects) {
+      const chips = [];
+      if (projects.comprehensive?.enabled) {
+        chips.push({ label: '综合测量', cls: 'visible', sub: '主测量 · 一圈三项' });
+        if (projects.posture?.enabled) {
+          chips.push({ label: '体态测量', cls: 'visible', sub: '可与综合顺序加测 · IPose' });
+        }
+      } else {
+        if (projects.bodyComp?.enabled) chips.push({ label: '身体成分测量', cls: 'visible', sub: '单项' });
+        if (projects.posture?.enabled) chips.push({ label: '体态测量', cls: 'visible', sub: '专业测量 / IPose' });
+        if (projects.circumference?.enabled) chips.push({ label: '体围测量', cls: 'visible', sub: '单项' });
+      }
+      if (projects.balance?.enabled) {
+        chips.push({ label: '平衡评估', cls: 'visible', sub: '主测量模式' });
+      }
+      if (projects.shoulder?.enabled || projects.neck?.enabled) {
+        const sh = !!projects.shoulder?.enabled;
+        const nk = !!projects.neck?.enabled;
+        let sub = '';
+        if (sh && nk) sub = '肩 · 颈；设备上将先选择测量部位';
+        else if (sh) sub = '设备上将直接进入肩部专项测量流程';
+        else if (nk) sub = '设备上将直接进入颈部专项测量流程';
+        chips.push({
+          label: '动态实验室',
+          cls: 'visible',
+          sub,
+        });
+      }
+      return chips;
+    }
+
+    function renderPreview() {
+      const projects = projectsForPreview();
+      const entries = collectHomeEntryChips(projects);
+      const reports = collectVisibleReportLabels(projects);
+      const coreOff = !projects.comprehensive?.enabled
+        && !projects.bodyComp?.enabled
+        && !projects.posture?.enabled
+        && !projects.circumference?.enabled
+        && !projects.balance?.enabled;
+      if (coreOff && !projects.shoulder?.enabled && !projects.neck?.enabled) {
+        els.previewPanel.innerHTML = `
+          <div class="preview-empty">请至少开启一项测量项目。</div>`;
+        return;
+      }
+      const entryHtml = entries.length
+        ? entries.map((e) => `<span class="preview-chip ${e.cls}">${e.label}<span style="opacity:.75;font-size:11px;margin-left:6px">${e.sub || ''}</span></span>`).join('')
+        : '<span class="preview-chip hidden">无首页入口</span>';
+      const reportHtml = reports.length
+        ? reports.map((label) => `<span class="preview-chip visible">${label}</span>`).join('')
+        : '<span class="preview-chip hidden">无可见报告</span>';
+      const bucket = orderPayloadBucket();
+      const enabledHome = computeEnabledHomeKeysFromProjects(projects);
+      const orderedHome = mergeUserHomeOrder(bucket.homeMeasurementOrderKeys, enabledHome);
+      const canEditOrder = !(state.scope === 'device' && !state.selectedUnitIds.length);
+      let homeOrderHtml = '';
+      if (orderedHome.length && canEditOrder) {
+        homeOrderHtml = `
+            <div class="home-order-block">
+              <div class="home-order-head">
+                <span style="font-size:12px;font-weight:650;color:#475467">首页入口显示顺序</span>
+                <button type="button" class="btn-tiny" data-home-order-reset>恢复默认顺序</button>
+              </div>
+              <p class="scope-tip" style="margin:0 0 8px;font-size:11px;">使用 ↑ / ↓ 调整顺序；多选设备时同步到已选各台。</p>
+              <div class="home-order-list">
+                ${orderedHome
+                  .map((key, idx) => {
+                    const title = escapeHtml(HOME_TILE_META_HUB[key] || key);
+                    const parts =
+                      key === 'dynamicLab' ? formatDynamicLabParts(projects) : '';
+                    const partsHtml = parts
+                      ? `<div class="home-order-row-parts">含：${escapeHtml(parts)}</div>`
+                      : '';
+                    const upDis = idx === 0 ? ' disabled' : '';
+                    const dnDis = idx === orderedHome.length - 1 ? ' disabled' : '';
+                    return `
+                  <div class="home-order-row" data-home-order-key="${escapeHtml(key)}">
+                    <div class="home-order-row-main">
+                      <span><strong>${idx + 1}.</strong> ${title}</span>
+                      ${partsHtml}
+                    </div>
+                    <div class="home-order-row-actions">
+                      <button type="button" class="btn-tiny"${upDis} data-home-order-move="up" data-home-order-index="${idx}">↑</button>
+                      <button type="button" class="btn-tiny"${dnDis} data-home-order-move="down" data-home-order-index="${idx}">↓</button>
+                    </div>
+                  </div>`;
+                  })
+                  .join('')}
+              </div>
+            </div>`;
+      } else if (orderedHome.length && !canEditOrder) {
+        homeOrderHtml =
+          '<p class="scope-tip" style="margin-top:10px">勾选设备后可调整首页入口顺序。</p>';
+      }
+      let devicePreviewHint = '';
+      if (state.scope === 'device') {
+        if (!state.selectedUnitIds.length) {
+          devicePreviewHint =
+            '<p class="scope-tip" style="margin:0 0 12px">以下为门店默认预览；勾选设备后可编辑指定覆盖。</p>';
+        } else if (state.selectedUnitIds.length > 1) {
+          devicePreviewHint = `<p class="scope-tip" style="margin:0 0 12px">已选 ${state.selectedUnitIds.length} 台设备，预览以第一台为准。</p>`;
+        } else {
+          const u = getUnitById(state.selectedUnitIds[0]);
+          if (u) {
+            devicePreviewHint = `<p class="scope-tip" style="margin:0 0 12px">当前设备：${escapeHtml(u.sn)}${u.storeName ? ` · ${escapeHtml(u.storeName)}` : ''}</p>`;
+          }
+        }
+      }
+      els.previewPanel.innerHTML = `
+        ${devicePreviewHint}
+        <div class="preview-grid">
+          <div class="preview-card">
+            <h4>首页入口</h4>
+            <p>根据当前配置展示设备首页可见入口。</p>
+            <div class="preview-section">
+              <div class="preview-section__title">入口</div>
+              <div class="preview-badges">${entryHtml}</div>
+              ${homeOrderHtml}
+            </div>
+          </div>
+          <div class="preview-card">
+            <h4>结果页可见报告</h4>
+            <p>汇总当前已开启项目的可见报告。</p>
+            <div class="preview-section">
+              <div class="preview-section__title">报告</div>
+              <div class="preview-badges">${reportHtml}</div>
+            </div>
+          </div>
+        </div>
+        <p class="scope-tip" style="margin-top:12px">设备端「结束测量」主链路：<strong>扫码登录/绑定</strong> → <strong>人体三维模型生成</strong> → <strong>报告详情</strong>；与扫码页为同一枚报告二维码时，报告详情页不重复展示（见综合 PRD §9）。</p>`;
+    }
+
+    function render() {
+      renderScope();
+      renderProjects();
+      renderAggregatedReports();
+      renderPreview();
+      syncDeviceDemoFromState();
+    }
+
+    function applyMutexOnEnable(bucket, projectId) {
+      const def = projectCatalog.find((p) => p.id === projectId);
+      if (def?.mutexGroup !== 'core-trio') return;
+      if (projectId === 'comprehensive') {
+        COMPREHENSIVE_EXCLUSIVE_SINGLE_IDS.forEach((id) => {
+          if (bucket.projects[id]) bucket.projects[id].enabled = false;
+        });
+      } else if (projectId === 'bodyComp' || projectId === 'circumference') {
+        bucket.projects.comprehensive.enabled = false;
+      }
+    }
+
+    function toggleProject(projectId) {
+      const flipBucket = (bucket) => {
+        const cur = bucket.projects[projectId].enabled;
+        const next = !cur;
+        bucket.projects[projectId].enabled = next;
+        if (next) applyMutexOnEnable(bucket, projectId);
+        reconcilePostureLinkedReports(bucket.projects);
+      };
+      if (state.scope === 'store') {
+        flipBucket(state.store);
+      } else {
+        const deviceIds = state.selectedUnitIds.length ? state.selectedUnitIds : [];
+        if (!deviceIds.length) {
+          toast('未选择设备', '请先勾选至少一台设备。');
+          return;
+        }
+        deviceIds.forEach((deviceId) => {
+          flipBucket(ensureDeviceOverride(deviceId));
+        });
+      }
+      render();
+    }
+
+    function toggleReport(projectId, reportId) {
+      if (state.scope === 'device' && !state.selectedUnitIds.length) {
+        toast('未选择设备', '请先勾选至少一台设备。');
+        return;
+      }
+      const applyOne = (bucket) => {
+        const projs = bucket.projects;
+        if (POSTURE_LINKED_REPORT_IDS.includes(reportId) && isPostureDualOpen(projs)) {
+          const cur = !!projs.comprehensive.reports[reportId];
+          setPostureLinkedReportValue(projs, reportId, !cur);
+          return;
+        }
+        const cfg = projs[projectId];
+        if (!cfg?.enabled) return;
+        cfg.reports[reportId] = !cfg.reports[reportId];
+      };
+      if (state.scope === 'store') {
+        applyOne(state.store);
+      } else {
+        state.selectedUnitIds.forEach((deviceId) => {
+          applyOne(ensureDeviceOverride(deviceId));
+        });
+      }
+      render();
+    }
+
+    function resetToSaved() {
+      state = deepClone(savedState);
+      render();
+      toast('已恢复', '已回到上次保存的配置。');
+    }
+
+    function bindEvents() {
+      const shell = document.querySelector('.editor-shell');
+      shell.addEventListener('change', (event) => {
+        const sel = event.target.closest('#devicePickerModelSelect');
+        if (sel && state.scope === 'device') {
+          state.devicePickerModel = sel.value || 'all';
+          state.devicePickerPage = 0;
+          render();
+        }
+      });
+      shell.addEventListener('keydown', (e) => {
+        if (e.key !== 'Enter') return;
+        if (!e.target.closest('#devicePickerSearchInput') || state.scope !== 'device') return;
+        e.preventDefault();
+        const inp = document.getElementById('devicePickerSearchInput');
+        state.devicePickerSearch = inp && inp.value ? inp.value.trim() : '';
+        state.devicePickerPage = 0;
+        render();
+      });
+      shell.addEventListener('click', (event) => {
+        const scopeBtn = event.target.closest('[data-scope]');
+        if (scopeBtn) {
+          state.scope = scopeBtn.dataset.scope;
+          if (state.scope === 'device' && !state.selectedUnitIds.length) {
+            state.selectedUnitIds = [STORE_DEVICE_UNITS[0].id];
+          }
+          render();
+          return;
+        }
+
+        const applySearchBtn = event.target.closest('[data-device-picker-apply-search]');
+        if (applySearchBtn && state.scope === 'device') {
+          const inp = document.getElementById('devicePickerSearchInput');
+          state.devicePickerSearch = inp && inp.value ? inp.value.trim() : '';
+          state.devicePickerPage = 0;
+          render();
+          return;
+        }
+
+        const pageBtn = event.target.closest('[data-device-picker-page]');
+        if (pageBtn && state.scope === 'device' && !pageBtn.disabled) {
+          state.devicePickerPage =
+            (Number(state.devicePickerPage) || 0) + (pageBtn.dataset.devicePickerPage === 'prev' ? -1 : 1);
+          render();
+          return;
+        }
+
+        const unitRow = event.target.closest('[data-unit-row]');
+        if (unitRow) {
+          if (state.scope !== 'device') return;
+          const id = unitRow.dataset.unitId;
+          if (state.selectedUnitIds.includes(id)) {
+            state.selectedUnitIds = state.selectedUnitIds.filter((item) => item !== id);
+          } else {
+            state.selectedUnitIds = [...state.selectedUnitIds, id];
+          }
+          render();
+          return;
+        }
+
+        const deviceAction = event.target.closest('[data-device-action]');
+        if (deviceAction) {
+          if (state.scope !== 'device') return;
+          const action = deviceAction.dataset.deviceAction;
+          if (action === 'all-filtered') {
+            state.selectedUnitIds = filterDeviceUnits().map((u) => u.id);
+          } else if (action === 'clear') {
+            state.selectedUnitIds = [];
+          }
+          render();
+          return;
+        }
+
+        const homeReset = event.target.closest('[data-home-order-reset]');
+        if (homeReset) {
+          applyHomeOrderReset();
+          render();
+          return;
+        }
+        const homeMove = event.target.closest('[data-home-order-move]');
+        if (homeMove) {
+          if (homeMove.disabled) return;
+          const idx = Number(homeMove.dataset.homeOrderIndex);
+          const dir = homeMove.dataset.homeOrderMove === 'up' ? -1 : 1;
+          applyHomeOrderMove(idx, dir);
+          render();
+          return;
+        }
+
+        const projectSwitch = event.target.closest('[data-role="project-switch"]');
+        if (projectSwitch) {
+          if (projectSwitch.disabled) return;
+          toggleProject(projectSwitch.dataset.projectId);
+          return;
+        }
+
+        const reportSwitch = event.target.closest('[data-role="report-switch"]');
+        if (reportSwitch) {
+          toggleReport(reportSwitch.dataset.projectId, reportSwitch.dataset.reportId);
+          return;
+        }
+      });
+
+      els.cancelBtn.addEventListener('click', resetToSaved);
+      els.saveBtn.addEventListener('click', () => {
+        if (state.scope === 'device' && !state.selectedUnitIds.length) {
+          toast('未选择设备', '请先勾选至少一台设备。');
+          return;
+        }
+        saveToStorage(
+          state.scope === 'store' ? '已保存门店默认配置' : '已保存设备覆盖配置',
+          state.scope === 'store'
+            ? '门店默认配置已保存。量产环境请重启对应体测设备后生效；本 Demo 请刷新设备端页面。'
+            : `已保存 ${state.selectedUnitIds.length} 台设备的覆盖配置。量产环境请重启对应体测设备后生效；本 Demo 请刷新设备端页面。`
+        );
+      });
+    }
+
+    render();
+    bindEvents();
+  </script>
+</body>
+</html>

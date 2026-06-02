@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>平衡测量准备</title>
+    <link rel="stylesheet" href="./shared.css" />
+  </head>
+  <body>
+    <main class="device-stage">
+      <section
+        class="device device--guide"
+        data-auto-detect-next="./single-countdown-balance.html"
+        data-auto-detect-delay="2600"
+        data-voice-text="请站稳并保持平衡。"
+      >
+        <div class="status-bar"><span>18:32</span><span>平衡测量</span></div>
+        <div class="topbar">
+          <a class="back-link" href="./home.html" data-stateful-link="./home.html">← 返回</a>
+          <span class="text-link">测量准备页</span>
+        </div>
+        <div class="section-label">平衡测量</div>
+        <h1 class="screen-title">请站稳并保持平衡</h1>
+        <p class="screen-subtitle guide-caption">请保持身体居中，双脚自然站稳，准备完成后进入倒计时。</p>
+        <div class="device-visual guide-visual">
+          <div class="live-stage guide-scene-wrap phase-stage-rails demo-click-zone">
+            <div class="camera-corner tl"></div><div class="camera-corner tr"></div><div class="camera-corner bl"></div><div class="camera-corner br"></div>
+            <div class="live-glow"></div>
+            <div class="live-status live-status--single"><span class="live-chip ok">姿态识别中</span></div>
+            <div class="guide-line circle"></div>
+            <div class="guide-line feet"></div>
+            <div class="human pose-balance">
+              <div class="head"></div><div class="torso"></div>
+              <div class="limb arm left"></div><div class="limb arm right"></div>
+              <div class="limb leg left"></div><div class="limb leg right"></div>
+            </div>
+            <p class="guide-arm-hint">双脚站稳，尽量不要晃动</p>
+            <div class="live-focus" data-auto-detect-status>正在识别平衡姿态...</div>
+          </div>
+        </div>
+        <div class="footer-hint guide-footer">
+          <div class="button-row">
+            <a class="button primary guide-phase-btn" href="./single-countdown-balance.html" data-demo-next="./single-countdown-balance.html" data-stateful-link="./single-countdown-balance.html">准备完成 · 进入倒计时</a>
+            <a class="button secondary" href="./single-prepare-balance.html?autoDetectMode=warning">姿势异常示例</a>
+          </div>
+        </div>
+      </section>
+    </main>
+    <script src="./shared.js"></script>
+  </body>
+</html>

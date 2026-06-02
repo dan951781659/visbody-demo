@@ -1,0 +1,70 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>平衡测量中</title>
+    <link rel="stylesheet" href="./shared.css" />
+  </head>
+  <body>
+    <main class="device-stage">
+      <section
+        class="device device--measurement"
+        data-measuring-flow
+        data-measuring-duration="10000"
+        data-measuring-next="./single-result-balance.html"
+        data-voice-text="平衡测量中，请保持站稳并不要晃动。"
+      >
+        <audio class="turntable-audio" data-turntable-audio preload="auto" loop playsinline hidden>
+          <source src="./assets/turntable-loop.wav" type="audio/wav" />
+        </audio>
+        <div class="status-bar"><span>18:32</span><span>测量中</span></div>
+        <div class="topbar">
+          <a class="back-link" href="./single-countdown-balance.html">← 返回</a>
+          <span class="text-link">平衡采集中</span>
+        </div>
+        <div class="section-label">平衡测量</div>
+        <h1 class="screen-title">请保持站稳</h1>
+        <p class="screen-subtitle" data-live-voice>正在采集平衡稳定性，请保持身体居中。</p>
+        <div class="device-visual">
+          <div class="live-stage measuring-stage">
+            <div class="live-glow"></div>
+            <div class="live-status">
+              <span class="live-chip ok">姿态正确</span>
+              <span class="live-chip" data-measuring-chip>平衡采集中</span>
+            </div>
+            <div class="turntable-plate" aria-hidden="true"></div>
+            <div class="guide-line circle"></div>
+            <div class="guide-line feet"></div>
+            <div class="human pose-balance measuring-human">
+              <div class="head"></div>
+              <div class="torso"></div>
+              <div class="limb arm left"></div>
+              <div class="limb arm right"></div>
+              <div class="limb leg left"></div>
+              <div class="limb leg right"></div>
+            </div>
+            <div class="scan-line"></div>
+            <div class="live-focus" data-measuring-focus>请不要晃动</div>
+          </div>
+        </div>
+        <div class="progress-track"><div class="progress-fill" data-measuring-progress style="width:0%;"></div></div>
+        <div class="measurement-tips-carousel" data-tip-carousel data-tip-interval="2600">
+          <p class="measurement-tips-title">测量注意事项</p>
+          <p class="measurement-tip-item is-active" data-tip-item>保持双脚均匀受力，尽量站在转台中心。</p>
+          <p class="measurement-tip-item" data-tip-item>请放松肩膀和手臂，不要刻意发力。</p>
+          <p class="measurement-tip-item" data-tip-item>测量完成后可查看平衡稳定性结果。</p>
+        </div>
+        <div class="footer-hint">
+          <div class="button-row">
+            <a class="button primary" href="./single-result-balance.html" data-action-link="noop" data-complete-group="balance">查看平衡结果</a>
+          </div>
+          <div class="button-row" style="margin-top:12px">
+            <a class="button secondary" href="./single-measuring-balance.html?autoDetectMode=warning">姿势异常示例</a>
+          </div>
+        </div>
+      </section>
+    </main>
+    <script src="./shared.js"></script>
+  </body>
+</html>

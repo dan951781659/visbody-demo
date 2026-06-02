@@ -1,61 +1,56 @@
 <!doctype html>
 <html lang="zh-CN">
-<head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>身体成分测量准备</title>
-<link rel="stylesheet" href="./shared.css" />
-</head>
-<body>
-<main class="device-stage">
-<section class="device device--bodycomp-prep" data-prep-gesture-advance="./standard-position.html">
-<div class="status-bar"><span>18:32</span><span>综合测量</span><span class="demo-version-badge" data-demo-version>v1.5.0</span></div>
-<div class="topbar"><a class="back-link" href="./home.html" data-stateful-link="./home.html">← 返回</a><span class="text-link">测量准备</span></div>
-<div class="section-label">综合测量</div>
-<h1 class="screen-title">身体成分测量准备</h1>
-<div class="bodycomp-prep-grid" role="list">
-<article class="bodycomp-prep-cell bodycomp-prep-cell--1 is-highlight" role="listitem">
-<div class="bodycomp-prep-visual bodycomp-prep-visual--feet" aria-hidden="true"><span class="bodycomp-prep-speaker" aria-hidden="true">🔊</span></div>
-<p class="bodycomp-prep-caption">保证足底和金属脚印的充分接触。</p>
-</article>
-<article class="bodycomp-prep-cell bodycomp-prep-cell--2" role="listitem">
-<div class="bodycomp-prep-visual bodycomp-prep-visual--hands" aria-hidden="true"></div>
-<p class="bodycomp-prep-caption">双手拇指及四指，与扶手金属充分接触。</p>
-</article>
-<article class="bodycomp-prep-cell bodycomp-prep-cell--3" role="listitem">
-<div class="bodycomp-prep-visual bodycomp-prep-visual--arms" aria-hidden="true"></div>
-<p class="bodycomp-prep-caption">双臂自然打开，并保持在 45° 夹角位置。</p>
-</article>
-<article class="bodycomp-prep-cell bodycomp-prep-cell--4" role="listitem">
-<div class="bodycomp-prep-visual bodycomp-prep-visual--still" aria-hidden="true"></div>
-<p class="bodycomp-prep-caption">测量过程中保持头部和身体静止。</p>
-</article>
-</div>
-<div class="prep-gesture-block" aria-label="进入扶手准备">
-<div class="scheme-three-gesture-panel scheme-three-gesture-panel--compact">
-<div class="scheme-three-gesture-panel-title">看完引导后</div>
-<p class="scheme-three-gesture-panel-lead">请<strong>举右手</strong>进入扶手姿势准备。Demo 可按 <kbd class="kbd-soft">R</kbd> 或点击下方模拟。</p>
-</div>
-<div class="scheme-three-gesture-figure" data-prep-gesture-figure>
-<div class="scheme-three-gesture-figure-stage">
-<div class="human pose-shoulder-right" aria-hidden="true">
-<div class="head"></div><div class="torso"></div>
-<div class="limb arm left"></div><div class="limb arm right"></div>
-<div class="limb leg left"></div><div class="limb leg right"></div>
-</div>
-</div>
-<p class="scheme-three-gesture-figure-caption">举右手 · 进入扶手准备</p>
-</div>
-<div class="scheme-three-toast" data-gesture-toast hidden role="status"></div>
-<div class="prep-gesture-demo-row">
-<button type="button" class="button ghost" data-gesture-simulate="next">Demo：模拟举右手</button>
-</div>
-<p class="prep-gesture-fallback">
-<a href="./standard-position.html" data-stateful-link="./standard-position.html">演示：点击进入扶手准备</a>
-</p>
-</div>
-</section>
-</main>
-<script src="./shared.js"></script>
-</body>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>转台站姿</title>
+    <link rel="stylesheet" href="./shared.css" />
+  </head>
+  <body>
+    <main class="device-stage">
+      <section
+        class="device device--guide"
+        data-turntable-anthropometry
+        data-anthropometry-auto="1"
+        data-anthropometry-next="./standard-grip-prep.html"
+        data-auto-detect-delay="2600"
+        data-voice-text="请站上转台，双手自然下垂，身体放松并保持静止，系统将自动测量身高与体重。"
+      >
+        <div class="status-bar"><span>18:32</span><span>转台站姿</span></div>
+        <div class="topbar">
+          <a class="back-link" href="./standard-user-prep.html" data-stateful-link="./standard-user-prep.html">← 返回</a>
+          <span class="text-link">测量准备页</span>
+        </div>
+        <h1 class="screen-title">站上转台</h1>
+        <p class="screen-subtitle">双手自然下垂，面向屏幕，保持静止直至提示完成。</p>
+        <div class="device-visual guide-visual">
+          <div class="live-stage guide-scene-wrap bodycomp-prep-scene">
+            <div class="camera-corner tl"></div>
+            <div class="camera-corner tr"></div>
+            <div class="camera-corner bl"></div>
+            <div class="camera-corner br"></div>
+            <div class="live-glow"></div>
+            <div class="live-status live-status--single"><span class="live-chip ok">站姿识别中</span></div>
+            <img
+              class="bodycomp-prep-hero-svg bodycomp-prep-turntable-figure"
+              src="./assets/weight-measure/turntable-figure.svg"
+              alt="站上转台、双手自然下垂示意"
+              width="320"
+              height="260"
+            />
+            <div class="live-focus" data-auto-detect-status>正在识别站姿，请保持站立不动。</div>
+          </div>
+        </div>
+        <div class="footer-hint" hidden>
+          <a
+            class="button primary"
+            href="./standard-grip-prep.html"
+            data-anthropometry-next-btn
+            data-stateful-link="./standard-grip-prep.html"
+          >下一步</a>
+        </div>
+      </section>
+    </main>
+    <script src="./shared.js"></script>
+  </body>
 </html>
