@@ -1,0 +1,183 @@
+:root {
+  color-scheme: dark;
+  font-family: "SF Pro Display", "PingFang SC", "Helvetica Neue", Arial, sans-serif;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  background:
+    radial-gradient(ellipse 92vw 68vh at 10% 4%, rgba(0, 229, 255, 0.22) 0%, transparent 58%),
+    radial-gradient(ellipse 74vw 54vh at 92% 8%, rgba(167, 139, 250, 0.22) 0%, transparent 52%),
+    radial-gradient(ellipse 90vw 64vh at 50% 100%, rgba(67, 185, 255, 0.10) 0%, transparent 56%),
+    linear-gradient(180deg, #02050b 0%, #060d19 16%, #0b1630 46%, #122044 70%, #172a56 100%);
+  background-attachment: fixed;
+  color: #e8ecf4;
+}
+
+#root {
+  min-height: 100vh;
+}
+
+.fx-appShell {
+  position: relative;
+}
+
+.fx-headerGlass {
+  border-bottom: 1px solid rgba(100, 140, 255, 0.12);
+  background: linear-gradient(180deg, rgba(7, 13, 31, 0.94), rgba(7, 13, 31, 0.78));
+  backdrop-filter: blur(18px);
+}
+
+.fx-navGlass {
+  background: linear-gradient(180deg, rgba(9, 15, 33, 0.9), rgba(7, 12, 28, 0.9));
+  border-top: 1px solid rgba(100, 140, 255, 0.12);
+  backdrop-filter: blur(18px);
+}
+
+.fx-pill {
+  position: relative;
+  overflow: hidden;
+  border-radius: 999px;
+  border: 1px solid rgba(100, 140, 255, 0.16);
+  background: rgba(20, 30, 60, 0.45);
+  color: rgba(122, 139, 170, 0.95);
+  backdrop-filter: blur(12px);
+  transition: transform 180ms ease, border-color 180ms ease, background 180ms ease, color 180ms ease, box-shadow 180ms ease;
+}
+
+.fx-pill:hover {
+  color: rgba(232, 236, 244, 0.95);
+  border-color: rgba(0, 229, 255, 0.22);
+}
+
+.fx-pill--active {
+  border-color: rgba(0, 229, 255, 0.22);
+  color: rgba(255, 255, 255, 0.98);
+  background:
+    radial-gradient(120px 60px at 20% 20%, rgba(0, 229, 255, 0.22), transparent 55%),
+    radial-gradient(140px 70px at 80% 0%, rgba(167, 139, 250, 0.18), transparent 55%),
+    linear-gradient(135deg, rgba(0, 229, 255, 0.16), rgba(167, 139, 250, 0.12));
+}
+
+.fx-cta {
+  position: relative;
+  overflow: hidden;
+  border-radius: 16px;
+  border: 1px solid rgba(0, 229, 255, 0.22);
+  background:
+    radial-gradient(120px 60px at 25% 25%, rgba(0, 229, 255, 0.22), transparent 60%),
+    radial-gradient(140px 70px at 85% 10%, rgba(167, 139, 250, 0.18), transparent 60%),
+    linear-gradient(135deg, rgba(0, 229, 255, 0.12), rgba(167, 139, 250, 0.1));
+  color: rgba(255, 255, 255, 0.98);
+  backdrop-filter: blur(12px);
+  transition: transform 180ms ease;
+}
+
+.fx-cta:active {
+  transform: scale(0.99);
+}
+
+.fx-cta-training {
+  border: none;
+  background: linear-gradient(90deg, #2b8cff 0%, #4f6cff 42%, #7a5cff 100%);
+  transition: transform 180ms ease, filter 180ms ease;
+}
+
+.fx-cta-training:active {
+  transform: scale(0.99);
+  filter: brightness(0.96);
+}
+
+.fx-cta-outline {
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  background: rgba(255, 255, 255, 0.06);
+  transition: transform 180ms ease, border-color 180ms ease, background 180ms ease;
+}
+
+.fx-cta-outline:active {
+  transform: scale(0.99);
+}
+
+.fx-cardInner {
+  position: relative;
+  overflow: hidden;
+  border: 1px solid rgba(100, 140, 255, 0.1);
+  background:
+    radial-gradient(circle at 0% 0%, rgba(0, 229, 255, 0.08), transparent 34%),
+    linear-gradient(180deg, rgba(255, 255, 255, 0.048), rgba(255, 255, 255, 0.018));
+  backdrop-filter: blur(14px);
+}
+
+.fx-listItem {
+  position: relative;
+  overflow: hidden;
+  border-radius: 16px;
+  border: 1px solid rgba(100, 140, 255, 0.1);
+  background:
+    radial-gradient(circle at 100% 0%, rgba(167, 139, 250, 0.08), transparent 30%),
+    linear-gradient(180deg, rgba(255, 255, 255, 0.05), rgba(255, 255, 255, 0.02));
+  transition: transform 180ms ease, border-color 180ms ease;
+}
+
+.fx-listItem:hover {
+  transform: translateY(-1px);
+  border-color: rgba(255, 255, 255, 0.18);
+}
+
+/** 横向滑动条内卡片：弱线框，避免与外层卡片叠线框 */
+.fx-listItem--flat {
+  border: none;
+  background:
+    radial-gradient(circle at 100% 0%, rgba(167, 139, 250, 0.06), transparent 32%),
+    linear-gradient(180deg, rgba(255, 255, 255, 0.055), rgba(255, 255, 255, 0.02));
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.04);
+}
+
+.fx-listItem--flat:hover {
+  border-color: transparent;
+  box-shadow: inset 0 0 0 1px rgba(0, 229, 255, 0.12);
+}
+
+.fx-routeBadge {
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  background:
+    radial-gradient(circle at 15% 10%, rgba(0, 229, 255, 0.12), transparent 42%),
+    rgba(255, 255, 255, 0.04);
+  color: #b6c3d9;
+}
+
+.hide-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+.hide-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+@keyframes model-spin-sway {
+  0% {
+    transform: perspective(900px) rotateY(-7deg);
+  }
+  50% {
+    transform: perspective(900px) rotateY(7deg);
+  }
+  100% {
+    transform: perspective(900px) rotateY(-7deg);
+  }
+}
+
+.fx-modelRotate {
+  transform-origin: 50% 58%;
+  animation: model-spin-sway 7s ease-in-out infinite;
+}
+
+::selection {
+  background: rgba(0, 229, 255, 0.18);
+}

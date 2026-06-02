@@ -1,0 +1,2107 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>WellnessHub 邮件通知中心</title>
+  <style>
+    :root {
+      --bg: #f6f8fb;
+      --panel: #ffffff;
+      --panel-soft: #f9fbff;
+      --line: #e6ebf2;
+      --line-strong: #d8e2ee;
+      --text: #1f2937;
+      --sub: #667085;
+      --muted: #94a3b8;
+      --blue: #2563eb;
+      --blue-soft: rgba(37, 99, 235, 0.1);
+      --teal: #0f766e;
+      --teal-soft: rgba(15, 118, 110, 0.1);
+      --green: #16a34a;
+      --green-soft: rgba(22, 163, 74, 0.1);
+      --orange: #d97706;
+      --orange-soft: rgba(217, 119, 6, 0.12);
+      --red: #dc2626;
+      --red-soft: rgba(220, 38, 38, 0.1);
+      --shadow: 0 10px 28px rgba(15, 23, 42, 0.06);
+      --radius: 16px;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Noto Sans SC", sans-serif;
+      color: var(--text);
+      background:
+        radial-gradient(circle at top left, rgba(37, 99, 235, 0.06), transparent 24%),
+        linear-gradient(180deg, #f9fbff 0%, #f6f8fb 260px);
+    }
+
+    button,
+    input,
+    select,
+    textarea {
+      font: inherit;
+    }
+
+    .app-shell {
+      min-height: 100vh;
+      display: grid;
+      grid-template-columns: 220px minmax(0, 1fr);
+    }
+
+    .sidebar {
+      background: rgba(255, 255, 255, 0.94);
+      border-right: 1px solid var(--line);
+      padding: 20px 14px;
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+      position: sticky;
+      top: 0;
+      height: 100vh;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 8px 10px;
+    }
+
+    .brand-mark {
+      width: 36px;
+      height: 36px;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: linear-gradient(180deg, #2f6bf5, #2455dd);
+      color: #fff;
+      font-weight: 700;
+      box-shadow: 0 10px 20px rgba(37, 99, 235, 0.22);
+    }
+
+    .brand-title {
+      margin: 0;
+      font-size: 15px;
+      font-weight: 700;
+    }
+
+    .brand-sub {
+      margin-top: 2px;
+      color: var(--sub);
+      font-size: 12px;
+    }
+
+    .nav-group-title {
+      padding: 0 10px;
+      font-size: 11px;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+
+    .nav-list {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .nav-btn {
+      width: 100%;
+      border: 0;
+      background: transparent;
+      color: var(--sub);
+      border-radius: 12px;
+      padding: 12px 12px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      cursor: pointer;
+      transition: all 0.16s ease;
+    }
+
+    .nav-btn:hover {
+      background: #f3f7fc;
+      color: var(--text);
+    }
+
+    .nav-btn.active {
+      background: var(--blue-soft);
+      color: var(--blue);
+      font-weight: 600;
+    }
+
+    .nav-btn .left {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .nav-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 999px;
+      background: currentColor;
+      opacity: 0.8;
+    }
+
+    .badge-count {
+      min-width: 24px;
+      padding: 2px 8px;
+      border-radius: 999px;
+      background: #eff3f8;
+      font-size: 11px;
+      color: var(--sub);
+      text-align: center;
+    }
+
+    .sidebar-foot {
+      margin-top: auto;
+      padding: 14px;
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      background: linear-gradient(180deg, #f8fbff, #f2f7ff);
+      box-shadow: var(--shadow);
+    }
+
+    .sidebar-foot strong {
+      display: block;
+      font-size: 13px;
+    }
+
+    .sidebar-foot span {
+      display: block;
+      margin-top: 5px;
+      font-size: 12px;
+      color: var(--sub);
+      line-height: 1.6;
+    }
+
+    .main {
+      min-width: 0;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .topbar {
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      background: rgba(246, 248, 251, 0.92);
+      backdrop-filter: blur(16px);
+      border-bottom: 1px solid rgba(230, 235, 242, 0.9);
+      padding: 18px 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+    }
+
+    .page-title {
+      margin: 0;
+      font-size: 24px;
+      font-weight: 700;
+    }
+
+    .toolbar {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .btn,
+    .btn-primary,
+    .btn-danger,
+    .btn-ghost {
+      border-radius: 10px;
+      padding: 9px 14px;
+      border: 1px solid var(--line);
+      background: var(--panel);
+      color: var(--text);
+      cursor: pointer;
+      transition: all 0.16s ease;
+      box-shadow: 0 1px 2px rgba(15, 23, 42, 0.04);
+    }
+
+    .btn:hover,
+    .btn-primary:hover,
+    .btn-danger:hover,
+    .btn-ghost:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 10px 18px rgba(15, 23, 42, 0.07);
+    }
+
+    .btn-primary {
+      background: linear-gradient(180deg, #2f6bf5, #2459df);
+      color: #fff;
+      border-color: var(--blue);
+    }
+
+    .btn-danger {
+      color: var(--red);
+      border-color: rgba(220, 38, 38, 0.2);
+      background: #fff;
+    }
+
+    .btn-ghost {
+      background: rgba(255, 255, 255, 0.72);
+    }
+
+    .page-body {
+      padding: 20px 24px 28px;
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+    }
+
+    .page-view {
+      display: none;
+      flex-direction: column;
+      gap: 18px;
+    }
+
+    .page-view.active {
+      display: flex;
+    }
+
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 16px;
+    }
+
+    .stat-card {
+      position: relative;
+      overflow: hidden;
+      border-radius: var(--radius);
+      border: 1px solid var(--line);
+      background: var(--panel);
+      padding: 18px;
+      box-shadow: var(--shadow);
+    }
+
+    .stat-card::after {
+      content: "";
+      position: absolute;
+      right: -24px;
+      bottom: -28px;
+      width: 74px;
+      height: 74px;
+      border-radius: 999px;
+      background: rgba(37, 99, 235, 0.05);
+    }
+
+    .stat-label {
+      font-size: 12px;
+      color: var(--sub);
+    }
+
+    .stat-value {
+      margin-top: 10px;
+      font-size: 28px;
+      font-weight: 700;
+      letter-spacing: -0.03em;
+    }
+
+    .stat-meta {
+      margin-top: 8px;
+      font-size: 12px;
+      color: var(--sub);
+    }
+
+    .content-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 1.45fr) 380px;
+      gap: 18px;
+      align-items: start;
+    }
+
+    .panel {
+      min-width: 0;
+      border-radius: var(--radius);
+      border: 1px solid var(--line);
+      background: var(--panel);
+      box-shadow: var(--shadow);
+    }
+
+    .panel-head {
+      padding: 16px 18px;
+      border-bottom: 1px solid var(--line);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .panel-title {
+      margin: 0;
+      font-size: 16px;
+      font-weight: 700;
+    }
+
+    .panel-body {
+      padding: 18px;
+    }
+
+    .filter-row {
+      display: grid;
+      grid-template-columns: minmax(0, 1.4fr) repeat(2, minmax(0, 1fr)) auto auto;
+      gap: 12px;
+    }
+
+    .input,
+    .select,
+    .textarea {
+      width: 100%;
+      border: 1px solid var(--line);
+      background: #fff;
+      color: var(--text);
+      border-radius: 10px;
+      padding: 11px 12px;
+      outline: none;
+      transition: border-color 0.16s ease, box-shadow 0.16s ease;
+    }
+
+    .input:focus,
+    .select:focus,
+    .textarea:focus {
+      border-color: rgba(37, 99, 235, 0.44);
+      box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.1);
+    }
+
+    .textarea {
+      min-height: 110px;
+      resize: vertical;
+      line-height: 1.6;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 16px;
+    }
+
+    th,
+    td {
+      padding: 14px 14px;
+      border-bottom: 1px solid var(--line);
+      text-align: left;
+      vertical-align: top;
+      font-size: 13px;
+    }
+
+    th {
+      color: var(--sub);
+      font-weight: 600;
+      background: var(--panel-soft);
+    }
+
+    tbody tr {
+      cursor: pointer;
+      transition: background 0.16s ease;
+    }
+
+    tbody tr:hover {
+      background: #fafcff;
+    }
+
+    tbody tr.active-row {
+      background: rgba(37, 99, 235, 0.06);
+    }
+
+    .row-main {
+      font-weight: 600;
+    }
+
+    .row-sub {
+      margin-top: 4px;
+      font-size: 12px;
+      color: var(--sub);
+      line-height: 1.5;
+    }
+
+    .inline-actions {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .link-btn {
+      border: 0;
+      background: transparent;
+      color: var(--blue);
+      cursor: pointer;
+      padding: 0;
+      font-weight: 600;
+    }
+
+    .tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 4px 10px;
+      border-radius: 999px;
+      font-size: 12px;
+      font-weight: 600;
+      white-space: nowrap;
+    }
+
+    .tag.blue { color: var(--blue); background: var(--blue-soft); }
+    .tag.green { color: var(--green); background: var(--green-soft); }
+    .tag.orange { color: var(--orange); background: var(--orange-soft); }
+    .tag.red { color: var(--red); background: var(--red-soft); }
+    .tag.teal { color: var(--teal); background: var(--teal-soft); }
+
+    .detail-card {
+      padding: 18px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .detail-head {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .detail-title {
+      margin: 0;
+      font-size: 18px;
+      font-weight: 700;
+      line-height: 1.4;
+    }
+
+    .detail-meta {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 12px;
+    }
+
+    .detail-meta-item {
+      border: 1px solid var(--line);
+      background: var(--panel-soft);
+      border-radius: 12px;
+      padding: 12px;
+    }
+
+    .detail-meta-key {
+      font-size: 12px;
+      color: var(--sub);
+    }
+
+    .detail-meta-value {
+      margin-top: 6px;
+      font-size: 15px;
+      font-weight: 700;
+    }
+
+    .segmented {
+      display: inline-flex;
+      background: #f3f6fb;
+      border: 1px solid var(--line);
+      padding: 4px;
+      border-radius: 12px;
+      gap: 4px;
+    }
+
+    .seg-btn {
+      border: 0;
+      background: transparent;
+      color: var(--sub);
+      padding: 8px 12px;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: all 0.16s ease;
+    }
+
+    .seg-btn.active {
+      background: #fff;
+      color: var(--text);
+      font-weight: 600;
+      box-shadow: 0 1px 2px rgba(15, 23, 42, 0.06);
+    }
+
+    .tab-panel {
+      display: none;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .tab-panel.active {
+      display: flex;
+    }
+
+    .mini-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 12px;
+    }
+
+    .mini-card {
+      padding: 12px;
+      border-radius: 12px;
+      border: 1px solid var(--line);
+      background: var(--panel-soft);
+    }
+
+    .mini-card strong {
+      display: block;
+      font-size: 18px;
+      font-weight: 700;
+    }
+
+    .mini-card span {
+      display: block;
+      margin-top: 5px;
+      font-size: 12px;
+      color: var(--sub);
+    }
+
+    .list-stack {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .list-item {
+      padding: 12px;
+      border-radius: 12px;
+      border: 1px solid var(--line);
+      background: #fbfdff;
+    }
+
+    .list-item strong {
+      display: block;
+      font-size: 13px;
+    }
+
+    .list-item span {
+      display: block;
+      margin-top: 5px;
+      font-size: 12px;
+      color: var(--sub);
+      line-height: 1.6;
+    }
+
+    .preview-card {
+      border-radius: 16px;
+      border: 1px solid var(--line);
+      overflow: hidden;
+      background: linear-gradient(180deg, #fff, #fafcff);
+    }
+
+    .preview-top {
+      padding: 14px;
+      border-bottom: 1px solid var(--line);
+      background: #f8fbff;
+      display: flex;
+      gap: 8px;
+    }
+
+    .preview-top span {
+      width: 10px;
+      height: 10px;
+      border-radius: 999px;
+      background: #d9e2ef;
+    }
+
+    .preview-body {
+      padding: 16px;
+    }
+
+    .preview-body .tag {
+      margin-bottom: 12px;
+    }
+
+    .preview-title {
+      font-size: 18px;
+      font-weight: 700;
+      line-height: 1.4;
+    }
+
+    .preview-copy {
+      margin-top: 10px;
+      font-size: 13px;
+      color: var(--sub);
+      line-height: 1.7;
+    }
+
+    .preview-highlight {
+      margin-top: 16px;
+      padding: 14px;
+      border-radius: 14px;
+      border: 1px solid var(--line);
+      background: #f8fbff;
+      font-size: 13px;
+      color: var(--text);
+      line-height: 1.7;
+    }
+
+    .preview-cta {
+      margin-top: 18px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 10px 16px;
+      border-radius: 10px;
+      background: var(--blue);
+      color: #fff;
+      font-weight: 600;
+      text-decoration: none;
+    }
+
+    .compose-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 1.35fr) 380px;
+      gap: 18px;
+      align-items: start;
+    }
+
+    .section-title {
+      margin: 0;
+      font-size: 14px;
+      font-weight: 700;
+    }
+
+    .section-block + .section-block {
+      margin-top: 22px;
+      padding-top: 22px;
+      border-top: 1px solid var(--line);
+    }
+
+    .option-group {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-top: 14px;
+    }
+
+    .option-chip {
+      border: 1px solid var(--line);
+      background: #fff;
+      color: var(--sub);
+      border-radius: 12px;
+      padding: 10px 12px;
+      cursor: pointer;
+      transition: all 0.16s ease;
+    }
+
+    .option-chip.active {
+      color: var(--blue);
+      border-color: rgba(37, 99, 235, 0.22);
+      background: rgba(37, 99, 235, 0.08);
+      font-weight: 600;
+    }
+
+    .store-grid {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 14px;
+    }
+
+    .store-chip {
+      border: 1px solid var(--line);
+      background: #fff;
+      color: var(--text);
+      border-radius: 999px;
+      padding: 7px 10px;
+      cursor: pointer;
+      transition: all 0.16s ease;
+      font-size: 12px;
+    }
+
+    .store-chip.active {
+      background: var(--teal-soft);
+      border-color: rgba(15, 118, 110, 0.22);
+      color: var(--teal);
+      font-weight: 600;
+    }
+
+    .form-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 14px;
+      margin-top: 14px;
+    }
+
+    .field {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .field.span-2 {
+      grid-column: 1 / -1;
+    }
+
+    .label {
+      font-size: 12px;
+      color: var(--sub);
+      font-weight: 600;
+    }
+
+    .hint {
+      font-size: 12px;
+      color: var(--muted);
+      line-height: 1.5;
+    }
+
+    .summary-stack {
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+      position: sticky;
+      top: 92px;
+    }
+
+    .summary-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 12px;
+    }
+
+    .summary-card {
+      border: 1px solid var(--line);
+      background: var(--panel-soft);
+      border-radius: 12px;
+      padding: 12px;
+    }
+
+    .summary-card .key {
+      font-size: 12px;
+      color: var(--sub);
+    }
+
+    .summary-card .value {
+      margin-top: 6px;
+      font-size: 20px;
+      font-weight: 700;
+    }
+
+    .summary-card .meta {
+      margin-top: 4px;
+      font-size: 12px;
+      color: var(--sub);
+    }
+
+    .footer-actions {
+      margin-top: 22px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .status-line {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+      font-size: 12px;
+      color: var(--sub);
+    }
+
+    .status-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 999px;
+      background: var(--green);
+    }
+
+    .hidden {
+      display: none !important;
+    }
+
+    .toast-wrap {
+      position: fixed;
+      right: 24px;
+      bottom: 24px;
+      z-index: 99;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      width: min(360px, calc(100vw - 32px));
+    }
+
+    .toast {
+      padding: 14px 16px;
+      border-radius: 14px;
+      background: rgba(31, 41, 55, 0.96);
+      color: #fff;
+      box-shadow: 0 16px 32px rgba(15, 23, 42, 0.18);
+      animation: slideIn 0.18s ease;
+      font-size: 13px;
+      line-height: 1.5;
+    }
+
+    .toast.success { background: rgba(22, 163, 74, 0.96); }
+    .toast.warning { background: rgba(217, 119, 6, 0.96); }
+    .toast.error { background: rgba(220, 38, 38, 0.96); }
+
+    @keyframes slideIn {
+      from { opacity: 0; transform: translateY(8px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @media (max-width: 1400px) {
+      .content-grid,
+      .compose-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .summary-stack {
+        position: static;
+      }
+    }
+
+    @media (max-width: 1080px) {
+      .app-shell {
+        grid-template-columns: 1fr;
+      }
+
+      .sidebar {
+        position: static;
+        height: auto;
+      }
+
+      .stats-grid,
+      .form-grid,
+      .mini-grid,
+      .detail-meta,
+      .summary-grid {
+        grid-template-columns: 1fr 1fr;
+      }
+
+      .filter-row {
+        grid-template-columns: 1fr 1fr;
+      }
+    }
+
+    @media (max-width: 720px) {
+      .topbar,
+      .page-body {
+        padding-left: 16px;
+        padding-right: 16px;
+      }
+
+      .stats-grid,
+      .form-grid,
+      .mini-grid,
+      .detail-meta,
+      .summary-grid,
+      .filter-row {
+        grid-template-columns: 1fr;
+      }
+
+      th:nth-child(4),
+      td:nth-child(4) {
+        display: none;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="app-shell">
+    <aside class="sidebar">
+      <div class="brand">
+        <div class="brand-mark">W</div>
+        <div>
+          <p class="brand-title">Visbody WellnessHub</p>
+          <div class="brand-sub">Mail Center</div>
+        </div>
+      </div>
+
+      <div>
+        <div class="nav-group-title">邮件通知</div>
+        <div class="nav-list">
+          <button class="nav-btn active" data-nav="tasks">
+            <span class="left"><span class="nav-dot"></span>邮件通知管理</span>
+            <span class="badge-count" id="taskCountBadge">0</span>
+          </button>
+        </div>
+      </div>
+
+      <div class="sidebar-foot">
+        <strong>MVP 核心流程</strong>
+        <span>邮件列表、创建邮件、测试发送、正式发送、结果查看、失败重试。</span>
+      </div>
+    </aside>
+
+    <main class="main">
+      <header class="topbar">
+        <h1 class="page-title" id="pageTitle">邮件通知管理</h1>
+        <div class="toolbar">
+          <button class="btn-ghost hidden" id="backToListTop">返回列表</button>
+          <button class="btn-primary" id="newTaskTop">新建邮件</button>
+        </div>
+      </header>
+
+      <div class="page-body">
+        <section class="page-view active" id="tasksView">
+          <div class="stats-grid" id="statsGrid"></div>
+
+          <div class="content-grid">
+            <section class="panel">
+              <div class="panel-head">
+                <h2 class="panel-title">邮件列表</h2>
+                <div class="inline-actions">
+                  <span class="tag teal" id="suppressCountTag">抑制名单 0</span>
+                  <span class="tag blue" id="todayCountTag">今日邮件 0</span>
+                </div>
+              </div>
+              <div class="panel-body">
+                <div class="filter-row">
+                  <input class="input" id="keywordFilter" placeholder="搜索邮件名称或标题" />
+                  <select class="select" id="statusFilter">
+                    <option value="all">全部状态</option>
+                    <option value="草稿">草稿</option>
+                    <option value="发送中">发送中</option>
+                    <option value="部分失败">部分失败</option>
+                    <option value="已完成">已完成</option>
+                  </select>
+                  <select class="select" id="typeFilter">
+                    <option value="all">全部类型</option>
+                    <option value="重大升级通知">重大升级通知</option>
+                    <option value="运营活动通知">运营活动通知</option>
+                    <option value="服务公告">服务公告</option>
+                  </select>
+                  <button class="btn" id="applyFilters">筛选</button>
+                  <button class="btn-ghost" id="resetFilters">重置</button>
+                </div>
+
+                <div style="overflow:auto;">
+                  <table>
+                    <thead>
+                      <tr>
+                        <th>邮件名称</th>
+                        <th>类型</th>
+                        <th>收件人数</th>
+                        <th>更新时间</th>
+                        <th>状态</th>
+                        <th>操作</th>
+                      </tr>
+                    </thead>
+                    <tbody id="taskTableBody"></tbody>
+                  </table>
+                </div>
+              </div>
+            </section>
+
+            <aside class="panel detail-card">
+              <div class="detail-head">
+                <div class="inline-actions" id="detailStatusWrap"></div>
+                <h2 class="detail-title" id="detailTitle"></h2>
+                <div class="inline-actions" id="detailActionWrap"></div>
+              </div>
+
+              <div class="detail-meta" id="detailMeta"></div>
+
+              <div class="segmented" id="detailTabs">
+                <button class="seg-btn active" data-tab="overview">概览</button>
+                <button class="seg-btn" data-tab="failures">失败地址</button>
+                <button class="seg-btn" data-tab="logs">发送日志</button>
+              </div>
+
+              <div class="tab-panel active" id="detailOverview"></div>
+              <div class="tab-panel" id="detailFailures"></div>
+              <div class="tab-panel" id="detailLogs"></div>
+
+              <div class="preview-card">
+                <div class="preview-top"><span></span><span></span><span></span></div>
+                <div class="preview-body">
+                  <div id="detailPreviewType"></div>
+                  <div class="preview-title" id="detailPreviewSubject"></div>
+                  <div class="preview-copy" id="detailPreviewPreheader"></div>
+                  <div class="preview-highlight" id="detailPreviewBody"></div>
+                  <a href="javascript:void(0);" class="preview-cta" id="detailPreviewCta">查看详情</a>
+                </div>
+              </div>
+            </aside>
+          </div>
+        </section>
+
+        <section class="page-view" id="composeView">
+          <div class="compose-grid">
+            <section class="panel">
+              <div class="panel-head">
+                <h2 class="panel-title" id="composeTitle">新建邮件</h2>
+                <span class="tag blue" id="composeModeTag">未发送</span>
+              </div>
+              <div class="panel-body">
+                <div class="section-block">
+                  <h3 class="section-title">发送对象</h3>
+                  <div class="option-group" id="audienceOptions">
+                    <button class="option-chip active" data-audience="all">全部客户门店</button>
+                    <button class="option-chip" data-audience="selected">指定门店</button>
+                  </div>
+                  <div class="store-grid" id="storeGrid"></div>
+
+                  <div class="form-grid">
+                    <label class="field span-2">
+                      <span class="label">补充外部邮箱</span>
+                      <textarea class="textarea" id="externalEmails" placeholder="每行一个邮箱地址"></textarea>
+                      <span class="hint">外部邮箱会与平台门店邮箱合并去重，模拟数据中会自动剔除无效地址与重复地址。</span>
+                    </label>
+                  </div>
+
+                  <div class="inline-actions" style="margin-top:14px;">
+                    <button class="btn" id="importSampleEmails">导入示例邮箱</button>
+                    <button class="btn-ghost" id="clearExternalEmails">清空外部邮箱</button>
+                  </div>
+                </div>
+
+                <div class="section-block">
+                  <h3 class="section-title">邮件内容</h3>
+                  <div class="option-group" id="typeOptions">
+                    <button class="option-chip active" data-type="运营活动通知">运营活动通知</button>
+                    <button class="option-chip" data-type="重大升级通知">重大升级通知</button>
+                    <button class="option-chip" data-type="服务公告">服务公告</button>
+                  </div>
+
+                  <div class="form-grid">
+                    <label class="field span-2">
+                      <span class="label">邮件标题</span>
+                      <input class="input" id="composeSubject" />
+                    </label>
+                    <label class="field span-2">
+                      <span class="label">预览摘要</span>
+                      <input class="input" id="composePreheader" />
+                    </label>
+                    <label class="field span-2">
+                      <span class="label">正文内容</span>
+                      <textarea class="textarea" id="composeBody"></textarea>
+                    </label>
+                    <label class="field">
+                      <span class="label">主按钮文案</span>
+                      <input class="input" id="composeCta" />
+                    </label>
+                    <label class="field">
+                      <span class="label">落地页链接</span>
+                      <input class="input" id="composeLink" />
+                    </label>
+                  </div>
+                </div>
+
+                <div class="section-block">
+                  <h3 class="section-title">发送动作</h3>
+                  <div class="footer-actions">
+                    <div class="status-line" id="composeStatusLine">
+                      <span class="status-dot"></span>
+                      <span>测试发送前不可正式发送</span>
+                    </div>
+                    <div class="inline-actions">
+                      <button class="btn-ghost" id="backToListBottom">返回列表</button>
+                      <button class="btn" id="saveDraftBtn">保存草稿</button>
+                      <button class="btn" id="sendTestBtn">发送测试邮件</button>
+                      <button class="btn-primary" id="sendFormalBtn">正式发送</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </section>
+
+            <aside class="summary-stack">
+              <section class="panel detail-card">
+                <div class="inline-actions">
+                  <span class="tag teal" id="composeTestTag">测试未执行</span>
+                  <span class="tag blue" id="composeAudienceTag">全部客户门店</span>
+                </div>
+                <div class="summary-grid" id="composeSummary"></div>
+              </section>
+
+              <section class="panel detail-card">
+                <div class="preview-card">
+                  <div class="preview-top"><span></span><span></span><span></span></div>
+                  <div class="preview-body">
+                    <div id="composePreviewType"></div>
+                    <div class="preview-title" id="composePreviewSubject"></div>
+                    <div class="preview-copy" id="composePreviewPreheader"></div>
+                    <div class="preview-highlight" id="composePreviewBody"></div>
+                    <a href="javascript:void(0);" class="preview-cta" id="composePreviewCta"></a>
+                  </div>
+                </div>
+              </section>
+
+              <section class="panel detail-card">
+                <h3 class="section-title">测试发送记录</h3>
+                <div class="list-stack" id="composeLogs"></div>
+              </section>
+            </aside>
+          </div>
+        </section>
+      </div>
+    </main>
+  </div>
+
+  <div class="toast-wrap" id="toastWrap"></div>
+
+  <script>
+    const stores = [
+      { id: "sg", name: "新加坡旗舰店", recipients: 186, suppressed: 3 },
+      { id: "syd", name: "悉尼 City Hub", recipients: 174, suppressed: 2 },
+      { id: "dubai", name: "迪拜 Mall Branch", recipients: 132, suppressed: 1 },
+      { id: "la", name: "洛杉矶 West Studio", recipients: 208, suppressed: 4 },
+      { id: "london", name: "伦敦 Central Lab", recipients: 241, suppressed: 4 },
+      { id: "toronto", name: "多伦多 North Point", recipients: 248, suppressed: 3 }
+    ];
+
+    const allStoreIds = stores.map((store) => store.id);
+    const sampleExternalEmails = [
+      "ops-partner@wellnesshub.global",
+      "owner-demo@partnerstudio.com",
+      "owner-demo@partnerstudio.com",
+      "launch-guest@fitalliance.io",
+      "invalid-email"
+    ];
+
+    const tasks = [
+      {
+        id: "task-001",
+        name: "春季活动首发通知",
+        type: "运营活动通知",
+        status: "部分失败",
+        audienceMode: "all",
+        selectedStores: [...allStoreIds],
+        externalEmails: ["ops-partner@wellnesshub.global", "launch-guest@fitalliance.io"],
+        subject: "WellnessHub 春季运营活动已上线，门店专属权益本周可领取",
+        preheader: "已覆盖全部活跃门店与渠道邮箱，包含活动入口与权益说明。",
+        body: "为了帮助门店提升春季获客转化，平台现已开放活动中心与物料支持包。完成报名后，可在后台查看门店参与条件、奖励规则与执行指南。",
+        cta: "进入活动中心",
+        link: "https://wellnesshub.visbody.com/operations/campaign-center",
+        updatedAt: "2026-04-11 14:30:00",
+        testPassed: true,
+        metrics: { platform: 1189, external: 2, invalid: 0, duplicates: 0, suppressed: 29, final: 1162, delivered: 1148, failed: 14 },
+        failures: [
+          { email: "owner@weststudio.co", reason: "Mailbox full，建议 6 小时后重试。" },
+          { email: "marketing@fitalliance.io", reason: "Remote server temporary rejected，当前位于重试池。" },
+          { email: "hello@partnerstudio.com", reason: "Domain throttled，需要稍后重试。" }
+        ],
+        logs: [
+          { time: "2026-04-11 13:40:12", text: "测试邮件已发送到 8 个测试邮箱。" },
+          { time: "2026-04-11 14:30:00", text: "正式任务开始发送，队列已提交第三方发信服务。" },
+          { time: "2026-04-11 14:41:05", text: "检测到 14 个地址发送失败，状态更新为部分失败。" }
+        ]
+      },
+      {
+        id: "task-002",
+        name: "北美维护升级通知",
+        type: "重大升级通知",
+        status: "已完成",
+        audienceMode: "selected",
+        selectedStores: ["la", "toronto"],
+        externalEmails: [],
+        subject: "WellnessHub 北美区维护升级通知",
+        preheader: "维护窗口、影响范围与恢复时间已同步。",
+        body: "平台将在北美时区周日晚执行系统升级，期间报告查看与活动中心入口可能短暂不可用。维护结束后会自动恢复，门店无需手动处理。",
+        cta: "查看维护说明",
+        link: "https://wellnesshub.visbody.com/operations/maintenance",
+        updatedAt: "2026-04-10 09:00:00",
+        testPassed: true,
+        metrics: { platform: 456, external: 0, invalid: 0, duplicates: 0, suppressed: 7, final: 449, delivered: 449, failed: 0 },
+        failures: [],
+        logs: [
+          { time: "2026-04-09 18:02:16", text: "测试邮件通过，内容与链接校验正常。" },
+          { time: "2026-04-10 09:00:00", text: "正式发送完成，449 个地址全部送达。" }
+        ]
+      },
+      {
+        id: "task-003",
+        name: "新门店 onboarding 资料包",
+        type: "服务公告",
+        status: "草稿",
+        audienceMode: "selected",
+        selectedStores: ["sg", "dubai"],
+        externalEmails: ["bd@newpartner.io"],
+        subject: "WellnessHub 新门店资料包已准备完成",
+        preheader: "包含后台入口、初始配置与上线检查清单。",
+        body: "欢迎加入 WellnessHub。资料包中已包含后台操作入口、门店配置清单、活动中心开启步骤和客服对接方式，便于门店快速开始使用。",
+        cta: "查看资料包",
+        link: "https://wellnesshub.visbody.com/operations/onboarding",
+        updatedAt: "2026-04-11 11:10:00",
+        testPassed: false,
+        metrics: { platform: 318, external: 1, invalid: 0, duplicates: 0, suppressed: 4, final: 315, delivered: 0, failed: 0 },
+        failures: [],
+        logs: [
+          { time: "2026-04-11 11:10:00", text: "草稿已创建，等待测试发送。" }
+        ]
+      },
+      {
+        id: "task-004",
+        name: "周末活动提醒补发",
+        type: "运营活动通知",
+        status: "发送中",
+        audienceMode: "selected",
+        selectedStores: ["london", "syd"],
+        externalEmails: ["partner@fitbridge.ai"],
+        subject: "周末体验营活动提醒",
+        preheader: "活动即将开始，请门店确认物料与报名入口。",
+        body: "本周末的体验营活动将在后台活动中心准时开启，请门店尽快确认人员安排和物料准备。若需活动图文素材，可直接进入活动中心下载。",
+        cta: "进入活动中心",
+        link: "https://wellnesshub.visbody.com/operations/weekend-campaign",
+        updatedAt: "2026-04-11 15:02:00",
+        testPassed: true,
+        metrics: { platform: 415, external: 1, invalid: 0, duplicates: 0, suppressed: 6, final: 410, delivered: 308, failed: 0 },
+        failures: [],
+        logs: [
+          { time: "2026-04-11 14:40:00", text: "测试发送完成。" },
+          { time: "2026-04-11 15:02:00", text: "正式发送中，当前已送达 308 / 410。" }
+        ]
+      }
+    ];
+
+    const defaultComposer = () => ({
+      id: null,
+      name: "",
+      audienceMode: "all",
+      selectedStores: [...allStoreIds],
+      externalEmails: "",
+      type: "运营活动通知",
+      subject: "WellnessHub 春季运营活动已上线，门店专属权益本周可领取",
+      preheader: "已覆盖全部活跃门店与渠道邮箱，包含活动入口与权益说明。",
+      body: "为了帮助门店提升春季获客转化，平台现已开放活动中心与物料支持包。完成报名后，可在后台查看门店参与条件、奖励规则与执行指南。",
+      cta: "进入活动中心",
+      link: "https://wellnesshub.visbody.com/operations/campaign-center",
+      testPassed: false,
+      logs: []
+    });
+
+    const state = {
+      view: "tasks",
+      selectedTaskId: tasks[0].id,
+      detailTab: "overview",
+      filters: { keyword: "", status: "all", type: "all" },
+      composer: defaultComposer()
+    };
+
+    const taskTableBody = document.getElementById("taskTableBody");
+    const statsGrid = document.getElementById("statsGrid");
+    const taskCountBadge = document.getElementById("taskCountBadge");
+    const suppressCountTag = document.getElementById("suppressCountTag");
+    const todayCountTag = document.getElementById("todayCountTag");
+    const pageTitle = document.getElementById("pageTitle");
+    const newTaskTop = document.getElementById("newTaskTop");
+    const backToListTop = document.getElementById("backToListTop");
+    const tasksView = document.getElementById("tasksView");
+    const composeView = document.getElementById("composeView");
+    const detailStatusWrap = document.getElementById("detailStatusWrap");
+    const detailTitle = document.getElementById("detailTitle");
+    const detailActionWrap = document.getElementById("detailActionWrap");
+    const detailMeta = document.getElementById("detailMeta");
+    const detailOverview = document.getElementById("detailOverview");
+    const detailFailures = document.getElementById("detailFailures");
+    const detailLogs = document.getElementById("detailLogs");
+    const detailPreviewType = document.getElementById("detailPreviewType");
+    const detailPreviewSubject = document.getElementById("detailPreviewSubject");
+    const detailPreviewPreheader = document.getElementById("detailPreviewPreheader");
+    const detailPreviewBody = document.getElementById("detailPreviewBody");
+    const detailPreviewCta = document.getElementById("detailPreviewCta");
+    const toastWrap = document.getElementById("toastWrap");
+
+    const composeTitle = document.getElementById("composeTitle");
+    const composeModeTag = document.getElementById("composeModeTag");
+    const storeGrid = document.getElementById("storeGrid");
+    const externalEmails = document.getElementById("externalEmails");
+    const composeSubject = document.getElementById("composeSubject");
+    const composePreheader = document.getElementById("composePreheader");
+    const composeBody = document.getElementById("composeBody");
+    const composeCta = document.getElementById("composeCta");
+    const composeLink = document.getElementById("composeLink");
+    const composeSummary = document.getElementById("composeSummary");
+    const composePreviewType = document.getElementById("composePreviewType");
+    const composePreviewSubject = document.getElementById("composePreviewSubject");
+    const composePreviewPreheader = document.getElementById("composePreviewPreheader");
+    const composePreviewBody = document.getElementById("composePreviewBody");
+    const composePreviewCta = document.getElementById("composePreviewCta");
+    const composeTestTag = document.getElementById("composeTestTag");
+    const composeAudienceTag = document.getElementById("composeAudienceTag");
+    const composeLogs = document.getElementById("composeLogs");
+    const composeStatusLine = document.getElementById("composeStatusLine");
+
+    function getStatusTagClass(status) {
+      if (status === "已完成") return "green";
+      if (status === "部分失败") return "orange";
+      if (status === "发送中") return "teal";
+      return "blue";
+    }
+
+    function getTypeTagClass(type) {
+      if (type === "重大升级通知") return "red";
+      if (type === "服务公告") return "teal";
+      return "blue";
+    }
+
+    function showToast(message, tone = "") {
+      const toast = document.createElement("div");
+      toast.className = `toast ${tone}`.trim();
+      toast.textContent = message;
+      toastWrap.appendChild(toast);
+      setTimeout(() => toast.remove(), 2600);
+    }
+
+    function nowString() {
+      return "2026-04-11 " + new Date().toTimeString().slice(0, 8);
+    }
+
+    function parseEmails(text) {
+      return text
+        .split(/[\n,;\s]+/)
+        .map((item) => item.trim())
+        .filter(Boolean);
+    }
+
+    function emailValid(email) {
+      return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+    }
+
+    function computeDraftMetrics(composer) {
+      const platformStores = composer.audienceMode === "all"
+        ? stores
+        : stores.filter((store) => composer.selectedStores.includes(store.id));
+      const platform = platformStores.reduce((sum, store) => sum + store.recipients, 0);
+      const suppressedBase = platformStores.reduce((sum, store) => sum + store.suppressed, 0);
+      const rawExternal = parseEmails(composer.externalEmails);
+      const uniqueExternal = [...new Set(rawExternal)];
+      const duplicates = Math.max(rawExternal.length - uniqueExternal.length, 0);
+      const invalid = uniqueExternal.filter((email) => !emailValid(email)).length;
+      const validExternal = uniqueExternal.filter((email) => emailValid(email)).length;
+      const suppressed = suppressedBase + duplicates + invalid;
+      const final = Math.max(platform + validExternal - suppressed, 0);
+      return {
+        platform,
+        external: validExternal,
+        invalid,
+        duplicates,
+        suppressed,
+        final,
+        delivered: 0,
+        failed: 0
+      };
+    }
+
+    function buildTaskFromComposer(status) {
+      const composer = state.composer;
+      const metrics = computeDraftMetrics(composer);
+      const isNew = !composer.id;
+      const id = composer.id || `task-${Date.now()}`;
+      const name = composer.name || composer.subject.slice(0, 18);
+      const logs = [...composer.logs];
+
+      if (!logs.length) {
+        logs.push({ time: nowString(), text: "草稿已创建。" });
+      }
+
+      return {
+        id,
+        name,
+        type: composer.type,
+        status,
+        audienceMode: composer.audienceMode,
+        selectedStores: [...composer.selectedStores],
+        externalEmails: parseEmails(composer.externalEmails).filter((email) => emailValid(email)),
+        subject: composer.subject,
+        preheader: composer.preheader,
+        body: composer.body,
+        cta: composer.cta,
+        link: composer.link,
+        updatedAt: nowString(),
+        testPassed: composer.testPassed,
+        metrics: {
+          ...metrics,
+          delivered: status === "已完成" ? metrics.final : status === "部分失败" ? Math.max(metrics.final - 12, 0) : status === "发送中" ? Math.max(Math.floor(metrics.final * 0.65), 0) : 0,
+          failed: status === "部分失败" ? Math.min(12, metrics.final) : 0
+        },
+        failures: status === "部分失败"
+          ? [
+              { email: "owner@weststudio.co", reason: "Mailbox full，建议稍后重试。" },
+              { email: "service@partnermail.io", reason: "Remote server temporary rejected。" },
+              { email: "hello@fitalliance.io", reason: "Temporary throttled。" }
+            ]
+          : [],
+        logs,
+        isNew
+      };
+    }
+
+    function upsertTask(task) {
+      const index = tasks.findIndex((item) => item.id === task.id);
+      if (index >= 0) {
+        tasks[index] = { ...tasks[index], ...task };
+      } else {
+        tasks.unshift(task);
+      }
+      state.selectedTaskId = task.id;
+    }
+
+    function getSelectedTask() {
+      return tasks.find((task) => task.id === state.selectedTaskId) || tasks[0];
+    }
+
+    function getFilteredTasks() {
+      return tasks.filter((task) => {
+        const keywordHit = !state.filters.keyword ||
+          task.name.includes(state.filters.keyword) ||
+          task.subject.includes(state.filters.keyword);
+        const statusHit = state.filters.status === "all" || task.status === state.filters.status;
+        const typeHit = state.filters.type === "all" || task.type === state.filters.type;
+        return keywordHit && statusHit && typeHit;
+      });
+    }
+
+    function renderStats() {
+      const sentTasks = tasks.filter((task) => task.status !== "草稿");
+      const todayTotal = tasks.filter((task) => task.updatedAt.startsWith("2026-04-11")).length;
+      const retryTotal = tasks.reduce((sum, task) => sum + task.metrics.failed, 0);
+      const delivered = sentTasks.reduce((sum, task) => sum + task.metrics.delivered, 0);
+      const finalCount = sentTasks.reduce((sum, task) => sum + task.metrics.final, 0);
+      const rate = finalCount ? ((delivered / finalCount) * 100).toFixed(1) : "0.0";
+      const totalSuppressed = tasks.reduce((sum, task) => sum + task.metrics.suppressed, 0);
+
+      taskCountBadge.textContent = String(tasks.length);
+      suppressCountTag.textContent = `抑制地址 ${totalSuppressed}`;
+      todayCountTag.textContent = `今日任务 ${todayTotal}`;
+
+      statsGrid.innerHTML = `
+        <div class="stat-card">
+          <div class="stat-label">任务总数</div>
+          <div class="stat-value">${tasks.length}</div>
+          <div class="stat-meta">草稿 ${tasks.filter((task) => task.status === "草稿").length} / 已发 ${sentTasks.length}</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">今日发送人数</div>
+          <div class="stat-value">${finalCount}</div>
+          <div class="stat-meta">含平台门店邮箱和外部补充邮箱</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">平均送达率</div>
+          <div class="stat-value">${rate}%</div>
+          <div class="stat-meta">按正式发送任务实时计算</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">待重试地址</div>
+          <div class="stat-value">${retryTotal}</div>
+          <div class="stat-meta">失败地址支持一键重试</div>
+        </div>
+      `;
+    }
+
+    function renderTaskTable() {
+      const filtered = getFilteredTasks();
+      if (!filtered.length) {
+        taskTableBody.innerHTML = `
+          <tr>
+            <td colspan="6">
+              <div class="row-main">没有匹配任务</div>
+              <div class="row-sub">调整筛选条件后重试。</div>
+            </td>
+          </tr>
+        `;
+        return;
+      }
+
+      taskTableBody.innerHTML = filtered.map((task) => `
+        <tr class="${task.id === state.selectedTaskId ? "active-row" : ""}" data-task-id="${task.id}">
+          <td>
+            <div class="row-main">${task.name}</div>
+            <div class="row-sub">${task.subject}</div>
+          </td>
+          <td><span class="tag ${getTypeTagClass(task.type)}">${task.type}</span></td>
+          <td>
+            <div class="row-main">${task.metrics.final}</div>
+            <div class="row-sub">送达 ${task.metrics.delivered}${task.metrics.failed ? ` / 失败 ${task.metrics.failed}` : ""}</div>
+          </td>
+          <td>
+            <div class="row-main">${task.updatedAt}</div>
+            <div class="row-sub">${task.audienceMode === "all" ? "全部客户门店" : "指定门店"}</div>
+          </td>
+          <td><span class="tag ${getStatusTagClass(task.status)}">${task.status}</span></td>
+          <td>
+            <div class="inline-actions">
+              <button class="link-btn" data-action="view" data-task-id="${task.id}">查看</button>
+              <button class="link-btn" data-action="${task.status === "草稿" ? "edit" : "copy"}" data-task-id="${task.id}">
+                ${task.status === "草稿" ? "编辑" : "复制"}
+              </button>
+              ${task.status === "部分失败" ? `<button class="link-btn" data-action="retry" data-task-id="${task.id}">重试</button>` : ""}
+            </div>
+          </td>
+        </tr>
+      `).join("");
+    }
+
+    function renderDetail() {
+      const task = getSelectedTask();
+      if (!task) return;
+
+      detailStatusWrap.innerHTML = `
+        <span class="tag ${getStatusTagClass(task.status)}">${task.status}</span>
+        <span class="tag ${getTypeTagClass(task.type)}">${task.type}</span>
+      `;
+      detailTitle.textContent = task.name;
+
+      const actions = [];
+      if (task.status === "草稿") {
+        actions.push(`<button class="btn" data-detail-action="edit">继续编辑</button>`);
+        actions.push(`<button class="btn-danger" data-detail-action="delete">删除草稿</button>`);
+      } else {
+        actions.push(`<button class="btn" data-detail-action="copy">复制创建</button>`);
+      }
+      if (task.status === "部分失败") {
+        actions.unshift(`<button class="btn-primary" data-detail-action="retry">重试失败地址</button>`);
+      }
+      if (task.status === "发送中") {
+        actions.unshift(`<button class="btn" data-detail-action="refresh">刷新状态</button>`);
+      }
+      detailActionWrap.innerHTML = actions.join("");
+
+      detailMeta.innerHTML = `
+        <div class="detail-meta-item">
+          <div class="detail-meta-key">收件人数</div>
+          <div class="detail-meta-value">${task.metrics.final}</div>
+        </div>
+        <div class="detail-meta-item">
+          <div class="detail-meta-key">成功送达</div>
+          <div class="detail-meta-value">${task.metrics.delivered}</div>
+        </div>
+        <div class="detail-meta-item">
+          <div class="detail-meta-key">失败地址</div>
+          <div class="detail-meta-value">${task.metrics.failed}</div>
+        </div>
+        <div class="detail-meta-item">
+          <div class="detail-meta-key">更新时间</div>
+          <div class="detail-meta-value">${task.updatedAt}</div>
+        </div>
+      `;
+
+      detailOverview.innerHTML = `
+        <div class="mini-grid">
+          <div class="mini-card">
+            <strong>${task.metrics.platform}</strong>
+            <span>平台门店邮箱</span>
+          </div>
+          <div class="mini-card">
+            <strong>${task.metrics.external}</strong>
+            <span>外部补充邮箱</span>
+          </div>
+          <div class="mini-card">
+            <strong>${task.metrics.suppressed}</strong>
+            <span>自动排除地址</span>
+          </div>
+        </div>
+        <div class="list-stack">
+          <div class="list-item">
+            <strong>发送范围</strong>
+            <span>${task.audienceMode === "all" ? "全部客户门店" : stores.filter((store) => task.selectedStores.includes(store.id)).map((store) => store.name).join("、")}</span>
+          </div>
+          <div class="list-item">
+            <strong>测试状态</strong>
+            <span>${task.testPassed ? "测试发送已通过，可正式发送或复制使用。" : "尚未执行测试发送。正式发送前需要先测试。"}</span>
+          </div>
+        </div>
+      `;
+
+      detailFailures.innerHTML = task.failures.length
+        ? `<div class="list-stack">${task.failures.map((failure) => `
+            <div class="list-item">
+              <strong>${failure.email}</strong>
+              <span>${failure.reason}</span>
+            </div>
+          `).join("")}</div>`
+        : `
+          <div class="list-item">
+            <strong>无失败地址</strong>
+            <span>当前任务没有失败地址，不需要重试。</span>
+          </div>
+        `;
+
+      detailLogs.innerHTML = `<div class="list-stack">${task.logs.map((log) => `
+        <div class="list-item">
+          <strong>${log.time}</strong>
+          <span>${log.text}</span>
+        </div>
+      `).join("")}</div>`;
+
+      detailPreviewType.innerHTML = `<span class="tag ${getTypeTagClass(task.type)}">${task.type}</span>`;
+      detailPreviewSubject.textContent = task.subject;
+      detailPreviewPreheader.textContent = task.preheader;
+      detailPreviewBody.textContent = task.body;
+      if (task.cta && task.link) {
+        detailPreviewCta.textContent = task.cta;
+        detailPreviewCta.classList.remove("hidden");
+      } else {
+        detailPreviewCta.textContent = "";
+        detailPreviewCta.classList.add("hidden");
+      }
+    }
+
+    function renderDetailTab() {
+      document.querySelectorAll(".seg-btn").forEach((button) => {
+        button.classList.toggle("active", button.dataset.tab === state.detailTab);
+      });
+      document.getElementById("detailOverview").classList.toggle("active", state.detailTab === "overview");
+      document.getElementById("detailFailures").classList.toggle("active", state.detailTab === "failures");
+      document.getElementById("detailLogs").classList.toggle("active", state.detailTab === "logs");
+    }
+
+    function renderCompose() {
+      const composer = state.composer;
+      composeTitle.textContent = composer.id ? "编辑邮件" : "新建邮件";
+      composeModeTag.textContent = composer.id ? "编辑中" : "未发送";
+      composeModeTag.className = `tag ${composer.id ? "teal" : "blue"}`;
+
+      document.querySelectorAll("#audienceOptions .option-chip").forEach((button) => {
+        button.classList.toggle("active", button.dataset.audience === composer.audienceMode);
+      });
+      document.querySelectorAll("#typeOptions .option-chip").forEach((button) => {
+        button.classList.toggle("active", button.dataset.type === composer.type);
+      });
+
+      storeGrid.innerHTML = stores.map((store) => `
+        <button class="store-chip ${composer.selectedStores.includes(store.id) ? "active" : ""}" data-store-id="${store.id}">
+          ${store.name} · ${store.recipients}
+        </button>
+      `).join("");
+
+      externalEmails.value = composer.externalEmails;
+      composeSubject.value = composer.subject;
+      composePreheader.value = composer.preheader;
+      composeBody.value = composer.body;
+      composeCta.value = composer.cta;
+      composeLink.value = composer.link;
+
+      const metrics = computeDraftMetrics(composer);
+      composeAudienceTag.textContent = composer.audienceMode === "all" ? "全部客户门店" : "指定门店";
+      composeTestTag.textContent = composer.testPassed ? "测试已通过" : "测试未执行";
+      composeTestTag.className = `tag ${composer.testPassed ? "green" : "orange"}`;
+      composeStatusLine.innerHTML = composer.testPassed
+        ? `<span class="status-dot"></span><span>测试邮件已通过，可以正式发送</span>`
+        : `<span class="status-dot" style="background: var(--orange);"></span><span>测试发送前不可正式发送</span>`;
+
+      composeSummary.innerHTML = `
+        <div class="summary-card">
+          <div class="key">平台门店邮箱</div>
+          <div class="value">${metrics.platform}</div>
+          <div class="meta">${composer.audienceMode === "all" ? "全量门店" : "指定门店汇总"}</div>
+        </div>
+        <div class="summary-card">
+          <div class="key">外部有效邮箱</div>
+          <div class="value">${metrics.external}</div>
+          <div class="meta">去重后有效地址</div>
+        </div>
+        <div class="summary-card">
+          <div class="key">自动排除</div>
+          <div class="value">${metrics.suppressed}</div>
+          <div class="meta">无效、重复、抑制</div>
+        </div>
+        <div class="summary-card">
+          <div class="key">最终发送数</div>
+          <div class="value">${metrics.final}</div>
+          <div class="meta">正式发送目标数</div>
+        </div>
+      `;
+
+      composePreviewType.innerHTML = `<span class="tag ${getTypeTagClass(composer.type)}">${composer.type}</span>`;
+      composePreviewSubject.textContent = composer.subject;
+      composePreviewPreheader.textContent = composer.preheader;
+      composePreviewBody.textContent = composer.body;
+      if (composer.cta && composer.link) {
+        composePreviewCta.textContent = composer.cta;
+        composePreviewCta.classList.remove("hidden");
+      } else {
+        composePreviewCta.textContent = "";
+        composePreviewCta.classList.add("hidden");
+      }
+
+      composeLogs.innerHTML = composer.logs.length
+        ? composer.logs.map((log) => `
+            <div class="list-item">
+              <strong>${log.time}</strong>
+              <span>${log.text}</span>
+            </div>
+          `).join("")
+        : `
+          <div class="list-item">
+            <strong>暂无测试记录</strong>
+            <span>点击“发送测试邮件”后，测试记录会展示在这里。</span>
+          </div>
+        `;
+    }
+
+    function switchView(view) {
+      state.view = view;
+      tasksView.classList.toggle("active", view === "tasks");
+      composeView.classList.toggle("active", view === "compose");
+      document.querySelectorAll(".nav-btn").forEach((button) => {
+        button.classList.toggle("active", button.dataset.nav === view);
+      });
+      pageTitle.textContent = view === "tasks" ? "邮件通知管理" : "新建邮件";
+      backToListTop.classList.toggle("hidden", view !== "compose");
+      if (view === "compose") {
+        newTaskTop.classList.add("hidden");
+      } else {
+        newTaskTop.classList.remove("hidden");
+      }
+    }
+
+    function resetComposer() {
+      state.composer = defaultComposer();
+      renderCompose();
+    }
+
+    function openCompose(task, duplicate = false) {
+      if (task) {
+        state.composer = {
+          id: duplicate ? null : task.id,
+          name: duplicate ? "" : task.name,
+          audienceMode: task.audienceMode,
+          selectedStores: [...task.selectedStores],
+          externalEmails: task.externalEmails.join("\n"),
+          type: task.type,
+          subject: task.subject,
+          preheader: task.preheader,
+          body: task.body,
+          cta: task.cta,
+          link: task.link,
+          testPassed: duplicate ? false : task.testPassed,
+          logs: duplicate ? [] : [...task.logs]
+        };
+      } else {
+        resetComposer();
+      }
+      renderCompose();
+      switchView("compose");
+    }
+
+    function applyFilterValues() {
+      state.filters.keyword = document.getElementById("keywordFilter").value.trim();
+      state.filters.status = document.getElementById("statusFilter").value;
+      state.filters.type = document.getElementById("typeFilter").value;
+      const filtered = getFilteredTasks();
+      if (filtered.length) {
+        state.selectedTaskId = filtered[0].id;
+      }
+      renderTaskTable();
+      renderDetail();
+      renderDetailTab();
+      showToast(`已筛选出 ${filtered.length} 个通知。`);
+    }
+
+    function resetFilterValues() {
+      document.getElementById("keywordFilter").value = "";
+      document.getElementById("statusFilter").value = "all";
+      document.getElementById("typeFilter").value = "all";
+      state.filters = { keyword: "", status: "all", type: "all" };
+      state.selectedTaskId = tasks[0]?.id || null;
+      renderTaskTable();
+      renderDetail();
+      renderDetailTab();
+      showToast("筛选条件已重置。");
+    }
+
+    function saveDraft() {
+      const subject = composeSubject.value.trim();
+      const body = composeBody.value.trim();
+      if (!subject || !body) {
+        showToast("标题和正文不能为空。", "warning");
+        return;
+      }
+      state.composer.subject = subject;
+      state.composer.preheader = composePreheader.value.trim();
+      state.composer.body = body;
+      state.composer.cta = composeCta.value.trim();
+      state.composer.link = composeLink.value.trim();
+      state.composer.logs = [{ time: nowString(), text: "草稿已保存。" }, ...state.composer.logs];
+      const task = buildTaskFromComposer("草稿");
+      upsertTask(task);
+      renderStats();
+      renderTaskTable();
+      renderDetail();
+      renderDetailTab();
+      switchView("tasks");
+      showToast("草稿已保存。", "success");
+    }
+
+    function sendTestMail() {
+      if (!composeSubject.value.trim() || !composeBody.value.trim()) {
+        showToast("请先填写标题和正文。", "warning");
+        return;
+      }
+      state.composer.subject = composeSubject.value.trim();
+      state.composer.preheader = composePreheader.value.trim();
+      state.composer.body = composeBody.value.trim();
+      state.composer.cta = composeCta.value.trim();
+      state.composer.link = composeLink.value.trim();
+      state.composer.testPassed = true;
+      state.composer.logs = [
+        { time: nowString(), text: "测试邮件已发送到 8 个测试邮箱，文案与链接校验通过。" },
+        ...state.composer.logs
+      ];
+      renderCompose();
+      showToast("测试邮件发送成功。", "success");
+    }
+
+    function sendFormalMail() {
+      if (!state.composer.testPassed) {
+        showToast("请先执行测试发送。", "warning");
+        return;
+      }
+      const task = buildTaskFromComposer("发送中");
+      task.logs = [
+        { time: nowString(), text: "正式发送已开始，任务进入发送队列。" },
+        ...task.logs
+      ];
+      upsertTask(task);
+      renderStats();
+      renderTaskTable();
+      renderDetail();
+      renderDetailTab();
+      switchView("tasks");
+      showToast("正式发送已开始。", "success");
+
+      setTimeout(() => {
+        const current = tasks.find((item) => item.id === task.id);
+        if (!current) return;
+        const shouldFail = current.metrics.final > 900;
+        current.status = shouldFail ? "部分失败" : "已完成";
+        current.metrics.delivered = shouldFail ? Math.max(current.metrics.final - 12, 0) : current.metrics.final;
+        current.metrics.failed = shouldFail ? Math.min(12, current.metrics.final) : 0;
+        current.failures = shouldFail ? [
+          { email: "owner@weststudio.co", reason: "Mailbox full，建议稍后重试。" },
+          { email: "service@partnermail.io", reason: "Remote server temporary rejected。" },
+          { email: "hello@fitalliance.io", reason: "Temporary throttled。" }
+        ] : [];
+        current.updatedAt = nowString();
+        current.logs = [
+          { time: nowString(), text: shouldFail ? "正式发送完成，检测到 12 个失败地址。" : "正式发送完成，全部地址送达成功。" },
+          ...current.logs
+        ];
+        renderStats();
+        renderTaskTable();
+        renderDetail();
+        renderDetailTab();
+        showToast(shouldFail ? "发送完成，存在失败地址。" : "发送完成，全部送达。", shouldFail ? "warning" : "success");
+      }, 1200);
+    }
+
+    function retryFailures(task) {
+      if (!task.metrics.failed) {
+        showToast("当前任务没有失败地址。");
+        return;
+      }
+      task.status = "发送中";
+      task.logs.unshift({ time: nowString(), text: "已发起失败地址重试。" });
+      renderStats();
+      renderTaskTable();
+      renderDetail();
+      renderDetailTab();
+      showToast("失败地址重试中。", "success");
+
+      setTimeout(() => {
+        task.status = "已完成";
+        task.metrics.delivered = task.metrics.final;
+        task.metrics.failed = 0;
+        task.failures = [];
+        task.updatedAt = nowString();
+        task.logs.unshift({ time: nowString(), text: "失败地址重试完成，全部送达。" });
+        renderStats();
+        renderTaskTable();
+        renderDetail();
+        renderDetailTab();
+        showToast("重试完成，当前任务已全部送达。", "success");
+      }, 1100);
+    }
+
+    function refreshSendingTask(task) {
+      if (task.status !== "发送中") {
+        showToast("当前任务不在发送中。");
+        return;
+      }
+      task.status = "已完成";
+      task.metrics.delivered = task.metrics.final;
+      task.updatedAt = nowString();
+      task.logs.unshift({ time: nowString(), text: "手动刷新后，任务状态已更新为全部完成。" });
+      renderStats();
+      renderTaskTable();
+      renderDetail();
+      renderDetailTab();
+      showToast("任务状态已刷新。", "success");
+    }
+
+    function deleteDraft(task) {
+      const index = tasks.findIndex((item) => item.id === task.id);
+      if (index >= 0) {
+        tasks.splice(index, 1);
+        state.selectedTaskId = tasks[0]?.id || null;
+        renderStats();
+        renderTaskTable();
+        renderDetail();
+        renderDetailTab();
+        showToast("草稿已删除。", "success");
+      }
+    }
+
+    function bindEvents() {
+      document.querySelectorAll(".nav-btn").forEach((button) => {
+        button.addEventListener("click", () => {
+          if (button.dataset.nav === "compose") {
+            openCompose();
+          } else {
+            switchView("tasks");
+          }
+        });
+      });
+
+      newTaskTop.addEventListener("click", () => openCompose());
+      backToListTop.addEventListener("click", () => switchView("tasks"));
+      document.getElementById("backToListBottom").addEventListener("click", () => switchView("tasks"));
+      document.getElementById("applyFilters").addEventListener("click", applyFilterValues);
+      document.getElementById("resetFilters").addEventListener("click", resetFilterValues);
+      document.getElementById("saveDraftBtn").addEventListener("click", saveDraft);
+      document.getElementById("sendTestBtn").addEventListener("click", sendTestMail);
+      document.getElementById("sendFormalBtn").addEventListener("click", sendFormalMail);
+
+      document.getElementById("importSampleEmails").addEventListener("click", () => {
+        state.composer.externalEmails = sampleExternalEmails.join("\n");
+        state.composer.testPassed = false;
+        renderCompose();
+        showToast("已导入示例邮箱。");
+      });
+
+      document.getElementById("clearExternalEmails").addEventListener("click", () => {
+        state.composer.externalEmails = "";
+        state.composer.testPassed = false;
+        renderCompose();
+        showToast("外部邮箱已清空。");
+      });
+
+      document.getElementById("audienceOptions").addEventListener("click", (event) => {
+        const button = event.target.closest("[data-audience]");
+        if (!button) return;
+        state.composer.audienceMode = button.dataset.audience;
+        if (state.composer.audienceMode === "all") {
+          state.composer.selectedStores = [...allStoreIds];
+        } else if (!state.composer.selectedStores.length) {
+          state.composer.selectedStores = [stores[0].id];
+        }
+        state.composer.testPassed = false;
+        renderCompose();
+      });
+
+      document.getElementById("typeOptions").addEventListener("click", (event) => {
+        const button = event.target.closest("[data-type]");
+        if (!button) return;
+        state.composer.type = button.dataset.type;
+        state.composer.testPassed = false;
+        renderCompose();
+      });
+
+      storeGrid.addEventListener("click", (event) => {
+        const button = event.target.closest("[data-store-id]");
+        if (!button) return;
+        const storeId = button.dataset.storeId;
+        if (state.composer.audienceMode === "all") {
+          showToast("当前是全部客户门店模式，切换到指定门店后可单独选择。");
+          return;
+        }
+        if (state.composer.selectedStores.includes(storeId)) {
+          if (state.composer.selectedStores.length === 1) {
+            showToast("至少保留一个门店。", "warning");
+            return;
+          }
+          state.composer.selectedStores = state.composer.selectedStores.filter((id) => id !== storeId);
+        } else {
+          state.composer.selectedStores.push(storeId);
+        }
+        state.composer.testPassed = false;
+        renderCompose();
+      });
+
+      [externalEmails, composeSubject, composePreheader, composeBody, composeCta, composeLink].forEach((element) => {
+        element.addEventListener("input", () => {
+          state.composer.externalEmails = externalEmails.value;
+          state.composer.subject = composeSubject.value;
+          state.composer.preheader = composePreheader.value;
+          state.composer.body = composeBody.value;
+          state.composer.cta = composeCta.value;
+          state.composer.link = composeLink.value;
+          if (element !== composeLink) {
+            state.composer.testPassed = false;
+          }
+          renderCompose();
+        });
+      });
+
+      taskTableBody.addEventListener("click", (event) => {
+        const button = event.target.closest("[data-action]");
+        const row = event.target.closest("tr[data-task-id]");
+        if (button) {
+          event.stopPropagation();
+          const task = tasks.find((item) => item.id === button.dataset.taskId);
+          if (!task) return;
+          if (button.dataset.action === "view") {
+            state.selectedTaskId = task.id;
+            renderTaskTable();
+            renderDetail();
+            renderDetailTab();
+          } else if (button.dataset.action === "edit") {
+            openCompose(task);
+          } else if (button.dataset.action === "copy") {
+            openCompose(task, true);
+          } else if (button.dataset.action === "retry") {
+            state.selectedTaskId = task.id;
+            retryFailures(task);
+          }
+          return;
+        }
+        if (row) {
+          state.selectedTaskId = row.dataset.taskId;
+          renderTaskTable();
+          renderDetail();
+          renderDetailTab();
+        }
+      });
+
+      detailActionWrap.addEventListener("click", (event) => {
+        const button = event.target.closest("[data-detail-action]");
+        if (!button) return;
+        const task = getSelectedTask();
+        if (!task) return;
+        const action = button.dataset.detailAction;
+        if (action === "edit") openCompose(task);
+        if (action === "copy") openCompose(task, true);
+        if (action === "retry") retryFailures(task);
+        if (action === "refresh") refreshSendingTask(task);
+        if (action === "delete") deleteDraft(task);
+      });
+
+      document.getElementById("detailTabs").addEventListener("click", (event) => {
+        const button = event.target.closest("[data-tab]");
+        if (!button) return;
+        state.detailTab = button.dataset.tab;
+        renderDetailTab();
+      });
+    }
+
+    function initialize() {
+      renderStats();
+      renderTaskTable();
+      renderDetail();
+      renderDetailTab();
+      renderCompose();
+      bindEvents();
+    }
+
+    initialize();
+  </script>
+</body>
+</html>

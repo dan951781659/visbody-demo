@@ -1,0 +1,436 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>结果方案二 · 方案一备选布局</title>
+    <link rel="stylesheet" href="./shared.css" />
+    <style>
+      .device.device--scheme-a {
+        padding: 18px 18px 22px;
+        min-height: 900px;
+        overflow-x: hidden;
+        overflow-y: auto;
+      }
+      .scheme-a-done {
+        padding: 14px 16px 16px;
+        border-radius: 22px;
+        background: linear-gradient(165deg, rgba(255, 255, 255, 0.055), rgba(255, 255, 255, 0.025));
+        border: 1px solid rgba(255, 255, 255, 0.06);
+        margin-bottom: 14px;
+      }
+      .scheme-a-done-head {
+        font-size: 11px;
+        letter-spacing: 0.14em;
+        text-transform: uppercase;
+        color: #87b3ff;
+        margin-bottom: 12px;
+      }
+      .scheme-a-timeline {
+        list-style: none;
+        margin: 0;
+        padding: 0;
+        display: grid;
+        gap: 8px;
+      }
+      .scheme-a-timeline li {
+        display: grid;
+        grid-template-columns: 22px 1fr auto;
+        align-items: center;
+        gap: 10px;
+        padding: 8px 10px;
+        border-radius: 14px;
+        background: rgba(0, 0, 0, 0.22);
+        border: 1px solid rgba(255, 255, 255, 0.05);
+      }
+      .scheme-a-timeline .tick {
+        width: 22px;
+        height: 22px;
+        border-radius: 50%;
+        background: var(--green-soft);
+        color: #93f0b7;
+        font-size: 12px;
+        font-weight: 700;
+        display: grid;
+        place-items: center;
+        line-height: 1;
+      }
+      .scheme-a-timeline .name {
+        font-size: 15px;
+        font-weight: 600;
+        color: var(--text);
+      }
+      .scheme-a-timeline .badge {
+        font-size: 11px;
+        padding: 4px 8px;
+        border-radius: 999px;
+        background: rgba(255, 255, 255, 0.06);
+        color: var(--muted);
+      }
+      .scheme-a-decision-label {
+        font-size: 13px;
+        color: var(--muted);
+        margin: 4px 0 10px;
+        text-align: center;
+      }
+      .scheme-a-live {
+        position: relative;
+        min-height: 168px;
+        margin-bottom: 10px;
+      }
+      .scheme-a-live .live-stage {
+        min-height: 168px;
+        padding: 52px 12px 12px;
+      }
+      .scheme-a-video {
+        position: absolute;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        border-radius: 24px;
+        opacity: 0.92;
+        z-index: 0;
+      }
+      .scheme-a-video.is-fallback {
+        display: none;
+      }
+      .scheme-a-live .camera-corner {
+        z-index: 2;
+      }
+      .scheme-a-live .live-status {
+        z-index: 2;
+      }
+      .scheme-a-live-overlay {
+        position: absolute;
+        inset: 0;
+        z-index: 1;
+        border-radius: 28px;
+        pointer-events: none;
+        background: linear-gradient(
+          180deg,
+          rgba(5, 10, 18, 0.55) 0%,
+          transparent 35%,
+          rgba(5, 10, 18, 0.35) 100%
+        );
+      }
+      .scheme-a-live.is-camera-off .scheme-a-live-overlay {
+        background: linear-gradient(
+          180deg,
+          rgba(43, 124, 255, 0.12),
+          transparent 40%,
+          rgba(5, 10, 18, 0.45)
+        );
+      }
+      .scheme-a-choice-grid {
+        grid-template-columns: 1fr 1fr;
+        gap: 10px;
+      }
+      .scheme-a-choice-grid .choice-card {
+        min-height: 96px;
+        padding: 14px 12px;
+        text-align: center;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+      }
+      .scheme-a-choice-grid .card-title {
+        font-size: 16px;
+        margin-bottom: 4px;
+        line-height: 1.25;
+      }
+      .scheme-a-choice-grid .card-desc {
+        font-size: 11px;
+        line-height: 1.45;
+        margin: 0;
+        color: var(--muted);
+      }
+      .scheme-a-gesture {
+        display: grid;
+        grid-template-columns: 1fr auto 1fr;
+        align-items: end;
+        gap: 6px;
+        margin-top: 12px;
+        padding: 10px 8px 12px;
+        border-radius: 20px;
+        background: rgba(255, 255, 255, 0.04);
+        border: 1px solid rgba(255, 255, 255, 0.06);
+      }
+      .scheme-a-bubble {
+        font-size: 11px;
+        line-height: 1.45;
+        color: #c9d6ee;
+        padding: 8px 10px;
+        border-radius: 14px;
+        background: rgba(9, 14, 22, 0.85);
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        max-width: 118px;
+      }
+      .scheme-a-bubble strong {
+        display: block;
+        color: #87b3ff;
+        font-size: 10px;
+        margin-bottom: 4px;
+        letter-spacing: 0.02em;
+      }
+      .scheme-a-gesture .human {
+        position: relative;
+        left: auto;
+        top: auto;
+        transform: none;
+        width: 72px;
+        height: 118px;
+        margin-bottom: 4px;
+      }
+      .scheme-a-gesture .human .torso {
+        left: 14px;
+        top: 26px;
+        width: 44px;
+        height: 72px;
+      }
+      .scheme-a-gesture .human .head {
+        left: 22px;
+        width: 30px;
+        height: 30px;
+      }
+      .scheme-a-gesture .human .leg.left {
+        left: 22px;
+        top: 94px;
+        width: 10px;
+        height: 36px;
+      }
+      .scheme-a-gesture .human .leg.right {
+        right: 22px;
+        top: 94px;
+        width: 10px;
+        height: 36px;
+      }
+      .scheme-a-gesture .human.pose-down .arm.left {
+        left: 8px;
+        top: 34px;
+        width: 10px;
+        height: 52px;
+      }
+      .scheme-a-gesture .human.pose-down .arm.right {
+        right: 8px;
+        top: 34px;
+        width: 10px;
+        height: 52px;
+      }
+      .scheme-a-footer {
+        position: relative;
+        margin-top: 14px;
+        display: grid;
+        gap: 10px;
+      }
+      .scheme-a-weak {
+        text-align: center;
+        margin-top: 4px;
+      }
+      .scheme-a-weak a {
+        font-size: 12px;
+        color: rgba(152, 166, 188, 0.85);
+        text-decoration: underline;
+        text-underline-offset: 3px;
+      }
+      .scheme-a-weak a:hover {
+        color: #a8c4ff;
+      }
+      .scheme-a-title-wrap .screen-title {
+        font-size: 28px;
+      }
+      .scheme-a-title-wrap .screen-subtitle {
+        font-size: 14px;
+        margin-bottom: 12px;
+      }
+      .scheme-a-start-demo {
+        width: 100%;
+        margin-bottom: 10px;
+        min-height: 48px;
+        padding: 12px 16px;
+        border-radius: 16px;
+        border: 1px solid rgba(43, 124, 255, 0.45);
+        background: linear-gradient(180deg, rgba(43, 124, 255, 0.22), rgba(43, 124, 255, 0.1));
+        color: var(--text);
+        font: inherit;
+        font-size: 15px;
+        font-weight: 650;
+        cursor: pointer;
+        transition: transform 0.18s ease, border-color 0.18s ease, box-shadow 0.18s ease;
+      }
+      .scheme-a-start-demo:hover,
+      .scheme-a-start-demo:focus-visible {
+        transform: translateY(-1px);
+        border-color: rgba(43, 124, 255, 0.62);
+        box-shadow: 0 10px 28px rgba(43, 124, 255, 0.15);
+        outline: none;
+      }
+    </style>
+  </head>
+  <body>
+    <main class="device-stage">
+      <section
+        class="device device--scheme-a"
+        data-voice-text="完整测量已完成。此为方案一备选布局；演示时请先点击开始倒计时。"
+      >
+        <div class="status-bar"><span>18:32</span><span>测量完成</span></div>
+        <div class="topbar">
+          <a class="back-link" href="./index.html">← 评审入口</a>
+          <span class="text-link">方案一 · 备选布局</span>
+        </div>
+        <div class="section-label">完整测量</div>
+        <div class="scheme-a-title-wrap">
+          <h1 class="screen-title">完整测量已完成</h1>
+          <p class="screen-subtitle">
+            清单式备选页：上方为本次已采集项目；中部取景；下方举手、点击或按键选择下一步（与主流程文案一致）。
+          </p>
+        </div>
+
+        <div class="scheme-a-done" aria-label="本次已完成项目">
+          <div class="scheme-a-done-head">本次已完成</div>
+          <ul class="scheme-a-timeline">
+            <li>
+              <span class="tick">✓</span>
+              <span class="name">体重</span>
+              <span class="badge">已采集</span>
+            </li>
+            <li>
+              <span class="tick">✓</span>
+              <span class="name">体成分</span>
+              <span class="badge">已采集</span>
+            </li>
+            <li>
+              <span class="tick">✓</span>
+              <span class="name">身高 / 体围</span>
+              <span class="badge">已采集</span>
+            </li>
+            <li>
+              <span class="tick">✓</span>
+              <span class="name">体态</span>
+              <span class="badge">已采集</span>
+            </li>
+          </ul>
+        </div>
+
+        <p class="scheme-a-decision-label">也可点击选择下一步操作；或使用 +/- 切换后按电源键确认。</p>
+        <div class="scheme-a-live is-camera-off" data-scheme-a-live>
+          <div class="live-stage">
+            <video class="scheme-a-video" autoplay muted playsinline></video>
+            <div class="scheme-a-live-overlay" aria-hidden="true"></div>
+            <div class="live-status">
+              <span class="live-chip ok">取景中</span>
+              <span class="live-chip">举手选择</span>
+            </div>
+            <span class="camera-corner tl"></span>
+            <span class="camera-corner tr"></span>
+            <span class="camera-corner bl"></span>
+            <span class="camera-corner br"></span>
+          </div>
+        </div>
+
+        <div
+          class="choice-grid compact scheme-a-choice-grid"
+          data-choice-group
+          data-default-index="1"
+          data-finish-group
+          data-finish-flow="standard"
+          data-finish-current="standard"
+          data-countdown="3"
+          data-countdown-start="manual"
+          data-countdown-idle-prefix="演示请点击「开始倒计时」，或点下方横条"
+        >
+          <a
+            class="choice-card"
+            href="./standard-generating.html"
+            data-choice-item
+            data-choice-label="结束测量（查看报告）"
+            data-finish-option="report"
+          >
+            <div class="card-title">结束测量</div>
+            <p class="card-desc">生成报告</p>
+          </a>
+          <a
+            class="choice-card"
+            href="./pro-prepare.html"
+            data-choice-item
+            data-choice-label="继续体态精测"
+            data-finish-option="next"
+          >
+            <div class="card-title" data-next-title>继续体态精测</div>
+            <p class="card-desc">高精度体态评估</p>
+          </a>
+        </div>
+
+        <div class="scheme-a-gesture" aria-hidden="true">
+          <div class="scheme-a-bubble">
+            <strong>左手势</strong>
+            举起左手确认「结束测量」（保持约 2 秒）
+          </div>
+          <div class="human pose-down" aria-hidden="true">
+            <div class="head"></div>
+            <div class="torso"></div>
+            <div class="limb arm left"></div>
+            <div class="limb arm right"></div>
+            <div class="limb leg left"></div>
+            <div class="limb leg right"></div>
+          </div>
+          <div class="scheme-a-bubble" style="justify-self: end; text-align: right">
+            <strong>右手势</strong>
+            举起右手确认「继续体态精测」（保持约 2 秒）
+          </div>
+        </div>
+
+        <div class="scheme-a-weak">
+          <a href="./standard-position.html">重新测量</a>
+        </div>
+
+        <div class="scheme-a-footer footer-hint" style="position: relative">
+          <button type="button" class="scheme-a-start-demo" data-finish-countdown-start>
+            开始倒计时（演示）
+          </button>
+          <div class="auto-hint demo-click-zone" data-auto-hint-click tabindex="0" role="button">
+            <strong
+              ><span data-auto-prefix>点击后开始演示倒计时</span>
+              <span data-auto-label>继续体态精测</span></strong
+            >
+            <span class="count-badge" data-auto-countdown>3</span>
+          </div>
+        </div>
+      </section>
+    </main>
+    <script src="./shared.js"></script>
+    <script>
+      (function () {
+        var wrap = document.querySelector("[data-scheme-a-live]");
+        var v = document.querySelector(".scheme-a-video");
+        if (!v || !wrap) return;
+
+        function setCameraOff() {
+          wrap.classList.add("is-camera-off");
+          v.classList.add("is-fallback");
+        }
+
+        function setCameraOn() {
+          wrap.classList.remove("is-camera-off");
+          v.classList.remove("is-fallback");
+        }
+
+        if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
+          setCameraOff();
+          return;
+        }
+
+        navigator.mediaDevices
+          .getUserMedia({ video: { facingMode: "user" }, audio: false })
+          .then(function (stream) {
+            v.srcObject = stream;
+            setCameraOn();
+          })
+          .catch(function () {
+            setCameraOff();
+          });
+      })();
+    </script>
+  </body>
+</html>

@@ -1,0 +1,880 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>登录注册 - 国内/海外无密码方案 Demo</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #f5f7fa;
+      --card-bg: #fff;
+      --primary: #165DFF;
+      --primary-light: #e8f0ff;
+      --text: #1e293b;
+      --text-muted: #64748b;
+      --border: #e2e8f0;
+      --radius: 12px;
+      --font-sans: 'Noto Sans SC', system-ui, sans-serif;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: var(--font-sans); background: var(--bg); color: var(--text); min-height: 100vh; line-height: 1.5; }
+
+    .page-header {
+      background: var(--card-bg);
+      padding: 16px 24px;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+    .page-title { font-size: 18px; font-weight: 600; }
+    .region-switch {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 14px;
+    }
+    .region-switch label { color: var(--text-muted); }
+    .lang-switch {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 13px;
+    }
+    .lang-switch label { color: var(--text-muted); }
+    .lang-select {
+      padding: 6px 10px;
+      border-radius: 6px;
+      border: 1px solid var(--border);
+      background: #fff;
+      font-size: 13px;
+      font-family: inherit;
+    }
+    .region-btn {
+      padding: 6px 14px;
+      border: 1px solid var(--border);
+      background: #fff;
+      border-radius: 8px;
+      font-size: 14px;
+      cursor: pointer;
+      font-family: inherit;
+    }
+    .region-btn.active {
+      background: var(--primary);
+      border-color: var(--primary);
+      color: #fff;
+    }
+    .region-btn:hover:not(.active) { border-color: var(--primary); color: var(--primary); }
+
+    .main { max-width: 420px; margin: 24px auto; padding: 0 16px; }
+
+    /* 手机端登录卡片 */
+    .phone-frame {
+      width: 100%;
+      max-width: 375px;
+      margin: 0 auto 24px;
+      background: var(--card-bg);
+      border-radius: 24px;
+      box-shadow: 0 8px 32px rgba(0,0,0,.1);
+      overflow: hidden;
+      border: 1px solid var(--border);
+    }
+    .phone-frame-inner { padding: 32px 24px 40px; }
+
+    .logo-area {
+      text-align: center;
+      margin-bottom: 28px;
+    }
+    .logo-area .logo {
+      font-size: 24px;
+      font-weight: 700;
+      color: var(--text);
+    }
+
+    /* 登录/注册切换 */
+    .auth-tabs {
+      display: flex;
+      gap: 4px;
+      margin-bottom: 24px;
+      background: var(--bg);
+      padding: 4px;
+      border-radius: 10px;
+    }
+    .auth-tab {
+      flex: 1;
+      padding: 10px;
+      border: none;
+      background: transparent;
+      font-size: 15px;
+      font-weight: 500;
+      color: var(--text-muted);
+      border-radius: 8px;
+      cursor: pointer;
+      font-family: inherit;
+    }
+    .auth-tab.active {
+      background: #fff;
+      color: var(--primary);
+      box-shadow: 0 1px 3px rgba(0,0,0,.06);
+    }
+
+    /* 国内登录区域 */
+    .auth-section { display: none; }
+    .auth-section.active { display: block; }
+
+    .third-party-row {
+      display: flex;
+      justify-content: center;
+      gap: 20px;
+      margin-bottom: 24px;
+    }
+    .third-btn {
+      width: 48px;
+      height: 48px;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      background: #fff;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 20px;
+      transition: all .2s;
+    }
+    .third-btn:hover { border-color: var(--primary); background: var(--primary-light); }
+    .third-btn.wechat { color: #07c160; }
+    .third-btn.qq { color: #12b7f5; }
+    .third-btn.google { color: #ea4335; }
+    .third-btn.facebook { color: #1877f2; }
+    .third-btn.apple { color: #000; }
+
+    .divider {
+      display: flex;
+      align-items: center;
+      margin: 20px 0;
+      font-size: 13px;
+      color: var(--text-muted);
+    }
+    .divider::before, .divider::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: var(--border);
+    }
+    .divider span { padding: 0 12px; }
+
+    .input-group { margin-bottom: 16px; }
+    .input-group label {
+      display: block;
+      font-size: 14px;
+      color: var(--text-muted);
+      margin-bottom: 6px;
+    }
+    .input-group input {
+      width: 100%;
+      padding: 12px 14px;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      font-size: 15px;
+      font-family: inherit;
+    }
+    .input-group input:focus {
+      outline: none;
+      border-color: var(--primary);
+    }
+    .input-with-btn {
+      display: flex;
+      gap: 8px;
+    }
+    .input-with-btn input { flex: 1; }
+    .btn-code {
+      padding: 12px 16px;
+      border: 1px solid var(--primary);
+      background: var(--primary-light);
+      color: var(--primary);
+      border-radius: 10px;
+      font-size: 14px;
+      font-weight: 500;
+      cursor: pointer;
+      white-space: nowrap;
+      font-family: inherit;
+    }
+    .btn-code:hover { background: rgba(22,93,255,.15); }
+    .btn-code.disabled { opacity: .6; cursor: not-allowed; }
+
+    .btn-primary {
+      width: 100%;
+      padding: 14px;
+      border: none;
+      background: var(--primary);
+      color: #fff;
+      border-radius: 10px;
+      font-size: 16px;
+      font-weight: 600;
+      cursor: pointer;
+      margin-top: 8px;
+      font-family: inherit;
+    }
+    .btn-primary:hover { opacity: .92; }
+    .btn-primary:disabled { opacity: .6; cursor: not-allowed; }
+
+    .remember-row {
+      display: flex;
+      align-items: center;
+      margin: 8px 0 4px;
+      font-size: 13px;
+      color: var(--text-muted);
+    }
+    .remember-row input[type="checkbox"] {
+      margin-right: 6px;
+      width: 16px;
+      height: 16px;
+      accent-color: var(--primary);
+    }
+
+    .agreements {
+      margin-top: 8px;
+      font-size: 12px;
+      color: var(--text-muted);
+    }
+    .agreements-item {
+      display: flex;
+      align-items: flex-start;
+      margin-bottom: 4px;
+    }
+    .agreements-item input[type="checkbox"] {
+      margin: 2px 6px 0 0;
+      width: 16px;
+      height: 16px;
+      accent-color: var(--primary);
+      flex-shrink: 0;
+    }
+    .agreements-item label {
+      line-height: 1.4;
+      cursor: pointer;
+    }
+    .agreements-item a { color: var(--primary); text-decoration: none; }
+
+    .footer-links {
+      display: flex;
+      justify-content: center;
+      gap: 24px;
+      margin-top: 20px;
+      font-size: 14px;
+    }
+    .footer-links a { color: var(--text-muted); text-decoration: none; }
+    .footer-links a:hover { color: var(--primary); }
+
+    .agreement {
+      font-size: 12px;
+      color: var(--text-muted);
+      margin-top: 16px;
+      text-align: center;
+    }
+    .agreement a { color: var(--primary); }
+
+    /* 说明区 */
+
+    /* 登录帮助 / 三级入口样式 */
+    .help-link {
+      margin-top: 12px;
+      font-size: 12px;
+      color: var(--text-muted);
+      text-align: right;
+    }
+    .help-link button {
+      border: none;
+      background: transparent;
+      color: var(--primary);
+      cursor: pointer;
+      font-size: 12px;
+      padding: 0;
+      font-family: inherit;
+    }
+    .login-help-modal {
+      position: fixed;
+      inset: 0;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 30;
+    }
+    .login-help-backdrop {
+      position: absolute;
+      inset: 0;
+      background: rgba(15, 23, 42, .45);
+    }
+    .login-help-dialog {
+      position: relative;
+      z-index: 1;
+      width: min(420px, 90vw);
+      background: #fff;
+      border-radius: 16px;
+      box-shadow: 0 20px 60px rgba(15,23,42,.35);
+      padding: 20px 22px 18px;
+    }
+    .login-help-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 12px;
+    }
+    .login-help-title {
+      font-size: 15px;
+      font-weight: 600;
+    }
+    .login-help-close {
+      border: none;
+      background: transparent;
+      font-size: 18px;
+      line-height: 1;
+      cursor: pointer;
+      color: #94a3b8;
+    }
+    .login-help-body {
+      font-size: 13px;
+      color: var(--text-muted);
+    }
+    .faq-list {
+      padding-left: 18px;
+      margin: 8px 0 4px;
+    }
+    .faq-list li {
+      margin-bottom: 6px;
+    }
+    .faq-strong {
+      color: var(--text);
+      font-weight: 500;
+    }
+    .faq-sms-btn {
+      border: none;
+      background: transparent;
+      color: var(--primary);
+      cursor: pointer;
+      font-size: 13px;
+      padding: 0;
+      font-family: inherit;
+    }
+    .faq-sms-desc {
+      font-size: 12px;
+      color: #94a3b8;
+      margin-top: 2px;
+    }
+    .help-step {
+      display: none;
+    }
+    .help-step.active {
+      display: block;
+    }
+    .help-footer-btns {
+      margin-top: 14px;
+      display: flex;
+      justify-content: flex-end;
+      gap: 12px;
+    }
+    .btn-secondary {
+      padding: 8px 14px;
+      border-radius: 999px;
+      border: 1px solid var(--border);
+      background: #fff;
+      font-size: 13px;
+      cursor: pointer;
+      font-family: inherit;
+      color: var(--text-muted);
+    }
+    .set-pwd-modal { display: none; position: fixed; inset: 0; align-items: center; justify-content: center; z-index: 40; }
+    .set-pwd-modal.show { display: flex; }
+    .set-pwd-backdrop { position: absolute; inset: 0; background: rgba(15,23,42,.45); }
+    .set-pwd-dialog { position: relative; z-index: 1; width: min(360px, 90vw); background: #fff; border-radius: 16px; padding: 20px; box-shadow: 0 20px 60px rgba(15,23,42,.35); }
+    .set-pwd-dialog h4 { margin-bottom: 12px; font-size: 16px; }
+    .set-pwd-dialog p { font-size: 13px; color: var(--text-muted); margin-bottom: 16px; line-height: 1.5; }
+  </style>
+</head>
+<body>
+  <header class="page-header">
+    <span class="page-title">登录注册 - 国内/海外无密码方案</span>
+    <div style="display:flex;align-items:center;gap:16px;">
+      <div class="region-switch">
+        <label>地区：</label>
+        <button type="button" class="region-btn active" data-region="cn">国内</button>
+        <button type="button" class="region-btn" data-region="overseas">海外</button>
+      </div>
+      <div class="lang-switch">
+        <label>语言：</label>
+        <select id="langSelect" class="lang-select"></select>
+      </div>
+    </div>
+  </header>
+
+  <main class="main">
+    <div class="phone-frame">
+      <div class="phone-frame-inner">
+        <div class="logo-area">
+          <div class="logo">VISBODY</div>
+        </div>
+
+        <!-- 国内登录 -->
+        <div class="auth-section active" id="section-cn-login">
+          <div class="third-party-row">
+            <button type="button" class="third-btn wechat js-third" title="微信登录">微</button>
+          </div>
+          <div class="divider"><span>或</span></div>
+          <div class="input-group">
+            <label>手机号码</label>
+            <div class="input-with-btn">
+              <input type="tel" placeholder="请输入手机号" maxlength="11">
+              <button type="button" class="btn-code">获取验证码</button>
+            </div>
+          </div>
+          <div class="remember-row">
+            <input type="checkbox" id="rememberCn">
+            <label for="rememberCn">记住我</label>
+          </div>
+          <div class="agreements">
+            <div class="agreements-item">
+              <input type="checkbox" id="agreeCn" class="js-agree">
+              <label for="agreeCn">我已阅读并同意 <a href="#">《用户协议》</a> 和 <a href="#">《隐私政策》</a></label>
+            </div>
+          </div>
+          <button type="button" class="btn-primary js-submit" data-action="login-cn" disabled>下一步</button>
+        </div>
+
+        <!-- 海外登录（Google + 邮箱验证码） -->
+        <div class="auth-section" id="section-overseas-login">
+          <div class="third-party-row">
+            <button type="button" class="third-btn google js-third" title="使用 Google 登录">G</button>
+          </div>
+          <div class="divider"><span>验证码登录</span></div>
+
+          <div class="input-group">
+            <label>邮箱</label>
+            <div class="input-with-btn">
+              <input type="email" placeholder="请输入邮箱" value="demo.user@example.com">
+              <button type="button" class="btn-code" data-fill="email">获取验证码</button>
+            </div>
+          </div>
+          <div class="input-group">
+            <label>验证码</label>
+            <input type="text" placeholder="请输入邮箱验证码" value="654321">
+          </div>
+          <div class="remember-row">
+            <input type="checkbox" id="rememberOverseas">
+            <label for="rememberOverseas">记住我</label>
+          </div>
+          <div class="agreements">
+            <div class="agreements-item">
+              <input type="checkbox" id="agreeOverseas" class="js-agree">
+              <label for="agreeOverseas">我已阅读并同意 <a href="#">《用户协议》</a> 和 <a href="#">《隐私政策》</a></label>
+            </div>
+          </div>
+          <button type="button" class="btn-primary js-submit" data-action="login-overseas" disabled>下一步</button>
+
+          <div class="help-link">
+            <button type="button" id="btnToOverseasPwd">密码登录</button>
+          </div>
+
+          <div class="help-link">
+            <button type="button" id="btnLoginHelp">登录遇到问题？</button>
+          </div>
+        </div>
+
+        <!-- 海外邮箱+密码登录页 -->
+        <div class="auth-section" id="section-overseas-login-pwd">
+          <div class="input-group">
+            <label>邮箱</label>
+            <input type="email" placeholder="请输入邮箱" class="js-overseas-pwd-email" value="demo.user@example.com">
+          </div>
+          <div class="input-group">
+            <label>密码</label>
+            <input type="password" placeholder="请输入密码" class="js-overseas-pwd-pw" value="">
+          </div>
+          <div class="remember-row">
+            <input type="checkbox" id="rememberOverseasPwd">
+            <label for="rememberOverseasPwd">记住我</label>
+          </div>
+          <div class="agreements">
+            <div class="agreements-item">
+              <input type="checkbox" id="agreeOverseasPwd" class="js-agree">
+              <label for="agreeOverseasPwd">我已阅读并同意 <a href="#">《用户协议》</a> 和 <a href="#">《隐私政策》</a></label>
+            </div>
+          </div>
+          <button type="button" class="btn-primary js-submit" data-action="login-overseas-pwd" disabled>登录</button>
+          <div class="help-link">
+            <button type="button" id="btnBackOverseasCode">验证码登录</button>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- 登录帮助：二级（帮助）+ 三级（短信入口） -->
+    <div class="login-help-modal" id="loginHelpModal">
+      <div class="login-help-backdrop"></div>
+      <div class="login-help-dialog">
+        <div class="login-help-header">
+          <span class="login-help-title">登录遇到问题</span>
+          <button type="button" class="login-help-close" id="btnHelpClose">×</button>
+        </div>
+        <div class="login-help-body">
+          <div class="help-step active" id="helpStepList">
+            <p>请优先使用 <span class="faq-strong">Google 授权</span> 或 <span class="faq-strong">邮箱验证码</span> 登录：</p>
+            <ol class="faq-list">
+              <li>检查邮箱地址是否填写正确，尤其是后缀。</li>
+              <li>查看「垃圾邮件」或「推广」分类，验证码邮件可能被误拦截。</li>
+              <li>如 Google 无法使用，可尝试切换网络或使用邮箱验证码。</li>
+              <li>
+                <button type="button" class="faq-sms-btn" id="btnToSmsThird">
+                  我身在日本等少数国家，历史上使用过短信验证码登录
+                </button>
+                <div class="faq-sms-desc">该方式仅为旧版用户在特殊情况下使用，新用户建议继续尝试邮箱/Google。</div>
+              </li>
+            </ol>
+          </div>
+
+          <div class="help-step" id="helpStepSms">
+            <p class="faq-strong">旧版用户短信验证码登录（仅日本等少数国家）</p>
+            <p class="faq-sms-desc">为了兼容历史使用短信登录的用户，我们在此保留该入口。新注册用户仍建议使用邮箱或 Google 登录。</p>
+            <div class="overseas-sms-block">
+              <div class="input-group" style="margin-top:10px;">
+                <label>手机号（带国家区号）</label>
+                <div class="input-with-btn">
+                  <input type="tel" placeholder="+81 请输入手机号" value="+81 90-1234-5678">
+                  <button type="button" class="btn-code" data-fill="phone">获取验证码</button>
+                </div>
+              </div>
+              <div class="input-group">
+                <label>验证码</label>
+                <input type="text" placeholder="请输入短信验证码" value="112233">
+              </div>
+              <div class="help-footer-btns">
+                <button type="button" class="btn-secondary" id="btnBackHelpList">返回问题列表</button>
+                <button type="button" class="btn-primary" data-action="login-sms-overseas">使用短信登录</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 设置登录密码说明（海外） -->
+    <div class="set-pwd-modal" id="setPwdModal">
+      <div class="set-pwd-backdrop"></div>
+      <div class="set-pwd-dialog">
+        <h4>设置登录密码</h4>
+        <p>登录后可在 <strong>我的 &rarr; 设置 &rarr; 账号与安全</strong> 中设置登录密码。设置后可使用「邮箱+密码」登录，无需每次获取验证码。</p>
+        <p style="font-size:12px;color:#94a3b8;">新用户注册时不要求设置密码，此处为可选功能。</p>
+        <button type="button" class="btn-primary" id="btnSetPwdClose">确定</button>
+      </div>
+    </div>
+  </main>
+
+  <script>
+    (function () {
+      var region = 'cn';
+      var mode = 'login';
+      var langSelect = document.getElementById('langSelect');
+      var langOptions = {
+        cn: [
+          { value: 'zh-CN', label: '简体中文' },
+          { value: 'zh-TW', label: '繁體中文' }
+        ],
+        overseas: [
+          { value: 'zh-CN', label: '简体中文' },
+          { value: 'en', label: 'English' },
+          { value: 'de', label: 'Deutsch' }
+        ]
+      };
+
+      function renderLangOptions() {
+        if (!langSelect) return;
+        var opts = langOptions[region] || [];
+        langSelect.innerHTML = '';
+        opts.forEach(function (o, idx) {
+          var opt = document.createElement('option');
+          opt.value = o.value;
+          opt.textContent = o.label;
+          if (idx === 0) opt.selected = true;
+          langSelect.appendChild(opt);
+        });
+      }
+
+      function showSection() {
+        var id = 'section-' + region + '-' + mode;
+        document.querySelectorAll('.auth-section').forEach(function (el) {
+          el.classList.toggle('active', el.id === id);
+        });
+      }
+
+      function showProfileStep(nextType) {
+        var inner = document.querySelector('.phone-frame-inner');
+        if (!inner) return;
+        var title = region === 'cn' ? '检测到为新用户，请完善资料' : 'New user, complete your profile';
+        var desc = region === 'cn'
+          ? '完善昵称、性别、年龄、身高后，将为你创建账号并自动登录。'
+          : 'Fill in basic info to create your account and sign in.';
+
+        inner.innerHTML = ''
+          + '<div class="logo-area"><div class="logo">VISBODY</div></div>'
+          + '<div style="margin-bottom:16px;text-align:center;">'
+          +   '<div style="font-size:18px;font-weight:600;margin-bottom:6px;">' + title + '</div>'
+          +   '<div style="font-size:13px;color:#64748b;">' + desc + '</div>'
+          + '</div>'
+          + '<div class="input-group"><label>昵称</label><input type="text" value="新用户" /></div>'
+          + '<div class="input-group"><label>性别</label><input type="text" value="男" /></div>'
+          + '<div class="input-group"><label>年龄</label><input type="number" value="28" /></div>'
+          + '<div class="input-group"><label>身高(cm)</label><input type="number" value="175" /></div>'
+          + '<button type="button" class="btn-primary" id="btnCompleteProfile">完成注册并登录</button>';
+
+        var btn = document.getElementById('btnCompleteProfile');
+        if (btn) {
+          btn.addEventListener('click', function () {
+            showSuccess(nextType);
+          });
+        }
+      }
+
+      function showSuccess(type) {
+        var inner = document.querySelector('.phone-frame-inner');
+        if (!inner) return;
+        var title = type === 'register'
+          ? (region === 'cn' ? '注册成功，已为你自动登录' : 'Sign up success, signed in')
+          : (region === 'cn' ? '登录成功' : 'Sign in success');
+        var sub;
+        if (region === 'cn') {
+          sub = '当前为「国内用户」场景，已用 ' + (mode === 'login' ? '手机号/验证码' : '手机号注册') + ' 完成认证。';
+        } else {
+          var overseasWay;
+          if (type === 'login-sms') {
+            overseasWay = '手机号短信验证码（日本等少数地区兼容）';
+          } else if (type === 'login-pwd') {
+            overseasWay = '邮箱+密码';
+          } else if (type === 'register') {
+            overseasWay = '邮箱注册';
+          } else {
+            overseasWay = 'Google 或 邮箱验证码';
+          }
+          sub = '当前为「海外用户」场景，已用 ' + overseasWay + ' 完成认证。';
+        }
+
+        var setPwdHint = '';
+        if (region === 'overseas') {
+          setPwdHint = '<p style="font-size:13px;color:#64748b;margin-top:12px;"><a href="#" id="linkSetPwd">设置登录密码</a>（可在 我的-设置-账号与安全 中设置，设置后可使用邮箱+密码登录）</p>';
+        }
+        inner.innerHTML = ''
+          + '<div class="logo-area"><div class="logo">VISBODY</div></div>'
+          + '<div style="text-align:center;margin-bottom:24px;">'
+          +   '<div style="font-size:20px;font-weight:600;margin-bottom:8px;">' + title + '</div>'
+          +   '<div style="font-size:14px;color:#64748b;margin-bottom:16px;">' + sub + '</div>'
+          +   '<div style="font-size:13px;color:#94a3b8;">以下仅为前端 Demo，实际环境需接入认证服务。</div>'
+          +   setPwdHint
+          + '</div>'
+          + '<button type="button" class="btn-primary" id="btnBack">返回登录页</button>';
+
+        var back = document.getElementById('btnBack');
+        if (back) {
+          back.addEventListener('click', function () {
+            window.location.reload();
+          });
+        }
+        var linkSetPwd = document.getElementById('linkSetPwd');
+        if (linkSetPwd) {
+          linkSetPwd.addEventListener('click', function (e) {
+            e.preventDefault();
+            if (window.openSetPwdModal) window.openSetPwdModal();
+          });
+        }
+      }
+
+      document.querySelectorAll('.region-btn').forEach(function (btn) {
+        btn.addEventListener('click', function () {
+          region = this.dataset.region;
+          document.querySelectorAll('.region-btn').forEach(function (b) { b.classList.remove('active'); });
+          this.classList.add('active');
+          showSection();
+          renderLangOptions();
+        });
+      });
+
+      document.querySelectorAll('.auth-tab').forEach(function (tab) {
+        tab.addEventListener('click', function () {
+          mode = this.dataset.mode;
+          document.querySelectorAll('.auth-tab').forEach(function (t) { t.classList.remove('active'); });
+          this.classList.add('active');
+          showSection();
+        });
+      });
+
+      document.querySelectorAll('.btn-code').forEach(function (btn) {
+        btn.addEventListener('click', function () {
+          if (this.classList.contains('disabled')) return;
+          var scope = this.getAttribute('data-fill');
+          var wrap = this.closest('.input-with-btn');
+          if (wrap) {
+            var input = wrap.querySelector('input');
+            if (input) {
+              if (scope === 'phone') input.value = '13800138000';
+              if (scope === 'email') input.value = 'demo.user@example.com';
+            }
+          }
+          this.classList.add('disabled');
+          this.textContent = '60s 后重发';
+          var n = 60;
+          var self = this;
+          var t = setInterval(function () {
+            n--;
+            self.textContent = n + 's 后重发';
+            if (n <= 0) {
+              clearInterval(t);
+              self.classList.remove('disabled');
+              self.textContent = '获取验证码';
+            }
+          }, 1000);
+        });
+      });
+      
+      function sectionAgreed(section) {
+        if (!section) return true;
+        var checks = section.querySelectorAll('.js-agree');
+        if (!checks.length) return true;
+        return Array.prototype.every.call(checks, function (c) { return c.checked; });
+      }
+
+      function refreshSubmitState() {
+        document.querySelectorAll('.auth-section').forEach(function (sec) {
+          var btn = sec.querySelector('.js-submit');
+          if (!btn) return;
+          btn.disabled = !sectionAgreed(sec);
+        });
+      }
+
+      document.querySelectorAll('.js-agree').forEach(function (cb) {
+        cb.addEventListener('change', refreshSubmitState);
+      });
+
+      document.querySelectorAll('.js-submit').forEach(function (btn) {
+        btn.addEventListener('click', function () {
+          var sec = this.closest('.auth-section');
+          if (!sectionAgreed(sec)) {
+            alert('请先勾选用户协议和隐私政策');
+            return;
+          }
+          var action = this.getAttribute('data-action') || '';
+          if (action === 'login-sms-overseas') {
+            showProfileStep('login-sms');
+          } else if (action === 'login-overseas-pwd') {
+            showProfileStep('login-pwd');
+          } else if (action.indexOf('register') === 0) {
+            showProfileStep('register');
+          } else {
+            showProfileStep('login');
+          }
+        });
+      });
+
+      document.querySelectorAll('.js-third').forEach(function (btn) {
+        btn.addEventListener('click', function () {
+          var sec = this.closest('.auth-section');
+          if (!sectionAgreed(sec)) {
+            alert('请先勾选用户协议和隐私政策');
+            return;
+          }
+          showProfileStep('login');
+        });
+      });
+
+      document.querySelectorAll('[data-link="to-login"]').forEach(function (a) {
+        a.addEventListener('click', function (e) {
+          e.preventDefault();
+          mode = 'login';
+          document.querySelectorAll('.auth-tab').forEach(function (t) {
+            t.classList.toggle('active', t.dataset.mode === 'login');
+          });
+          showSection();
+        });
+      });
+
+      // 登录帮助 & 短信三级入口（仅海外场景使用） + 邮箱密码页切换
+      var helpModal = document.getElementById('loginHelpModal');
+      var helpStepList = document.getElementById('helpStepList');
+      var helpStepSms = document.getElementById('helpStepSms');
+      var btnHelp = document.getElementById('btnLoginHelp');
+      var btnHelpClose = document.getElementById('btnHelpClose');
+      var btnToSmsThird = document.getElementById('btnToSmsThird');
+      var btnBackHelpList = document.getElementById('btnBackHelpList');
+      var backdrop = helpModal ? helpModal.querySelector('.login-help-backdrop') : null;
+      var btnToOverseasPwd = document.getElementById('btnToOverseasPwd');
+      var btnBackOverseasCode = document.getElementById('btnBackOverseasCode');
+      var overseasCodeSec = document.getElementById('section-overseas-login');
+      var overseasPwdSec = document.getElementById('section-overseas-login-pwd');
+
+      function openHelp() {
+        if (!helpModal) return;
+        helpModal.style.display = 'flex';
+        if (helpStepList && helpStepSms) {
+          helpStepList.classList.add('active');
+          helpStepSms.classList.remove('active');
+        }
+      }
+      function closeHelp() {
+        if (!helpModal) return;
+        helpModal.style.display = 'none';
+      }
+      if (btnHelp) {
+        btnHelp.addEventListener('click', function () {
+          if (region !== 'overseas') return;
+          openHelp();
+        });
+      }
+      if (btnHelpClose) btnHelpClose.addEventListener('click', closeHelp);
+      if (backdrop) backdrop.addEventListener('click', closeHelp);
+      if (btnToSmsThird && helpStepList && helpStepSms) {
+        btnToSmsThird.addEventListener('click', function () {
+          helpStepList.classList.remove('active');
+          helpStepSms.classList.add('active');
+        });
+      }
+      if (btnBackHelpList && helpStepList && helpStepSms) {
+        btnBackHelpList.addEventListener('click', function () {
+          helpStepSms.classList.remove('active');
+          helpStepList.classList.add('active');
+        });
+      }
+
+      if (btnToOverseasPwd && overseasCodeSec && overseasPwdSec) {
+        btnToOverseasPwd.addEventListener('click', function () {
+          overseasCodeSec.classList.remove('active');
+          overseasPwdSec.classList.add('active');
+          refreshSubmitState();
+        });
+      }
+      if (btnBackOverseasCode && overseasCodeSec && overseasPwdSec) {
+        btnBackOverseasCode.addEventListener('click', function () {
+          overseasPwdSec.classList.remove('active');
+          overseasCodeSec.classList.add('active');
+          refreshSubmitState();
+        });
+      }
+
+      renderLangOptions();
+      refreshSubmitState();
+
+      var setPwdModal = document.getElementById('setPwdModal');
+      var setPwdBackdrop = setPwdModal ? setPwdModal.querySelector('.set-pwd-backdrop') : null;
+      var btnSetPwdClose = document.getElementById('btnSetPwdClose');
+      window.openSetPwdModal = function () {
+        if (setPwdModal) setPwdModal.classList.add('show');
+      };
+      function closeSetPwdModal() {
+        if (setPwdModal) setPwdModal.classList.remove('show');
+      }
+      if (btnSetPwdClose) btnSetPwdClose.addEventListener('click', closeSetPwdModal);
+      if (setPwdBackdrop) setPwdBackdrop.addEventListener('click', closeSetPwdModal);
+    })();
+  </script>
+</body>
+</html>

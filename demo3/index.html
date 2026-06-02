@@ -1,0 +1,800 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>维塑大中台管理系统</title>
+  <style>
+    :root {
+      --line: #e8e8e8;
+      --line-2: #f0f0f0;
+      --ink: rgba(0, 0, 0, 0.85);
+      --muted: rgba(0, 0, 0, 0.45);
+      --blue: #1890ff;
+      --blue-hover: #40a9ff;
+      --blue-soft: #e6f7ff;
+      --bg: #f0f2f5;
+      --green: #52c41a;
+      --danger: #ff4d4f;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Helvetica Neue", Arial, "Microsoft YaHei", sans-serif;
+      color: var(--ink);
+      background: var(--bg);
+      font-size: 14px;
+    }
+    button, input, select, textarea { font: inherit; }
+    .admin-root { min-height: 100vh; display: flex; flex-direction: column; }
+    .admin-header {
+      height: 48px;
+      background: #fff;
+      border-bottom: 1px solid var(--line-2);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 16px 0 12px;
+      flex-shrink: 0;
+      z-index: 20;
+    }
+    .admin-header-left { display: flex; align-items: center; gap: 8px; min-width: 160px; }
+    .logo-mark {
+      width: 28px; height: 28px; border-radius: 50%;
+      background: linear-gradient(135deg, var(--blue), #096dd9);
+      flex-shrink: 0;
+    }
+    .logo-text { font-weight: 600; font-size: 16px; }
+    .admin-header-center { flex: 1; text-align: center; font-size: 16px; font-weight: 600; }
+    .admin-header-right { display: flex; align-items: center; gap: 8px; min-width: 160px; justify-content: flex-end; }
+    .user-avatar {
+      width: 28px; height: 28px; border-radius: 50%;
+      background: var(--blue-soft); color: var(--blue);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 13px; font-weight: 600;
+    }
+    .admin-body { flex: 1; display: flex; min-height: 0; }
+    .admin-sider {
+      width: 220px; background: #fff; border-right: 1px solid var(--line-2);
+      display: flex; flex-direction: column; flex-shrink: 0;
+    }
+    .sider-brand { padding: 12px 16px; border-bottom: 1px solid var(--line-2); font-size: 12px; color: var(--muted); }
+    .nav-scroll { flex: 1; overflow-y: auto; padding: 8px 0 48px; }
+    .nav-item-top {
+      padding: 10px 16px; color: rgba(0, 0, 0, 0.65); cursor: default; font-size: 14px;
+    }
+    .nav-item-top:hover { background: #fafafa; }
+    .submenu-wrap { border-bottom: 1px solid #f5f5f5; }
+    .nav-parent {
+      padding: 10px 16px; display: flex; align-items: center; justify-content: space-between;
+      color: rgba(0, 0, 0, 0.65); font-size: 14px; cursor: default; user-select: none;
+    }
+    .nav-parent .chev { font-size: 10px; color: var(--muted); }
+    .submenu { background: #fafafa; padding-bottom: 4px; }
+    .nav-sub {
+      padding: 9px 16px 9px 32px; font-size: 14px; color: rgba(0, 0, 0, 0.65);
+      cursor: pointer; border-left: 3px solid transparent;
+    }
+    .nav-sub:hover { color: var(--blue); background: rgba(24, 144, 255, 0.06); }
+    .nav-sub.active {
+      color: var(--blue); font-weight: 600; background: var(--blue-soft); border-left-color: var(--blue);
+    }
+    .sider-foot {
+      margin-top: auto; padding: 12px 16px; border-top: 1px solid var(--line-2);
+      font-size: 12px; color: var(--muted); display: flex; justify-content: space-between; align-items: center;
+    }
+    .admin-main { flex: 1; min-width: 0; display: flex; flex-direction: column; background: var(--bg); }
+    .content-inner { flex: 1; padding: 16px; overflow: auto; display: flex; flex-direction: column; }
+    .canvas {
+      flex: 1; min-height: 200px; background: #fff; border: 1px solid var(--line-2);
+      border-radius: 2px; padding: 16px 20px 20px;
+    }
+    .admin-footer { text-align: center; padding: 12px; font-size: 12px; color: var(--muted); }
+    .page { display: none; }
+    .page.active { display: block; }
+    .page-title {
+      margin: 0 0 4px; font-size: 18px; font-weight: 600;
+    }
+    .page-desc { margin: 0 0 16px; font-size: 13px; color: var(--muted); line-height: 1.5; }
+    .toolbar-row {
+      display: flex; flex-wrap: wrap; gap: 10px; align-items: center; margin-bottom: 14px;
+    }
+    .toolbar-row select, .toolbar-row input[type="text"], .toolbar-row input[type="search"] {
+      height: 32px; border: 1px solid var(--line); border-radius: 2px; padding: 0 10px; min-width: 120px;
+    }
+    .toolbar-row .date-pair { display: flex; align-items: center; gap: 8px; color: var(--muted); font-size: 13px; }
+    .btn {
+      border-radius: 2px; border: 1px solid var(--line); background: #fff;
+      color: rgba(0, 0, 0, 0.65); cursor: pointer; padding: 4px 15px; height: 32px; font-size: 14px;
+    }
+    .btn:hover { color: var(--blue); border-color: var(--blue); }
+    .btn.primary { background: var(--blue); color: #fff; border-color: var(--blue); }
+    .btn.primary:hover { background: var(--blue-hover); border-color: var(--blue-hover); color: #fff; }
+    .btn.link { border: none; background: none; color: var(--blue); padding: 0 4px; height: auto; }
+    .btn.link.danger { color: var(--danger); }
+    .admin-card {
+      background: #fafafa; border: 1px solid var(--line-2); border-radius: 2px;
+      padding: 14px 16px; margin-bottom: 14px;
+    }
+    .admin-card > h3, .admin-card > h4 {
+      margin: 0 0 10px; font-size: 14px; font-weight: 600;
+    }
+    .admin-card h4 { margin-top: 16px; color: rgba(0, 0, 0, 0.75); font-size: 13px; }
+    .admin-card:first-child h4 { margin-top: 0; }
+    .data-table {
+      width: 100%; border-collapse: collapse; font-size: 13px;
+    }
+    .data-table th, .data-table td {
+      border: 1px solid #f0f0f0; padding: 10px 12px; text-align: left;
+    }
+    .data-table th { background: #fafafa; font-weight: 600; color: rgba(0, 0, 0, 0.65); }
+    .data-table tr:hover td { background: #fafafa; }
+    .data-table input[type="number"] {
+      width: 100%; min-width: 72px; border: 1px solid var(--line); border-radius: 2px; padding: 4px 8px;
+    }
+    .form-grid {
+      display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 12px; margin-bottom: 12px;
+    }
+    .form-field label { display: block; font-size: 12px; color: var(--muted); margin-bottom: 4px; }
+    .form-field input, .form-field select {
+      width: 100%; border: 1px solid var(--line); border-radius: 2px; padding: 6px 8px; height: 32px;
+    }
+    .kbd {
+      font-family: ui-monospace, monospace; font-size: 12px;
+      background: #f5f5f5; padding: 1px 6px; border-radius: 2px;
+    }
+    .chip { display: inline-block; padding: 0 6px; border-radius: 2px; font-size: 12px; }
+    .chip-pro { background: var(--blue-soft); color: var(--blue); }
+    .chip-pack { background: #f6ffed; color: var(--green); border: 1px solid #b7eb8f; }
+    .chip-basic { background: #f5f5f5; color: var(--muted); }
+    .points-stat {
+      display: flex; flex-wrap: wrap; gap: 16px; margin-bottom: 16px;
+    }
+    .points-stat .box {
+      background: #fff; border: 1px solid var(--line-2); border-radius: 2px; padding: 12px 16px; min-width: 160px;
+    }
+    .points-stat .box .label { font-size: 12px; color: var(--muted); }
+    .points-stat .box .val { font-size: 22px; font-weight: 600; margin-top: 4px; }
+    .back-row { margin-bottom: 12px; }
+    .text-muted { color: var(--muted); font-size: 13px; }
+    .pill-ok { color: var(--green); font-weight: 500; }
+    .pill-warn { color: #fa8c16; }
+    .toast {
+      position: fixed; bottom: 28px; left: 50%; transform: translateX(-50%) translateY(80px);
+      background: rgba(0, 0, 0, 0.75); color: #fff; padding: 10px 20px; border-radius: 4px;
+      font-size: 14px; opacity: 0; pointer-events: none; transition: opacity 0.2s, transform 0.2s; z-index: 1000;
+    }
+    .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+    .mobile-nav {
+      display: none; gap: 8px; padding: 10px 16px; background: #fff; border-bottom: 1px solid var(--line);
+      overflow-x: auto; flex-wrap: nowrap; align-items: center;
+    }
+    .mobile-nav-btn {
+      flex: 0 0 auto; border: 1px solid var(--line); background: #fafafa;
+      color: rgba(0, 0, 0, 0.65); border-radius: 999px; padding: 8px 14px; font-size: 13px; cursor: pointer; white-space: nowrap;
+    }
+    .mobile-nav-btn.active { border-color: #91d5ff; background: var(--blue-soft); color: var(--blue); font-weight: 600; }
+    @media (max-width: 960px) {
+      .admin-sider { display: none; }
+      .mobile-nav { display: flex; }
+      .admin-header-center { font-size: 14px; }
+      .content-inner { padding: 10px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="admin-root">
+    <header class="admin-header">
+      <div class="admin-header-left">
+        <span class="logo-mark" aria-hidden="true"></span>
+        <span class="logo-text">维塑</span>
+      </div>
+      <div class="admin-header-center">维塑大中台管理系统</div>
+      <div class="admin-header-right">
+        <span class="user-avatar">h</span>
+        <span class="user-name">hudandan</span>
+      </div>
+    </header>
+
+    <div class="admin-body">
+      <aside class="admin-sider">
+        <div class="sider-brand">夸父</div>
+        <nav class="nav-scroll" aria-label="侧边导航">
+          <div class="nav-item-top">客户管理</div>
+          <div class="nav-item-top">销售管理工具</div>
+          <div class="nav-item-top">设备管理</div>
+          <div class="submenu-wrap">
+            <div class="nav-parent"><span>付费管理</span><span class="chev">▼</span></div>
+            <div class="submenu">
+              <div class="nav-sub active" data-view="payment-mode">付费模式</div>
+              <div class="nav-sub" data-view="customer-payment">客户付费管理</div>
+              <div class="nav-sub" data-view="payment-records">缴费记录</div>
+            </div>
+          </div>
+          <div class="nav-item-top">优惠券管理</div>
+          <div class="nav-item-top">资源管理</div>
+          <div class="nav-item-top">系统管理</div>
+        </nav>
+        <div class="sider-foot"><span>版本 v2.9.3</span></div>
+      </aside>
+
+      <div class="admin-main">
+        <nav class="mobile-nav" aria-label="模块切换">
+          <button type="button" class="mobile-nav-btn active" data-view="payment-mode">付费模式</button>
+          <button type="button" class="mobile-nav-btn" data-view="customer-payment">客户付费</button>
+          <button type="button" class="mobile-nav-btn" data-view="payment-records">缴费记录</button>
+        </nav>
+        <div class="content-inner">
+          <div class="canvas">
+            <!-- 付费模式：列表 + Pro 下积分包与策略配置 -->
+            <section class="page active" id="page-payment-mode">
+              <h1 class="page-title">付费模式</h1>
+              <p class="page-desc">维护付费模式列表；在 <strong>Pro 付费模式</strong> 中配置套餐发放积分、AI 单次消耗及<strong>积分包价格</strong>（与客户端「购买积分包」一致）。</p>
+              <div class="toolbar-row">
+                <button type="button" class="btn primary">+ 新建</button>
+                <select aria-label="筛一"><option>全部</option></select>
+                <select aria-label="筛二"><option>全部</option></select>
+                <input type="search" placeholder="请输入付费模式查询" style="min-width:200px;" />
+                <button type="button" class="btn primary">查询</button>
+              </div>
+              <div class="admin-card" style="padding:0;overflow:auto;background:#fff;">
+                <table class="data-table">
+                  <thead>
+                    <tr>
+                      <th>序号</th>
+                      <th>付费模式名称</th>
+                      <th>适用类型</th>
+                      <th>国家</th>
+                      <th>状态</th>
+                      <th>操作</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>1</td>
+                      <td>VA-Pro6 China 标准 Pro</td>
+                      <td>Pro</td>
+                      <td>中国</td>
+                      <td><span class="pill-ok">启用中</span></td>
+                      <td><button type="button" class="btn link">详情</button> <button type="button" class="btn link">编辑</button></td>
+                    </tr>
+                    <tr>
+                      <td>2</td>
+                      <td>（演示）与下方积分配置联动</td>
+                      <td>Pro</td>
+                      <td>中国</td>
+                      <td><span class="pill-ok">启用中</span></td>
+                      <td><span class="text-muted">—</span></td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+
+              <div class="admin-card">
+                <h3>Pro 付费模式 · 积分与计费</h3>
+                <p class="text-muted" style="margin:0 0 12px;">以下配置对应客户端 demo「账户与权益 / 续费 / 购买积分包」中的数值来源；保存仅为前端演示。</p>
+
+                <h4>套餐档位发放积分（支付成功即发，与实付解耦）</h4>
+                <table class="data-table" id="tableProGrant">
+                  <thead>
+                    <tr>
+                      <th>档位 × 周期</th>
+                      <th>发放积分</th>
+                      <th>说明</th>
+                    </tr>
+                  </thead>
+                  <tbody></tbody>
+                </table>
+
+                <h4>AI 能力单次消耗积分</h4>
+                <table class="data-table" id="tableConsume">
+                  <thead>
+                    <tr>
+                      <th>能力 key</th>
+                      <th>展示名称</th>
+                      <th>消耗积分</th>
+                      <th>备注</th>
+                    </tr>
+                  </thead>
+                  <tbody></tbody>
+                </table>
+
+                <h4>积分包价格配置（按量购买 · 与客户端档位一致）</h4>
+                <p class="text-muted" style="margin:0 0 8px;">自定义输入校验范围；固定档位价格支持多币种（演示）。</p>
+                <div class="form-grid" style="max-width:520px;">
+                  <div class="form-field">
+                    <label>最小积分</label>
+                    <input type="number" id="customMin" min="1" />
+                  </div>
+                  <div class="form-field">
+                    <label>最大积分</label>
+                    <input type="number" id="customMax" min="1" />
+                  </div>
+                  <div class="form-field">
+                    <label>步长（可选）</label>
+                    <input type="number" id="customStep" min="1" placeholder="100" />
+                  </div>
+                </div>
+                <table class="data-table" id="tablePurchase">
+                  <thead>
+                    <tr>
+                      <th>积分数量</th>
+                      <th>CNY（¥）</th>
+                      <th>USD</th>
+                      <th>EUR</th>
+                    </tr>
+                  </thead>
+                  <tbody></tbody>
+                </table>
+                <div style="margin-top:12px;">
+                  <button type="button" class="btn primary" id="savePaymentModePoints">保存积分相关配置</button>
+                </div>
+              </div>
+            </section>
+
+            <!-- 客户付费管理：列表 / 详情 -->
+            <section class="page" id="page-customer-payment">
+              <div id="panel-customer-list">
+                <h1 class="page-title">客户付费管理</h1>
+                <p class="page-desc">查看客户套餐与设备；进入详情可查看该客户<strong>剩余积分</strong>与<strong>积分使用记录</strong>（与客户端 demo 一致）。</p>
+                <div class="toolbar-row">
+                  <div class="date-pair">
+                    <span>开始日期</span><input type="date" style="width:140px;" />
+                    <span>—</span>
+                    <span>结束日期</span><input type="date" style="width:140px;" />
+                  </div>
+                  <select><option>全部</option></select>
+                  <select><option>全部</option></select>
+                  <input type="text" placeholder="请输入客户名称查询" style="min-width:160px;" />
+                  <input type="text" placeholder="请输入客户ID查询" style="min-width:140px;" />
+                  <button type="button" class="btn primary">查询</button>
+                </div>
+                <div class="admin-card" style="padding:0;overflow:auto;background:#fff;">
+                  <table class="data-table">
+                    <thead>
+                      <tr>
+                        <th>序号</th>
+                        <th>客户ID</th>
+                        <th>客户名称</th>
+                        <th>套餐类型</th>
+                        <th>设备数</th>
+                        <th>到期时间</th>
+                        <th>状态</th>
+                        <th>操作</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <td>1</td>
+                        <td>10086</td>
+                        <td>XAtest</td>
+                        <td>Pro</td>
+                        <td>3</td>
+                        <td>2026-05-15</td>
+                        <td>正常</td>
+                        <td><button type="button" class="btn link" id="openCustomerDetail">详情</button></td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+
+              <div id="panel-customer-detail" hidden>
+                <div class="back-row">
+                  <button type="button" class="btn" id="backCustomerList">← 返回</button>
+                </div>
+                <h1 class="page-title">客户付费管理详情</h1>
+                <p class="page-desc">客户：<strong>XAtest</strong> · 客户ID：<span class="kbd">10086</span> · 套餐：<strong>Pro</strong></p>
+
+                <div class="points-stat">
+                  <div class="box">
+                    <div class="label">当前剩余积分</div>
+                    <div class="val" id="detailBalance">420</div>
+                    <div class="text-muted" style="margin-top:4px;">与客户端「账户与权益」一致（演示数据）</div>
+                  </div>
+                  <div class="box">
+                    <div class="label">近 30 日已消耗积分</div>
+                    <div class="val" id="detailUsed30">1830</div>
+                  </div>
+                </div>
+
+                <div class="admin-card" style="padding:0;overflow:auto;background:#fff;">
+                  <table class="data-table">
+                    <thead>
+                      <tr>
+                        <th>设备型号</th>
+                        <th>所属门店</th>
+                        <th>设备序列号</th>
+                        <th>设备到期时间</th>
+                        <th>激活状态</th>
+                        <th>是否Pro设备</th>
+                        <th>Pro开通时间</th>
+                        <th>Pro到期时间</th>
+                        <th>操作</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <td>Visbody-E735</td>
+                        <td>深圳VE735-162对接JZ</td>
+                        <td>43123456789162</td>
+                        <td>—</td>
+                        <td>激活</td>
+                        <td>否</td>
+                        <td>—</td>
+                        <td>—</td>
+                        <td><button type="button" class="btn primary" style="height:auto;padding:2px 8px;font-size:12px;">修改Pro权益</button></td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+
+                <h3 style="margin:20px 0 10px;font-size:15px;font-weight:600;">积分使用记录</h3>
+                <p class="text-muted" style="margin:0 0 10px;">字段与客户端「积分使用记录」一致：时间、功能、设备、消耗、扣减后余额、状态、备注。</p>
+                <div class="toolbar-row">
+                  <select id="usageDatePreset">
+                    <option value="all">时间：全部</option>
+                    <option value="7d">近 7 日</option>
+                    <option value="30d">近 30 日</option>
+                  </select>
+                  <select id="usageFilterFeature">
+                    <option value="all">功能：全部</option>
+                    <option value="report">AI 报告解读</option>
+                    <option value="outline">AI 个性化训练大纲</option>
+                    <option value="consult">AI 自由对话</option>
+                  </select>
+                  <select id="usageFilterStatus">
+                    <option value="all">状态：全部</option>
+                    <option value="成功">成功</option>
+                    <option value="失败">失败</option>
+                  </select>
+                  <button type="button" class="btn primary" id="applyUsageFilter">筛选</button>
+                </div>
+                <div class="admin-card" style="padding:0;overflow:auto;background:#fff;">
+                  <table class="data-table" id="tableUsageDetail">
+                    <thead>
+                      <tr>
+                        <th>时间</th>
+                        <th>功能</th>
+                        <th>设备</th>
+                        <th>消耗积分</th>
+                        <th>扣减后余额</th>
+                        <th>状态</th>
+                        <th>备注</th>
+                      </tr>
+                    </thead>
+                    <tbody></tbody>
+                  </table>
+                </div>
+              </div>
+            </section>
+
+            <!-- 缴费记录：与客户端 demo2 一致 -->
+            <section class="page" id="page-payment-records">
+              <h1 class="page-title">缴费记录</h1>
+              <p class="page-desc">订单类型、编号、实付、套餐类型等与客户端「缴费记录」演示一致。</p>
+              <div class="toolbar-row">
+                <div class="date-pair">
+                  <span>开始日期</span><input type="date" id="payDateStart" style="width:140px;" />
+                  <span>—</span>
+                  <span>结束日期</span><input type="date" id="payDateEnd" style="width:140px;" />
+                </div>
+                <select id="paymentFilterType" aria-label="订单类型">
+                  <option value="all">全部订单类型</option>
+                  <option value="pro">Pro 订阅订单</option>
+                  <option value="basic">Basic 订阅订单</option>
+                  <option value="pack">积分包订单</option>
+                </select>
+                <select><option>全部</option></select>
+                <input type="search" id="paymentSearchQuery" placeholder="请输入订单编号/客户名称查询" style="min-width:220px;" />
+                <input type="text" placeholder="请输入客户ID查询" style="min-width:140px;" />
+                <button type="button" class="btn primary" id="paymentSearchBtn">查询</button>
+              </div>
+              <div class="admin-card" style="padding:0;overflow:auto;background:#fff;">
+                <table class="data-table" id="tablePaymentRecords">
+                  <thead>
+                    <tr>
+                      <th>序号</th>
+                      <th>订单编号</th>
+                      <th>实付金额</th>
+                      <th>套餐类型</th>
+                      <th>状态</th>
+                      <th>创建时间</th>
+                      <th>支付时间</th>
+                      <th>操作</th>
+                    </tr>
+                  </thead>
+                  <tbody></tbody>
+                </table>
+              </div>
+            </section>
+          </div>
+          <footer class="admin-footer">维塑科技</footer>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="toast" id="toast" role="status"></div>
+
+  <script>
+(function () {
+  /** 与 demo2-pro-upgrade-page.html buildPaymentRows('normal') 同源示例数据 */
+  const PAYMENT_ROWS = [
+    { id: 'basic-1', orderNo: '300842202602201031228805', amount: '¥ 59.00', packageType: 'Basic/月', status: '支付成功', createTime: '2026-02-20 10:31:20', payTime: '2026-02-20 10:31:38', type: 'basic' },
+    { id: 'pro-m-1', orderNo: '300842202602101030115503', amount: '¥ 129.00', packageType: 'Pro/月', status: '支付成功', createTime: '2026-02-10 10:30:12', payTime: '2026-02-10 10:30:28', type: 'pro' },
+    { id: 'pro-1', orderNo: '30084220260225160143189', amount: '¥ 990.00', packageType: 'Pro/年', status: '支付成功', createTime: '2026-02-25 16:01:44', payTime: '2026-02-25 16:01:59', type: 'pro' },
+    { id: 'pack-1', orderNo: '3008422026031809152231661', amount: '¥ 399.00', packageType: '积分包', status: '支付成功', createTime: '2026-03-18 09:15:02', payTime: '2026-03-18 09:15:18', type: 'pack' },
+    { id: 'pro-f-1', orderNo: '300842202601051200558812', amount: '¥ 3999.00', packageType: 'Pro/永久', status: '支付成功', createTime: '2026-01-05 12:00:33', payTime: '2026-01-05 12:00:48', type: 'pro' }
+  ];
+
+  /** 与 demo2 buildUsageRows('normal') 一致 */
+  const USAGE_ROWS = [
+    { time: '2026-03-24 14:32:15', feature: 'AI 报告解读', featureId: 'report', device: 'Visbody-M30', points: 10, balance: 430, status: '成功', remark: '—' },
+    { time: '2026-03-24 11:05:33', feature: 'AI 报告解读', featureId: 'report', device: 'Visbody-M30', points: 0, balance: 440, status: '失败', remark: '服务响应超时，未扣减积分' },
+    { time: '2026-03-23 18:20:46', feature: 'AI 个性化训练大纲', featureId: 'outline', device: 'Visbody-M30', points: 70, balance: 440, status: '成功', remark: '—' },
+    { time: '2026-03-22 10:41:05', feature: 'AI 自由对话', featureId: 'consult', device: 'Visbody-M60', points: 1, balance: 510, status: '成功', remark: '—' }
+  ];
+
+  const state = {
+    view: 'payment-mode',
+    proGrant: [
+      { id: 'Pro-月付', points: 500, note: '方案 A 默认' },
+      { id: 'Pro-年付', points: 5000, note: '方案 A 默认' }
+    ],
+    consume: [
+      { key: 'ai_report_interpretation', name: 'AI 报告解读', points: 10, note: '成功扣减' },
+      { key: 'ai_training_outline', name: 'AI 个性化训练大纲', points: 70, note: '成功扣减' },
+      { key: 'ai_consultation', name: 'AI 咨询 / 自由对话', points: 1, note: '成功扣减' }
+    ],
+    purchaseTiers: [
+      { qty: 1000, cny: 99, usd: 14, eur: 13 },
+      { qty: 5000, cny: 399, usd: 56, eur: 52 },
+      { qty: 10000, cny: 699, usd: 99, eur: 91 }
+    ],
+    customMin: 100,
+    customMax: 50000,
+    customStep: 100,
+    paymentRows: PAYMENT_ROWS.slice(),
+    paymentFilterType: 'all',
+    paymentSearchQuery: '',
+    usageRows: USAGE_ROWS.slice(),
+    usageDatePreset: 'all',
+    usageFilterFeature: 'all',
+    usageFilterStatus: 'all'
+  };
+
+  function toast(msg) {
+    const el = document.getElementById('toast');
+    el.textContent = msg;
+    el.classList.add('show');
+    clearTimeout(toast._t);
+    toast._t = setTimeout(() => el.classList.remove('show'), 2000);
+  }
+
+  function setView(id) {
+    state.view = id;
+    document.querySelectorAll('.nav-sub[data-view]').forEach((n) => {
+      n.classList.toggle('active', n.dataset.view === id);
+    });
+    document.querySelectorAll('.mobile-nav-btn[data-view]').forEach((b) => {
+      b.classList.toggle('active', b.dataset.view === id);
+    });
+    document.querySelectorAll('.page').forEach((p) => {
+      p.classList.toggle('active', p.id === 'page-' + id);
+    });
+    if (id === 'customer-payment') {
+      const list = document.getElementById('panel-customer-list');
+      const detail = document.getElementById('panel-customer-detail');
+      if (list && detail) {
+        list.hidden = false;
+        detail.hidden = true;
+      }
+    }
+  }
+
+  function renderProGrant() {
+    const tb = document.querySelector('#tableProGrant tbody');
+    tb.innerHTML = state.proGrant.map((row, i) => `
+      <tr>
+        <td><span class="kbd">${row.id}</span></td>
+        <td><input type="number" min="0" data-pro-idx="${i}" class="inp-pro" value="${row.points}" /></td>
+        <td class="text-muted" style="font-size:12px;">${row.note}</td>
+      </tr>
+    `).join('');
+    tb.querySelectorAll('.inp-pro').forEach((inp) => {
+      inp.addEventListener('change', () => {
+        const i = +inp.dataset.proIdx;
+        state.proGrant[i].points = +inp.value || 0;
+      });
+    });
+  }
+
+  function renderConsume() {
+    const tb = document.querySelector('#tableConsume tbody');
+    tb.innerHTML = state.consume.map((row, i) => `
+      <tr>
+        <td><span class="kbd">${row.key}</span></td>
+        <td>${row.name}</td>
+        <td><input type="number" min="0" data-con-idx="${i}" class="inp-con" value="${row.points}" /></td>
+        <td class="text-muted" style="font-size:12px;">${row.note}</td>
+      </tr>
+    `).join('');
+    tb.querySelectorAll('.inp-con').forEach((inp) => {
+      inp.addEventListener('change', () => {
+        const i = +inp.dataset.conIdx;
+        state.consume[i].points = +inp.value || 0;
+      });
+    });
+  }
+
+  function renderPurchase() {
+    document.getElementById('customMin').value = state.customMin;
+    document.getElementById('customMax').value = state.customMax;
+    document.getElementById('customStep').value = state.customStep != null ? state.customStep : '';
+    const tb = document.querySelector('#tablePurchase tbody');
+    tb.innerHTML = state.purchaseTiers.map((row, i) => `
+      <tr>
+        <td><input type="number" min="1" data-tier-idx="${i}" data-field="qty" value="${row.qty}" /></td>
+        <td><input type="number" min="0" step="0.01" data-tier-idx="${i}" data-field="cny" value="${row.cny}" /></td>
+        <td><input type="number" min="0" step="0.01" data-tier-idx="${i}" data-field="usd" value="${row.usd}" /></td>
+        <td><input type="number" min="0" step="0.01" data-tier-idx="${i}" data-field="eur" value="${row.eur}" /></td>
+      </tr>
+    `).join('');
+    tb.querySelectorAll('input').forEach((inp) => {
+      inp.addEventListener('change', () => {
+        const i = +inp.dataset.tierIdx;
+        const f = inp.dataset.field;
+        state.purchaseTiers[i][f] = +inp.value || 0;
+      });
+    });
+  }
+
+  function bindCustomInputs() {
+    document.getElementById('customMin').addEventListener('change', () => {
+      state.customMin = +document.getElementById('customMin').value || 0;
+    });
+    document.getElementById('customMax').addEventListener('change', () => {
+      state.customMax = +document.getElementById('customMax').value || 0;
+    });
+    document.getElementById('customStep').addEventListener('change', () => {
+      const v = document.getElementById('customStep').value;
+      state.customStep = v ? +v : null;
+    });
+  }
+
+  function usageRowInPreset(row) {
+    if (state.usageDatePreset === 'all') return true;
+    const t = new Date(row.time.replace(/-/g, '/'));
+    const anchor = new Date('2026-03-25T23:59:59');
+    const days = (anchor - t) / 86400000;
+    if (days < 0) return false;
+    const win = state.usageDatePreset === '7d' ? 7 : 30;
+    return days <= win;
+  }
+
+  function getFilteredUsageRows() {
+    return state.usageRows.filter((row) => {
+      if (!usageRowInPreset(row)) return false;
+      if (state.usageFilterFeature !== 'all' && row.featureId !== state.usageFilterFeature) return false;
+      if (state.usageFilterStatus !== 'all' && row.status !== state.usageFilterStatus) return false;
+      return true;
+    });
+  }
+
+  function renderUsageTable() {
+    const rows = getFilteredUsageRows();
+    const tb = document.querySelector('#tableUsageDetail tbody');
+    tb.innerHTML = rows.length
+      ? rows.map((r) => `
+        <tr>
+          <td>${r.time}</td>
+          <td>${r.feature}</td>
+          <td>${r.device}</td>
+          <td>${r.points}</td>
+          <td>${r.balance}</td>
+          <td>${r.status === '成功' ? '<span class="pill-ok">成功</span>' : '<span class="pill-warn">失败</span>'}</td>
+          <td class="text-muted" style="font-size:12px;">${r.remark}</td>
+        </tr>
+      `).join('')
+      : '<tr><td colspan="7" style="text-align:center;padding:24px;color:var(--muted);">无匹配记录</td></tr>';
+  }
+
+  function getFilteredPaymentRows() {
+    const q = (state.paymentSearchQuery || '').trim().toLowerCase();
+    return state.paymentRows.filter((row) => {
+      if (state.paymentFilterType !== 'all' && row.type !== state.paymentFilterType) return false;
+      if (!q) return true;
+      return row.orderNo.toLowerCase().includes(q) || row.packageType.toLowerCase().includes(q);
+    });
+  }
+
+  function renderPaymentRecordsTable() {
+    const list = getFilteredPaymentRows();
+    const tb = document.querySelector('#tablePaymentRecords tbody');
+    tb.innerHTML = list.length
+      ? list.map((row, index) => {
+          const chip =
+            row.type === 'pack'
+              ? '<span class="chip chip-pack">积分包订单</span>'
+              : row.type === 'basic'
+                ? '<span class="chip chip-basic">Basic 订阅</span>'
+                : '<span class="chip chip-pro">Pro 订阅</span>';
+          return `
+          <tr>
+            <td>${index + 1}</td>
+            <td>${row.orderNo}</td>
+            <td>${row.amount}</td>
+            <td>${chip}<div class="text-muted" style="margin-top:4px;font-size:12px;">${row.packageType}</div></td>
+            <td><span class="pill-ok">${row.status}</span></td>
+            <td>${row.createTime}</td>
+            <td>${row.payTime}</td>
+            <td><button type="button" class="btn link">详情</button></td>
+          </tr>`;
+        }).join('')
+      : '<tr><td colspan="8" style="text-align:center;padding:24px;color:var(--muted);">未找到符合条件的订单</td></tr>';
+  }
+
+  document.querySelectorAll('.nav-sub[data-view]').forEach((el) => {
+    el.addEventListener('click', () => setView(el.dataset.view));
+  });
+  document.querySelectorAll('.mobile-nav-btn[data-view]').forEach((el) => {
+    el.addEventListener('click', () => setView(el.dataset.view));
+  });
+
+  document.getElementById('savePaymentModePoints').addEventListener('click', () => {
+    state.customMin = +document.getElementById('customMin').value;
+    state.customMax = +document.getElementById('customMax').value;
+    const st = document.getElementById('customStep').value;
+    state.customStep = st ? +st : null;
+    toast('已保存（演示）：Pro 发放、AI 消耗、积分包价格');
+  });
+
+  document.getElementById('openCustomerDetail').addEventListener('click', () => {
+    document.getElementById('panel-customer-list').hidden = true;
+    document.getElementById('panel-customer-detail').hidden = false;
+    renderUsageTable();
+  });
+  document.getElementById('backCustomerList').addEventListener('click', () => {
+    document.getElementById('panel-customer-detail').hidden = true;
+    document.getElementById('panel-customer-list').hidden = false;
+  });
+
+  document.getElementById('usageDatePreset').addEventListener('change', (e) => {
+    state.usageDatePreset = e.target.value;
+  });
+  document.getElementById('usageFilterFeature').addEventListener('change', (e) => {
+    state.usageFilterFeature = e.target.value;
+  });
+  document.getElementById('usageFilterStatus').addEventListener('change', (e) => {
+    state.usageFilterStatus = e.target.value;
+  });
+  document.getElementById('applyUsageFilter').addEventListener('click', () => {
+    renderUsageTable();
+    toast('已筛选积分使用记录');
+  });
+
+  document.getElementById('paymentFilterType').addEventListener('change', (e) => {
+    state.paymentFilterType = e.target.value;
+  });
+  document.getElementById('paymentSearchBtn').addEventListener('click', () => {
+    state.paymentSearchQuery = document.getElementById('paymentSearchQuery').value;
+    renderPaymentRecordsTable();
+    toast('已查询');
+  });
+  document.getElementById('paymentSearchQuery').addEventListener('keydown', (e) => {
+    if (e.key === 'Enter') {
+      state.paymentSearchQuery = e.target.value;
+      renderPaymentRecordsTable();
+    }
+  });
+
+  renderProGrant();
+  renderConsume();
+  renderPurchase();
+  bindCustomInputs();
+  renderPaymentRecordsTable();
+})();
+  </script>
+</body>
+</html>

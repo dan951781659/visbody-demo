@@ -1,0 +1,38 @@
+{
+  "dingtalk": {
+    "webhook": "https://oapi.dingtalk.com/robot/send?access_token=YOUR_ACCESS_TOKEN",
+    "secret": "YOUR_SECRET_IF_USE_SIGN"
+  },
+  "llm": {
+    "provider": "openai",
+    "api_key": "sk-xxx",
+    "base_url": "https://api.openai.com/v1",
+    "model": "gpt-4o-mini"
+  },
+  "competitors": [
+    {
+      "name": "仙库",
+      "channels": [
+        {
+          "url": "https://www.xianku.com/",
+          "type": "scrape",
+          "list_selector": "a[href*='newsinfo']",
+          "link_attr": "href",
+          "label": "官网"
+        }
+      ]
+    },
+    {
+      "name": "锐动科技",
+      "channels": [
+        {
+          "url": "http://rdwl.cc/",
+          "type": "scrape",
+          "list_selector": "a[href]",
+          "link_attr": "href",
+          "label": "官网"
+        }
+      ]
+    }
+  ]
+}

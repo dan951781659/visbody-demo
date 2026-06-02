@@ -1,0 +1,115 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>结果方案三</title>
+    <link rel="stylesheet" href="./shared.css" />
+  </head>
+  <body>
+    <main class="device-stage">
+      <section class="device device--scheme-three" data-voice-text="方案三预览页，请选择下一步。">
+        <div class="status-bar"><span>18:32</span><span>测量完成</span></div>
+        <div class="topbar">
+          <a class="back-link" href="./home.html">← 返回首页</a>
+          <span class="text-link">方案三预览</span>
+        </div>
+        <div class="section-label">综合测量</div>
+        <div class="scheme-one-title">
+          <h1 class="screen-title">请选择下一步</h1>
+        </div>
+
+        <div class="scheme-three-summary">
+          <span class="tag">体重已采集</span>
+          <span class="tag">体成分已采集</span>
+          <span class="tag">身高体围已采集</span>
+          <span class="tag">体态已采集</span>
+        </div>
+
+        <div class="scheme-three-camera is-camera-off" data-scheme-three-live>
+          <div
+            class="live-stage"
+            data-finish-group
+            data-finish-flow="standard"
+            data-finish-current="standard"
+          >
+            <video class="scheme-three-video" autoplay muted playsinline></video>
+            <div class="scheme-three-overlay" aria-hidden="true"></div>
+            <div class="live-status">
+              <span class="live-chip ok">取景中</span>
+              <span class="live-chip">举手选择</span>
+            </div>
+            <span class="camera-corner tl"></span>
+            <span class="camera-corner tr"></span>
+            <span class="camera-corner bl"></span>
+            <span class="camera-corner br"></span>
+
+            <div class="scheme-three-stage">
+              <div class="human pose-down" aria-hidden="true">
+                <div class="head"></div>
+                <div class="torso"></div>
+                <div class="limb arm left"></div>
+                <div class="limb arm right"></div>
+                <div class="limb leg left"></div>
+                <div class="limb leg right"></div>
+              </div>
+
+              <div class="scheme-three-action-row">
+                <a class="scheme-three-action-card active" href="./pro-prepare.html" data-choice-item data-choice-label="继续测量" data-finish-option="next">
+                  <strong data-next-title>继续测量</strong>
+                  <span>左手确认下一推荐项</span>
+                </a>
+                <a class="scheme-three-action-card" href="./standard-generating.html" data-choice-item data-choice-label="结束测量" data-finish-option="report">
+                  <strong>结束测量</strong>
+                  <span>右手确认生成报告</span>
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="scheme-one-weak">
+          <span class="scheme-one-weak-label">弱化入口</span>
+          <a href="./standard-position.html">重新测量完整流程</a>
+        </div>
+
+        <div class="scheme-one-footer footer-hint">
+          <div class="auto-hint">
+            <strong><span data-auto-prefix>请点击上方选项</span> <span data-auto-label>继续测量</span></strong>
+          </div>
+        </div>
+      </section>
+    </main>
+    <script src="./shared.js"></script>
+    <script>
+      (function () {
+        var wrap = document.querySelector("[data-scheme-three-live]");
+        var video = document.querySelector(".scheme-three-video");
+        if (!wrap || !video) return;
+
+        function setCameraOff() {
+          wrap.classList.add("is-camera-off");
+        }
+
+        function setCameraOn() {
+          wrap.classList.remove("is-camera-off");
+        }
+
+        if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
+          setCameraOff();
+          return;
+        }
+
+        navigator.mediaDevices
+          .getUserMedia({ video: { facingMode: "user" }, audio: false })
+          .then(function (stream) {
+            video.srcObject = stream;
+            setCameraOn();
+          })
+          .catch(function () {
+            setCameraOff();
+          });
+      })();
+    </script>
+  </body>
+</html>

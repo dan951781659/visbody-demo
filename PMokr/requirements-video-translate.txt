@@ -1,0 +1,7 @@
+# 视频语音提取与翻译所需依赖
+openai-whisper>=20231117
+deep-translator>=1.11.0
+
+# Whisper 依赖 ffmpeg，请独立安装：
+# Windows: 从 https://ffmpeg.org/download.html 下载并加入 PATH
+# 或使用: winget install ffmpeg

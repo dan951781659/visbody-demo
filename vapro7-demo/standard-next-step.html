@@ -1,0 +1,109 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>完整测量已完成 · 手势引导</title>
+    <link rel="stylesheet" href="./shared.css" />
+  </head>
+  <body>
+    <main class="device-stage">
+      <section
+        class="device device--scheme-three"
+        data-gesture-demo-a
+        data-voice-text="完整测量已完成。请举右手示意继续下一项，或点下方卡片选择；Demo 可按键盘 L 或 R。"
+      >
+        <div class="status-bar"><span>18:32</span><span>测量完成</span><span class="demo-version-badge" data-demo-version>v1.5.0</span></div>
+        <div class="topbar">
+          <a class="back-link" href="./standard-measuring.html">← 返回</a>
+          <span class="text-link">手势引导 · 主流程</span>
+        </div>
+        <div class="section-label">综合测量 · 方案 A</div>
+        <div class="scheme-one-title">
+          <h1 class="screen-title">完整测量已完成</h1>
+        </div>
+
+        <div class="scheme-three-summary" aria-label="本次已采集项">
+          <div class="summary-check-row"><span class="summary-check-name">体重</span><span class="summary-check-mark" aria-hidden="true">✓</span></div>
+          <div class="summary-check-row"><span class="summary-check-name">体成分</span><span class="summary-check-mark" aria-hidden="true">✓</span></div>
+          <div class="summary-check-row"><span class="summary-check-name">身高体围</span><span class="summary-check-mark" aria-hidden="true">✓</span></div>
+          <div class="summary-check-row"><span class="summary-check-name">体态</span><span class="summary-check-mark" aria-hidden="true">✓</span></div>
+        </div>
+
+        <div class="scheme-three-gesture-panel" aria-label="手势指引">
+          <div class="scheme-three-gesture-panel-title">手势指引</div>
+          <p class="scheme-three-gesture-panel-lead">
+            请<strong>举右手</strong>示意继续下一项；结束测量请点下方「结束测量」卡片。Demo 可按 <kbd class="kbd-soft">R</kbd> / <kbd class="kbd-soft">L</kbd> 快捷触发。
+          </p>
+        </div>
+
+        <div class="scheme-three-gesture-figure" data-scheme-three-figure>
+          <div class="scheme-three-gesture-figure-stage">
+            <div class="human pose-shoulder-right" aria-hidden="true">
+              <div class="head"></div>
+              <div class="torso"></div>
+              <div class="limb arm left"></div>
+              <div class="limb arm right"></div>
+              <div class="limb leg left"></div>
+              <div class="limb leg right"></div>
+            </div>
+          </div>
+          <p class="scheme-three-gesture-figure-caption">举右手 · 继续下一项</p>
+        </div>
+
+        <div class="scheme-three-toast" data-gesture-toast hidden role="status"></div>
+
+        <div
+          class="scheme-three-flow"
+          data-choice-group
+          data-default-index="1"
+          data-finish-group
+          data-finish-flow="standard"
+          data-finish-current="standard"
+          data-idle-default-next="1"
+          data-idle-start="on-first-click"
+          data-idle-seconds="18"
+          data-countdown="3"
+        >
+          <div class="scheme-three-action-row">
+            <a
+              class="scheme-three-action-card"
+              href="./standard-generating.html"
+              data-choice-item
+              data-choice-label="结束测量（查看报告）"
+              data-finish-option="report"
+            >
+              <strong>结束测量</strong>
+              <span>生成报告</span>
+            </a>
+            <a
+              class="scheme-three-action-card"
+              href="#"
+              data-choice-item
+              data-choice-label="继续下一项测量"
+              data-finish-option="next"
+            >
+              <strong data-next-title>继续下一项测量</strong>
+              <span data-next-desc>按测量顺序推荐</span>
+            </a>
+          </div>
+
+          <div class="scheme-one-weak scheme-one-weak--minimal">
+            <a href="./standard-position.html" data-action-link="start-session" data-standard-flow-entry>重新测量</a>
+          </div>
+
+          <div class="scheme-one-footer footer-hint scheme-three-idle-footer">
+            <div class="auto-hint">
+              <strong><span data-idle-label>空闲倒计时</span></strong>
+              <span class="count-badge" data-idle-countdown>18</span>
+            </div>
+            <div class="auto-hint">
+              <strong><span data-auto-prefix>空闲默认：</span><span data-auto-label>继续下一项测量</span></strong>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+    <script src="./shared.js"></script>
+  </body>
+</html>

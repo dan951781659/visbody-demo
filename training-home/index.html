@@ -1,0 +1,1821 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <title>训练首页布局 Demo</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <style>
+    :root {
+      --bg-gradient: radial-gradient(circle at 20% 0%, #1b2c5f 0, #050717 55%, #05030b 100%);
+      --card-blue: linear-gradient(135deg, #0f5bff, #11c6ff);
+      --card-purple: linear-gradient(135deg, #7a3bff, #c54fff);
+      --card-dark: linear-gradient(135deg, #182032, #272f48);
+      --text-main: #f6f7ff;
+      --text-sub: #a5b0d8;
+      --accent: #21e3ff;
+      --danger: #ff5b7a;
+      --surface: rgba(10, 14, 30, 0.8);
+      --radius-lg: 24px;
+      --radius-md: 18px;
+      --radius-sm: 12px;
+      --shadow-soft: 0 24px 60px rgba(0, 0, 0, 0.7);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: #000;
+      color: var(--text-main);
+      font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", system-ui, sans-serif;
+    }
+
+    .page-shell {
+      width: 1440px;
+      height: 900px;
+      background: var(--bg-gradient);
+      border-radius: 32px;
+      box-shadow: var(--shadow-soft);
+      padding: 20px 32px 24px;
+      display: flex;
+      flex-direction: column;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .layout-switcher {
+      position: absolute;
+      top: 18px;
+      right: 32px;
+      display: inline-flex;
+      gap: 8px;
+      padding: 4px;
+      border-radius: 999px;
+      background: rgba(7, 12, 32, 0.9);
+      border: 1px solid rgba(90, 120, 255, 0.5);
+      backdrop-filter: blur(18px);
+      z-index: 10;
+    }
+
+    .layout-switcher button {
+      border: none;
+      outline: none;
+      cursor: pointer;
+      padding: 6px 14px;
+      border-radius: 999px;
+      font-size: 12px;
+      color: var(--text-sub);
+      background: transparent;
+      transition: all 0.2s ease;
+      white-space: nowrap;
+    }
+
+    .layout-switcher button.active {
+      background: radial-gradient(circle at 20% 0, #3270ff, #8132ff);
+      color: var(--text-main);
+      box-shadow: 0 0 0 1px rgba(163, 199, 255, 0.4);
+    }
+
+    .top-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 10px 16px;
+      border-radius: 20px;
+      background: rgba(5, 10, 30, 0.8);
+      border: 1px solid rgba(96, 132, 255, 0.4);
+      backdrop-filter: blur(16px);
+      margin-bottom: 16px;
+    }
+
+    .user-info {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .avatar {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: radial-gradient(circle at 30% 0, #34e4ff, #1742ff);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 18px;
+      font-weight: 600;
+    }
+
+    .user-meta {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+
+    .user-meta-primary {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 14px;
+    }
+
+    .user-meta-secondary {
+      display: flex;
+      gap: 10px;
+      font-size: 12px;
+      color: var(--text-sub);
+    }
+
+    .tag-chip {
+      padding: 2px 8px;
+      border-radius: 999px;
+      background: rgba(20, 102, 255, 0.2);
+      border: 1px solid rgba(80, 150, 255, 0.7);
+      font-size: 11px;
+    }
+
+    .session-info {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      font-size: 12px;
+      color: var(--text-sub);
+    }
+
+    .session-metrics {
+      display: flex;
+      gap: 12px;
+    }
+
+    .pill {
+      padding: 4px 10px;
+      border-radius: 999px;
+      background: rgba(9, 18, 53, 0.9);
+      border: 1px solid rgba(80, 120, 255, 0.4);
+    }
+
+    .primary-btn {
+      padding: 6px 14px;
+      border-radius: 999px;
+      background: linear-gradient(135deg, #1a7eff, #35e0ff);
+      color: #040714;
+      border: none;
+      font-size: 12px;
+      font-weight: 600;
+      cursor: pointer;
+      box-shadow: 0 10px 26px rgba(0, 0, 0, 0.6);
+    }
+
+    .layout {
+      flex: 1;
+      border-radius: 24px;
+      padding: 18px 14px;
+      display: none;
+    }
+
+    .layout.active {
+      display: grid;
+    }
+
+    /* Layout 1: 上状态 / 中推荐 / 下课程瀑布 */
+    .layout-1 {
+      grid-template-rows: auto 1.2fr 1.3fr auto;
+      row-gap: 14px;
+    }
+
+    .section-title {
+      font-size: 16px;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      color: var(--text-sub);
+    }
+
+    .recommend-hero {
+      border-radius: var(--radius-lg);
+      background: radial-gradient(circle at 10% 0, rgba(70, 163, 255, 0.45), transparent 55%),
+        radial-gradient(circle at 85% 100%, rgba(131, 51, 255, 0.6), transparent 55%),
+        rgba(8, 17, 42, 0.9);
+      border: 1px solid rgba(99, 148, 255, 0.6);
+      box-shadow: 0 26px 60px rgba(0, 0, 0, 0.8);
+      padding: 18px 24px;
+      display: grid;
+      grid-template-columns: 2.2fr 1.1fr;
+      column-gap: 18px;
+      align-items: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .recommend-copy {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .recommend-label {
+      font-size: 12px;
+      color: var(--accent);
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+    }
+
+    .recommend-title {
+      font-size: 24px;
+      font-weight: 600;
+    }
+
+    .recommend-desc {
+      font-size: 13px;
+      color: var(--text-sub);
+      max-width: 420px;
+      line-height: 1.6;
+    }
+
+    .recommend-meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 4px;
+    }
+
+    .recommend-meta-item {
+      padding: 4px 10px;
+      font-size: 11px;
+      border-radius: 999px;
+      background: rgba(7, 16, 40, 0.9);
+      border: 1px solid rgba(75, 122, 255, 0.7);
+      color: var(--text-sub);
+    }
+
+    .recommend-actions {
+      margin-top: 10px;
+      display: flex;
+      gap: 10px;
+      align-items: center;
+    }
+
+    .secondary-btn {
+      border-radius: 999px;
+      padding: 6px 12px;
+      font-size: 12px;
+      border: 1px solid rgba(116, 148, 255, 0.5);
+      background: rgba(2, 7, 25, 0.7);
+      color: var(--text-main);
+      cursor: pointer;
+    }
+
+    .body-figure {
+      justify-self: end;
+      width: 260px;
+      height: 160px;
+      border-radius: 30px;
+      background: var(--card-blue);
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .body-figure::before {
+      content: "";
+      position: absolute;
+      width: 130%;
+      height: 150%;
+      background: radial-gradient(circle at 50% 10%, rgba(255, 255, 255, 0.35), transparent 60%);
+      mix-blend-mode: screen;
+      opacity: 0.7;
+    }
+
+    .figure-outline {
+      position: relative;
+      width: 70px;
+      height: 140px;
+      border-radius: 40px;
+      border: 2px solid rgba(226, 255, 255, 0.9);
+      box-shadow: 0 0 20px rgba(183, 255, 255, 0.6);
+    }
+
+    .figure-outline::before,
+    .figure-outline::after {
+      content: "";
+      position: absolute;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      border: 2px solid rgba(226, 255, 255, 0.75);
+      top: -30px;
+    }
+
+    .course-grid-rows {
+      display: grid;
+      grid-template-rows: 1fr 1fr;
+      row-gap: 10px;
+    }
+
+    .course-row {
+      display: grid;
+      grid-auto-flow: column;
+      grid-auto-columns: minmax(0, 1fr);
+      column-gap: 12px;
+    }
+
+    .course-card {
+      position: relative;
+      border-radius: var(--radius-md);
+      padding: 14px 14px 12px;
+      overflow: hidden;
+      color: var(--text-main);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      cursor: pointer;
+      transform-origin: center;
+      transition: transform 0.15s ease, box-shadow 0.15s ease, translate 0.15s ease;
+    }
+
+    .course-card--primary {
+      background: var(--card-blue);
+    }
+
+    .course-card--purple {
+      background: var(--card-purple);
+    }
+
+    .course-card--dark {
+      background: var(--card-dark);
+    }
+
+    .course-card:hover {
+      transform: translateY(-3px) scale(1.01);
+      box-shadow: 0 18px 40px rgba(0, 0, 0, 0.7);
+    }
+
+    .course-tag-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 8px;
+      font-size: 11px;
+    }
+
+    .course-tag {
+      padding: 2px 8px;
+      border-radius: 999px;
+      background: rgba(5, 14, 46, 0.36);
+      border: 1px solid rgba(230, 242, 255, 0.6);
+    }
+
+    .course-title {
+      font-size: 16px;
+      font-weight: 600;
+      margin-bottom: 4px;
+    }
+
+    .course-desc {
+      font-size: 12px;
+      opacity: 0.86;
+    }
+
+    .course-meta-footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 10px;
+      font-size: 11px;
+    }
+
+    .course-meta-chips {
+      display: flex;
+      gap: 6px;
+    }
+
+    .course-chip {
+      padding: 2px 7px;
+      border-radius: 999px;
+      border: 1px solid rgba(242, 247, 255, 0.7);
+      background: rgba(8, 18, 40, 0.24);
+    }
+
+    .bottom-nav {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 10px 18px;
+      border-radius: 20px;
+      background: rgba(0, 0, 0, 0.85);
+      margin-top: 10px;
+      border: 1px solid rgba(60, 70, 120, 0.9);
+    }
+
+    .nav-items {
+      display: flex;
+      gap: 26px;
+      font-size: 11px;
+      color: var(--text-sub);
+    }
+
+    .nav-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 3px;
+      opacity: 0.7;
+    }
+
+    .nav-item.active {
+      opacity: 1;
+      color: var(--accent);
+    }
+
+    .nav-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: rgba(80, 110, 230, 0.9);
+    }
+
+    .cta-row {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    /* Layout 2: 左测量 / 右课程网格 */
+    .layout-2 {
+      grid-template-columns: 1.1fr 2.1fr;
+      column-gap: 18px;
+      align-items: stretch;
+    }
+
+    .left-column {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .panel {
+      border-radius: var(--radius-lg);
+      background: rgba(4, 10, 30, 0.92);
+      border: 1px solid rgba(82, 122, 255, 0.6);
+      padding: 16px 16px 14px;
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.78);
+    }
+
+    .body-summary {
+      margin-top: 10px;
+      padding: 12px;
+      border-radius: 18px;
+      background: radial-gradient(circle at 10% 0, rgba(46, 139, 255, 0.32), transparent 60%),
+        rgba(5, 10, 30, 0.95);
+      display: grid;
+      grid-template-columns: 1.1fr 1.2fr;
+      column-gap: 10px;
+      align-items: center;
+    }
+
+    .metrics-list {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      font-size: 12px;
+      color: var(--text-sub);
+    }
+
+    .metrics-item-key {
+      color: var(--text-main);
+      margin-right: 6px;
+    }
+
+    .secondary-panel {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      font-size: 12px;
+      color: var(--text-sub);
+    }
+
+    .right-column {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    .right-recommend {
+      border-radius: var(--radius-lg);
+      background: radial-gradient(circle at 5% 0, rgba(76, 163, 255, 0.5), transparent 55%),
+        radial-gradient(circle at 85% 100%, rgba(162, 68, 255, 0.55), transparent 55%),
+        rgba(6, 13, 36, 0.96);
+      border: 1px solid rgba(112, 160, 255, 0.7);
+      padding: 16px 20px;
+      display: grid;
+      grid-template-columns: 2.2fr 1.1fr;
+      column-gap: 12px;
+      align-items: center;
+    }
+
+    .course-grid-2col {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 12px;
+      margin-top: 2px;
+    }
+
+    /* Layout 3: 时间轴布局 */
+    .layout-3 {
+      grid-template-columns: 1.2fr 2.2fr;
+      column-gap: 16px;
+    }
+
+    .timeline {
+      position: relative;
+      padding: 8px 8px 8px 14px;
+    }
+
+    .timeline-line {
+      position: absolute;
+      top: 18px;
+      bottom: 16px;
+      left: 18px;
+      width: 2px;
+      background: linear-gradient(to bottom, rgba(72, 130, 255, 0.2), rgba(104, 78, 255, 0.7));
+    }
+
+    .timeline-item {
+      position: relative;
+      margin-bottom: 32px;
+      padding-left: 26px;
+    }
+
+    .timeline-dot {
+      position: absolute;
+      left: 10px;
+      top: 4px;
+      width: 14px;
+      height: 14px;
+      border-radius: 50%;
+      background: radial-gradient(circle, #26ebff, #0b5fff);
+      box-shadow: 0 0 18px rgba(45, 199, 255, 0.9);
+    }
+
+    .timeline-label {
+      font-size: 12px;
+      color: var(--text-sub);
+      margin-bottom: 4px;
+    }
+
+    .timeline-card {
+      border-radius: 18px;
+      padding: 10px 12px;
+      background: rgba(4, 10, 30, 0.96);
+      border: 1px solid rgba(86, 126, 255, 0.7);
+    }
+
+    .timeline-card h3 {
+      font-size: 15px;
+      margin-bottom: 4px;
+    }
+
+    .timeline-card p {
+      font-size: 12px;
+      color: var(--text-sub);
+    }
+
+    .timeline-badge {
+      display: inline-flex;
+      margin-top: 6px;
+      padding: 2px 8px;
+      font-size: 11px;
+      border-radius: 999px;
+      background: rgba(31, 101, 255, 0.3);
+      border: 1px solid rgba(102, 157, 255, 0.8);
+      color: var(--accent);
+    }
+
+    .timeline-footer {
+      margin-top: 10px;
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      font-size: 11px;
+    }
+
+    .timeline-footer span {
+      padding: 2px 7px;
+      border-radius: 999px;
+      background: rgba(5, 12, 38, 0.9);
+      border: 1px solid rgba(92, 122, 255, 0.6);
+      color: var(--text-sub);
+    }
+
+    .timeline-hero {
+      border-radius: 24px;
+      padding: 16px 18px;
+      background: radial-gradient(circle at 0% 0%, rgba(70, 163, 255, 0.5), transparent 60%),
+        radial-gradient(circle at 100% 100%, rgba(158, 65, 255, 0.55), transparent 60%),
+        rgba(7, 12, 35, 0.98);
+      border: 1px solid rgba(120, 163, 255, 0.8);
+      box-shadow: 0 20px 54px rgba(0, 0, 0, 0.86);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      margin-bottom: 12px;
+    }
+
+    .timeline-hero-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 12px;
+    }
+
+    .timeline-hero-title {
+      font-size: 20px;
+      font-weight: 600;
+      margin-bottom: 4px;
+    }
+
+    .timeline-hero-desc {
+      font-size: 13px;
+      color: var(--text-sub);
+      line-height: 1.5;
+    }
+
+    .timeline-hero-figure {
+      width: 200px;
+      height: 130px;
+      border-radius: 24px;
+      background: var(--card-blue);
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .small-figure-outline {
+      width: 56px;
+      height: 110px;
+      border-radius: 40px;
+      border: 2px solid rgba(226, 255, 255, 0.9);
+      box-shadow: 0 0 16px rgba(183, 255, 255, 0.5);
+    }
+
+    .timeline-hero-bottom {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 12px;
+      font-size: 12px;
+    }
+
+    .timeline-steps {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .timeline-step-chip {
+      padding: 4px 10px;
+      border-radius: 999px;
+      background: rgba(3, 10, 34, 0.92);
+      border: 1px solid rgba(105, 150, 255, 0.85);
+      color: var(--text-sub);
+    }
+
+    .primary-cta-large {
+      padding: 10px 18px;
+      border-radius: 999px;
+      border: none;
+      background: linear-gradient(135deg, #1a7eff, #32e3ff);
+      color: #020511;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      box-shadow: 0 16px 44px rgba(0, 0, 0, 0.78);
+    }
+
+    .timeline-course-list {
+      display: grid;
+      grid-template-rows: repeat(3, minmax(0, 1fr));
+      row-gap: 10px;
+    }
+
+    .timeline-course-card {
+      border-radius: 18px;
+      padding: 10px 12px;
+      background: rgba(8, 16, 39, 0.96);
+      border: 1px solid rgba(86, 126, 255, 0.6);
+      display: grid;
+      grid-template-columns: 2.3fr 0.9fr;
+      column-gap: 10px;
+      align-items: center;
+    }
+
+    .timeline-course-main h4 {
+      font-size: 14px;
+      margin-bottom: 2px;
+    }
+
+    .timeline-course-main p {
+      font-size: 12px;
+      color: var(--text-sub);
+    }
+
+    .timeline-course-tags {
+      margin-top: 8px;
+      display: flex;
+      gap: 6px;
+      font-size: 11px;
+      flex-wrap: wrap;
+    }
+
+    .timeline-course-thumb {
+      height: 54px;
+      border-radius: 16px;
+      background: linear-gradient(135deg, #0f5bff, #b037ff);
+      opacity: 0.9;
+    }
+
+    /* Layout 4: 原首页结构 + 半球训练模块 */
+    .layout-4 {
+      display: grid;
+      grid-template-rows: auto auto auto 1fr auto;
+      row-gap: 18px;
+      padding-inline: 80px;
+      padding-top: 10px;
+    }
+
+    .measure-title {
+      text-align: center;
+      font-size: 18px;
+      letter-spacing: 0.2em;
+      color: var(--text-sub);
+      margin-top: 10px;
+    }
+
+    .measure-main-card {
+      height: 150px;
+      border-radius: 36px;
+      background: radial-gradient(circle at 0% 0%, rgba(71, 158, 255, 0.6), transparent 60%),
+        radial-gradient(circle at 80% 0%, rgba(118, 63, 255, 0.6), transparent 60%),
+        rgba(6, 13, 36, 0.98);
+      box-shadow: 0 26px 60px rgba(0, 0, 0, 0.85);
+      border: 1px solid rgba(120, 164, 255, 0.8);
+      padding: 18px 26px;
+      display: grid;
+      grid-template-columns: 1.7fr 1fr;
+      align-items: center;
+      column-gap: 24px;
+    }
+
+    .measure-main-text {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .measure-main-title {
+      font-size: 22px;
+      font-weight: 600;
+    }
+
+    .measure-main-desc {
+      font-size: 13px;
+      color: var(--text-sub);
+      max-width: 480px;
+      line-height: 1.6;
+    }
+
+    .measure-main-figure {
+      justify-self: end;
+      width: 260px;
+      height: 130px;
+      border-radius: 30px;
+      background: linear-gradient(135deg, #0e5eff, #10c4ff);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .measure-main-figure::before {
+      content: "";
+      position: absolute;
+      width: 130%;
+      height: 160%;
+      background: radial-gradient(circle at 50% 0%, rgba(255, 255, 255, 0.35), transparent 60%);
+      mix-blend-mode: screen;
+    }
+
+    .measure-sub-row {
+      display: flex;
+      justify-content: center;
+      gap: 32px;
+      margin-top: 6px;
+    }
+
+    .measure-sub-card {
+      width: 190px;
+      height: 210px;
+      border-radius: 26px;
+      background: linear-gradient(135deg, #0f5bff, #11c6ff);
+      box-shadow: 0 22px 50px rgba(0, 0, 0, 0.9);
+      padding: 14px;
+      color: var(--text-main);
+      transform-origin: center bottom;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .measure-sub-card:nth-child(1) {
+      transform: rotate(-18deg) translateY(12px);
+      background: linear-gradient(135deg, #6b3bff, #c04bff);
+    }
+
+    .measure-sub-card:nth-child(2) {
+      transform: translateY(-4px);
+    }
+
+    .measure-sub-card:nth-child(3) {
+      transform: rotate(18deg) translateY(12px);
+      background: linear-gradient(135deg, #274bff, #4dd4ff);
+    }
+
+    .measure-sub-title {
+      font-size: 15px;
+      font-weight: 600;
+      margin-bottom: 4px;
+    }
+
+    .measure-sub-desc {
+      font-size: 11px;
+      line-height: 1.5;
+      opacity: 0.86;
+    }
+
+    .sphere-zone {
+      position: relative;
+      margin-top: 6px;
+      height: 220px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .sphere-base {
+      position: absolute;
+      bottom: -40px;
+      width: 620px;
+      height: 260px;
+      border-radius: 620px 620px 0 0;
+      background: radial-gradient(circle at 50% 0%, rgba(60, 132, 255, 0.85), transparent 70%),
+        radial-gradient(circle at 50% 30%, rgba(40, 12, 104, 0.9), rgba(3, 5, 14, 0.98));
+      filter: blur(0.2px);
+      box-shadow: 0 -10px 60px rgba(0, 0, 0, 0.95);
+    }
+
+    .sphere-highlight {
+      position: absolute;
+      top: 50%;
+      width: 120px;
+      height: 40px;
+      border-radius: 999px;
+      background: radial-gradient(circle at 50% 0, rgba(255, 255, 255, 0.9), transparent 70%);
+      opacity: 0.9;
+      transform: translateY(-40px);
+    }
+
+    .person-card-row {
+      position: absolute;
+      bottom: 22px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 460px;
+      height: 84px;
+      border-radius: 22px;
+      background: rgba(6, 10, 26, 0.9);
+      border: 1px solid rgba(112, 140, 210, 0.8);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 12px 18px;
+      backdrop-filter: blur(14px);
+    }
+
+    .person-main {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-size: 13px;
+    }
+
+    .person-avatar {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: radial-gradient(circle at 30% 0, #34e4ff, #1742ff);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 18px;
+    }
+
+    .person-meta-row {
+      display: flex;
+      gap: 12px;
+      color: var(--text-sub);
+      font-size: 12px;
+    }
+
+    .person-actions {
+      display: flex;
+      gap: 8px;
+    }
+
+    .person-actions .secondary-btn {
+      padding-inline: 10px;
+      font-size: 11px;
+    }
+
+    .training-panel {
+      position: relative;
+      width: 640px;
+      margin: 0 auto;
+      border-radius: 30px;
+      background: radial-gradient(circle at 0% 0%, rgba(74, 167, 255, 0.75), transparent 70%),
+        radial-gradient(circle at 100% 100%, rgba(143, 62, 255, 0.65), transparent 70%),
+        rgba(5, 10, 27, 0.96);
+      border: 1px solid rgba(136, 178, 255, 0.85);
+      box-shadow: 0 26px 70px rgba(0, 0, 0, 0.92);
+      padding: 14px 18px 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .training-panel-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 16px;
+      margin-bottom: 2px;
+    }
+
+    .training-panel-title {
+      font-size: 16px;
+      font-weight: 600;
+      margin-bottom: 4px;
+    }
+
+    .training-panel-sub {
+      font-size: 12px;
+      color: var(--text-sub);
+    }
+
+    .training-badges {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      justify-content: flex-end;
+    }
+
+    .training-badges span {
+      padding: 3px 8px;
+      border-radius: 999px;
+      font-size: 11px;
+      background: rgba(5, 12, 40, 0.86);
+      border: 1px solid rgba(152, 198, 255, 0.9);
+      color: var(--accent);
+    }
+
+    .training-cards-row {
+      display: flex;
+      justify-content: center;
+      gap: 12px;
+      margin-top: 2px;
+    }
+
+    .training-card {
+      width: 180px;
+      height: 140px;
+      border-radius: 22px;
+      padding: 10px 10px 9px;
+      background: linear-gradient(135deg, #0f5bff, #11c6ff);
+      box-shadow: 0 18px 48px rgba(0, 0, 0, 0.85);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      font-size: 11px;
+      position: relative;
+      overflow: hidden;
+      transform-origin: center;
+    }
+
+    .training-card:nth-child(1) {
+      background: linear-gradient(135deg, #7a3bff, #c54fff);
+      transform: translateY(8px) rotate(-8deg);
+    }
+
+    .training-card:nth-child(2) {
+      transform: translateY(-2px);
+    }
+
+    .training-card:nth-child(3) {
+      background: linear-gradient(135deg, #2456ff, #44d0ff);
+      transform: translateY(8px) rotate(8deg);
+    }
+
+    .training-card-tag {
+      padding: 2px 8px;
+      border-radius: 999px;
+      border: 1px solid rgba(230, 242, 255, 0.86);
+      background: rgba(5, 14, 46, 0.5);
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      font-size: 10px;
+      margin-bottom: 4px;
+    }
+
+    .training-card-title {
+      font-size: 13px;
+      font-weight: 600;
+      margin-bottom: 2px;
+    }
+
+    .training-card-desc {
+      font-size: 11px;
+      opacity: 0.9;
+    }
+
+    .training-card-footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 6px;
+    }
+
+    .training-card-meta {
+      display: flex;
+      gap: 4px;
+    }
+
+    .training-chip {
+      padding: 2px 6px;
+      border-radius: 999px;
+      border: 1px solid rgba(244, 248, 255, 0.85);
+      background: rgba(5, 12, 36, 0.35);
+      font-size: 10px;
+    }
+
+    .training-main-cta {
+      align-self: flex-end;
+      margin-top: 4px;
+      padding: 6px 14px;
+      border-radius: 999px;
+      border: none;
+      background: linear-gradient(135deg, #1a7eff, #32e3ff);
+      color: #020511;
+      font-size: 12px;
+      font-weight: 600;
+      cursor: pointer;
+      box-shadow: 0 14px 40px rgba(0, 0, 0, 0.9);
+    }
+
+    .training-main-course {
+      margin-top: 6px;
+      border-radius: 22px;
+      background: linear-gradient(135deg, rgba(7, 16, 44, 0.98), rgba(10, 30, 80, 0.98));
+      border: 1px solid rgba(160, 200, 255, 0.85);
+      padding: 12px 14px;
+      display: grid;
+      grid-template-columns: 2.1fr 1.1fr;
+      column-gap: 12px;
+      align-items: center;
+    }
+
+    .training-main-course-left {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      font-size: 12px;
+    }
+
+    .training-main-course-title {
+      font-size: 16px;
+      font-weight: 600;
+    }
+
+    .training-main-course-desc {
+      color: var(--text-sub);
+      line-height: 1.6;
+    }
+
+    .training-main-course-meta {
+      display: flex;
+      gap: 8px;
+      margin-top: 2px;
+      font-size: 11px;
+    }
+
+    .training-main-course-meta span {
+      padding: 2px 8px;
+      border-radius: 999px;
+      background: rgba(5, 14, 40, 0.85);
+      border: 1px solid rgba(140, 184, 255, 0.9);
+    }
+
+    .training-main-course-figure {
+      height: 86px;
+      border-radius: 18px;
+      overflow: hidden;
+      position: relative;
+      background-position: center;
+      background-size: cover;
+      background-repeat: no-repeat;
+      background-image: url("https://images.pexels.com/photos/7676400/pexels-photo-7676400.jpeg?auto=compress&cs=tinysrgb&w=1200");
+      box-shadow: 0 16px 40px rgba(0, 0, 0, 0.9);
+    }
+
+    .training-main-course-figure::after {
+      content: "核心稳定 · 今日主推荐";
+      position: absolute;
+      left: 10px;
+      bottom: 8px;
+      padding: 2px 8px;
+      border-radius: 999px;
+      background: rgba(2, 6, 20, 0.82);
+      border: 1px solid rgba(214, 238, 255, 0.9);
+      font-size: 10px;
+    }
+
+    .coach-row {
+      display: grid;
+      grid-template-columns: 1.4fr 1fr;
+      column-gap: 14px;
+      align-items: center;
+      margin-top: 10px;
+    }
+
+    .coach-text {
+      font-size: 12px;
+      color: var(--text-sub);
+      line-height: 1.6;
+    }
+
+    .coach-text strong {
+      color: var(--text-main);
+    }
+
+    .coach-photo-card {
+      height: 90px;
+      border-radius: 18px;
+      overflow: hidden;
+      position: relative;
+      box-shadow: 0 18px 40px rgba(0, 0, 0, 0.88);
+      background-position: center;
+      background-size: cover;
+      background-repeat: no-repeat;
+      background-image: url("https://images.pexels.com/photos/7991660/pexels-photo-7991660.jpeg?auto=compress&cs=tinysrgb&w=1200");
+    }
+
+    .coach-photo-overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg, rgba(3, 9, 32, 0.1), rgba(3, 9, 32, 0.85));
+    }
+
+    .coach-photo-content {
+      position: absolute;
+      inset: 10px 12px;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      font-size: 11px;
+    }
+
+    .coach-name {
+      font-weight: 600;
+      margin-bottom: 2px;
+    }
+
+    .coach-role {
+      color: var(--text-sub);
+      margin-bottom: 4px;
+    }
+
+    .coach-badge {
+      display: inline-flex;
+      padding: 2px 8px;
+      border-radius: 999px;
+      border: 1px solid rgba(215, 238, 255, 0.9);
+      background: rgba(5, 14, 40, 0.6);
+      font-size: 10px;
+    }
+
+    .hint {
+      position: absolute;
+      left: 32px;
+      top: 18px;
+      font-size: 12px;
+      color: var(--text-sub);
+      opacity: 0.85;
+    }
+
+    @media (max-width: 1200px) {
+      .page-shell {
+        transform: scale(0.8);
+      }
+    }
+
+    @media (max-width: 900px) {
+      body {
+        padding: 12px;
+      }
+      .page-shell {
+        width: 100%;
+        height: auto;
+        aspect-ratio: 16 / 10;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="page-shell">
+    <div class="hint">训练首页 3 套布局 Demo（内容模块不变，仅重排布局）</div>
+    <div class="layout-switcher">
+      <button class="active" data-layout="layout-1">布局一 · 舞台+瀑布</button>
+      <button data-layout="layout-2">布局二 · 左测量右课程</button>
+      <button data-layout="layout-3">布局三 · 今日流程</button>
+      <button data-layout="layout-4">布局四 · 半球训练模块</button>
+    </div>
+
+    <header class="top-bar">
+      <div class="user-info">
+        <div class="avatar">A</div>
+        <div class="user-meta">
+          <div class="user-meta-primary">
+            <span>张三</span>
+            <span class="tag-chip">体态管理 · 训练中</span>
+          </div>
+          <div class="user-meta-secondary">
+            <span>身高 170cm</span>
+            <span>体重 65kg</span>
+            <span>最近一次测量：今天 10:32</span>
+          </div>
+        </div>
+      </div>
+      <div class="session-info">
+        <div class="session-metrics">
+          <div class="pill">训练模式：标准</div>
+          <div class="pill">今日已完成：12 分钟</div>
+        </div>
+        <button class="primary-btn">开始新一次测量</button>
+      </div>
+    </header>
+
+    <!-- Layout 1 -->
+    <main class="layout layout-1 active" id="layout-1">
+      <div class="section-title">推荐训练计划 · Layout 1</div>
+
+      <section class="recommend-hero">
+        <div class="recommend-copy">
+          <div class="recommend-label">RECOMMENDED PROGRAM</div>
+          <h2 class="recommend-title">核心稳定与体态优化训练</h2>
+          <p class="recommend-desc">
+            基于你最新一次身体测量结果，为你组合的一套核心稳定与肩颈放松训练，约 25 分钟，适合在日常工作间隙完成。
+          </p>
+          <div class="recommend-meta">
+            <span class="recommend-meta-item">总时长 · 25 分钟</span>
+            <span class="recommend-meta-item">难度 · 中等</span>
+            <span class="recommend-meta-item">推荐频率 · 每周 3 次</span>
+          </div>
+          <div class="recommend-actions">
+            <button class="primary-btn">立即开始训练</button>
+            <button class="secondary-btn">查看训练详情</button>
+          </div>
+        </div>
+        <div class="body-figure">
+          <div class="figure-outline"></div>
+        </div>
+      </section>
+
+      <section class="course-grid-rows">
+        <div class="course-row">
+          <article class="course-card course-card--primary">
+            <div>
+              <div class="course-tag-row">
+                <span class="course-tag">燃脂 · 推荐</span>
+                <span>20 分钟</span>
+              </div>
+              <h3 class="course-title">高效脂肪燃烧循环训练</h3>
+              <p class="course-desc">
+                结合下肢力量与全身有氧冲刺动作，提升心肺能力，同时帮助快速消耗卡路里。
+              </p>
+            </div>
+            <div class="course-meta-footer">
+              <div class="course-meta-chips">
+                <span class="course-chip">心率提升</span>
+                <span class="course-chip">大汗训练</span>
+              </div>
+              <span>难度 · 中高</span>
+            </div>
+          </article>
+          <article class="course-card course-card--purple">
+            <div>
+              <div class="course-tag-row">
+                <span class="course-tag">体态 · 推荐</span>
+                <span>18 分钟</span>
+              </div>
+              <h3 class="course-title">久坐人群肩颈舒展</h3>
+              <p class="course-desc">
+                重点放松肩颈与上背，改善含胸圆肩状况，减轻久坐带来的肌肉紧张。
+              </p>
+            </div>
+            <div class="course-meta-footer">
+              <div class="course-meta-chips">
+                <span class="course-chip">肩颈放松</span>
+                <span class="course-chip">办公室友好</span>
+              </div>
+              <span>难度 · 轻松</span>
+            </div>
+          </article>
+          <article class="course-card course-card--dark">
+            <div>
+              <div class="course-tag-row">
+                <span class="course-tag">核心 · 推荐</span>
+                <span>16 分钟</span>
+              </div>
+              <h3 class="course-title">腰部核心稳固训练</h3>
+              <p class="course-desc">
+                通过多平面核心控制动作，帮助稳定腰椎，降低腰部负担，适合长期站立或搬运人群。
+              </p>
+            </div>
+            <div class="course-meta-footer">
+              <div class="course-meta-chips">
+                <span class="course-chip">核心激活</span>
+                <span class="course-chip">保护腰椎</span>
+              </div>
+              <span>难度 · 中等</span>
+            </div>
+          </article>
+        </div>
+        <div class="course-row">
+          <article class="course-card course-card--dark">
+            <div>
+              <div class="course-tag-row">
+                <span class="course-tag">恢复 · 推荐</span>
+                <span>15 分钟</span>
+              </div>
+              <h3 class="course-title">全身舒缓拉伸放松</h3>
+              <p class="course-desc">
+                适合作为任何训练后的结束环节，帮助肌肉回到舒适长度，减轻第二天酸痛。
+              </p>
+            </div>
+            <div class="course-meta-footer">
+              <div class="course-meta-chips">
+                <span class="course-chip">训练后恢复</span>
+                <span class="course-chip">睡前可做</span>
+              </div>
+              <span>难度 · 轻松</span>
+            </div>
+          </article>
+          <article class="course-card course-card--purple">
+            <div>
+              <div class="course-tag-row">
+                <span class="course-tag">下肢 · 推荐</span>
+                <span>22 分钟</span>
+              </div>
+              <h3 class="course-title">下肢力量与稳定训练</h3>
+              <p class="course-desc">
+                针对膝关节与踝关节稳定性设计，兼顾力量训练与平衡控制。
+              </p>
+            </div>
+            <div class="course-meta-footer">
+              <div class="course-meta-chips">
+                <span class="course-chip">膝关节保护</span>
+                <span class="course-chip">改善步态</span>
+              </div>
+              <span>难度 · 中等</span>
+            </div>
+          </article>
+        </div>
+      </section>
+
+      <footer class="bottom-nav">
+        <div class="nav-items">
+          <div class="nav-item active">
+            <div class="nav-dot"></div>
+            <span>训练首页</span>
+          </div>
+          <div class="nav-item">
+            <div class="nav-dot"></div>
+            <span>身体测量</span>
+          </div>
+          <div class="nav-item">
+            <div class="nav-dot"></div>
+            <span>历史报告</span>
+          </div>
+          <div class="nav-item">
+            <div class="nav-dot"></div>
+            <span>设置</span>
+          </div>
+        </div>
+        <div class="cta-row">
+          <button class="secondary-btn">跳过今日推荐</button>
+          <button class="primary-btn">一键开始推荐训练</button>
+        </div>
+      </footer>
+    </main>
+
+    <!-- Layout 2 -->
+    <main class="layout layout-2" id="layout-2">
+      <section class="left-column">
+        <div class="panel">
+          <div class="section-title">测量结果与风险提示</div>
+          <div class="body-summary">
+            <div class="figure-outline"></div>
+            <div class="metrics-list">
+              <div><span class="metrics-item-key">姿态评分</span> 78 / 100（轻度前倾）</div>
+              <div><span class="metrics-item-key">腰背负荷</span> 中度偏高 · 建议加强核心</div>
+              <div><span class="metrics-item-key">左右平衡</span> 略偏右 · 建议对称训练</div>
+            </div>
+          </div>
+          <div class="secondary-panel">
+            <div>本次推荐训练基于你最近三次测量的综合结果，重点优化腰背稳定与久坐体态。</div>
+            <button class="secondary-btn">查看完整测量报告</button>
+          </div>
+        </div>
+
+        <div class="panel">
+          <div class="section-title">今日进度</div>
+          <div class="metrics-list" style="margin-top: 10px;">
+            <div><span class="metrics-item-key">计划课时</span> 3 节 · 总计约 60 分钟</div>
+            <div><span class="metrics-item-key">已完成</span> 1 节 · 20 分钟</div>
+            <div><span class="metrics-item-key">建议完成时间</span> 今天 22:00 前</div>
+          </div>
+          <button class="primary-btn" style="margin-top: 10px;">继续上次训练</button>
+        </div>
+      </section>
+
+      <section class="right-column">
+        <div class="right-recommend">
+          <div class="recommend-copy">
+            <div class="recommend-label">今日主推荐训练</div>
+            <h2 class="recommend-title">腰背减压核心训练 · 25 分钟</h2>
+            <p class="recommend-desc">
+              已根据你当前腰背负荷与姿态评分自动调整训练强度，适合在下班后进行一轮完整训练。
+            </p>
+            <div class="recommend-meta">
+              <span class="recommend-meta-item">目标 · 缓解腰背疲劳</span>
+              <span class="recommend-meta-item">难度 · 中等</span>
+            </div>
+          </div>
+          <div class="timeline-hero-figure">
+            <div class="small-figure-outline"></div>
+          </div>
+        </div>
+
+        <div class="course-grid-2col">
+          <article class="course-card course-card--primary">
+            <div>
+              <div class="course-tag-row">
+                <span class="course-tag">推荐 · 体态</span>
+                <span>18 分钟</span>
+              </div>
+              <h3 class="course-title">站立体态矫正训练</h3>
+              <p class="course-desc">
+                从足踝到骨盆的链式训练，帮助你重建站立姿态。
+              </p>
+            </div>
+            <div class="course-meta-footer">
+              <div class="course-meta-chips">
+                <span class="course-chip">改善驼背</span>
+              </div>
+              <span>难度 · 中</span>
+            </div>
+          </article>
+          <article class="course-card course-card--purple">
+            <div>
+              <div class="course-tag-row">
+                <span class="course-tag">推荐 · 肩颈</span>
+                <span>16 分钟</span>
+              </div>
+              <h3 class="course-title">坐姿肩颈舒展</h3>
+              <p class="course-desc">
+                在办公椅上即可完成，适合作为中途放松的小训练。
+              </p>
+            </div>
+            <div class="course-meta-footer">
+              <div class="course-meta-chips">
+                <span class="course-chip">办公室</span>
+              </div>
+              <span>难度 · 轻</span>
+            </div>
+          </article>
+          <article class="course-card course-card--dark">
+            <div>
+              <div class="course-tag-row">
+                <span class="course-tag">推荐 · 燃脂</span>
+                <span>22 分钟</span>
+              </div>
+              <h3 class="course-title">下肢力量燃脂组合</h3>
+              <p class="course-desc">
+                通过连续下肢力量训练提升日常代谢水平。
+              </p>
+            </div>
+            <div class="course-meta-footer">
+              <div class="course-meta-chips">
+                <span class="course-chip">燃脂</span>
+              </div>
+              <span>难度 · 中高</span>
+            </div>
+          </article>
+          <article class="course-card course-card--dark">
+            <div>
+              <div class="course-tag-row">
+                <span class="course-tag">推荐 · 恢复</span>
+                <span>15 分钟</span>
+              </div>
+              <h3 class="course-title">深度放松拉伸</h3>
+              <p class="course-desc">
+                睡前可做的一套安静拉伸流程，帮助提升睡眠质量。
+              </p>
+            </div>
+            <div class="course-meta-footer">
+              <div class="course-meta-chips">
+                <span class="course-chip">恢复</span>
+              </div>
+              <span>难度 · 轻</span>
+            </div>
+          </article>
+        </div>
+
+        <footer class="bottom-nav">
+          <div class="nav-items">
+            <div class="nav-item active">
+              <div class="nav-dot"></div>
+              <span>训练首页</span>
+            </div>
+            <div class="nav-item">
+              <div class="nav-dot"></div>
+              <span>测量记录</span>
+            </div>
+            <div class="nav-item">
+              <div class="nav-dot"></div>
+              <span>训练历史</span>
+            </div>
+            <div class="nav-item">
+              <div class="nav-dot"></div>
+              <span>更多</span>
+            </div>
+          </div>
+          <button class="primary-btn">一键开始今日推荐</button>
+        </footer>
+      </section>
+    </main>
+
+    <!-- Layout 3 -->
+    <main class="layout layout-3" id="layout-3">
+      <aside class="timeline">
+        <div class="timeline-line"></div>
+        <div class="timeline-item">
+          <div class="timeline-dot"></div>
+          <div class="timeline-card">
+            <div class="timeline-label">STEP 01 · 测量结果</div>
+            <h3>今日身体测量已完成</h3>
+            <p>姿态评分 78 分 · 腰背负荷中度偏高，建议今天完成 1 轮核心减压训练。</p>
+            <div class="timeline-footer">
+              <span>身高 170cm</span>
+              <span>体重 65kg</span>
+              <span>测量时间 · 10:32</span>
+            </div>
+          </div>
+        </div>
+        <div class="timeline-item">
+          <div class="timeline-dot"></div>
+          <div class="timeline-card">
+            <div class="timeline-label">STEP 02 · 今日推荐训练</div>
+            <h3>核心稳定 + 肩颈舒展</h3>
+            <p>建议按照下方流程依次完成，系统会自动记录完成情况。</p>
+            <span class="timeline-badge">总时长 · 约 45 分钟 · 难度中等</span>
+          </div>
+        </div>
+        <div class="timeline-item">
+          <div class="timeline-dot"></div>
+          <div class="timeline-card">
+            <div class="timeline-label">STEP 03 · 训练完成与总结</div>
+            <h3>完成后将生成今日训练报告</h3>
+            <p>包含训练时长、关键动作完成度与次日建议。</p>
+          </div>
+        </div>
+      </aside>
+
+      <section>
+        <div class="timeline-hero">
+          <div class="timeline-hero-top">
+            <div>
+              <div class="recommend-label">TODAY PLAN</div>
+              <h2 class="timeline-hero-title">今日推荐训练流程</h2>
+              <p class="timeline-hero-desc">
+                按照「热身 → 主训练 → 放松」三个步骤依次完成，可有效减轻腰背压力并改善久坐体态。
+              </p>
+              <div class="timeline-steps">
+                <span class="timeline-step-chip">步骤 1 · 体验式热身（5 分钟）</span>
+                <span class="timeline-step-chip">步骤 2 · 核心与体态训练（30 分钟）</span>
+                <span class="timeline-step-chip">步骤 3 · 全身放松（10 分钟）</span>
+              </div>
+            </div>
+            <div class="timeline-hero-figure">
+              <div class="small-figure-outline"></div>
+            </div>
+          </div>
+          <div class="timeline-hero-bottom">
+            <span>系统会自动按照流程播放训练课程，你也可以在下方自由选择单节课程。</span>
+            <button class="primary-cta-large">一键开始今日流程</button>
+          </div>
+        </div>
+
+        <div class="timeline-course-list">
+          <article class="timeline-course-card">
+            <div class="timeline-course-main">
+              <div class="course-tag-row">
+                <span class="course-tag">步骤 1 · 热身</span>
+                <span>5 分钟</span>
+              </div>
+              <h4>全身动态唤醒</h4>
+              <p>通过轻度动态拉伸和关节活动，为正式训练做准备。</p>
+              <div class="timeline-course-tags">
+                <span class="course-chip">关节活动度</span>
+                <span class="course-chip">轻度出汗</span>
+              </div>
+            </div>
+            <div class="timeline-course-thumb"></div>
+          </article>
+
+          <article class="timeline-course-card">
+            <div class="timeline-course-main">
+              <div class="course-tag-row">
+                <span class="course-tag">步骤 2 · 主训练</span>
+                <span>30 分钟</span>
+              </div>
+              <h4>核心稳定 & 体态训练</h4>
+              <p>重点训练腰腹与肩带周围肌群，帮助你建立更稳定的身体中轴。</p>
+              <div class="timeline-course-tags">
+                <span class="course-chip">核心力量</span>
+                <span class="course-chip">体态优化</span>
+              </div>
+            </div>
+            <div class="timeline-course-thumb"></div>
+          </article>
+
+          <article class="timeline-course-card">
+            <div class="timeline-course-main">
+              <div class="course-tag-row">
+                <span class="course-tag">步骤 3 · 放松</span>
+                <span>10 分钟</span>
+              </div>
+              <h4>全身舒缓拉伸</h4>
+              <p>针对腰背、肩颈与下肢的静态拉伸，帮助身体回到放松状态。</p>
+              <div class="timeline-course-tags">
+                <span class="course-chip">恢复与放松</span>
+                <span class="course-chip">睡前可做</span>
+              </div>
+            </div>
+            <div class="timeline-course-thumb"></div>
+          </article>
+        </div>
+      </section>
+    </main>
+
+    <!-- Layout 4 · 原首页 + 半球训练模块 -->
+    <main class="layout layout-4" id="layout-4">
+      <h2 class="measure-title">请选择您的测量方案</h2>
+
+      <section class="measure-main-card">
+        <div class="measure-main-text">
+          <h3 class="measure-main-title">自由组合测量项目</h3>
+          <p class="measure-main-desc">
+            全面评估体态管理与功能状态，帮助定制高效训练方案，加速回归健康生活。
+          </p>
+        </div>
+        <div class="measure-main-figure">
+          <div class="figure-outline"></div>
+        </div>
+      </section>
+
+      <section class="measure-sub-row">
+        <article class="measure-sub-card">
+          <div>
+            <div class="measure-sub-title">综合训练评估</div>
+            <p class="measure-sub-desc">
+              覆盖全身主要肌群力量与稳定性，适合作为正式训练计划前的综合评估。
+            </p>
+          </div>
+        </article>
+        <article class="measure-sub-card">
+          <div>
+            <div class="measure-sub-title">快速身体评估</div>
+            <p class="measure-sub-desc">
+              在较短时间内完成核心测量项目，用于日常状态追踪与趋势观察。
+            </p>
+          </div>
+        </article>
+        <article class="measure-sub-card">
+          <div>
+            <div class="measure-sub-title">专项体态评估</div>
+            <p class="measure-sub-desc">
+              针对肩颈、腰背或下肢等重点区域的专项评估，适合有明确困扰人群。
+            </p>
+          </div>
+        </article>
+      </section>
+
+      <!-- 新增：半球上方训练课程模块 -->
+      <section class="training-panel">
+        <div class="training-panel-header">
+          <div>
+            <div class="training-panel-title">今日推荐训练课程</div>
+            <p class="training-panel-sub">基于本次测量结果为你自动搭配训练组合，可直接从任意课程开始。</p>
+          </div>
+          <div class="training-badges">
+            <span>总时长 · 约 45 分钟</span>
+            <span>难度 · 中等</span>
+            <span>建议频率 · 每周 3 次</span>
+          </div>
+        </div>
+
+        <div class="training-main-course">
+          <div class="training-main-course-left">
+            <div class="training-main-course-title">核心稳定与体态优化训练 · 45 分钟</div>
+            <p class="training-main-course-desc">
+              系统基于你最新一次身体测量结果生成的一套综合训练流程，包含核心激活、体态调整和全身放松三个阶段，适合在下班后完成一整套训练。
+            </p>
+            <div class="training-main-course-meta">
+              <span>目标 · 缓解腰背压力</span>
+              <span>建议频率 · 每周 3 次</span>
+            </div>
+          </div>
+          <div class="training-main-course-figure"></div>
+        </div>
+
+        <button class="training-main-cta">进入今日推荐训练</button>
+      </section>
+
+      <section class="sphere-zone">
+        <div class="sphere-base"></div>
+        <div class="sphere-highlight"></div>
+
+        <div class="person-card-row">
+          <div class="person-main">
+            <div class="person-avatar">A</div>
+            <div>
+              <div>Visbody 001</div>
+              <div class="person-meta-row">
+                <span>男</span>
+                <span>180cm</span>
+                <span>24 岁</span>
+              </div>
+            </div>
+          </div>
+          <div class="person-actions">
+            <button class="secondary-btn">编辑资料</button>
+            <button class="secondary-btn">历史报告</button>
+          </div>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <script>
+    const switchButtons = document.querySelectorAll(".layout-switcher button");
+    const layouts = document.querySelectorAll(".layout");
+
+    switchButtons.forEach((btn) => {
+      btn.addEventListener("click", () => {
+        const target = btn.dataset.layout;
+        switchButtons.forEach((b) => b.classList.remove("active"));
+        btn.classList.add("active");
+        layouts.forEach((l) => {
+          l.classList.toggle("active", l.id === target);
+        });
+      });
+    });
+  </script>
+</body>
+</html>
+

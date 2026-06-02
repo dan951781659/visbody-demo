@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <title>Visbody 登录确认</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no" />
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Helvetica Neue", Arial, sans-serif;
+      background: #f7f7f7;
+      color: #111111;
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: stretch;
+    }
+    .page {
+      width: 100%;
+      max-width: 430px;
+      padding: 12px 16px 32px;
+      display: flex;
+      flex-direction: column;
+      background: #ffffff;
+    }
+    .nav {
+      height: 44px;
+      display: flex;
+      align-items: center;
+      font-size: 15px;
+      border-bottom: 1px solid #e5e5e5;
+      margin-bottom: 24px;
+    }
+    .nav-back {
+      width: 24px;
+      height: 24px;
+      border-radius: 12px;
+      border: 1px solid #d0d0d0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-right: 8px;
+      font-size: 14px;
+      color: #555;
+    }
+    .nav-title {
+      font-size: 16px;
+      font-weight: 500;
+    }
+    .card {
+      padding: 12px 12px 20px;
+    }
+    .title {
+      font-size: 18px;
+      font-weight: 600;
+      text-align: center;
+      margin-bottom: 12px;
+    }
+    .subtitle {
+      font-size: 13px;
+      color: #333333;
+      line-height: 1.6;
+      margin-bottom: 16px;
+      text-align: left;
+    }
+    .tips {
+      font-size: 12px;
+      color: #666666;
+      line-height: 1.5;
+      margin-bottom: 20px;
+    }
+    .btn-group {
+      margin-top: 18px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    .btn {
+      border-radius: 26px;
+      padding: 12px 16px;
+      font-size: 15px;
+      font-weight: 600;
+      border: none;
+      cursor: pointer;
+      width: 100%;
+    }
+    .btn-primary {
+      background: #169bd5;
+      color: #ffffff;
+    }
+    .btn-secondary {
+      background: #ffffff;
+      color: #169bd5;
+      border: 1px solid #169bd5;
+    }
+    .btn:active {
+      transform: scale(0.98);
+    }
+    .btn-sub {
+      margin-top: 4px;
+      font-size: 12px;
+      color: #777777;
+      text-align: center;
+    }
+    .foot-note {
+      margin-top: 16px;
+      font-size: 11px;
+      color: #999999;
+      line-height: 1.5;
+      text-align: left;
+    }
+    @media (min-height: 740px) {
+      .page { padding-top: 40px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="page">
+    <div class="nav">
+      <div class="nav-back"><</div>
+      <div class="nav-title">账号确认</div>
+    </div>
+
+    <div class="card">
+      <div class="title">您之前是否用邮箱或手机号登录过 Visbody？</div>
+      <div class="subtitle">
+        如果您是新用户，直接创建新账号开始使用。<br/>
+        如果您之前使用 <strong>邮箱或手机号</strong> 登录过，可以把当前 Google 账号合并到原账号，保留历史数据。
+      </div>
+
+      <div class="btn-group">
+        <button class="btn btn-primary">
+          创建新账号并继续
+        </button>
+        <div class="btn-sub">使用当前 Google 账号创建新账号</div>
+        <button class="btn btn-secondary">
+          合并到已有账号
+        </button>
+        <div class="btn-sub">将 Google 账号绑定到已有账号</div>
+      </div>
+    </div>
+
+    <div class="foot-note">
+      合并后，历史测量数据和报告会自动同步到当前账号，无需重复注册。
+    </div>
+  </div>
+</body>
+</html>

@@ -1,0 +1,3005 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>WellnessHub 多角色运营分析</title>
+  <style>
+    :root {
+      --bg: #f6f8fb;
+      --panel: #ffffff;
+      --panel-2: #fbfcfe;
+      --line: #e6ebf2;
+      --line-strong: #d7dfea;
+      --text: #1f2937;
+      --sub: #667085;
+      --muted: #94a3b8;
+      --blue: #2563eb;
+      --blue-soft: rgba(37, 99, 235, 0.08);
+      --teal: #0f766e;
+      --teal-soft: rgba(15, 118, 110, 0.08);
+      --green: #16a34a;
+      --green-soft: rgba(22, 163, 74, 0.08);
+      --orange: #d97706;
+      --orange-soft: rgba(217, 119, 6, 0.08);
+      --red: #dc2626;
+      --red-soft: rgba(220, 38, 38, 0.08);
+      --purple: #4f46e5;
+      --purple-soft: rgba(79, 70, 229, 0.08);
+      --shadow: 0 8px 24px rgba(15, 23, 42, 0.05);
+      --radius: 12px;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html,
+    body {
+      min-height: 100%;
+    }
+
+    body {
+      margin: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Noto Sans SC", sans-serif;
+      background: var(--bg);
+      color: var(--text);
+    }
+
+    button,
+    input,
+    select {
+      font: inherit;
+    }
+
+    button {
+      cursor: pointer;
+    }
+
+    .app-shell {
+      display: grid;
+      grid-template-columns: 236px minmax(0, 1fr);
+      min-height: 100vh;
+    }
+
+    .sidebar {
+      background: var(--panel);
+      border-right: 1px solid var(--line);
+      padding: 20px 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 8px;
+    }
+
+    .brand-mark {
+      width: 38px;
+      height: 38px;
+      border-radius: 12px;
+      background: linear-gradient(180deg, #2f6bf5, #2455dd);
+      color: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      box-shadow: 0 10px 20px rgba(37, 99, 235, 0.22);
+    }
+
+    .brand-title {
+      font-size: 15px;
+      font-weight: 700;
+    }
+
+    .brand-sub {
+      margin-top: 2px;
+      font-size: 12px;
+      color: var(--sub);
+    }
+
+    .side-section-title {
+      padding: 0 8px;
+      font-size: 11px;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+
+    .nav-list {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .side-btn {
+      width: 100%;
+      border: 0;
+      background: transparent;
+      color: var(--sub);
+      border-radius: 10px;
+      padding: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      transition: background 0.16s ease, color 0.16s ease;
+    }
+
+    .side-btn:hover {
+      background: #f3f6fc;
+      color: var(--text);
+    }
+
+    .side-btn.active {
+      background: var(--blue-soft);
+      color: var(--blue);
+      font-weight: 600;
+    }
+
+    .left {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 999px;
+      background: currentColor;
+    }
+
+    .side-meta {
+      font-size: 12px;
+      color: inherit;
+    }
+
+    .main {
+      display: flex;
+      flex-direction: column;
+      min-width: 0;
+    }
+
+    .global-bar {
+      min-height: 52px;
+      padding: 0 24px;
+      border-bottom: 1px solid var(--line);
+      background: var(--panel);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .crumbs {
+      font-size: 13px;
+      color: var(--sub);
+    }
+
+    .global-right,
+    .workspace-status,
+    .toolbar {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .tiny-pill,
+    .pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      border-radius: 999px;
+      font-weight: 600;
+    }
+
+    .tiny-pill {
+      padding: 4px 10px;
+      border: 1px solid var(--line);
+      background: #fff;
+      color: var(--sub);
+      font-size: 12px;
+    }
+
+    .workspace-head {
+      padding: 20px 24px 12px;
+      background: var(--panel);
+      border-bottom: 1px solid var(--line);
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 16px;
+    }
+
+    .page-title {
+      margin: 0;
+      font-size: 24px;
+      font-weight: 700;
+    }
+
+    .page-sub {
+      margin-top: 6px;
+      color: var(--sub);
+      font-size: 13px;
+    }
+
+    .topbar {
+      background: var(--panel);
+      border-bottom: 1px solid var(--line);
+      padding: 14px 24px 18px;
+    }
+
+    .filter-bar {
+      display: flex;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+
+    .filter-bar .primary-btn {
+      margin-left: auto;
+    }
+
+    .segmented {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      background: #f3f6fb;
+      padding: 3px;
+    }
+
+    .segmented button {
+      height: 38px;
+      border: 0;
+      background: transparent;
+      color: var(--sub);
+      padding: 0 12px;
+      border-radius: 8px;
+    }
+
+    .segmented button.active {
+      background: var(--panel);
+      color: var(--text);
+      box-shadow: 0 1px 2px rgba(15, 23, 42, 0.05);
+      font-weight: 600;
+    }
+
+    .ghost-btn,
+    .primary-btn,
+    .search-box,
+    .select-box {
+      height: 40px;
+      border-radius: 10px;
+    }
+
+    .ghost-btn,
+    .primary-btn {
+      border: 1px solid var(--line);
+      padding: 0 14px;
+      background: var(--panel);
+      color: var(--text);
+    }
+
+    .primary-btn {
+      background: var(--blue);
+      color: #fff;
+      border-color: var(--blue);
+    }
+
+    .search-box,
+    .select-box {
+      border: 1px solid var(--line);
+      padding: 0 12px;
+      background: var(--panel);
+      color: var(--text);
+    }
+
+    .search-box {
+      min-width: 280px;
+      flex: 1 1 280px;
+    }
+
+    .select-box {
+      min-width: 160px;
+    }
+
+    .content {
+      padding: 24px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      min-width: 0;
+    }
+
+    .panel,
+    .detail-panel,
+    .stat-card {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+    }
+
+    .panel-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 16px 18px;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .panel-head h3,
+    .detail-panel h3,
+    .mini-card h4,
+    .chart-card h4,
+    .empty h4,
+    .locked-block h4 {
+      margin: 0;
+    }
+
+    .panel-head p,
+    .detail-panel p,
+    .mini-card p,
+    .chart-card p,
+    .empty p,
+    .locked-block p {
+      margin: 4px 0 0;
+      color: var(--sub);
+      font-size: 12px;
+      line-height: 1.55;
+    }
+
+    .panel-body {
+      padding: 18px;
+    }
+
+    .panel-body.flush {
+      padding: 0;
+    }
+
+    .stat-strip {
+      display: grid;
+      grid-template-columns: repeat(12, minmax(0, 1fr));
+      gap: 12px;
+    }
+
+    .stat-card {
+      grid-column: span 3;
+      padding: 16px;
+      min-height: 132px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      gap: 12px;
+      transition: border-color 0.16s ease, box-shadow 0.16s ease, transform 0.16s ease;
+    }
+
+    .stat-card.clickable:hover {
+      border-color: #bfd2ff;
+      transform: translateY(-1px);
+    }
+
+    .stat-card.active {
+      border-color: var(--blue);
+      box-shadow: 0 12px 26px rgba(37, 99, 235, 0.14);
+    }
+
+    .stat-card.locked {
+      background: linear-gradient(180deg, #fafbfd, #f6f8fb);
+      border-style: dashed;
+    }
+
+    .label {
+      font-size: 12px;
+      color: var(--sub);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .value {
+      margin-top: 2px;
+      font-size: 30px;
+      line-height: 1;
+      font-weight: 700;
+    }
+
+    .delta {
+      margin-top: 6px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+      font-size: 12px;
+      color: var(--sub);
+    }
+
+    .delta strong {
+      color: var(--text);
+    }
+
+    .card-foot {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      font-size: 12px;
+      color: var(--sub);
+    }
+
+    .card-link {
+      color: var(--blue);
+      font-weight: 600;
+    }
+
+    .pill {
+      padding: 4px 8px;
+      font-size: 11px;
+    }
+
+    .pill.blue { color: var(--blue); background: var(--blue-soft); }
+    .pill.teal { color: var(--teal); background: var(--teal-soft); }
+    .pill.green { color: var(--green); background: var(--green-soft); }
+    .pill.orange { color: var(--orange); background: var(--orange-soft); }
+    .pill.red { color: var(--red); background: var(--red-soft); }
+    .pill.purple { color: var(--purple); background: var(--purple-soft); }
+    .pill.gray { color: #475569; background: #eef2f7; }
+
+    .panel-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) 336px;
+      gap: 16px;
+      align-items: start;
+    }
+
+    .two-col {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 16px;
+    }
+
+    .stack {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      min-width: 0;
+    }
+
+    .chart-card {
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      background: var(--panel-2);
+      padding: 16px;
+    }
+
+    .chart-legend {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      flex-wrap: wrap;
+      margin-top: 10px;
+      font-size: 12px;
+      color: var(--sub);
+    }
+
+    .legend-item {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .legend-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 999px;
+    }
+
+    .group-chart {
+      margin-top: 18px;
+      height: 230px;
+      display: grid;
+      grid-template-columns: repeat(6, minmax(0, 1fr));
+      gap: 14px;
+      align-items: end;
+    }
+
+    .group-col {
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .group-bars {
+      width: 100%;
+      height: 180px;
+      display: flex;
+      align-items: flex-end;
+      justify-content: center;
+      gap: 6px;
+    }
+
+    .bar-wrap {
+      width: 28%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .bar-value {
+      font-size: 11px;
+      color: var(--sub);
+      white-space: nowrap;
+    }
+
+    .bar {
+      width: 100%;
+      min-height: 8px;
+      border-radius: 8px 8px 0 0;
+    }
+
+    .axis-label {
+      font-size: 12px;
+      color: var(--sub);
+    }
+
+    .rank-list {
+      margin-top: 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .rank-item {
+      display: grid;
+      grid-template-columns: 160px 1fr auto;
+      gap: 12px;
+      align-items: center;
+    }
+
+    .rank-name {
+      font-size: 13px;
+      font-weight: 600;
+    }
+
+    .bar-track {
+      height: 10px;
+      background: #eef2f7;
+      border-radius: 999px;
+      overflow: hidden;
+    }
+
+    .bar-fill {
+      height: 100%;
+      border-radius: 999px;
+    }
+
+    .rank-value {
+      font-size: 12px;
+      color: var(--sub);
+    }
+
+    .mini-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 12px;
+    }
+
+    .mini-card,
+    .focus-card {
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      background: var(--panel-2);
+      padding: 14px;
+    }
+
+    .focus-card {
+      cursor: pointer;
+      transition: border-color 0.16s ease, transform 0.16s ease;
+    }
+
+    .focus-card:hover {
+      border-color: #bfd2ff;
+      transform: translateY(-1px);
+    }
+
+    .focus-card.active {
+      border-color: var(--blue);
+    }
+
+    .modal-backdrop {
+      position: fixed;
+      inset: 0;
+      background: rgba(15, 23, 42, 0.32);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+      z-index: 40;
+    }
+
+    .modal {
+      width: min(620px, 100%);
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      box-shadow: 0 24px 60px rgba(15, 23, 42, 0.18);
+      overflow: hidden;
+    }
+
+    .modal-head {
+      padding: 18px 20px;
+      border-bottom: 1px solid var(--line);
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 12px;
+    }
+
+    .modal-head h3,
+    .toast strong {
+      margin: 0;
+    }
+
+    .modal-head p,
+    .toast p {
+      margin: 6px 0 0;
+      color: var(--sub);
+      font-size: 13px;
+      line-height: 1.6;
+    }
+
+    .modal-body {
+      padding: 18px 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    .field-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .field-tags span {
+      padding: 6px 10px;
+      border-radius: 999px;
+      background: #f3f6fb;
+      border: 1px solid var(--line);
+      font-size: 12px;
+      color: var(--sub);
+    }
+
+    .modal-actions {
+      padding: 16px 20px 20px;
+      border-top: 1px solid var(--line);
+      display: flex;
+      justify-content: flex-end;
+      gap: 10px;
+    }
+
+    .toast {
+      position: fixed;
+      right: 24px;
+      bottom: 24px;
+      width: 320px;
+      padding: 14px 16px;
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      box-shadow: 0 18px 42px rgba(15, 23, 42, 0.16);
+      z-index: 45;
+    }
+
+    .focus-value {
+      margin-top: 8px;
+      font-size: 28px;
+      font-weight: 700;
+      line-height: 1;
+    }
+
+    .focus-sub {
+      margin-top: 8px;
+      font-size: 12px;
+      color: var(--sub);
+      line-height: 1.5;
+    }
+
+    .detail-panel {
+      padding: 18px;
+      position: sticky;
+      top: 24px;
+    }
+
+    .detail-panel .sub {
+      margin-top: 6px;
+      color: var(--sub);
+      font-size: 12px;
+    }
+
+    .detail-section {
+      margin-top: 16px;
+      padding-top: 16px;
+      border-top: 1px solid var(--line);
+    }
+
+    .detail-title {
+      font-size: 14px;
+      font-weight: 600;
+      margin: 0 0 8px;
+    }
+
+    .kv {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 12px;
+      padding: 8px 0;
+      font-size: 13px;
+      color: var(--sub);
+    }
+
+    .kv strong {
+      color: var(--text);
+      font-weight: 600;
+    }
+
+    .bullet-list {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .bullet {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      color: var(--sub);
+      font-size: 13px;
+      line-height: 1.5;
+    }
+
+    .bullet i {
+      width: 8px;
+      height: 8px;
+      margin-top: 6px;
+      border-radius: 999px;
+      background: var(--blue);
+      flex: 0 0 8px;
+    }
+
+    .table-wrap {
+      overflow: auto;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      min-width: 860px;
+    }
+
+    th,
+    td {
+      padding: 12px;
+      border-bottom: 1px solid var(--line);
+      text-align: left;
+      vertical-align: middle;
+      font-size: 13px;
+      white-space: nowrap;
+    }
+
+    th {
+      color: var(--sub);
+      font-weight: 600;
+      background: #fbfcfe;
+      position: sticky;
+      top: 0;
+      z-index: 1;
+    }
+
+    tbody tr {
+      cursor: pointer;
+      transition: background 0.16s ease;
+    }
+
+    tbody tr:hover {
+      background: #f8fbff;
+    }
+
+    tbody tr.selected {
+      background: #f1f6ff;
+    }
+
+    .cell-sub {
+      margin-top: 4px;
+      font-size: 12px;
+      color: var(--muted);
+    }
+
+    .section-kicker {
+      font-size: 12px;
+      color: var(--sub);
+    }
+
+    .rule-line {
+      margin-top: 6px;
+      font-size: 12px;
+      color: var(--sub);
+      line-height: 1.5;
+    }
+
+    .status-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 12px;
+    }
+
+    .status-card {
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      background: var(--panel-2);
+      padding: 14px;
+    }
+
+    .status-card strong {
+      display: block;
+      font-size: 14px;
+    }
+
+    .status-card span {
+      display: block;
+      margin-top: 6px;
+      color: var(--sub);
+      font-size: 12px;
+      line-height: 1.5;
+    }
+
+    .empty,
+    .locked-block {
+      border: 1px dashed var(--line-strong);
+      border-radius: 14px;
+      padding: 22px 18px;
+      background: #fbfcfe;
+      text-align: center;
+    }
+
+    .empty p,
+    .locked-block p {
+      margin-top: 8px;
+    }
+
+    .skeletons {
+      display: grid;
+      gap: 16px;
+    }
+
+    .skeleton-grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 12px;
+    }
+
+    .skeleton-card,
+    .skeleton-panel {
+      border-radius: 14px;
+      background: linear-gradient(90deg, #eff3f8 25%, #f7f9fc 37%, #eff3f8 63%);
+      background-size: 400% 100%;
+      animation: shimmer 1.2s ease infinite;
+      border: 1px solid var(--line);
+    }
+
+    .skeleton-card {
+      height: 132px;
+    }
+
+    .skeleton-panel {
+      height: 360px;
+    }
+
+    @keyframes shimmer {
+      0% { background-position: 100% 0; }
+      100% { background-position: 0 0; }
+    }
+
+    @media (max-width: 1280px) {
+      .stat-card { grid-column: span 4; }
+      .panel-grid { grid-template-columns: 1fr; }
+      .detail-panel { position: static; }
+    }
+
+    @media (max-width: 980px) {
+      .app-shell { grid-template-columns: 1fr; }
+      .sidebar { border-right: 0; border-bottom: 1px solid var(--line); }
+      .workspace-head { flex-direction: column; }
+      .stat-card { grid-column: span 6; }
+      .two-col,
+      .mini-grid,
+      .status-grid { grid-template-columns: 1fr; }
+      .skeleton-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .group-chart { grid-template-columns: repeat(3, minmax(0, 1fr)); height: auto; }
+      .group-bars { height: 140px; }
+      .filter-bar .primary-btn { margin-left: 0; }
+      .modal-backdrop { padding: 16px; }
+    }
+  </style>
+</head>
+<body>
+  <div id="app"></div>
+  <script>
+    const roles = {
+      hq: {
+        label: "总部端 PC",
+        pages: [
+          { key: "overview", label: "经营总览" },
+          { key: "stores", label: "门店分析" }
+        ]
+      },
+      owner: {
+        label: "馆主端 PC",
+        pages: [
+          { key: "overview", label: "经营总览" },
+          { key: "analysis", label: "经营分析" }
+        ]
+      },
+      coach: {
+        label: "教练端 PC",
+        pages: [
+          { key: "workbench", label: "工作台" },
+          { key: "members", label: "会员工作" }
+        ]
+      }
+    };
+
+    const hqStores = [
+      { id: "st1", name: "静安旗舰店", group: "华东", tier: "pro", measuredTotal: 4200, newMeasured: 302, activeUsers: 1740, retestUsers: 320, eligibleRetest: 1380, riskUsers: 180, unassignedUsers: 60, dueRetest: 34, pendingBind: 4, archiveCompletePct: 91, aiUsers: 970, proUsers: 1500, outlineUsers: 780, deviceUtilization: 76, status: "标杆门店", tone: "green", peak: "18:00-20:00" },
+      { id: "st2", name: "海淀大学店", group: "华北", tier: "pro", measuredTotal: 2890, newMeasured: 148, activeUsers: 1300, retestUsers: 135, eligibleRetest: 1290, riskUsers: 240, unassignedUsers: 181, dueRetest: 51, pendingBind: 11, archiveCompletePct: 76, aiUsers: 364, proUsers: 1300, outlineUsers: 247, deviceUtilization: 61, status: "高风险门店", tone: "red", peak: "19:00-21:00" },
+      { id: "st3", name: "天河店", group: "华南", tier: "pro", measuredTotal: 2350, newMeasured: 196, activeUsers: 980, retestUsers: 152, eligibleRetest: 882, riskUsers: 118, unassignedUsers: 61, dueRetest: 26, pendingBind: 5, archiveCompletePct: 88, aiUsers: 480, proUsers: 980, outlineUsers: 363, deviceUtilization: 69, status: "稳态增长", tone: "blue", peak: "17:00-19:00" },
+      { id: "st4", name: "高新店", group: "西南", tier: "pro", measuredTotal: 2140, newMeasured: 188, activeUsers: 900, retestUsers: 126, eligibleRetest: 807, riskUsers: 142, unassignedUsers: 88, dueRetest: 29, pendingBind: 7, archiveCompletePct: 84, aiUsers: 369, proUsers: 900, outlineUsers: 306, deviceUtilization: 67, status: "承接偏弱", tone: "orange", peak: "18:00-21:00" },
+      { id: "st5", name: "重庆两路口店", group: "西南", tier: "basic", measuredTotal: 1810, newMeasured: 140, activeUsers: 820, retestUsers: 96, eligibleRetest: 730, riskUsers: 138, unassignedUsers: 92, dueRetest: 46, pendingBind: 10, archiveCompletePct: 73, aiUsers: 0, proUsers: 0, outlineUsers: 0, deviceUtilization: 63, status: "待整改", tone: "red", peak: "18:00-20:00" },
+      { id: "st6", name: "杭州滨江店", group: "华东", tier: "pro", measuredTotal: 2010, newMeasured: 162, activeUsers: 1100, retestUsers: 148, eligibleRetest: 1030, riskUsers: 172, unassignedUsers: 106, dueRetest: 42, pendingBind: 6, archiveCompletePct: 81, aiUsers: 506, proUsers: 1100, outlineUsers: 319, deviceUtilization: 72, status: "高风险门店", tone: "red", peak: "17:00-20:00" },
+      { id: "st7", name: "成都 IFS 店", group: "西南", tier: "basic", measuredTotal: 1650, newMeasured: 122, activeUsers: 750, retestUsers: 88, eligibleRetest: 670, riskUsers: 127, unassignedUsers: 83, dueRetest: 41, pendingBind: 8, archiveCompletePct: 79, aiUsers: 0, proUsers: 0, outlineUsers: 0, deviceUtilization: 65, status: "高风险门店", tone: "red", peak: "18:00-21:00" },
+      { id: "st8", name: "武汉光谷店", group: "华中", tier: "pro", measuredTotal: 1590, newMeasured: 118, activeUsers: 740, retestUsers: 84, eligibleRetest: 665, riskUsers: 119, unassignedUsers: 71, dueRetest: 40, pendingBind: 9, archiveCompletePct: 78, aiUsers: 215, proUsers: 740, outlineUsers: 163, deviceUtilization: 64, status: "复测偏弱", tone: "orange", peak: "19:00-21:00" }
+    ];
+
+    const ownerUsers = [
+      { id: "u1", name: "李梦瑶", coach: "陈教练", goal: "减脂塑形", gender: "女", ageGroup: "25-34", status: "待复测", tone: "orange", active: true, newPeriod: false, retested: false, eligibleRetest: true, dueRetest: true, risk: false, assigned: true, pendingBind: false, archiveComplete: true, highPotential: false, aiInterpreted: true, outlineStatus: "执行中", improved: true, mainTag: "体脂偏高", lastMeasure: "2026-03-14", latestReport: "体成分", note: "已执行 3 周，适合在本周安排复测。", priority: 1 },
+      { id: "u2", name: "王哲", coach: "李教练", goal: "健康管理", gender: "男", ageGroup: "35-44", status: "流失风险", tone: "red", active: false, newPeriod: false, retested: false, eligibleRetest: true, dueRetest: false, risk: true, assigned: true, pendingBind: false, archiveComplete: true, highPotential: false, aiInterpreted: true, outlineStatus: "未执行", improved: false, mainTag: "运动能力偏弱", lastMeasure: "2026-02-24", latestReport: "体适能", note: "46 天无行为，需优先唤醒。", priority: 1 },
+      { id: "u3", name: "陈可欣", coach: "陈教练", goal: "体态改善", gender: "女", ageGroup: "25-34", status: "高潜转化", tone: "blue", active: true, newPeriod: true, retested: false, eligibleRetest: false, dueRetest: false, risk: false, assigned: true, pendingBind: false, archiveComplete: true, highPotential: true, aiInterpreted: false, outlineStatus: "未生成", improved: false, mainTag: "体态异常", lastMeasure: "2026-04-05", latestReport: "体态", note: "近 10 天新测评用户，转化窗口最佳。", priority: 2 },
+      { id: "u4", name: "赵晨", coach: "王教练", goal: "增肌", gender: "男", ageGroup: "25-34", status: "持续改善", tone: "green", active: true, newPeriod: false, retested: true, eligibleRetest: true, dueRetest: false, risk: false, assigned: true, pendingBind: false, archiveComplete: true, highPotential: false, aiInterpreted: true, outlineStatus: "执行中", improved: true, mainTag: "运动能力偏弱", lastMeasure: "2026-03-30", latestReport: "围度", note: "已连续改善 2 次，可沉淀案例。", priority: 3 },
+      { id: "u5", name: "林嘉宁", coach: "陈教练", goal: "减脂塑形", gender: "女", ageGroup: "18-24", status: "待绑定报告", tone: "gray", active: true, newPeriod: true, retested: false, eligibleRetest: false, dueRetest: false, risk: false, assigned: true, pendingBind: true, archiveComplete: true, highPotential: false, aiInterpreted: false, outlineStatus: "未生成", improved: false, mainTag: "体脂偏高", lastMeasure: "2026-04-07", latestReport: "体成分", note: "前台上传后未完成绑定，影响后续跟进。", priority: 2 },
+      { id: "u6", name: "孙悦", coach: "陈教练", goal: "健康管理", gender: "女", ageGroup: "35-44", status: "待补档案", tone: "gray", active: true, newPeriod: false, retested: false, eligibleRetest: true, dueRetest: false, risk: false, assigned: true, pendingBind: false, archiveComplete: false, highPotential: false, aiInterpreted: true, outlineStatus: "执行中", improved: false, mainTag: "腰腹围度异常", lastMeasure: "2026-03-21", latestReport: "体成分", note: "缺饮食偏好和运动目标。", priority: 3 },
+      { id: "u7", name: "周岚", coach: "李教练", goal: "减脂塑形", gender: "女", ageGroup: "25-34", status: "待复测", tone: "orange", active: true, newPeriod: false, retested: false, eligibleRetest: true, dueRetest: true, risk: false, assigned: true, pendingBind: false, archiveComplete: true, highPotential: false, aiInterpreted: true, outlineStatus: "执行中", improved: false, mainTag: "体脂偏高", lastMeasure: "2026-03-10", latestReport: "体成分", note: "进入第 4 周，适合安排复测。", priority: 1 },
+      { id: "u8", name: "何鹏", coach: "王教练", goal: "健康管理", gender: "男", ageGroup: "45+", status: "流失风险", tone: "red", active: false, newPeriod: false, retested: false, eligibleRetest: true, dueRetest: false, risk: true, assigned: true, pendingBind: false, archiveComplete: true, highPotential: false, aiInterpreted: false, outlineStatus: "未执行", improved: false, mainTag: "平衡风险偏高", lastMeasure: "2026-02-18", latestReport: "平衡风险", note: "长期未触达，需要回访。", priority: 1 },
+      { id: "u9", name: "许然", coach: "陈教练", goal: "体态改善", gender: "女", ageGroup: "25-34", status: "高潜转化", tone: "blue", active: true, newPeriod: true, retested: false, eligibleRetest: false, dueRetest: false, risk: false, assigned: true, pendingBind: false, archiveComplete: true, highPotential: true, aiInterpreted: true, outlineStatus: "未生成", improved: false, mainTag: "体态异常", lastMeasure: "2026-04-08", latestReport: "体态", note: "完成解读，需尽快推进承接。", priority: 2 },
+      { id: "u10", name: "张沁", coach: "未分配", goal: "健康管理", gender: "女", ageGroup: "35-44", status: "待分配", tone: "orange", active: true, newPeriod: true, retested: false, eligibleRetest: false, dueRetest: false, risk: false, assigned: false, pendingBind: false, archiveComplete: false, highPotential: false, aiInterpreted: false, outlineStatus: "未生成", improved: false, mainTag: "体脂偏高", lastMeasure: "2026-04-09", latestReport: "体成分", note: "已测评但未分配负责人。", priority: 1 },
+      { id: "u11", name: "吴桐", coach: "王教练", goal: "增肌", gender: "男", ageGroup: "18-24", status: "待复测", tone: "orange", active: true, newPeriod: false, retested: false, eligibleRetest: true, dueRetest: true, risk: false, assigned: true, pendingBind: false, archiveComplete: true, highPotential: false, aiInterpreted: false, outlineStatus: "执行中", improved: false, mainTag: "运动能力偏弱", lastMeasure: "2026-03-11", latestReport: "体适能", note: "适合与执行情况一起复盘。", priority: 2 },
+      { id: "u12", name: "冯雪", coach: "王教练", goal: "减脂塑形", gender: "女", ageGroup: "25-34", status: "持续改善", tone: "green", active: true, newPeriod: false, retested: true, eligibleRetest: true, dueRetest: false, risk: false, assigned: true, pendingBind: false, archiveComplete: true, highPotential: false, aiInterpreted: true, outlineStatus: "执行中", improved: true, mainTag: "腰腹围度异常", lastMeasure: "2026-03-25", latestReport: "围度", note: "围度连续改善，适合沉淀案例。", priority: 3 },
+      { id: "u13", name: "马会", coach: "陈教练", goal: "健康管理", gender: "男", ageGroup: "35-44", status: "待复测", tone: "orange", active: true, newPeriod: false, retested: false, eligibleRetest: true, dueRetest: true, risk: false, assigned: true, pendingBind: false, archiveComplete: true, highPotential: false, aiInterpreted: true, outlineStatus: "执行中", improved: false, mainTag: "平衡风险偏高", lastMeasure: "2026-03-09", latestReport: "平衡风险", note: "建议复测后再调整大纲。", priority: 1 },
+      { id: "u14", name: "唐诺", coach: "未分配", goal: "体态改善", gender: "女", ageGroup: "25-34", status: "待分配", tone: "orange", active: true, newPeriod: true, retested: false, eligibleRetest: false, dueRetest: false, risk: false, assigned: false, pendingBind: true, archiveComplete: false, highPotential: true, aiInterpreted: false, outlineStatus: "未生成", improved: false, mainTag: "体态异常", lastMeasure: "2026-04-09", latestReport: "体态", note: "高潜用户且未分配，馆主需优先处理。", priority: 1 },
+      { id: "u15", name: "江珊", coach: "李教练", goal: "减脂塑形", gender: "女", ageGroup: "35-44", status: "流失风险", tone: "red", active: false, newPeriod: false, retested: false, eligibleRetest: true, dueRetest: false, risk: true, assigned: true, pendingBind: false, archiveComplete: true, highPotential: false, aiInterpreted: true, outlineStatus: "未执行", improved: false, mainTag: "体脂偏高", lastMeasure: "2026-02-28", latestReport: "体成分", note: "已解读后无后续动作。", priority: 1 },
+      { id: "u16", name: "罗然", coach: "陈教练", goal: "增肌", gender: "男", ageGroup: "25-34", status: "持续改善", tone: "green", active: true, newPeriod: false, retested: true, eligibleRetest: true, dueRetest: false, risk: false, assigned: true, pendingBind: false, archiveComplete: true, highPotential: false, aiInterpreted: true, outlineStatus: "执行中", improved: true, mainTag: "运动能力偏弱", lastMeasure: "2026-03-29", latestReport: "体适能", note: "适合做会员案例复盘。", priority: 3 }
+    ];
+
+    const ownerDevices = [
+      { id: "d1", name: "Visbody A1", utilization: 72, status: "正常", tone: "green", peak: "18:00-20:00", measures: 142 },
+      { id: "d2", name: "Visbody A2", utilization: 66, status: "正常", tone: "blue", peak: "19:00-21:00", measures: 129 },
+      { id: "d3", name: "体态镜 P1", utilization: 58, status: "待提升", tone: "orange", peak: "17:00-19:00", measures: 83 }
+    ];
+
+    const trendSets = {
+      hq: {
+        labels: ["11月", "12月", "1月", "2月", "3月", "4月"],
+        series: [
+          { name: "新增测评", tone: "blue", values: [920, 980, 1040, 1105, 1180, 1248] },
+          { name: "活跃用户", tone: "teal", values: [6380, 6720, 7010, 7230, 7560, 7860] },
+          { name: "复测用户", tone: "green", values: [1620, 1710, 1860, 1980, 2140, 2316] }
+        ]
+      },
+      owner: {
+        labels: ["第1周", "第2周", "第3周", "第4周", "第5周", "第6周"],
+        series: [
+          { name: "新增测评", tone: "blue", values: [3, 4, 2, 5, 4, 5] },
+          { name: "待复测", tone: "orange", values: [2, 3, 4, 4, 5, 5] },
+          { name: "已完成复测", tone: "green", values: [1, 2, 2, 3, 3, 4] }
+        ]
+      },
+      coach: {
+        labels: ["第1周", "第2周", "第3周", "第4周", "第5周", "第6周"],
+        series: [
+          { name: "新增测评", tone: "blue", values: [1, 1, 0, 2, 1, 2] },
+          { name: "待复测", tone: "orange", values: [1, 1, 2, 2, 2, 3] },
+          { name: "已复测", tone: "green", values: [0, 1, 1, 1, 1, 2] }
+        ]
+      }
+    };
+
+    const state = {
+      role: "hq",
+      page: "overview",
+      tier: "pro",
+      date: "30d",
+      search: "",
+      group: "全部门店组",
+      coach: "全部教练",
+      tag: "全部状态",
+      loading: false,
+      exportModal: false,
+      toast: "",
+      selected: {
+        hq_overview: "st2",
+        hq_stores: "st2",
+        owner_overview: "u2",
+        owner_analysis: "u3",
+        coach_workbench: "u1",
+        coach_members: "u1"
+      },
+      activeDrill: {
+        hq_overview: "highRiskStores",
+        hq_stores: "allStores",
+        owner_overview: "todayActions",
+        owner_analysis: "highPotential",
+        coach_workbench: "dueRetest"
+      }
+    };
+
+    let timer = null;
+    let toastTimer = null;
+
+    function sum(list, getter) {
+      return list.reduce((acc, item) => acc + getter(item), 0);
+    }
+
+    function avg(list, getter) {
+      if (!list.length) return 0;
+      return sum(list, getter) / list.length;
+    }
+
+    function pct(value, digits = 1) {
+      return value.toFixed(digits) + "%";
+    }
+
+    function tonePill(tone, text) {
+      return '<span class="pill ' + tone + '">' + text + "</span>";
+    }
+
+    function stripHtml(value) {
+      return String(value == null ? "" : value)
+        .replace(/<br\s*\/?>/gi, " ")
+        .replace(/<\/div>/gi, " ")
+        .replace(/<[^>]+>/g, "")
+        .replace(/\s+/g, " ")
+        .trim();
+    }
+
+    function dateLabel() {
+      const map = {
+        "7d": "近 7 天",
+        "30d": "近 30 天",
+        "90d": "近 90 天",
+        "all": "累计"
+      };
+      return map[state.date] || "自定义";
+    }
+
+    function pageId() {
+      return state.role + "_" + state.page;
+    }
+
+    function setLoading(mutator) {
+      state.loading = true;
+      render();
+      clearTimeout(timer);
+      timer = setTimeout(() => {
+        mutator();
+        state.loading = false;
+        render();
+      }, 180);
+    }
+
+    function rolePages() {
+      return roles[state.role].pages;
+    }
+
+    function pageMeta() {
+      return rolePages().find((page) => page.key === state.page);
+    }
+
+    function selectedGroups() {
+      const groups = new Set(["全部门店组"]);
+      hqStores.forEach((item) => groups.add(item.group));
+      return Array.from(groups);
+    }
+
+    function ownerCoachOptions() {
+      const options = new Set(["全部教练"]);
+      ownerUsers.forEach((item) => options.add(item.coach));
+      return Array.from(options);
+    }
+
+    function hqRows() {
+      return hqStores.map((item) => {
+        const retestRate = item.eligibleRetest ? item.retestUsers / item.eligibleRetest * 100 : 0;
+        const riskRatio = item.activeUsers ? item.riskUsers / item.activeUsers * 100 : 0;
+        const unassignedRatio = item.activeUsers ? item.unassignedUsers / item.activeUsers * 100 : 0;
+        const aiCoverage = item.proUsers ? item.aiUsers / item.proUsers * 100 : 0;
+        const outlineRate = item.proUsers ? item.outlineUsers / item.proUsers * 100 : 0;
+        const isHighRisk = riskRatio >= 15;
+        return {
+          ...item,
+          retestRate,
+          riskRatio,
+          unassignedRatio,
+          aiCoverage,
+          outlineRate,
+          isHighRisk,
+          isProStore: item.tier === "pro"
+        };
+      });
+    }
+
+    function filteredHQRows() {
+      return hqRows().filter((item) => {
+        const searchPass = !state.search || item.name.includes(state.search) || item.group.includes(state.search);
+        const groupPass = state.group === "全部门店组" || item.group === state.group;
+        return searchPass && groupPass;
+      });
+    }
+
+    function filteredOwnerUsers() {
+      return ownerUsers.filter((item) => {
+        const searchPass = !state.search || item.name.includes(state.search) || item.status.includes(state.search) || item.coach.includes(state.search);
+        const coachPass = state.coach === "全部教练" || item.coach === state.coach;
+        return searchPass && coachPass;
+      });
+    }
+
+    function coachUsers() {
+      return ownerUsers.filter((item) => item.coach === "陈教练");
+    }
+
+    function filteredCoachUsers() {
+      return coachUsers().filter((item) => {
+        return !state.search || item.name.includes(state.search) || item.status.includes(state.search);
+      });
+    }
+
+    function hqMetrics(rows) {
+      const totalMeasured = sum(rows, (item) => item.measuredTotal);
+      const newMeasured = sum(rows, (item) => item.newMeasured);
+      const activeUsers = sum(rows, (item) => item.activeUsers);
+      const retestUsers = sum(rows, (item) => item.retestUsers);
+      const eligibleRetest = sum(rows, (item) => item.eligibleRetest);
+      const retestRate = eligibleRetest ? retestUsers / eligibleRetest * 100 : 0;
+      const highRiskStores = rows.filter((item) => item.isHighRisk);
+      const proStores = rows.filter((item) => item.isProStore);
+      const aiPenetration = proStores.length
+        ? proStores.filter((item) => item.aiCoverage >= 35).length / proStores.length * 100
+        : 0;
+      return {
+        totalMeasured,
+        newMeasured,
+        activeUsers,
+        retestUsers,
+        retestRate,
+        highRiskStores,
+        proStores,
+        aiPenetration
+      };
+    }
+
+    function ownerMetrics(users) {
+      const totalMeasured = users.length;
+      const newMeasured = users.filter((item) => item.newPeriod).length;
+      const activeUsers = users.filter((item) => item.active).length;
+      const sleepingUsers = users.filter((item) => !item.active).length;
+      const retestUsers = users.filter((item) => item.retested).length;
+      const eligibleRetest = users.filter((item) => item.eligibleRetest).length;
+      const retestRate = eligibleRetest ? retestUsers / eligibleRetest * 100 : 0;
+      const unassignedUsers = users.filter((item) => !item.assigned).length;
+      const dueRetestUsers = users.filter((item) => item.dueRetest).length;
+      const riskUsers = users.filter((item) => item.risk).length;
+      const highPotentialUsers = users.filter((item) => item.highPotential).length;
+      const pendingBindUsers = users.filter((item) => item.pendingBind).length;
+      const archiveCompleteRate = totalMeasured ? users.filter((item) => item.archiveComplete).length / totalMeasured * 100 : 0;
+      const executingOutlineRate = totalMeasured
+        ? users.filter((item) => item.outlineStatus === "执行中").length / totalMeasured * 100
+        : 0;
+      const aiCoverage = totalMeasured
+        ? users.filter((item) => item.aiInterpreted).length / totalMeasured * 100
+        : 0;
+      return {
+        totalMeasured,
+        newMeasured,
+        activeUsers,
+        sleepingUsers,
+        retestUsers,
+        retestRate,
+        unassignedUsers,
+        dueRetestUsers,
+        riskUsers,
+        highPotentialUsers,
+        pendingBindUsers,
+        archiveCompleteRate,
+        executingOutlineRate,
+        aiCoverage
+      };
+    }
+
+    function coachMetrics(users) {
+      const totalMeasured = users.length;
+      const activeUsers = users.filter((item) => item.active).length;
+      const dueRetestUsers = users.filter((item) => item.dueRetest).length;
+      const riskUsers = users.filter((item) => item.risk).length;
+      const highPotentialUsers = users.filter((item) => item.highPotential).length;
+      const improvedUsers = users.filter((item) => item.improved).length;
+      const aiCoverage = totalMeasured ? users.filter((item) => item.aiInterpreted).length / totalMeasured * 100 : 0;
+      const outlineUsers = users.filter((item) => item.outlineStatus === "执行中").length;
+      return {
+        totalMeasured,
+        activeUsers,
+        dueRetestUsers,
+        riskUsers,
+        highPotentialUsers,
+        improvedUsers,
+        aiCoverage,
+        outlineUsers
+      };
+    }
+
+    function getToneForValue(type, value) {
+      if (type === "risk") return value >= 15 ? "red" : value >= 12 ? "orange" : "green";
+      if (type === "retest") return value >= 18 ? "green" : value >= 14 ? "blue" : "orange";
+      return "blue";
+    }
+
+    function groupedChart(title, labels, series) {
+      const max = Math.max(...series.flatMap((item) => item.values), 1);
+      return `
+        <div class="chart-card">
+          <h4>${title}</h4>
+          <div class="chart-legend">
+            ${series.map((item) => `
+              <span class="legend-item">
+                <span class="legend-dot" style="background:${toneColor(item.tone)}"></span>
+                <span>${item.name}</span>
+              </span>
+            `).join("")}
+          </div>
+          <div class="group-chart">
+            ${labels.map((label, index) => `
+              <div class="group-col">
+                <div class="group-bars">
+                  ${series.map((item) => {
+                    const value = item.values[index];
+                    const height = Math.max(12, value / max * 150);
+                    return `
+                      <div class="bar-wrap">
+                        <div class="bar-value">${value}</div>
+                        <div class="bar" style="height:${height}px;background:${toneColor(item.tone)}"></div>
+                      </div>
+                    `;
+                  }).join("")}
+                </div>
+                <div class="axis-label">${label}</div>
+              </div>
+            `).join("")}
+          </div>
+        </div>
+      `;
+    }
+
+    function toneColor(tone) {
+      const map = {
+        blue: "#6ea2ff",
+        teal: "#77d2c9",
+        green: "#7fd699",
+        orange: "#f0b979",
+        red: "#ee9b9b",
+        purple: "#b7a9ff",
+        gray: "#c9d3df"
+      };
+      return map[tone] || map.blue;
+    }
+
+    function rankChart(title, items, valueKey, formatter, toneType) {
+      const max = Math.max(...items.map((item) => item[valueKey]), 1);
+      return `
+        <div class="chart-card">
+          <h4>${title}</h4>
+          <div class="rank-list">
+            ${items.map((item) => `
+              <div class="rank-item">
+                <div class="rank-name">${item.name}</div>
+                <div class="bar-track">
+                  <div class="bar-fill" style="width:${item[valueKey] / max * 100}%;background:${toneColor(getToneForValue(toneType, item[valueKey]))}"></div>
+                </div>
+                <div class="rank-value">${formatter(item[valueKey])}</div>
+              </div>
+            `).join("")}
+          </div>
+        </div>
+      `;
+    }
+
+    function distributionChart(title, items) {
+      const max = Math.max(...items.map((item) => item.value), 1);
+      return `
+        <div class="chart-card">
+          <h4>${title}</h4>
+          <div class="rank-list">
+            ${items.map((item) => `
+              <div class="rank-item">
+                <div class="rank-name">${item.label}</div>
+                <div class="bar-track">
+                  <div class="bar-fill" style="width:${item.value / max * 100}%;background:${toneColor(item.tone || "blue")}"></div>
+                </div>
+                <div class="rank-value">${item.text || item.value}</div>
+              </div>
+            `).join("")}
+          </div>
+        </div>
+      `;
+    }
+
+    function emptyBlock(title, text) {
+      return `
+        <div class="empty">
+          <h4>${title}</h4>
+          <p>${text}</p>
+        </div>
+      `;
+    }
+
+    function lockedBlock(title, text) {
+      return `
+        <div class="locked-block">
+          <h4>${title}</h4>
+          <p>${text}</p>
+          <div style="margin-top:12px;"><button class="primary-btn">升级 Pro 查看</button></div>
+        </div>
+      `;
+    }
+
+    function renderLoading() {
+      return `
+        <div class="skeletons">
+          <div class="skeleton-grid">
+            <div class="skeleton-card"></div>
+            <div class="skeleton-card"></div>
+            <div class="skeleton-card"></div>
+            <div class="skeleton-card"></div>
+          </div>
+          <div class="panel-grid">
+            <div class="skeleton-panel"></div>
+            <div class="skeleton-panel"></div>
+          </div>
+        </div>
+      `;
+    }
+
+    function renderMetricCards(metrics, activeKey) {
+      return `
+        <section class="stat-strip">
+          ${metrics.map((metric) => {
+            const locked = metric.proOnly && state.tier === "basic";
+            const clickable = metric.drillKey && !locked;
+            const active = clickable && metric.drillKey === activeKey;
+            return `
+              <button
+                class="stat-card ${clickable ? "clickable" : ""} ${locked ? "locked" : ""} ${active ? "active" : ""}"
+                ${clickable ? `data-drill="${metric.drillKey}"` : ""}
+              >
+                <div>
+                  <div class="label">
+                    <span>${metric.label}</span>
+                    ${metric.badge ? tonePill(metric.badgeTone || "gray", metric.badge) : ""}
+                  </div>
+                  <div class="value">${locked ? "—" : metric.value}</div>
+                  <div class="delta">
+                    <strong>${locked ? "Pro 指标" : metric.delta}</strong>
+                    <span>${locked ? "升级后可见" : metric.hint}</span>
+                  </div>
+                </div>
+                <div class="card-foot">
+                  <span>${metric.ruleShort}</span>
+                  ${clickable ? '<span class="card-link">查看明细</span>' : ""}
+                </div>
+              </button>
+            `;
+          }).join("")}
+        </section>
+      `;
+    }
+
+    function renderTable(columns, rows, selectedId, tableKey) {
+      return `
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>${columns.map((column) => "<th>" + column.label + "</th>").join("")}</tr>
+            </thead>
+            <tbody>
+              ${rows.map((row) => `
+                <tr class="${row.id === selectedId ? "selected" : ""}" data-select-table="${tableKey}" data-id="${row.id}">
+                  ${columns.map((column) => "<td>" + column.render(row) + "</td>").join("")}
+                </tr>
+              `).join("")}
+            </tbody>
+          </table>
+        </div>
+      `;
+    }
+
+    function ensureSelected(pageKey, rows) {
+      const current = state.selected[pageKey];
+      if (rows.some((item) => item.id === current)) return current;
+      const fallback = rows[0] ? rows[0].id : "";
+      state.selected[pageKey] = fallback;
+      return fallback;
+    }
+
+    function getRowById(rows, id) {
+      return rows.find((item) => item.id === id) || rows[0] || null;
+    }
+
+    function hqOverviewDrilldowns(rows) {
+      const metrics = hqMetrics(rows);
+      const storeContribution = rows.slice().sort((a, b) => b.measuredTotal - a.measuredTotal);
+      const growthRows = rows.slice().sort((a, b) => b.newMeasured - a.newMeasured);
+      const activeRows = rows.slice().sort((a, b) => b.activeUsers - a.activeUsers);
+      const retestRows = rows.slice().sort((a, b) => b.retestUsers - a.retestUsers);
+      const rateRows = rows.slice().sort((a, b) => b.retestRate - a.retestRate);
+      const riskRows = rows.filter((item) => item.isHighRisk).sort((a, b) => b.riskRatio - a.riskRatio);
+      const proRows = rows.filter((item) => item.isProStore).sort((a, b) => b.aiCoverage - a.aiCoverage);
+      return {
+        totalMeasured: {
+          title: "累计测评用户明细",
+          rule: "统计口径：按子门店累计测评用户数汇总，按用户唯一 ID 去重。",
+          tableKey: "hq_overview",
+          rows: storeContribution,
+          columns: [
+            { label: "子门店", render: (row) => "<strong>" + row.name + "</strong><div class='cell-sub'>" + row.group + "</div>" },
+            { label: "累计测评用户", render: (row) => row.measuredTotal },
+            { label: "活跃用户", render: (row) => row.activeUsers },
+            { label: "复测用户", render: (row) => row.retestUsers },
+            { label: "门店状态", render: (row) => tonePill(row.tone, row.status) }
+          ],
+          detail: (row) => ({
+            title: row.name,
+            subtitle: row.group,
+            sections: [
+              { kv: [
+                { label: "累计测评用户", value: row.measuredTotal },
+                { label: "活跃用户", value: row.activeUsers },
+                { label: "复测用户", value: row.retestUsers },
+                { label: "待复测人数", value: row.dueRetest }
+              ] },
+              { title: "门店状态", bullets: [row.status, "当前门店在总部视角下属于可跟踪门店。"] }
+            ]
+          })
+        },
+        newMeasured: {
+          title: "本期新增测评门店分布",
+          rule: "统计口径：按当前筛选周期内新增测评用户数汇总，不含导入历史数据。",
+          tableKey: "hq_overview",
+          rows: growthRows,
+          columns: [
+            { label: "子门店", render: (row) => "<strong>" + row.name + "</strong><div class='cell-sub'>" + row.group + "</div>" },
+            { label: "本期新增测评", render: (row) => row.newMeasured },
+            { label: "累计测评用户", render: (row) => row.measuredTotal },
+            { label: "设备利用率", render: (row) => pct(row.deviceUtilization) }
+          ],
+          detail: (row) => ({
+            title: row.name,
+            subtitle: "新增测评明细",
+            sections: [
+              { kv: [
+                { label: "本期新增测评", value: row.newMeasured },
+                { label: "高峰时段", value: row.peak },
+                { label: "待绑定报告", value: row.pendingBind },
+                { label: "设备利用率", value: pct(row.deviceUtilization) }
+              ] },
+              { title: "查看重点", bullets: ["关注新增是否被及时分配。", "新增高但待绑定高的门店优先排查补绑流程。"] }
+            ]
+          })
+        },
+        activeUsers: {
+          title: "活跃用户门店分布",
+          rule: "统计口径：近 30 天内满足有效行为的用户数，包括非导入测评、训练大纲更新、AI 解读或 AI 对话。",
+          tableKey: "hq_overview",
+          rows: activeRows,
+          columns: [
+            { label: "子门店", render: (row) => "<strong>" + row.name + "</strong><div class='cell-sub'>" + row.group + "</div>" },
+            { label: "活跃用户", render: (row) => row.activeUsers },
+            { label: "风险用户", render: (row) => row.riskUsers },
+            { label: "流失风险占比", render: (row) => pct(row.riskRatio) }
+          ],
+          detail: (row) => ({
+            title: row.name,
+            subtitle: "活跃用户明细",
+            sections: [
+              { kv: [
+                { label: "活跃用户", value: row.activeUsers },
+                { label: "风险用户", value: row.riskUsers },
+                { label: "流失风险占比", value: pct(row.riskRatio) },
+                { label: "待分配用户", value: row.unassignedUsers }
+              ] }
+            ]
+          })
+        },
+        retestUsers: {
+          title: "复测用户门店分布",
+          rule: "统计口径：当前周期内完成复测的用户数，按用户唯一 ID 去重。",
+          tableKey: "hq_overview",
+          rows: retestRows,
+          columns: [
+            { label: "子门店", render: (row) => "<strong>" + row.name + "</strong><div class='cell-sub'>" + row.group + "</div>" },
+            { label: "复测用户", render: (row) => row.retestUsers },
+            { label: "可复测池", render: (row) => row.eligibleRetest },
+            { label: "复测达成率", render: (row) => pct(row.retestRate) }
+          ],
+          detail: (row) => ({
+            title: row.name,
+            subtitle: "复测用户明细",
+            sections: [
+              { kv: [
+                { label: "复测用户", value: row.retestUsers },
+                { label: "可复测池", value: row.eligibleRetest },
+                { label: "复测达成率", value: pct(row.retestRate) },
+                { label: "待复测人数", value: row.dueRetest }
+              ] }
+            ]
+          })
+        },
+        retestRate: {
+          title: "复测达成率门店明细",
+          rule: "统计口径：复测达成率 = 当前周期复测用户数 / 当前周期可复测用户池。",
+          tableKey: "hq_overview",
+          rows: rateRows,
+          columns: [
+            { label: "子门店", render: (row) => "<strong>" + row.name + "</strong><div class='cell-sub'>" + row.group + "</div>" },
+            { label: "复测用户", render: (row) => row.retestUsers },
+            { label: "可复测池", render: (row) => row.eligibleRetest },
+            { label: "复测达成率", render: (row) => pct(row.retestRate) }
+          ],
+          detail: (row) => ({
+            title: row.name,
+            subtitle: "复测达成率构成",
+            sections: [
+              { kv: [
+                { label: "复测用户", value: row.retestUsers },
+                { label: "可复测池", value: row.eligibleRetest },
+                { label: "复测达成率", value: pct(row.retestRate) },
+                { label: "待复测人数", value: row.dueRetest }
+              ] },
+              { title: "建议动作", bullets: ["复测率低且待复测池大的门店优先干预。"] }
+            ]
+          })
+        },
+        highRiskStores: {
+          title: "高风险门店明细",
+          rule: "统计口径：流失风险用户占活跃用户比例 >= 15% 的门店计入高风险门店。",
+          tableKey: "hq_overview",
+          rows: riskRows,
+          columns: [
+            { label: "子门店", render: (row) => "<strong>" + row.name + "</strong><div class='cell-sub'>" + row.group + "</div>" },
+            { label: "风险用户", render: (row) => row.riskUsers },
+            { label: "活跃用户", render: (row) => row.activeUsers },
+            { label: "流失风险占比", render: (row) => pct(row.riskRatio) },
+            { label: "待分配用户", render: (row) => row.unassignedUsers }
+          ],
+          detail: (row) => ({
+            title: row.name,
+            subtitle: "高风险门店",
+            sections: [
+              { kv: [
+                { label: "流失风险用户", value: row.riskUsers },
+                { label: "活跃用户", value: row.activeUsers },
+                { label: "流失风险占比", value: pct(row.riskRatio) },
+                { label: "待分配用户", value: row.unassignedUsers },
+                { label: "待复测人数", value: row.dueRetest }
+              ] },
+              { title: "建议动作", bullets: ["先排查待分配，再推动复测清理。", "需要总部跟门店负责人对齐整改节奏。"] }
+            ]
+          })
+        },
+        aiPenetration: {
+          title: "AI 渗透门店明细",
+          rule: "统计口径：仅统计 Pro 子门店；AI 渗透门店占比 = AI 解读覆盖率 >= 35% 的 Pro 子门店数 / Pro 子门店数。",
+          tableKey: "hq_overview",
+          rows: proRows,
+          columns: [
+            { label: "子门店", render: (row) => "<strong>" + row.name + "</strong><div class='cell-sub'>" + row.group + "</div>" },
+            { label: "AI 解读覆盖率", render: (row) => pct(row.aiCoverage) },
+            { label: "执行中大纲占比", render: (row) => pct(row.outlineRate) },
+            { label: "门店状态", render: (row) => tonePill(row.tone, row.status) }
+          ],
+          detail: (row) => ({
+            title: row.name,
+            subtitle: "Pro 门店运营数据",
+            sections: [
+              { kv: [
+                { label: "AI 解读覆盖率", value: pct(row.aiCoverage) },
+                { label: "执行中大纲占比", value: pct(row.outlineRate) },
+                { label: "Pro 用户池", value: row.proUsers },
+                { label: "训练大纲用户", value: row.outlineUsers }
+              ] }
+            ]
+          })
+        }
+      };
+    }
+
+    function ownerOverviewDrilldowns(users) {
+      const metrics = ownerMetrics(users);
+      const coachSummary = ownerCoachSummary(users);
+      const priorityUsers = users.slice().sort((a, b) => a.priority - b.priority || a.name.localeCompare(b.name));
+      const dueUsers = users.filter((item) => item.dueRetest).sort((a, b) => a.priority - b.priority);
+      const riskUsers = users.filter((item) => item.risk).sort((a, b) => a.priority - b.priority);
+      const unassignedUsers = users.filter((item) => !item.assigned).sort((a, b) => a.priority - b.priority);
+      const outlineUsers = users.filter((item) => item.outlineStatus === "执行中").sort((a, b) => a.priority - b.priority);
+      const activeUsers = users.filter((item) => item.active);
+      const sleepingUsers = users.filter((item) => !item.active);
+      return {
+        totalMeasured: {
+          title: "累计测评用户明细",
+          rule: "统计口径：当前门店累计测评用户数，按用户唯一 ID 去重。",
+          tableKey: "owner_overview",
+          rows: priorityUsers,
+          columns: userColumns(),
+          detail: userDetail
+        },
+        newMeasured: {
+          title: "本期新增测评用户明细",
+          rule: "统计口径：当前周期内新增测评的用户数，不含导入历史数据。",
+          tableKey: "owner_overview",
+          rows: users.filter((item) => item.newPeriod),
+          columns: userColumns(),
+          detail: userDetail
+        },
+        activeUsers: {
+          title: "活跃用户明细",
+          rule: "统计口径：近 30 天内满足有效行为的用户。",
+          tableKey: "owner_overview",
+          rows: activeUsers,
+          columns: userColumns(),
+          detail: userDetail
+        },
+        sleepingUsers: {
+          title: "沉睡用户明细",
+          rule: "统计口径：当前统计池内不满足活跃定义的用户。",
+          tableKey: "owner_overview",
+          rows: sleepingUsers,
+          columns: userColumns(),
+          detail: userDetail
+        },
+        retestRate: {
+          title: "复测达成率按教练拆分",
+          rule: "统计口径：复测达成率 = 当前周期完成复测用户数 / 当前周期可复测用户池。",
+          tableKey: "owner_overview",
+          rows: coachSummary,
+          columns: [
+            { label: "教练", render: (row) => "<strong>" + row.name + "</strong>" },
+            { label: "复测用户", render: (row) => row.retested },
+            { label: "可复测池", render: (row) => row.eligibleRetest },
+            { label: "复测达成率", render: (row) => pct(row.retestRate) },
+            { label: "待复测用户", render: (row) => row.dueRetest }
+          ],
+          detail: coachDetail
+        },
+        unassignedUsers: {
+          title: "待分配用户明细",
+          rule: "统计口径：已测评但未分配给工作人员的用户数。",
+          tableKey: "owner_overview",
+          rows: unassignedUsers,
+          columns: userColumns(),
+          detail: userDetail
+        },
+        dueRetestUsers: {
+          title: "待复测用户明细",
+          rule: "统计口径：进入可复测池且当前仍未复测的用户。",
+          tableKey: "owner_overview",
+          rows: dueUsers,
+          columns: userColumns(),
+          detail: userDetail
+        },
+        riskUsers: {
+          title: "流失风险用户明细",
+          rule: "统计口径：当前统计池内满足流失风险判定的用户。",
+          tableKey: "owner_overview",
+          rows: riskUsers,
+          columns: userColumns(),
+          detail: userDetail
+        },
+        executingOutline: {
+          title: "执行中大纲用户明细",
+          rule: "统计口径：当前门店训练大纲状态为执行中的用户占比，仅 Pro 可见。",
+          tableKey: "owner_overview",
+          rows: outlineUsers,
+          columns: userColumns(true),
+          detail: userDetail
+        },
+        todayActions: {
+          title: "今日重点行动名单",
+          rule: "统计口径：按优先级汇总待分配、待复测、流失风险和高潜转化用户。",
+          tableKey: "owner_overview",
+          rows: priorityUsers.filter((item) => ["待分配", "待复测", "流失风险", "高潜转化"].includes(item.status)),
+          columns: userColumns(true),
+          detail: userDetail
+        }
+      };
+    }
+
+    function coachOverviewDrilldowns(users) {
+      return {
+        totalMeasured: {
+          title: "负责会员明细",
+          rule: "统计口径：当前归属到该教练的测评会员数。",
+          tableKey: "coach_workbench",
+          rows: users.slice(),
+          columns: userColumns(true, true),
+          detail: userDetail
+        },
+        activeUsers: {
+          title: "活跃会员明细",
+          rule: "统计口径：近 30 天内满足有效行为的负责会员。",
+          tableKey: "coach_workbench",
+          rows: users.filter((item) => item.active),
+          columns: userColumns(true, true),
+          detail: userDetail
+        },
+        dueRetest: {
+          title: "待复测会员明细",
+          rule: "统计口径：进入可复测池且当前仍未复测的负责会员。",
+          tableKey: "coach_workbench",
+          rows: users.filter((item) => item.dueRetest),
+          columns: userColumns(true, true),
+          detail: userDetail
+        },
+        riskUsers: {
+          title: "流失风险会员明细",
+          rule: "统计口径：当前统计池内满足流失风险判定的负责会员。",
+          tableKey: "coach_workbench",
+          rows: users.filter((item) => item.risk),
+          columns: userColumns(true, true),
+          detail: userDetail
+        },
+        highPotential: {
+          title: "高潜转化会员明细",
+          rule: "统计口径：近 10 天新测评且尚未进入稳定服务承接的负责会员。",
+          tableKey: "coach_workbench",
+          rows: users.filter((item) => item.highPotential),
+          columns: userColumns(true, true),
+          detail: userDetail
+        },
+        outlineUsers: {
+          title: "执行中大纲会员明细",
+          rule: "统计口径：当前训练大纲状态为执行中的负责会员，仅 Pro 可见。",
+          tableKey: "coach_workbench",
+          rows: users.filter((item) => item.outlineStatus === "执行中"),
+          columns: userColumns(true, true),
+          detail: userDetail
+        },
+        improved: {
+          title: "持续改善会员明细",
+          rule: "统计口径：同类报告连续改善 2 次及以上的负责会员。",
+          tableKey: "coach_workbench",
+          rows: users.filter((item) => item.improved),
+          columns: userColumns(true, true),
+          detail: userDetail
+        },
+        aiCoverage: {
+          title: "AI 解读覆盖明细",
+          rule: "统计口径：负责会员中已生成 AI 解读的占比，仅 Pro 可见。",
+          tableKey: "coach_workbench",
+          rows: users.slice(),
+          columns: userColumns(true, true),
+          detail: userDetail
+        }
+      };
+    }
+
+    function ownerAnalysisDrilldowns(users) {
+      const archiveUsers = users.filter((item) => !item.archiveComplete);
+      const pendingBindUsers = users.filter((item) => item.pendingBind);
+      const highPotentialUsers = users.filter((item) => item.highPotential);
+      const aiUsers = users.filter((item) => item.aiInterpreted);
+      return {
+        highPotential: {
+          title: "高潜转化用户明细",
+          rule: "统计口径：近 10 天新测评且当前仍处于转化窗口期的用户。",
+          tableKey: "owner_analysis",
+          rows: highPotentialUsers,
+          columns: userColumns(true),
+          detail: userDetail
+        },
+        pendingBind: {
+          title: "待绑定报告明细",
+          rule: "统计口径：报告已上传但尚未完成用户绑定的记录。",
+          tableKey: "owner_analysis",
+          rows: pendingBindUsers,
+          columns: userColumns(true),
+          detail: userDetail
+        },
+        archive: {
+          title: "档案缺失用户明细",
+          rule: "统计口径：健康档案未达到完整要求的用户。",
+          tableKey: "owner_analysis",
+          rows: archiveUsers,
+          columns: userColumns(true),
+          detail: userDetail
+        },
+        devices: {
+          title: "设备利用率明细",
+          rule: "统计口径：设备利用率 = 当月有效测量次数 / 可服务时段容量。",
+          tableKey: "owner_analysis",
+          rows: ownerDevices,
+          columns: [
+            { label: "设备", render: (row) => "<strong>" + row.name + "</strong>" },
+            { label: "利用率", render: (row) => pct(row.utilization) },
+            { label: "本月测量次数", render: (row) => row.measures },
+            { label: "高峰时段", render: (row) => row.peak },
+            { label: "状态", render: (row) => tonePill(row.tone, row.status) }
+          ],
+          detail: deviceDetail
+        },
+        aiCoverage: {
+          title: "AI 解读覆盖用户明细",
+          rule: "统计口径：门店用户中已生成 AI 解读的用户占比，仅 Pro 可见。",
+          tableKey: "owner_analysis",
+          rows: aiUsers,
+          columns: userColumns(true),
+          detail: userDetail
+        }
+      };
+    }
+
+    function hqStoreDrilldowns(rows) {
+      return {
+        allStores: {
+          title: "子门店透明指标排行",
+          rule: "统计口径：按子门店查看新增、活跃、复测、风险、承接、档案和设备指标。",
+          tableKey: "hq_stores",
+          rows: rows.slice().sort((a, b) => b.measuredTotal - a.measuredTotal),
+          columns: [
+            { label: "子门店", render: (row) => "<strong>" + row.name + "</strong><div class='cell-sub'>" + row.group + " · " + row.tier.toUpperCase() + "</div>" },
+            { label: "累计测评用户", render: (row) => row.measuredTotal },
+            { label: "本期新增测评", render: (row) => row.newMeasured },
+            { label: "活跃用户", render: (row) => row.activeUsers },
+            { label: "复测达成率", render: (row) => pct(row.retestRate) },
+            { label: "风险占比", render: (row) => pct(row.riskRatio) },
+            { label: "待分配占比", render: (row) => pct(row.unassignedRatio) },
+            { label: "档案完整度", render: (row) => pct(row.archiveCompletePct) },
+            { label: "设备利用率", render: (row) => pct(row.deviceUtilization) }
+          ],
+          detail: hqStoreDetail
+        },
+        highRiskStores: {
+          title: "高风险门店明细",
+          rule: "统计口径：流失风险用户占活跃用户比例 >= 15% 的门店。",
+          tableKey: "hq_stores",
+          rows: rows.filter((item) => item.isHighRisk).sort((a, b) => b.riskRatio - a.riskRatio),
+          columns: [
+            { label: "子门店", render: (row) => "<strong>" + row.name + "</strong><div class='cell-sub'>" + row.group + "</div>" },
+            { label: "风险用户", render: (row) => row.riskUsers },
+            { label: "活跃用户", render: (row) => row.activeUsers },
+            { label: "流失风险占比", render: (row) => pct(row.riskRatio) },
+            { label: "待分配用户", render: (row) => row.unassignedUsers },
+            { label: "待复测人数", render: (row) => row.dueRetest }
+          ],
+          detail: hqStoreDetail
+        },
+        growthStores: {
+          title: "高增长门店明细",
+          rule: "统计口径：本期新增测评用户数 >= 180 的门店。",
+          tableKey: "hq_stores",
+          rows: rows.filter((item) => item.newMeasured >= 180).sort((a, b) => b.newMeasured - a.newMeasured),
+          columns: [
+            { label: "子门店", render: (row) => "<strong>" + row.name + "</strong><div class='cell-sub'>" + row.group + "</div>" },
+            { label: "本期新增测评", render: (row) => row.newMeasured },
+            { label: "累计测评用户", render: (row) => row.measuredTotal },
+            { label: "活跃用户", render: (row) => row.activeUsers },
+            { label: "设备利用率", render: (row) => pct(row.deviceUtilization) }
+          ],
+          detail: hqStoreDetail
+        },
+        retestRate: {
+          title: "复测达成率门店明细",
+          rule: "统计口径：复测达成率 = 当前周期复测用户数 / 当前周期可复测用户池。",
+          tableKey: "hq_stores",
+          rows: rows.slice().sort((a, b) => b.retestRate - a.retestRate),
+          columns: [
+            { label: "子门店", render: (row) => "<strong>" + row.name + "</strong><div class='cell-sub'>" + row.group + "</div>" },
+            { label: "复测用户", render: (row) => row.retestUsers },
+            { label: "可复测池", render: (row) => row.eligibleRetest },
+            { label: "复测达成率", render: (row) => pct(row.retestRate) },
+            { label: "待复测人数", render: (row) => row.dueRetest }
+          ],
+          detail: hqStoreDetail
+        },
+        unassignedRatio: {
+          title: "待分配占比门店明细",
+          rule: "统计口径：待分配占比 = 已测评未分配用户数 / 活跃用户数。",
+          tableKey: "hq_stores",
+          rows: rows.slice().sort((a, b) => b.unassignedRatio - a.unassignedRatio),
+          columns: [
+            { label: "子门店", render: (row) => "<strong>" + row.name + "</strong><div class='cell-sub'>" + row.group + "</div>" },
+            { label: "待分配用户", render: (row) => row.unassignedUsers },
+            { label: "活跃用户", render: (row) => row.activeUsers },
+            { label: "待分配占比", render: (row) => pct(row.unassignedRatio) },
+            { label: "待绑定报告", render: (row) => row.pendingBind + " 份" }
+          ],
+          detail: hqStoreDetail
+        }
+      };
+    }
+
+    function coachPlanDrilldowns(users) {
+      return {
+        outlineUsers: {
+          title: "执行中大纲会员明细",
+          rule: "统计口径：当前训练大纲状态为执行中的负责会员，仅 Pro 可见。",
+          tableKey: "coach_plan",
+          rows: users.filter((item) => item.outlineStatus === "执行中"),
+          columns: userColumns(true, true),
+          detail: userDetail
+        },
+        dueRetest: {
+          title: "待复测会员明细",
+          rule: "统计口径：进入可复测池且当前仍未复测的负责会员。",
+          tableKey: "coach_plan",
+          rows: users.filter((item) => item.dueRetest),
+          columns: userColumns(true, true),
+          detail: userDetail
+        },
+        highPotential: {
+          title: "高潜转化会员明细",
+          rule: "统计口径：近 10 天新测评且适合推进承接的负责会员。",
+          tableKey: "coach_plan",
+          rows: users.filter((item) => item.highPotential),
+          columns: userColumns(true, true),
+          detail: userDetail
+        },
+        improved: {
+          title: "持续改善会员明细",
+          rule: "统计口径：同类报告连续改善 2 次及以上的负责会员。",
+          tableKey: "coach_plan",
+          rows: users.filter((item) => item.improved),
+          columns: userColumns(true, true),
+          detail: userDetail
+        }
+      };
+    }
+
+    function ownerCoachSummary(users) {
+      const map = {};
+      users.filter((item) => item.coach !== "未分配").forEach((item) => {
+        if (!map[item.coach]) {
+          map[item.coach] = { id: item.coach, name: item.coach, total: 0, retested: 0, eligibleRetest: 0, dueRetest: 0, active: 0 };
+        }
+        const row = map[item.coach];
+        row.total += 1;
+        if (item.retested) row.retested += 1;
+        if (item.eligibleRetest) row.eligibleRetest += 1;
+        if (item.dueRetest) row.dueRetest += 1;
+        if (item.active) row.active += 1;
+      });
+      return Object.values(map).map((item) => ({
+        ...item,
+        retestRate: item.eligibleRetest ? item.retested / item.eligibleRetest * 100 : 0
+      }));
+    }
+
+    function userColumns(showOutline, hideCoach) {
+      const base = [
+        {
+          label: "用户",
+          render: (row) => "<strong>" + row.name + "</strong><div class='cell-sub'>" + row.goal + "</div>"
+        }
+      ];
+      if (!hideCoach) {
+        base.push({
+          label: "归属教练",
+          render: (row) => row.coach
+        });
+      }
+      base.push(
+        { label: "当前状态", render: (row) => tonePill(row.tone, row.status) },
+        { label: "最近测评", render: (row) => row.lastMeasure },
+        { label: "问题标签", render: (row) => row.mainTag }
+      );
+      if (showOutline) {
+        base.push({ label: "训练大纲", render: (row) => row.outlineStatus });
+      }
+      return base;
+    }
+
+    function userDetail(row) {
+      return {
+        title: row.name,
+        subtitle: row.goal + " · " + row.status,
+        sections: [
+          {
+            kv: [
+              { label: "归属教练", value: row.coach },
+              { label: "最近测评", value: row.lastMeasure },
+              { label: "问题标签", value: row.mainTag },
+              { label: "训练大纲", value: row.outlineStatus },
+              { label: "AI 解读", value: row.aiInterpreted ? "已生成" : "未生成" }
+            ]
+          },
+          { title: "跟进建议", bullets: [row.note] }
+        ]
+      };
+    }
+
+    function coachDetail(row) {
+      return {
+        title: row.name,
+        subtitle: "教练维度",
+        sections: [
+          {
+            kv: [
+              { label: "累计负责用户", value: row.total },
+              { label: "活跃用户", value: row.active },
+              { label: "复测用户", value: row.retested },
+              { label: "可复测池", value: row.eligibleRetest },
+              { label: "复测达成率", value: pct(row.retestRate) }
+            ]
+          }
+        ]
+      };
+    }
+
+    function deviceDetail(row) {
+      return {
+        title: row.name,
+        subtitle: "设备维度",
+        sections: [
+          {
+            kv: [
+              { label: "设备利用率", value: pct(row.utilization) },
+              { label: "本月测量次数", value: row.measures },
+              { label: "高峰时段", value: row.peak },
+              { label: "状态", value: row.status }
+            ]
+          }
+        ]
+      };
+    }
+
+    function hqStoreDetail(row) {
+      return {
+        title: row.name,
+        subtitle: row.group + " · " + row.status,
+        sections: [
+          {
+            kv: [
+              { label: "累计测评用户", value: row.measuredTotal },
+              { label: "本期新增测评", value: row.newMeasured },
+              { label: "活跃用户", value: row.activeUsers },
+              { label: "复测达成率", value: pct(row.retestRate) },
+              { label: "流失风险占比", value: pct(row.riskRatio) },
+              { label: "待分配占比", value: pct(row.unassignedRatio) },
+              { label: "档案完整度", value: pct(row.archiveCompletePct) },
+              { label: "设备利用率", value: pct(row.deviceUtilization) }
+            ]
+          },
+          {
+            title: "重点状态",
+            bullets: [
+              "待复测人数 " + row.dueRetest + " 人",
+              "待绑定报告 " + row.pendingBind + " 份",
+              row.isProStore ? "AI 解读覆盖率 " + pct(row.aiCoverage) + "，执行中大纲占比 " + pct(row.outlineRate) : "当前为非 Pro 子门店"
+            ]
+          }
+        ]
+      };
+    }
+
+    function renderDetailPanel(detail) {
+      return `
+        <aside class="detail-panel">
+          <h3>${detail.title}</h3>
+          <div class="sub">${detail.subtitle || ""}</div>
+          ${detail.sections.map((section) => `
+            <div class="detail-section">
+              ${section.title ? '<div class="detail-title">' + section.title + '</div>' : ""}
+              ${section.kv ? section.kv.map((item) => `
+                <div class="kv">
+                  <span>${item.label}</span>
+                  <strong>${item.value}</strong>
+                </div>
+              `).join("") : ""}
+              ${section.bullets ? `
+                <div class="bullet-list">
+                  ${section.bullets.map((item) => '<div class="bullet"><i></i><span>' + item + '</span></div>').join("")}
+                </div>
+              ` : ""}
+            </div>
+          `).join("")}
+        </aside>
+      `;
+    }
+
+    function renderHQOverview() {
+      const rows = filteredHQRows();
+      const metrics = hqMetrics(rows);
+      const drills = hqOverviewDrilldowns(rows);
+      if (state.tier === "basic" && state.activeDrill.hq_overview === "aiPenetration") {
+        state.activeDrill.hq_overview = "highRiskStores";
+      }
+      const activeKey = state.activeDrill.hq_overview;
+      const active = drills[activeKey];
+      const selectedId = ensureSelected("hq_overview", active.rows);
+      const selected = getRowById(active.rows, selectedId);
+      return `
+        ${renderMetricCards([
+          { label: "累计测评用户", value: metrics.totalMeasured.toLocaleString(), delta: "门店累计", hint: rows.length + " 家门店", ruleShort: "按用户去重", drillKey: "totalMeasured" },
+          { label: "本期新增测评", value: metrics.newMeasured.toLocaleString(), delta: "当前周期", hint: "不含导入历史", ruleShort: "按本期新增", drillKey: "newMeasured" },
+          { label: "活跃用户", value: metrics.activeUsers.toLocaleString(), delta: "近 30 天", hint: "含有效行为", ruleShort: "近30天有效行为", drillKey: "activeUsers" },
+          { label: "复测用户", value: metrics.retestUsers.toLocaleString(), delta: "当前周期", hint: "已完成复测", ruleShort: "按复测完成统计", drillKey: "retestUsers" },
+          { label: "复测达成率", value: pct(metrics.retestRate), delta: "复测用户 / 可复测池", hint: "可下钻到门店", ruleShort: "可复测池口径", drillKey: "retestRate" },
+          { label: "高风险门店", value: String(metrics.highRiskStores.length), delta: "风险占比 >= 15%", hint: "点击查看门店", ruleShort: "风险占比阈值", drillKey: "highRiskStores", badge: metrics.highRiskStores.length ? "需跟进" : "稳定", badgeTone: metrics.highRiskStores.length ? "red" : "green" },
+          { label: "AI 渗透门店占比", value: pct(metrics.aiPenetration), delta: "AI 覆盖率 >= 35%", hint: "仅 Pro 子门店", ruleShort: "按 Pro 门店计算", drillKey: "aiPenetration", proOnly: true },
+          { label: "子门店数", value: String(rows.length), delta: "当前筛选结果", hint: "支持横向对比", ruleShort: "门店聚合维度" }
+        ], activeKey)}
+        <section class="panel-grid">
+          <div class="panel">
+            <div class="panel-head">
+              <div>
+                <h3>${active.title}</h3>
+                <p>${active.rule}</p>
+              </div>
+              <span class="tiny-pill">${active.rows.length} 条</span>
+            </div>
+            <div class="panel-body flush">
+              ${active.rows.length ? renderTable(active.columns, active.rows, selectedId, active.tableKey) : emptyBlock("暂无数据", "当前筛选条件下没有可展示的门店明细。")}
+            </div>
+          </div>
+          ${selected ? renderDetailPanel(active.detail(selected)) : renderDetailPanel({ title: "无可用明细", subtitle: "", sections: [{ bullets: ["当前筛选条件下没有可查看明细。"] }] })}
+        </section>
+        <section class="two-col">
+          ${groupedChart("近 6 期趋势（人数）", trendSets.hq.labels, trendSets.hq.series)}
+          ${rankChart("高风险门店占比", metrics.highRiskStores, "riskRatio", (value) => pct(value), "risk")}
+        </section>
+      `;
+    }
+
+    function renderHQStores() {
+      const rows = filteredHQRows();
+      const drills = hqStoreDrilldowns(rows);
+      const activeKey = state.activeDrill.hq_stores || "allStores";
+      const active = drills[activeKey] || drills.allStores;
+      const selectedId = ensureSelected("hq_stores", active.rows);
+      const selected = getRowById(active.rows, selectedId);
+      return `
+        ${renderMetricCards([
+          { label: "全部子门店", value: String(rows.length), delta: "当前筛选结果", hint: "查看全部门店", ruleShort: "门店聚合维度", drillKey: "allStores" },
+          { label: "高风险门店", value: String(rows.filter((item) => item.isHighRisk).length), delta: "风险占比 >= 15%", hint: "点击查看门店", ruleShort: "按风险阈值统计", drillKey: "highRiskStores" },
+          { label: "高增长门店", value: String(rows.filter((item) => item.newMeasured >= 180).length), delta: "新增测评 >= 180", hint: "点击查看门店", ruleShort: "按新增测评阈值", drillKey: "growthStores" },
+          { label: "平均复测达成率", value: pct(avg(rows, (item) => item.retestRate)), delta: "门店均值", hint: "点击查看排行", ruleShort: "按门店均值统计", drillKey: "retestRate" },
+          { label: "平均待分配占比", value: pct(avg(rows, (item) => item.unassignedRatio)), delta: "门店均值", hint: "点击查看排行", ruleShort: "按门店均值统计", drillKey: "unassignedRatio" }
+        ], activeKey)}
+        <section class="panel-grid">
+          <div class="panel">
+            <div class="panel-head">
+              <div>
+                <h3>${active.title}</h3>
+                <p>${active.rule}</p>
+              </div>
+              <span class="tiny-pill">${active.rows.length} 条</span>
+            </div>
+            <div class="panel-body flush">
+              ${active.rows.length ? renderTable(active.columns, active.rows, selectedId, active.tableKey) : emptyBlock("暂无门店", "当前筛选条件下没有门店数据。")}
+            </div>
+          </div>
+          ${selected ? renderDetailPanel(active.detail(selected)) : renderDetailPanel({ title: "无可用明细", subtitle: "", sections: [{ bullets: ["当前筛选条件下没有可查看明细。"] }] })}
+        </section>
+        <section class="two-col">
+          ${rankChart("子门店复测达成率", rows.slice().sort((a, b) => b.retestRate - a.retestRate), "retestRate", (value) => pct(value), "retest")}
+          ${rankChart("子门店流失风险占比", rows.slice().sort((a, b) => b.riskRatio - a.riskRatio), "riskRatio", (value) => pct(value), "risk")}
+        </section>
+        <section class="panel">
+          <div class="panel-head">
+            <div>
+              <h3>门店状态</h3>
+              <p>按风险、承接、复测和设备状态查看。</p>
+            </div>
+          </div>
+          <div class="panel-body">
+            <div class="status-grid">
+              <div class="status-card">
+                <strong>高风险门店</strong>
+                <span>${rows.filter((item) => item.isHighRisk).length} 家</span>
+              </div>
+              <div class="status-card">
+                <strong>待分配偏高</strong>
+                <span>${rows.filter((item) => item.unassignedRatio >= 10).length} 家</span>
+              </div>
+              <div class="status-card">
+                <strong>待绑定偏高</strong>
+                <span>${rows.filter((item) => item.pendingBind >= 8).length} 家</span>
+              </div>
+              <div class="status-card">
+                <strong>设备利用偏低</strong>
+                <span>${rows.filter((item) => item.deviceUtilization < 65).length} 家</span>
+              </div>
+            </div>
+          </div>
+        </section>
+      `;
+    }
+
+    function renderOwnerOverview() {
+      const users = filteredOwnerUsers();
+      const metrics = ownerMetrics(users);
+      const drills = ownerOverviewDrilldowns(users);
+      if (state.tier === "basic" && state.activeDrill.owner_overview === "executingOutline") {
+        state.activeDrill.owner_overview = "todayActions";
+      }
+      const activeKey = state.activeDrill.owner_overview;
+      const active = drills[activeKey];
+      const selectedId = ensureSelected("owner_overview", active.rows);
+      const selected = getRowById(active.rows, selectedId);
+      return `
+        ${renderMetricCards([
+          { label: "累计测评用户", value: String(metrics.totalMeasured), delta: "当前门店累计", hint: "按用户去重", ruleShort: "累计口径", drillKey: "totalMeasured" },
+          { label: "本期新增测评", value: String(metrics.newMeasured), delta: "当前周期", hint: "不含导入历史", ruleShort: "新增口径", drillKey: "newMeasured" },
+          { label: "活跃用户", value: String(metrics.activeUsers), delta: "近 30 天", hint: "含有效行为", ruleShort: "活跃口径", drillKey: "activeUsers" },
+          { label: "沉睡用户", value: String(metrics.sleepingUsers), delta: "当前统计池", hint: "需唤醒", ruleShort: "沉睡口径", drillKey: "sleepingUsers" },
+          { label: "复测达成率", value: pct(metrics.retestRate), delta: "复测用户 / 可复测池", hint: "按教练拆分", ruleShort: "可复测池口径", drillKey: "retestRate" },
+          { label: "待分配用户", value: String(metrics.unassignedUsers), delta: "已测评未分配", hint: "优先处理", ruleShort: "待分配口径", drillKey: "unassignedUsers", badge: metrics.unassignedUsers ? "待处理" : "正常", badgeTone: metrics.unassignedUsers ? "orange" : "green" },
+          { label: "待复测用户", value: String(metrics.dueRetestUsers), delta: "当前可复测未完成", hint: "适合推进复测", ruleShort: "待复测口径", drillKey: "dueRetestUsers" },
+          { label: "流失风险用户", value: String(metrics.riskUsers), delta: "当前风险池", hint: "需回访", ruleShort: "风险口径", drillKey: "riskUsers" },
+          { label: "执行中大纲占比", value: pct(metrics.executingOutlineRate), delta: "执行中 / 用户池", hint: "仅 Pro 可见", ruleShort: "大纲状态口径", drillKey: "executingOutline", proOnly: true },
+          { label: "今日重点行动", value: String(drills.todayActions.rows.length), delta: "优先级名单", hint: "可直接跟进", ruleShort: "优先级口径", drillKey: "todayActions" }
+        ], activeKey)}
+        <section class="panel-grid">
+          <div class="panel">
+            <div class="panel-head">
+              <div>
+                <h3>${active.title}</h3>
+                <p>${active.rule}</p>
+              </div>
+              <span class="tiny-pill">${active.rows.length} 条</span>
+            </div>
+            <div class="panel-body flush">
+              ${active.rows.length ? renderTable(active.columns, active.rows, selectedId, active.tableKey) : emptyBlock("暂无数据", "当前筛选条件下没有明细记录。")}
+            </div>
+          </div>
+          ${selected ? renderDetailPanel(active.detail(selected)) : renderDetailPanel({ title: "无可用明细", subtitle: "", sections: [{ bullets: ["当前筛选条件下没有可查看明细。"] }] })}
+        </section>
+        <section class="two-col">
+          ${groupedChart("近 6 周运营趋势（人数）", trendSets.owner.labels, trendSets.owner.series)}
+          ${rankChart("教练复测达成率", ownerCoachSummary(users), "retestRate", (value) => pct(value), "retest")}
+        </section>
+        <section class="panel">
+          <div class="panel-head">
+            <div>
+              <h3>重点状态</h3>
+              <p>当前门店最需要处理的状态。</p>
+            </div>
+          </div>
+          <div class="panel-body">
+            <div class="status-grid">
+              <div class="status-card">
+                <strong>待分配</strong>
+                <span>${metrics.unassignedUsers} 人</span>
+              </div>
+              <div class="status-card">
+                <strong>待复测</strong>
+                <span>${metrics.dueRetestUsers} 人</span>
+              </div>
+              <div class="status-card">
+                <strong>流失风险</strong>
+                <span>${metrics.riskUsers} 人</span>
+              </div>
+              <div class="status-card">
+                <strong>高潜转化</strong>
+                <span>${metrics.highPotentialUsers} 人</span>
+              </div>
+            </div>
+          </div>
+        </section>
+      `;
+    }
+
+    function countBy(list, key) {
+      const map = {};
+      list.forEach((item) => {
+        map[item[key]] = (map[item[key]] || 0) + 1;
+      });
+      return map;
+    }
+
+    function ownerDistributionCharts(users) {
+      const gender = countBy(users, "gender");
+      const age = countBy(users, "ageGroup");
+      const goal = countBy(users, "goal");
+      const tags = countBy(users, "mainTag");
+      return [
+        distributionChart("性别分布", [
+          { label: "女性", value: gender["女"] || 0, text: gender["女"] || 0, tone: "blue" },
+          { label: "男性", value: gender["男"] || 0, text: gender["男"] || 0, tone: "teal" }
+        ]),
+        distributionChart("年龄分布", Object.entries(age).map(([label, value], index) => ({
+          label,
+          value,
+          text: value,
+          tone: ["blue", "teal", "orange", "purple"][index % 4]
+        }))),
+        distributionChart("目标分布", Object.entries(goal).map(([label, value], index) => ({
+          label,
+          value,
+          text: value,
+          tone: ["blue", "green", "orange", "purple"][index % 4]
+        }))),
+        distributionChart("问题标签分布", Object.entries(tags).map(([label, value], index) => ({
+          label,
+          value,
+          text: value,
+          tone: ["orange", "blue", "purple", "teal", "red"][index % 5]
+        })))
+      ];
+    }
+
+    function renderOwnerAnalysis() {
+      const users = filteredOwnerUsers();
+      const metrics = ownerMetrics(users);
+      const drills = ownerAnalysisDrilldowns(users);
+      if (state.tier === "basic" && state.activeDrill.owner_analysis === "aiCoverage") {
+        state.activeDrill.owner_analysis = "highPotential";
+      }
+      const activeKey = state.activeDrill.owner_analysis;
+      const active = drills[activeKey];
+      const selectedId = ensureSelected("owner_analysis", active.rows);
+      const selected = getRowById(active.rows, selectedId);
+      const deviceAvg = avg(ownerDevices, (item) => item.utilization);
+      return `
+        <section class="panel">
+          <div class="panel-head">
+            <div>
+              <h3>用户结构</h3>
+              <p>当前门店用户分布与问题标签。</p>
+            </div>
+          </div>
+          <div class="panel-body">
+            <div class="two-col">
+              ${ownerDistributionCharts(users).join("")}
+            </div>
+          </div>
+        </section>
+        <section class="panel">
+          <div class="panel-head">
+            <div>
+              <h3>重点人群与数据质量</h3>
+              <p>按指标查看对应明细。</p>
+            </div>
+          </div>
+          <div class="panel-body">
+            <div class="mini-grid">
+              <button class="focus-card ${activeKey === "highPotential" ? "active" : ""}" data-drill="highPotential">
+                <div class="label">高潜转化用户</div>
+                <div class="focus-value">${metrics.highPotentialUsers}</div>
+                <div class="focus-sub">近 10 天新测评且适合推进承接。</div>
+              </button>
+              <button class="focus-card ${activeKey === "pendingBind" ? "active" : ""}" data-drill="pendingBind">
+                <div class="label">待绑定报告</div>
+                <div class="focus-value">${metrics.pendingBindUsers}</div>
+                <div class="focus-sub">报告已上传但尚未完成绑定。</div>
+              </button>
+              <button class="focus-card ${activeKey === "archive" ? "active" : ""}" data-drill="archive">
+                <div class="label">档案完整度</div>
+                <div class="focus-value">${pct(metrics.archiveCompleteRate)}</div>
+                <div class="focus-sub">基础信息、健康背景、目标偏好完整度。</div>
+              </button>
+              <button class="focus-card ${activeKey === "devices" ? "active" : ""}" data-drill="devices">
+                <div class="label">设备利用率</div>
+                <div class="focus-value">${pct(deviceAvg)}</div>
+                <div class="focus-sub">按设备可服务时段容量计算。</div>
+              </button>
+              ${state.tier === "pro" ? `
+                <button class="focus-card ${activeKey === "aiCoverage" ? "active" : ""}" data-drill="aiCoverage">
+                  <div class="label">AI 解读覆盖率</div>
+                  <div class="focus-value">${pct(metrics.aiCoverage)}</div>
+                  <div class="focus-sub">门店用户中已生成 AI 解读的比例。</div>
+                </button>
+              ` : `
+                <div class="focus-card active" style="cursor:default;">
+                  <div class="label">AI 解读覆盖率</div>
+                  <div class="focus-value">—</div>
+                  <div class="focus-sub">当前套餐不展示 AI 相关指标。</div>
+                </div>
+              `}
+            </div>
+          </div>
+        </section>
+        <section class="panel-grid">
+          <div class="panel">
+            <div class="panel-head">
+              <div>
+                <h3>${active.title}</h3>
+                <p>${active.rule}</p>
+              </div>
+              <span class="tiny-pill">${active.rows.length} 条</span>
+            </div>
+            <div class="panel-body flush">
+              ${active.rows.length ? renderTable(active.columns, active.rows, selectedId, active.tableKey) : emptyBlock("暂无数据", "当前筛选条件下没有明细记录。")}
+            </div>
+          </div>
+          ${selected ? renderDetailPanel(active.detail(selected)) : renderDetailPanel({ title: "无可用明细", subtitle: "", sections: [{ bullets: ["当前筛选条件下没有可查看明细。"] }] })}
+        </section>
+      `;
+    }
+
+    function renderCoachWorkbench() {
+      const users = filteredCoachUsers();
+      const metrics = coachMetrics(users);
+      const drills = coachOverviewDrilldowns(users);
+      if (state.tier === "basic" && state.activeDrill.coach_workbench === "aiCoverage") {
+        state.activeDrill.coach_workbench = "dueRetest";
+      }
+      if (state.tier === "basic" && state.activeDrill.coach_workbench === "outlineUsers") {
+        state.activeDrill.coach_workbench = "dueRetest";
+      }
+      const activeKey = state.activeDrill.coach_workbench;
+      const active = drills[activeKey];
+      const selectedId = ensureSelected("coach_workbench", active.rows);
+      const selected = getRowById(active.rows, selectedId);
+      const statusCount = countBy(users, "status");
+      const outlineCount = users.filter((item) => item.outlineStatus === "执行中").length;
+      return `
+        ${renderMetricCards([
+          { label: "负责会员数", value: String(metrics.totalMeasured), delta: "当前归属用户", hint: "按用户去重", ruleShort: "当前归属口径", drillKey: "totalMeasured" },
+          { label: "活跃会员", value: String(metrics.activeUsers), delta: "近 30 天", hint: "含有效行为", ruleShort: "活跃口径", drillKey: "activeUsers" },
+          { label: "待复测会员", value: String(metrics.dueRetestUsers), delta: "当前可复测未完成", hint: "优先推进", ruleShort: "待复测口径", drillKey: "dueRetest" },
+          { label: "流失风险会员", value: String(metrics.riskUsers), delta: "需优先回访", hint: "风险池", ruleShort: "风险口径", drillKey: "riskUsers" },
+          { label: "高潜转化会员", value: String(metrics.highPotentialUsers), delta: "转化窗口期", hint: "适合推进承接", ruleShort: "高潜口径", drillKey: "highPotential" },
+          { label: "执行中大纲会员", value: String(outlineCount), delta: "当前执行中", hint: "仅 Pro 可见", ruleShort: "大纲状态口径", drillKey: "outlineUsers", proOnly: true },
+          { label: "持续改善会员", value: String(metrics.improvedUsers), delta: "连续改善", hint: "可沉淀案例", ruleShort: "改善口径", drillKey: "improved" },
+          { label: "AI 解读覆盖率", value: pct(metrics.aiCoverage), delta: "已解读 / 负责会员", hint: "仅 Pro 可见", ruleShort: "AI 解读口径", drillKey: "aiCoverage", proOnly: true }
+        ], activeKey)}
+        <section class="panel-grid">
+          <div class="panel">
+            <div class="panel-head">
+              <div>
+                <h3>${active.title}</h3>
+                <p>${active.rule}</p>
+              </div>
+              <span class="tiny-pill">${active.rows.length} 条</span>
+            </div>
+            <div class="panel-body flush">
+              ${active.rows.length ? renderTable(active.columns, active.rows, selectedId, active.tableKey) : emptyBlock("暂无数据", "当前筛选条件下没有明细记录。")}
+            </div>
+          </div>
+          ${selected ? renderDetailPanel(active.detail(selected)) : renderDetailPanel({ title: "无可用明细", subtitle: "", sections: [{ bullets: ["当前筛选条件下没有可查看明细。"] }] })}
+        </section>
+        <section class="two-col">
+          ${groupedChart("近 6 周负责会员趋势（人数）", trendSets.coach.labels, trendSets.coach.series)}
+          ${distributionChart("会员状态分布", [
+            { label: "待复测", value: statusCount["待复测"] || 0, text: statusCount["待复测"] || 0, tone: "orange" },
+            { label: "流失风险", value: statusCount["流失风险"] || 0, text: statusCount["流失风险"] || 0, tone: "red" },
+            { label: "高潜转化", value: statusCount["高潜转化"] || 0, text: statusCount["高潜转化"] || 0, tone: "blue" },
+            { label: "持续改善", value: statusCount["持续改善"] || 0, text: statusCount["持续改善"] || 0, tone: "green" }
+          ])}
+        </section>
+      `;
+    }
+
+    function renderCoachMembers() {
+      const users = filteredCoachUsers();
+      const selectedId = ensureSelected("coach_members", users);
+      const selected = getRowById(users, selectedId);
+      const columns = userColumns(true, true);
+      return `
+        <section class="two-col">
+          ${distributionChart("目标分布", Object.entries(countBy(users, "goal")).map(([label, value], index) => ({
+            label,
+            value,
+            text: value,
+            tone: ["blue", "green", "orange", "purple"][index % 4]
+          })))}
+          ${distributionChart("问题标签分布", Object.entries(countBy(users, "mainTag")).map(([label, value], index) => ({
+            label,
+            value,
+            text: value,
+            tone: ["orange", "blue", "purple", "teal"][index % 4]
+          })))}
+        </section>
+        <section class="panel">
+          <div class="panel-head">
+            <div>
+              <h3>训练大纲状态分布</h3>
+              <p>按当前会员的训练承接状态查看。</p>
+            </div>
+          </div>
+          <div class="panel-body">
+            ${distributionChart("训练大纲状态分布", [
+              { label: "执行中", value: users.filter((item) => item.outlineStatus === "执行中").length, text: users.filter((item) => item.outlineStatus === "执行中").length, tone: "purple" },
+              { label: "未生成", value: users.filter((item) => item.outlineStatus === "未生成").length, text: users.filter((item) => item.outlineStatus === "未生成").length, tone: "orange" },
+              { label: "未执行", value: users.filter((item) => item.outlineStatus === "未执行").length, text: users.filter((item) => item.outlineStatus === "未执行").length, tone: "red" }
+            ])}
+          </div>
+        </section>
+        <section class="panel-grid">
+          <div class="panel">
+            <div class="panel-head">
+              <div>
+                <h3>会员工作表</h3>
+                <p>按状态查看当前会员明细。</p>
+              </div>
+              <span class="tiny-pill">${users.length} 人</span>
+            </div>
+            <div class="panel-body flush">
+              ${users.length ? renderTable(columns, users, selectedId, "coach_members") : emptyBlock("暂无用户", "当前筛选条件下没有会员。")}
+            </div>
+          </div>
+          ${selected ? renderDetailPanel(userDetail(selected)) : renderDetailPanel({ title: "无可用明细", subtitle: "", sections: [{ bullets: ["当前筛选条件下没有可查看明细。"] }] })}
+        </section>
+      `;
+    }
+
+    function renderCoachPlan() {
+      const users = filteredCoachUsers();
+      const metrics = coachMetrics(users);
+      const drills = coachPlanDrilldowns(users);
+      if (state.tier === "basic" && state.activeDrill.coach_plan === "outlineUsers") {
+        state.activeDrill.coach_plan = "dueRetest";
+      }
+      const activeKey = state.activeDrill.coach_plan;
+      const active = drills[activeKey];
+      const selectedId = ensureSelected("coach_plan", active.rows);
+      const selected = getRowById(active.rows, selectedId);
+      const outlineCount = users.filter((item) => item.outlineStatus === "执行中").length;
+      return `
+        ${renderMetricCards([
+          { label: "执行中大纲用户", value: String(outlineCount), delta: "当前执行中", hint: "仅 Pro 可见", ruleShort: "大纲状态口径", drillKey: "outlineUsers", proOnly: true },
+          { label: "待复测用户", value: String(metrics.dueRetestUsers), delta: "优先推进复测", hint: "当前可复测未完成", ruleShort: "待复测口径", drillKey: "dueRetest" },
+          { label: "高潜转化用户", value: String(metrics.highPotentialUsers), delta: "适合推进承接", hint: "当前窗口期", ruleShort: "高潜口径", drillKey: "highPotential" },
+          { label: "持续改善用户", value: String(metrics.improvedUsers), delta: "可沉淀案例", hint: "连续改善", ruleShort: "改善口径", drillKey: "improved" }
+        ], activeKey)}
+        <section class="two-col">
+          ${distributionChart("训练大纲状态分布", [
+            { label: "执行中", value: users.filter((item) => item.outlineStatus === "执行中").length, text: users.filter((item) => item.outlineStatus === "执行中").length, tone: "purple" },
+            { label: "未生成", value: users.filter((item) => item.outlineStatus === "未生成").length, text: users.filter((item) => item.outlineStatus === "未生成").length, tone: "orange" },
+            { label: "未执行", value: users.filter((item) => item.outlineStatus === "未执行").length, text: users.filter((item) => item.outlineStatus === "未执行").length, tone: "red" }
+          ])}
+          <div class="panel">
+            <div class="panel-head">
+              <div>
+                <h3>重点状态</h3>
+                <p>当前用户池内的训练与复测状态。</p>
+              </div>
+            </div>
+            <div class="panel-body">
+              <div class="status-grid">
+                <div class="status-card">
+                  <strong>执行中大纲</strong>
+                  <span>${outlineCount} 人</span>
+                </div>
+                <div class="status-card">
+                  <strong>待复测</strong>
+                  <span>${metrics.dueRetestUsers} 人</span>
+                </div>
+                <div class="status-card">
+                  <strong>高潜转化</strong>
+                  <span>${metrics.highPotentialUsers} 人</span>
+                </div>
+                <div class="status-card">
+                  <strong>持续改善</strong>
+                  <span>${metrics.improvedUsers} 人</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+        <section class="panel-grid">
+          <div class="panel">
+            <div class="panel-head">
+              <div>
+                <h3>${active.title}</h3>
+                <p>${active.rule}</p>
+              </div>
+              <span class="tiny-pill">${active.rows.length} 条</span>
+            </div>
+            <div class="panel-body flush">
+              ${state.tier === "basic" && activeKey === "outlineUsers"
+                ? lockedBlock("当前套餐不展示训练大纲指标", "非 Pro 只保留基础运营指标，训练大纲相关指标后续按套餐开放。")
+                : active.rows.length
+                  ? renderTable(active.columns, active.rows, selectedId, active.tableKey)
+                  : emptyBlock("暂无数据", "当前筛选条件下没有明细记录。")}
+            </div>
+          </div>
+          ${selected ? renderDetailPanel(active.detail(selected)) : renderDetailPanel({ title: "无可用明细", subtitle: "", sections: [{ bullets: ["当前筛选条件下没有可查看明细。"] }] })}
+        </section>
+      `;
+    }
+
+    function renderSidebar() {
+      const currentRole = roles[state.role];
+      return `
+        <aside class="sidebar">
+          <div class="brand">
+            <div class="brand-mark">W</div>
+            <div>
+              <div class="brand-title">Visbody WellnessHub</div>
+              <div class="brand-sub">运营分析</div>
+            </div>
+          </div>
+          <div>
+            <div class="side-section-title">角色视图</div>
+            <div class="nav-list">
+              ${Object.entries(roles).map(([key, item]) => `
+                <button class="side-btn ${state.role === key ? "active" : ""}" data-role-switch="${key}">
+                  <span class="left"><span class="dot"></span><span>${item.label}</span></span>
+                  <span class="side-meta">${state.role === key ? "当前" : ""}</span>
+                </button>
+              `).join("")}
+            </div>
+          </div>
+          <div>
+            <div class="side-section-title">页面</div>
+            <div class="nav-list">
+              ${currentRole.pages.map((page) => `
+                <button class="side-btn ${state.page === page.key ? "active" : ""}" data-page-switch="${page.key}">
+                  <span class="left"><span class="dot"></span><span>${page.label}</span></span>
+                </button>
+              `).join("")}
+            </div>
+          </div>
+        </aside>
+      `;
+    }
+
+    function renderTopbar() {
+      const searchPlaceholder = state.role === "hq"
+        ? "搜索门店"
+        : "搜索会员";
+      const extraFilter = state.role === "hq"
+        ? `
+          <select class="select-box" data-filter="group">
+            ${selectedGroups().map((item) => `<option value="${item}">${item}</option>`).join("")}
+          </select>
+        `
+        : state.role === "owner"
+          ? `
+            <select class="select-box" data-filter="coach">
+              ${ownerCoachOptions().map((item) => `<option value="${item}">${item}</option>`).join("")}
+            </select>
+          `
+          : "";
+      return `
+        <header class="topbar">
+          <div class="filter-bar">
+            <input class="search-box" data-filter="search" value="${state.search}" placeholder="${searchPlaceholder}" />
+            <div class="segmented">
+              <button class="${state.date === "7d" ? "active" : ""}" data-date-switch="7d">近 7 天</button>
+              <button class="${state.date === "30d" ? "active" : ""}" data-date-switch="30d">近 30 天</button>
+              <button class="${state.date === "90d" ? "active" : ""}" data-date-switch="90d">近 90 天</button>
+              <button class="${state.date === "all" ? "active" : ""}" data-date-switch="all">累计</button>
+            </div>
+            ${extraFilter}
+            <button class="primary-btn" data-action="export">导出当前视图</button>
+          </div>
+        </header>
+      `;
+    }
+
+    function currentContent() {
+      if (state.role === "hq" && state.page === "overview") return renderHQOverview();
+      if (state.role === "hq" && state.page === "stores") return renderHQStores();
+      if (state.role === "owner" && state.page === "overview") return renderOwnerOverview();
+      if (state.role === "owner" && state.page === "analysis") return renderOwnerAnalysis();
+      if (state.role === "coach" && state.page === "workbench") return renderCoachWorkbench();
+      if (state.role === "coach" && state.page === "members") return renderCoachMembers();
+      return renderCoachWorkbench();
+    }
+
+    function exportFiltersSummary() {
+      const parts = ["时间范围：" + dateLabel()];
+      if (state.search) parts.push("搜索：" + state.search);
+      if (state.role === "hq" && state.group !== "全部门店组") parts.push("门店组：" + state.group);
+      if (state.role === "owner" && state.coach !== "全部教练") parts.push("教练：" + state.coach);
+      return parts.join(" / ");
+    }
+
+    function currentExportContext() {
+      if (state.role === "hq" && state.page === "overview") {
+        const drills = hqOverviewDrilldowns(filteredHQRows());
+        const active = drills[state.activeDrill.hq_overview];
+        return {
+          title: active.title,
+          columns: active.columns,
+          rows: active.rows,
+          fileKey: "hq-overview"
+        };
+      }
+
+      if (state.role === "hq" && state.page === "stores") {
+        const drills = hqStoreDrilldowns(filteredHQRows());
+        const active = drills[state.activeDrill.hq_stores || "allStores"];
+        return {
+          title: active.title,
+          columns: active.columns,
+          rows: active.rows,
+          fileKey: "hq-stores"
+        };
+      }
+
+      if (state.role === "owner" && state.page === "overview") {
+        const drills = ownerOverviewDrilldowns(filteredOwnerUsers());
+        const active = drills[state.activeDrill.owner_overview];
+        return {
+          title: active.title,
+          columns: active.columns,
+          rows: active.rows,
+          fileKey: "owner-overview"
+        };
+      }
+
+      if (state.role === "owner" && state.page === "analysis") {
+        const drills = ownerAnalysisDrilldowns(filteredOwnerUsers());
+        const active = drills[state.activeDrill.owner_analysis];
+        return {
+          title: active.title,
+          columns: active.columns,
+          rows: active.rows,
+          fileKey: "owner-analysis"
+        };
+      }
+
+      if (state.role === "coach" && state.page === "workbench") {
+        const drills = coachOverviewDrilldowns(filteredCoachUsers());
+        const active = drills[state.activeDrill.coach_workbench];
+        return {
+          title: active.title,
+          columns: active.columns,
+          rows: active.rows,
+          fileKey: "coach-workbench"
+        };
+      }
+
+      return {
+        title: "会员工作表",
+        columns: userColumns(true, true),
+        rows: filteredCoachUsers(),
+        fileKey: "coach-members"
+      };
+    }
+
+    function csvEscape(value) {
+      const text = String(value == null ? "" : value).replace(/"/g, '""');
+      return '"' + text + '"';
+    }
+
+    function buildCsv(context) {
+      const metaLines = [
+        ["视图", roles[state.role].label + " / " + pageMeta().label],
+        ["导出内容", context.title],
+        ["筛选条件", exportFiltersSummary()],
+        ["导出时间", "2026-04-11 14:20:00"]
+      ].map((line) => line.map(csvEscape).join(","));
+
+      const headers = context.columns.map((column) => csvEscape(column.label)).join(",");
+      const rows = context.rows.map((row) => context.columns.map((column) => csvEscape(stripHtml(column.render(row)))).join(","));
+      return "\ufeff" + metaLines.join("\n") + "\n\n" + headers + "\n" + rows.join("\n");
+    }
+
+    function triggerCsvDownload(filename, content) {
+      const blob = new Blob([content], { type: "text/csv;charset=utf-8;" });
+      const link = document.createElement("a");
+      link.href = URL.createObjectURL(blob);
+      link.download = filename;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      URL.revokeObjectURL(link.href);
+    }
+
+    function showToast(title, text) {
+      state.toast = { title, text };
+      render();
+      clearTimeout(toastTimer);
+      toastTimer = setTimeout(() => {
+        state.toast = "";
+        render();
+      }, 2600);
+    }
+
+    function renderExportModal() {
+      const context = currentExportContext();
+      return `
+        <div class="modal-backdrop" data-action="close-export">
+          <div class="modal" onclick="event.stopPropagation()">
+            <div class="modal-head">
+              <div>
+                <h3>导出当前视图</h3>
+                <p>导出当前页面正在查看的明细表，格式为 CSV。</p>
+              </div>
+              <button class="ghost-btn" data-action="close-export">关闭</button>
+            </div>
+            <div class="modal-body">
+              <div class="kv"><span>页面</span><strong>${roles[state.role].label} / ${pageMeta().label}</strong></div>
+              <div class="kv"><span>导出内容</span><strong>${context.title}</strong></div>
+              <div class="kv"><span>筛选条件</span><strong>${exportFiltersSummary()}</strong></div>
+              <div class="kv"><span>数据条数</span><strong>${context.rows.length} 条</strong></div>
+              <div>
+                <div class="section-kicker">导出字段</div>
+                <div class="field-tags">${context.columns.map((column) => "<span>" + column.label + "</span>").join("")}</div>
+              </div>
+            </div>
+            <div class="modal-actions">
+              <button class="ghost-btn" data-action="close-export">取消</button>
+              <button class="primary-btn" data-action="confirm-export">确认导出</button>
+            </div>
+          </div>
+        </div>
+      `;
+    }
+
+    function renderToast() {
+      if (!state.toast) return "";
+      return `
+        <div class="toast">
+          <strong>${state.toast.title}</strong>
+          <p>${state.toast.text}</p>
+        </div>
+      `;
+    }
+
+    function render() {
+      const app = document.getElementById("app");
+      app.innerHTML = `
+        <div class="app-shell">
+          ${renderSidebar()}
+          <main class="main">
+            <div class="global-bar">
+              <div class="crumbs">Visbody WellnessHub / 运营分析 / ${pageMeta().label}</div>
+              <div class="global-right">
+                <span class="tiny-pill">${roles[state.role].label}</span>
+                <div class="segmented">
+                  <button class="${state.tier === "basic" ? "active" : ""}" data-tier-switch="basic">非 Pro</button>
+                  <button class="${state.tier === "pro" ? "active" : ""}" data-tier-switch="pro">Pro</button>
+                </div>
+                <button class="ghost-btn" data-action="refresh">刷新</button>
+              </div>
+            </div>
+            ${renderTopbar()}
+            <div class="content">
+              ${state.loading ? renderLoading() : currentContent()}
+            </div>
+          </main>
+        </div>
+        ${state.exportModal ? renderExportModal() : ""}
+        ${renderToast()}
+      `;
+      syncFilters();
+    }
+
+    function syncFilters() {
+      document.querySelectorAll("[data-filter='group']").forEach((node) => node.value = state.group);
+      document.querySelectorAll("[data-filter='coach']").forEach((node) => node.value = state.coach);
+    }
+
+    document.addEventListener("click", (event) => {
+      const roleBtn = event.target.closest("[data-role-switch]");
+      if (roleBtn) {
+        const nextRole = roleBtn.dataset.roleSwitch;
+        if (nextRole !== state.role) {
+          setLoading(() => {
+            state.role = nextRole;
+            state.page = roles[nextRole].pages[0].key;
+            state.search = "";
+          });
+        }
+        return;
+      }
+
+      const pageBtn = event.target.closest("[data-page-switch]");
+      if (pageBtn) {
+        const nextPage = pageBtn.dataset.pageSwitch;
+        if (nextPage !== state.page) {
+          setLoading(() => state.page = nextPage);
+        }
+        return;
+      }
+
+      const tierBtn = event.target.closest("[data-tier-switch]");
+      if (tierBtn) {
+        const nextTier = tierBtn.dataset.tierSwitch;
+        if (nextTier !== state.tier) {
+          setLoading(() => state.tier = nextTier);
+        }
+        return;
+      }
+
+      const dateBtn = event.target.closest("[data-date-switch]");
+      if (dateBtn) {
+        const nextDate = dateBtn.dataset.dateSwitch;
+        if (nextDate !== state.date) {
+          setLoading(() => state.date = nextDate);
+        }
+        return;
+      }
+
+      const drillBtn = event.target.closest("[data-drill]");
+      if (drillBtn) {
+        const page = pageId();
+        state.activeDrill[page] = drillBtn.dataset.drill;
+        render();
+        return;
+      }
+
+      const rowBtn = event.target.closest("[data-select-table]");
+      if (rowBtn) {
+        const table = rowBtn.dataset.selectTable;
+        const id = rowBtn.dataset.id;
+        state.selected[table] = id;
+        render();
+        return;
+      }
+
+      const refreshBtn = event.target.closest("[data-action='refresh']");
+      if (refreshBtn) {
+        setLoading(() => {});
+        return;
+      }
+
+      const exportBtn = event.target.closest("[data-action='export']");
+      if (exportBtn) {
+        state.exportModal = true;
+        render();
+        return;
+      }
+
+      const closeExportBtn = event.target.closest("[data-action='close-export']");
+      if (closeExportBtn) {
+        state.exportModal = false;
+        render();
+        return;
+      }
+
+      const confirmExportBtn = event.target.closest("[data-action='confirm-export']");
+      if (confirmExportBtn) {
+        const context = currentExportContext();
+        const filename = context.fileKey + "-" + state.date + "-20260411-142000.csv";
+        triggerCsvDownload(filename, buildCsv(context));
+        state.exportModal = false;
+        showToast("导出已开始", "已导出“" + context.title + "”，共 " + context.rows.length + " 条。");
+      }
+    });
+
+    document.addEventListener("input", (event) => {
+      const field = event.target.dataset.filter;
+      if (field === "search") {
+        state.search = event.target.value.trim();
+        render();
+      }
+    });
+
+    document.addEventListener("change", (event) => {
+      const field = event.target.dataset.filter;
+      if (!field || field === "search") return;
+      state[field] = event.target.value;
+      render();
+    });
+
+    render();
+  </script>
+</body>
+</html>

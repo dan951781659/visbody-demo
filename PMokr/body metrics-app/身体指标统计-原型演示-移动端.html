@@ -1,0 +1,1388 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <title>身体指标 - 移动端演示</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700&family=Noto+Sans+SC:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-zoom@2.0.1/dist/chartjs-plugin-zoom.min.js"></script>
+  <style>
+    :root {
+      --bg: #f5f7fa;
+      --card-bg: #fff;
+      --primary: #165DFF;
+      --primary-light: #e8f0ff;
+      --text: #1e293b;
+      --text-muted: #64748b;
+      --border: #e2e8f0;
+      --shadow: 0 1px 3px rgba(0,0,0,.08);
+      --radius: 12px;
+      --radius-sm: 8px;
+      --font-sans: 'DM Sans', 'Noto Sans SC', system-ui, sans-serif;
+      --safe-top: env(safe-area-inset-top, 0);
+      --safe-bottom: env(safe-area-inset-bottom, 0);
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html { -webkit-tap-highlight-color: transparent; overflow-x: hidden; }
+    body {
+      font-family: var(--font-sans);
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      min-height: 100dvh;
+      line-height: 1.5;
+      padding-bottom: var(--safe-bottom);
+      overflow-x: hidden;
+    }
+
+    .header {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: var(--card-bg);
+      padding: 12px 16px;
+      padding-top: calc(12px + var(--safe-top));
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      border-bottom: 1px solid var(--border);
+      box-shadow: var(--shadow);
+    }
+    .back-btn {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 40px;
+      height: 40px;
+      margin: -8px 0 -8px -8px;
+      color: var(--primary);
+      text-decoration: none;
+      font-size: 20px;
+      font-weight: 600;
+      border-radius: var(--radius-sm);
+    }
+    .back-btn:active { background: var(--primary-light); }
+    .header-title {
+      flex: 1;
+      font-size: 18px;
+      font-weight: 600;
+      color: var(--text);
+    }
+    .header-settings-btn {
+      width: 40px;
+      height: 40px;
+      margin: -8px -8px -8px 0;
+      padding: 0;
+      border: none;
+      background: transparent;
+      color: var(--text-muted);
+      font-size: 20px;
+      cursor: pointer;
+      border-radius: var(--radius-sm);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      -webkit-tap-highlight-color: transparent;
+    }
+    .header-settings-btn:active { background: var(--primary-light); color: var(--primary); }
+
+    .main {
+      padding: 16px;
+      max-width: 480px;
+      margin: 0 auto;
+      overflow-x: hidden;
+      width: 100%;
+    }
+
+    .tabs-wrap {
+      margin-bottom: 14px;
+    }
+    .tabs {
+      display: flex;
+      gap: 4px;
+      background: var(--card-bg);
+      padding: 4px;
+      border-radius: var(--radius-sm);
+      box-shadow: var(--shadow);
+      width: 100%;
+    }
+    .tab {
+      flex: 1;
+      min-width: 0;
+      padding: 10px 4px;
+      border: none;
+      background: transparent;
+      color: var(--text-muted);
+      font-size: 12px;
+      font-weight: 500;
+      border-radius: 6px;
+      cursor: pointer;
+      font-family: inherit;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      text-align: center;
+      -webkit-tap-highlight-color: transparent;
+    }
+    .tab:active { background: var(--bg); }
+    .tab.active { background: var(--primary); color: #fff; }
+
+    .section-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      margin-bottom: 4px;
+    }
+    .section-title {
+      font-size: 13px;
+      color: var(--text-muted);
+      margin-bottom: 0;
+      font-weight: 500;
+    }
+    .btn-set-metrics {
+      padding: 6px 12px;
+      border: 1px solid var(--primary);
+      border-radius: var(--radius-sm);
+      background: var(--card-bg);
+      color: var(--primary);
+      font-size: 12px;
+      font-weight: 500;
+      cursor: pointer;
+      font-family: inherit;
+      -webkit-tap-highlight-color: transparent;
+    }
+    .btn-set-metrics:active { background: var(--primary-light); }
+    .stats-section-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      margin-bottom: 12px;
+    }
+    .stats-section-head h2 { margin-bottom: 0; }
+    .btn-help {
+      width: 28px;
+      height: 28px;
+      border: 1px solid var(--border);
+      border-radius: 50%;
+      background: var(--card-bg);
+      color: var(--text-muted);
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      -webkit-tap-highlight-color: transparent;
+    }
+    .btn-help:active { background: var(--bg); color: var(--primary); }
+    .device-filters-sheet { flex-direction: column; align-items: flex-start; gap: 14px; margin-bottom: 16px; }
+    .device-priority-block { display: none; }
+    .device-priority-block.visible { display: block; }
+    .device-priority-hint { font-size: 12px; color: var(--text-muted); line-height: 1.5; margin-bottom: 12px; }
+    .device-priority-list { display: flex; flex-direction: column; gap: 12px; }
+    .device-priority-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 12px;
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+    }
+    .device-priority-item .rank-label { font-size: 12px; color: var(--text-muted); min-width: 48px; }
+    .device-priority-item .device-name { font-size: 14px; font-weight: 600; color: var(--text); flex: 1; }
+    .device-priority-item .btn-move-up {
+      padding: 6px 14px;
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--primary);
+      background: transparent;
+      border: 1px solid var(--primary);
+      border-radius: var(--radius-sm);
+      cursor: pointer;
+      -webkit-tap-highlight-color: transparent;
+    }
+    .device-priority-item .btn-move-up:disabled { opacity: 0.4; cursor: not-allowed; }
+    .device-priority-item .btn-move-up:active:not(:disabled) { background: var(--primary-light); }
+    .device-filters {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      align-items: center;
+    }
+    .device-check {
+      font-size: 13px;
+      color: var(--text);
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .device-check input { width: 16px; height: 16px; }
+    .cards-wrap {
+      background: var(--card-bg);
+      border-radius: var(--radius);
+      padding: 12px;
+      margin-bottom: 20px;
+      box-shadow: var(--shadow);
+      max-height: 280px;
+      overflow-x: hidden;
+      overflow-y: auto;
+      -webkit-overflow-scrolling: touch;
+    }
+    .cards-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 6px;
+      min-width: 0;
+    }
+    .card {
+      min-height: 78px;
+      min-width: 0;
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 8px 6px;
+      cursor: pointer;
+      transition: all .2s;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      position: relative;
+      -webkit-tap-highlight-color: transparent;
+    }
+    .card:active { opacity: 0.9; }
+    .card.selected, .card.latest {
+      background: var(--primary-light);
+      border-color: var(--primary);
+      box-shadow: var(--shadow);
+    }
+    .card .name {
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--text);
+      line-height: 1.25;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      padding-right: 26px;
+    }
+    .card .value {
+      font-size: 15px;
+      font-weight: 700;
+      color: var(--text);
+      line-height: 1.2;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+    .card .date {
+      font-size: 10px;
+      color: var(--text-muted);
+    }
+    .card .card-device-wrap {
+      position: absolute;
+      top: 8px;
+      right: 8px;
+      margin: 0;
+      min-height: 0;
+    }
+    .card .card-source-btn {
+      width: 18px;
+      height: 18px;
+      border: 1px solid var(--border);
+      border-radius: 50%;
+      background: var(--card-bg);
+      color: var(--text-muted);
+      font-size: 11px;
+      font-weight: 600;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0;
+      -webkit-tap-highlight-color: transparent;
+    }
+    .card .card-source-btn:active { background: var(--primary-light); color: var(--primary); }
+    @media (max-width: 360px) {
+      .cards-grid { grid-template-columns: repeat(3, 1fr); }
+    }
+
+    .stats-section {
+      background: var(--card-bg);
+      border-radius: var(--radius);
+      padding: 16px;
+      box-shadow: var(--shadow);
+    }
+    .stats-section h2 {
+      font-size: 15px;
+      font-weight: 600;
+      margin-bottom: 14px;
+    }
+    .stats-header {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      margin-bottom: 16px;
+    }
+    .date-picker-wrap {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 8px;
+    }
+    .date-picker-wrap label { font-size: 13px; color: var(--text-muted); }
+    .date-input {
+      padding: 12px 14px;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      font-size: 14px;
+      font-family: inherit;
+      flex: 1;
+      min-width: 0;
+    }
+    .date-input:focus {
+      outline: none;
+      border-color: var(--primary);
+    }
+    .date-presets {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      flex-wrap: wrap;
+    }
+    .date-preset-btn {
+      padding: 6px 12px;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      background: var(--card-bg);
+      color: var(--text-muted);
+      font-size: 12px;
+      font-weight: 500;
+      cursor: pointer;
+      font-family: inherit;
+      -webkit-tap-highlight-color: transparent;
+    }
+    .date-preset-btn:active { background: var(--bg); }
+    .date-preset-btn.active { background: var(--primary-light); border-color: var(--primary); color: var(--primary); }
+    .chart-group-title .chart-axis-hint { font-size: 10px; color: var(--text-muted); font-weight: 400; opacity: 0.85; }
+    .date-range-display { font-size: 13px; color: var(--text-muted); margin-top: 4px; }
+    .btn-custom-range {
+      padding: 6px 12px;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      background: var(--card-bg);
+      color: var(--text-muted);
+      font-size: 12px;
+      font-weight: 500;
+      cursor: pointer;
+      font-family: inherit;
+      -webkit-tap-highlight-color: transparent;
+    }
+    .btn-custom-range:active { background: var(--bg); }
+    .btn-custom-range.active { background: var(--primary-light); border-color: var(--primary); color: var(--primary); }
+    .bottom-sheet-backdrop {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,.4);
+      z-index: 1000;
+      opacity: 0;
+      visibility: hidden;
+      transition: opacity .25s, visibility .25s;
+    }
+    .bottom-sheet-backdrop.show { opacity: 1; visibility: visible; }
+    .bottom-sheet-panel {
+      position: fixed;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: var(--card-bg);
+      border-radius: 16px 16px 0 0;
+      padding: 20px 16px;
+      padding-bottom: calc(20px + var(--safe-bottom));
+      z-index: 1001;
+      transform: translateY(100%);
+      transition: transform .3s ease-out;
+      box-shadow: 0 -4px 20px rgba(0,0,0,.15);
+    }
+    .bottom-sheet-backdrop.show .bottom-sheet-panel { transform: translateY(0); }
+    .bottom-sheet-panel h3 { font-size: 16px; font-weight: 600; margin-bottom: 16px; text-align: center; }
+    .bottom-sheet-panel .form-row { margin-bottom: 16px; }
+    .bottom-sheet-panel .form-row label { display: block; font-size: 13px; color: var(--text-muted); margin-bottom: 6px; }
+    .bottom-sheet-panel .form-row input { width: 100%; padding: 12px; border: 1px solid var(--border); border-radius: var(--radius-sm); font-size: 14px; }
+    .bottom-sheet-actions { display: flex; gap: 12px; margin-top: 24px; }
+    .bottom-sheet-actions button { flex: 1; padding: 12px; border-radius: var(--radius-sm); font-size: 14px; font-weight: 600; font-family: inherit; cursor: pointer; -webkit-tap-highlight-color: transparent; }
+    .bottom-sheet-actions .btn-cancel { border: 1px solid var(--border); background: var(--bg); color: var(--text); }
+    .bottom-sheet-actions .btn-confirm { border: none; background: var(--primary); color: #fff; }
+    .sheet-hint { font-size: 12px; color: var(--text-muted); margin: -8px 0 12px; }
+    .set-metrics-panel .set-metrics-list {
+      max-height: 50vh;
+      overflow-y: auto;
+      -webkit-overflow-scrolling: touch;
+      margin-bottom: 16px;
+    }
+    .set-metrics-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 12px 0;
+      border-bottom: 1px solid var(--border);
+      cursor: pointer;
+      -webkit-tap-highlight-color: transparent;
+    }
+    .set-metrics-item:last-child { border-bottom: none; }
+    .set-metrics-item .dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }
+    .set-metrics-item .name { flex: 1; font-size: 14px; color: var(--text); }
+    .set-metrics-item .unit { font-size: 12px; color: var(--text-muted); }
+    .set-metrics-item .check { width: 20px; height: 20px; flex-shrink: 0; }
+    .settings-panel .settings-block { margin-bottom: 20px; }
+    .settings-panel .settings-block:last-of-type { margin-bottom: 0; }
+    .settings-block-title { font-size: 14px; font-weight: 600; color: var(--text); margin-bottom: 8px; }
+    .settings-panel .set-metrics-list { max-height: 36vh; overflow-y: auto; -webkit-overflow-scrolling: touch; margin-bottom: 8px; }
+    .help-panel .help-content {
+      max-height: 55vh;
+      overflow-y: auto;
+      -webkit-overflow-scrolling: touch;
+      font-size: 13px;
+      line-height: 1.7;
+      color: var(--text);
+      margin-bottom: 16px;
+    }
+    .help-panel .help-content ol { margin: 0; padding-left: 20px; }
+    .help-panel .help-content li { margin-bottom: 10px; }
+    .legend-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      align-items: center;
+    }
+    .legend-item {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 12px;
+      color: var(--text-muted);
+    }
+    .legend-item .dot { width: 8px; height: 8px; border-radius: 50%; }
+    .legend-item.active { color: var(--text); font-weight: 500; }
+
+    .chart-wrap {
+      position: relative;
+      height: 260px;
+      background: var(--bg);
+      border-radius: var(--radius-sm);
+      border: 1px solid var(--border);
+    }
+    .chart-placeholder {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--text-muted);
+      font-size: 14px;
+      background: var(--bg);
+      border-radius: var(--radius-sm);
+    }
+    .charts-row { display: flex; flex-direction: column; gap: 20px; }
+    .chart-group { display: flex; flex-direction: column; gap: 6px; }
+    .chart-group-title { font-size: 12px; color: var(--text-muted); font-weight: 500; }
+
+    #customTooltip {
+      position: fixed;
+      z-index: 9999;
+      padding: 14px 16px;
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      box-shadow: 0 8px 24px rgba(0,0,0,.15);
+      font-size: 13px;
+      pointer-events: none;
+      opacity: 0;
+      visibility: hidden;
+      transform: translate(-50%, 6px);
+      transition: opacity 0.15s ease, visibility 0.15s, transform 0.15s ease;
+      max-width: min(320px, calc(100vw - 32px));
+      min-width: 160px;
+    }
+    #customTooltip.visible {
+      opacity: 1;
+      visibility: visible;
+      transform: translate(-50%, 0);
+      pointer-events: auto;
+    }
+    #customTooltip .tt-footer { margin-top: 10px; padding-top: 8px; border-top: 1px solid var(--border); }
+    #customTooltip .tt-detail-trigger {
+      font-size: 12px;
+      color: var(--primary);
+      cursor: pointer;
+      -webkit-tap-highlight-color: transparent;
+    }
+    .tooltip-detail-body { font-size: 13px; margin-bottom: 16px; }
+    .tooltip-detail-body .detail-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 10px 0;
+      border-bottom: 1px solid var(--border);
+    }
+    .tooltip-detail-body .detail-row:last-child { border-bottom: none; }
+    .tooltip-detail-body .detail-name { color: var(--text); }
+    .tooltip-detail-body .detail-value { font-weight: 600; color: var(--text); }
+    .tooltip-detail-body .detail-device { font-size: 12px; color: var(--text-muted); margin-left: 8px; }
+    #customTooltip .tt-time {
+      font-weight: 600;
+      margin-bottom: 10px;
+      padding-bottom: 8px;
+      border-bottom: 1px solid var(--border);
+      font-size: 12px;
+      color: var(--text-muted);
+    }
+    #customTooltip .tt-body {
+      max-height: 180px;
+      overflow-y: auto;
+      padding-right: 2px;
+    }
+    #customTooltip .tt-body::-webkit-scrollbar { width: 4px; }
+    #customTooltip .tt-body::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
+    #customTooltip .tt-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-top: 6px;
+      margin-bottom: 2px;
+    }
+    #customTooltip .tt-row:first-child { margin-top: 0; }
+    #customTooltip .tt-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+    #customTooltip .tt-name { color: var(--text-muted); font-size: 12px; flex: 1; min-width: 0; }
+    #customTooltip .tt-value { font-weight: 600; color: var(--text); font-size: 13px; flex-shrink: 0; }
+    #customTooltip .tt-device { font-weight: 400; color: var(--text-muted); font-size: 11px; }
+    #customTooltip::after {
+      content: '';
+      position: absolute;
+      left: 50%;
+      bottom: -6px;
+      margin-left: -6px;
+      border: 6px solid transparent;
+      border-top-color: var(--card-bg);
+      border-bottom: none;
+      opacity: 0;
+      transition: opacity 0.15s;
+    }
+    #customTooltip.visible::after { opacity: 1; }
+    #customTooltip.tt-below::after {
+      bottom: auto;
+      top: -6px;
+      border-top: none;
+      border-bottom-color: var(--card-bg);
+    }
+  </style>
+</head>
+<body>
+  <header class="header">
+    <a href="#" class="back-btn" aria-label="返回" onclick="history.back();return false">‹</a>
+    <h1 class="header-title">身体指标</h1>
+    <button type="button" class="header-settings-btn" id="btnSettings" aria-label="设置">⚙</button>
+  </header>
+
+  <main class="main">
+    <div id="customTooltip"></div>
+    <div class="tabs-wrap">
+      <div class="tabs">
+        <button type="button" class="tab active" data-type="body_composition">体成分</button>
+        <button type="button" class="tab" data-type="posture">体态</button>
+        <button type="button" class="tab" data-type="circumference">体围</button>
+        <button type="button" class="tab" data-type="fms">FMS</button>
+        <button type="button" class="tab" data-type="fitness">体适能</button>
+      </div>
+    </div>
+
+    <p class="section-title">指标概览</p>
+    <div class="cards-wrap">
+      <div class="cards-grid" id="cardsGrid"></div>
+    </div>
+
+    <section class="stats-section">
+      <div class="stats-section-head">
+        <h2>数据统计</h2>
+        <button type="button" class="btn-help" id="btnHelp" aria-label="帮助">?</button>
+      </div>
+      <div class="stats-header">
+        <div class="date-picker-wrap">
+          <input type="date" id="startDate" value="" style="position:absolute;left:-9999px;">
+          <input type="date" id="endDate" value="" style="position:absolute;left:-9999px;">
+          <div class="date-presets">
+            <button type="button" class="date-preset-btn" data-range="1w">近一周</button>
+            <button type="button" class="date-preset-btn active" data-range="1m">近一月</button>
+            <button type="button" class="date-preset-btn" data-range="1y">近一年</button>
+            <button type="button" class="btn-custom-range" id="btnCustomRange">自定义</button>
+          </div>
+          <div class="date-range-display" id="dateRangeDisplay"></div>
+        </div>
+        <div class="legend-list" id="legendList"></div>
+      </div>
+      <div class="charts-row" id="chartsRow"></div>
+    </section>
+  </main>
+
+  <div class="bottom-sheet-backdrop" id="dateRangeSheet">
+    <div class="bottom-sheet-panel">
+      <h3>选择时间范围</h3>
+      <div class="form-row">
+        <label>开始日期</label>
+        <input type="date" id="sheetStartDate" value="">
+      </div>
+      <div class="form-row">
+        <label>结束日期</label>
+        <input type="date" id="sheetEndDate" value="">
+      </div>
+      <div class="bottom-sheet-actions">
+        <button type="button" class="btn-cancel" id="sheetCancel">取消</button>
+        <button type="button" class="btn-confirm" id="sheetConfirm">确定</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="bottom-sheet-backdrop" id="settingsSheet">
+    <div class="bottom-sheet-panel settings-panel">
+      <h3>设置</h3>
+      <div class="settings-block">
+        <h4 class="settings-block-title">设置显示项</h4>
+        <div class="set-metrics-list" id="setMetricsList"></div>
+      </div>
+      <div class="settings-block">
+        <h4 class="settings-block-title">数据来源设备</h4>
+        <p class="sheet-hint">选择要统计的设备类型，支持多选/全选</p>
+        <div class="device-filters device-filters-sheet" id="deviceFilters"></div>
+      </div>
+      <div class="settings-block device-priority-block" id="devicePriorityBlock">
+        <h4 class="settings-block-title">身体指标数据排序</h4>
+        <p class="sheet-hint device-priority-hint">*1. 身体指标中的数据将根据设置的设备类型排序进行取值，示例：用户同一天在多个设备类型测了体脂率数据，则取排序在前面的设备上测出来的体脂率数据。</p>
+        <div class="device-priority-list" id="devicePriorityList"></div>
+      </div>
+      <div class="bottom-sheet-actions">
+        <button type="button" class="btn-cancel" id="settingsCancel">取消</button>
+        <button type="button" class="btn-confirm" id="settingsConfirm">确定</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="bottom-sheet-backdrop" id="helpSheet">
+    <div class="bottom-sheet-panel help-panel">
+      <h3>数据对比显示规则</h3>
+      <div class="help-content" id="helpContent"></div>
+      <div class="bottom-sheet-actions">
+        <button type="button" class="btn-confirm" id="helpClose" style="flex:1">我知道了</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="bottom-sheet-backdrop" id="tooltipDetailSheet">
+    <div class="bottom-sheet-panel">
+      <h3 id="tooltipDetailTime">数据详情</h3>
+      <div class="tooltip-detail-body" id="tooltipDetailBody"></div>
+      <div class="bottom-sheet-actions">
+        <button type="button" class="btn-confirm" id="tooltipDetailClose" style="flex:1">关闭</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    function formatValue(m, val) {
+      if (val == null) return '—';
+      const v = Number(val);
+      if (m.precision === 0) return String(Math.round(v));
+      if (m.precision === 2) return v.toFixed(2);
+      return v.toFixed(1);
+    }
+    function formatValueWithUnit(m, val) {
+      const s = formatValue(m, val);
+      return m.unit ? s + ' ' + m.unit : s;
+    }
+
+    const MOCK_METRICS = {
+      body_composition: [
+        { id: 'weight', name: '体重', unit: 'kg', precision: 1, value: 65.5, date: '2025-6-9', color: '#0ea5e9' },
+        { id: 'bmi', name: 'BMI', unit: '', precision: 1, value: 22.5, date: '2025-6-9', color: '#a855f7' },
+        { id: 'body_fat', name: '体脂率', unit: '%', precision: 1, value: 18.5, date: '2025-6-9', color: '#22c55e' },
+        { id: 'lean_mass', name: '去脂体重', unit: 'kg', precision: 1, value: 53.4, date: '2025-6-9', color: '#eab308' },
+        { id: 'body_fat_kg', name: '体脂肪', unit: 'kg', precision: 1, value: 12.1, date: '2025-6-9', color: '#f97316' },
+        { id: 'muscle', name: '肌肉量', unit: 'kg', precision: 1, value: 45.2, date: '2025-6-8', color: '#ec4899' },
+        { id: 'bmr', name: '基础代谢率', unit: 'kcal', precision: 0, value: 1450, date: '2025-6-8', color: '#06b6d4' },
+        { id: 'visceral', name: '内脏脂肪等级', unit: '', precision: 0, value: 5, date: '2025-6-8', color: '#84cc16' },
+        { id: 'water', name: '体水分', unit: 'kg', precision: 1, value: 38.5, date: '2025-6-7', color: '#0ea5e9' },
+        { id: 'protein', name: '蛋白质', unit: 'kg', precision: 1, value: 9.8, date: '2025-6-7', color: '#22c55e' },
+        { id: 'mineral', name: '无机盐', unit: 'kg', precision: 1, value: 3.2, date: '2025-6-6', color: '#eab308' },
+        { id: 'skeletal_muscle', name: '骨骼肌', unit: 'kg', precision: 1, value: 28.5, date: '2025-6-6', color: '#f97316' },
+        { id: 'subcutaneous_fat', name: '皮下脂肪', unit: 'kg', precision: 1, value: 8.5, date: '2025-6-5', color: '#a855f7' },
+        { id: 'body_age', name: '身体年龄', unit: '岁', precision: 0, value: 28, date: '2025-6-5', color: '#06b6d4' },
+      ],
+      posture: [
+        { id: 'head_forward', name: '头部前倾', unit: '°', precision: 1, value: 5.2, date: '2025-6-9', color: '#0ea5e9' },
+        { id: 'shoulder_height', name: '高低肩', unit: 'mm', precision: 1, value: 3.5, date: '2025-6-9', color: '#22c55e' },
+        { id: 'pelvis_ante', name: '骨盆前倾', unit: '°', precision: 1, value: 8.5, date: '2025-6-8', color: '#eab308' },
+        { id: 'pelvis_lateral', name: '骨盆侧倾', unit: '°', precision: 1, value: 2.1, date: '2025-6-8', color: '#f97316' },
+        { id: 'knee_varus', name: '膝内翻/外翻', unit: '°', precision: 1, value: 1.5, date: '2025-6-7', color: '#a855f7' },
+        { id: 'arch_height', name: '足弓高度', unit: 'mm', precision: 1, value: 25.3, date: '2025-6-7', color: '#06b6d4' },
+      ],
+      circumference: [
+        { id: 'chest', name: '胸围', unit: 'cm', precision: 1, value: 95.5, date: '2025-6-9', color: '#0ea5e9' },
+        { id: 'waist', name: '腰围', unit: 'cm', precision: 1, value: 78.2, date: '2025-6-9', color: '#22c55e' },
+        { id: 'hip', name: '臀围', unit: 'cm', precision: 1, value: 92.5, date: '2025-6-9', color: '#eab308' },
+        { id: 'arm_l', name: '左臂围', unit: 'cm', precision: 1, value: 28.5, date: '2025-6-8', color: '#f97316' },
+        { id: 'arm_r', name: '右臂围', unit: 'cm', precision: 1, value: 29.0, date: '2025-6-8', color: '#a855f7' },
+        { id: 'thigh_l', name: '左大腿围', unit: 'cm', precision: 1, value: 52.5, date: '2025-6-7', color: '#06b6d4' },
+        { id: 'thigh_r', name: '右大腿围', unit: 'cm', precision: 1, value: 53.0, date: '2025-6-7', color: '#ec4899' },
+        { id: 'calf_l', name: '左小腿围', unit: 'cm', precision: 1, value: 35.5, date: '2025-6-6', color: '#84cc16' },
+        { id: 'calf_r', name: '右小腿围', unit: 'cm', precision: 1, value: 36.0, date: '2025-6-6', color: '#0ea5e9' },
+        { id: 'neck', name: '颈围', unit: 'cm', precision: 1, value: 36.5, date: '2025-6-5', color: '#22c55e' },
+        { id: 'shoulder_width', name: '肩宽', unit: 'cm', precision: 1, value: 42.5, date: '2025-6-5', color: '#eab308' },
+      ],
+      fms: [
+        { id: 'squat', name: '深蹲', unit: '分', precision: 0, value: 2, date: '2025-6-9', color: '#0ea5e9', min: 0, max: 3 },
+        { id: 'hurdle', name: '跨栏步', unit: '分', precision: 0, value: 2, date: '2025-6-9', color: '#22c55e', min: 0, max: 3 },
+        { id: 'lunge', name: '直线弓步蹲', unit: '分', precision: 0, value: 3, date: '2025-6-8', color: '#eab308', min: 0, max: 3 },
+        { id: 'shoulder_mob', name: '肩部灵活性', unit: '分', precision: 0, value: 2, date: '2025-6-8', color: '#f97316', min: 0, max: 3 },
+        { id: 'leg_raise', name: '主动直腿上抬', unit: '分', precision: 0, value: 2, date: '2025-6-7', color: '#a855f7', min: 0, max: 3 },
+        { id: 'pushup', name: '躯干稳定性俯卧撑', unit: '分', precision: 0, value: 3, date: '2025-6-7', color: '#06b6d4', min: 0, max: 3 },
+        { id: 'rotation', name: '旋转稳定性', unit: '分', precision: 0, value: 2, date: '2025-6-6', color: '#ec4899', min: 0, max: 3 },
+        { id: 'fms_total', name: 'FMS总分', unit: '分', precision: 0, value: 16, date: '2025-6-6', color: '#84cc16', min: 0, max: 21 },
+      ],
+      fitness: [
+        { id: 'grip', name: '握力', unit: 'kg', precision: 1, value: 35.5, date: '2025-6-9', color: '#0ea5e9' },
+        { id: 'back_strength', name: '背力', unit: 'kg', precision: 1, value: 85.5, date: '2025-6-9', color: '#22c55e' },
+        { id: 'sit_reach', name: '坐位体前屈', unit: 'cm', precision: 1, value: 12.5, date: '2025-6-9', color: '#eab308' },
+        { id: 'balance', name: '闭眼单脚站立', unit: '秒', precision: 0, value: 45, date: '2025-6-8', color: '#f97316' },
+        { id: 'reaction', name: '反应时', unit: '秒', precision: 2, value: 0.35, date: '2025-6-8', color: '#a855f7' },
+        { id: 'vertical_jump', name: '纵跳', unit: 'cm', precision: 1, value: 45.5, date: '2025-6-7', color: '#06b6d4' },
+        { id: 'pushups', name: '俯卧撑', unit: '次', precision: 0, value: 25, date: '2025-6-7', color: '#ec4899' },
+        { id: 'sit_ups', name: '仰卧起坐', unit: '次', precision: 0, value: 35, date: '2025-6-6', color: '#84cc16' },
+      ],
+    };
+
+    function genTrendData(metrics, start, end) {
+      const out = {};
+      if (!metrics.length) return { labels: [], data: out, metrics: [] };
+      const startMs = new Date(start).getTime();
+      const endMs = new Date(end).getTime();
+      const dayMs = 24 * 60 * 60 * 1000;
+      let t = startMs;
+      const labels = [];
+      while (t <= endMs) {
+        const d = new Date(t);
+        const y = d.getFullYear(), m = String(d.getMonth() + 1).padStart(2, '0'), day = String(d.getDate()).padStart(2, '0');
+        const h = String(d.getHours()).padStart(2, '0'), min = String(d.getMinutes()).padStart(2, '0'), s = String(d.getSeconds()).padStart(2, '0');
+        labels.push(y + '/' + m + '/' + day + ' ' + h + ':' + min + ':' + s);
+        t += dayMs;
+      }
+      const devices = ['VAPRO6', 'VDPRO3', 'VAPRO3', 'VDPRO2'];
+      const deviceSource = {};
+      metrics.forEach(m => {
+        const base = m.value;
+        const p = m.precision ?? 1;
+        const lo = m.min != null ? m.min : -Infinity;
+        const hi = m.max != null ? m.max : Infinity;
+        deviceSource[m.id] = labels.map(() => devices[Math.floor(Math.random() * devices.length)]);
+        out[m.id] = labels.map((_, i) => {
+          if (Math.random() < 0.1) return null;
+          const noise = (Math.random() - 0.5) * 2;
+          const trend = i * 0.05;
+          let v = base + noise + trend;
+          v = Math.max(lo, Math.min(hi, v));
+          if (p === 0) return Math.round(v);
+          return Math.round(v * Math.pow(10, p)) / Math.pow(10, p);
+        });
+      });
+      return { labels, data: out, metrics, deviceSource };
+    }
+
+    function genDualAxisDemoData(metrics, start, end) {
+      const base = genTrendData(metrics, start, end);
+      if (!base.labels.length || base.metrics.length < 2) return base;
+      const dayMs = 24 * 60 * 60 * 1000;
+      const startMs = new Date(start).getTime();
+      const endMs = new Date(end).getTime();
+      const n = base.labels.length;
+      const t0 = startMs;
+      const span = Math.max(1, endMs - t0);
+      base.metrics.forEach((m, idx) => {
+        const arr = base.data[m.id];
+        if (!arr) return;
+        const id = m.id;
+        const p = m.precision ?? 1;
+        const round = (v) => p === 0 ? Math.round(v) : Math.round(v * Math.pow(10, p)) / Math.pow(10, p);
+        if (id === 'weight') {
+          for (let i = 0; i < n; i++) {
+            const k = (new Date(base.labels[i]).getTime() - t0) / span;
+            arr[i] = round(60 + k * 10);
+          }
+        } else if (id === 'lean_mass' || id === 'muscle' || id === 'skeletal_muscle') {
+          for (let i = 0; i < n; i++) {
+            const k = (new Date(base.labels[i]).getTime() - t0) / span;
+            arr[i] = round(52 + k * 2 + (idx % 3) * 0.2);
+          }
+        } else if (id === 'protein' || id === 'body_fat_kg' || id === 'subcutaneous_fat') {
+          for (let i = 0; i < n; i++) {
+            const k = (new Date(base.labels[i]).getTime() - t0) / span;
+            arr[i] = round(9 + k * 2);
+          }
+        } else if (id === 'mineral') {
+          for (let i = 0; i < n; i++) {
+            const k = (new Date(base.labels[i]).getTime() - t0) / span;
+            arr[i] = round(2.8 + k * 0.4);
+          }
+        } else if (id === 'water') {
+          for (let i = 0; i < n; i++) {
+            const k = (new Date(base.labels[i]).getTime() - t0) / span;
+            arr[i] = round(38 + k * 1);
+          }
+        }
+      });
+      const devices = ['VAPRO6', 'VDPRO3', 'VAPRO3', 'VDPRO2'];
+      if (!base.deviceSource) base.deviceSource = {};
+      base.metrics.forEach(m => {
+        if (!base.deviceSource[m.id] && base.data[m.id]) {
+          base.deviceSource[m.id] = base.labels.map(() => devices[Math.floor(Math.random() * devices.length)]);
+        }
+      });
+      return base;
+    }
+
+    function groupMetricsByUnit(metrics) {
+      const map = new Map();
+      metrics.forEach(m => {
+        const key = m.unit != null && m.unit !== '' ? m.unit : '__none__';
+        if (!map.has(key)) map.set(key, []);
+        map.get(key).push(m);
+      });
+      return map;
+    }
+
+    const MAX_SELECTED_METRICS = 8;
+    const MOCK_DEVICE_TYPES = ['VAPRO6', 'VDPRO3', 'VAPRO3', 'VDPRO2', 'VAPRO5', 'VE260'];
+    let currentType = 'body_composition';
+    let selectedIds = new Set();
+    let selectedDeviceIds = new Set(MOCK_DEVICE_TYPES);
+    let devicePriorityOrder = [...MOCK_DEVICE_TYPES];
+    let chartInstances = [];
+    let allChartData = null;
+
+    function setDefaultDates() {
+      applyDatePreset('1m');
+    }
+    function applyDatePreset(range) {
+      const end = new Date();
+      const start = new Date();
+      if (range === '1w') start.setDate(start.getDate() - 6);
+      else if (range === '1m') start.setMonth(start.getMonth() - 1);
+      else if (range === '1y') start.setFullYear(start.getFullYear() - 1);
+      document.getElementById('startDate').value = start.toISOString().slice(0, 10);
+      document.getElementById('endDate').value = end.toISOString().slice(0, 10);
+      document.querySelectorAll('.date-preset-btn').forEach(btn => {
+        btn.classList.toggle('active', btn.dataset.range === range);
+      });
+      document.getElementById('btnCustomRange').classList.remove('active');
+      updateDateRangeDisplay();
+    }
+    function clearDatePresetActive() {
+      document.querySelectorAll('.date-preset-btn').forEach(btn => btn.classList.remove('active'));
+      document.getElementById('btnCustomRange').classList.remove('active');
+    }
+    function setCustomRangeActive() {
+      document.querySelectorAll('.date-preset-btn').forEach(btn => btn.classList.remove('active'));
+      document.getElementById('btnCustomRange').classList.add('active');
+    }
+    function updateDateRangeDisplay() {
+      const start = document.getElementById('startDate').value;
+      const end = document.getElementById('endDate').value;
+      const el = document.getElementById('dateRangeDisplay');
+      if (!el) return;
+      if (start && end) el.textContent = start + ' 至 ' + end;
+      else el.textContent = '';
+    }
+
+    function renderCards() {
+      const list = MOCK_METRICS[currentType] || [];
+      const devices = list.map((m, idx) => m.deviceModel || MOCK_DEVICE_TYPES[idx % MOCK_DEVICE_TYPES.length]);
+      const devicesSame = devices.length <= 1 || new Set(devices).size === 1;
+      const grid = document.getElementById('cardsGrid');
+      grid.innerHTML = list.map((m, idx) => {
+        const isSelected = selectedIds.has(m.id);
+        const isLatest = list.length && list[0].id === m.id;
+        const nameLabel = m.unit ? m.name + ' (' + m.unit + ')' : m.name;
+        const displayValue = formatValueWithUnit(m, m.value);
+        const deviceModel = devices[idx];
+        const showSourceBtn = !devicesSame;
+        const devicePart = showSourceBtn
+          ? '<div class="card-device-wrap"><button type="button" class="card-source-btn" data-name="' + m.name + '" data-value="' + displayValue.replace(/"/g, '&quot;') + '" data-device="' + deviceModel + '" aria-label="查看数据来源">?</button></div>'
+          : '<div class="card-device-wrap"></div>';
+        return '<div class="card ' + (isSelected ? 'selected' : '') + (isLatest ? ' latest' : '') + '" data-id="' + m.id + '">' +
+          '<div class="name">' + nameLabel + '</div><div class="value">' + displayValue + '</div><div class="date">' + m.date + '</div>' + devicePart + '</div>';
+      }).join('');
+      grid.querySelectorAll('.card').forEach(el => {
+        el.addEventListener('click', (e) => {
+          if (e.target.closest('.card-source-btn')) return;
+          const id = el.dataset.id;
+          if (selectedIds.has(id)) {
+            selectedIds.delete(id);
+          } else {
+            if (selectedIds.size >= MAX_SELECTED_METRICS) return;
+            selectedIds.add(id);
+          }
+          renderCards();
+          renderLegend();
+          updateChart();
+        });
+      });
+      grid.querySelectorAll('.card-source-btn').forEach(btn => {
+        btn.addEventListener('click', function(e) {
+          e.preventDefault();
+          e.stopPropagation();
+          const name = this.dataset.name;
+          const value = this.dataset.value;
+          const device = this.dataset.device || '—';
+          window._tooltipDetail = { time: '当前值', rows: [{ name, value, device }] };
+          openTooltipDetailSheet();
+        });
+      });
+    }
+
+    function renderLegend() {
+      const list = MOCK_METRICS[currentType] || [];
+      const mapped = list.filter(m => selectedIds.has(m.id));
+      const wrap = document.getElementById('legendList');
+      wrap.innerHTML = mapped.map(m =>
+        '<div class="legend-item active"><span class="dot" style="background:' + m.color + '"></span><span>' + m.name + '</span></div>'
+      ).join('');
+    }
+
+    function updateChart() {
+      const list = MOCK_METRICS[currentType] || [];
+      const filtered = list.filter(m => selectedIds.has(m.id));
+      const start = document.getElementById('startDate').value;
+      const end = document.getElementById('endDate').value;
+      const row = document.getElementById('chartsRow');
+      chartInstances.forEach(c => c.destroy());
+      chartInstances = [];
+      row.innerHTML = '';
+
+      if (!filtered.length || !start || !end) {
+        row.innerHTML = '<div class="chart-wrap"><div class="chart-placeholder">【暂无数据】</div></div>';
+        return;
+      }
+
+      const groups = groupMetricsByUnit(filtered);
+      const groupsArr = [];
+      groups.forEach((metrics, unitKey) => {
+        const res = (currentType === 'body_composition' && unitKey === 'kg') ? genDualAxisDemoData(metrics, start, end) : genTrendData(metrics, start, end);
+        groupsArr.push({ unitKey, metrics: res.metrics, data: res.data, labels: res.labels, deviceSource: res.deviceSource || {} });
+      });
+      allChartData = { labels: groupsArr[0] ? groupsArr[0].labels : [], groups: groupsArr.map(g => ({ metrics: g.metrics, data: g.data, deviceSource: g.deviceSource || {} })) };
+
+      const ttEl = document.getElementById('customTooltip');
+      const GAP = 14;
+      if (!ttEl.dataset.ttListeners) {
+        ttEl.dataset.ttListeners = '1';
+        ttEl.addEventListener('mouseenter', function() { clearTimeout(ttEl._ttHideTimeout); });
+        ttEl.addEventListener('mouseleave', function() { ttEl.classList.remove('visible', 'tt-below'); });
+      }
+      function externalTooltip(ctx) {
+        if (!ctx.tooltip || ctx.tooltip.opacity === 0) {
+          clearTimeout(ttEl._ttHideTimeout);
+          ttEl._ttHideTimeout = setTimeout(function() { ttEl.classList.remove('visible', 'tt-below'); }, 400);
+          return;
+        }
+        clearTimeout(ttEl._ttHideTimeout);
+        const i = ctx.tooltip.dataIndex;
+        if (!allChartData || i < 0 || i >= allChartData.labels.length) {
+          ttEl.classList.remove('visible', 'tt-below');
+          return;
+        }
+        let time = (allChartData.labels[i] != null && String(allChartData.labels[i]) !== 'undefined') ? allChartData.labels[i] : null;
+        if (time == null && start) {
+          const d = new Date(start);
+          if (!isNaN(d.getTime())) {
+            d.setDate(d.getDate() + i);
+            time = d.getFullYear() + '/' + (d.getMonth() + 1) + '/' + d.getDate();
+          }
+        }
+        if (time == null || (typeof time === 'string' && time.indexOf('NaN') >= 0)) time = '当日数据';
+        const detailRows = [];
+        let rows = '';
+        allChartData.groups.forEach(g => {
+          g.metrics.forEach(m => {
+            const v = g.data[m.id] && g.data[m.id][i];
+            const displayVal = v != null ? v : m.value;
+            const str = formatValueWithUnit(m, displayVal);
+            const device = (g.deviceSource && g.deviceSource[m.id] && g.deviceSource[m.id][i]) ? g.deviceSource[m.id][i] : '';
+            const deviceHtml = device ? ' <span class="tt-device">· ' + device + '</span>' : '';
+            rows += '<div class="tt-row"><span class="tt-dot" style="background:' + m.color + '"></span><span class="tt-name">' + m.name + '</span><span class="tt-value">' + str + deviceHtml + '</span></div>';
+            detailRows.push({ name: m.name, value: str, device: device || '—' });
+          });
+        });
+        window._tooltipDetail = { time, rows: detailRows };
+        ttEl.innerHTML = '<div class="tt-time">' + time + '</div><div class="tt-body">' + rows + '</div><div class="tt-footer"><span class="tt-detail-trigger" id="ttDetailTrigger">? 查看数据来源</span></div>';
+        const trigger = document.getElementById('ttDetailTrigger');
+        if (trigger) trigger.onclick = function(e) { e.preventDefault(); openTooltipDetailSheet(); };
+        ttEl.classList.remove('tt-below');
+        ttEl.classList.add('visible');
+        const rect = ctx.chart.canvas.getBoundingClientRect();
+        const caretX = rect.left + ctx.tooltip.caretX;
+        const caretY = rect.top + ctx.tooltip.caretY;
+        const ttRect = ttEl.getBoundingClientRect();
+        const padding = 12;
+        let x = Math.max(padding + ttRect.width / 2, Math.min(window.innerWidth - padding - ttRect.width / 2, caretX));
+        let y;
+        const aboveY = caretY - ttRect.height - GAP;
+        if (aboveY >= padding) {
+          y = aboveY;
+        } else {
+          y = caretY + GAP;
+          ttEl.classList.add('tt-below');
+        }
+        if (y < padding) y = padding;
+        if (y + ttRect.height > window.innerHeight - padding) y = window.innerHeight - padding - ttRect.height;
+        ttEl.style.left = x + 'px';
+        ttEl.style.top = y + 'px';
+      }
+
+      const startYear = start ? new Date(start).getFullYear() : new Date().getFullYear();
+      const endYear = end ? new Date(end).getFullYear() : new Date().getFullYear();
+      const sameYear = startYear === endYear;
+      const startMs = new Date(start).getTime();
+      const endMs = new Date(end).getTime();
+      const daysCount = Math.round((endMs - startMs) / (24 * 60 * 60 * 1000)) + 1;
+      const isLongRange = daysCount > 90;
+
+      groupsArr.forEach(obj => {
+        const unitLabel = obj.unitKey === '__none__' ? '无单位' : obj.unitKey;
+        const ms = obj.metrics, data = obj.data, labels = obj.labels;
+        const ranges = ms.map(m => {
+          const arr = data[m.id];
+          if (!arr || !arr.length) return { min: 0, max: 0, range: 0 };
+          const vals = arr.filter(v => v != null);
+          if (!vals.length) return { min: 0, max: 0, range: 0 };
+          const min = Math.min(...vals);
+          const max = Math.max(...vals);
+          return { min, max, range: max - min || 1 };
+        });
+        const maxRange = Math.max(...ranges.map(r => r.range));
+        const minRange = Math.min(...ranges.filter(r => r.range > 0).map(r => r.range)) || 1;
+        const useDualAxis = ms.length >= 2 && maxRange / minRange > 3;
+        const threshold = Math.sqrt(maxRange * minRange);
+        const yAxisId = useDualAxis ? ms.map((m, i) => ranges[i].range >= threshold ? 'y' : 'y1') : ms.map(() => 'y');
+
+        const wrap = document.createElement('div');
+        wrap.className = 'chart-group';
+        wrap.innerHTML = '<div class="chart-group-title">' + unitLabel + (useDualAxis ? ' <span class="chart-axis-hint">（左/右轴）</span>' : '') + '</div><div class="chart-wrap"><canvas height="220"></canvas></div>';
+        row.appendChild(wrap);
+        const canvas = wrap.querySelector('canvas');
+        const datasets = ms.map((m, i) => ({
+          label: m.name,
+          data: data[m.id],
+          borderColor: m.color,
+          backgroundColor: m.color + '20',
+          fill: false,
+          tension: 0.3,
+          pointRadius: 2.5,
+          pointHoverRadius: 6,
+          yAxisID: yAxisId[i],
+          spanGaps: false,
+        }));
+        const scaleY = { grid: { color: 'rgba(0,0,0,.05)' }, beginAtZero: false, position: 'left', ticks: { font: { size: 11 }, color: 'rgba(0,0,0,0.7)' } };
+        const scaleY1 = useDualAxis ? { grid: { color: 'rgba(0,0,0,.05)' }, beginAtZero: false, position: 'right', ticks: { font: { size: 11 }, color: 'rgba(0,0,0,0.7)' } } : null;
+        const zoomPanOptions = isLongRange ? {
+          zoom: {
+            zoom: { wheel: { enabled: true }, pinch: { enabled: true }, drag: { enabled: true }, mode: 'x' },
+            pan: { enabled: true, mode: 'x' },
+            limits: { x: { minRange: 7 } },
+          },
+        } : {};
+        const ch = new Chart(canvas.getContext('2d'), {
+          type: 'line',
+          data: { labels, datasets },
+          options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            interaction: { intersect: false, mode: 'index' },
+            plugins: {
+              legend: { display: false },
+              tooltip: { enabled: false, external: externalTooltip },
+              ...zoomPanOptions,
+            },
+            scales: {
+              x: {
+                grid: { color: 'rgba(0,0,0,.05)' },
+                ticks: {
+                  maxTicksLimit: sameYear ? 6 : 8,
+                  callback: function(_, i) {
+                    const d = new Date(labels[i]);
+                    if (sameYear) return (d.getMonth() + 1) + '/' + d.getDate();
+                    return d.getFullYear() + '/' + (d.getMonth() + 1) + '/' + d.getDate();
+                  },
+                },
+              },
+              y: scaleY,
+              ...(scaleY1 ? { y1: scaleY1 } : {}),
+            },
+          },
+          plugins: [{
+            id: 'lastPointLabel',
+            afterDatasetsDraw(chart) {
+              const ctx = chart.ctx;
+              chart.data.datasets.forEach((ds, idx) => {
+                const meta = chart.getDatasetMeta(idx);
+                if (!meta.data.length) return;
+                const arr = ds.data;
+                let lastIdx = arr.length - 1;
+                while (lastIdx >= 0 && (arr[lastIdx] == null || arr[lastIdx] === undefined)) lastIdx--;
+                if (lastIdx < 0) return;
+                const last = meta.data[lastIdx];
+                const val = arr[lastIdx];
+                const m = ms.find(x => x.name === ds.label);
+                const unit = m && m.unit ? ' ' + m.unit : '';
+                const text = String(val) + unit;
+                ctx.save();
+                ctx.fillStyle = ds.borderColor;
+                ctx.font = '11px ' + getComputedStyle(document.body).fontFamily;
+                ctx.textAlign = 'right';
+                const left = chart.chartArea?.left ?? 0;
+                const rightEdge = chart.chartArea?.right ?? chart.width;
+                const rightMargin = (chart.options?.scales?.y1 != null) ? 46 : 4;
+                const x = Math.max(left + 4, Math.min(last.x - 4, rightEdge - rightMargin));
+                ctx.fillText(text, x, last.y);
+                ctx.restore();
+              });
+            },
+          }],
+        });
+        chartInstances.push(ch);
+      });
+    }
+
+    function defaultSelectedIds() {
+      const list = MOCK_METRICS[currentType] || [];
+      return new Set(list.slice(0, MAX_SELECTED_METRICS).map(m => m.id));
+    }
+
+    function openSettingsSheet() {
+      const list = MOCK_METRICS[currentType] || [];
+      const container = document.getElementById('setMetricsList');
+      const selected = new Set(selectedIds);
+      container.innerHTML = list.map(m => {
+        const checked = selected.has(m.id);
+        return '<label class="set-metrics-item" data-id="' + m.id + '">' +
+          '<span class="dot" style="background:' + m.color + '"></span>' +
+          '<span class="name">' + m.name + '</span>' +
+          '<span class="unit">' + (m.unit ? m.unit : '') + '</span>' +
+          '<input type="checkbox" class="check" ' + (checked ? 'checked' : '') + ' onclick="event.stopPropagation()">' +
+          '</label>';
+      }).join('');
+      container.querySelectorAll('.set-metrics-item').forEach(el => {
+        el.addEventListener('click', function(e) {
+          const id = el.dataset.id;
+          const check = el.querySelector('.check');
+          if (e.target.classList.contains('check')) {
+            if (check.checked) {
+              if (selected.size >= MAX_SELECTED_METRICS) check.checked = false;
+              else selected.add(id);
+            } else selected.delete(id);
+            return;
+          }
+          if (check.checked) {
+            check.checked = false;
+            selected.delete(id);
+          } else {
+            if (selected.size >= MAX_SELECTED_METRICS) return;
+            check.checked = true;
+            selected.add(id);
+          }
+        });
+      });
+      window._setMetricsTemp = selected;
+      window._devicePriorityTemp = null;
+      renderDeviceFilters();
+      renderDevicePriorityList();
+      document.getElementById('settingsSheet').classList.add('show');
+    }
+    function closeSettingsSheet() {
+      document.getElementById('settingsSheet').classList.remove('show');
+    }
+    function confirmSettings() {
+      const temp = window._setMetricsTemp;
+      if (temp) {
+        selectedIds = new Set(temp);
+        renderCards();
+        renderLegend();
+        updateChart();
+      }
+      if (window._devicePriorityTemp && window._devicePriorityTemp.length) {
+        const ordered = window._devicePriorityTemp;
+        devicePriorityOrder = [...ordered, ...devicePriorityOrder.filter(d => !ordered.includes(d))];
+      }
+      closeSettingsSheet();
+    }
+
+    const HELP_RULES = [
+      '支持选择多个指标进行对比显示；',
+      '选择后的指标显示在下方，点击关闭后，该指标的数据不在图表上显示。',
+      '底部的图表支持按日、周、月、年等时间范围快速查看；点击某一天可显示当天详细数据；默认显示当周。',
+      '若查询范围内无数据，则图表显示为【暂无数据】的样式。',
+      '若用户选择多个无法合并展示的指标时，展示规则与 wellnesshub 平台一致。',
+    ];
+    function openHelpSheet() {
+      document.getElementById('helpContent').innerHTML = '<ol>' + HELP_RULES.map(r => '<li>' + r + '</li>').join('') + '</ol>';
+      document.getElementById('helpSheet').classList.add('show');
+    }
+    function closeHelpSheet() {
+      document.getElementById('helpSheet').classList.remove('show');
+    }
+
+    function renderDeviceFilters() {
+      const wrap = document.getElementById('deviceFilters');
+      if (!wrap) return;
+      wrap.innerHTML = '<label class="device-check"><input type="checkbox" id="deviceSelectAll"> 全选</label>';
+      const allCheck = document.getElementById('deviceSelectAll');
+      allCheck.checked = selectedDeviceIds.size === MOCK_DEVICE_TYPES.length;
+      allCheck.addEventListener('change', function() {
+        if (this.checked) MOCK_DEVICE_TYPES.forEach(d => selectedDeviceIds.add(d));
+        else selectedDeviceIds.clear();
+        wrap.querySelectorAll('input[data-device]').forEach(inp => { inp.checked = selectedDeviceIds.has(inp.dataset.device); });
+      });
+      MOCK_DEVICE_TYPES.forEach(dev => {
+        const label = document.createElement('label');
+        label.className = 'device-check';
+        const input = document.createElement('input');
+        input.type = 'checkbox';
+        input.dataset.device = dev;
+        input.checked = selectedDeviceIds.has(dev);
+        input.addEventListener('change', () => {
+          if (input.checked) selectedDeviceIds.add(dev);
+          else selectedDeviceIds.delete(dev);
+          allCheck.checked = selectedDeviceIds.size === MOCK_DEVICE_TYPES.length;
+          renderDevicePriorityList();
+        });
+        label.appendChild(input);
+        label.appendChild(document.createTextNode(dev));
+        wrap.appendChild(label);
+      });
+    }
+
+    function renderDevicePriorityList() {
+      const block = document.getElementById('devicePriorityBlock');
+      const listEl = document.getElementById('devicePriorityList');
+      if (!block || !listEl) return;
+      const baseOrder = window._devicePriorityTemp || devicePriorityOrder;
+      let ordered = baseOrder.filter(d => selectedDeviceIds.has(d));
+      const newlyAdded = [...selectedDeviceIds].filter(d => !ordered.includes(d));
+      if (newlyAdded.length) {
+        newlyAdded.sort((a, b) => devicePriorityOrder.indexOf(a) - devicePriorityOrder.indexOf(b));
+        ordered = ordered.concat(newlyAdded);
+      }
+      window._devicePriorityTemp = ordered;
+      if (ordered.length <= 1) {
+        block.classList.remove('visible');
+        return;
+      }
+      block.classList.add('visible');
+      listEl.innerHTML = ordered.map((dev, idx) =>
+        '<div class="device-priority-item" data-device="' + dev + '" data-idx="' + idx + '">' +
+        '<span class="rank-label">排序' + (idx + 1) + '</span>' +
+        '<span class="device-name">' + dev + '</span>' +
+        '<button type="button" class="btn-move-up" data-idx="' + idx + '" ' + (idx === 0 ? 'disabled' : '') + '>前移</button>' +
+        '</div>'
+      ).join('');
+      listEl.querySelectorAll('.btn-move-up:not([disabled])').forEach(btn => {
+        btn.addEventListener('click', function() {
+          const idx = parseInt(this.dataset.idx, 10);
+          if (idx <= 0) return;
+          const arr = window._devicePriorityTemp;
+          [arr[idx - 1], arr[idx]] = [arr[idx], arr[idx - 1]];
+          window._devicePriorityTemp = arr;
+          renderDevicePriorityList();
+        });
+      });
+    }
+    function openTooltipDetailSheet() {
+      const d = window._tooltipDetail;
+      if (!d) return;
+      let titleTime = (d.time != null && String(d.time) !== 'undefined' && String(d.time).indexOf('NaN') < 0) ? d.time : '数据详情';
+      document.getElementById('tooltipDetailTime').textContent = titleTime;
+      document.getElementById('tooltipDetailBody').innerHTML = d.rows.map(r =>
+        '<div class="detail-row"><span class="detail-name">' + r.name + '</span><span class="detail-value">' + r.value + '<span class="detail-device"> ' + (r.device || '—') + '</span></span></div>'
+      ).join('');
+      document.getElementById('tooltipDetailSheet').classList.add('show');
+      document.getElementById('customTooltip').classList.remove('visible');
+    }
+    function closeTooltipDetailSheet() {
+      document.getElementById('tooltipDetailSheet').classList.remove('show');
+    }
+
+    function openDateRangeSheet() {
+      document.getElementById('sheetStartDate').value = document.getElementById('startDate').value;
+      document.getElementById('sheetEndDate').value = document.getElementById('endDate').value;
+      document.getElementById('dateRangeSheet').classList.add('show');
+    }
+    function closeDateRangeSheet() {
+      document.getElementById('dateRangeSheet').classList.remove('show');
+    }
+
+    function init() {
+      setDefaultDates();
+      updateDateRangeDisplay();
+      selectedIds = defaultSelectedIds();
+      renderCards();
+      renderLegend();
+      updateChart();
+      document.getElementById('btnSettings').addEventListener('click', openSettingsSheet);
+      document.getElementById('settingsCancel').addEventListener('click', closeSettingsSheet);
+      document.getElementById('settingsConfirm').addEventListener('click', confirmSettings);
+      document.getElementById('settingsSheet').addEventListener('click', function(e) { if (e.target === this) closeSettingsSheet(); });
+      document.getElementById('btnHelp').addEventListener('click', openHelpSheet);
+      document.getElementById('helpSheet').addEventListener('click', function(e) { if (e.target === this) closeHelpSheet(); });
+      document.getElementById('helpClose').addEventListener('click', closeHelpSheet);
+      document.getElementById('tooltipDetailSheet').addEventListener('click', function(e) { if (e.target === this) closeTooltipDetailSheet(); });
+      document.getElementById('tooltipDetailClose').addEventListener('click', closeTooltipDetailSheet);
+      document.querySelectorAll('.tab').forEach(tab => {
+        tab.addEventListener('click', () => {
+          document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+          tab.classList.add('active');
+          currentType = tab.dataset.type;
+          selectedIds = defaultSelectedIds();
+          renderCards();
+          renderLegend();
+          updateChart();
+        });
+      });
+      document.querySelectorAll('.date-preset-btn').forEach(btn => {
+        btn.addEventListener('click', function() {
+          applyDatePreset(btn.dataset.range);
+          updateChart();
+        });
+      });
+      document.getElementById('btnCustomRange').addEventListener('click', openDateRangeSheet);
+      document.getElementById('dateRangeSheet').addEventListener('click', function(e) {
+        if (e.target === this) closeDateRangeSheet();
+      });
+      document.getElementById('sheetCancel').addEventListener('click', closeDateRangeSheet);
+      document.getElementById('sheetConfirm').addEventListener('click', function() {
+        const start = document.getElementById('sheetStartDate').value;
+        const end = document.getElementById('sheetEndDate').value;
+        if (!start || !end) { closeDateRangeSheet(); return; }
+        document.getElementById('startDate').value = start;
+        document.getElementById('endDate').value = end;
+        setCustomRangeActive();
+        updateDateRangeDisplay();
+        closeDateRangeSheet();
+        updateChart();
+      });
+    }
+    init();
+  </script>
+</body>
+</html>

@@ -1,0 +1,101 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>完整测量准备</title>
+    <link rel="stylesheet" href="./shared.css" />
+  </head>
+  <body>
+    <main class="device-stage">
+      <section class="device">
+        <div class="status-bar"><span>18:32</span><span>完整测量</span></div>
+        <div class="topbar">
+          <a class="back-link" href="./home.html">← 返回</a>
+          <span class="text-link">测量准备</span>
+        </div>
+        <div class="section-label">完整测量</div>
+        <h1 class="screen-title">完整测量准备</h1>
+        <p class="screen-subtitle" data-guide-subtitle>请先完成上台前准备。</p>
+
+        <div class="guide-phase-bar" role="tablist" aria-label="准备阶段">
+          <button type="button" class="guide-phase-tab is-active" data-guide-phase-tab="1" role="tab" aria-selected="true">
+            ① 上台前准备
+          </button>
+          <button type="button" class="guide-phase-tab" data-guide-phase-tab="2" role="tab" aria-selected="false" disabled>
+            ② 扶手与手臂姿势
+          </button>
+        </div>
+
+        <div class="device-visual">
+          <div
+            class="live-stage"
+            data-guide-sequence
+            data-guide-next="./standard-countdown.html"
+            data-voice-text="请先脱鞋脱袜，并将双脚站稳在脚印位置。"
+          >
+            <div class="camera-corner tl"></div>
+            <div class="camera-corner tr"></div>
+            <div class="camera-corner bl"></div>
+            <div class="camera-corner br"></div>
+            <div class="live-glow"></div>
+            <div class="live-status" data-guide-chips>
+              <span class="live-chip ok" data-guide-chip-a>阶段一 · 上台前</span>
+              <span class="live-chip" data-guide-chip-b>请按提示操作</span>
+            </div>
+            <div class="guide-line circle" data-guide-circle></div>
+            <div class="guide-line feet" data-guide-feet></div>
+            <div class="human pose-down" data-guide-human>
+              <div class="head"></div>
+              <div class="torso"></div>
+              <div class="limb arm left"></div>
+              <div class="limb arm right"></div>
+              <div class="limb leg left"></div>
+              <div class="limb leg right"></div>
+            </div>
+            <div class="guide-spotlight">
+              <div class="guide-step-pill" data-guide-phase-label>阶段 1/2</div>
+              <ul class="guide-point-list" data-guide-points>
+                <li class="is-active">
+                  <span class="guide-point-dot"></span>
+                  <div>
+                    <strong data-guide-point-title-a>脱鞋脱袜</strong>
+                    <span data-guide-point-body-a>保持足底可完整接触转台。</span>
+                  </div>
+                </li>
+                <li>
+                  <span class="guide-point-dot"></span>
+                  <div>
+                    <strong data-guide-point-title-b>双脚接触脚印</strong>
+                    <span data-guide-point-body-b>双脚站稳，足底与脚印充分接触。</span>
+                  </div>
+                </li>
+              </ul>
+            </div>
+            <div class="live-focus" data-guide-focus>请脱鞋脱袜</div>
+          </div>
+        </div>
+
+        <div class="guide-actions">
+          <button type="button" class="button ghost guide-replay-btn" data-guide-replay>再次播报</button>
+        </div>
+
+        <div class="footer-hint guide-footer">
+          <button type="button" class="button primary guide-phase-btn" data-guide-phase-confirm="1">
+            确定第一步完成（演示）
+          </button>
+          <a
+            class="button primary guide-phase-btn"
+            href="./standard-countdown.html"
+            data-guide-phase-next
+            data-demo-next="./standard-countdown.html"
+            hidden
+          >
+            准备完成，进入倒计时
+          </a>
+        </div>
+      </section>
+    </main>
+    <script src="./shared.js"></script>
+  </body>
+</html>
