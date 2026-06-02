@@ -997,6 +997,8 @@ function withStateQuery(target, state) {
   const params = new URLSearchParams(currentQuery);
   const stateParams = new URLSearchParams(buildStateQuery(state));
   stateParams.forEach((value, key) => params.set(key, value));
+  const pageQs = new URLSearchParams(window.location.search);
+  if (pageQs.get("demoAuto") === "1") params.set("demoAuto", "1");
   const query = params.toString();
   return `${basePath}${query ? `?${query}` : ""}${hash ? `#${hash}` : ""}`;
 }
@@ -1733,7 +1735,7 @@ function setupFinishAutoAdvance() {
     function syncIdlePendingHint() {
       const idleLabelEl = section.querySelector("[data-idle-label]");
       const idleCountEl = section.querySelector("[data-idle-countdown]");
-      if (idleLabelEl) idleLabelEl.textContent = "点击下方区域或选项后开始倒计时";
+      if (idleLabelEl) idleLabelEl.textContent = "点击空白处后启动空闲倒计时（演示）";
       if (idleCountEl) {
         idleCountEl.textContent = "";
         idleCountEl.hidden = true;
@@ -1773,8 +1775,18 @@ function setupFinishAutoAdvance() {
       startIdleCountdown();
     }
 
-    function onIdleUserActivity() {
+    function onIdleUserActivity(event) {
       if (!idleEnabled) return;
+      const t = event?.target;
+      if (t?.closest?.("[data-choice-item], [data-finish-option]")) {
+        return;
+      }
+      if (event?.type === "keydown") {
+        const ae = document.activeElement;
+        if (ae?.closest?.("[data-choice-item], [data-finish-option]")) {
+          return;
+        }
+      }
       if (idleStartOnFirstClick && !idleCountdownStarted) {
         idleCountdownStarted = true;
         startIdleCountdown();
@@ -2188,7 +2200,7 @@ function setupGestureRingModule(prepRoot) {
       (context === "finish"
         ? "测量已完成。请举手确认下一步操作。"
         : prepDualHand
-          ? "请确认准备事项。举右手进入下一步，举左手退出测量。"
+          ? "请按清单准备好后举手：右手进入下一步，左手退出测量。"
           : "请举右手进入下一步。")
   );
 
@@ -2257,7 +2269,9 @@ function setupAutoDetectAdvance() {
       if (!skipRecognizedSpeak) speakText("识别通过。");
     }
 
-    if (voiceAdvanceNext) {
+    if (voiceAdvanceNext && !isDemoManualAdvance()) {
+      const autoHint = root.querySelector("[data-voice-auto-hint]");
+      if (autoHint) autoHint.hidden = false;
       if (statusEl) statusEl.textContent = "正在识别...";
       const voiceLine =
         root.dataset.voiceText || "正在识别姿态，请保持不动。";
@@ -3083,9 +3097,7 @@ function setupTurntableAnthropometryCapture() {
     }
   }
 
-  const forceAutoAnthropometry = root.dataset.anthropometryAuto === "1";
-
-  if (forceAutoAnthropometry || !isDemoManualAdvance()) {
+  if (!isDemoManualAdvance()) {
     let autoStarted = false;
     function runAnthropometrySequenceAuto() {
       if (autoStarted) return;

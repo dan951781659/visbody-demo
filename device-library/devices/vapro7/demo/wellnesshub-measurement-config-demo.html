@@ -933,6 +933,246 @@
       .preview-grid { grid-template-columns: 1fr; }
     }
 
+
+    .model-bar {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 12px 14px;
+      border-radius: 14px;
+      border: 1px solid var(--line);
+      background: linear-gradient(90deg, #f0f6ff 0%, #fff 100%);
+    }
+    .model-bar-title {
+      font-size: 14px;
+      font-weight: 700;
+      color: #1d2939;
+    }
+    .model-tab-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+    .model-tab {
+      min-height: 34px;
+      padding: 0 14px;
+      border-radius: 10px;
+      border: 1px solid var(--line-strong);
+      background: #fff;
+      font-size: 12px;
+      font-weight: 600;
+      color: #475467;
+    }
+    .model-tab.active {
+      border-color: var(--blue);
+      background: var(--blue-weak);
+      color: var(--blue);
+    }
+    .config-subtabs {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      padding-bottom: 10px;
+      border-bottom: 1px solid var(--line);
+    }
+    .config-subtab {
+      min-height: 32px;
+      padding: 0 16px;
+      border-radius: 8px;
+      border: 1px solid var(--line-strong);
+      background: #fff;
+      font-size: 13px;
+      font-weight: 600;
+      color: #475467;
+      transition: all 0.18s ease;
+    }
+    .config-subtab.active {
+      border-color: var(--blue);
+      background: linear-gradient(180deg, #3b74ff 0%, var(--blue) 100%);
+      color: #fff;
+      box-shadow: 0 6px 16px rgba(47, 107, 255, 0.2);
+    }
+    .config-panel {
+      display: grid;
+      gap: 14px;
+    }
+    .config-panel[hidden] {
+      display: none;
+    }
+    .legacy-stack {
+      display: grid;
+      gap: 12px;
+    }
+    .legacy-card {
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      background: #fff;
+      padding: 14px 16px;
+      display: grid;
+      gap: 10px;
+    }
+    .legacy-card h4 {
+      margin: 0;
+      font-size: 15px;
+    }
+    .legacy-details summary {
+      cursor: pointer;
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--blue);
+    }
+    .legacy-muted {
+      margin: 8px 0 0;
+      font-size: 12px;
+      color: var(--muted);
+      line-height: 1.6;
+    }
+    .legacy-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      align-items: center;
+    }
+    .legacy-fake-input {
+      flex: 1 1 200px;
+      min-height: 36px;
+      border: 1px dashed var(--line-strong);
+      border-radius: 10px;
+      padding: 0 12px;
+      display: flex;
+      align-items: center;
+      color: #98a2b3;
+      font-size: 12px;
+    }
+    .legacy-select {
+      min-width: 220px;
+      height: 36px;
+      border-radius: 10px;
+      border: 1px solid var(--line-strong);
+      padding: 0 10px;
+      font-size: 13px;
+    }
+    .panel-muted {
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.6;
+    }
+    .hub-device-preview {
+      border-radius: 14px;
+      overflow: hidden;
+      border: 1px solid #1a2740;
+      background: #0b0f14;
+    }
+    .hub-device-preview__chrome {
+      padding: 8px 12px;
+      font-size: 11px;
+      font-weight: 600;
+      color: rgba(255,255,255,0.55);
+      background: #121826;
+      border-bottom: 1px solid rgba(255,255,255,0.06);
+    }
+    .hub-device-preview__screen {
+      padding: 10px;
+      max-height: 420px;
+      overflow-y: auto;
+    }
+    .hub-ms-stack {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    .hub-ms-card {
+      border-radius: 14px;
+      border: 1px solid rgba(255,255,255,0.08);
+      background: linear-gradient(135deg, #252a35 0%, #1a1f28 100%);
+      overflow: hidden;
+    }
+    .hub-ms-card--primary {
+      background: linear-gradient(135deg, #1f5fd4 0%, #2b7cff 55%, #1a4ec4 100%);
+      border-color: rgba(120, 180, 255, 0.45);
+    }
+    .hub-ms-card__body {
+      display: grid;
+      grid-template-columns: 1fr 72px;
+      gap: 6px 8px;
+      align-items: start;
+      padding: 10px 10px 10px 8px;
+      min-height: 72px;
+    }
+    .hub-ms-card__title {
+      font-size: 14px;
+      font-weight: 700;
+      line-height: 1.25;
+      color: #fff;
+      margin-bottom: 4px;
+    }
+    .hub-ms-card__benefit {
+      font-size: 11px;
+      line-height: 1.45;
+      color: rgba(232, 241, 255, 0.78);
+      margin-bottom: 4px;
+    }
+    .hub-ms-card__hint {
+      font-size: 12px;
+      font-weight: 650;
+      color: #f0f6ff;
+      line-height: 1.35;
+    }
+    .hub-ms-card__figure img {
+      width: 100%;
+      max-height: 64px;
+      object-fit: contain;
+      filter: drop-shadow(0 4px 10px rgba(0,0,0,0.25));
+    }
+    .save-scope-modal {
+      position: fixed;
+      inset: 0;
+      z-index: 80;
+      display: grid;
+      place-items: center;
+      padding: 20px;
+      background: rgba(15, 23, 42, 0.45);
+    }
+    .save-scope-modal[hidden] {
+      display: none;
+    }
+    .save-scope-dialog {
+      width: min(520px, 100%);
+      max-height: min(90vh, 720px);
+      overflow: auto;
+      border-radius: 16px;
+      background: #fff;
+      border: 1px solid var(--line);
+      box-shadow: var(--shadow);
+      padding: 18px 20px 16px;
+      display: grid;
+      gap: 14px;
+    }
+    .save-scope-dialog h2 {
+      margin: 0;
+      font-size: 17px;
+    }
+    .modal-scope-row {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      font-size: 13px;
+    }
+    .modal-scope-row label {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      cursor: pointer;
+    }
+    .modal-actions {
+      display: flex;
+      justify-content: flex-end;
+      gap: 10px;
+      padding-top: 4px;
+    }
+
     .restart-hint {
       margin: 12px 0 0;
       padding: 10px 12px;
@@ -1006,10 +1246,8 @@
           <a class="back-link" href="javascript:void(0)">← 返回</a>
           <div class="page-title">
             <h1>编辑门店</h1>
-            <p>配置测量项目开关与报告显隐。综合测量与身体成分、体态、体围单项互斥。</p>
-            <p class="restart-hint" role="note">
-              <strong>设备端生效（量产）</strong>：保存成功后请<strong>重启门店内对应体测设备</strong>，新配置在设备重启后生效。本 Demo 为同源浏览器存储，保存后<strong>刷新设备端演示页</strong>即可读取最新配置。
-            </p>
+            <p>配置设备展示样式，或按型号设置测量项目与报告显隐。</p>
+            <p class="restart-hint" role="note">保存后需<strong>重启设备</strong>生效；本 Demo 请刷新设备端演示页读取配置。</p>
           </div>
         </div>
 
@@ -1022,24 +1260,69 @@
         <section class="editor-frame">
           <div class="editor-shell">
             <div class="editor-config">
-              <div class="scope-bar">
-                <div class="scope-row">
-                  <span class="scope-label">生效方式</span>
-                  <div class="segmented" id="scopeSwitch" role="tablist" aria-label="配置范围">
-                    <button type="button" data-scope="store" class="active">门店默认</button>
-                    <button type="button" data-scope="device">指定设备覆盖</button>
-                  </div>
-                </div>
-                <div class="scope-tip">门店默认为基础配置；指定设备覆盖仅作用于勾选的设备，不回写门店默认。</div>
-                <div class="device-row" id="deviceRow" hidden aria-live="polite"></div>
+              <div class="config-subtabs" role="tablist" aria-label="设备配置分区">
+                <button type="button" class="config-subtab" data-config-subtab="style">设备样式配置</button>
+                <button type="button" class="config-subtab active" data-config-subtab="measurement">测量项目/报告配置</button>
               </div>
+
+              <section id="configPanelStyle" class="config-panel" hidden>
+            <div class="legacy-stack">
+              <div class="legacy-card">
+                <h4>Logo 与待机视频</h4>
+                <span class="tag gray" id="legacyStyleTag">适用：VApro6 / Pro5 / Lite6 等（示意）</span>
+                <details class="legacy-details">
+                  <summary>上传要求（展开）</summary>
+                  <p class="legacy-muted">Logo：PNG/SVG，建议透明底；视频：MP4，建议 1080p 以内、30fps 以内。具体以线上校验为准。</p>
+                </details>
+                <div class="legacy-row">
+                  <span style="font-size:12px;font-weight:600;color:#475467;width:72px">门店 Logo</span>
+                  <div class="legacy-fake-input">点击上传（Demo 占位）</div>
+                </div>
+                <div class="legacy-row">
+                  <span style="font-size:12px;font-weight:600;color:#475467;width:72px">待机视频</span>
+                  <div class="legacy-fake-input">点击上传（Demo 占位）</div>
+                </div>
+              </div>
+              <div class="legacy-card">
+                <h4>体成分标准</h4>
+                <span class="tag gray">适用：RPro5 / DPro3 / E260 / APro6 等（示意）</span>
+                <div class="legacy-row">
+                  <label for="legacyBodyCompSelect" style="font-size:12px;font-weight:600;color:#475467">当前标准</label>
+                  <select class="legacy-select" id="legacyBodyCompSelect" aria-label="体成分标准">
+                    <option value="inbody">InBody 对照</option>
+                    <option value="who">WHO 标准</option>
+                    <option value="custom">门店自定义（占位）</option>
+                  </select>
+                  <a href="javascript:void(0)" style="font-size:12px;color:var(--blue)">修改记录</a>
+                </div>
+              </div>
+              <div class="legacy-card" id="legacyGirthBlock">
+                <h4>围度展示数量</h4>
+                <span class="tag blue">仅 Visbody-APro7</span>
+                <p class="legacy-muted" style="margin:0">门店级字段，仅对 APro7 设备生效。</p>
+                <div class="legacy-row" style="gap:16px">
+                  <label style="display:flex;align-items:center;gap:6px;font-size:13px;cursor:pointer">
+                    <input type="radio" name="girthDisplayCount" value="9" checked /> 9 项
+                  </label>
+                  <label style="display:flex;align-items:center;gap:6px;font-size:13px;cursor:pointer">
+                    <input type="radio" name="girthDisplayCount" value="14" /> 14 项
+                  </label>
+                </div>
+              </div>
+            </div>
+              </section>
+
+              <section id="configPanelMeasurement" class="config-panel">
+            <div class="model-bar">
+              <div class="model-bar-title" id="modelBarTitle">当前正在配置：—</div>
+              <div class="model-tab-row" id="modelSwitchBar" role="tablist" aria-label="设备型号"></div>
+            </div>
 
               <div class="config-grid">
                 <section class="panel panel--projects">
                   <div class="panel-head">
                     <div>
                       <h3>测量项目配置</h3>
-                      <p>开启或关闭各测量项目。</p>
                     </div>
                   </div>
                   <div class="panel-body">
@@ -1051,21 +1334,20 @@
                   <div class="panel-head">
                     <div>
                       <h3 id="reportTitle">报告显示配置</h3>
-                      <p>以下为当前已开启测量项目的报告显隐；开启或关闭左侧项目后，本区域会即时更新。</p>
                     </div>
                   </div>
                   <div class="panel-body panel-body--detail">
                     <div class="report-list" id="reportList"></div>
                     <div class="preview-panel">
                       <div class="preview-panel__head">
-                        <h4>显示预览</h4>
-                        <span class="tag blue" id="scopeLabel">门店默认</span>
+                        <h4>设备端项目选择页</h4>
                       </div>
                       <div class="preview-panel__body" id="previewPanel"></div>
                     </div>
                   </div>
                 </section>
               </div>
+              </section>
             </div>
           </div>
         </section>
@@ -1078,853 +1360,1079 @@
     </main>
   </div>
 
+
+  <div id="saveScopeModal" class="save-scope-modal" hidden>
+    <div class="save-scope-dialog" role="dialog" aria-modal="true" aria-labelledby="saveScopeModalTitle">
+      <h2 id="saveScopeModalTitle">选择生效范围</h2>
+      <div class="modal-scope-row">
+        <label><input type="radio" name="saveScopeKind" id="modalRadioStore" value="store" checked /> 门店内该型号全部设备</label>
+        <label><input type="radio" name="saveScopeKind" id="modalRadioDevices" value="devices" /> 指定设备（SN）</label>
+      </div>
+      <div id="modalDeviceRow" hidden></div>
+      <div class="modal-actions">
+        <button type="button" class="btn ghost" id="modalCancelBtn">取消</button>
+        <button type="button" class="btn primary" id="modalConfirmBtn">保存</button>
+      </div>
+    </div>
+  </div>
+
   <div class="toast" id="toast">
     <div class="title" id="toastTitle">已保存</div>
     <div class="desc" id="toastDesc">配置已保存。</div>
   </div>
 
   <script>
-    const STORAGE_KEY = 'wellnesshub_measurement_config_demo_v6';
-    const STORAGE_KEY_LEGACY = 'wellnesshub_measurement_config_demo_v5';
-    const DEVICE_PAYLOAD_KEY = 'vapro7-measurement-config';
+/* WellnessHub 设备配置 Demo v7 */
+(function () {
+  const STORAGE_KEY = 'wellnesshub_measurement_config_demo_v7';
+  const STORAGE_KEY_V6 = 'wellnesshub_measurement_config_demo_v6';
+  const STORAGE_KEY_LEGACY = 'wellnesshub_measurement_config_demo_v5';
+  const DEVICE_PAYLOAD_KEY = 'vapro7-measurement-config';
 
-    const CORE_MUTEX_IDS = ['comprehensive', 'bodyComp', 'posture', 'circumference'];
-    const CORE_SINGLE_IDS = ['bodyComp', 'posture', 'circumference'];
-    /** 与「综合测量」不能同时开启的单项（体态单项 B1 除外，可与综合顺序加测） */
-    const COMPREHENSIVE_EXCLUSIVE_SINGLE_IDS = ['bodyComp', 'circumference'];
-    /** B1：综合与体态单项同开时，以下 3 份报告在两处存储中保持一致（以综合内为准 reconcile） */
-    const POSTURE_LINKED_REPORT_IDS = ['postureReport', 'spine', 'hip'];
-    const DYNAMIC_LAB_PROJECT_IDS = ['shoulder', 'neck'];
-    const DYNAMIC_LAB_GROUP = {
-      id: 'dynamicLab',
-      name: '动态实验室',
-      desc: '设备端合并为一张入口；肩、颈可分别开关。',
-    };
+  const MODEL_IDS_ORDER = [
+    'visbody-apro7',
+    'visbody-apro6',
+    'visbody-rpro5',
+    'visbody-dpro3',
+    'visbody-e260',
+  ];
 
-    /** 综合测量开启时，结果页可单独配置显隐的 7 份报告（写入 projects.comprehensive.reports） */
-    const COMPREHENSIVE_REPORT_DEFS = [
-      { id: 'postureReport', label: '体态报告', hint: '设备端报告页显示体态卡片。', defaultVisible: true, group: 'posture' },
-      { id: 'spine', label: '脊柱报告', hint: '设备端报告页显示脊柱卡片。', defaultVisible: true, group: 'posture' },
-      { id: 'hip', label: '臀型报告', hint: '设备端报告页显示臀型卡片。', defaultVisible: false, group: 'posture' },
-      { id: 'bodyCompReport', label: '身体成分报告', hint: '设备端结果页显示身体成分报告卡片。', defaultVisible: true, group: 'bodyComp' },
-      {
-        id: 'youthGrowthReport',
-        label: '青少年成长报告',
-        hint: '设备端结果页显示青少年成长类报告卡片；与身体成分同属一组开关。',
-        defaultVisible: true,
-        group: 'bodyComp',
-      },
-      { id: 'circumferenceReport', label: '体围报告', hint: '设备端结果页显示体围报告卡片。', defaultVisible: true, group: 'circumference' },
-      { id: 'waistAbdomenReport', label: '腰腹维度报告', hint: '设备端结果页显示腰腹维度报告卡片。', defaultVisible: true, group: 'circumference' },
-    ];
+  const DEVICE_MODEL_CATALOG = [
+    {
+      id: 'visbody-apro7',
+      name: 'Visbody-APro7',
+      snPrefix: 'VA700',
+      supportedProjectIds: [
+        'comprehensive',
+        'bodyComp',
+        'posture',
+        'circumference',
+        'balance',
+        'shoulder',
+        'neck',
+      ],
+      legacyStyleTag: 'VApro6 / Pro5 / Lite6 等（示意）',
+    },
+    {
+      id: 'visbody-apro6',
+      name: 'Visbody-APro6',
+      snPrefix: 'VA600',
+      supportedProjectIds: ['comprehensive', 'bodyComp', 'posture', 'circumference'],
+      legacyStyleTag: 'RPro5 / DPro3 / E260 / APro6 等（示意）',
+    },
+    {
+      id: 'visbody-rpro5',
+      name: 'Visbody-RPro5',
+      snPrefix: 'VR510',
+      supportedProjectIds: ['comprehensive', 'bodyComp', 'posture', 'circumference'],
+      legacyStyleTag: 'RPro5 / DPro3 / E260 / APro6 等（示意）',
+    },
+    {
+      id: 'visbody-dpro3',
+      name: 'Visbody-DPro3',
+      snPrefix: 'VD320',
+      supportedProjectIds: ['comprehensive', 'bodyComp', 'posture', 'circumference'],
+      legacyStyleTag: 'RPro5 / DPro3 / E260 / APro6 等（示意）',
+    },
+    {
+      id: 'visbody-e260',
+      name: 'Visbody-E260',
+      snPrefix: 'VP260',
+      supportedProjectIds: ['comprehensive', 'bodyComp', 'posture', 'circumference'],
+      legacyStyleTag: 'RPro5 / DPro3 / E260 / APro6 等（示意）',
+    },
+  ];
 
-    const REPORT_DEFS_BY_SOURCE = {
-      bodyComp: COMPREHENSIVE_REPORT_DEFS.filter((r) => r.group === 'bodyComp'),
-      posture: COMPREHENSIVE_REPORT_DEFS.filter((r) => r.group === 'posture'),
-      circumference: COMPREHENSIVE_REPORT_DEFS.filter((r) => r.group === 'circumference'),
-    };
+  function getModelMeta(modelId) {
+    return DEVICE_MODEL_CATALOG.find((m) => m.id === modelId) || DEVICE_MODEL_CATALOG[0];
+  }
 
-    const projectCatalog = [
-      {
-        id: 'comprehensive',
-        type: 'composite',
-        mutexGroup: 'core-trio',
-        includes: ['bodyComp', 'posture', 'circumference'],
-        name: '综合测量',
-        desc: '一轮完成身体成分、体态、体围测量；与身体成分/体围单项互斥；体态单项可与综合同时开启用于顺序加测。',
-        reports: [].concat(
-          REPORT_DEFS_BY_SOURCE.bodyComp,
-          REPORT_DEFS_BY_SOURCE.posture,
-          REPORT_DEFS_BY_SOURCE.circumference,
-        ),
-      },
-      {
-        id: 'bodyComp',
-        type: 'single',
-        mutexGroup: 'core-trio',
-        name: '身体成分',
-        desc: '单项测量：仅身体成分；与综合测量互斥。',
-        reports: [...REPORT_DEFS_BY_SOURCE.bodyComp],
-      },
-      {
-        id: 'posture',
-        type: 'single',
-        mutexGroup: 'core-trio',
-        name: '体态',
-        desc: '单项测量：体态专项（双手下垂）；可与综合同时开启，建议综合后经「继续下一项」加测。',
-        reports: [...REPORT_DEFS_BY_SOURCE.posture],
-      },
-      {
-        id: 'circumference',
-        type: 'single',
-        mutexGroup: 'core-trio',
-        name: '体围',
-        desc: '单项测量：体围；与综合测量互斥。',
-        reports: [...REPORT_DEFS_BY_SOURCE.circumference],
-      },
-      {
-        id: 'balance',
-        type: 'single',
-        name: '平衡评估',
-        desc: '控制平衡入口与报告是否显示。',
-        reports: [
-          { id: 'balanceReport', label: '平衡报告', hint: '设备端结果页显示平衡报告卡片。', defaultVisible: true },
-        ],
-      },
-      {
-        id: 'shoulder',
-        type: 'single',
-        parentGroup: 'dynamicLab',
-        name: '肩部',
-        desc: '控制肩部测量入口与肩部报告显示。',
-        reports: [
-          { id: 'shoulderReport', label: '肩部报告', hint: '设备端结果页显示肩部报告卡片。', defaultVisible: true },
-        ],
-      },
-      {
-        id: 'neck',
-        type: 'single',
-        parentGroup: 'dynamicLab',
-        name: '颈部',
-        desc: '控制颈部测量入口与颈部报告显示。',
-        reports: [
-          { id: 'neckReport', label: '颈部报告', hint: '设备端结果页显示颈部报告卡片。', defaultVisible: true },
-        ],
-      },
-    ];
+  function modelSupportsProject(modelId, projectId) {
+    return getModelMeta(modelId).supportedProjectIds.includes(projectId);
+  }
 
-    const DEVICE_PICKER_PAGE_SIZE = 20;
-    const DEMO_STORE_NAMES = ['体测线旗舰店', '体测线朝阳店', '体测线海淀店'];
+  const CORE_MUTEX_IDS = ['comprehensive', 'bodyComp', 'posture', 'circumference'];
+  const CORE_SINGLE_IDS = ['bodyComp', 'posture', 'circumference'];
+  const COMPREHENSIVE_EXCLUSIVE_SINGLE_IDS = ['bodyComp', 'circumference'];
+  const POSTURE_LINKED_REPORT_IDS = ['postureReport', 'spine', 'hip'];
+  const DYNAMIC_LAB_PROJECT_IDS = ['shoulder', 'neck'];
+  const DYNAMIC_LAB_GROUP = {
+    id: 'dynamicLab',
+    name: '动态实验室',
+    desc: '设备端合并为一张入口；肩、颈可分别开关。',
+  };
 
-    function buildDemoStoreUnits() {
-      const models = [
-        { id: 'visbody-e260', name: 'Visbody-E260 (V260)', snPrefix: 'VP260' },
-        { id: 'visbody-dpro3', name: 'Visbody-DPro3', snPrefix: 'VD320' },
-        { id: 'visbody-rpro5', name: 'Visbody-RPro5', snPrefix: 'VR510' },
-        { id: 'visbody-apro6', name: 'Visbody-APro6', snPrefix: 'VA600' },
-      ];
-      const counts = [28, 22, 8, 6];
-      const units = [];
-      let seq = 0;
-      models.forEach((m, mi) => {
-        const count = counts[mi] || 6;
-        for (let i = 0; i < count; i++) {
-          seq += 1;
-          const sn = `${m.snPrefix}-${String(10000 + seq).slice(1)}`;
-          units.push({
-            id: `u-${m.id}-${i + 1}`,
-            modelId: m.id,
-            modelName: m.name,
-            sn,
-            storeName: DEMO_STORE_NAMES[(seq - 1) % DEMO_STORE_NAMES.length],
-          });
-        }
-      });
-      return units;
-    }
+  const COMPREHENSIVE_REPORT_DEFS = [
+    { id: 'postureReport', label: '体态报告', hint: '设备端报告页显示体态卡片。', defaultVisible: true, group: 'posture' },
+    { id: 'spine', label: '脊柱报告', hint: '设备端报告页显示脊柱卡片。', defaultVisible: true, group: 'posture' },
+    { id: 'hip', label: '臀型报告', hint: '设备端报告页显示臀型卡片。', defaultVisible: false, group: 'posture' },
+    { id: 'bodyCompReport', label: '身体成分报告', hint: '设备端结果页显示身体成分报告卡片。', defaultVisible: true, group: 'bodyComp' },
+    {
+      id: 'youthGrowthReport',
+      label: '青少年成长报告',
+      hint: '设备端结果页显示青少年成长类报告卡片；与身体成分同属一组开关。',
+      defaultVisible: true,
+      group: 'bodyComp',
+    },
+    { id: 'circumferenceReport', label: '体围报告', hint: '设备端结果页显示体围报告卡片。', defaultVisible: true, group: 'circumference' },
+    { id: 'waistAbdomenReport', label: '腰腹维度报告', hint: '设备端结果页显示腰腹维度报告卡片。', defaultVisible: true, group: 'circumference' },
+  ];
 
-    /** 门店已绑定设备：按 SN 唯一（演示数据约 60+ 台，用于验证大量设备下的筛选与分页） */
-    const STORE_DEVICE_UNITS = buildDemoStoreUnits();
+  const REPORT_DEFS_BY_SOURCE = {
+    bodyComp: COMPREHENSIVE_REPORT_DEFS.filter((r) => r.group === 'bodyComp'),
+    posture: COMPREHENSIVE_REPORT_DEFS.filter((r) => r.group === 'posture'),
+    circumference: COMPREHENSIVE_REPORT_DEFS.filter((r) => r.group === 'circumference'),
+  };
 
-    const LEGACY_MODEL_IDS = ['visbody-e260', 'visbody-dpro3', 'visbody-rpro5', 'visbody-apro6'];
+  const projectCatalog = [
+    {
+      id: 'comprehensive',
+      type: 'composite',
+      mutexGroup: 'core-trio',
+      includes: ['bodyComp', 'posture', 'circumference'],
+      name: '综合测量',
+      desc: '一轮完成身体成分、体态、体围测量；与身体成分/体围单项互斥；体态单项可与综合同时开启用于顺序加测。',
+      reports: [].concat(REPORT_DEFS_BY_SOURCE.bodyComp, REPORT_DEFS_BY_SOURCE.posture, REPORT_DEFS_BY_SOURCE.circumference),
+    },
+    {
+      id: 'bodyComp',
+      type: 'single',
+      mutexGroup: 'core-trio',
+      name: '身体成分',
+      desc: '单项测量：仅身体成分；与综合测量互斥。',
+      reports: [...REPORT_DEFS_BY_SOURCE.bodyComp],
+    },
+    {
+      id: 'posture',
+      type: 'single',
+      mutexGroup: 'core-trio',
+      name: '体态',
+      desc: '单项测量：体态专项（双手下垂）；可与综合同时开启，建议综合后经「继续下一项」加测。',
+      reports: [...REPORT_DEFS_BY_SOURCE.posture],
+    },
+    {
+      id: 'circumference',
+      type: 'single',
+      mutexGroup: 'core-trio',
+      name: '体围',
+      desc: '单项测量：体围；与综合测量互斥。',
+      reports: [...REPORT_DEFS_BY_SOURCE.circumference],
+    },
+    {
+      id: 'balance',
+      type: 'single',
+      name: '平衡评估',
+      desc: '控制平衡入口与报告是否显示。',
+      reports: [{ id: 'balanceReport', label: '平衡报告', hint: '设备端结果页显示平衡报告卡片。', defaultVisible: true }],
+    },
+    {
+      id: 'shoulder',
+      type: 'single',
+      parentGroup: 'dynamicLab',
+      name: '肩部',
+      desc: '控制肩部测量入口与肩部报告显示。',
+      reports: [{ id: 'shoulderReport', label: '肩部报告', hint: '设备端结果页显示肩部报告卡片。', defaultVisible: true }],
+    },
+    {
+      id: 'neck',
+      type: 'single',
+      parentGroup: 'dynamicLab',
+      name: '颈部',
+      desc: '控制颈部测量入口与颈部报告显示。',
+      reports: [{ id: 'neckReport', label: '颈部报告', hint: '设备端结果页显示颈部报告卡片。', defaultVisible: true }],
+    },
+  ];
 
-    const deepClone = (obj) => JSON.parse(JSON.stringify(obj));
+  const DEVICE_PICKER_PAGE_SIZE = 20;
+  const DEMO_STORE_NAMES = ['体测线旗舰店', '体测线朝阳店', '体测线海淀店'];
 
-    function escapeHtml(str) {
-      return String(str)
-        .replace(/&/g, '&amp;')
-        .replace(/</g, '&lt;')
-        .replace(/"/g, '&quot;');
-    }
-
-    function getUnitById(unitId) {
-      return STORE_DEVICE_UNITS.find((u) => u.id === unitId) || null;
-    }
-
-    function migrateLegacyDeviceOverrides(raw) {
-      if (!raw || typeof raw !== 'object') return {};
-      const out = {};
-      Object.entries(raw).forEach(([key, cfg]) => {
-        if (!cfg || typeof cfg !== 'object') return;
-        const asUnit = getUnitById(key);
-        if (asUnit) {
-          out[key] = cfg;
-          return;
-        }
-        if (LEGACY_MODEL_IDS.includes(key)) {
-          STORE_DEVICE_UNITS.filter((u) => u.modelId === key).forEach((u) => {
-            out[u.id] = deepClone(cfg);
-          });
-        }
-      });
-      return out;
-    }
-
-    function mergeSelectedUnitIdsFromPayload(data) {
-      const valid = (ids) =>
-        (Array.isArray(ids) ? ids : []).filter((id) => STORE_DEVICE_UNITS.some((u) => u.id === id));
-      let selected = valid(data.selectedUnitIds);
-      if (selected.length) return selected;
-      const legacy = Array.isArray(data.selectedDeviceIds) ? data.selectedDeviceIds : [];
-      const expanded = legacy.flatMap((mid) =>
-        LEGACY_MODEL_IDS.includes(mid) ? STORE_DEVICE_UNITS.filter((u) => u.modelId === mid).map((u) => u.id) : []
-      );
-      if (expanded.length) return expanded;
-      return [STORE_DEVICE_UNITS[0].id];
-    }
-
-    const HOME_TILE_POOL_HUB = [
-      'standard',
-      'pro',
-      'bodyCompSingle',
-      'circumferenceSingle',
-      'bodycompGirth',
-      'girthOnly',
-      'dynamicLab',
-      'balance',
-    ];
-    const HOME_TILE_META_HUB = {
-      standard: '综合测量',
-      pro: '体态测量',
-      bodyCompSingle: '身体成分测量',
-      circumferenceSingle: '体围测量',
-      bodycompGirth: '体成分 + 体围',
-      girthOnly: '体围（单体围）',
-      dynamicLab: '动态实验室',
-      balance: '平衡测量',
-    };
-
-    function sanitizeHubHomeOrder(keys) {
-      const allowed = new Set(HOME_TILE_POOL_HUB);
-      const out = [];
-      const seen = new Set();
-      (Array.isArray(keys) ? keys : []).forEach((k) => {
-        if (!allowed.has(k) || seen.has(k)) return;
-        seen.add(k);
-        out.push(k);
-      });
-      return out;
-    }
-
-    function computeEnabledHomeKeysFromProjects(projects) {
-      const keys = [];
-      if (projects.comprehensive?.enabled) {
-        keys.push('standard');
-        if (projects.posture?.enabled) keys.push('pro');
-      } else {
-        if (projects.bodyComp?.enabled) keys.push('bodyCompSingle');
-        if (projects.posture?.enabled) keys.push('pro');
-        if (projects.circumference?.enabled) keys.push('circumferenceSingle');
+  function buildDemoStoreUnits() {
+    const models = DEVICE_MODEL_CATALOG.map((m) => ({ id: m.id, name: m.name, snPrefix: m.snPrefix }));
+    const counts = [12, 28, 22, 8, 6];
+    const units = [];
+    let seq = 0;
+    models.forEach((m, mi) => {
+      const count = counts[mi] || 6;
+      for (let i = 0; i < count; i++) {
+        seq += 1;
+        const sn = `${m.snPrefix}-${String(10000 + seq).slice(1)}`;
+        units.push({
+          id: `u-${m.id}-${i + 1}`,
+          modelId: m.id,
+          modelName: m.name,
+          sn,
+          storeName: DEMO_STORE_NAMES[(seq - 1) % DEMO_STORE_NAMES.length],
+        });
       }
-      if (projects.balance?.enabled) keys.push('balance');
-      if (projects.shoulder?.enabled || projects.neck?.enabled) keys.push('dynamicLab');
-      return keys;
-    }
+    });
+    return units;
+  }
 
-    function mergeUserHomeOrder(savedOrder, enabledKeys) {
-      const enabled = new Set(enabledKeys);
-      const out = [];
-      const seen = new Set();
-      (Array.isArray(savedOrder) ? savedOrder : []).forEach((k) => {
-        if (!enabled.has(k) || seen.has(k)) return;
-        if (!HOME_TILE_POOL_HUB.includes(k)) return;
-        seen.add(k);
-        out.push(k);
-      });
-      HOME_TILE_POOL_HUB.forEach((k) => {
-        if (enabled.has(k) && !seen.has(k)) {
-          seen.add(k);
-          out.push(k);
-        }
-      });
-      return out;
-    }
+  const STORE_DEVICE_UNITS = buildDemoStoreUnits();
+  const LEGACY_MODEL_IDS = MODEL_IDS_ORDER;
 
-    function formatDynamicLabParts(projects) {
-      const parts = [];
-      if (projects?.shoulder?.enabled) parts.push('肩部');
-      if (projects?.neck?.enabled) parts.push('颈部');
-      return parts.join(' · ');
-    }
+  const deepClone = (obj) => JSON.parse(JSON.stringify(obj));
 
-    function createProjectState(def) {
-      return {
-        id: def.id,
-        enabled: def.id !== 'neck',
-        reports: Object.fromEntries(def.reports.map((report) => [report.id, report.defaultVisible])),
-      };
-    }
+  function escapeHtml(str) {
+    return String(str)
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/"/g, '&quot;');
+  }
 
-    function createConfigState() {
-      const projects = Object.fromEntries(projectCatalog.map((def) => [def.id, createProjectState(def)]));
-      projects.comprehensive.enabled = true;
-      projects.bodyComp.enabled = false;
-      projects.posture.enabled = true;
-      projects.circumference.enabled = false;
-      return {
-        scope: 'store',
-        selectedUnitIds: [STORE_DEVICE_UNITS[0].id],
-        devicePickerSearch: '',
-        devicePickerModel: 'all',
-        devicePickerPage: 0,
-        store: { projects, homeMeasurementOrderKeys: null },
-        deviceOverrides: {},
-      };
-    }
+  function getUnitById(unitId) {
+    return STORE_DEVICE_UNITS.find((u) => u.id === unitId) || null;
+  }
 
-    function mergeProjectsLayer(targetProjects, sourceProjects) {
-      if (!sourceProjects || typeof sourceProjects !== 'object') return;
-      projectCatalog.forEach((def) => {
-        const item = sourceProjects[def.id];
-        if (!item) return;
-        const current = targetProjects[def.id];
-        current.enabled = Boolean(item.enabled);
-        def.reports.forEach((report) => {
-          if (Object.prototype.hasOwnProperty.call(item.reports || {}, report.id)) {
-            current.reports[report.id] = Boolean(item.reports[report.id]);
-          }
-        });
-      });
-    }
-
-    function repairMutexProjects(projects) {
-      if (!projects?.comprehensive) return;
-      if (projects.comprehensive.enabled) {
-        COMPREHENSIVE_EXCLUSIVE_SINGLE_IDS.forEach((id) => {
-          if (projects[id]) projects[id].enabled = false;
-        });
+  function migrateLegacyDeviceOverrides(raw) {
+    if (!raw || typeof raw !== 'object') return {};
+    const out = {};
+    Object.entries(raw).forEach(([key, cfg]) => {
+      if (!cfg || typeof cfg !== 'object') return;
+      const asUnit = getUnitById(key);
+      if (asUnit) {
+        out[key] = cfg;
         return;
       }
-      const anySingle = CORE_SINGLE_IDS.some((id) => projects[id]?.enabled);
-      if (anySingle) projects.comprehensive.enabled = false;
-    }
-
-    function isPostureDualOpen(projects) {
-      return !!(projects?.comprehensive?.enabled && projects?.posture?.enabled);
-    }
-
-    /** 双开时把体态 3 份从 comprehensive 复制到 posture，消除不一致 */
-    function reconcilePostureLinkedReports(projects) {
-      if (!isPostureDualOpen(projects)) return;
-      const comp = projects.comprehensive;
-      const post = projects.posture;
-      if (!comp?.reports || !post?.reports) return;
-      POSTURE_LINKED_REPORT_IDS.forEach((id) => {
-        post.reports[id] = !!comp.reports[id];
-      });
-    }
-
-    function setPostureLinkedReportValue(projects, reportId, value) {
-      if (!POSTURE_LINKED_REPORT_IDS.includes(reportId)) return;
-      const v = !!value;
-      if (isPostureDualOpen(projects)) {
-        projects.comprehensive.reports[reportId] = v;
-        projects.posture.reports[reportId] = v;
-      }
-    }
-
-    function reconcileAllBuckets() {
-      reconcilePostureLinkedReports(state.store.projects);
-      Object.values(state.deviceOverrides).forEach((ov) => {
-        if (ov?.projects) reconcilePostureLinkedReports(ov.projects);
-      });
-    }
-
-    function migrateV5StoreShape(oldStore) {
-      const next = createConfigState();
-      const op = oldStore?.projects || {};
-      if (op.comprehensive) {
-        mergeProjectsLayer(next.store.projects, op);
-        repairMutexProjects(next.store.projects);
-        reconcilePostureLinkedReports(next.store.projects);
-        return next;
-      }
-      const legacyIds = ['bodyComp', 'posture', 'circumference', 'shoulder', 'neck', 'balance'];
-      legacyIds.forEach((id) => {
-        if (!op[id]) return;
-        const cur = next.store.projects[id];
-        cur.enabled = Boolean(op[id].enabled);
-        const def = projectCatalog.find((p) => p.id === id);
-        if (!def) return;
-        def.reports.forEach((report) => {
-          if (Object.prototype.hasOwnProperty.call(op[id].reports || {}, report.id)) {
-            cur.reports[report.id] = Boolean(op[id].reports[report.id]);
-          }
+      if (LEGACY_MODEL_IDS.includes(key)) {
+        STORE_DEVICE_UNITS.filter((u) => u.modelId === key).forEach((u) => {
+          out[u.id] = deepClone(cfg);
         });
-      });
-      const bc = next.store.projects.bodyComp.enabled;
-      const po = next.store.projects.posture.enabled;
-      const ci = next.store.projects.circumference.enabled;
-      if (bc && po && ci) {
-        const comp = next.store.projects.comprehensive;
-        comp.enabled = true;
-        next.store.projects.bodyComp.enabled = false;
-        next.store.projects.posture.enabled = false;
-        next.store.projects.circumference.enabled = false;
-        const compDef = projectCatalog.find((p) => p.id === 'comprehensive');
-        compDef.reports.forEach((report) => {
-          let src = 'bodyComp';
-          if (['postureReport', 'spine', 'hip'].includes(report.id)) src = 'posture';
-          if (['circumferenceReport', 'waistAbdomenReport'].includes(report.id)) src = 'circumference';
-          if (op[src]?.reports && Object.prototype.hasOwnProperty.call(op[src].reports, report.id)) {
-            comp.reports[report.id] = Boolean(op[src].reports[report.id]);
-          }
-        });
-      } else {
-        next.store.projects.comprehensive.enabled = false;
       }
-      repairMutexProjects(next.store.projects);
-      reconcilePostureLinkedReports(next.store.projects);
-      return next;
+    });
+    return out;
+  }
+
+  const HOME_TILE_POOL_HUB = [
+    'standard',
+    'pro',
+    'bodyCompSingle',
+    'circumferenceSingle',
+    'bodycompGirth',
+    'girthOnly',
+    'dynamicLab',
+    'balance',
+  ];
+  const HOME_TILE_META_HUB = {
+    standard: '综合测量',
+    pro: '体态测量',
+    bodyCompSingle: '身体成分测量',
+    circumferenceSingle: '体围测量',
+    bodycompGirth: '体成分 + 体围',
+    girthOnly: '体围（单体围）',
+    dynamicLab: '动态实验室',
+    balance: '平衡测量',
+  };
+
+  const HOME_MEASURE_PREVIEW_META = {
+    standard: {
+      title: '综合测量',
+      benefitDesc: '体重、体成分、围度、身高、体态一次完成',
+      gestureHint: '请自然站立 / 保持静止 2 秒',
+      illustration: './assets/home-select/posture-standing.svg',
+      primary: true,
+    },
+    pro: {
+      title: '体态评估',
+      benefitDesc: '了解您的头前引、高低肩、腿型等',
+      gestureHint: '请自然站立 / 保持静止 2 秒',
+      illustration: './assets/home-select/posture-standing.svg',
+      primary: false,
+    },
+    bodyCompSingle: {
+      title: '身体成分',
+      benefitDesc: '了解您的体重、体脂率、肌肉量、身体围度等',
+      gestureHint: '先确认准备事项，再站上转台采集',
+      illustration: './assets/home-select/bodycomp-torso.svg',
+      primary: false,
+    },
+    circumferenceSingle: {
+      title: '体围测量',
+      benefitDesc: '了解您的腰围、臀围、四肢围度等',
+      gestureHint: '请自然站立 / 保持静止 2 秒',
+      illustration: './assets/home-select/generic-measure.svg',
+      primary: false,
+    },
+    bodycompGirth: {
+      title: '体成分 + 体围',
+      benefitDesc: '一次转台同步完成体成分与体围采集',
+      gestureHint: '请握紧扶手 / 双臂展开 45°',
+      illustration: './assets/home-select/bodycomp-torso.svg',
+      primary: false,
+    },
+    girthOnly: {
+      title: '体围测量',
+      benefitDesc: '了解您的腰围、臀围、四肢围度等',
+      gestureHint: '请自然站立 / 保持静止 2 秒',
+      illustration: './assets/home-select/generic-measure.svg',
+      primary: false,
+    },
+    dynamicLab: {
+      title: '动态实验室',
+      benefitDesc: '肩、颈活动度专项评估',
+      gestureHint: '请按图示完成肩部或颈部动作',
+      illustration: './assets/home-select/generic-measure.svg',
+      primary: false,
+    },
+    balance: {
+      title: '平衡评估',
+      benefitDesc: '了解您的平衡稳定性与重心分布',
+      gestureHint: '请单脚站立 / 保持平衡 2 秒',
+      illustration: './assets/home-select/generic-measure.svg',
+      primary: false,
+    },
+  };
+
+  function sanitizeHubHomeOrder(keys) {
+    const allowed = new Set(HOME_TILE_POOL_HUB);
+    const out = [];
+    const seen = new Set();
+    (Array.isArray(keys) ? keys : []).forEach((k) => {
+      if (!allowed.has(k) || seen.has(k)) return;
+      seen.add(k);
+      out.push(k);
+    });
+    return out;
+  }
+
+  function computeEnabledHomeKeysFromProjects(projects) {
+    const keys = [];
+    if (projects.comprehensive?.enabled) {
+      keys.push('standard');
+      if (projects.posture?.enabled) keys.push('pro');
+    } else {
+      if (projects.bodyComp?.enabled) keys.push('bodyCompSingle');
+      if (projects.posture?.enabled) keys.push('pro');
+      if (projects.circumference?.enabled) keys.push('circumferenceSingle');
     }
+    if (projects.balance?.enabled) keys.push('balance');
+    if (projects.shoulder?.enabled || projects.neck?.enabled) keys.push('dynamicLab');
+    return keys;
+  }
 
-    function normalizeConfig(data) {
-      const base = createConfigState();
-      if (!data || typeof data !== 'object') return base;
+  function mergeUserHomeOrder(savedOrder, enabledKeys) {
+    const enabled = new Set(enabledKeys);
+    const out = [];
+    const seen = new Set();
+    (Array.isArray(savedOrder) ? savedOrder : []).forEach((k) => {
+      if (!enabled.has(k) || seen.has(k)) return;
+      if (!HOME_TILE_POOL_HUB.includes(k)) return;
+      seen.add(k);
+      out.push(k);
+    });
+    HOME_TILE_POOL_HUB.forEach((k) => {
+      if (enabled.has(k) && !seen.has(k)) {
+        seen.add(k);
+        out.push(k);
+      }
+    });
+    return out;
+  }
 
-      const next = deepClone(base);
-      if (data.scope === 'device') next.scope = 'device';
-      next.selectedUnitIds = mergeSelectedUnitIdsFromPayload(data);
-      if (typeof data.devicePickerSearch === 'string') {
-        next.devicePickerSearch = data.devicePickerSearch;
-      }
-      if (data.devicePickerModel === 'all' || STORE_DEVICE_UNITS.some((u) => u.modelId === data.devicePickerModel)) {
-        next.devicePickerModel = data.devicePickerModel || 'all';
-      }
-      if (Number.isFinite(data.devicePickerPage) && data.devicePickerPage >= 0) {
-        next.devicePickerPage = data.devicePickerPage;
-      }
-      if (data.store?.projects) {
-        mergeProjectsLayer(next.store.projects, data.store.projects);
-      }
-      if (Array.isArray(data.store?.homeMeasurementOrderKeys) && data.store.homeMeasurementOrderKeys.length) {
-        next.store.homeMeasurementOrderKeys = sanitizeHubHomeOrder(data.store.homeMeasurementOrderKeys);
-      }
-      repairMutexProjects(next.store.projects);
-      reconcilePostureLinkedReports(next.store.projects);
-      const migratedOverrides = migrateLegacyDeviceOverrides(data.deviceOverrides || {});
-      Object.entries(migratedOverrides).forEach(([unitId, cfg]) => {
-        if (!getUnitById(unitId)) return;
-        next.deviceOverrides[unitId] = {
-          projects: Object.fromEntries(
-            projectCatalog.map((def) => {
-              const src = cfg.projects?.[def.id];
-              const fallback = createProjectState(def);
-              return [def.id, {
-                enabled: src ? Boolean(src.enabled) : fallback.enabled,
-                reports: Object.fromEntries(
-                  def.reports.map((report) => [
-                    report.id,
-                    src?.reports && Object.prototype.hasOwnProperty.call(src.reports, report.id)
-                      ? Boolean(src.reports[report.id])
-                      : fallback.reports[report.id],
-                  ])
-                ),
-              }];
-            })
-          ),
-          homeMeasurementOrderKeys: null,
-        };
-        if (Array.isArray(cfg.homeMeasurementOrderKeys) && cfg.homeMeasurementOrderKeys.length) {
-          next.deviceOverrides[unitId].homeMeasurementOrderKeys = sanitizeHubHomeOrder(cfg.homeMeasurementOrderKeys);
-        }
-        repairMutexProjects(next.deviceOverrides[unitId].projects);
-        reconcilePostureLinkedReports(next.deviceOverrides[unitId].projects);
-      });
-      return next;
-    }
+  function formatDynamicLabParts(projects) {
+    const parts = [];
+    if (projects?.shoulder?.enabled) parts.push('肩部');
+    if (projects?.neck?.enabled) parts.push('颈部');
+    return parts.join(' · ');
+  }
 
-    function loadState() {
-      try {
-        let raw = localStorage.getItem(STORAGE_KEY);
-        if (!raw) {
-          const legacy = localStorage.getItem(STORAGE_KEY_LEGACY);
-          if (legacy) {
-            const parsed = JSON.parse(legacy);
-            return normalizeConfig(migrateV5StoreShape(parsed.store ? parsed : { store: parsed }));
-          }
-        }
-        if (!raw) return createConfigState();
-        const parsed = JSON.parse(raw);
-        if (
-          parsed?.store?.projects
-          && !Object.prototype.hasOwnProperty.call(parsed.store.projects, 'comprehensive')
-        ) {
-          return normalizeConfig(migrateV5StoreShape(parsed));
-        }
-        return normalizeConfig(parsed);
-      } catch (err) {
-        return createConfigState();
-      }
-    }
-
-    let state = loadState();
-    reconcileAllBuckets();
-    let savedState = deepClone(state);
-    const els = {
-      scopeSwitch: document.getElementById('scopeSwitch'),
-      deviceRow: document.getElementById('deviceRow'),
-      scopeLabel: document.getElementById('scopeLabel'),
-      projectList: document.getElementById('projectList'),
-      reportList: document.getElementById('reportList'),
-      reportTitle: document.getElementById('reportTitle'),
-      previewPanel: document.getElementById('previewPanel'),
-      cancelBtn: document.getElementById('cancelBtn'),
-      saveBtn: document.getElementById('saveBtn'),
-      toast: document.getElementById('toast'),
-      toastTitle: document.getElementById('toastTitle'),
-      toastDesc: document.getElementById('toastDesc'),
+  function createProjectState(def) {
+    return {
+      id: def.id,
+      enabled: def.id !== 'neck',
+      reports: Object.fromEntries(def.reports.map((report) => [report.id, report.defaultVisible])),
     };
+  }
 
-    function activeUnitId() {
-      return state.selectedUnitIds[0] || null;
-    }
+  function freshProjectsMap() {
+    const projects = Object.fromEntries(projectCatalog.map((def) => [def.id, createProjectState(def)]));
+    projects.comprehensive.enabled = true;
+    projects.bodyComp.enabled = false;
+    projects.posture.enabled = true;
+    projects.circumference.enabled = false;
+    return projects;
+  }
 
-    function getProjectConfig(projectId, unitId = null) {
-      const source = unitId ? state.deviceOverrides[unitId] : state.store;
-      if (!source?.projects?.[projectId]) {
-        return createProjectState(projectCatalog.find((item) => item.id === projectId));
+  function applyModelCapabilityToProjects(projects, modelId) {
+    projectCatalog.forEach((def) => {
+      if (!modelSupportsProject(modelId, def.id) && projects[def.id]) {
+        projects[def.id].enabled = false;
       }
-      return source.projects[projectId];
-    }
+    });
+  }
 
-    function ensureDeviceOverride(unitId) {
-      if (!state.deviceOverrides[unitId]) {
-        state.deviceOverrides[unitId] = deepClone(state.store);
+  function createModelBucket(modelId) {
+    const projects = freshProjectsMap();
+    applyModelCapabilityToProjects(projects, modelId);
+    repairMutexProjects(projects);
+    reconcilePostureLinkedReports(projects);
+    return { projects, homeMeasurementOrderKeys: null };
+  }
+
+  function createConfigStateV7() {
+    const modelStoreDefaults = {};
+    MODEL_IDS_ORDER.forEach((mid) => {
+      modelStoreDefaults[mid] = createModelBucket(mid);
+    });
+    return {
+      activeModelId: 'visbody-apro7',
+      activeConfigSubTab: 'measurement',
+      storeLegacySettings: {
+        bodyCompStandard: 'inbody',
+      },
+      modelGirthDisplayCount: { 'visbody-apro7': '9' },
+      modelStoreDefaults,
+      modelDeviceOverrides: {},
+      workspace: { projects: freshProjectsMap(), homeMeasurementOrderKeys: null },
+      modalSave: {
+        scopeKind: 'store',
+        devicePickerSearch: '',
+        devicePickerPage: 0,
+        selectedUnitIds: [],
+      },
+    };
+  }
+
+  function mergeProjectsLayer(targetProjects, sourceProjects) {
+    if (!sourceProjects || typeof sourceProjects !== 'object') return;
+    projectCatalog.forEach((def) => {
+      const item = sourceProjects[def.id];
+      if (!item) return;
+      const current = targetProjects[def.id];
+      current.enabled = Boolean(item.enabled);
+      def.reports.forEach((report) => {
+        if (Object.prototype.hasOwnProperty.call(item.reports || {}, report.id)) {
+          current.reports[report.id] = Boolean(item.reports[report.id]);
+        }
+      });
+    });
+  }
+
+  function repairMutexProjects(projects) {
+    if (!projects?.comprehensive) return;
+    if (projects.comprehensive.enabled) {
+      COMPREHENSIVE_EXCLUSIVE_SINGLE_IDS.forEach((id) => {
+        if (projects[id]) projects[id].enabled = false;
+      });
+      return;
+    }
+    const anySingle = CORE_SINGLE_IDS.some((id) => projects[id]?.enabled);
+    if (anySingle) projects.comprehensive.enabled = false;
+  }
+
+  function isPostureDualOpen(projects) {
+    return !!(projects?.comprehensive?.enabled && projects?.posture?.enabled);
+  }
+
+  function reconcilePostureLinkedReports(projects) {
+    if (!isPostureDualOpen(projects)) return;
+    const comp = projects.comprehensive;
+    const post = projects.posture;
+    if (!comp?.reports || !post?.reports) return;
+    POSTURE_LINKED_REPORT_IDS.forEach((id) => {
+      post.reports[id] = !!comp.reports[id];
+    });
+  }
+
+  function setPostureLinkedReportValue(projects, reportId, value) {
+    if (!POSTURE_LINKED_REPORT_IDS.includes(reportId)) return;
+    const v = !!value;
+    if (isPostureDualOpen(projects)) {
+      projects.comprehensive.reports[reportId] = v;
+      projects.posture.reports[reportId] = v;
+    }
+  }
+
+  function normalizeOverrideBucketFromRaw(cfg) {
+    return {
+      projects: Object.fromEntries(
+        projectCatalog.map((def) => {
+          const src = cfg.projects?.[def.id];
+          const fallback = createProjectState(def);
+          return [
+            def.id,
+            {
+              enabled: src ? Boolean(src.enabled) : fallback.enabled,
+              reports: Object.fromEntries(
+                def.reports.map((report) => [
+                  report.id,
+                  src?.reports && Object.prototype.hasOwnProperty.call(src.reports, report.id)
+                    ? Boolean(src.reports[report.id])
+                    : fallback.reports[report.id],
+                ])
+              ),
+            },
+          ];
+        })
+      ),
+      homeMeasurementOrderKeys:
+        Array.isArray(cfg.homeMeasurementOrderKeys) && cfg.homeMeasurementOrderKeys.length
+          ? sanitizeHubHomeOrder(cfg.homeMeasurementOrderKeys)
+          : null,
+    };
+  }
+
+  function reconcileAllBuckets(st) {
+    MODEL_IDS_ORDER.forEach((mid) => {
+      const b = st.modelStoreDefaults[mid];
+      if (b?.projects) {
+        repairMutexProjects(b.projects);
+        reconcilePostureLinkedReports(b.projects);
       }
-      return state.deviceOverrides[unitId];
-    }
+    });
+    Object.values(st.modelDeviceOverrides || {}).forEach((byUnit) => {
+      Object.values(byUnit || {}).forEach((ov) => {
+        if (ov?.projects) {
+          repairMutexProjects(ov.projects);
+          reconcilePostureLinkedReports(ov.projects);
+        }
+      });
+    });
+  }
 
-    function projectsForPreview() {
-      if (state.scope === 'store') return state.store.projects;
-      const id = activeUnitId();
-      if (!id) return state.store.projects;
-      if (state.deviceOverrides[id]) return state.deviceOverrides[id].projects;
-      return state.store.projects;
+  function migrateV5StoreShape(oldStore) {
+    const projects = freshProjectsMap();
+    const op = oldStore?.projects || {};
+    if (op.comprehensive) {
+      mergeProjectsLayer(projects, op);
+      repairMutexProjects(projects);
+      reconcilePostureLinkedReports(projects);
+      return { projects, homeMeasurementOrderKeys: null };
     }
-
-    function scopeLabel() {
-      if (state.scope === 'store') return '门店默认';
-      const n = state.selectedUnitIds.length;
-      return n ? `指定设备（SN）· 已选 ${n} 台` : '指定设备（SN）· 未选择';
+    const legacyIds = ['bodyComp', 'posture', 'circumference', 'shoulder', 'neck', 'balance'];
+    legacyIds.forEach((id) => {
+      if (!op[id]) return;
+      const cur = projects[id];
+      cur.enabled = Boolean(op[id].enabled);
+      const def = projectCatalog.find((p) => p.id === id);
+      if (!def) return;
+      def.reports.forEach((report) => {
+        if (Object.prototype.hasOwnProperty.call(op[id].reports || {}, report.id)) {
+          cur.reports[report.id] = Boolean(op[id].reports[report.id]);
+        }
+      });
+    });
+    const bc = projects.bodyComp.enabled;
+    const po = projects.posture.enabled;
+    const ci = projects.circumference.enabled;
+    if (bc && po && ci) {
+      const comp = projects.comprehensive;
+      comp.enabled = true;
+      projects.bodyComp.enabled = false;
+      projects.posture.enabled = false;
+      projects.circumference.enabled = false;
+      const compDef = projectCatalog.find((p) => p.id === 'comprehensive');
+      compDef.reports.forEach((report) => {
+        let src = 'bodyComp';
+        if (['postureReport', 'spine', 'hip'].includes(report.id)) src = 'posture';
+        if (['circumferenceReport', 'waistAbdomenReport'].includes(report.id)) src = 'circumference';
+        if (op[src]?.reports && Object.prototype.hasOwnProperty.call(op[src].reports, report.id)) {
+          comp.reports[report.id] = Boolean(op[src].reports[report.id]);
+        }
+      });
+    } else {
+      projects.comprehensive.enabled = false;
     }
+    repairMutexProjects(projects);
+    reconcilePostureLinkedReports(projects);
+    return { projects, homeMeasurementOrderKeys: null };
+  }
 
-    function toast(title, desc) {
-      els.toastTitle.textContent = title;
-      els.toastDesc.textContent = desc;
-      els.toast.classList.add('show');
-      clearTimeout(toast._timer);
-      toast._timer = setTimeout(() => els.toast.classList.remove('show'), 2200);
+  function migrateV6RawToV7(raw) {
+    const v7 = createConfigStateV7();
+    const mid = 'visbody-apro7';
+    if (raw?.store?.projects) {
+      mergeProjectsLayer(v7.modelStoreDefaults[mid].projects, raw.store.projects);
+      repairMutexProjects(v7.modelStoreDefaults[mid].projects);
+      reconcilePostureLinkedReports(v7.modelStoreDefaults[mid].projects);
+      if (Array.isArray(raw.store.homeMeasurementOrderKeys) && raw.store.homeMeasurementOrderKeys.length) {
+        v7.modelStoreDefaults[mid].homeMeasurementOrderKeys = sanitizeHubHomeOrder(raw.store.homeMeasurementOrderKeys);
+      }
     }
+    const migratedOverrides = migrateLegacyDeviceOverrides(raw.deviceOverrides || {});
+    v7.modelDeviceOverrides[mid] = v7.modelDeviceOverrides[mid] || {};
+    Object.entries(migratedOverrides).forEach(([uid, cfg]) => {
+      if (!getUnitById(uid)) return;
+      const bucket = normalizeOverrideBucketFromRaw(cfg);
+      repairMutexProjects(bucket.projects);
+      reconcilePostureLinkedReports(bucket.projects);
+      v7.modelDeviceOverrides[mid][uid] = bucket;
+    });
+    return v7;
+  }
 
-    function assertMutexValid(projects) {
-      if (!projects?.comprehensive) return true;
-      if (!projects.comprehensive.enabled) return true;
-      return !COMPREHENSIVE_EXCLUSIVE_SINGLE_IDS.some((id) => projects[id]?.enabled);
+  function normalizeConfigV7(data) {
+    const base = createConfigStateV7();
+    if (!data || typeof data !== 'object') return base;
+    const next = deepClone(base);
+    if (MODEL_IDS_ORDER.includes(data.activeModelId)) next.activeModelId = data.activeModelId;
+    if (data.activeConfigSubTab === 'style' || data.activeConfigSubTab === 'measurement') {
+      next.activeConfigSubTab = data.activeConfigSubTab;
     }
+    if (data.storeLegacySettings && typeof data.storeLegacySettings === 'object') {
+      if (typeof data.storeLegacySettings.bodyCompStandard === 'string') {
+        next.storeLegacySettings.bodyCompStandard = data.storeLegacySettings.bodyCompStandard;
+      }
+    }
+    if (data.modelGirthDisplayCount && typeof data.modelGirthDisplayCount === 'object') {
+      Object.entries(data.modelGirthDisplayCount).forEach(([k, v]) => {
+        if (k === 'visbody-apro7' && (v === '9' || v === '14')) next.modelGirthDisplayCount[k] = v;
+      });
+    }
+    MODEL_IDS_ORDER.forEach((mid) => {
+      const src = data.modelStoreDefaults?.[mid];
+      if (src?.projects) {
+        mergeProjectsLayer(next.modelStoreDefaults[mid].projects, src.projects);
+        repairMutexProjects(next.modelStoreDefaults[mid].projects);
+        reconcilePostureLinkedReports(next.modelStoreDefaults[mid].projects);
+      }
+      if (Array.isArray(src?.homeMeasurementOrderKeys) && src.homeMeasurementOrderKeys.length) {
+        next.modelStoreDefaults[mid].homeMeasurementOrderKeys = sanitizeHubHomeOrder(src.homeMeasurementOrderKeys);
+      }
+    });
+    Object.entries(data.modelDeviceOverrides || {}).forEach(([modelId, byUnit]) => {
+      if (!MODEL_IDS_ORDER.includes(modelId) || !byUnit || typeof byUnit !== 'object') return;
+      next.modelDeviceOverrides[modelId] = next.modelDeviceOverrides[modelId] || {};
+      Object.entries(byUnit).forEach(([unitId, cfg]) => {
+        if (!getUnitById(unitId)) return;
+        const bucket = normalizeOverrideBucketFromRaw(cfg || {});
+        repairMutexProjects(bucket.projects);
+        reconcilePostureLinkedReports(bucket.projects);
+        next.modelDeviceOverrides[modelId][unitId] = bucket;
+      });
+    });
+    applyModelCapabilityToProjects(next.modelStoreDefaults[next.activeModelId].projects, next.activeModelId);
+    MODEL_IDS_ORDER.forEach((mid) => applyModelCapabilityToProjects(next.modelStoreDefaults[mid].projects, mid));
+    reconcileAllBuckets(next);
+    return next;
+  }
 
-    function toDevicePayloadFromProjects(projects, orderBucket) {
-      const reportVisibility = {};
-      const addReports = (projId) => {
-        const p = projects[projId];
-        if (!p?.enabled) return;
+  function loadState() {
+    try {
+      const v7raw = localStorage.getItem(STORAGE_KEY);
+      if (v7raw) return normalizeConfigV7(JSON.parse(v7raw));
+      const v6raw = localStorage.getItem(STORAGE_KEY_V6);
+      if (v6raw) {
+        const parsed = JSON.parse(v6raw);
+        return normalizeConfigV7(migrateV6RawToV7(parsed));
+      }
+      const legacy = localStorage.getItem(STORAGE_KEY_LEGACY);
+      if (legacy) {
+        const parsed = JSON.parse(legacy);
+        const bucket = migrateV5StoreShape(parsed.store ? parsed : { store: parsed });
+        return normalizeConfigV7(migrateV6RawToV7({ store: bucket, deviceOverrides: {} }));
+      }
+      return createConfigStateV7();
+    } catch (e) {
+      return createConfigStateV7();
+    }
+  }
+
+  let state = loadState();
+  reconcileAllBuckets(state);
+
+  function loadWorkspaceFromStore() {
+    const mid = state.activeModelId;
+    const src = state.modelStoreDefaults[mid] || createModelBucket(mid);
+    state.workspace = {
+      projects: deepClone(src.projects),
+      homeMeasurementOrderKeys: src.homeMeasurementOrderKeys ? [...src.homeMeasurementOrderKeys] : null,
+    };
+    applyModelCapabilityToProjects(state.workspace.projects, mid);
+    repairMutexProjects(state.workspace.projects);
+    reconcilePostureLinkedReports(state.workspace.projects);
+  }
+
+  loadWorkspaceFromStore();
+  let savedState = deepClone(state);
+
+  const els = {
+    configPanelStyle: document.getElementById('configPanelStyle'),
+    configPanelMeasurement: document.getElementById('configPanelMeasurement'),
+    modelBarTitle: document.getElementById('modelBarTitle'),
+    modelSwitchBar: document.getElementById('modelSwitchBar'),
+    legacyBodyCompSelect: document.getElementById('legacyBodyCompSelect'),
+    legacyGirthBlock: document.getElementById('legacyGirthBlock'),
+    girthRadios: document.querySelectorAll('input[name="girthDisplayCount"]'),
+    projectList: document.getElementById('projectList'),
+    reportList: document.getElementById('reportList'),
+    reportTitle: document.getElementById('reportTitle'),
+    previewPanel: document.getElementById('previewPanel'),
+    cancelBtn: document.getElementById('cancelBtn'),
+    saveBtn: document.getElementById('saveBtn'),
+    toast: document.getElementById('toast'),
+    toastTitle: document.getElementById('toastTitle'),
+    toastDesc: document.getElementById('toastDesc'),
+    saveScopeModal: document.getElementById('saveScopeModal'),
+    modalTitle: document.getElementById('saveScopeModalTitle'),
+    modalDeviceRow: document.getElementById('modalDeviceRow'),
+    modalRadioStore: document.getElementById('modalRadioStore'),
+    modalRadioDevices: document.getElementById('modalRadioDevices'),
+    modalCancelBtn: document.getElementById('modalCancelBtn'),
+    modalConfirmBtn: document.getElementById('modalConfirmBtn'),
+  };
+
+  function workspaceProjects() {
+    return state.workspace.projects;
+  }
+
+  function assertMutexValid(projects) {
+    if (!projects?.comprehensive) return true;
+    if (!projects.comprehensive.enabled) return true;
+    return !COMPREHENSIVE_EXCLUSIVE_SINGLE_IDS.some((id) => projects[id]?.enabled);
+  }
+
+  function toDevicePayloadFromProjects(projects, orderBucket) {
+    const reportVisibility = {};
+    const addReports = (projId) => {
+      const p = projects[projId];
+      if (!p?.enabled) return;
+      Object.entries(p.reports || {}).forEach(([k, v]) => {
+        reportVisibility[k] = !!v;
+      });
+    };
+    if (projects.comprehensive?.enabled) {
+      addReports('comprehensive');
+      if (projects.posture?.enabled) {
+        const p = projects.posture;
         Object.entries(p.reports || {}).forEach(([k, v]) => {
+          if (POSTURE_LINKED_REPORT_IDS.includes(k)) return;
           reportVisibility[k] = !!v;
         });
-      };
-      if (projects.comprehensive?.enabled) {
-        addReports('comprehensive');
-        if (projects.posture?.enabled) {
-          const p = projects.posture;
-          Object.entries(p.reports || {}).forEach(([k, v]) => {
-            if (POSTURE_LINKED_REPORT_IDS.includes(k)) return;
-            reportVisibility[k] = !!v;
-          });
-        }
-      } else {
-        addReports('bodyComp');
-        addReports('posture');
-        addReports('circumference');
       }
-      addReports('balance');
-      addReports('shoulder');
-      addReports('neck');
-      const enabledHome = computeEnabledHomeKeysFromProjects(projects);
-      const hasCustomHomeOrder =
-        Array.isArray(orderBucket?.homeMeasurementOrderKeys) && orderBucket.homeMeasurementOrderKeys.length > 0;
-      const payload = {
-        version: 1,
-        comprehensiveEnabled: !!projects.comprehensive?.enabled,
-        bodyCompSingleEnabled: !!projects.bodyComp?.enabled,
-        postureModeEnabled: !!projects.posture?.enabled,
-        circumferenceSingleEnabled: !!projects.circumference?.enabled,
-        balanceModeEnabled: !!projects.balance?.enabled,
-        singleShoulderEnabled: !!projects.shoulder?.enabled,
-        singleNeckEnabled: !!projects.neck?.enabled,
-        reportVisibility,
-      };
-      if (hasCustomHomeOrder) {
-        const homeOrder = mergeUserHomeOrder(orderBucket.homeMeasurementOrderKeys, enabledHome);
-        if (homeOrder.length) payload.homeMeasurementOrderKeys = homeOrder;
-        else payload.homeMeasurementOrderKeys = null;
-      } else {
-        payload.homeMeasurementOrderKeys = null;
-      }
-      return payload;
+    } else {
+      addReports('bodyComp');
+      addReports('posture');
+      addReports('circumference');
     }
-
-    function orderPayloadBucket() {
-      if (state.scope === 'store') return state.store;
-      const id = activeUnitId();
-      if (!id) return state.store;
-      return ensureDeviceOverride(id);
+    addReports('balance');
+    addReports('shoulder');
+    addReports('neck');
+    const enabledHome = computeEnabledHomeKeysFromProjects(projects);
+    const hasCustomHomeOrder =
+      Array.isArray(orderBucket?.homeMeasurementOrderKeys) && orderBucket.homeMeasurementOrderKeys.length > 0;
+    const payload = {
+      version: 1,
+      comprehensiveEnabled: !!projects.comprehensive?.enabled,
+      bodyCompSingleEnabled: !!projects.bodyComp?.enabled,
+      postureModeEnabled: !!projects.posture?.enabled,
+      circumferenceSingleEnabled: !!projects.circumference?.enabled,
+      balanceModeEnabled: !!projects.balance?.enabled,
+      singleShoulderEnabled: !!projects.shoulder?.enabled,
+      singleNeckEnabled: !!projects.neck?.enabled,
+      reportVisibility,
+    };
+    if (hasCustomHomeOrder) {
+      const homeOrder = mergeUserHomeOrder(orderBucket.homeMeasurementOrderKeys, enabledHome);
+      if (homeOrder.length) payload.homeMeasurementOrderKeys = homeOrder;
+      else payload.homeMeasurementOrderKeys = null;
+    } else {
+      payload.homeMeasurementOrderKeys = null;
     }
+    return payload;
+  }
 
-    function syncDeviceDemoFromState() {
-      const projects = projectsForPreview();
-      const bucket = orderPayloadBucket();
-      const payload = toDevicePayloadFromProjects(projects, bucket);
-      try {
-        localStorage.setItem(DEVICE_PAYLOAD_KEY, JSON.stringify(payload));
-      } catch (err) {
-        console.warn('sync device demo payload failed', err);
-      }
+  function syncDeviceDemoFromState() {
+    const projects = workspaceProjects();
+    const bucket = state.workspace;
+    const payload = toDevicePayloadFromProjects(projects, bucket);
+    try {
+      localStorage.setItem(DEVICE_PAYLOAD_KEY, JSON.stringify(payload));
+    } catch (err) {
+      console.warn('sync device demo payload failed', err);
     }
+  }
 
-    function applyHomeOrderToTargets(keys) {
-      const value = keys && keys.length ? keys : null;
-      if (state.scope === 'store') {
-        state.store.homeMeasurementOrderKeys = value;
-        return;
-      }
-      if (!state.selectedUnitIds.length) return;
-      state.selectedUnitIds.forEach((uid) => {
-        ensureDeviceOverride(uid).homeMeasurementOrderKeys = value ? [...value] : null;
-      });
+  function applyHomeOrderToTargets(keys) {
+    state.workspace.homeMeasurementOrderKeys = keys && keys.length ? [...keys] : null;
+  }
+
+  function applyHomeOrderMove(index, dir) {
+    const projects = workspaceProjects();
+    const enabled = computeEnabledHomeKeysFromProjects(projects);
+    const keys = mergeUserHomeOrder(state.workspace.homeMeasurementOrderKeys, enabled);
+    const j = index + dir;
+    if (j < 0 || j >= keys.length) return;
+    const next = [...keys];
+    [next[index], next[j]] = [next[j], next[index]];
+    applyHomeOrderToTargets(next);
+  }
+
+  function applyHomeOrderReset() {
+    applyHomeOrderToTargets(null);
+  }
+
+  function saveToStorage(messageTitle, messageDesc, options = {}) {
+    MODEL_IDS_ORDER.forEach((mid) => {
+      repairMutexProjects(state.modelStoreDefaults[mid].projects);
+    });
+    Object.values(state.modelDeviceOverrides).forEach((byUnit) => {
+      Object.values(byUnit || {}).forEach((ov) => repairMutexProjects(ov.projects));
+    });
+    reconcileAllBuckets(state);
+    if (!assertMutexValid(state.modelStoreDefaults[state.activeModelId].projects)) {
+      toast('配置冲突', '综合测量与身体成分/体围单项不能同时开启，已自动修正。');
     }
-
-    function applyHomeOrderMove(index, dir) {
-      const projects = projectsForPreview();
-      const bucket = orderPayloadBucket();
-      const enabled = computeEnabledHomeKeysFromProjects(projects);
-      const keys = mergeUserHomeOrder(bucket.homeMeasurementOrderKeys, enabled);
-      const j = index + dir;
-      if (j < 0 || j >= keys.length) return;
-      const next = [...keys];
-      [next[index], next[j]] = [next[j], next[index]];
-      applyHomeOrderToTargets(next);
+    try {
+      const persist = { ...state };
+      delete persist.workspace;
+      delete persist.modalSave;
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(persist));
+    } catch (err) {
+      console.warn('localStorage unavailable', err);
     }
-
-    function applyHomeOrderReset() {
-      applyHomeOrderToTargets(null);
+    syncDeviceDemoFromState();
+    savedState = deepClone(state);
+    if (!options.keepWorkspace) {
+      loadWorkspaceFromStore();
     }
+    toast(messageTitle, messageDesc);
+  }
 
-    function saveToStorage(messageTitle = '已保存配置', messageDesc = '配置已保存。') {
-      repairMutexProjects(state.store.projects);
-      Object.values(state.deviceOverrides).forEach((ov) => repairMutexProjects(ov.projects));
-      reconcileAllBuckets();
-      if (!assertMutexValid(state.store.projects)) {
-        toast('配置冲突', '综合测量与身体成分/体围单项不能同时开启，已自动修正。');
-      }
-      try {
-        localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
-      } catch (err) {
-        console.warn('localStorage unavailable, skip persist.', err);
-      }
+  function getProjectConfig(projectId) {
+    return state.workspace.projects[projectId];
+  }
+
+  function projectStats(projectId) {
+    const cfg = getProjectConfig(projectId);
+    const def = projectCatalog.find((item) => item.id === projectId);
+    const pv = workspaceProjects();
+    if (isPostureDualOpen(pv) && projectId === 'posture') {
+      const visibleCount = def.reports.filter((report) => pv.comprehensive.reports[report.id]).length;
+      return { visibleCount, totalCount: def.reports.length, enabled: cfg.enabled };
+    }
+    return {
+      visibleCount: def.reports.filter((report) => cfg.reports[report.id]).length,
+      totalCount: def.reports.length,
+      enabled: cfg.enabled,
+    };
+  }
+
+  function toast(title, desc) {
+    els.toastTitle.textContent = title;
+    els.toastDesc.textContent = desc;
+    els.toast.classList.add('show');
+    clearTimeout(toast._timer);
+    toast._timer = setTimeout(() => els.toast.classList.remove('show'), 2200);
+  }
+
+  function renderModelBar() {
+    const meta = getModelMeta(state.activeModelId);
+    if (els.modelBarTitle) els.modelBarTitle.textContent = `当前正在配置：${meta.name}`;
+    if (!els.modelSwitchBar) return;
+    els.modelSwitchBar.innerHTML = MODEL_IDS_ORDER.map((mid) => {
+      const m = getModelMeta(mid);
+      const active = mid === state.activeModelId ? ' active' : '';
+      return `<button type="button" class="model-tab${active}" data-model-id="${escapeHtml(mid)}" role="tab" aria-selected="${mid === state.activeModelId}">${escapeHtml(m.name)}</button>`;
+    }).join('');
+  }
+
+  function syncLegacyFormControls() {
+    if (els.legacyBodyCompSelect) {
+      els.legacyBodyCompSelect.value = state.storeLegacySettings.bodyCompStandard || 'inbody';
+    }
+    const g = state.modelGirthDisplayCount['visbody-apro7'];
+    const val = g === '14' ? '14' : '9';
+    document.querySelectorAll('input[name="girthDisplayCount"]').forEach((inp) => {
+      inp.checked = inp.value === val;
+    });
+  }
+
+  function renderConfigSubTabs() {
+    const tab = state.activeConfigSubTab === 'style' ? 'style' : 'measurement';
+    state.activeConfigSubTab = tab;
+    document.querySelectorAll('.config-subtab[data-config-subtab]').forEach((btn) => {
+      const on = btn.dataset.configSubtab === tab;
+      btn.classList.toggle('active', on);
+      btn.setAttribute('aria-selected', on ? 'true' : 'false');
+    });
+    if (els.configPanelStyle) els.configPanelStyle.hidden = tab !== 'style';
+    if (els.configPanelMeasurement) els.configPanelMeasurement.hidden = tab !== 'measurement';
+  }
+
+  function setConfigSubTab(id) {
+    if (id !== 'style' && id !== 'measurement') return;
+    if (state.activeConfigSubTab === id) return;
+    state.activeConfigSubTab = id;
+    renderConfigSubTabs();
+    if (id === 'measurement') {
+      renderModelBar();
+      renderProjects();
+      renderAggregatedReports();
+      renderPreview();
       syncDeviceDemoFromState();
-      savedState = deepClone(state);
-      toast(messageTitle, messageDesc);
     }
+  }
 
-    function projectStats(projectId) {
-      const cfg = getProjectConfig(projectId, state.scope === 'device' ? activeUnitId() : null);
-      const def = projectCatalog.find((item) => item.id === projectId);
-      const pv = projectsForPreview();
-      if (isPostureDualOpen(pv) && projectId === 'posture') {
-        const visibleCount = def.reports.filter((report) => pv.comprehensive.reports[report.id]).length;
-        return {
-          visibleCount,
-          totalCount: def.reports.length,
-          enabled: cfg.enabled,
-        };
-      }
-      return {
-        visibleCount: def.reports.filter((report) => cfg.reports[report.id]).length,
-        totalCount: def.reports.length,
-        enabled: cfg.enabled,
-      };
+  function saveStyleSettings() {
+    saveToStorage(
+      '已保存设备样式',
+      '门店级样式、体成分标准与围度展示已保存。保存后需重启设备生效；本 Demo 请刷新设备端页面。',
+      { keepWorkspace: true }
+    );
+  }
+
+  function filterModalDeviceUnits() {
+    const mid = state.activeModelId;
+    const q = (state.modalSave.devicePickerSearch || '').trim().toLowerCase();
+    return STORE_DEVICE_UNITS.filter((u) => {
+      if (u.modelId !== mid) return false;
+      if (!q) return true;
+      const hay = `${u.sn} ${u.modelName} ${u.storeName || ''} ${u.id}`.toLowerCase();
+      return hay.includes(q);
+    });
+  }
+
+  function renderModalDevicePicker() {
+    if (!els.modalDeviceRow) return;
+    if (state.modalSave.scopeKind !== 'devices') {
+      els.modalDeviceRow.innerHTML = '';
+      els.modalDeviceRow.hidden = true;
+      return;
     }
-
-    function filterDeviceUnits() {
-      const q = (state.devicePickerSearch || '').trim().toLowerCase();
-      const mf = state.devicePickerModel || 'all';
-      return STORE_DEVICE_UNITS.filter((u) => {
-        if (mf !== 'all' && u.modelId !== mf) return false;
-        if (!q) return true;
-        const hay = `${u.sn} ${u.modelName} ${u.storeName || ''} ${u.id}`.toLowerCase();
-        return hay.includes(q);
-      });
-    }
-
-    function sortUnitsForDisplay(units, modelFilter) {
-      if (modelFilter !== 'all' || units.length <= 1) return units;
-      const modelOrder = [...new Set(units.map((u) => u.modelId))];
-      const queues = Object.fromEntries(
-        modelOrder.map((mid) => [mid, units.filter((u) => u.modelId === mid)])
-      );
-      const out = [];
-      let hasMore = true;
-      while (hasMore) {
-        hasMore = false;
-        modelOrder.forEach((mid) => {
-          const q = queues[mid];
-          if (q && q.length) {
-            out.push(q.shift());
-            hasMore = true;
-          }
-        });
-      }
-      return out;
-    }
-
-    function renderDeviceUnitPicker() {
-      if (!els.deviceRow) return;
-      if (state.scope === 'store') {
-        els.deviceRow.innerHTML = '';
-        return;
-      }
-      const filtered = sortUnitsForDisplay(filterDeviceUnits(), state.devicePickerModel || 'all');
-      const totalFiltered = filtered.length;
-      const totalAll = STORE_DEVICE_UNITS.length;
-      const totalPages = Math.max(1, Math.ceil(totalFiltered / DEVICE_PICKER_PAGE_SIZE) || 1);
-      let page = Number(state.devicePickerPage) || 0;
-      if (page > totalPages - 1) page = totalPages - 1;
-      if (page < 0) page = 0;
-      state.devicePickerPage = page;
-      const start = page * DEVICE_PICKER_PAGE_SIZE;
-      const pageUnits = filtered.slice(start, start + DEVICE_PICKER_PAGE_SIZE);
-
-      const modelOrder = [...new Set(STORE_DEVICE_UNITS.map((u) => u.modelId))];
-      const modelOptions = [
-        `<option value="all" ${state.devicePickerModel === 'all' ? 'selected' : ''}>全部型号</option>`,
-        ...modelOrder.map((mid) => {
-          const name = STORE_DEVICE_UNITS.find((u) => u.modelId === mid)?.modelName || mid;
-          const c = STORE_DEVICE_UNITS.filter((u) => u.modelId === mid).length;
-          return `<option value="${escapeHtml(mid)}" ${state.devicePickerModel === mid ? 'selected' : ''}>${escapeHtml(name)}（${c} 台）</option>`;
-        }),
-      ].join('');
-
-      const selectedCount = state.selectedUnitIds.length;
-      const selectedUnitsOrdered = state.selectedUnitIds.map((id) => getUnitById(id)).filter(Boolean);
-      const previewSn = selectedUnitsOrdered.slice(0, 8).map((u) => u.sn);
-      const stripText =
-        selectedCount === 0
-          ? '当前未选择设备。'
-          : `${previewSn.join('、')}${selectedCount > 8 ? ` … 等共 ${selectedCount} 台` : `（共 ${selectedCount} 台）`}`;
-
-      const rows = pageUnits
-        .map((u) => {
-          const sel = state.selectedUnitIds.includes(u.id);
-          return `<div class="device-picker-row${sel ? ' is-selected' : ''}" data-unit-row data-unit-id="${escapeHtml(
-            u.id
-          )}" role="checkbox" aria-checked="${sel}">
+    els.modalDeviceRow.hidden = false;
+    const filtered = filterModalDeviceUnits();
+    const totalFiltered = filtered.length;
+    const totalPages = Math.max(1, Math.ceil(totalFiltered / DEVICE_PICKER_PAGE_SIZE) || 1);
+    let page = Number(state.modalSave.devicePickerPage) || 0;
+    if (page > totalPages - 1) page = totalPages - 1;
+    if (page < 0) page = 0;
+    state.modalSave.devicePickerPage = page;
+    const start = page * DEVICE_PICKER_PAGE_SIZE;
+    const pageUnits = filtered.slice(start, start + DEVICE_PICKER_PAGE_SIZE);
+    const rows = pageUnits
+      .map((u) => {
+        const sel = state.modalSave.selectedUnitIds.includes(u.id);
+        return `<div class="device-picker-row${sel ? ' is-selected' : ''}" data-modal-unit-row data-unit-id="${escapeHtml(u.id)}" role="checkbox" aria-checked="${sel}">
             <span class="device-picker-row-check">${sel ? '✓' : ''}</span>
             <div>
               <div class="device-picker-row-sn">${escapeHtml(u.sn)}</div>
-              <div class="device-picker-row-sub">${escapeHtml(u.modelName)} · ${escapeHtml(u.storeName || '')}</div>
+              <div class="device-picker-row-sub">${escapeHtml(u.storeName || '')}</div>
             </div>
           </div>`;
-        })
-        .join('');
-
-      const pagerPrevDisabled = page <= 0 ? ' disabled' : '';
-      const pagerNextDisabled = page >= totalPages - 1 ? ' disabled' : '';
-
-      const emptyHint =
-        totalFiltered === 0
-          ? '<div class="device-picker-row" style="grid-template-columns:1fr;cursor:default;padding:16px"><div style="color:#667085;font-size:13px">无匹配设备，请放宽搜索条件或切换型号。</div></div>'
-          : '';
-
-      const paginationHint = '';
-
-      els.deviceRow.innerHTML = `
-        <span class="device-label">选择设备（SN）</span>
-        <p class="scope-tip" style="margin:0;">可通过型号筛选与搜索定位设备。</p>
-        <div class="device-unit-wrap">
-          <div class="device-picker-toolbar">
-            <div class="device-picker-filters">
-              <input type="search" id="devicePickerSearchInput" placeholder="搜索 SN、型号、门店名称…" value="${escapeHtml(
-                state.devicePickerSearch
-              )}" autocomplete="off" />
-              <button type="button" class="btn-tiny" data-device-picker-apply-search>应用筛选</button>
-              <select id="devicePickerModelSelect" aria-label="型号筛选">${modelOptions}</select>
-            </div>
-            <div class="device-picker-meta">
-              全店共 <strong>${totalAll}</strong> 台；当前筛选 <strong>${totalFiltered}</strong> 台；已选 <strong>${selectedCount}</strong> 台。
-              ${totalFiltered ? `本页第 <strong>${start + 1}</strong>–<strong>${Math.min(start + DEVICE_PICKER_PAGE_SIZE, totalFiltered)}</strong> 条。` : ''}
-              ${paginationHint ? `<br>${paginationHint}` : ''}
-            </div>
-            <div class="device-picker-selected-strip">${escapeHtml(stripText)}</div>
-            <div class="device-picker-actions">
-              <button type="button" class="chip" data-device-action="all-filtered">全选当前筛选结果</button>
-              <button type="button" class="chip" data-device-action="clear">清空已选</button>
-              <button type="button" class="chip"${pagerPrevDisabled} data-device-picker-page="prev">上一页</button>
-              <button type="button" class="chip"${pagerNextDisabled} data-device-picker-page="next">下一页</button>
-            </div>
+      })
+      .join('');
+    const pagerPrevDisabled = page <= 0 ? ' disabled' : '';
+    const pagerNextDisabled = page >= totalPages - 1 ? ' disabled' : '';
+    const selectedCount = state.modalSave.selectedUnitIds.length;
+    els.modalDeviceRow.innerHTML = `
+      <span class="device-label">选择设备（SN）· 当前型号</span>
+      <div class="device-unit-wrap">
+        <div class="device-picker-toolbar">
+          <div class="device-picker-filters">
+            <input type="search" id="modalDevicePickerSearchInput" placeholder="搜索 SN、门店…" value="${escapeHtml(state.modalSave.devicePickerSearch)}" autocomplete="off" />
+            <button type="button" class="btn-tiny" data-modal-device-apply-search>筛选</button>
           </div>
-          <div class="device-picker-list">${rows || emptyHint}</div>
-          <div class="device-picker-pager">
-            <span>第 ${page + 1} / ${totalPages} 页</span>
-            <span>每页 ${DEVICE_PICKER_PAGE_SIZE} 台</span>
+          <div class="device-picker-meta">该型号共 <strong>${totalFiltered}</strong> 台；已选 <strong>${selectedCount}</strong> 台。</div>
+          <div class="device-picker-actions">
+            <button type="button" class="chip" data-modal-device-action="all-page">全选本页</button>
+            <button type="button" class="chip" data-modal-device-action="clear">清空</button>
+            <button type="button" class="chip"${pagerPrevDisabled} data-modal-device-page="prev">上一页</button>
+            <button type="button" class="chip"${pagerNextDisabled} data-modal-device-page="next">下一页</button>
           </div>
         </div>
-      `;
-    }
+        <div class="device-picker-list">${rows || '<div class="device-picker-row" style="grid-template-columns:1fr;cursor:default;padding:16px"><div style="color:#667085;font-size:13px">无匹配设备。</div></div>'}</div>
+        <div class="device-picker-pager"><span>第 ${page + 1} / ${totalPages} 页</span></div>
+      </div>`;
+  }
 
-    function renderScope() {
-      els.scopeSwitch.querySelectorAll('button[data-scope]').forEach((btn) => {
-        btn.classList.toggle('active', btn.dataset.scope === state.scope);
+  function openSaveModal() {
+    state.modalSave = {
+      scopeKind: 'store',
+      devicePickerSearch: '',
+      devicePickerPage: 0,
+      selectedUnitIds: [],
+    };
+    if (els.modalRadioStore) els.modalRadioStore.checked = true;
+    if (els.modalRadioDevices) els.modalRadioDevices.checked = false;
+    const meta = getModelMeta(state.activeModelId);
+    if (els.modalTitle) els.modalTitle.textContent = `选择生效范围 · ${meta.name}`;
+    if (els.saveScopeModal) els.saveScopeModal.hidden = false;
+    renderModalDevicePicker();
+  }
+
+  function closeSaveModal() {
+    if (els.saveScopeModal) els.saveScopeModal.hidden = true;
+  }
+
+  function confirmModalSave() {
+    const mid = state.activeModelId;
+    const ws = {
+      projects: deepClone(state.workspace.projects),
+      homeMeasurementOrderKeys: state.workspace.homeMeasurementOrderKeys
+        ? [...state.workspace.homeMeasurementOrderKeys]
+        : null,
+    };
+    repairMutexProjects(ws.projects);
+    reconcilePostureLinkedReports(ws.projects);
+    const kind = state.modalSave.scopeKind;
+    let savedDeviceCount = 0;
+    if (kind === 'store') {
+      state.modelStoreDefaults[mid] = deepClone(ws);
+    } else {
+      const ids = state.modalSave.selectedUnitIds.filter((id) => {
+        const u = getUnitById(id);
+        return u && u.modelId === mid;
       });
-      els.deviceRow.hidden = state.scope === 'store';
-      if (els.scopeLabel) els.scopeLabel.textContent = scopeLabel();
-      renderDeviceUnitPicker();
+      if (!ids.length) {
+        toast('未选择设备', '请至少勾选一台当前型号的设备。');
+        return;
+      }
+      savedDeviceCount = ids.length;
+      if (!state.modelDeviceOverrides[mid]) state.modelDeviceOverrides[mid] = {};
+      ids.forEach((uid) => {
+        state.modelDeviceOverrides[mid][uid] = deepClone(ws);
+      });
     }
+    closeSaveModal();
+    saveToStorage(
+      kind === 'store' ? '已保存门店默认' : '已保存指定设备',
+      kind === 'store'
+        ? `已写入该型号门店默认（全部 SN）。保存后需重启设备生效；本 Demo 请刷新设备端页面。`
+        : `已写入 ${savedDeviceCount} 台设备的覆盖配置。保存后需重启设备生效；本 Demo 请刷新设备端页面。`
+    );
+    render();
+  }
 
-    function renderProjects() {
-      const pv = projectsForPreview();
-      const compOn = !!pv.comprehensive?.enabled;
-      const unitId = state.scope === 'device' ? activeUnitId() : null;
+  function catalogForActiveModel() {
+    return projectCatalog.filter((p) => modelSupportsProject(state.activeModelId, p.id));
+  }
 
-      function renderProjectRow(project, nested = false) {
-        const stats = projectStats(project.id);
-        const cfg = getProjectConfig(project.id, unitId);
-        let mutexHint = '';
-        let switchDisabled = false;
-        if (project.mutexGroup === 'core-trio') {
-          const compBlockSingles = COMPREHENSIVE_EXCLUSIVE_SINGLE_IDS.some((id) => pv[id]?.enabled);
-          if (project.id === 'comprehensive' && compBlockSingles) {
-            mutexHint = '<span class="tag amber">与身体成分/体围单项互斥</span>';
-          } else if (project.id === 'comprehensive' && compOn && pv.posture?.enabled) {
-            mutexHint = '<span class="tag blue">体态单项已开 · 顺序加测</span>';
-          } else if ((project.id === 'bodyComp' || project.id === 'circumference') && compOn) {
-            mutexHint = '<span class="tag amber">与综合测量互斥</span>';
-            switchDisabled = true;
-          } else if (project.id === 'posture' && compOn) {
-            mutexHint = '<span class="tag blue">可与综合同时开</span>';
-          }
+  function renderProjects() {
+    const pv = workspaceProjects();
+    const compOn = !!pv.comprehensive?.enabled;
+
+    function renderProjectRow(project, nested = false) {
+      const stats = projectStats(project.id);
+      const cfg = getProjectConfig(project.id);
+      let mutexHint = '';
+      let switchDisabled = false;
+      if (project.mutexGroup === 'core-trio') {
+        const compBlockSingles = COMPREHENSIVE_EXCLUSIVE_SINGLE_IDS.some((id) => pv[id]?.enabled);
+        if (project.id === 'comprehensive' && compBlockSingles) {
+          mutexHint = '<span class="tag amber">与身体成分/体围单项互斥</span>';
+        } else if (project.id === 'comprehensive' && compOn && pv.posture?.enabled) {
+          mutexHint = '<span class="tag blue">体态单项已开 · 顺序加测</span>';
+        } else if ((project.id === 'bodyComp' || project.id === 'circumference') && compOn) {
+          mutexHint = '<span class="tag amber">与综合测量互斥</span>';
+          switchDisabled = true;
+        } else if (project.id === 'posture' && compOn) {
+          mutexHint = '<span class="tag blue">可与综合同时开</span>';
         }
-        const compositeTag = project.type === 'composite' ? '<span class="tag blue">复合测量</span>' : '';
-        const includesMeta = project.type === 'composite'
+      }
+      const compositeTag = project.type === 'composite' ? '<span class="tag blue">复合测量</span>' : '';
+      const includesMeta =
+        project.type === 'composite'
           ? '<div class="project-meta"><span class="tag gray">含：身体成分 · 体态 · 体围</span></div>'
           : '';
-        const nestedClass = nested ? ' project-row--nested' : '';
-        const reportTagVisible = (rid) => {
-          if (isPostureDualOpen(pv) && project.id === 'posture' && POSTURE_LINKED_REPORT_IDS.includes(rid)) {
-            return !!pv.comprehensive.reports[rid];
-          }
-          return !!cfg.reports[rid];
-        };
-        return `
+      const nestedClass = nested ? ' project-row--nested' : '';
+      const reportTagVisible = (rid) => {
+        if (isPostureDualOpen(pv) && project.id === 'posture' && POSTURE_LINKED_REPORT_IDS.includes(rid)) {
+          return !!pv.comprehensive.reports[rid];
+        }
+        return !!cfg.reports[rid];
+      };
+      return `
           <div class="project-row${nestedClass}" data-project-id="${project.id}">
             <div class="project-top">
               <div style="min-width:0">
@@ -1932,7 +2440,6 @@
                   <span>${project.name}</span>
                   ${compositeTag}
                   <span class="tag ${stats.enabled ? 'green' : 'red'}">${stats.enabled ? '已开启' : '已关闭'}</span>
-                  <span class="tag ${state.scope === 'store' ? 'blue' : 'amber'}">${state.scope === 'store' ? '门店默认' : '指定设备'}</span>
                   ${mutexHint}
                 </div>
                 <p class="project-desc">${project.desc}</p>
@@ -1951,17 +2458,20 @@
             </div>`}
           </div>
         `;
-      }
+    }
 
-      const primaryHtml = projectCatalog
-        .filter((p) => !DYNAMIC_LAB_PROJECT_IDS.includes(p.id))
-        .map((p) => renderProjectRow(p))
-        .join('');
-
-      const dynamicProjects = projectCatalog.filter((p) => DYNAMIC_LAB_PROJECT_IDS.includes(p.id));
-      const enabledDynamic = dynamicProjects.filter((p) => projectStats(p.id).enabled).length;
-      const homeEntryOn = !!(pv.shoulder?.enabled || pv.neck?.enabled);
-      const dynamicGroupHtml = `
+    const cat = catalogForActiveModel();
+    const primaryHtml = cat
+      .filter((p) => !DYNAMIC_LAB_PROJECT_IDS.includes(p.id))
+      .map((p) => renderProjectRow(p))
+      .join('');
+    const dynamicProjects = cat.filter((p) => DYNAMIC_LAB_PROJECT_IDS.includes(p.id));
+    const enabledDynamic = dynamicProjects.filter((p) => projectStats(p.id).enabled).length;
+    const homeEntryOn = !!(pv.shoulder?.enabled || pv.neck?.enabled);
+    const dynamicGroupHtml =
+      dynamicProjects.length === 0
+        ? ''
+        : `
         <section class="project-group" aria-labelledby="project-group-dynamic-lab">
           <div class="project-group-header">
             <h4 class="project-group-title" id="project-group-dynamic-lab">${DYNAMIC_LAB_GROUP.name}</h4>
@@ -1976,15 +2486,14 @@
           </div>
         </section>
       `;
+    els.projectList.innerHTML = primaryHtml + dynamicGroupHtml;
+  }
 
-      els.projectList.innerHTML = primaryHtml + dynamicGroupHtml;
-    }
-
-    function renderReportSwitchRow(report, projectId, reportsRef, rowEnabled) {
-      const visible = !!reportsRef[report.id];
-      const disClass = rowEnabled ? '' : ' disabled';
-      const disAttr = rowEnabled ? '' : ' disabled';
-      return `
+  function renderReportSwitchRow(report, projectId, reportsRef, rowEnabled) {
+    const visible = !!reportsRef[report.id];
+    const disClass = rowEnabled ? '' : ' disabled';
+    const disAttr = rowEnabled ? '' : ' disabled';
+    return `
                 <div class="report-row${disClass}">
                   <div class="report-top">
                     <div style="min-width:0">
@@ -2004,203 +2513,145 @@
                     </div>
                   </div>
                 </div>`;
+  }
+
+  function renderAggregatedReports() {
+    const pv = workspaceProjects();
+    els.reportTitle.textContent = '报告显示配置';
+    const dualPosture = isPostureDualOpen(pv);
+    const anyProject =
+      pv.comprehensive?.enabled ||
+      pv.bodyComp?.enabled ||
+      pv.posture?.enabled ||
+      pv.circumference?.enabled ||
+      pv.balance?.enabled ||
+      pv.shoulder?.enabled ||
+      pv.neck?.enabled;
+    if (!anyProject) {
+      els.reportList.innerHTML = '<p class="panel-muted" style="margin:0">请先开启至少一项测量项目。</p>';
+      return;
     }
+    const sections = [];
 
-    function renderAggregatedReports() {
-      const pv = projectsForPreview();
-      els.reportTitle.textContent = '报告显示配置';
-      const dualPosture = isPostureDualOpen(pv);
-      const anyProject =
-        pv.comprehensive?.enabled ||
-        pv.bodyComp?.enabled ||
-        pv.posture?.enabled ||
-        pv.circumference?.enabled ||
-        pv.balance?.enabled ||
-        pv.shoulder?.enabled ||
-        pv.neck?.enabled;
-      if (!anyProject) {
-        els.reportList.innerHTML = '<p class="scope-tip" style="margin:0">请先开启至少一项测量项目。</p>';
-        return;
-      }
-      const sections = [];
-
-      if (pv.comprehensive?.enabled) {
-        const comp = pv.comprehensive;
-        sections.push('<div class="report-group" data-report-group="comprehensive">');
-        sections.push('<div class="report-group-title">综合测量</div>');
-        ['bodyComp', 'posture', 'circumference'].forEach((srcId) => {
-          const srcName = projectCatalog.find((p) => p.id === srcId)?.name || srcId;
-          const linkedNote =
-            dualPosture && srcId === 'posture'
-              ? '<span class="tag blue report-group-linked">与体态单项共用</span>'
-              : '';
-          const rows = REPORT_DEFS_BY_SOURCE[srcId]
-            .map((report) => renderReportSwitchRow(report, 'comprehensive', comp.reports, true))
-            .join('');
-          sections.push(
-            `<div class="report-group" data-report-group-sub="${srcId}"><div class="report-group-title-row"><span class="report-group-title">${srcName}</span>${linkedNote}</div>${rows}</div>`
-          );
-        });
-        sections.push('</div>');
-      }
-
-      if (!pv.comprehensive?.enabled && pv.posture?.enabled) {
-        const cfg = pv.posture;
-        const rows = REPORT_DEFS_BY_SOURCE.posture
-          .map((report) => renderReportSwitchRow(report, 'posture', cfg.reports, true))
-          .join('');
-        sections.push(`<div class="report-group" data-report-group="posture"><div class="report-group-title">体态</div>${rows}</div>`);
-      }
-
-      if (!pv.comprehensive?.enabled && pv.bodyComp?.enabled) {
-        const cfg = pv.bodyComp;
-        const def = projectCatalog.find((p) => p.id === 'bodyComp');
-        const rows = def.reports
-          .map((report) => renderReportSwitchRow(report, 'bodyComp', cfg.reports, true))
-          .join('');
-        sections.push(`<div class="report-group" data-report-group="bodyComp"><div class="report-group-title">身体成分</div>${rows}</div>`);
-      }
-
-      if (!pv.comprehensive?.enabled && pv.circumference?.enabled) {
-        const cfg = pv.circumference;
-        const def = projectCatalog.find((p) => p.id === 'circumference');
-        const rows = def.reports
-          .map((report) => renderReportSwitchRow(report, 'circumference', cfg.reports, true))
-          .join('');
-        sections.push(`<div class="report-group" data-report-group="circumference"><div class="report-group-title">体围</div>${rows}</div>`);
-      }
-
-      if (pv.balance?.enabled) {
-        const cfg = pv.balance;
-        const def = projectCatalog.find((p) => p.id === 'balance');
-        const rows = def.reports
-          .map((report) => renderReportSwitchRow(report, 'balance', cfg.reports, true))
-          .join('');
-        sections.push(`<div class="report-group" data-report-group="balance"><div class="report-group-title">平衡评估</div>${rows}</div>`);
-      }
-
-      if (pv.shoulder?.enabled) {
-        const cfg = pv.shoulder;
-        const def = projectCatalog.find((p) => p.id === 'shoulder');
-        const rows = def.reports
-          .map((report) => renderReportSwitchRow(report, 'shoulder', cfg.reports, true))
+    if (pv.comprehensive?.enabled) {
+      const comp = pv.comprehensive;
+      sections.push('<div class="report-group" data-report-group="comprehensive">');
+      sections.push('<div class="report-group-title">综合测量</div>');
+      ['bodyComp', 'posture', 'circumference'].forEach((srcId) => {
+        const srcName = projectCatalog.find((p) => p.id === srcId)?.name || srcId;
+        const linkedNote =
+          dualPosture && srcId === 'posture' ? '<span class="tag blue report-group-linked">与体态单项共用</span>' : '';
+        const rows = REPORT_DEFS_BY_SOURCE[srcId]
+          .map((report) => renderReportSwitchRow(report, 'comprehensive', comp.reports, true))
           .join('');
         sections.push(
-          `<div class="report-group" data-report-group="shoulder"><div class="report-group-title">${DYNAMIC_LAB_GROUP.name} · 肩部</div>${rows}</div>`
+          `<div class="report-group" data-report-group-sub="${srcId}"><div class="report-group-title-row"><span class="report-group-title">${srcName}</span>${linkedNote}</div>${rows}</div>`
         );
-      }
-
-      if (pv.neck?.enabled) {
-        const cfg = pv.neck;
-        const def = projectCatalog.find((p) => p.id === 'neck');
-        const rows = def.reports
-          .map((report) => renderReportSwitchRow(report, 'neck', cfg.reports, true))
-          .join('');
-        sections.push(
-          `<div class="report-group" data-report-group="neck"><div class="report-group-title">${DYNAMIC_LAB_GROUP.name} · 颈部</div>${rows}</div>`
-        );
-      }
-
-      els.reportList.innerHTML = sections.join('');
+      });
+      sections.push('</div>');
     }
 
-    function collectVisibleReportLabels(projects) {
-      const labels = [];
-      const pushFrom = (projId) => {
-        const p = projects[projId];
-        if (!p?.enabled) return;
-        const def = projectCatalog.find((x) => x.id === projId);
-        if (!def) return;
-        def.reports.forEach((r) => {
-          if (p.reports[r.id]) labels.push(r.label);
-        });
-      };
-      if (projects.comprehensive?.enabled) {
-        pushFrom('comprehensive');
-      } else {
-        pushFrom('bodyComp');
-        pushFrom('posture');
-        pushFrom('circumference');
-      }
-      pushFrom('balance');
-      pushFrom('shoulder');
-      pushFrom('neck');
-      return labels;
+    if (!pv.comprehensive?.enabled && pv.posture?.enabled) {
+      const cfg = pv.posture;
+      const rows = REPORT_DEFS_BY_SOURCE.posture
+        .map((report) => renderReportSwitchRow(report, 'posture', cfg.reports, true))
+        .join('');
+      sections.push(`<div class="report-group" data-report-group="posture"><div class="report-group-title">体态</div>${rows}</div>`);
     }
 
-    function collectHomeEntryChips(projects) {
-      const chips = [];
-      if (projects.comprehensive?.enabled) {
-        chips.push({ label: '综合测量', cls: 'visible', sub: '主测量 · 一圈三项' });
-        if (projects.posture?.enabled) {
-          chips.push({ label: '体态测量', cls: 'visible', sub: '可与综合顺序加测 · IPose' });
-        }
-      } else {
-        if (projects.bodyComp?.enabled) chips.push({ label: '身体成分测量', cls: 'visible', sub: '单项' });
-        if (projects.posture?.enabled) chips.push({ label: '体态测量', cls: 'visible', sub: '专业测量 / IPose' });
-        if (projects.circumference?.enabled) chips.push({ label: '体围测量', cls: 'visible', sub: '单项' });
-      }
-      if (projects.balance?.enabled) {
-        chips.push({ label: '平衡评估', cls: 'visible', sub: '主测量模式' });
-      }
-      if (projects.shoulder?.enabled || projects.neck?.enabled) {
-        const sh = !!projects.shoulder?.enabled;
-        const nk = !!projects.neck?.enabled;
-        let sub = '';
-        if (sh && nk) sub = '肩 · 颈；设备上将先选择测量部位';
-        else if (sh) sub = '设备上将直接进入肩部专项测量流程';
-        else if (nk) sub = '设备上将直接进入颈部专项测量流程';
-        chips.push({
-          label: '动态实验室',
-          cls: 'visible',
-          sub,
-        });
-      }
-      return chips;
+    if (!pv.comprehensive?.enabled && pv.bodyComp?.enabled) {
+      const cfg = pv.bodyComp;
+      const def = projectCatalog.find((p) => p.id === 'bodyComp');
+      const rows = def.reports.map((report) => renderReportSwitchRow(report, 'bodyComp', cfg.reports, true)).join('');
+      sections.push(`<div class="report-group" data-report-group="bodyComp"><div class="report-group-title">身体成分</div>${rows}</div>`);
     }
 
-    function renderPreview() {
-      const projects = projectsForPreview();
-      const entries = collectHomeEntryChips(projects);
-      const reports = collectVisibleReportLabels(projects);
-      const coreOff = !projects.comprehensive?.enabled
-        && !projects.bodyComp?.enabled
-        && !projects.posture?.enabled
-        && !projects.circumference?.enabled
-        && !projects.balance?.enabled;
-      if (coreOff && !projects.shoulder?.enabled && !projects.neck?.enabled) {
-        els.previewPanel.innerHTML = `
-          <div class="preview-empty">请至少开启一项测量项目。</div>`;
-        return;
-      }
-      const entryHtml = entries.length
-        ? entries.map((e) => `<span class="preview-chip ${e.cls}">${e.label}<span style="opacity:.75;font-size:11px;margin-left:6px">${e.sub || ''}</span></span>`).join('')
-        : '<span class="preview-chip hidden">无首页入口</span>';
-      const reportHtml = reports.length
-        ? reports.map((label) => `<span class="preview-chip visible">${label}</span>`).join('')
-        : '<span class="preview-chip hidden">无可见报告</span>';
-      const bucket = orderPayloadBucket();
-      const enabledHome = computeEnabledHomeKeysFromProjects(projects);
-      const orderedHome = mergeUserHomeOrder(bucket.homeMeasurementOrderKeys, enabledHome);
-      const canEditOrder = !(state.scope === 'device' && !state.selectedUnitIds.length);
-      let homeOrderHtml = '';
-      if (orderedHome.length && canEditOrder) {
-        homeOrderHtml = `
+    if (!pv.comprehensive?.enabled && pv.circumference?.enabled) {
+      const cfg = pv.circumference;
+      const def = projectCatalog.find((p) => p.id === 'circumference');
+      const rows = def.reports.map((report) => renderReportSwitchRow(report, 'circumference', cfg.reports, true)).join('');
+      sections.push(`<div class="report-group" data-report-group="circumference"><div class="report-group-title">体围</div>${rows}</div>`);
+    }
+
+    if (pv.balance?.enabled) {
+      const cfg = pv.balance;
+      const def = projectCatalog.find((p) => p.id === 'balance');
+      const rows = def.reports.map((report) => renderReportSwitchRow(report, 'balance', cfg.reports, true)).join('');
+      sections.push(`<div class="report-group" data-report-group="balance"><div class="report-group-title">平衡评估</div>${rows}</div>`);
+    }
+
+    if (pv.shoulder?.enabled) {
+      const cfg = pv.shoulder;
+      const def = projectCatalog.find((p) => p.id === 'shoulder');
+      const rows = def.reports.map((report) => renderReportSwitchRow(report, 'shoulder', cfg.reports, true)).join('');
+      sections.push(
+        `<div class="report-group" data-report-group="shoulder"><div class="report-group-title">${DYNAMIC_LAB_GROUP.name} · 肩部</div>${rows}</div>`
+      );
+    }
+
+    if (pv.neck?.enabled) {
+      const cfg = pv.neck;
+      const def = projectCatalog.find((p) => p.id === 'neck');
+      const rows = def.reports.map((report) => renderReportSwitchRow(report, 'neck', cfg.reports, true)).join('');
+      sections.push(
+        `<div class="report-group" data-report-group="neck"><div class="report-group-title">${DYNAMIC_LAB_GROUP.name} · 颈部</div>${rows}</div>`
+      );
+    }
+
+    els.reportList.innerHTML = sections.join('');
+  }
+
+  function renderMeasureSelectMini(projects) {
+    const enabledHome = computeEnabledHomeKeysFromProjects(projects);
+    const orderedHome = mergeUserHomeOrder(state.workspace.homeMeasurementOrderKeys, enabledHome);
+    return orderedHome
+      .map((key) => {
+        const meta = HOME_MEASURE_PREVIEW_META[key];
+        if (!meta) return '';
+        const primary = meta.primary ? ' hub-ms-card--primary' : '';
+        return `
+        <div class="hub-ms-card${primary}">
+          <div class="hub-ms-card__body">
+            <div class="hub-ms-card__copy">
+              <div class="hub-ms-card__title">${escapeHtml(meta.title)}</div>
+              <div class="hub-ms-card__benefit">${escapeHtml(meta.benefitDesc)}</div>
+              <div class="hub-ms-card__hint">${escapeHtml(meta.gestureHint)}</div>
+            </div>
+            <div class="hub-ms-card__figure"><img src="${escapeHtml(meta.illustration)}" alt="" /></div>
+          </div>
+        </div>`;
+      })
+      .join('');
+  }
+
+  function renderPreview() {
+    const projects = workspaceProjects();
+    const coreOff =
+      !projects.comprehensive?.enabled &&
+      !projects.bodyComp?.enabled &&
+      !projects.posture?.enabled &&
+      !projects.circumference?.enabled &&
+      !projects.balance?.enabled;
+    if (coreOff && !projects.shoulder?.enabled && !projects.neck?.enabled) {
+      els.previewPanel.innerHTML = '<div class="preview-empty">请至少开启一项测量项目。</div>';
+      return;
+    }
+    const enabledHome = computeEnabledHomeKeysFromProjects(projects);
+    const orderedHome = mergeUserHomeOrder(state.workspace.homeMeasurementOrderKeys, enabledHome);
+    let homeOrderHtml = '';
+    if (orderedHome.length) {
+      homeOrderHtml = `
             <div class="home-order-block">
               <div class="home-order-head">
-                <span style="font-size:12px;font-weight:650;color:#475467">首页入口显示顺序</span>
-                <button type="button" class="btn-tiny" data-home-order-reset>恢复默认顺序</button>
+                <span style="font-size:12px;font-weight:650;color:#475467">首页入口顺序</span>
+                <button type="button" class="btn-tiny" data-home-order-reset title="恢复默认顺序">恢复默认</button>
               </div>
-              <p class="scope-tip" style="margin:0 0 8px;font-size:11px;">使用 ↑ / ↓ 调整顺序；多选设备时同步到已选各台。</p>
               <div class="home-order-list">
                 ${orderedHome
                   .map((key, idx) => {
                     const title = escapeHtml(HOME_TILE_META_HUB[key] || key);
-                    const parts =
-                      key === 'dynamicLab' ? formatDynamicLabParts(projects) : '';
-                    const partsHtml = parts
-                      ? `<div class="home-order-row-parts">含：${escapeHtml(parts)}</div>`
-                      : '';
+                    const parts = key === 'dynamicLab' ? formatDynamicLabParts(projects) : '';
+                    const partsHtml = parts ? `<div class="home-order-row-parts">含：${escapeHtml(parts)}</div>` : '';
                     const upDis = idx === 0 ? ' disabled' : '';
                     const dnDis = idx === orderedHome.length - 1 ? ' disabled' : '';
                     return `
@@ -2218,243 +2669,216 @@
                   .join('')}
               </div>
             </div>`;
-      } else if (orderedHome.length && !canEditOrder) {
-        homeOrderHtml =
-          '<p class="scope-tip" style="margin-top:10px">勾选设备后可调整首页入口顺序。</p>';
-      }
-      let devicePreviewHint = '';
-      if (state.scope === 'device') {
-        if (!state.selectedUnitIds.length) {
-          devicePreviewHint =
-            '<p class="scope-tip" style="margin:0 0 12px">以下为门店默认预览；勾选设备后可编辑指定覆盖。</p>';
-        } else if (state.selectedUnitIds.length > 1) {
-          devicePreviewHint = `<p class="scope-tip" style="margin:0 0 12px">已选 ${state.selectedUnitIds.length} 台设备，预览以第一台为准。</p>`;
-        } else {
-          const u = getUnitById(state.selectedUnitIds[0]);
-          if (u) {
-            devicePreviewHint = `<p class="scope-tip" style="margin:0 0 12px">当前设备：${escapeHtml(u.sn)}${u.storeName ? ` · ${escapeHtml(u.storeName)}` : ''}</p>`;
-          }
-        }
-      }
-      els.previewPanel.innerHTML = `
-        ${devicePreviewHint}
-        <div class="preview-grid">
-          <div class="preview-card">
-            <h4>首页入口</h4>
-            <p>根据当前配置展示设备首页可见入口。</p>
-            <div class="preview-section">
-              <div class="preview-section__title">入口</div>
-              <div class="preview-badges">${entryHtml}</div>
-              ${homeOrderHtml}
-            </div>
-          </div>
-          <div class="preview-card">
-            <h4>结果页可见报告</h4>
-            <p>汇总当前已开启项目的可见报告。</p>
-            <div class="preview-section">
-              <div class="preview-section__title">报告</div>
-              <div class="preview-badges">${reportHtml}</div>
-            </div>
-          </div>
-        </div>
-        <p class="scope-tip" style="margin-top:12px">设备端「结束测量」主链路：<strong>扫码登录/绑定</strong> → <strong>人体三维模型生成</strong> → <strong>报告详情</strong>；与扫码页为同一枚报告二维码时，报告详情页不重复展示（见综合 PRD §9）。</p>`;
     }
+    els.previewPanel.innerHTML = `
+      <div class="hub-device-preview">
+        <div class="hub-device-preview__chrome">设备端项目选择（示意）</div>
+        <div class="hub-device-preview__screen">
+          <div class="hub-ms-stack">${renderMeasureSelectMini(projects)}</div>
+        </div>
+      </div>
+      ${homeOrderHtml}`;
+  }
 
-    function render() {
-      renderScope();
+  function applyMutexOnEnable(bucket, projectId) {
+    const def = projectCatalog.find((p) => p.id === projectId);
+    if (def?.mutexGroup !== 'core-trio') return;
+    if (projectId === 'comprehensive') {
+      COMPREHENSIVE_EXCLUSIVE_SINGLE_IDS.forEach((id) => {
+        if (bucket.projects[id]) bucket.projects[id].enabled = false;
+      });
+    } else if (projectId === 'bodyComp' || projectId === 'circumference') {
+      bucket.projects.comprehensive.enabled = false;
+    }
+  }
+
+  function toggleProject(projectId) {
+    if (!modelSupportsProject(state.activeModelId, projectId)) return;
+    const bucket = state.workspace;
+    const cur = bucket.projects[projectId].enabled;
+    const next = !cur;
+    bucket.projects[projectId].enabled = next;
+    if (next) applyMutexOnEnable(bucket, projectId);
+    reconcilePostureLinkedReports(bucket.projects);
+    render();
+  }
+
+  function toggleReport(projectId, reportId) {
+    const projs = state.workspace.projects;
+    if (POSTURE_LINKED_REPORT_IDS.includes(reportId) && isPostureDualOpen(projs)) {
+      const cur = !!projs.comprehensive.reports[reportId];
+      setPostureLinkedReportValue(projs, reportId, !cur);
+      render();
+      return;
+    }
+    const cfg = projs[projectId];
+    if (!cfg?.enabled) return;
+    cfg.reports[reportId] = !cfg.reports[reportId];
+    render();
+  }
+
+  function resetToSaved() {
+    state = deepClone(savedState);
+    loadWorkspaceFromStore();
+    render();
+    toast('已恢复', '已回到上次保存的配置。');
+  }
+
+  function render() {
+    renderConfigSubTabs();
+    syncLegacyFormControls();
+    if (state.activeConfigSubTab !== 'style') {
+      renderModelBar();
       renderProjects();
       renderAggregatedReports();
       renderPreview();
       syncDeviceDemoFromState();
     }
+  }
 
-    function applyMutexOnEnable(bucket, projectId) {
-      const def = projectCatalog.find((p) => p.id === projectId);
-      if (def?.mutexGroup !== 'core-trio') return;
-      if (projectId === 'comprehensive') {
-        COMPREHENSIVE_EXCLUSIVE_SINGLE_IDS.forEach((id) => {
-          if (bucket.projects[id]) bucket.projects[id].enabled = false;
-        });
-      } else if (projectId === 'bodyComp' || projectId === 'circumference') {
-        bucket.projects.comprehensive.enabled = false;
-      }
-    }
-
-    function toggleProject(projectId) {
-      const flipBucket = (bucket) => {
-        const cur = bucket.projects[projectId].enabled;
-        const next = !cur;
-        bucket.projects[projectId].enabled = next;
-        if (next) applyMutexOnEnable(bucket, projectId);
-        reconcilePostureLinkedReports(bucket.projects);
-      };
-      if (state.scope === 'store') {
-        flipBucket(state.store);
-      } else {
-        const deviceIds = state.selectedUnitIds.length ? state.selectedUnitIds : [];
-        if (!deviceIds.length) {
-          toast('未选择设备', '请先勾选至少一台设备。');
-          return;
-        }
-        deviceIds.forEach((deviceId) => {
-          flipBucket(ensureDeviceOverride(deviceId));
-        });
-      }
-      render();
-    }
-
-    function toggleReport(projectId, reportId) {
-      if (state.scope === 'device' && !state.selectedUnitIds.length) {
-        toast('未选择设备', '请先勾选至少一台设备。');
+  function bindEvents() {
+    const shell = document.querySelector('.editor-shell');
+    shell.addEventListener('click', (event) => {
+      const subTabBtn = event.target.closest('[data-config-subtab]');
+      if (subTabBtn && subTabBtn.closest('.config-subtabs')) {
+        setConfigSubTab(subTabBtn.dataset.configSubtab);
         return;
       }
-      const applyOne = (bucket) => {
-        const projs = bucket.projects;
-        if (POSTURE_LINKED_REPORT_IDS.includes(reportId) && isPostureDualOpen(projs)) {
-          const cur = !!projs.comprehensive.reports[reportId];
-          setPostureLinkedReportValue(projs, reportId, !cur);
-          return;
+
+      const modelTab = event.target.closest('[data-model-id]');
+      if (modelTab && modelTab.closest('#modelSwitchBar')) {
+        const nextId = modelTab.dataset.modelId;
+        if (nextId && nextId !== state.activeModelId) {
+          state.activeModelId = nextId;
+          loadWorkspaceFromStore();
+          render();
         }
-        const cfg = projs[projectId];
-        if (!cfg?.enabled) return;
-        cfg.reports[reportId] = !cfg.reports[reportId];
-      };
-      if (state.scope === 'store') {
-        applyOne(state.store);
-      } else {
-        state.selectedUnitIds.forEach((deviceId) => {
-          applyOne(ensureDeviceOverride(deviceId));
-        });
+        return;
       }
-      render();
-    }
 
-    function resetToSaved() {
-      state = deepClone(savedState);
-      render();
-      toast('已恢复', '已回到上次保存的配置。');
-    }
-
-    function bindEvents() {
-      const shell = document.querySelector('.editor-shell');
-      shell.addEventListener('change', (event) => {
-        const sel = event.target.closest('#devicePickerModelSelect');
-        if (sel && state.scope === 'device') {
-          state.devicePickerModel = sel.value || 'all';
-          state.devicePickerPage = 0;
-          render();
-        }
-      });
-      shell.addEventListener('keydown', (e) => {
-        if (e.key !== 'Enter') return;
-        if (!e.target.closest('#devicePickerSearchInput') || state.scope !== 'device') return;
-        e.preventDefault();
-        const inp = document.getElementById('devicePickerSearchInput');
-        state.devicePickerSearch = inp && inp.value ? inp.value.trim() : '';
-        state.devicePickerPage = 0;
+      const homeReset = event.target.closest('[data-home-order-reset]');
+      if (homeReset) {
+        applyHomeOrderReset();
         render();
+        return;
+      }
+      const homeMove = event.target.closest('[data-home-order-move]');
+      if (homeMove) {
+        if (homeMove.disabled) return;
+        const idx = Number(homeMove.dataset.homeOrderIndex);
+        const dir = homeMove.dataset.homeOrderMove === 'up' ? -1 : 1;
+        applyHomeOrderMove(idx, dir);
+        render();
+        return;
+      }
+
+      const projectSwitch = event.target.closest('[data-role="project-switch"]');
+      if (projectSwitch) {
+        if (projectSwitch.disabled) return;
+        toggleProject(projectSwitch.dataset.projectId);
+        return;
+      }
+
+      const reportSwitch = event.target.closest('[data-role="report-switch"]');
+      if (reportSwitch) {
+        toggleReport(reportSwitch.dataset.projectId, reportSwitch.dataset.reportId);
+      }
+    });
+
+    if (els.legacyBodyCompSelect) {
+      els.legacyBodyCompSelect.addEventListener('change', () => {
+        state.storeLegacySettings.bodyCompStandard = els.legacyBodyCompSelect.value;
       });
-      shell.addEventListener('click', (event) => {
-        const scopeBtn = event.target.closest('[data-scope]');
-        if (scopeBtn) {
-          state.scope = scopeBtn.dataset.scope;
-          if (state.scope === 'device' && !state.selectedUnitIds.length) {
-            state.selectedUnitIds = [STORE_DEVICE_UNITS[0].id];
-          }
-          render();
-          return;
-        }
-
-        const applySearchBtn = event.target.closest('[data-device-picker-apply-search]');
-        if (applySearchBtn && state.scope === 'device') {
-          const inp = document.getElementById('devicePickerSearchInput');
-          state.devicePickerSearch = inp && inp.value ? inp.value.trim() : '';
-          state.devicePickerPage = 0;
-          render();
-          return;
-        }
-
-        const pageBtn = event.target.closest('[data-device-picker-page]');
-        if (pageBtn && state.scope === 'device' && !pageBtn.disabled) {
-          state.devicePickerPage =
-            (Number(state.devicePickerPage) || 0) + (pageBtn.dataset.devicePickerPage === 'prev' ? -1 : 1);
-          render();
-          return;
-        }
-
-        const unitRow = event.target.closest('[data-unit-row]');
-        if (unitRow) {
-          if (state.scope !== 'device') return;
-          const id = unitRow.dataset.unitId;
-          if (state.selectedUnitIds.includes(id)) {
-            state.selectedUnitIds = state.selectedUnitIds.filter((item) => item !== id);
-          } else {
-            state.selectedUnitIds = [...state.selectedUnitIds, id];
-          }
-          render();
-          return;
-        }
-
-        const deviceAction = event.target.closest('[data-device-action]');
-        if (deviceAction) {
-          if (state.scope !== 'device') return;
-          const action = deviceAction.dataset.deviceAction;
-          if (action === 'all-filtered') {
-            state.selectedUnitIds = filterDeviceUnits().map((u) => u.id);
-          } else if (action === 'clear') {
-            state.selectedUnitIds = [];
-          }
-          render();
-          return;
-        }
-
-        const homeReset = event.target.closest('[data-home-order-reset]');
-        if (homeReset) {
-          applyHomeOrderReset();
-          render();
-          return;
-        }
-        const homeMove = event.target.closest('[data-home-order-move]');
-        if (homeMove) {
-          if (homeMove.disabled) return;
-          const idx = Number(homeMove.dataset.homeOrderIndex);
-          const dir = homeMove.dataset.homeOrderMove === 'up' ? -1 : 1;
-          applyHomeOrderMove(idx, dir);
-          render();
-          return;
-        }
-
-        const projectSwitch = event.target.closest('[data-role="project-switch"]');
-        if (projectSwitch) {
-          if (projectSwitch.disabled) return;
-          toggleProject(projectSwitch.dataset.projectId);
-          return;
-        }
-
-        const reportSwitch = event.target.closest('[data-role="report-switch"]');
-        if (reportSwitch) {
-          toggleReport(reportSwitch.dataset.projectId, reportSwitch.dataset.reportId);
-          return;
-        }
+    }
+    document.querySelectorAll('input[name="girthDisplayCount"]').forEach((inp) => {
+      inp.addEventListener('change', () => {
+        if (inp.checked) state.modelGirthDisplayCount['visbody-apro7'] = inp.value;
       });
+    });
 
-      els.cancelBtn.addEventListener('click', resetToSaved);
-      els.saveBtn.addEventListener('click', () => {
-        if (state.scope === 'device' && !state.selectedUnitIds.length) {
-          toast('未选择设备', '请先勾选至少一台设备。');
-          return;
-        }
-        saveToStorage(
-          state.scope === 'store' ? '已保存门店默认配置' : '已保存设备覆盖配置',
-          state.scope === 'store'
-            ? '门店默认配置已保存。量产环境请重启对应体测设备后生效；本 Demo 请刷新设备端页面。'
-            : `已保存 ${state.selectedUnitIds.length} 台设备的覆盖配置。量产环境请重启对应体测设备后生效；本 Demo 请刷新设备端页面。`
-        );
+    els.cancelBtn.addEventListener('click', resetToSaved);
+    els.saveBtn.addEventListener('click', () => {
+      if (state.activeConfigSubTab === 'style') {
+        saveStyleSettings();
+        return;
+      }
+      openSaveModal();
+    });
+
+    document.addEventListener('click', (event) => {
+      const m = els.saveScopeModal;
+      if (!m || m.hidden) return;
+      if (event.target === m) closeSaveModal();
+    });
+
+    if (els.modalCancelBtn) els.modalCancelBtn.addEventListener('click', closeSaveModal);
+    if (els.modalConfirmBtn) els.modalConfirmBtn.addEventListener('click', confirmModalSave);
+
+    if (els.modalRadioStore) {
+      els.modalRadioStore.addEventListener('change', () => {
+        state.modalSave.scopeKind = 'store';
+        state.modalSave.devicePickerPage = 0;
+        renderModalDevicePicker();
+      });
+    }
+    if (els.modalRadioDevices) {
+      els.modalRadioDevices.addEventListener('change', () => {
+        state.modalSave.scopeKind = 'devices';
+        state.modalSave.devicePickerPage = 0;
+        renderModalDevicePicker();
       });
     }
 
-    render();
-    bindEvents();
+    document.body.addEventListener('click', (event) => {
+      if (!els.saveScopeModal || els.saveScopeModal.hidden) return;
+      const applySearch = event.target.closest('[data-modal-device-apply-search]');
+      if (applySearch) {
+        const inp = document.getElementById('modalDevicePickerSearchInput');
+        state.modalSave.devicePickerSearch = inp && inp.value ? inp.value.trim() : '';
+        state.modalSave.devicePickerPage = 0;
+        renderModalDevicePicker();
+        return;
+      }
+      const pageBtn = event.target.closest('[data-modal-device-page]');
+      if (pageBtn && !pageBtn.disabled) {
+        state.modalSave.devicePickerPage =
+          (Number(state.modalSave.devicePickerPage) || 0) + (pageBtn.dataset.modalDevicePage === 'prev' ? -1 : 1);
+        renderModalDevicePicker();
+        return;
+      }
+      const unitRow = event.target.closest('[data-modal-unit-row]');
+      if (unitRow) {
+        const id = unitRow.dataset.unitId;
+        if (state.modalSave.selectedUnitIds.includes(id)) {
+          state.modalSave.selectedUnitIds = state.modalSave.selectedUnitIds.filter((x) => x !== id);
+        } else {
+          state.modalSave.selectedUnitIds = [...state.modalSave.selectedUnitIds, id];
+        }
+        renderModalDevicePicker();
+        return;
+      }
+      const deviceAction = event.target.closest('[data-modal-device-action]');
+      if (deviceAction) {
+        const action = deviceAction.dataset.modalDeviceAction;
+        const filtered = filterModalDeviceUnits();
+        const start = (Number(state.modalSave.devicePickerPage) || 0) * DEVICE_PICKER_PAGE_SIZE;
+        const pageSlice = filtered.slice(start, start + DEVICE_PICKER_PAGE_SIZE);
+        if (action === 'all-page') {
+          const set = new Set(state.modalSave.selectedUnitIds);
+          pageSlice.forEach((u) => set.add(u.id));
+          state.modalSave.selectedUnitIds = [...set];
+        } else if (action === 'clear') {
+          state.modalSave.selectedUnitIds = [];
+        }
+        renderModalDevicePicker();
+      }
+    });
+  }
+
+  render();
+  bindEvents();
+})();
+
   </script>
 </body>
 </html>

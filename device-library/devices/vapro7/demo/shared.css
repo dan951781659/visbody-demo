@@ -1098,11 +1098,42 @@ a { color: inherit; text-decoration: none; }
   border-radius:18px; border:1px solid var(--line); background:rgba(255,255,255,0.06); color:var(--text); font:inherit; cursor:pointer;
 }
 .button.primary { background: linear-gradient(180deg, rgba(43,124,255,0.28), rgba(43,124,255,0.16)); border-color: rgba(43,124,255,0.5); }
+.button[data-demo-next],
+.button[data-anthropometry-next-btn] {
+  position: relative;
+}
+.button[data-demo-next]::after,
+.button[data-anthropometry-next-btn]::after {
+  content: "Demo 演示";
+  position: absolute;
+  top: -20px;
+  right: 0;
+  font-size: 10px;
+  font-weight: 650;
+  letter-spacing: 0.04em;
+  color: rgba(168, 196, 240, 0.9);
+  pointer-events: none;
+  white-space: nowrap;
+}
+.demo-ui-caption {
+  display: inline-block;
+  margin-right: 6px;
+  padding: 1px 7px;
+  border-radius: 6px;
+  font-size: 10px;
+  font-weight: 650;
+  letter-spacing: 0.04em;
+  color: rgba(168, 196, 240, 0.95);
+  background: rgba(43, 124, 255, 0.12);
+  border: 1px solid rgba(43, 124, 255, 0.28);
+  vertical-align: 0.1em;
+}
 .button.secondary { background: rgba(255,255,255,0.04); }
 .button.ghost { background: transparent; }
 
 .footer-hint {
   position:absolute; left:20px; right:20px; bottom:20px; display:grid; gap:12px;
+  z-index: 6;
 }
 .hint-panel {
   padding:16px 18px; border-radius:22px; background:rgba(255,255,255,0.08); border:1px solid rgba(255,255,255,0.05);
@@ -1984,58 +2015,38 @@ audio.turntable-audio {
 .device--guide.is-aligned .guide-grip-stage .guide-grip-hero {
   filter: drop-shadow(0 0 10px rgba(43, 124, 255, 0.35));
 }
-.guide-dual-visual {
+.guide-grip-nudge {
   display: flex;
-  flex-direction: column;
+  align-items: center;
   gap: 10px;
-  width: 100%;
-  min-height: 0;
-}
-.guide-dual-visual--position .guide-visual-main {
-  flex: 1 1 auto;
-  min-width: 0;
-}
-.guide-dual-visual--position .guide-visual-main .live-stage {
-  min-height: 300px;
-}
-.guide-grip-recap {
-  margin: 0;
-  padding: 10px 10px 12px;
-  border-radius: 14px;
-  border: 1px solid rgba(255, 255, 255, 0.12);
-  background: rgba(0, 0, 0, 0.35);
+  margin-top: 8px;
+  padding: 6px 10px 8px;
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: rgba(255, 255, 255, 0.03);
   box-sizing: border-box;
+  max-width: 100%;
 }
-.guide-grip-recap__title {
-  margin: 0 0 8px;
-  font-size: 12px;
-  font-weight: 650;
-  color: #e8f1ff;
-  text-align: center;
-  line-height: 1.35;
-}
-.guide-grip-recap__img {
+.guide-grip-nudge__icon {
+  flex-shrink: 0;
   display: block;
-  width: 100%;
-  max-width: 200px;
+  max-width: 88px;
+  max-height: 48px;
+  width: auto;
   height: auto;
-  border-radius: 10px;
-  margin: 0 auto;
+  opacity: 0.85;
+  border-radius: 8px;
 }
-@media (min-width: 400px) {
-  .guide-dual-visual--position {
-    flex-direction: row;
-    align-items: stretch;
-    gap: 10px;
-  }
-  .guide-dual-visual--position .guide-grip-recap {
-    flex: 0 0 118px;
-    width: 118px;
-    align-self: stretch;
-  }
-  .guide-dual-visual--position .guide-grip-recap__img {
-    max-width: none;
-  }
+.guide-grip-nudge__text {
+  margin: 0;
+  font-size: 12px;
+  line-height: 1.35;
+  font-weight: 550;
+  color: rgba(232, 241, 255, 0.72);
+}
+.footer-muted code {
+  font-size: 11px;
+  color: #a8c4f0;
 }
 .footer-hint--voice-auto {
   text-align: center;

@@ -60,7 +60,7 @@ python3 -m http.server 8080 --bind 127.0.0.1
 
 ## 联调顺序建议
 
-1. 打开 `wellnesshub-measurement-config-demo.html` 调整开关：**每次界面刷新预览时**都会写入 `vapro7-measurement-config`，与设备端同开时刷新 `home.html` 即可看到入口变化。点击 **确定** 会额外持久化 WellnessHub Demo 自身状态（`wellnesshub_measurement_config_demo_v6`）并再次同步设备键。指定设备覆盖在 Demo 中按 **SN（单台）** 勾选，同一型号下多台可分别保存不同覆盖；当前仍只向设备键写入**一份**预览 payload（联调单页）。
+1. 打开 `wellnesshub-measurement-config-demo.html`：**设备样式配置** 与 **测量项目/报告配置** 为二级 Tab（默认后者）。在测量子 Tab 选择型号并调整开关；样式子 Tab 可改 Logo/体成分/围度（门店级）。**每次测量子 Tab 刷新预览时**都会写入 `vapro7-measurement-config`，刷新 `home.html` 即可看到入口变化。点击 **确定**：样式子 Tab 直接保存；测量子 Tab 在弹层选择生效范围后保存（`wellnesshub_measurement_config_demo_v7`）。指定 SN 列表仅限当前型号；仍只向设备键写入**一份**预览 payload（联调单页）。
 2. 同标签页或新标签打开 `home.html` / `report-scan-login.html` / `report-detail.html`，刷新即可看到入口与结束测量支路、报告卡片随配置变化。
 
 ## 与 pm-ai-playbook 源文件的关系

@@ -145,6 +145,19 @@
 
 以下为门店后台「测量项目与报告配置」与 VAPro7 静态 Demo 之间的约定，便于联调与后续接入真实 API。
 
+**配置入口信息架构（设备配置 Tab）**
+
+- **二级 Tab**（同一「设备配置」页内）：
+  - **设备样式配置**：Logo / 待机视频、体成分标准、围度展示数量（9/14，仅 APro7；门店级字段，**无型号切换条**）。
+  - **测量项目/报告配置**（默认进入）：顶部**型号切换条**（「当前正在配置：{型号名}」）+ 测量项目开关 + 报告聚合 + **设备端项目选择页**缩略预览；首页入口顺序在预览区旁用 ↑/↓ 调整。
+- **保存行为**：样式子 Tab 点「确定」直接保存门店级字段；测量子 Tab 点「确定」后在弹层中选择**该型号门店内全部 SN** 或**该型号下指定 SN** 后落库。
+
+**WellnessHub Demo 持久化（v7）**
+
+- 浏览器键名：`localStorage['wellnesshub_measurement_config_demo_v7']`。
+- 顶层包含：`activeModelId`、`activeConfigSubTab`（`style` | `measurement`）、`storeLegacySettings`（门店级 Logo/视频/体成分标准等 Demo 字段）、`modelGirthDisplayCount`（如 APro7 围度 9/14）、`modelStoreDefaults`（按型号：`projects` + `homeMeasurementOrderKeys`）、`modelDeviceOverrides`（按型号再按 `unitId` 存覆盖桶）。
+- **自 v6 迁移**：若存在 `wellnesshub_measurement_config_demo_v6`，首次加载时将其 `store` 与 `deviceOverrides` 映射为 **`visbody-apro7`** 型号下的默认与覆盖；读入后仍以 v7 键保存（不自动删除 v6 键，便于回滚对照）。
+
 **项目与互斥**
 
 | 测量项目 id | 说明 | 与综合测量互斥 |
@@ -190,9 +203,9 @@
 **本地演示同步（无 API 时）**
 
 - 后台 Demo 保存后写入 `localStorage['vapro7-measurement-config']`，值为 `version: 1` 的 JSON，字段包括：`comprehensiveEnabled`、`bodyCompSingleEnabled`、`postureModeEnabled`、`circumferenceSingleEnabled`、`balanceModeEnabled`、`singleShoulderEnabled`、`singleNeckEnabled`、`reportVisibility`；若配置了首页卡片顺序，另含 **`homeMeasurementOrderKeys`**（与设备端 `HOME_TILE_KEYS` 对齐的 key 数组）。**有该字段时**，设备 Demo 将其同时用于**首页网格顺序**与**测量完成页「继续下一项」推荐顺序**；未配置时完成页推荐仍用设备内 `measurementOrderKeys` 预设。详见 [`PRD-综合测量与WellnessHub配置.md`](./PRD-综合测量与WellnessHub配置.md) §6.3。
-- 后台 Demo 在每次 `render()`（如切换开关、范围、设备）后也会将**当前预览**写入同一键，便于与设备端同开调试；WellnessHub 演示状态本身的持久化仍以点击「确定」为准。
+- 后台 Demo 在每次 `render()`（如切换型号或项目开关）后也会将**当前型号编辑区预览**写入同一键，便于与设备端同开调试；WellnessHub 演示状态本身的持久化仍以弹层内点击「保存」为准。
 - 设备 Demo 在 `loadState` 时读取该键并合并进归一化状态；URL 查询参数用于流程态与分享；**WellnessHub 项目键以该 payload 为准**；设备端能力键（§11）以 `vapro7-demo-state` 持久化为准，见 §11。
-- 门店默认与指定设备覆盖在后台 Demo 内编辑；**指定覆盖按单台设备 SN（`selectedUnitIds` + `deviceOverrides[unitId]`）存储**，写入设备演示键时仍按「当前预览」生成单份 payload（真实多终端需设备上报 SN 后拉取各自配置）。设备列表展示 **SN · 型号 · 门店名称**（非放置区域）；设备较多时使用**型号筛选、关键词搜索、按型号交错分页列表**选择 SN。两层配置的交互、生效与清除规则见 [`PRD-综合测量与WellnessHub配置.md`](./PRD-综合测量与WellnessHub配置.md) **§7.7**。
+- 该型号门店默认与指定 SN 覆盖在后台 Demo 内通过 `modelStoreDefaults` / `modelDeviceOverrides` 维护；保存弹层内**仅列出当前型号 SN**。写入设备演示键时仍按**当前选中型号 + 编辑区预览**生成单份 payload（真实多终端需设备上报 SN 后拉取各自型号与覆盖）。交互与生效规则见 [`PRD-综合测量与WellnessHub配置.md`](./PRD-综合测量与WellnessHub配置.md) **§7.7**。
 - **量产**：后台保存并成功下发后，设备端新配置须在**重启设备**后完整生效（非运行中即时切换）；WellnessHub 须在配置保存等节点展示「保存后请重启对应体测设备」类固定提示，详见综合 PRD **§7.7.2**。同源浏览器 Demo 以刷新设备端页模拟读配置，**不**代表量产即时生效。
 
 **动态实验室与肩/颈配置映射**

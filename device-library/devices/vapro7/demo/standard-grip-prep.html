@@ -41,8 +41,16 @@
             <div class="live-focus" data-auto-detect-status>正在识别手部接触...</div>
           </div>
         </div>
-        <div class="footer-hint footer-hint--voice-auto" aria-live="polite">
-          <p class="footer-muted">语音播报结束后约 3 秒将自动进入手臂姿势准备。</p>
+        <div class="footer-hint">
+          <p class="footer-muted" hidden data-voice-auto-hint>
+            联调模式（URL 带 <code>demoAuto=1</code>）：语音播报结束后约 3 秒将自动进入下一页。
+          </p>
+          <a
+            class="button primary"
+            href="./standard-position.html"
+            data-demo-next="./standard-position.html"
+            data-stateful-link="./standard-position.html"
+          >下一步</a>
         </div>
       </section>
     </main>
