@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>站姿准备</title>
+    <title>转台站姿</title>
     <link rel="stylesheet" href="./shared.css" />
   </head>
   <body>
@@ -11,17 +11,18 @@
       <section
         class="device device--guide"
         data-turntable-anthropometry
+        data-anthropometry-auto="1"
         data-anthropometry-next="./standard-grip-prep.html"
         data-auto-detect-delay="2600"
-        data-voice-text="请站上转台，并确保足底与金属脚印充分接触。"
+        data-voice-text="请站上转台，双手自然下垂，身体放松并保持静止，系统将自动测量身高与体重。"
       >
-        <div class="status-bar"><span>18:32</span><span>站姿准备</span></div>
+        <div class="status-bar"><span>18:32</span><span>转台站姿</span></div>
         <div class="topbar">
           <a class="back-link" href="./standard-user-prep.html" data-stateful-link="./standard-user-prep.html">← 返回</a>
           <span class="text-link">测量准备页</span>
         </div>
-        <h1 class="screen-title">站上转台并对准脚印</h1>
-        <p class="screen-subtitle">请确保双脚足底与金属脚印充分接触，并对准转台电极片位置。</p>
+        <h1 class="screen-title">站上转台</h1>
+        <p class="screen-subtitle">双手自然下垂，面向屏幕，保持静止直至提示完成。</p>
         <div class="device-visual guide-visual">
           <div class="live-stage guide-scene-wrap bodycomp-prep-scene">
             <div class="camera-corner tl"></div>
@@ -31,16 +32,16 @@
             <div class="live-glow"></div>
             <div class="live-status live-status--single"><span class="live-chip ok">站姿识别中</span></div>
             <img
-              class="bodycomp-prep-hero-svg"
-              src="./assets/bodycomp-prep/footprint-turntable-alignment.svg"
-              alt="转台脚印与电极片对准示意"
-              width="400"
-              height="360"
+              class="bodycomp-prep-hero-svg bodycomp-prep-turntable-figure"
+              src="./assets/weight-measure/turntable-figure.svg"
+              alt="站上转台、双手自然下垂示意"
+              width="320"
+              height="260"
             />
             <div class="live-focus" data-auto-detect-status>正在识别站姿，请保持站立不动。</div>
           </div>
         </div>
-        <div class="footer-hint">
+        <div class="footer-hint" hidden>
           <a
             class="button primary"
             href="./standard-grip-prep.html"

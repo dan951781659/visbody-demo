@@ -1101,12 +1101,19 @@
       desc: '设备端合并为一张入口；肩、颈可分别开关。',
     };
 
-    /** 综合测量开启时，结果页可单独配置显隐的 6 份报告（写入 projects.comprehensive.reports） */
+    /** 综合测量开启时，结果页可单独配置显隐的 7 份报告（写入 projects.comprehensive.reports） */
     const COMPREHENSIVE_REPORT_DEFS = [
       { id: 'postureReport', label: '体态报告', hint: '设备端报告页显示体态卡片。', defaultVisible: true, group: 'posture' },
       { id: 'spine', label: '脊柱报告', hint: '设备端报告页显示脊柱卡片。', defaultVisible: true, group: 'posture' },
       { id: 'hip', label: '臀型报告', hint: '设备端报告页显示臀型卡片。', defaultVisible: false, group: 'posture' },
       { id: 'bodyCompReport', label: '身体成分报告', hint: '设备端结果页显示身体成分报告卡片。', defaultVisible: true, group: 'bodyComp' },
+      {
+        id: 'youthGrowthReport',
+        label: '青少年成长报告',
+        hint: '设备端结果页显示青少年成长类报告卡片；与身体成分同属一组开关。',
+        defaultVisible: true,
+        group: 'bodyComp',
+      },
       { id: 'circumferenceReport', label: '体围报告', hint: '设备端结果页显示体围报告卡片。', defaultVisible: true, group: 'circumference' },
       { id: 'waistAbdomenReport', label: '腰腹维度报告', hint: '设备端结果页显示腰腹维度报告卡片。', defaultVisible: true, group: 'circumference' },
     ];

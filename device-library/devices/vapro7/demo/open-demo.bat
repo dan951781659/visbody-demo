@@ -16,8 +16,9 @@ start "VAPro7-static-5173" cmd /k "npx --yes serve . -l 5173"
 REM 等待几秒让服务起来后再打开浏览器（无 timeout 时用 ping 代替）
 ping 127.0.0.1 -n 5 >nul
 
+start "" "http://127.0.0.1:5173/local-demo-hub.html"
 start "" "http://127.0.0.1:5173/index.html"
 start "" "http://127.0.0.1:5173/wellnesshub-measurement-config-demo.html"
 
-echo 已在浏览器打开 index 与 WellnessHub 测量配置页。若页面空白，请稍等再刷新。
+echo 已在浏览器打开联调总览、设备入口与 WellnessHub 测量配置页。若页面空白，请稍等再刷新。
 pause

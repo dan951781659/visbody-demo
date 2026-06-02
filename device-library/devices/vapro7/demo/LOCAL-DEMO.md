@@ -1,11 +1,16 @@
 # 本地部署（WellnessHub 后台 Demo + VAPro7 设备 Demo）
 
+本仓 **没有**独立的 WellnessHub 全站工程；门店「测量项目与报告配置」为单页 **`wellnesshub-measurement-config-demo.html`**，与设备端 HTML **放在同一目录、由同一静态服务托管**即可联调（**不要**再起第二个端口跑「另一份后台」，否则与设备端不同源，`localStorage` 无法共享）。
+
+- **联调总览页（推荐书签）**：已起 `serve` 后打开 [local-demo-hub.html](http://127.0.0.1:5173/local-demo-hub.html)（文件：`local-demo-hub.html`），内含 WellnessHub Demo 与设备端常用链接。
+
 ## 一键打开（推荐）
 
 | 方式 | 操作 |
 |------|------|
 | **Windows** | 双击 **`一键打开-WellnessHub测量配置.bat`** → 会用系统默认浏览器打开后台 Demo |
-| **macOS** | 双击 **`一键打开-WellnessHub测量配置.command`**（首次若提示权限，到「隐私与安全性」允许） |
+| **macOS · 起服务并打开浏览器** | 双击 **`一键本地联调.command`**（首次若提示权限，到「隐私与安全性」允许）→ 若 5173 空闲会启动 `serve` 并打开联调总览与后台/设备页 |
+| **macOS · 仅打开文件（无 http）** | 双击 **`一键打开-WellnessHub测量配置.command`**（首次若提示权限，到「隐私与安全性」允许） |
 | **已在浏览器中** | 先打开本目录下的 **`点此打开-WellnessHub测量配置.html`**，会自动跳转到后台 Demo（相对路径，无需改地址） |
 
 > 说明：网上分享的 `http://...` 链接无法指向你电脑里的文件；**可点击的相对链接**只在「已打开同目录下某一页」时有效，因此上面用 `.bat` / `.command` 实现真正的「点一下就开」。
@@ -39,6 +44,7 @@ npx --yes serve . -l 5173
 
 浏览器访问：
 
+- 联调总览：[http://127.0.0.1:5173/local-demo-hub.html](http://127.0.0.1:5173/local-demo-hub.html)
 - 设备总览：[http://127.0.0.1:5173/index.html](http://127.0.0.1:5173/index.html)
 - 设备首页：[http://127.0.0.1:5173/home.html](http://127.0.0.1:5173/home.html)
 - 后台测量配置 Demo：[http://127.0.0.1:5173/wellnesshub-measurement-config-demo.html](http://127.0.0.1:5173/wellnesshub-measurement-config-demo.html)

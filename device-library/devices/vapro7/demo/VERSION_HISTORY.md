@@ -14,6 +14,23 @@
 
 ---
 
+## 2026-06-03 · v1.9.4（四步准备：脚印并入清单 · 转台自动采 · 扶手语音 +3s）
+
+- **`standard-user-prep.html`** / **`shared.css`**：第 5 项脚印准备（`.prep-check-cell--wide`）；副文案「站上转台…」。
+- **`standard-bodycomp-prep.html`**：`data-anthropometry-auto`、`turntable-figure.svg`、隐藏底部按钮。
+- **`shared.js`**：`speakTextThen`、`data-voice-advance-*`、`setupVoice` 与 `[data-auto-detect-next]` 去重；转台状态「即将进入扶手准备」；`DEMO_VERSION_FALLBACK` 1.9.4。
+- **`standard-grip-prep.html`** / **`standard-position.html`** / **`assets/bodycomp-prep/hand-grip-metal.svg`**。
+- **`PRD.md`**、**`PRD-综合测量与WellnessHub配置.md`** v1.3.6、**`CHANGELOG.md`**、**`index.html`** 注释、**`standard-weight.html`** 按钮文案。
+
+---
+
+## 2026-06-03 · v1.9.3（青少年成长报告 · youthGrowthReport）
+
+- **`wellnesshub-measurement-config-demo.html`** / **`shared.js`** / **`report-detail.html`**：`youthGrowthReport` 显隐与预览；`DEMO_VERSION_FALLBACK` 1.9.3。
+- **文档**：综合 PRD v1.3.5 §7.5、`PRD.md` §9.1。
+
+---
+
 ## 2026-06-03 · v1.9.2（WellnessHub Demo：配置须重启提示 · PRD v1.3.4）
 
 - **`wellnesshub-measurement-config-demo.html`**：页头 `restart-hint`；保存 Toast 文案含「量产请重启设备 / Demo 请刷新设备端页」。

@@ -13,7 +13,7 @@ const DEVICE_PERSISTED_KEYS = new Set([
 
 let __vapro7DemoStateMemory = null;
 const REPORT_URL = "./report-scan-login.html";
-const DEMO_VERSION_FALLBACK = "1.9.2";
+const DEMO_VERSION_FALLBACK = "1.9.4";
 const DYNAMIC_LAB_SELECT_HREF = "./single-select.html";
 
 const HOME_TILE_KEYS = [
@@ -200,11 +200,13 @@ const REPORT_METRIC_VALUES = {
   脊柱报告: "已分析",
   臀型报告: "已分析",
   体态报告: "轻度圆肩",
+  青少年成长报告: "已生成",
   综合评分: "82 分"
 };
 
 const DEFAULT_REPORT_VISIBILITY = {
   bodyCompReport: true,
+  youthGrowthReport: true,
   postureReport: true,
   spine: true,
   hip: false,
@@ -1105,12 +1107,45 @@ function speakText(text) {
   }, 180);
 }
 
+/** 播完主文案后回调（语音关闭时用估算时长兜底，避免永远不跳转）。 */
+function speakTextThen(text, onDone) {
+  if (typeof onDone !== "function") return;
+  const trimmed = (text || "").trim();
+  if (!trimmed) {
+    window.requestAnimationFrame(() => {
+      onDone();
+    });
+    return;
+  }
+  if (!loadState().voiceEnabled || !("speechSynthesis" in window)) {
+    const approxMs = Math.min(9000, 900 + trimmed.length * 85);
+    window.setTimeout(onDone, approxMs);
+    return;
+  }
+  window.speechSynthesis.cancel();
+  const utterance = new SpeechSynthesisUtterance(trimmed);
+  utterance.lang = "zh-CN";
+  utterance.rate = 1;
+  utterance.pitch = 1;
+  utterance.onend = () => {
+    window.setTimeout(onDone, 0);
+  };
+  utterance.onerror = () => {
+    window.setTimeout(onDone, 0);
+  };
+  window.setTimeout(() => {
+    window.speechSynthesis.speak(utterance);
+  }, 180);
+}
+
 function setupVoice() {
   if (document.querySelector("[data-guide-sequence]")) return;
   if (document.querySelector("[data-measuring-flow]")) return;
   if (document.querySelector("[data-generating-flow]")) return;
   if (document.querySelector("[data-demo-countdown-target]")) return;
   if (document.querySelector("[data-weight-standalone-measuring]")) return;
+  if (document.querySelector("[data-auto-detect-next]")) return;
+  if (document.querySelector("[data-turntable-anthropometry]")) return;
   const source =
     document.querySelector("[data-voice-text]")?.dataset.voiceText ||
     document.querySelector("[data-live-voice]")?.textContent?.trim() ||
@@ -2187,11 +2222,14 @@ function setupAutoDetectAdvance() {
     const subtitleEl = root.closest("section")?.querySelector(".screen-subtitle");
     const focusEl = root.querySelector(".live-focus");
     const warningMode = new URLSearchParams(window.location.search).get("autoDetectMode") === "warning";
+    const voiceAdvanceNext = root.dataset.voiceAdvanceNext;
+    const voiceAdvanceAfterMs = Number(root.dataset.voiceAdvanceAfterMs || 3000);
     let demoTimer = null;
+    let navigateTimer = null;
 
-    if (statusEl) statusEl.textContent = "正在识别...";
-    speakText(warningMode ? "检测到姿态异常，请先调整姿势。" : root.dataset.voiceText || "正在识别姿态，请保持不动。");
     if (warningMode) {
+      if (statusEl) statusEl.textContent = "正在识别...";
+      speakText("检测到姿态异常，请先调整姿势。");
       root.classList.add("is-warning");
       if (subtitleEl) subtitleEl.textContent = "检测到姿态异常，请先调整姿势后再继续。";
       if (focusEl) focusEl.textContent = "请调整姿势";
@@ -2204,17 +2242,39 @@ function setupAutoDetectAdvance() {
         window.clearTimeout(demoTimer);
         demoTimer = null;
       }
+      if (navigateTimer) {
+        window.clearTimeout(navigateTimer);
+        navigateTimer = null;
+      }
+      if ("speechSynthesis" in window) window.speechSynthesis.cancel();
     }
 
-    function completeDemo() {
+    function completeDemo(skipRecognizedSpeak) {
       root.classList.add("is-aligned");
       const scene = root.querySelector(".bodycomp-prep-scene");
       if (scene) scene.classList.add("is-aligned");
       if (statusEl) statusEl.textContent = "识别通过";
-      speakText("识别通过。");
+      if (!skipRecognizedSpeak) speakText("识别通过。");
     }
 
-    demoTimer = window.setTimeout(completeDemo, delay);
+    if (voiceAdvanceNext) {
+      if (statusEl) statusEl.textContent = "正在识别...";
+      const voiceLine =
+        root.dataset.voiceText || "正在识别姿态，请保持不动。";
+      speakTextThen(voiceLine, () => {
+        navigateTimer = window.setTimeout(() => {
+          navigateToTarget(withStateQuery(voiceAdvanceNext, loadState()));
+        }, voiceAdvanceAfterMs);
+      });
+      demoTimer = window.setTimeout(() => completeDemo(true), delay);
+      setActivePageDemo({ cancel: cancelDemo });
+      return;
+    }
+
+    if (statusEl) statusEl.textContent = "正在识别...";
+    speakText(root.dataset.voiceText || "正在识别姿态，请保持不动。");
+
+    demoTimer = window.setTimeout(() => completeDemo(false), delay);
     setActivePageDemo({ cancel: cancelDemo });
   });
 }
@@ -3004,7 +3064,7 @@ function setupTurntableAnthropometryCapture() {
       patchState({ sessionWeightKg: state.sessionWeightKg || 56.8 });
       showDeviceToast("体重测量已完成");
       speakText("体重测量已完成。");
-      if (statusEl) statusEl.textContent = autoNavigate ? "即将进入下一步" : "请点击「继续测量」进入下一步";
+      if (statusEl) statusEl.textContent = autoNavigate ? "即将进入扶手准备" : "请点击「继续测量」进入下一步";
       if (autoNavigate) window.setTimeout(goNext, 700);
     }]);
 
@@ -3023,7 +3083,9 @@ function setupTurntableAnthropometryCapture() {
     }
   }
 
-  if (!isDemoManualAdvance()) {
+  const forceAutoAnthropometry = root.dataset.anthropometryAuto === "1";
+
+  if (forceAutoAnthropometry || !isDemoManualAdvance()) {
     let autoStarted = false;
     function runAnthropometrySequenceAuto() {
       if (autoStarted) return;

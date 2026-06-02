@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 160" role="img" aria-labelledby="t">
+  <title id="t">�K����vK�^::</title>
+  <defs>
+    <linearGradient id="rail" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#5a6d88"/>
+      <stop offset="100%" stop-color="#3d4d64"/>
+    </linearGradient>
+    <linearGradient id="metal" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#8aa4c4"/>
+      <stop offset="50%" stop-color="#c8d6ea"/>
+      <stop offset="100%" stop-color="#7a93b5"/>
+    </linearGradient>
+  </defs>
+  <rect width="240" height="160" fill="#141c28" rx="12"/>
+  <rect x="72" y="28" width="96" height="22" rx="5" fill="url(#metal)" stroke="#6eb0ff" stroke-width="1.2"/>
+  <rect x="60" y="52" width="120" height="14" rx="4" fill="url(#rail)"/>
+  <ellipse cx="88" cy="108" rx="22" ry="28" fill="#2a3344" stroke="#4a5d78" stroke-width="1.5"/>
+  <ellipse cx="152" cy="108" rx="22" ry="28" fill="#2a3344" stroke="#4a5d78" stroke-width="1.5"/>
+  <path d="M78 86 Q88 72 98 78 L104 62 Q108 52 118 58 L112 82 Q120 78 126 88 L118 100 Q108 96 100 104 Z" fill="#d4a574" stroke="#b8895a" stroke-width="1"/>
+  <path d="M162 86 Q152 72 142 78 L136 62 Q132 52 122 58 L128 82 Q120 78 114 88 L122 100 Q132 96 140 104 Z" fill="#d4a574" stroke="#b8895a" stroke-width="1"/>
+  <rect x="92" y="48" width="14" height="18" rx="3" fill="url(#metal)" opacity="0.95"/>
+  <rect x="134" y="48" width="14" height="18" rx="3" fill="url(#metal)" opacity="0.95"/>
+  <text x="120" y="148" text-anchor="middle" fill="#8fa6c2" font-size="10" font-family="system-ui,sans-serif">��4�^</text>
+</svg>

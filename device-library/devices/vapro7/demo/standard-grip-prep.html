@@ -12,6 +12,8 @@
         class="device device--guide"
         data-auto-detect-next="./standard-position.html"
         data-auto-detect-delay="2600"
+        data-voice-advance-next="./standard-position.html"
+        data-voice-advance-after-ms="3000"
         data-voice-text="请双手握住扶手，拇指与四指充分接触金属区域。"
       >
         <div class="status-bar"><span>18:32</span><span>扶手准备</span></div>
@@ -22,21 +24,25 @@
         <h1 class="screen-title">双手接触扶手金属</h1>
         <p class="screen-subtitle">请双手拇指及四指与扶手金属区域充分接触。</p>
         <div class="device-visual guide-visual">
-          <div class="live-stage guide-scene-wrap phase-stage-rails">
+          <div class="live-stage guide-scene-wrap phase-stage-rails guide-grip-stage">
             <div class="camera-corner tl"></div><div class="camera-corner tr"></div><div class="camera-corner bl"></div><div class="camera-corner br"></div>
             <div class="live-glow"></div>
             <div class="live-status live-status--single"><span class="live-chip ok">扶手识别中</span></div>
             <div class="turntable-base" aria-hidden="true"></div>
             <div class="guide-line circle"></div>
-            <div class="human pose-hold">
-              <div class="head"></div><div class="torso"></div><div class="limb arm left"></div><div class="limb arm right"></div><div class="limb leg left"></div><div class="limb leg right"></div>
-            </div>
+            <img
+              class="guide-grip-hero"
+              src="./assets/bodycomp-prep/hand-grip-metal.svg"
+              alt="双手拇指与四指接触扶手金属区示意"
+              width="320"
+              height="220"
+            />
             <div class="guide-rail-hint">拇指与四指贴合金属区</div>
             <div class="live-focus" data-auto-detect-status>正在识别手部接触...</div>
           </div>
         </div>
-        <div class="footer-hint">
-          <a class="button primary" href="./standard-position.html" data-demo-next="./standard-position.html" data-stateful-link="./standard-position.html">下一步</a>
+        <div class="footer-hint footer-hint--voice-auto" aria-live="polite">
+          <p class="footer-muted">语音播报结束后约 3 秒将自动进入手臂姿势准备。</p>
         </div>
       </section>
     </main>

@@ -1,5 +1,25 @@
 # VAPro7 Demo 变更记录
 
+## v1.9.4（综合测量 / 体成分四步准备链路）
+
+- **`standard-user-prep.html`**：准备清单增加通栏「足底对准转台脚印」项；进入下一步副文案改为站上转台采集。
+- **`standard-bodycomp-prep.html`**：改为站转台 + 双手下垂主视觉（`turntable-figure.svg`）；`data-anthropometry-auto="1"` 固定自动采身高/体重并跳转；底部手动按钮隐藏。
+- **`shared.js`**：`setupTurntableAnthropometryCapture` 支持 `anthropometryAuto`；`speakTextThen`；`setupAutoDetectAdvance` 支持 `data-voice-advance-next` / `data-voice-advance-after-ms`（扶手页语音结束 +3s 进 45°）；`setupVoice` 避免与自动识别页重复播报；`DEMO_VERSION_FALLBACK` **1.9.4**。
+- **`standard-grip-prep.html`** / **`standard-position.html`**：握持特写 `hand-grip-metal.svg`；45° 页增加握持参照区；扶手页底部改为自动跳转说明。
+- **`shared.css`**：`.prep-check-cell--wide`、`.guide-grip-*`、`.guide-dual-visual` 等。
+- **文档**：`PRD.md` §12、`PRD-综合测量与WellnessHub配置.md` v1.3.6（§5、附录 A）；`VERSION_HISTORY.md`；`index.html` 注释说明主链路；`standard-weight.html` 入口文案。
+
+---
+
+## v1.9.3（青少年成长报告 · reportVisibility）
+
+- **`wellnesshub-measurement-config-demo.html`**：综合测量 / 身体成分分组增加「青少年成长报告」开关（`youthGrowthReport`，与身体成分报告同属 `bodyComp` 组）。
+- **`shared.js`**：`DEFAULT_REPORT_VISIBILITY`、`REPORT_METRIC_VALUES` 增加 `youthGrowthReport`；`DEMO_VERSION_FALLBACK` **1.9.3**。
+- **`report-detail.html`**：按显隐展示「青少年成长报告」卡片。
+- **文档**：`PRD-综合测量与WellnessHub配置.md` v1.3.5 §7.5、`PRD.md` §9.1。
+
+---
+
 ## v1.9.2（WellnessHub 配置 Demo：重启后生效提示）
 
 - **`wellnesshub-measurement-config-demo.html`**：页头常驻说明「量产须重启体测设备后生效」；保存成功 Toast 补充量产与本 Demo 的差异提示。
