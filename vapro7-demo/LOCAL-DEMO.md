@@ -60,7 +60,7 @@ python3 -m http.server 8080 --bind 127.0.0.1
 
 ## 联调顺序建议
 
-1. 打开 `wellnesshub-measurement-config-demo.html`：**设备样式配置** 与 **测量项目/报告配置** 为二级 Tab（默认后者）。在测量子 Tab 选择型号并调整开关；样式子 Tab 可改 Logo/体成分/围度（门店级）。**每次测量子 Tab 刷新预览时**都会写入 `vapro7-measurement-config`，刷新 `home.html` 即可看到入口变化。点击 **确定**：样式子 Tab 直接保存；测量子 Tab 在弹层选择生效范围后保存（`wellnesshub_measurement_config_demo_v7`）。指定 SN 列表仅限当前型号；仍只向设备键写入**一份**预览 payload（联调单页）。
+1. 打开 `wellnesshub-measurement-config-demo.html`：**设备样式配置** 与 **测量项目/报告配置** 为二级 Tab（默认后者；Tab 下有「保存后需重启设备生效」提示）。测量子 Tab：先选**型号** → 选**门店运行模式**（快速 / 专业，单选卡片）→ 编辑当前模式下的测量项目与报告（列表末尾含**体重测量**；专业模式开身体成分时可配**身高是否需要确认**）→ 切换运行模式会加载另一模式已存档配置。**每次测量子 Tab 刷新预览时**都会写入 `vapro7-measurement-config`（`version: 2`），刷新 `home.html` 即可看到入口变化。点击 **确定**：样式子 Tab 直接保存；测量子 Tab 在弹层选择生效范围后保存（`wellnesshub_measurement_config_demo_v7`）。指定 SN 列表仅限当前型号；仍只向设备键写入**一份**预览 payload（联调单页）。独立体重入口在 `home.html`，不在 `standby.html`。
 2. 同标签页或新标签打开 `home.html` / `report-scan-login.html` / `report-detail.html`，刷新即可看到入口与结束测量支路、报告卡片随配置变化。
 
 ## 与 pm-ai-playbook 源文件的关系

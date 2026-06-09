@@ -11,19 +11,13 @@
       <section
         class="device device--weight-result"
         data-weight-standalone-result
-        data-result-return="./standby.html"
+        data-result-return="./home.html"
       >
         <div class="status-bar"><span>18:32</span><span>体重测量</span></div>
         <div class="topbar">
-          <a class="back-link" href="./standby.html" data-stateful-link="./standby.html">← 首页</a>
+          <a class="back-link" href="./home.html" data-stateful-link="./home.html">← 项目选择</a>
         </div>
         <h1 class="screen-title">体重测量</h1>
-
-        <div class="live-status-wrap">
-          <div class="live-status">
-            <span class="live-chip ok">测量完成</span>
-          </div>
-        </div>
 
         <div class="weight-result-hero">
           <span class="weight-result-number" data-session-weight-value>56.8</span>
@@ -38,7 +32,11 @@
         </div>
 
         <div class="footer-hint">
-          <a class="button secondary" href="./standby.html" data-weight-return-now data-stateful-link="./standby.html">立即返回</a>
+          <a class="button secondary" href="./home.html" data-weight-return-now data-stateful-link="./home.html">立即返回</a>
+          <p class="weight-result-idle-hint" role="status">
+            <span data-weight-idle-label>20 秒无操作将返回项目选择</span>
+            <span class="count-badge" data-weight-idle-countdown>20</span>
+          </p>
         </div>
       </section>
     </main>

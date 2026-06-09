@@ -2,51 +2,17 @@
 <html lang="zh-CN">
   <head>
     <meta charset="UTF-8" />
+    <meta http-equiv="refresh" content="0; url=./settings.html#measurement-flow" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>身高测量设置</title>
-    <link rel="stylesheet" href="./shared.css" />
+    <script>
+      window.location.replace("./settings.html#measurement-flow");
+    </script>
   </head>
   <body>
-    <main class="device-stage">
-      <section class="device device--settings">
-        <div class="status-bar"><span>18:32</span><span>身高测量</span></div>
-        <div class="topbar">
-          <a
-            class="back-link"
-            href="./settings.html"
-            data-back-link
-            data-back-mode="settings"
-            data-back-default="./settings.html"
-            >← 设置</a>
-        </div>
-        <h1 class="screen-title">身高测量</h1>
-        <p class="screen-subtitle">开启后设备可测量身高并支持手动调整；关闭时登录或注册需手动填写身高。</p>
-
-        <div class="config-list">
-          <div class="setting-card setting-card--stack">
-            <div>
-              <div class="card-title">身高测量</div>
-              <div class="card-desc">开启后，测量流程中同步采集身高。</div>
-            </div>
-            <label class="toggle"><input type="checkbox" data-config-key="heightMeasurementEnabled" /><span></span></label>
-          </div>
-          <div class="setting-card setting-card--stack">
-            <div>
-              <div class="card-title">身高是否需要确认</div>
-              <div class="card-desc">开启后，整轮测量结束再进入身高确认页。</div>
-            </div>
-            <label class="toggle"><input type="checkbox" data-config-key="heightConfirmRequired" /><span></span></label>
-          </div>
-          <div class="setting-card setting-card--stack">
-            <div>
-              <div class="card-title">身高是否显示</div>
-              <div class="card-desc">关闭后界面不展示身高数值，后台仍保存测量结果。</div>
-            </div>
-            <label class="toggle"><input type="checkbox" data-config-key="heightResultVisible" /><span></span></label>
-          </div>
-        </div>
-      </section>
-    </main>
-    <script src="./shared.js"></script>
+    <p>
+      身高相关 Hub 配置已迁移至 WellnessHub；设备本地显示偏好请在
+      <a href="./settings.html#measurement-flow">设备设置</a> 中调整。
+    </p>
   </body>
 </html>

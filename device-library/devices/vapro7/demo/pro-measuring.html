@@ -8,7 +8,7 @@
   </head>
   <body>
     <main class="device-stage">
-      <section class="device">
+      <section class="device" data-set-measurement-mode="pro" data-measuring-flow>
         <div class="status-bar"><span>18:32</span><span>测量中</span></div>
         <div class="topbar">
           <a class="back-link" href="./pro-countdown.html">← 返回</a>
@@ -41,7 +41,13 @@
             <span class="count-badge">82%</span>
           </div>
           <div class="button-row">
-            <a class="button primary" href="./pro-result.html" data-action-link="noop" data-complete-group="pro">查看结果</a>
+            <a
+              class="button primary"
+              href="./standard-next-step.html"
+              data-stateful-link="./standard-next-step.html"
+              data-measuring-next
+              >查看结果</a
+            >
           </div>
           <div class="button-row" style="margin-top:12px">
             <a class="button secondary" href="./pro-measuring.html?autoDetectMode=warning">姿势异常示例</a>

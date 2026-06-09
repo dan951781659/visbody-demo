@@ -540,6 +540,7 @@
       box-shadow: 0 6px 20px rgba(17, 32, 56, 0.06);
       transform: translateY(-1px);
     }
+    .project-top,
     .report-top {
       display: flex;
       align-items: flex-start;
@@ -970,6 +971,70 @@
       background: var(--blue-weak);
       color: var(--blue);
     }
+    .runtime-mode-bar {
+      margin-bottom: 12px;
+    }
+    .runtime-mode-bar__head {
+      margin: 0 0 10px;
+      font-size: 13px;
+      font-weight: 650;
+      color: #344054;
+    }
+    .runtime-mode-bar__sub {
+      margin: 4px 0 0;
+      font-size: 12px;
+      color: var(--muted);
+      font-weight: 400;
+    }
+    .runtime-mode-choices {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 10px;
+    }
+    .runtime-mode-choice {
+      position: relative;
+      display: grid;
+      gap: 6px;
+      padding: 12px 14px 12px 38px;
+      border-radius: 14px;
+      border: 1px solid var(--line-strong);
+      background: #fff;
+      text-align: left;
+      cursor: pointer;
+      transition: border-color 0.18s ease, box-shadow 0.18s ease, background 0.18s ease;
+    }
+    .runtime-mode-choice:hover {
+      border-color: rgba(47, 107, 255, 0.35);
+    }
+    .runtime-mode-choice.selected {
+      border-color: var(--blue);
+      background: linear-gradient(180deg, #f8fbff 0%, #fff 100%);
+      box-shadow: 0 0 0 1px rgba(47, 107, 255, 0.12);
+    }
+    .runtime-mode-choice__radio {
+      position: absolute;
+      left: 14px;
+      top: 14px;
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      border: 2px solid #c5ced9;
+      background: #fff;
+    }
+    .runtime-mode-choice.selected .runtime-mode-choice__radio {
+      border-color: var(--blue);
+      box-shadow: inset 0 0 0 4px var(--blue);
+    }
+    .runtime-mode-choice__title {
+      font-size: 14px;
+      font-weight: 700;
+      color: #1d2939;
+    }
+    .runtime-mode-choice__desc {
+      font-size: 12px;
+      line-height: 1.55;
+      color: var(--muted);
+    }
     .config-subtabs {
       display: flex;
       flex-wrap: wrap;
@@ -1184,6 +1249,12 @@
       border-radius: 8px;
     }
     .restart-hint strong { font-weight: 600; }
+    .config-save-hint {
+      margin: 0 0 14px;
+      font-size: 13px;
+      line-height: 1.5;
+      color: var(--muted);
+    }
   </style>
 </head>
 <body>
@@ -1246,8 +1317,6 @@
           <a class="back-link" href="javascript:void(0)">← 返回</a>
           <div class="page-title">
             <h1>编辑门店</h1>
-            <p>配置设备展示样式，或按型号设置测量项目与报告显隐。</p>
-            <p class="restart-hint" role="note">保存后需<strong>重启设备</strong>生效；本 Demo 请刷新设备端演示页读取配置。</p>
           </div>
         </div>
 
@@ -1264,6 +1333,7 @@
                 <button type="button" class="config-subtab" data-config-subtab="style">设备样式配置</button>
                 <button type="button" class="config-subtab active" data-config-subtab="measurement">测量项目/报告配置</button>
               </div>
+              <p class="config-save-hint" role="note">保存后需重启设备生效</p>
 
               <section id="configPanelStyle" class="config-panel" hidden>
             <div class="legacy-stack">
@@ -1317,6 +1387,8 @@
               <div class="model-bar-title" id="modelBarTitle">当前正在配置：—</div>
               <div class="model-tab-row" id="modelSwitchBar" role="tablist" aria-label="设备型号"></div>
             </div>
+
+            <div class="runtime-mode-bar" id="runtimeModeBar" role="radiogroup" aria-label="门店运行模式"></div>
 
               <div class="config-grid">
                 <section class="panel panel--projects">
@@ -1396,6 +1468,11 @@
     'visbody-dpro3',
     'visbody-e260',
   ];
+
+  const RUNTIME_MODE_QUICK = 'quick';
+  const RUNTIME_MODE_PRO = 'professional';
+  const QUICK_MODE_PROJECT_IDS = ['comprehensive', 'balance', 'shoulder', 'neck'];
+  const PRO_MODE_PROJECT_IDS = ['bodyComp', 'posture', 'circumference', 'balance', 'shoulder', 'neck'];
 
   const DEVICE_MODEL_CATALOG = [
     {
@@ -1490,8 +1567,8 @@
       type: 'composite',
       mutexGroup: 'core-trio',
       includes: ['bodyComp', 'posture', 'circumference'],
-      name: '综合测量',
-      desc: '一轮完成身体成分、体态、体围测量；与身体成分/体围单项互斥；体态单项可与综合同时开启用于顺序加测。',
+      name: '快速测量',
+      desc: '快速模式主入口：一轮完成身体成分、体态、体围；与身体成分/体围单项互斥（方案 A，不支持综合+体态并存）。',
       reports: [].concat(REPORT_DEFS_BY_SOURCE.bodyComp, REPORT_DEFS_BY_SOURCE.posture, REPORT_DEFS_BY_SOURCE.circumference),
     },
     {
@@ -1499,7 +1576,7 @@
       type: 'single',
       mutexGroup: 'core-trio',
       name: '身体成分',
-      desc: '单项测量：仅身体成分；与综合测量互斥。',
+      desc: '专业模式：仅身体成分；与快速测量互斥。',
       reports: [...REPORT_DEFS_BY_SOURCE.bodyComp],
     },
     {
@@ -1507,7 +1584,7 @@
       type: 'single',
       mutexGroup: 'core-trio',
       name: '体态',
-      desc: '单项测量：体态专项（双手下垂）；可与综合同时开启，建议综合后经「继续下一项」加测。',
+      desc: '专业模式：体态专项（双手下垂）。',
       reports: [...REPORT_DEFS_BY_SOURCE.posture],
     },
     {
@@ -1515,7 +1592,7 @@
       type: 'single',
       mutexGroup: 'core-trio',
       name: '体围',
-      desc: '单项测量：体围；与综合测量互斥。',
+      desc: '专业模式：体围；与快速测量互斥。',
       reports: [...REPORT_DEFS_BY_SOURCE.circumference],
     },
     {
@@ -1612,9 +1689,10 @@
     'girthOnly',
     'dynamicLab',
     'balance',
+    'weightStandalone',
   ];
   const HOME_TILE_META_HUB = {
-    standard: '综合测量',
+    standard: '快速测量',
     pro: '体态测量',
     bodyCompSingle: '身体成分测量',
     circumferenceSingle: '体围测量',
@@ -1622,11 +1700,12 @@
     girthOnly: '体围（单体围）',
     dynamicLab: '动态实验室',
     balance: '平衡测量',
+    weightStandalone: '体重测量',
   };
 
   const HOME_MEASURE_PREVIEW_META = {
     standard: {
-      title: '综合测量',
+      title: '快速测量',
       benefitDesc: '体重、体成分、围度、身高、体态一次完成',
       gestureHint: '请自然站立 / 保持静止 2 秒',
       illustration: './assets/home-select/posture-standing.svg',
@@ -1681,6 +1760,13 @@
       illustration: './assets/home-select/generic-measure.svg',
       primary: false,
     },
+    weightStandalone: {
+      title: '体重测量',
+      benefitDesc: '独立体重测量，不进入快速/专业主流程',
+      gestureHint: '请站上转台完成体重采集',
+      illustration: './assets/home-select/bodycomp-torso.svg',
+      primary: false,
+    },
   };
 
   function sanitizeHubHomeOrder(keys) {
@@ -1695,11 +1781,24 @@
     return out;
   }
 
-  function computeEnabledHomeKeysFromProjects(projects) {
+  function workspaceRuntimeMode() {
+    return state.workspace.measurementRuntimeMode === RUNTIME_MODE_PRO
+      ? RUNTIME_MODE_PRO
+      : RUNTIME_MODE_QUICK;
+  }
+
+  function defaultDeviceCapabilities(mode) {
+    return {
+      heightMeasurementEnabled: false,
+      heightConfirmRequired: mode === RUNTIME_MODE_PRO,
+    };
+  }
+
+  function computeEnabledHomeKeysFromProjects(projects, runtimeMode, weightStandaloneEnabled) {
     const keys = [];
-    if (projects.comprehensive?.enabled) {
-      keys.push('standard');
-      if (projects.posture?.enabled) keys.push('pro');
+    const mode = runtimeMode === RUNTIME_MODE_PRO ? RUNTIME_MODE_PRO : RUNTIME_MODE_QUICK;
+    if (mode === RUNTIME_MODE_QUICK) {
+      if (projects.comprehensive?.enabled) keys.push('standard');
     } else {
       if (projects.bodyComp?.enabled) keys.push('bodyCompSingle');
       if (projects.posture?.enabled) keys.push('pro');
@@ -1707,7 +1806,25 @@
     }
     if (projects.balance?.enabled) keys.push('balance');
     if (projects.shoulder?.enabled || projects.neck?.enabled) keys.push('dynamicLab');
+    if (weightStandaloneEnabled) keys.push('weightStandalone');
     return keys;
+  }
+
+  function getEnabledHomeKeysForWorkspace(ws) {
+    const workspace = ws || state.workspace;
+    return computeEnabledHomeKeysFromProjects(
+      workspace.projects,
+      workspace.measurementRuntimeMode,
+      workspace.weightStandaloneEnabled
+    );
+  }
+
+  function mergeHomeOrderForWorkspace(ws) {
+    const workspace = ws || state.workspace;
+    return mergeUserHomeOrder(
+      workspace.homeMeasurementOrderKeys,
+      getEnabledHomeKeysForWorkspace(workspace)
+    );
   }
 
   function mergeUserHomeOrder(savedOrder, enabledKeys) {
@@ -1744,13 +1861,68 @@
     };
   }
 
-  function freshProjectsMap() {
+  function freshProjectsMapForMode(mode, modelId) {
     const projects = Object.fromEntries(projectCatalog.map((def) => [def.id, createProjectState(def)]));
-    projects.comprehensive.enabled = true;
-    projects.bodyComp.enabled = false;
-    projects.posture.enabled = true;
-    projects.circumference.enabled = false;
+    if (mode === RUNTIME_MODE_QUICK) {
+      projects.comprehensive.enabled = true;
+      projects.bodyComp.enabled = false;
+      projects.posture.enabled = false;
+      projects.circumference.enabled = false;
+    } else {
+      projects.comprehensive.enabled = false;
+      projects.bodyComp.enabled = false;
+      projects.posture.enabled = true;
+      projects.circumference.enabled = false;
+    }
+    applyModelCapabilityToProjects(projects, modelId);
+    repairMutexProjects(projects);
     return projects;
+  }
+
+  function createModeConfig(mode, modelId) {
+    return {
+      projects: freshProjectsMapForMode(mode, modelId),
+      homeMeasurementOrderKeys: null,
+      deviceCapabilities: defaultDeviceCapabilities(mode),
+    };
+  }
+
+  function createModelStoreEntry(modelId) {
+    return {
+      measurementRuntimeMode: RUNTIME_MODE_QUICK,
+      quickModeConfig: createModeConfig(RUNTIME_MODE_QUICK, modelId),
+      professionalModeConfig: createModeConfig(RUNTIME_MODE_PRO, modelId),
+      weightStandaloneEnabled: false,
+    };
+  }
+
+  function isLegacyModelStoreEntry(entry) {
+    return entry && entry.projects && !entry.quickModeConfig;
+  }
+
+  function migrateLegacyModelStoreEntry(entry, modelId) {
+    if (!isLegacyModelStoreEntry(entry)) return entry;
+    const next = createModelStoreEntry(modelId);
+    mergeProjectsLayer(next.quickModeConfig.projects, entry.projects);
+    repairMutexProjects(next.quickModeConfig.projects);
+    next.quickModeConfig.homeMeasurementOrderKeys = entry.homeMeasurementOrderKeys || null;
+    mergeProjectsLayer(next.professionalModeConfig.projects, entry.projects);
+    next.professionalModeConfig.projects.comprehensive.enabled = false;
+    repairMutexProjects(next.professionalModeConfig.projects);
+    if (entry.deviceCapabilities && typeof entry.deviceCapabilities === 'object') {
+      next.quickModeConfig.deviceCapabilities = {
+        ...defaultDeviceCapabilities(RUNTIME_MODE_QUICK),
+        ...entry.deviceCapabilities,
+      };
+      next.professionalModeConfig.deviceCapabilities = {
+        ...defaultDeviceCapabilities(RUNTIME_MODE_PRO),
+        ...entry.deviceCapabilities,
+      };
+    }
+    if (typeof entry.weightStandaloneEnabled === 'boolean') {
+      next.weightStandaloneEnabled = entry.weightStandaloneEnabled;
+    }
+    return next;
   }
 
   function applyModelCapabilityToProjects(projects, modelId) {
@@ -1761,19 +1933,13 @@
     });
   }
 
-  function createModelBucket(modelId) {
-    const projects = freshProjectsMap();
-    applyModelCapabilityToProjects(projects, modelId);
-    repairMutexProjects(projects);
-    reconcilePostureLinkedReports(projects);
-    return { projects, homeMeasurementOrderKeys: null };
-  }
-
   function createConfigStateV7() {
     const modelStoreDefaults = {};
     MODEL_IDS_ORDER.forEach((mid) => {
-      modelStoreDefaults[mid] = createModelBucket(mid);
+      modelStoreDefaults[mid] = createModelStoreEntry(mid);
     });
+    const wsEntry = modelStoreDefaults['visbody-apro7'];
+    const quickCfg = wsEntry.quickModeConfig;
     return {
       activeModelId: 'visbody-apro7',
       activeConfigSubTab: 'measurement',
@@ -1783,7 +1949,13 @@
       modelGirthDisplayCount: { 'visbody-apro7': '9' },
       modelStoreDefaults,
       modelDeviceOverrides: {},
-      workspace: { projects: freshProjectsMap(), homeMeasurementOrderKeys: null },
+      workspace: {
+        measurementRuntimeMode: RUNTIME_MODE_QUICK,
+        projects: deepClone(quickCfg.projects),
+        homeMeasurementOrderKeys: null,
+        deviceCapabilities: deepClone(quickCfg.deviceCapabilities),
+        weightStandaloneEnabled: false,
+      },
       modalSave: {
         scopeKind: 'store',
         devicePickerSearch: '',
@@ -1814,14 +1986,15 @@
       COMPREHENSIVE_EXCLUSIVE_SINGLE_IDS.forEach((id) => {
         if (projects[id]) projects[id].enabled = false;
       });
+      if (projects.posture) projects.posture.enabled = false;
       return;
     }
     const anySingle = CORE_SINGLE_IDS.some((id) => projects[id]?.enabled);
     if (anySingle) projects.comprehensive.enabled = false;
   }
 
-  function isPostureDualOpen(projects) {
-    return !!(projects?.comprehensive?.enabled && projects?.posture?.enabled);
+  function isPostureDualOpen() {
+    return false;
   }
 
   function reconcilePostureLinkedReports(projects) {
@@ -1843,55 +2016,53 @@
     }
   }
 
-  function normalizeOverrideBucketFromRaw(cfg) {
-    return {
-      projects: Object.fromEntries(
-        projectCatalog.map((def) => {
-          const src = cfg.projects?.[def.id];
-          const fallback = createProjectState(def);
-          return [
-            def.id,
-            {
-              enabled: src ? Boolean(src.enabled) : fallback.enabled,
-              reports: Object.fromEntries(
-                def.reports.map((report) => [
-                  report.id,
-                  src?.reports && Object.prototype.hasOwnProperty.call(src.reports, report.id)
-                    ? Boolean(src.reports[report.id])
-                    : fallback.reports[report.id],
-                ])
-              ),
-            },
-          ];
-        })
-      ),
-      homeMeasurementOrderKeys:
-        Array.isArray(cfg.homeMeasurementOrderKeys) && cfg.homeMeasurementOrderKeys.length
-          ? sanitizeHubHomeOrder(cfg.homeMeasurementOrderKeys)
-          : null,
+  function normalizeModelStoreEntry(cfg, modelId) {
+    if (cfg?.quickModeConfig && cfg?.professionalModeConfig) {
+      const entry = deepClone(cfg);
+      entry.measurementRuntimeMode =
+        entry.measurementRuntimeMode === RUNTIME_MODE_PRO ? RUNTIME_MODE_PRO : RUNTIME_MODE_QUICK;
+      entry.weightStandaloneEnabled = !!entry.weightStandaloneEnabled;
+      return entry;
+    }
+    const legacy = {
+      projects: cfg?.projects,
+      homeMeasurementOrderKeys: cfg?.homeMeasurementOrderKeys,
+      deviceCapabilities: cfg?.deviceCapabilities,
+      weightStandaloneEnabled: cfg?.weightStandaloneEnabled,
     };
+    return migrateLegacyModelStoreEntry(legacy, modelId);
+  }
+
+  function reconcileModelStoreEntry(entry, modelId) {
+    if (!entry) return;
+    [entry.quickModeConfig, entry.professionalModeConfig].forEach((cfg) => {
+      if (!cfg?.projects) return;
+      applyModelCapabilityToProjects(cfg.projects, modelId);
+      repairMutexProjects(cfg.projects);
+      reconcilePostureLinkedReports(cfg.projects);
+    });
   }
 
   function reconcileAllBuckets(st) {
     MODEL_IDS_ORDER.forEach((mid) => {
       const b = st.modelStoreDefaults[mid];
-      if (b?.projects) {
-        repairMutexProjects(b.projects);
-        reconcilePostureLinkedReports(b.projects);
+      if (b) {
+        st.modelStoreDefaults[mid] = migrateLegacyModelStoreEntry(b, mid);
+        reconcileModelStoreEntry(st.modelStoreDefaults[mid], mid);
       }
     });
-    Object.values(st.modelDeviceOverrides || {}).forEach((byUnit) => {
+    Object.entries(st.modelDeviceOverrides || {}).forEach(([modelId, byUnit]) => {
+      if (!MODEL_IDS_ORDER.includes(modelId)) return;
       Object.values(byUnit || {}).forEach((ov) => {
-        if (ov?.projects) {
-          repairMutexProjects(ov.projects);
-          reconcilePostureLinkedReports(ov.projects);
-        }
+        const normalized = normalizeModelStoreEntry(ov, modelId);
+        Object.assign(ov, normalized);
+        reconcileModelStoreEntry(ov, modelId);
       });
     });
   }
 
   function migrateV5StoreShape(oldStore) {
-    const projects = freshProjectsMap();
+    const projects = freshProjectsMapForMode(RUNTIME_MODE_QUICK, 'visbody-apro7');
     const op = oldStore?.projects || {};
     if (op.comprehensive) {
       mergeProjectsLayer(projects, op);
@@ -1941,22 +2112,20 @@
   function migrateV6RawToV7(raw) {
     const v7 = createConfigStateV7();
     const mid = 'visbody-apro7';
+    const entry = v7.modelStoreDefaults[mid];
     if (raw?.store?.projects) {
-      mergeProjectsLayer(v7.modelStoreDefaults[mid].projects, raw.store.projects);
-      repairMutexProjects(v7.modelStoreDefaults[mid].projects);
-      reconcilePostureLinkedReports(v7.modelStoreDefaults[mid].projects);
+      mergeProjectsLayer(entry.quickModeConfig.projects, raw.store.projects);
+      repairMutexProjects(entry.quickModeConfig.projects);
+      reconcilePostureLinkedReports(entry.quickModeConfig.projects);
       if (Array.isArray(raw.store.homeMeasurementOrderKeys) && raw.store.homeMeasurementOrderKeys.length) {
-        v7.modelStoreDefaults[mid].homeMeasurementOrderKeys = sanitizeHubHomeOrder(raw.store.homeMeasurementOrderKeys);
+        entry.quickModeConfig.homeMeasurementOrderKeys = sanitizeHubHomeOrder(raw.store.homeMeasurementOrderKeys);
       }
     }
     const migratedOverrides = migrateLegacyDeviceOverrides(raw.deviceOverrides || {});
     v7.modelDeviceOverrides[mid] = v7.modelDeviceOverrides[mid] || {};
     Object.entries(migratedOverrides).forEach(([uid, cfg]) => {
       if (!getUnitById(uid)) return;
-      const bucket = normalizeOverrideBucketFromRaw(cfg);
-      repairMutexProjects(bucket.projects);
-      reconcilePostureLinkedReports(bucket.projects);
-      v7.modelDeviceOverrides[mid][uid] = bucket;
+      v7.modelDeviceOverrides[mid][uid] = normalizeModelStoreEntry(cfg, mid);
     });
     return v7;
   }
@@ -1981,28 +2150,17 @@
     }
     MODEL_IDS_ORDER.forEach((mid) => {
       const src = data.modelStoreDefaults?.[mid];
-      if (src?.projects) {
-        mergeProjectsLayer(next.modelStoreDefaults[mid].projects, src.projects);
-        repairMutexProjects(next.modelStoreDefaults[mid].projects);
-        reconcilePostureLinkedReports(next.modelStoreDefaults[mid].projects);
-      }
-      if (Array.isArray(src?.homeMeasurementOrderKeys) && src.homeMeasurementOrderKeys.length) {
-        next.modelStoreDefaults[mid].homeMeasurementOrderKeys = sanitizeHubHomeOrder(src.homeMeasurementOrderKeys);
-      }
+      if (!src) return;
+      next.modelStoreDefaults[mid] = normalizeModelStoreEntry(src, mid);
     });
     Object.entries(data.modelDeviceOverrides || {}).forEach(([modelId, byUnit]) => {
       if (!MODEL_IDS_ORDER.includes(modelId) || !byUnit || typeof byUnit !== 'object') return;
       next.modelDeviceOverrides[modelId] = next.modelDeviceOverrides[modelId] || {};
       Object.entries(byUnit).forEach(([unitId, cfg]) => {
         if (!getUnitById(unitId)) return;
-        const bucket = normalizeOverrideBucketFromRaw(cfg || {});
-        repairMutexProjects(bucket.projects);
-        reconcilePostureLinkedReports(bucket.projects);
-        next.modelDeviceOverrides[modelId][unitId] = bucket;
+        next.modelDeviceOverrides[modelId][unitId] = normalizeModelStoreEntry(cfg || {}, modelId);
       });
     });
-    applyModelCapabilityToProjects(next.modelStoreDefaults[next.activeModelId].projects, next.activeModelId);
-    MODEL_IDS_ORDER.forEach((mid) => applyModelCapabilityToProjects(next.modelStoreDefaults[mid].projects, mid));
     reconcileAllBuckets(next);
     return next;
   }
@@ -2031,12 +2189,70 @@
   let state = loadState();
   reconcileAllBuckets(state);
 
+  function getModelStoreEntry(mid) {
+    const entry = state.modelStoreDefaults[mid] || createModelStoreEntry(mid);
+    state.modelStoreDefaults[mid] = migrateLegacyModelStoreEntry(entry, mid);
+    return state.modelStoreDefaults[mid];
+  }
+
+  function deriveHeightPayloadFields(ws) {
+    const projects = ws.projects;
+    const runtimeMode = ws.measurementRuntimeMode === RUNTIME_MODE_PRO ? RUNTIME_MODE_PRO : RUNTIME_MODE_QUICK;
+    if (runtimeMode === RUNTIME_MODE_QUICK) {
+      return {
+        heightMeasurementEnabled: !!projects.comprehensive?.enabled,
+        heightConfirmRequired: false,
+      };
+    }
+    const bodyCompOn = !!projects.bodyComp?.enabled;
+    const caps = ws.deviceCapabilities || defaultDeviceCapabilities(RUNTIME_MODE_PRO);
+    return {
+      heightMeasurementEnabled: bodyCompOn,
+      heightConfirmRequired: bodyCompOn ? !!caps.heightConfirmRequired : false,
+    };
+  }
+
+  function normalizeWorkspaceCapabilities(ws) {
+    if (!ws.deviceCapabilities) {
+      ws.deviceCapabilities = defaultDeviceCapabilities(workspaceRuntimeMode());
+    }
+    if (workspaceRuntimeMode() === RUNTIME_MODE_QUICK) {
+      ws.deviceCapabilities.heightConfirmRequired = false;
+    } else if (!ws.projects.bodyComp?.enabled) {
+      ws.deviceCapabilities.heightConfirmRequired = false;
+    }
+  }
+
+  function persistWorkspaceToModelStore(mid, ws) {
+    normalizeWorkspaceCapabilities(ws);
+    const entry = getModelStoreEntry(mid);
+    const mode = ws.measurementRuntimeMode === RUNTIME_MODE_PRO ? RUNTIME_MODE_PRO : RUNTIME_MODE_QUICK;
+    entry.measurementRuntimeMode = mode;
+    entry.weightStandaloneEnabled = !!ws.weightStandaloneEnabled;
+    const target = mode === RUNTIME_MODE_PRO ? entry.professionalModeConfig : entry.quickModeConfig;
+    target.projects = deepClone(ws.projects);
+    target.homeMeasurementOrderKeys = ws.homeMeasurementOrderKeys ? [...ws.homeMeasurementOrderKeys] : null;
+    target.deviceCapabilities = deepClone(
+      ws.deviceCapabilities || defaultDeviceCapabilities(mode)
+    );
+    if (mode === RUNTIME_MODE_QUICK) {
+      target.deviceCapabilities.heightConfirmRequired = false;
+    } else if (!ws.projects.bodyComp?.enabled) {
+      target.deviceCapabilities.heightConfirmRequired = false;
+    }
+  }
+
   function loadWorkspaceFromStore() {
     const mid = state.activeModelId;
-    const src = state.modelStoreDefaults[mid] || createModelBucket(mid);
+    const entry = getModelStoreEntry(mid);
+    const mode = entry.measurementRuntimeMode === RUNTIME_MODE_PRO ? RUNTIME_MODE_PRO : RUNTIME_MODE_QUICK;
+    const cfg = mode === RUNTIME_MODE_PRO ? entry.professionalModeConfig : entry.quickModeConfig;
     state.workspace = {
-      projects: deepClone(src.projects),
-      homeMeasurementOrderKeys: src.homeMeasurementOrderKeys ? [...src.homeMeasurementOrderKeys] : null,
+      measurementRuntimeMode: mode,
+      projects: deepClone(cfg.projects),
+      homeMeasurementOrderKeys: cfg.homeMeasurementOrderKeys ? [...cfg.homeMeasurementOrderKeys] : null,
+      deviceCapabilities: deepClone(cfg.deviceCapabilities || defaultDeviceCapabilities(mode)),
+      weightStandaloneEnabled: !!entry.weightStandaloneEnabled,
     };
     applyModelCapabilityToProjects(state.workspace.projects, mid);
     repairMutexProjects(state.workspace.projects);
@@ -2051,6 +2267,7 @@
     configPanelMeasurement: document.getElementById('configPanelMeasurement'),
     modelBarTitle: document.getElementById('modelBarTitle'),
     modelSwitchBar: document.getElementById('modelSwitchBar'),
+    runtimeModeBar: document.getElementById('runtimeModeBar'),
     legacyBodyCompSelect: document.getElementById('legacyBodyCompSelect'),
     legacyGirthBlock: document.getElementById('legacyGirthBlock'),
     girthRadios: document.querySelectorAll('input[name="girthDisplayCount"]'),
@@ -2082,7 +2299,9 @@
     return !COMPREHENSIVE_EXCLUSIVE_SINGLE_IDS.some((id) => projects[id]?.enabled);
   }
 
-  function toDevicePayloadFromProjects(projects, orderBucket) {
+  function toDevicePayloadFromWorkspace(ws) {
+    const projects = ws.projects;
+    const runtimeMode = ws.measurementRuntimeMode === RUNTIME_MODE_PRO ? RUNTIME_MODE_PRO : RUNTIME_MODE_QUICK;
     const reportVisibility = {};
     const addReports = (projId) => {
       const p = projects[projId];
@@ -2091,15 +2310,8 @@
         reportVisibility[k] = !!v;
       });
     };
-    if (projects.comprehensive?.enabled) {
-      addReports('comprehensive');
-      if (projects.posture?.enabled) {
-        const p = projects.posture;
-        Object.entries(p.reports || {}).forEach(([k, v]) => {
-          if (POSTURE_LINKED_REPORT_IDS.includes(k)) return;
-          reportVisibility[k] = !!v;
-        });
-      }
+    if (runtimeMode === RUNTIME_MODE_QUICK) {
+      if (projects.comprehensive?.enabled) addReports('comprehensive');
     } else {
       addReports('bodyComp');
       addReports('posture');
@@ -2108,34 +2320,38 @@
     addReports('balance');
     addReports('shoulder');
     addReports('neck');
-    const enabledHome = computeEnabledHomeKeysFromProjects(projects);
-    const hasCustomHomeOrder =
-      Array.isArray(orderBucket?.homeMeasurementOrderKeys) && orderBucket.homeMeasurementOrderKeys.length > 0;
+    const heightFields = deriveHeightPayloadFields(ws);
+    const enabledHome = computeEnabledHomeKeysFromProjects(
+      projects,
+      runtimeMode,
+      ws.weightStandaloneEnabled
+    );
+    const homeOrder = mergeUserHomeOrder(ws.homeMeasurementOrderKeys, enabledHome);
     const payload = {
-      version: 1,
-      comprehensiveEnabled: !!projects.comprehensive?.enabled,
-      bodyCompSingleEnabled: !!projects.bodyComp?.enabled,
-      postureModeEnabled: !!projects.posture?.enabled,
-      circumferenceSingleEnabled: !!projects.circumference?.enabled,
+      version: 2,
+      measurementRuntimeMode: runtimeMode,
+      comprehensiveEnabled:
+        runtimeMode === RUNTIME_MODE_QUICK ? !!projects.comprehensive?.enabled : false,
+      bodyCompSingleEnabled:
+        runtimeMode === RUNTIME_MODE_PRO ? !!projects.bodyComp?.enabled : false,
+      postureModeEnabled:
+        runtimeMode === RUNTIME_MODE_PRO ? !!projects.posture?.enabled : false,
+      circumferenceSingleEnabled:
+        runtimeMode === RUNTIME_MODE_PRO ? !!projects.circumference?.enabled : false,
       balanceModeEnabled: !!projects.balance?.enabled,
       singleShoulderEnabled: !!projects.shoulder?.enabled,
       singleNeckEnabled: !!projects.neck?.enabled,
+      heightMeasurementEnabled: heightFields.heightMeasurementEnabled,
+      heightConfirmRequired: heightFields.heightConfirmRequired,
+      weightStandaloneEnabled: !!ws.weightStandaloneEnabled,
       reportVisibility,
     };
-    if (hasCustomHomeOrder) {
-      const homeOrder = mergeUserHomeOrder(orderBucket.homeMeasurementOrderKeys, enabledHome);
-      if (homeOrder.length) payload.homeMeasurementOrderKeys = homeOrder;
-      else payload.homeMeasurementOrderKeys = null;
-    } else {
-      payload.homeMeasurementOrderKeys = null;
-    }
+    payload.homeMeasurementOrderKeys = homeOrder.length ? homeOrder : null;
     return payload;
   }
 
   function syncDeviceDemoFromState() {
-    const projects = workspaceProjects();
-    const bucket = state.workspace;
-    const payload = toDevicePayloadFromProjects(projects, bucket);
+    const payload = toDevicePayloadFromWorkspace(state.workspace);
     try {
       localStorage.setItem(DEVICE_PAYLOAD_KEY, JSON.stringify(payload));
     } catch (err) {
@@ -2148,9 +2364,8 @@
   }
 
   function applyHomeOrderMove(index, dir) {
-    const projects = workspaceProjects();
-    const enabled = computeEnabledHomeKeysFromProjects(projects);
-    const keys = mergeUserHomeOrder(state.workspace.homeMeasurementOrderKeys, enabled);
+    const ws = state.workspace;
+    const keys = mergeHomeOrderForWorkspace(ws);
     const j = index + dir;
     if (j < 0 || j >= keys.length) return;
     const next = [...keys];
@@ -2163,15 +2378,14 @@
   }
 
   function saveToStorage(messageTitle, messageDesc, options = {}) {
-    MODEL_IDS_ORDER.forEach((mid) => {
-      repairMutexProjects(state.modelStoreDefaults[mid].projects);
-    });
-    Object.values(state.modelDeviceOverrides).forEach((byUnit) => {
-      Object.values(byUnit || {}).forEach((ov) => repairMutexProjects(ov.projects));
-    });
+    persistWorkspaceToModelStore(state.activeModelId, state.workspace);
     reconcileAllBuckets(state);
-    if (!assertMutexValid(state.modelStoreDefaults[state.activeModelId].projects)) {
-      toast('配置冲突', '综合测量与身体成分/体围单项不能同时开启，已自动修正。');
+    const activeCfg =
+      getModelStoreEntry(state.activeModelId).measurementRuntimeMode === RUNTIME_MODE_PRO
+        ? getModelStoreEntry(state.activeModelId).professionalModeConfig
+        : getModelStoreEntry(state.activeModelId).quickModeConfig;
+    if (!assertMutexValid(activeCfg.projects)) {
+      toast('配置冲突', '快速测量与身体成分/体围单项不能同时开启，已自动修正。');
     }
     try {
       const persist = { ...state };
@@ -2227,6 +2441,113 @@
     }).join('');
   }
 
+  function setRuntimeMode(mode) {
+    const next = mode === RUNTIME_MODE_PRO ? RUNTIME_MODE_PRO : RUNTIME_MODE_QUICK;
+    if (state.workspace.measurementRuntimeMode === next) return;
+    persistWorkspaceToModelStore(state.activeModelId, state.workspace);
+    state.workspace.measurementRuntimeMode = next;
+    const entry = getModelStoreEntry(state.activeModelId);
+    entry.measurementRuntimeMode = next;
+    const cfg = next === RUNTIME_MODE_PRO ? entry.professionalModeConfig : entry.quickModeConfig;
+    state.workspace.projects = deepClone(cfg.projects);
+    state.workspace.homeMeasurementOrderKeys = cfg.homeMeasurementOrderKeys
+      ? [...cfg.homeMeasurementOrderKeys]
+      : null;
+    state.workspace.deviceCapabilities = deepClone(
+      cfg.deviceCapabilities || defaultDeviceCapabilities(next)
+    );
+    applyModelCapabilityToProjects(state.workspace.projects, state.activeModelId);
+    repairMutexProjects(state.workspace.projects);
+    reconcilePostureLinkedReports(state.workspace.projects);
+  }
+
+  function renderRuntimeModeBar() {
+    if (!els.runtimeModeBar) return;
+    const mode = workspaceRuntimeMode();
+    const modeLabel = mode === RUNTIME_MODE_PRO ? '专业模式' : '快速模式';
+    const choices = [
+      {
+        id: RUNTIME_MODE_QUICK,
+        title: '快速模式',
+        desc: '设备端首页展示快速测量、平衡、动态实验室等入口',
+      },
+      {
+        id: RUNTIME_MODE_PRO,
+        title: '专业模式',
+        desc: '设备端首页展示身体成分、体态、体围等单项组合入口',
+      },
+    ];
+    els.runtimeModeBar.innerHTML = `
+      <div class="runtime-mode-bar__head">
+        门店运行模式
+        <div class="runtime-mode-bar__sub">当前门店采用：${escapeHtml(modeLabel)}</div>
+      </div>
+      <div class="runtime-mode-choices" role="radiogroup" aria-label="门店运行模式">
+        ${choices
+          .map((choice) => {
+            const selected = choice.id === mode;
+            return `
+          <button
+            type="button"
+            class="runtime-mode-choice${selected ? ' selected' : ''}"
+            data-runtime-mode="${escapeHtml(choice.id)}"
+            role="radio"
+            aria-checked="${selected ? 'true' : 'false'}"
+          >
+            <span class="runtime-mode-choice__radio" aria-hidden="true"></span>
+            <span class="runtime-mode-choice__title">${escapeHtml(choice.title)}</span>
+            <span class="runtime-mode-choice__desc">${escapeHtml(choice.desc)}</span>
+          </button>`;
+          })
+          .join('')}
+      </div>`;
+  }
+
+  function renderCapabilityRow({ name, desc, enabled, capKey, switchDisabled = false, nested = false }) {
+    const disClass = switchDisabled ? ' disabled' : '';
+    const disAttr = switchDisabled ? ' disabled' : '';
+    const nestedClass = nested ? ' project-row--nested' : '';
+    return `
+      <div class="project-row${nestedClass}" data-cap-row="${escapeHtml(capKey)}">
+        <div class="project-top">
+          <div style="min-width:0">
+            <div class="project-title">
+              <span>${escapeHtml(name)}</span>
+              <span class="tag ${enabled ? 'green' : 'red'}">${enabled ? '已开启' : '已关闭'}</span>
+            </div>
+            <p class="project-desc">${escapeHtml(desc)}</p>
+          </div>
+          <div class="project-badge-row">
+            <button
+              class="switch ${enabled ? 'on' : ''}${disClass}"
+              type="button"
+              data-role="cap-switch"
+              data-cap-key="${escapeHtml(capKey)}"
+              aria-label="${escapeHtml(name)}"
+              ${disAttr}
+            ></button>
+          </div>
+        </div>
+      </div>`;
+  }
+
+  function toggleCapability(key) {
+    const ws = state.workspace;
+    if (key === 'weightStandaloneEnabled') {
+      ws.weightStandaloneEnabled = !ws.weightStandaloneEnabled;
+      render();
+      return;
+    }
+    if (key === 'heightConfirmRequired') {
+      if (workspaceRuntimeMode() !== RUNTIME_MODE_PRO || !ws.projects.bodyComp?.enabled) return;
+      if (!ws.deviceCapabilities) {
+        ws.deviceCapabilities = defaultDeviceCapabilities(RUNTIME_MODE_PRO);
+      }
+      ws.deviceCapabilities.heightConfirmRequired = !ws.deviceCapabilities.heightConfirmRequired;
+      render();
+    }
+  }
+
   function syncLegacyFormControls() {
     if (els.legacyBodyCompSelect) {
       els.legacyBodyCompSelect.value = state.storeLegacySettings.bodyCompStandard || 'inbody';
@@ -2257,6 +2578,7 @@
     renderConfigSubTabs();
     if (id === 'measurement') {
       renderModelBar();
+      renderRuntimeModeBar();
       renderProjects();
       renderAggregatedReports();
       renderPreview();
@@ -2357,18 +2679,14 @@
 
   function confirmModalSave() {
     const mid = state.activeModelId;
-    const ws = {
-      projects: deepClone(state.workspace.projects),
-      homeMeasurementOrderKeys: state.workspace.homeMeasurementOrderKeys
-        ? [...state.workspace.homeMeasurementOrderKeys]
-        : null,
-    };
+    const ws = deepClone(state.workspace);
     repairMutexProjects(ws.projects);
     reconcilePostureLinkedReports(ws.projects);
+    normalizeWorkspaceCapabilities(ws);
     const kind = state.modalSave.scopeKind;
     let savedDeviceCount = 0;
     if (kind === 'store') {
-      state.modelStoreDefaults[mid] = deepClone(ws);
+      persistWorkspaceToModelStore(mid, ws);
     } else {
       const ids = state.modalSave.selectedUnitIds.filter((id) => {
         const u = getUnitById(id);
@@ -2380,8 +2698,18 @@
       }
       savedDeviceCount = ids.length;
       if (!state.modelDeviceOverrides[mid]) state.modelDeviceOverrides[mid] = {};
+      const entry = deepClone(getModelStoreEntry(mid));
+      entry.measurementRuntimeMode = ws.measurementRuntimeMode === RUNTIME_MODE_PRO ? RUNTIME_MODE_PRO : RUNTIME_MODE_QUICK;
+      entry.weightStandaloneEnabled = !!ws.weightStandaloneEnabled;
+      const target =
+        entry.measurementRuntimeMode === RUNTIME_MODE_PRO
+          ? entry.professionalModeConfig
+          : entry.quickModeConfig;
+      target.projects = deepClone(ws.projects);
+      target.homeMeasurementOrderKeys = ws.homeMeasurementOrderKeys ? [...ws.homeMeasurementOrderKeys] : null;
+      target.deviceCapabilities = deepClone(ws.deviceCapabilities || defaultDeviceCapabilities(entry.measurementRuntimeMode));
       ids.forEach((uid) => {
-        state.modelDeviceOverrides[mid][uid] = deepClone(ws);
+        state.modelDeviceOverrides[mid][uid] = deepClone(entry);
       });
     }
     closeSaveModal();
@@ -2395,12 +2723,20 @@
   }
 
   function catalogForActiveModel() {
-    return projectCatalog.filter((p) => modelSupportsProject(state.activeModelId, p.id));
+    const mode = workspaceRuntimeMode();
+    const allowed = mode === RUNTIME_MODE_PRO ? PRO_MODE_PROJECT_IDS : QUICK_MODE_PROJECT_IDS;
+    return projectCatalog.filter(
+      (p) => modelSupportsProject(state.activeModelId, p.id) && allowed.includes(p.id)
+    );
   }
 
   function renderProjects() {
+    const ws = state.workspace;
     const pv = workspaceProjects();
     const compOn = !!pv.comprehensive?.enabled;
+    const mode = workspaceRuntimeMode();
+    const modeLabel = mode === RUNTIME_MODE_PRO ? '专业模式' : '快速模式';
+    const caps = ws.deviceCapabilities || defaultDeviceCapabilities(mode);
 
     function renderProjectRow(project, nested = false) {
       const stats = projectStats(project.id);
@@ -2411,19 +2747,19 @@
         const compBlockSingles = COMPREHENSIVE_EXCLUSIVE_SINGLE_IDS.some((id) => pv[id]?.enabled);
         if (project.id === 'comprehensive' && compBlockSingles) {
           mutexHint = '<span class="tag amber">与身体成分/体围单项互斥</span>';
-        } else if (project.id === 'comprehensive' && compOn && pv.posture?.enabled) {
-          mutexHint = '<span class="tag blue">体态单项已开 · 顺序加测</span>';
         } else if ((project.id === 'bodyComp' || project.id === 'circumference') && compOn) {
-          mutexHint = '<span class="tag amber">与综合测量互斥</span>';
+          mutexHint = '<span class="tag amber">与快速测量互斥</span>';
           switchDisabled = true;
-        } else if (project.id === 'posture' && compOn) {
-          mutexHint = '<span class="tag blue">可与综合同时开</span>';
         }
       }
       const compositeTag = project.type === 'composite' ? '<span class="tag blue">复合测量</span>' : '';
+      const quickHeightTag =
+        mode === RUNTIME_MODE_QUICK && project.id === 'comprehensive'
+          ? '<span class="tag gray">身高测后不需确认</span>'
+          : '';
       const includesMeta =
         project.type === 'composite'
-          ? '<div class="project-meta"><span class="tag gray">含：身体成分 · 体态 · 体围</span></div>'
+          ? `<div class="project-meta"><span class="tag gray">含：身体成分 · 体态 · 体围</span>${quickHeightTag ? ` ${quickHeightTag}` : ''}</div>`
           : '';
       const nestedClass = nested ? ' project-row--nested' : '';
       const reportTagVisible = (rid) => {
@@ -2432,6 +2768,16 @@
         }
         return !!cfg.reports[rid];
       };
+      let bodyCompHeightConfirmHtml = '';
+      if (mode === RUNTIME_MODE_PRO && project.id === 'bodyComp' && cfg.enabled) {
+        bodyCompHeightConfirmHtml = renderCapabilityRow({
+          name: '身高是否需要确认',
+          desc: '整轮测量结束后是否进入身高确认页；身高随身体成分转台流程采集',
+          enabled: !!caps.heightConfirmRequired,
+          capKey: 'heightConfirmRequired',
+          nested: true,
+        });
+      }
       return `
           <div class="project-row${nestedClass}" data-project-id="${project.id}">
             <div class="project-top">
@@ -2457,14 +2803,17 @@
               }).join('')}
             </div>`}
           </div>
+          ${bodyCompHeightConfirmHtml}
         `;
     }
 
     const cat = catalogForActiveModel();
-    const primaryHtml = cat
-      .filter((p) => !DYNAMIC_LAB_PROJECT_IDS.includes(p.id))
-      .map((p) => renderProjectRow(p))
-      .join('');
+    const primaryHtml =
+      `<p class="panel-muted" style="margin:0 0 10px">以下为 <strong>${escapeHtml(modeLabel)}</strong> 下的测量项目</p>` +
+      cat
+        .filter((p) => !DYNAMIC_LAB_PROJECT_IDS.includes(p.id))
+        .map((p) => renderProjectRow(p))
+        .join('');
     const dynamicProjects = cat.filter((p) => DYNAMIC_LAB_PROJECT_IDS.includes(p.id));
     const enabledDynamic = dynamicProjects.filter((p) => projectStats(p.id).enabled).length;
     const homeEntryOn = !!(pv.shoulder?.enabled || pv.neck?.enabled);
@@ -2486,7 +2835,13 @@
           </div>
         </section>
       `;
-    els.projectList.innerHTML = primaryHtml + dynamicGroupHtml;
+    const weightRowHtml = renderCapabilityRow({
+      name: '体重测量',
+      desc: '开启后项目选择页出现「体重测量」入口（待机页不展示）',
+      enabled: !!ws.weightStandaloneEnabled,
+      capKey: 'weightStandaloneEnabled',
+    });
+    els.projectList.innerHTML = primaryHtml + dynamicGroupHtml + weightRowHtml;
   }
 
   function renderReportSwitchRow(report, projectId, reportsRef, rowEnabled) {
@@ -2536,7 +2891,7 @@
     if (pv.comprehensive?.enabled) {
       const comp = pv.comprehensive;
       sections.push('<div class="report-group" data-report-group="comprehensive">');
-      sections.push('<div class="report-group-title">综合测量</div>');
+      sections.push('<div class="report-group-title">快速测量</div>');
       ['bodyComp', 'posture', 'circumference'].forEach((srcId) => {
         const srcName = projectCatalog.find((p) => p.id === srcId)?.name || srcId;
         const linkedNote =
@@ -2602,8 +2957,7 @@
   }
 
   function renderMeasureSelectMini(projects) {
-    const enabledHome = computeEnabledHomeKeysFromProjects(projects);
-    const orderedHome = mergeUserHomeOrder(state.workspace.homeMeasurementOrderKeys, enabledHome);
+    const orderedHome = mergeHomeOrderForWorkspace(state.workspace);
     return orderedHome
       .map((key) => {
         const meta = HOME_MEASURE_PREVIEW_META[key];
@@ -2625,19 +2979,14 @@
   }
 
   function renderPreview() {
-    const projects = workspaceProjects();
-    const coreOff =
-      !projects.comprehensive?.enabled &&
-      !projects.bodyComp?.enabled &&
-      !projects.posture?.enabled &&
-      !projects.circumference?.enabled &&
-      !projects.balance?.enabled;
-    if (coreOff && !projects.shoulder?.enabled && !projects.neck?.enabled) {
-      els.previewPanel.innerHTML = '<div class="preview-empty">请至少开启一项测量项目。</div>';
+    const ws = state.workspace;
+    const orderedHome = mergeHomeOrderForWorkspace(ws);
+    if (!orderedHome.length) {
+      els.previewPanel.innerHTML =
+        '<div class="preview-empty">请至少开启一项测量项目，或开启独立体重。</div>';
       return;
     }
-    const enabledHome = computeEnabledHomeKeysFromProjects(projects);
-    const orderedHome = mergeUserHomeOrder(state.workspace.homeMeasurementOrderKeys, enabledHome);
+    const projects = workspaceProjects();
     let homeOrderHtml = '';
     if (orderedHome.length) {
       homeOrderHtml = `
@@ -2687,6 +3036,7 @@
       COMPREHENSIVE_EXCLUSIVE_SINGLE_IDS.forEach((id) => {
         if (bucket.projects[id]) bucket.projects[id].enabled = false;
       });
+      if (bucket.projects.posture) bucket.projects.posture.enabled = false;
     } else if (projectId === 'bodyComp' || projectId === 'circumference') {
       bucket.projects.comprehensive.enabled = false;
     }
@@ -2699,6 +3049,12 @@
     const next = !cur;
     bucket.projects[projectId].enabled = next;
     if (next) applyMutexOnEnable(bucket, projectId);
+    if (projectId === 'bodyComp' && !next) {
+      if (!bucket.deviceCapabilities) {
+        bucket.deviceCapabilities = defaultDeviceCapabilities(RUNTIME_MODE_PRO);
+      }
+      bucket.deviceCapabilities.heightConfirmRequired = false;
+    }
     reconcilePostureLinkedReports(bucket.projects);
     render();
   }
@@ -2729,6 +3085,7 @@
     syncLegacyFormControls();
     if (state.activeConfigSubTab !== 'style') {
       renderModelBar();
+      renderRuntimeModeBar();
       renderProjects();
       renderAggregatedReports();
       renderPreview();
@@ -2745,10 +3102,25 @@
         return;
       }
 
+      const runtimeBtn = event.target.closest('[data-runtime-mode]');
+      if (runtimeBtn && runtimeBtn.closest('#runtimeModeBar')) {
+        setRuntimeMode(runtimeBtn.dataset.runtimeMode);
+        render();
+        return;
+      }
+
+      const capSwitch = event.target.closest('[data-role="cap-switch"]');
+      if (capSwitch && capSwitch.closest('#projectList')) {
+        if (capSwitch.disabled || capSwitch.classList.contains('disabled')) return;
+        toggleCapability(capSwitch.dataset.capKey);
+        return;
+      }
+
       const modelTab = event.target.closest('[data-model-id]');
       if (modelTab && modelTab.closest('#modelSwitchBar')) {
         const nextId = modelTab.dataset.modelId;
         if (nextId && nextId !== state.activeModelId) {
+          persistWorkspaceToModelStore(state.activeModelId, state.workspace);
           state.activeModelId = nextId;
           loadWorkspaceFromStore();
           render();

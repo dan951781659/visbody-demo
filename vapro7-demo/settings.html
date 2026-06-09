@@ -24,36 +24,21 @@
         </div>
 
         <div class="settings-scroll-list" tabindex="0" aria-label="设置列表，可上下滑动">
-          <section class="settings-group" aria-labelledby="settings-group-measure-cap">
-            <h2 class="settings-group-title" id="settings-group-measure-cap">测量能力</h2>
-            <div class="settings-group-body">
-              <a class="settings-row" href="./settings-height.html" data-stateful-link="./settings-height.html">
-                <span class="settings-row__icon">📏</span>
-                <span class="settings-row__label">身高测量</span>
-                <span class="settings-row__value" data-settings-height-status>已关闭</span>
-                <span class="settings-row__chev">›</span>
-              </a>
-              <div class="settings-row settings-row--toggle">
-                <span class="settings-row__icon">⚖</span>
-                <span class="settings-row__label">体重测量显示</span>
-                <span class="settings-row__value settings-row__value--hint">待机页入口</span>
-                <label class="toggle settings-row__toggle"><input type="checkbox" data-config-key="weightStandaloneEnabled" /><span></span></label>
-              </div>
-            </div>
-          </section>
-
           <section class="settings-group" id="measurement-flow" aria-labelledby="settings-group-measure-flow">
             <h2 class="settings-group-title" id="settings-group-measure-flow">测量流程</h2>
             <div class="settings-group-body">
               <div class="settings-row settings-row--toggle">
                 <span class="settings-row__icon">📋</span>
                 <span class="settings-row__label">显示测量准备页</span>
-                <span class="settings-row__value settings-row__value--hint">综合测量前引导</span>
+                <span class="settings-row__value settings-row__value--hint">快速测量前引导</span>
                 <label class="toggle settings-row__toggle"><input type="checkbox" data-config-key="bodyCompositionPrepEnabled" /><span></span></label>
               </div>
               <div class="settings-row settings-row--toggle">
                 <span class="settings-row__icon">🔊</span>
-                <span class="settings-row__label">语音播报</span>
+                <div class="settings-row__text">
+                  <span class="settings-row__label">语音播报</span>
+                  <span class="settings-row__subhint">仅供 Demo 演示</span>
+                </div>
                 <span class="settings-row__value settings-row__value--hint">测量引导语音</span>
                 <label class="toggle settings-row__toggle"><input type="checkbox" data-config-key="voiceEnabled" /><span></span></label>
               </div>
