@@ -34,7 +34,7 @@ const LEGACY_GIRTH_ONLY_HREF = "./legacy-girth-prep.html";
 const NEXT_RECOMMEND_DESC = {
   standard: "一圈综合采集",
   pro: "IPose 体态专项",
-  bodycompGirth: "一次转台 · 体成分与体围",
+  bodycompGirth: "一圈综合采集",
   girthOnly: "单体围流程",
   bodyCompSingle: "单项体成分",
   circumferenceSingle: "单体围流程",
@@ -99,15 +99,16 @@ const HOME_TILE_META = {
     statefulLink: true
   },
   bodycompGirth: {
-    title: "体成分 + 体围",
-    displayTitle: "体成分 + 体围",
-    desc: "一次转台完成体成分与体围",
-    descLong: "一次转台同步完成体成分与体围采集，适合经典分体测量流程。",
-    benefitDesc: "一次转台同步完成体成分与体围采集",
-    gestureHint: "请握紧扶手 / 双臂展开 45°",
-    illustration: HOME_SELECT_ILLUSTRATIONS.bodyComp,
+    title: "身体成分",
+    displayTitle: "身体成分",
+    desc: "体重、体成分、围度、身高一次出结果",
+    descLong: "快速测量：体重、体成分、围度、身高、体态一次出结果，适合首次到店用户。",
+    benefitDesc: "体重、体成分、围度、身高、体态一次完成",
+    gestureHint: "请自然站立 / 保持静止 2 秒",
+    illustration: HOME_SELECT_ILLUSTRATIONS.posture,
     measurementMode: "bodycompGirth",
-    startSession: true
+    startSession: true,
+    standardFlowEntry: true
   },
   girthOnly: {
     title: "体围测量",
@@ -164,7 +165,7 @@ const HOME_TILE_GLYPH = {
   pro: "体态",
   bodyCompSingle: "成分",
   circumferenceSingle: "体围",
-  bodycompGirth: "体测",
+  bodycompGirth: "成分",
   girthOnly: "体围",
   dynamicLab: "动态",
   balance: "平衡"
@@ -185,7 +186,7 @@ const MEASUREMENT_ITEMS = {
     href: LEGACY_GIRTH_ONLY_HREF,
     group: "circumferenceSingle"
   },
-  bodycompGirth: { key: "bodycompGirth", title: "体成分 + 体围", href: LEGACY_BODYCOMP_GIRTH_HREF, group: "bodycompGirth" },
+  bodycompGirth: { key: "bodycompGirth", title: "身体成分", href: "./standard-user-prep.html", group: "bodycompGirth" },
   girthOnly: { key: "girthOnly", title: "体围测量", href: LEGACY_GIRTH_ONLY_HREF, group: "girthOnly" },
   dynamicLab: { key: "dynamicLab", title: "动态实验室", href: DYNAMIC_LAB_SELECT_HREF, group: "dynamicLab" },
   balance: { key: "balance", title: "平衡测量", href: "./single-prepare-balance.html", group: "balance" },
@@ -257,7 +258,7 @@ function getMeasurementRuntimeMode(state) {
 /** 与 Hub §7.4 一致：快速模式随快速测量、专业模式随身体成分推导是否采高。 */
 function deriveHeightMeasurementEnabled(state) {
   if (getMeasurementRuntimeMode(state) === RUNTIME_MODE_PROFESSIONAL) {
-    return !!state.bodyCompSingleEnabled;
+    return !!(state.bodyCompSingleEnabled || state.bodycompGirthModeEnabled);
   }
   return !!state.comprehensiveEnabled;
 }
@@ -478,6 +479,8 @@ function mapMeasurementConfigFromWellnessHubDemo() {
     if (typeof pos === "boolean") out.postureModeEnabled = pos;
     const circ = hubConfigBool(cfg.circumferenceSingleEnabled);
     if (typeof circ === "boolean") out.circumferenceSingleEnabled = circ;
+    const bgh = hubConfigBool(cfg.bodycompGirthModeEnabled);
+    if (typeof bgh === "boolean") out.bodycompGirthModeEnabled = bgh;
     const bal = hubConfigBool(cfg.balanceModeEnabled);
     if (typeof bal === "boolean") out.balanceModeEnabled = bal;
     const sh = hubConfigBool(cfg.singleShoulderEnabled);
@@ -494,6 +497,20 @@ function mapMeasurementConfigFromWellnessHubDemo() {
     }
     if (cfg.reportVisibility && typeof cfg.reportVisibility === "object") {
       out.reportVisibility = { ...DEFAULT_REPORT_VISIBILITY, ...cfg.reportVisibility };
+    }
+    if (
+      out.measurementRuntimeMode === RUNTIME_MODE_PROFESSIONAL &&
+      out.bodyCompSingleEnabled &&
+      out.circumferenceSingleEnabled &&
+      !Object.prototype.hasOwnProperty.call(cfg, "bodycompGirthModeEnabled")
+    ) {
+      out.bodycompGirthModeEnabled = true;
+      out.bodyCompSingleEnabled = false;
+      out.circumferenceSingleEnabled = false;
+    }
+    if (out.bodycompGirthModeEnabled) {
+      out.bodyCompSingleEnabled = false;
+      out.circumferenceSingleEnabled = false;
     }
     return out;
   } catch {
@@ -695,7 +712,8 @@ function isPrimaryItemEnabled(state, itemKey) {
     }
     if (itemKey === "bodycompGirth" || itemKey === "girthOnly") return false;
   } else {
-    if (itemKey === "standard" || itemKey === "bodycompGirth" || itemKey === "girthOnly") return false;
+    if (itemKey === "standard" || itemKey === "girthOnly") return false;
+    if (itemKey === "bodycompGirth") return !!s.bodycompGirthModeEnabled;
     if (itemKey === "pro") return !!s.postureModeEnabled;
     if (itemKey === "bodyCompSingle") return !!s.bodyCompSingleEnabled;
     if (itemKey === "circumferenceSingle") return !!s.circumferenceSingleEnabled;
@@ -735,6 +753,7 @@ function isHomeTileAvailable(state, key) {
 function getHomeTileHref(key, state) {
   if (key === "standard") return getStandardFlowEntryHref(state);
   if (key === "bodyCompSingle") return "./standard-user-prep.html";
+  if (key === "bodycompGirth") return getStandardFlowEntryHref(state);
   if (key === "weightStandalone") return "./weight-standalone-measuring.html";
   if (key === "dynamicLab") return resolveDynamicLabEntryHref(state);
   return MEASUREMENT_ITEMS[key]?.href || "#";
@@ -972,7 +991,8 @@ function isMeasurementAvailable(item, state) {
     }
     if (item.key === "bodycompGirth" || item.key === "girthOnly") return false;
   } else {
-    if (item.key === "standard" || item.key === "bodycompGirth" || item.key === "girthOnly") return false;
+    if (item.key === "standard" || item.key === "girthOnly") return false;
+    if (item.key === "bodycompGirth") return !!state.bodycompGirthModeEnabled;
     if (item.key === "pro") return !!state.postureModeEnabled;
     if (item.key === "bodyCompSingle") return !!state.bodyCompSingleEnabled;
     if (item.key === "circumferenceSingle") return !!state.circumferenceSingleEnabled;
@@ -1013,7 +1033,7 @@ function finishKeyDisplayName(finishKey) {
 function getRemeasureHref(finishKey, state) {
   if (finishKey === "pro") return "./pro-prepare.html";
   if (finishKey === "circumferenceSingle") return LEGACY_GIRTH_ONLY_HREF;
-  if (finishKey === "bodycompGirth") return LEGACY_BODYCOMP_GIRTH_HREF;
+  if (finishKey === "bodycompGirth") return getStandardFlowEntryHref(state);
   if (finishKey === "balance") return "./single-prepare-balance.html";
   if (finishKey === "singleShoulder") return "./single-prepare-shoulder.html";
   if (finishKey === "singleNeck") return "./single-prepare-neck.html";
@@ -1177,7 +1197,11 @@ function buildStateQuery(state) {
 
 function resolvePostMeasuringHref(state) {
   const s = state || loadState();
-  if (s.heightMeasurementEnabled && s.heightConfirmRequired) {
+  if (!s.heightMeasurementEnabled || !s.heightConfirmRequired) {
+    return "./standard-next-step.html";
+  }
+  const finishKey = measurementModeToFinishKey(s.currentMeasurementMode);
+  if (["standard", "bodyCompSingle", "bodycompGirth"].includes(finishKey)) {
     return "./height-confirm.html";
   }
   return "./standard-next-step.html";

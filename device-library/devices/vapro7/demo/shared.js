@@ -34,7 +34,7 @@ const LEGACY_GIRTH_ONLY_HREF = "./legacy-girth-prep.html";
 const NEXT_RECOMMEND_DESC = {
   standard: "一圈综合采集",
   pro: "IPose 体态专项",
-  bodycompGirth: "一次转台 · 体成分与体围",
+  bodycompGirth: "一圈综合采集",
   girthOnly: "单体围流程",
   bodyCompSingle: "单项体成分",
   circumferenceSingle: "单体围流程",
@@ -57,7 +57,7 @@ const HOME_TILE_META = {
     desc: "体重、体成分、围度、身高一次出结果",
     descLong: "快速测量：体重、体成分、围度、身高、体态一次出结果，适合首次到店用户。",
     benefitDesc: "体重、体成分、围度、身高、体态一次完成",
-    gestureHint: "请自然站立 / 保持静止 2 秒",
+    gestureHint: "请站上转台，握紧扶手",
     illustration: HOME_SELECT_ILLUSTRATIONS.posture,
     recommended: true,
     measurementMode: "standard",
@@ -70,7 +70,7 @@ const HOME_TILE_META = {
     desc: "双手自然垂放，体态结果更准",
     descLong: "IPose 体态专项：双手自然垂放，减少上肢代偿与遮挡，体态评估更准确。",
     benefitDesc: "了解您的头前引、高低肩、腿型等",
-    gestureHint: "请自然站立 / 保持静止 2 秒",
+    gestureHint: "",
     illustration: HOME_SELECT_ILLUSTRATIONS.posture,
     measurementMode: "pro",
     startSession: true
@@ -81,7 +81,7 @@ const HOME_TILE_META = {
     desc: "单项体成分测量流程",
     descLong: "专注体成分单项采集，流程更短，适合只需成分数据的场景。",
     benefitDesc: "了解您的体重、体脂率、肌肉量、身体围度等",
-    gestureHint: "先确认准备事项，再站上转台采集",
+    gestureHint: "请站上转台，握紧扶手",
     illustration: HOME_SELECT_ILLUSTRATIONS.bodyComp,
     measurementMode: "bodyCompSingle",
     startSession: true
@@ -92,22 +92,23 @@ const HOME_TILE_META = {
     desc: "单项体围采集流程",
     descLong: "专注体围维度单项采集，流程更短，适合只需围度数据的场景。",
     benefitDesc: "了解您的腰围、臀围、四肢围度等",
-    gestureHint: "请自然站立 / 保持静止 2 秒",
+    gestureHint: "",
     illustration: HOME_SELECT_ILLUSTRATIONS.generic,
     measurementMode: "circumferenceSingle",
     startSession: true,
     statefulLink: true
   },
   bodycompGirth: {
-    title: "体成分 + 体围",
-    displayTitle: "体成分 + 体围",
-    desc: "一次转台完成体成分与体围",
-    descLong: "一次转台同步完成体成分与体围采集，适合经典分体测量流程。",
-    benefitDesc: "一次转台同步完成体成分与体围采集",
-    gestureHint: "请握紧扶手 / 双臂展开 45°",
-    illustration: HOME_SELECT_ILLUSTRATIONS.bodyComp,
+    title: "身体成分",
+    displayTitle: "身体成分",
+    desc: "体重、体成分、围度、身高一次出结果",
+    descLong: "快速测量：体重、体成分、围度、身高、体态一次出结果，适合首次到店用户。",
+    benefitDesc: "体重、体成分、围度、身高、体态一次完成",
+    gestureHint: "请站上转台，握紧扶手",
+    illustration: HOME_SELECT_ILLUSTRATIONS.posture,
     measurementMode: "bodycompGirth",
-    startSession: true
+    startSession: true,
+    standardFlowEntry: true
   },
   girthOnly: {
     title: "体围测量",
@@ -115,7 +116,7 @@ const HOME_TILE_META = {
     desc: "单体围采集流程",
     descLong: "专注体围维度采集，流程更短，适合只需围度数据的场景。",
     benefitDesc: "了解您的腰围、臀围、四肢围度等",
-    gestureHint: "请自然站立 / 保持静止 2 秒",
+    gestureHint: "",
     illustration: HOME_SELECT_ILLUSTRATIONS.generic,
     measurementMode: "girthOnly",
     startSession: true
@@ -126,7 +127,7 @@ const HOME_TILE_META = {
     desc: "肩 · 颈活动度测量",
     descLong: "动态实验室：肩、颈活动度专项评估，可按部位分别测量。",
     benefitDesc: "肩、颈活动度专项评估",
-    gestureHint: "请按图示完成肩部或颈部动作",
+    gestureHint: "",
     illustration: HOME_SELECT_ILLUSTRATIONS.generic,
     measurementMode: "dynamicLab",
     startSession: true
@@ -137,7 +138,7 @@ const HOME_TILE_META = {
     desc: "站稳保持平衡，完成稳定性评估",
     descLong: "站稳转台保持平衡，完成稳定性评估并查看专项结果。",
     benefitDesc: "了解您的平衡稳定性与重心分布",
-    gestureHint: "请单脚站立 / 保持平衡 2 秒",
+    gestureHint: "",
     illustration: HOME_SELECT_ILLUSTRATIONS.generic,
     measurementMode: "balance",
     startSession: true,
@@ -149,7 +150,7 @@ const HOME_TILE_META = {
     desc: "独立体重测量流程",
     descLong: "从项目选择页进入的独立体重测量。",
     benefitDesc: "了解您的体重与测量时间",
-    gestureHint: "请站上转台完成体重采集",
+    gestureHint: "",
     illustration: HOME_SELECT_ILLUSTRATIONS.bodyComp,
     measurementMode: "weightStandalone",
     startSession: true,
@@ -164,7 +165,7 @@ const HOME_TILE_GLYPH = {
   pro: "体态",
   bodyCompSingle: "成分",
   circumferenceSingle: "体围",
-  bodycompGirth: "体测",
+  bodycompGirth: "成分",
   girthOnly: "体围",
   dynamicLab: "动态",
   balance: "平衡"
@@ -172,7 +173,7 @@ const HOME_TILE_GLYPH = {
 
 const MEASUREMENT_ITEMS = {
   standard: { key: "standard", title: "快速测量", href: "./standard-user-prep.html", group: "standard" },
-  pro: { key: "pro", title: "体态测量", href: "./pro-prepare.html", group: "pro" },
+  pro: { key: "pro", title: "体态测量", href: "./pro-user-prep.html", group: "pro" },
   bodyCompSingle: {
     key: "bodyCompSingle",
     title: "身体成分测量",
@@ -185,7 +186,7 @@ const MEASUREMENT_ITEMS = {
     href: LEGACY_GIRTH_ONLY_HREF,
     group: "circumferenceSingle"
   },
-  bodycompGirth: { key: "bodycompGirth", title: "体成分 + 体围", href: LEGACY_BODYCOMP_GIRTH_HREF, group: "bodycompGirth" },
+  bodycompGirth: { key: "bodycompGirth", title: "身体成分", href: "./standard-user-prep.html", group: "bodycompGirth" },
   girthOnly: { key: "girthOnly", title: "体围测量", href: LEGACY_GIRTH_ONLY_HREF, group: "girthOnly" },
   dynamicLab: { key: "dynamicLab", title: "动态实验室", href: DYNAMIC_LAB_SELECT_HREF, group: "dynamicLab" },
   balance: { key: "balance", title: "平衡测量", href: "./single-prepare-balance.html", group: "balance" },
@@ -257,7 +258,7 @@ function getMeasurementRuntimeMode(state) {
 /** 与 Hub §7.4 一致：快速模式随快速测量、专业模式随身体成分推导是否采高。 */
 function deriveHeightMeasurementEnabled(state) {
   if (getMeasurementRuntimeMode(state) === RUNTIME_MODE_PROFESSIONAL) {
-    return !!state.bodyCompSingleEnabled;
+    return !!(state.bodyCompSingleEnabled || state.bodycompGirthModeEnabled);
   }
   return !!state.comprehensiveEnabled;
 }
@@ -477,6 +478,8 @@ function mapMeasurementConfigFromWellnessHubDemo() {
     if (typeof pos === "boolean") out.postureModeEnabled = pos;
     const circ = hubConfigBool(cfg.circumferenceSingleEnabled);
     if (typeof circ === "boolean") out.circumferenceSingleEnabled = circ;
+    const bgh = hubConfigBool(cfg.bodycompGirthModeEnabled);
+    if (typeof bgh === "boolean") out.bodycompGirthModeEnabled = bgh;
     const bal = hubConfigBool(cfg.balanceModeEnabled);
     if (typeof bal === "boolean") out.balanceModeEnabled = bal;
     const sh = hubConfigBool(cfg.singleShoulderEnabled);
@@ -493,6 +496,20 @@ function mapMeasurementConfigFromWellnessHubDemo() {
     }
     if (cfg.reportVisibility && typeof cfg.reportVisibility === "object") {
       out.reportVisibility = { ...DEFAULT_REPORT_VISIBILITY, ...cfg.reportVisibility };
+    }
+    if (
+      out.measurementRuntimeMode === RUNTIME_MODE_PROFESSIONAL &&
+      out.bodyCompSingleEnabled &&
+      out.circumferenceSingleEnabled &&
+      !Object.prototype.hasOwnProperty.call(cfg, "bodycompGirthModeEnabled")
+    ) {
+      out.bodycompGirthModeEnabled = true;
+      out.bodyCompSingleEnabled = false;
+      out.circumferenceSingleEnabled = false;
+    }
+    if (out.bodycompGirthModeEnabled) {
+      out.bodyCompSingleEnabled = false;
+      out.circumferenceSingleEnabled = false;
     }
     return out;
   } catch {
@@ -745,7 +762,8 @@ function isPrimaryItemEnabled(state, itemKey) {
     }
     if (itemKey === "bodycompGirth" || itemKey === "girthOnly") return false;
   } else {
-    if (itemKey === "standard" || itemKey === "bodycompGirth" || itemKey === "girthOnly") return false;
+    if (itemKey === "standard" || itemKey === "girthOnly") return false;
+    if (itemKey === "bodycompGirth") return !!s.bodycompGirthModeEnabled;
     if (itemKey === "pro") return !!s.postureModeEnabled;
     if (itemKey === "bodyCompSingle") return !!s.bodyCompSingleEnabled;
     if (itemKey === "circumferenceSingle") return !!s.circumferenceSingleEnabled;
@@ -784,7 +802,9 @@ function isHomeTileAvailable(state, key) {
 
 function getHomeTileHref(key, state) {
   if (key === "standard") return getStandardFlowEntryHref(state);
+  if (key === "pro") return getProFlowEntryHref(state);
   if (key === "bodyCompSingle") return "./standard-user-prep.html";
+  if (key === "bodycompGirth") return getStandardFlowEntryHref(state);
   if (key === "weightStandalone") return "./weight-standalone-measuring.html";
   if (key === "dynamicLab") return resolveDynamicLabEntryHref(state);
   return MEASUREMENT_ITEMS[key]?.href || "#";
@@ -824,13 +844,11 @@ function getHomeMeasurementTiles(state) {
     const descBase = key === "dynamicLab" ? getDynamicLabSubtitle(s) : meta.desc || "";
     const benefitDesc =
       key === "dynamicLab" ? getDynamicLabSubtitle(s) : meta.benefitDesc || meta.descLong || descBase;
-    let gestureHint = meta.gestureHint || "请按图示动作进入测量";
-    if (key === "dynamicLab") {
-      if (s.singleShoulderEnabled && !s.singleNeckEnabled) {
-        gestureHint = "请按图示完成肩部活动度测量";
-      } else if (s.singleNeckEnabled && !s.singleShoulderEnabled) {
-        gestureHint = "请按图示完成颈部活动度测量";
-      }
+    let gestureHint = "";
+    if (Object.prototype.hasOwnProperty.call(meta, "gestureHint")) {
+      gestureHint = meta.gestureHint;
+    } else {
+      gestureHint = "请按图示动作进入测量";
     }
     return {
       key,
@@ -884,13 +902,14 @@ function buildMeasureSelectCard(tile, state) {
   benefit.className = "measure-select-card__benefit";
   benefit.textContent = tile.benefitDesc || tile.desc;
 
-  const hint = document.createElement("div");
-  hint.className = "measure-select-card__hint";
-  hint.textContent = tile.gestureHint;
-
   copy.appendChild(title);
   copy.appendChild(benefit);
-  copy.appendChild(hint);
+  if (tile.gestureHint) {
+    const hint = document.createElement("div");
+    hint.className = "measure-select-card__hint";
+    hint.textContent = tile.gestureHint;
+    copy.appendChild(hint);
+  }
 
   const figure = document.createElement("div");
   figure.className = "measure-select-card__figure";
@@ -1021,7 +1040,8 @@ function isMeasurementAvailable(item, state) {
     }
     if (item.key === "bodycompGirth" || item.key === "girthOnly") return false;
   } else {
-    if (item.key === "standard" || item.key === "bodycompGirth" || item.key === "girthOnly") return false;
+    if (item.key === "standard" || item.key === "girthOnly") return false;
+    if (item.key === "bodycompGirth") return !!state.bodycompGirthModeEnabled;
     if (item.key === "pro") return !!state.postureModeEnabled;
     if (item.key === "bodyCompSingle") return !!state.bodyCompSingleEnabled;
     if (item.key === "circumferenceSingle") return !!state.circumferenceSingleEnabled;
@@ -1110,6 +1130,145 @@ function finishKeyShortLabel(finishKey) {
   return finishKeyDisplayName(key).replace(/测量$/, "");
 }
 
+const MEASUREMENT_PREP_COPY = {
+  withPosture: [
+    {
+      label: "穿着贴身衣物",
+      icon: "./assets/prep/fitted-clothing.svg"
+    },
+    {
+      label: "扎起长发，露出头颈",
+      icon: "./assets/prep/hair-tied.svg"
+    },
+    {
+      label: "赤脚，贴合电极",
+      icon: "./assets/prep/barefoot.svg",
+      requiresBodyComp: true
+    },
+    {
+      label: "自然站姿即可",
+      icon: "./assets/prep/natural-stance.svg"
+    }
+  ],
+  bodycompGirthOnly: [
+    { label: "保持赤脚", icon: "./assets/prep/barefoot.svg" },
+    {
+      label: "足底贴合电极",
+      icon: "./assets/bodycomp-prep/footprint-turntable-alignment.svg"
+    },
+    {
+      label: "穿着贴身衣物",
+      icon: "./assets/prep/fitted-clothing.svg"
+    },
+    {
+      label: "避免剧烈运动与大量饮食",
+      icon: "./assets/prep/no-exercise.svg"
+    }
+  ]
+};
+
+const MEASUREMENT_TIPS_COPY = {
+  withPosture: [
+    "请保持身体静止",
+    "保持自然站姿，不要刻意挺胸或收腹",
+    "保持自然呼吸，请勿憋气",
+    "请目视前方，避免低头或转头"
+  ],
+  bodycompGirthOnly: [
+    "请保持身体静止",
+    "双脚与电极充分接触",
+    "请保持自然呼吸",
+    "请勿吸气收腹或刻意挺胸"
+  ]
+};
+
+function resolveMeasurementModeKey(state) {
+  const s = state || loadState();
+  return normalizeFinishKey(s.currentMeasurementMode || resolveFinishKeyForPage(s), s);
+}
+
+function sessionIncludesPosture(state) {
+  const s = state || loadState();
+  const mode = resolveMeasurementModeKey(s);
+  if (mode === "pro") return true;
+  if (["bodyCompSingle", "bodycompGirth", "girthOnly", "circumferenceSingle"].includes(mode)) {
+    return false;
+  }
+  if (mode === "standard") return !!s.postureModeEnabled;
+  return !!s.postureModeEnabled;
+}
+
+function sessionIncludesBodyComp(state) {
+  const s = state || loadState();
+  const mode = resolveMeasurementModeKey(s);
+  if (mode === "pro") return false;
+  if (["bodyCompSingle", "bodycompGirth", "standard"].includes(mode)) return true;
+  if (mode === "girthOnly" || mode === "circumferenceSingle") return false;
+  return !!s.comprehensiveEnabled || !!s.bodyCompSingleEnabled || !!s.bodycompGirthModeEnabled;
+}
+
+function resolvePrepCopyProfile(state) {
+  return sessionIncludesPosture(state) ? "withPosture" : "bodycompGirthOnly";
+}
+
+function getPrepChecklistItems(state) {
+  const profile = resolvePrepCopyProfile(state);
+  const items = MEASUREMENT_PREP_COPY[profile] || [];
+  if (profile !== "withPosture") return items;
+  return items.filter((item) => !item.requiresBodyComp || sessionIncludesBodyComp(state));
+}
+
+function getMeasurementTipLines(state) {
+  const profile = resolvePrepCopyProfile(state);
+  return MEASUREMENT_TIPS_COPY[profile] || MEASUREMENT_TIPS_COPY.withPosture;
+}
+
+function renderPrepChecklist(container, state) {
+  if (!container) return;
+  const items = getPrepChecklistItems(state);
+  container.innerHTML = items
+    .map((item) => {
+      const wide = item.wide ? " prep-check-cell--wide" : "";
+      const visual = item.icon
+        ? `<img class="prep-check-visual" src="${item.icon}" alt="" width="40" height="40" />`
+        : "";
+      return `<div class="prep-check-cell${wide}">${visual}<p class="prep-check-label">${item.label}</p></div>`;
+    })
+    .join("");
+}
+
+function renderMeasurementTips(container, state) {
+  if (!container) return;
+  const lines = getMeasurementTipLines(state);
+  const titleEl = container.querySelector(".measurement-tips-title");
+  const titleHtml = titleEl
+    ? titleEl.outerHTML
+    : '<p class="measurement-tips-title">测量注意事项</p>';
+  container.innerHTML =
+    titleHtml +
+    lines
+      .map(
+        (line, index) =>
+          `<p class="measurement-tip-item${index === 0 ? " is-active" : ""}" data-tip-item>${line}</p>`
+      )
+      .join("");
+}
+
+function setupMeasurementCopyPages() {
+  const state = loadState();
+  document.querySelectorAll("[data-prep-checklist]").forEach((el) => {
+    renderPrepChecklist(el, state);
+  });
+  document.querySelectorAll("[data-tip-carousel]").forEach((el) => {
+    renderMeasurementTips(el, state);
+  });
+}
+
+function getProFlowEntryHref(state) {
+  const s = state || loadState();
+  return withStateQuery("./pro-user-prep.html", s);
+}
+
 /** 完成页摘要：与刚完成项目一致（PRD §6.1）；身高/体重在 getFinishSummaryRows 中按开关插入 */
 const FINISH_SUMMARY_BASE_ROWS = {
   standard: [
@@ -1137,9 +1296,9 @@ const FINISH_SUMMARY_BASE_ROWS = {
 };
 
 function getRemeasureHref(finishKey, state) {
-  if (finishKey === "pro") return "./pro-prepare.html";
+  if (finishKey === "pro") return getProFlowEntryHref(state);
   if (finishKey === "circumferenceSingle") return LEGACY_GIRTH_ONLY_HREF;
-  if (finishKey === "bodycompGirth") return LEGACY_BODYCOMP_GIRTH_HREF;
+  if (finishKey === "bodycompGirth") return getStandardFlowEntryHref(state);
   if (finishKey === "balance") return "./single-prepare-balance.html";
   if (finishKey === "singleShoulder") return "./single-prepare-shoulder.html";
   if (finishKey === "singleNeck") return "./single-prepare-neck.html";
@@ -1186,10 +1345,6 @@ function renderFinishSummary(container, state) {
   if (!container) return;
   const rows = getFinishSummaryRows(state);
   container.classList.toggle("is-single-summary", rows.length === 1);
-  container.classList.toggle(
-    "is-sparse-summary",
-    rows.length > 1 && rows.length % 2 === 1
-  );
   container.innerHTML = rows
     .map(
       (row) => `
@@ -1288,21 +1443,9 @@ function applyFinishPageUi(root, state) {
     finishGroup.classList.toggle("is-single-action", isLast);
   }
 
-  const subtitle = root.querySelector(".screen-subtitle");
-  if (subtitle) {
-    if (isLast) {
-      subtitle.textContent =
-        "本轮最后一项已完成。请举手选择完成测量查看报告，或重新测量当前项目。";
-    } else {
-      const visitOrder = buildCycleVisitOrder(s);
-      const currentIdx = visitOrder.indexOf(finishKey);
-      const progress =
-        currentIdx >= 0 && visitOrder.length > 1
-          ? `（${currentIdx + 1}/${visitOrder.length}）`
-          : "";
-      subtitle.textContent = `本次${finishKeyDisplayName(finishKey)}已完成${progress}。请举手选择：完成测量并查看报告，或继续${recommendation.title}。`;
-    }
-  }
+  root.querySelectorAll(".screen-subtitle").forEach((el) => {
+    el.remove();
+  });
 
   root.querySelectorAll("[data-gesture-bubble]").forEach((el) => {
     el.textContent = isLast ? "请举手确认完成测量。" : "请举手确认下方操作。";
@@ -1320,7 +1463,7 @@ function applyFinishPageUi(root, state) {
     const href = getRemeasureHref(finishKey, s);
     remeasure.dataset.finishRemeasureKey = finishKey;
     remeasure.setAttribute("href", appendReturnToFromPage(withStateQuery(href, s)));
-    remeasure.textContent = `重新测量${finishKeyShortLabel(finishKey)}`;
+    remeasure.textContent = "重新测量";
     if (!remeasure.dataset.finishRemeasureBound) {
       remeasure.dataset.finishRemeasureBound = "1";
       remeasure.addEventListener("click", (event) => {
@@ -1393,7 +1536,11 @@ function buildStateQuery(state) {
 
 function resolvePostMeasuringHref(state) {
   const s = state || loadState();
-  if (s.heightMeasurementEnabled && s.heightConfirmRequired) {
+  if (!s.heightMeasurementEnabled || !s.heightConfirmRequired) {
+    return "./standard-next-step.html";
+  }
+  const finishKey = resolveFinishKeyForPage(s);
+  if (["standard", "bodyCompSingle", "bodycompGirth"].includes(finishKey)) {
     return "./height-confirm.html";
   }
   return "./standard-next-step.html";
@@ -2122,8 +2269,15 @@ function setupFinishAutoAdvance() {
     const visibleItems = [...group.querySelectorAll("[data-choice-item]")].filter((item) => !item.hidden);
     if (!visibleItems.length) return;
 
-    let activeItem = reportOption && !reportOption.hidden ? reportOption : visibleItems[0];
-    if (!isLast && recommendation && nextOption && !nextOption.hidden) {
+    const defaultIndex = Number(group.dataset.defaultIndex || 0);
+    let activeItem = visibleItems[defaultIndex] || visibleItems[0];
+    if (
+      idleEnabled &&
+      !isLast &&
+      recommendation &&
+      nextOption &&
+      !nextOption.hidden
+    ) {
       activeItem = nextOption;
     }
 
@@ -2996,29 +3150,63 @@ function setupVersionDisplay() {
 function setupGeneratingFlow() {
   const root = document.querySelector("[data-generating-flow]");
   if (!root) return;
-  const target = root.dataset.generatingNext || "./report-detail.html";
-  const delay = Number(root.dataset.generatingDelay || 3000);
-  const voice = root.dataset.voiceText || "正在生成三维模型，请稍候。";
-  speakText(voice);
-  const fill = root.querySelector("[data-generating-progress]");
-  const label = root.querySelector("[data-generating-label]");
-  const started = performance.now();
 
-  const tick = () => {
-    const elapsed = performance.now() - started;
-    const pct = Math.min(100, Math.round((elapsed / delay) * 100));
-    if (fill) fill.style.width = `${pct}%`;
-    if (label && pct < 100) label.textContent = `模型生成中 ${pct}%`;
-    if (elapsed >= delay) {
-      if (label) label.textContent = "模型生成完成";
-      window.setTimeout(() => {
-        navigateToTarget(withStateQuery(target, loadState()));
-      }, 400);
-      return;
-    }
+  const particleStage = root.querySelector("[data-generating-particle-stage]");
+  const particleCanvas = root.querySelector("[data-generating-particle-canvas]");
+  let started = false;
+
+  const runGeneratingFlow = (body3dRenderer) => {
+    if (started) return;
+    started = true;
+    const target = root.dataset.generatingNext || "./report-detail.html";
+    const delay = Number(root.dataset.generatingDelay || 3000);
+    const voice = root.dataset.voiceText || "正在生成三维模型，请稍候。";
+    speakText(voice);
+    const fill = root.querySelector("[data-generating-progress]");
+    const label = root.querySelector("[data-generating-label]");
+    const panel = root.querySelector("[data-generating-panel]");
+    const flowStarted = performance.now();
+
+    const tick = () => {
+      const elapsed = performance.now() - flowStarted;
+      const pct = Math.min(100, Math.round((elapsed / delay) * 100));
+      if (fill) fill.style.width = `${pct}%`;
+      body3dRenderer?.setProgress(pct / 100);
+      if (label && pct < 100) label.textContent = `模型生成中 ${pct}%`;
+      if (elapsed >= delay) {
+        if (label) label.textContent = "模型生成完成";
+        body3dRenderer?.setProgress(1);
+        panel?.classList.add("is-generating-complete");
+        window.setTimeout(() => {
+          navigateToTarget(withStateQuery(target, loadState()));
+        }, 2000);
+        return;
+      }
+      window.requestAnimationFrame(tick);
+    };
     window.requestAnimationFrame(tick);
   };
-  window.requestAnimationFrame(tick);
+
+  const tryAttachRenderer = () => {
+    const body3dRenderer = window.createGeneratingBody3DRenderer?.(particleStage, particleCanvas);
+    if (body3dRenderer) {
+      runGeneratingFlow(body3dRenderer);
+      return true;
+    }
+    return false;
+  };
+
+  if (tryAttachRenderer()) return;
+
+  window.addEventListener("generating-body3d-ready", () => {
+    tryAttachRenderer();
+  }, { once: true });
+
+  let attempts = 0;
+  const poll = window.setInterval(() => {
+    if (tryAttachRenderer() || attempts >= 80) window.clearInterval(poll);
+    attempts += 1;
+  }, 50);
 }
 
 function setupReportDetail() {
@@ -3169,6 +3357,7 @@ function setupMeasuringTurntable() {
   }
 
   const durationMs = Number(root.dataset.measuringDuration || 10000);
+  const isPostureMeasuring = resolveMeasurementModeKey(loadState()) === "pro";
   const progressFill = root.querySelector("[data-measuring-progress]");
   const focusEl = root.querySelector("[data-measuring-focus]");
   const chipEl = root.querySelector("[data-measuring-chip]");
@@ -3285,7 +3474,11 @@ function setupMeasuringTurntable() {
     }
   });
 
-  speakText("测量中，请保持静止，不要移动。");
+  const measuringVoiceIntro =
+    root.dataset.voiceText?.trim() ||
+    root.querySelector("[data-live-voice]")?.textContent?.trim() ||
+    "转台正在旋转采集，请保持当前姿势勿动。";
+  speakText(measuringVoiceIntro);
 
   const finaleThresholdMs = Math.min(3000, durationMs * 0.35);
 
@@ -3320,8 +3513,12 @@ function setupMeasuringTurntable() {
     spinComplete = true;
     stopSound();
     if (progressFill) progressFill.style.width = "100%";
-    if (focusEl) focusEl.textContent = "转台已停，请点击「下一步」";
-    if (chipEl) chipEl.textContent = "转台已停";
+    if (focusEl) {
+      focusEl.textContent = isPostureMeasuring
+        ? "采集完成，请点击「下一步」"
+        : "转台已停，请点击「下一步」";
+    }
+    if (chipEl) chipEl.textContent = isPostureMeasuring ? "采集完成" : "转台已停";
     speakText("测量完成，请点击下一步。");
   }
 
@@ -3462,6 +3659,57 @@ function setupTurntableAnthropometryCapture() {
     if (focusEl) focusEl.textContent = "请调整姿势";
     if (statusEl) statusEl.textContent = "姿势异常";
     speakText("检测到姿态异常，请先调整姿势。");
+    return;
+  }
+
+  const skipAnthropometry =
+    root.dataset.anthropometrySkip === "1" || root.dataset.anthropometrySkip === "true";
+
+  if (skipAnthropometry) {
+    function completePostureDetectionVisual() {
+      root.classList.add("is-aligned");
+      const scene = root.querySelector(".bodycomp-prep-scene");
+      if (scene) scene.classList.add("is-aligned");
+      if (statusEl) statusEl.textContent = "识别通过";
+      speakText("识别通过。");
+      if (btn) {
+        btn.removeAttribute("disabled");
+        btn.setAttribute("aria-disabled", "false");
+      }
+    }
+
+    if (!isDemoManualAdvance()) {
+      if (statusEl) statusEl.textContent = "正在识别…";
+      speakText(root.dataset.voiceText || "请站上转台，双手自然垂放，保持静止。");
+      const detectTimer = window.setTimeout(() => {
+        completePostureDetectionVisual();
+        if (statusEl) statusEl.textContent = "即将进入倒计时";
+        window.setTimeout(goNext, 700);
+      }, delay);
+      setActivePageDemo({ cancel: () => window.clearTimeout(detectTimer) });
+      return;
+    }
+
+    let detectionComplete = false;
+    if (btn) {
+      btn.addEventListener("click", (event) => {
+        event.preventDefault();
+        if (!detectionComplete) return;
+        goNext();
+      });
+      btn.setAttribute("disabled", "disabled");
+      btn.setAttribute("aria-disabled", "true");
+      btn.textContent = "下一步";
+    }
+    if (statusEl) statusEl.textContent = "正在识别…";
+    speakText(root.dataset.voiceText || "请站上转台，双手自然垂放，保持静止。");
+    const detectTimer = window.setTimeout(() => {
+      detectionComplete = true;
+      completePostureDetectionVisual();
+      if (statusEl) statusEl.textContent = "识别通过，可进入下一步";
+      if (btn) btn.textContent = "下一步";
+    }, delay);
+    setActivePageDemo({ cancel: () => window.clearTimeout(detectTimer) });
     return;
   }
 
@@ -3855,6 +4103,7 @@ document.addEventListener("DOMContentLoaded", () => {
   setupSchemeThreeGestureDemo();
   setupPrepGestureAdvance();
   setupAutoDetectAdvance();
+  setupMeasurementCopyPages();
   setupTipCarousel();
   setupGuideSequence();
   setupDemoAdvance();
@@ -3880,6 +4129,7 @@ window.VAProDemo = {
   completeGroup,
   getQuickItemMeta,
   getStandardFlowEntryHref,
+  getProFlowEntryHref,
   isAnyPrimaryEnabled,
   isAnyHomeMeasurementEnabled,
   isDynamicLabVisible,

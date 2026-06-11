@@ -1472,7 +1472,9 @@
   const RUNTIME_MODE_QUICK = 'quick';
   const RUNTIME_MODE_PRO = 'professional';
   const QUICK_MODE_PROJECT_IDS = ['comprehensive', 'balance', 'shoulder', 'neck'];
-  const PRO_MODE_PROJECT_IDS = ['bodyComp', 'posture', 'circumference', 'balance', 'shoulder', 'neck'];
+  /** 专业模式 UI：身体成分 + 体围合并为一行（底层仍写 projects.bodyComp / projects.circumference） */
+  const BODY_COMP_CIRC_BUNDLE_ID = 'bodyCompCircBundle';
+  const PRO_MODE_PROJECT_IDS = [BODY_COMP_CIRC_BUNDLE_ID, 'posture', 'balance', 'shoulder', 'neck'];
 
   const DEVICE_MODEL_CATALOG = [
     {
@@ -1536,7 +1538,7 @@
   const DYNAMIC_LAB_GROUP = {
     id: 'dynamicLab',
     name: '动态实验室',
-    desc: '设备端合并为一张入口；肩、颈可分别开关。',
+    desc: '首页合并为一张入口；肩、颈可分别开关。',
   };
 
   const COMPREHENSIVE_REPORT_DEFS = [
@@ -1561,6 +1563,15 @@
     circumference: COMPREHENSIVE_REPORT_DEFS.filter((r) => r.group === 'circumference'),
   };
 
+  const PRO_BODY_COMP_CIRC_BUNDLE_CATALOG = {
+    id: BODY_COMP_CIRC_BUNDLE_ID,
+    type: 'bundle',
+    mutexGroup: 'core-trio',
+    name: '身体成分与体围',
+    desc: '同一转台流程内完成身体成分与体围；两项一并开关。',
+    reports: [].concat(REPORT_DEFS_BY_SOURCE.bodyComp, REPORT_DEFS_BY_SOURCE.circumference),
+  };
+
   const projectCatalog = [
     {
       id: 'comprehensive',
@@ -1568,7 +1579,7 @@
       mutexGroup: 'core-trio',
       includes: ['bodyComp', 'posture', 'circumference'],
       name: '快速测量',
-      desc: '快速模式主入口：一轮完成身体成分、体态、体围；与身体成分/体围单项互斥（方案 A，不支持综合+体态并存）。',
+      desc: '一轮完成身体成分、体态与体围；步骤少、整体更快，适合日常筛查与客流高峰。与「身体成分 + 体围」分项入口互斥，同一时间仅保留一条主测量路径。',
       reports: [].concat(REPORT_DEFS_BY_SOURCE.bodyComp, REPORT_DEFS_BY_SOURCE.posture, REPORT_DEFS_BY_SOURCE.circumference),
     },
     {
@@ -1696,7 +1707,7 @@
     pro: '体态测量',
     bodyCompSingle: '身体成分测量',
     circumferenceSingle: '体围测量',
-    bodycompGirth: '体成分 + 体围',
+    bodycompGirth: '身体成分',
     girthOnly: '体围（单体围）',
     dynamicLab: '动态实验室',
     balance: '平衡测量',
@@ -1707,63 +1718,63 @@
     standard: {
       title: '快速测量',
       benefitDesc: '体重、体成分、围度、身高、体态一次完成',
-      gestureHint: '请自然站立 / 保持静止 2 秒',
+      gestureHint: '请站上转台，握紧扶手',
       illustration: './assets/home-select/posture-standing.svg',
       primary: true,
     },
     pro: {
       title: '体态评估',
       benefitDesc: '了解您的头前引、高低肩、腿型等',
-      gestureHint: '请自然站立 / 保持静止 2 秒',
+      gestureHint: '',
       illustration: './assets/home-select/posture-standing.svg',
       primary: false,
     },
     bodyCompSingle: {
       title: '身体成分',
       benefitDesc: '了解您的体重、体脂率、肌肉量、身体围度等',
-      gestureHint: '先确认准备事项，再站上转台采集',
+      gestureHint: '请站上转台，握紧扶手',
       illustration: './assets/home-select/bodycomp-torso.svg',
       primary: false,
     },
     circumferenceSingle: {
       title: '体围测量',
       benefitDesc: '了解您的腰围、臀围、四肢围度等',
-      gestureHint: '请自然站立 / 保持静止 2 秒',
+      gestureHint: '',
       illustration: './assets/home-select/generic-measure.svg',
       primary: false,
     },
     bodycompGirth: {
-      title: '体成分 + 体围',
-      benefitDesc: '一次转台同步完成体成分与体围采集',
-      gestureHint: '请握紧扶手 / 双臂展开 45°',
-      illustration: './assets/home-select/bodycomp-torso.svg',
+      title: '身体成分',
+      benefitDesc: '体重、体成分、围度、身高、体态一次完成',
+      gestureHint: '请站上转台，握紧扶手',
+      illustration: './assets/home-select/posture-standing.svg',
       primary: false,
     },
     girthOnly: {
       title: '体围测量',
       benefitDesc: '了解您的腰围、臀围、四肢围度等',
-      gestureHint: '请自然站立 / 保持静止 2 秒',
+      gestureHint: '',
       illustration: './assets/home-select/generic-measure.svg',
       primary: false,
     },
     dynamicLab: {
       title: '动态实验室',
       benefitDesc: '肩、颈活动度专项评估',
-      gestureHint: '请按图示完成肩部或颈部动作',
+      gestureHint: '',
       illustration: './assets/home-select/generic-measure.svg',
       primary: false,
     },
     balance: {
       title: '平衡评估',
       benefitDesc: '了解您的平衡稳定性与重心分布',
-      gestureHint: '请单脚站立 / 保持平衡 2 秒',
+      gestureHint: '',
       illustration: './assets/home-select/generic-measure.svg',
       primary: false,
     },
     weightStandalone: {
       title: '体重测量',
       benefitDesc: '独立体重测量，不进入快速/专业主流程',
-      gestureHint: '请站上转台完成体重采集',
+      gestureHint: '',
       illustration: './assets/home-select/bodycomp-torso.svg',
       primary: false,
     },
@@ -1800,9 +1811,8 @@
     if (mode === RUNTIME_MODE_QUICK) {
       if (projects.comprehensive?.enabled) keys.push('standard');
     } else {
-      if (projects.bodyComp?.enabled) keys.push('bodyCompSingle');
+      if (projects.bodyComp?.enabled && projects.circumference?.enabled) keys.push('bodycompGirth');
       if (projects.posture?.enabled) keys.push('pro');
-      if (projects.circumference?.enabled) keys.push('circumferenceSingle');
     }
     if (projects.balance?.enabled) keys.push('balance');
     if (projects.shoulder?.enabled || projects.neck?.enabled) keys.push('dynamicLab');
@@ -1980,6 +1990,15 @@
     });
   }
 
+  function repairProBodyCompCircPair(projects) {
+    if (!projects?.bodyComp || !projects?.circumference) return;
+    if (projects.bodyComp.enabled === projects.circumference.enabled) return;
+    /** 旧数据一开一关：任一为开则全开，否则全关 */
+    const on = !!(projects.bodyComp.enabled || projects.circumference.enabled);
+    projects.bodyComp.enabled = on;
+    projects.circumference.enabled = on;
+  }
+
   function repairMutexProjects(projects) {
     if (!projects?.comprehensive) return;
     if (projects.comprehensive.enabled) {
@@ -1987,10 +2006,12 @@
         if (projects[id]) projects[id].enabled = false;
       });
       if (projects.posture) projects.posture.enabled = false;
+      repairProBodyCompCircPair(projects);
       return;
     }
     const anySingle = CORE_SINGLE_IDS.some((id) => projects[id]?.enabled);
     if (anySingle) projects.comprehensive.enabled = false;
+    repairProBodyCompCircPair(projects);
   }
 
   function isPostureDualOpen() {
@@ -2302,6 +2323,10 @@
   function toDevicePayloadFromWorkspace(ws) {
     const projects = ws.projects;
     const runtimeMode = ws.measurementRuntimeMode === RUNTIME_MODE_PRO ? RUNTIME_MODE_PRO : RUNTIME_MODE_QUICK;
+    const proBundleOn =
+      runtimeMode === RUNTIME_MODE_PRO &&
+      !!projects.bodyComp?.enabled &&
+      !!projects.circumference?.enabled;
     const reportVisibility = {};
     const addReports = (projId) => {
       const p = projects[projId];
@@ -2333,11 +2358,12 @@
       comprehensiveEnabled:
         runtimeMode === RUNTIME_MODE_QUICK ? !!projects.comprehensive?.enabled : false,
       bodyCompSingleEnabled:
-        runtimeMode === RUNTIME_MODE_PRO ? !!projects.bodyComp?.enabled : false,
+        runtimeMode === RUNTIME_MODE_PRO ? !proBundleOn && !!projects.bodyComp?.enabled : false,
       postureModeEnabled:
         runtimeMode === RUNTIME_MODE_PRO ? !!projects.posture?.enabled : false,
       circumferenceSingleEnabled:
-        runtimeMode === RUNTIME_MODE_PRO ? !!projects.circumference?.enabled : false,
+        runtimeMode === RUNTIME_MODE_PRO ? !proBundleOn && !!projects.circumference?.enabled : false,
+      bodycompGirthModeEnabled: proBundleOn,
       balanceModeEnabled: !!projects.balance?.enabled,
       singleShoulderEnabled: !!projects.shoulder?.enabled,
       singleNeckEnabled: !!projects.neck?.enabled,
@@ -2408,6 +2434,20 @@
   }
 
   function projectStats(projectId) {
+    if (projectId === BODY_COMP_CIRC_BUNDLE_ID) {
+      const bc = getProjectConfig('bodyComp');
+      const ci = getProjectConfig('circumference');
+      const defBc = projectCatalog.find((p) => p.id === 'bodyComp');
+      const defCi = projectCatalog.find((p) => p.id === 'circumference');
+      const enabled = !!(bc?.enabled && ci?.enabled);
+      const visibleBody = defBc.reports.filter((report) => bc.reports[report.id]).length;
+      const visibleCirc = defCi.reports.filter((report) => ci.reports[report.id]).length;
+      return {
+        visibleCount: visibleBody + visibleCirc,
+        totalCount: defBc.reports.length + defCi.reports.length,
+        enabled,
+      };
+    }
     const cfg = getProjectConfig(projectId);
     const def = projectCatalog.find((item) => item.id === projectId);
     const pv = workspaceProjects();
@@ -2469,12 +2509,12 @@
       {
         id: RUNTIME_MODE_QUICK,
         title: '快速模式',
-        desc: '设备端首页展示快速测量、平衡、动态实验室等入口',
+        desc: '一次主流程覆盖身体成分、体态与体围；步骤少、整体更快，适合日常筛查与客流高峰。',
       },
       {
         id: RUNTIME_MODE_PRO,
         title: '专业模式',
-        desc: '设备端首页展示身体成分、体态、体围等单项组合入口',
+        desc: '按测量项目分项完成；每项需按姿势要求站好再采数，整体更久，单点数据更稳、更细，适合对结果要求高的客户。',
       },
     ];
     els.runtimeModeBar.innerHTML = `
@@ -2724,10 +2764,31 @@
 
   function catalogForActiveModel() {
     const mode = workspaceRuntimeMode();
-    const allowed = mode === RUNTIME_MODE_PRO ? PRO_MODE_PROJECT_IDS : QUICK_MODE_PROJECT_IDS;
-    return projectCatalog.filter(
-      (p) => modelSupportsProject(state.activeModelId, p.id) && allowed.includes(p.id)
-    );
+    const modelId = state.activeModelId;
+    if (mode === RUNTIME_MODE_QUICK) {
+      return projectCatalog.filter(
+        (p) => modelSupportsProject(modelId, p.id) && QUICK_MODE_PROJECT_IDS.includes(p.id)
+      );
+    }
+    const meta = getModelMeta(modelId);
+    const hasBodyCircBundle =
+      meta.supportedProjectIds.includes('bodyComp') && meta.supportedProjectIds.includes('circumference');
+    const items = [];
+    PRO_MODE_PROJECT_IDS.forEach((pid) => {
+      if (pid === BODY_COMP_CIRC_BUNDLE_ID) {
+        if (hasBodyCircBundle) items.push(PRO_BODY_COMP_CIRC_BUNDLE_CATALOG);
+        else {
+          ['bodyComp', 'circumference'].forEach((bid) => {
+            const p = projectCatalog.find((x) => x.id === bid);
+            if (p && modelSupportsProject(modelId, bid)) items.push(p);
+          });
+        }
+        return;
+      }
+      const p = projectCatalog.find((x) => x.id === pid);
+      if (p && modelSupportsProject(modelId, p.id)) items.push(p);
+    });
+    return items;
   }
 
   function renderProjects() {
@@ -2740,19 +2801,26 @@
 
     function renderProjectRow(project, nested = false) {
       const stats = projectStats(project.id);
-      const cfg = getProjectConfig(project.id);
+      const cfg =
+        project.id === BODY_COMP_CIRC_BUNDLE_ID
+          ? { enabled: stats.enabled, reports: getProjectConfig('bodyComp').reports }
+          : getProjectConfig(project.id);
       let mutexHint = '';
       let switchDisabled = false;
       if (project.mutexGroup === 'core-trio') {
         const compBlockSingles = COMPREHENSIVE_EXCLUSIVE_SINGLE_IDS.some((id) => pv[id]?.enabled);
         if (project.id === 'comprehensive' && compBlockSingles) {
-          mutexHint = '<span class="tag amber">与身体成分/体围单项互斥</span>';
-        } else if ((project.id === 'bodyComp' || project.id === 'circumference') && compOn) {
-          mutexHint = '<span class="tag amber">与快速测量互斥</span>';
+          mutexHint = '';
+        } else if (project.id === BODY_COMP_CIRC_BUNDLE_ID && compOn) {
           switchDisabled = true;
         }
       }
-      const compositeTag = project.type === 'composite' ? '<span class="tag blue">复合测量</span>' : '';
+      const compositeTag =
+        project.type === 'composite'
+          ? '<span class="tag blue">复合测量</span>'
+          : project.type === 'bundle'
+            ? '<span class="tag blue">组合测量</span>'
+            : '';
       const quickHeightTag =
         mode === RUNTIME_MODE_QUICK && project.id === 'comprehensive'
           ? '<span class="tag gray">身高测后不需确认</span>'
@@ -2766,10 +2834,18 @@
         if (isPostureDualOpen(pv) && project.id === 'posture' && POSTURE_LINKED_REPORT_IDS.includes(rid)) {
           return !!pv.comprehensive.reports[rid];
         }
+        if (project.id === BODY_COMP_CIRC_BUNDLE_ID) {
+          const src = REPORT_DEFS_BY_SOURCE.bodyComp.some((r) => r.id === rid) ? 'bodyComp' : 'circumference';
+          return !!pv[src].reports[rid];
+        }
         return !!cfg.reports[rid];
       };
       let bodyCompHeightConfirmHtml = '';
-      if (mode === RUNTIME_MODE_PRO && project.id === 'bodyComp' && cfg.enabled) {
+      if (
+        mode === RUNTIME_MODE_PRO &&
+        (project.id === 'bodyComp' || project.id === BODY_COMP_CIRC_BUNDLE_ID) &&
+        stats.enabled
+      ) {
         bodyCompHeightConfirmHtml = renderCapabilityRow({
           name: '身高是否需要确认',
           desc: '整轮测量结束后是否进入身高确认页；身高随身体成分转台流程采集',
@@ -2792,7 +2868,7 @@
               </div>
               <div class="project-badge-row">
                 <span class="tag gray">${stats.visibleCount}/${stats.totalCount} 报告显示</span>
-                <button class="switch ${cfg.enabled ? 'on' : ''} ${switchDisabled ? 'disabled' : ''}" type="button" data-role="project-switch" data-project-id="${project.id}" aria-label="项目开关" ${switchDisabled ? 'disabled' : ''}></button>
+                <button class="switch ${stats.enabled ? 'on' : ''} ${switchDisabled ? 'disabled' : ''}" type="button" data-role="project-switch" data-project-id="${project.id}" aria-label="项目开关" ${switchDisabled ? 'disabled' : ''}></button>
               </div>
             </div>
             ${project.type === 'composite' ? includesMeta : `
@@ -2914,18 +2990,35 @@
       sections.push(`<div class="report-group" data-report-group="posture"><div class="report-group-title">体态</div>${rows}</div>`);
     }
 
-    if (!pv.comprehensive?.enabled && pv.bodyComp?.enabled) {
-      const cfg = pv.bodyComp;
-      const def = projectCatalog.find((p) => p.id === 'bodyComp');
-      const rows = def.reports.map((report) => renderReportSwitchRow(report, 'bodyComp', cfg.reports, true)).join('');
-      sections.push(`<div class="report-group" data-report-group="bodyComp"><div class="report-group-title">身体成分</div>${rows}</div>`);
-    }
+    if (!pv.comprehensive?.enabled && pv.bodyComp?.enabled && pv.circumference?.enabled) {
+      sections.push('<div class="report-group" data-report-group="bodyCompCircBundle">');
+      sections.push('<div class="report-group-title">身体成分与体围</div>');
+      [
+        ['bodyComp', '身体成分'],
+        ['circumference', '体围'],
+      ].forEach(([srcId, subtitle]) => {
+        const cfg = pv[srcId];
+        const def = projectCatalog.find((p) => p.id === srcId);
+        const rows = def.reports.map((report) => renderReportSwitchRow(report, srcId, cfg.reports, true)).join('');
+        sections.push(
+          `<div class="report-group" data-report-group-sub="${srcId}"><div class="report-group-title-row"><span class="report-group-title">${subtitle}</span></div>${rows}</div>`
+        );
+      });
+      sections.push('</div>');
+    } else {
+      if (!pv.comprehensive?.enabled && pv.bodyComp?.enabled) {
+        const cfg = pv.bodyComp;
+        const def = projectCatalog.find((p) => p.id === 'bodyComp');
+        const rows = def.reports.map((report) => renderReportSwitchRow(report, 'bodyComp', cfg.reports, true)).join('');
+        sections.push(`<div class="report-group" data-report-group="bodyComp"><div class="report-group-title">身体成分</div>${rows}</div>`);
+      }
 
-    if (!pv.comprehensive?.enabled && pv.circumference?.enabled) {
-      const cfg = pv.circumference;
-      const def = projectCatalog.find((p) => p.id === 'circumference');
-      const rows = def.reports.map((report) => renderReportSwitchRow(report, 'circumference', cfg.reports, true)).join('');
-      sections.push(`<div class="report-group" data-report-group="circumference"><div class="report-group-title">体围</div>${rows}</div>`);
+      if (!pv.comprehensive?.enabled && pv.circumference?.enabled) {
+        const cfg = pv.circumference;
+        const def = projectCatalog.find((p) => p.id === 'circumference');
+        const rows = def.reports.map((report) => renderReportSwitchRow(report, 'circumference', cfg.reports, true)).join('');
+        sections.push(`<div class="report-group" data-report-group="circumference"><div class="report-group-title">体围</div>${rows}</div>`);
+      }
     }
 
     if (pv.balance?.enabled) {
@@ -2969,7 +3062,7 @@
             <div class="hub-ms-card__copy">
               <div class="hub-ms-card__title">${escapeHtml(meta.title)}</div>
               <div class="hub-ms-card__benefit">${escapeHtml(meta.benefitDesc)}</div>
-              <div class="hub-ms-card__hint">${escapeHtml(meta.gestureHint)}</div>
+              ${meta.gestureHint ? `<div class="hub-ms-card__hint">${escapeHtml(meta.gestureHint)}</div>` : ''}
             </div>
             <div class="hub-ms-card__figure"><img src="${escapeHtml(meta.illustration)}" alt="" /></div>
           </div>
@@ -3031,18 +3124,39 @@
 
   function applyMutexOnEnable(bucket, projectId) {
     const def = projectCatalog.find((p) => p.id === projectId);
-    if (def?.mutexGroup !== 'core-trio') return;
+    const isBundle = projectId === BODY_COMP_CIRC_BUNDLE_ID;
+    if (!isBundle && def?.mutexGroup !== 'core-trio') return;
     if (projectId === 'comprehensive') {
       COMPREHENSIVE_EXCLUSIVE_SINGLE_IDS.forEach((id) => {
         if (bucket.projects[id]) bucket.projects[id].enabled = false;
       });
       if (bucket.projects.posture) bucket.projects.posture.enabled = false;
-    } else if (projectId === 'bodyComp' || projectId === 'circumference') {
+    } else if (projectId === 'bodyComp' || projectId === 'circumference' || projectId === BODY_COMP_CIRC_BUNDLE_ID) {
       bucket.projects.comprehensive.enabled = false;
     }
   }
 
   function toggleProject(projectId) {
+    if (projectId === BODY_COMP_CIRC_BUNDLE_ID) {
+      if (!modelSupportsProject(state.activeModelId, 'bodyComp') || !modelSupportsProject(state.activeModelId, 'circumference')) {
+        return;
+      }
+      const bucket = state.workspace;
+      const cur = !!(bucket.projects.bodyComp.enabled && bucket.projects.circumference.enabled);
+      const next = !cur;
+      bucket.projects.bodyComp.enabled = next;
+      bucket.projects.circumference.enabled = next;
+      if (next) applyMutexOnEnable(bucket, BODY_COMP_CIRC_BUNDLE_ID);
+      if (!next) {
+        if (!bucket.deviceCapabilities) {
+          bucket.deviceCapabilities = defaultDeviceCapabilities(RUNTIME_MODE_PRO);
+        }
+        bucket.deviceCapabilities.heightConfirmRequired = false;
+      }
+      reconcilePostureLinkedReports(bucket.projects);
+      render();
+      return;
+    }
     if (!modelSupportsProject(state.activeModelId, projectId)) return;
     const bucket = state.workspace;
     const cur = bucket.projects[projectId].enabled;

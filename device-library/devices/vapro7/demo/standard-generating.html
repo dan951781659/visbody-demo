@@ -12,7 +12,7 @@
         class="device"
         data-generating-flow
         data-generating-next="./report-detail.html"
-        data-generating-delay="3000"
+        data-generating-delay="5000"
         data-voice-text="正在生成三维模型，请稍候。"
       >
         <div class="status-bar"><span>18:32</span><span>模型生成</span></div>
@@ -22,8 +22,15 @@
         </div>
         <h1 class="screen-title">模型生成中</h1>
         <p class="screen-subtitle" data-live-voice>正在构建三维人体模型…</p>
-        <div class="generating-panel">
-          <div class="generating-orbit" aria-hidden="true"></div>
+        <div class="generating-panel" data-generating-panel>
+          <div class="generating-particle-stage" data-generating-particle-stage>
+            <canvas
+              class="generating-particle-canvas"
+              data-generating-particle-canvas
+              aria-label="三维人体模型重建预览，可拖动旋转"
+            ></canvas>
+          </div>
+          <p class="generating-rotate-hint">拖动可旋转查看</p>
           <p class="generating-label" data-generating-label>模型生成中 0%</p>
           <div class="progress-track generating-track">
             <div class="progress-fill" data-generating-progress style="width:0%;"></div>
@@ -32,6 +39,8 @@
         </div>
       </section>
     </main>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.min.js"></script>
+    <script src="./generating-body3d.js"></script>
     <script src="./shared.js"></script>
   </body>
 </html>
