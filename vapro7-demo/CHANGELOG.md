@@ -1,5 +1,29 @@
 # VAPro7 Demo 变更记录
 
+## v1.9.7（完成页摘要与首页入口绑定 · 单按钮布局）
+
+- **`shared.js`**：`bindActionLinks` 改为 document 级事件委托，首页动态生成的测量卡片可正确触发 `start-session` 与 `currentMeasurementMode`；`startSession` 同步写入 `currentMeasurementMode`；新增 `resolveFinishKeyForPage` 在无已完成项时与会话起点对齐，避免旧 localStorage 残留模式；`FINISH_SUMMARY_BASE_ROWS` 统一摘要（肩/颈子项文案）；末项时完成区 `is-single-action`、摘要区 `is-single-summary` / `is-sparse-summary`。
+- **`shared.css`**：单摘要行与仅「完成测量」时摘要栅格与操作区单列居中、`max-width` 约束。
+
+---
+
+## v1.9.6（完成页摘要与「继续下一项」修复）
+
+- **`shared.js`**：循环池 `resolveFinishOrderKeys` 与首页卡片 `getHomeMeasurementTileKeys` 同源；`normalizeFinishKey` 统一 `girthOnly` → `circumferenceSingle`；抽取 `syncFinishGroupActions` 供完成页 UI 与 idle 倒计时共用；快速测量摘要顺序调整为体成分→体态→体围→身高→体重；完成页增加 `data-finish-section` 项目标签与进度副标题。
+- **`standard-next-step.html`**：增加 `[data-finish-section]` 占位。
+- **`legacy-girth-prep.html`**：修正体围入口为「开始测量」+ `circumferenceSingle` 模式与会话起点。
+
+---
+
+## v1.9.5（PRD §6.2 环形下一项 · 统一完成页）
+
+- **`shared.js`**：实现 `sessionCycleStartKey`、环形 `getNextMeasurementRecommendation`、体重不进循环池；末项隐藏「继续下一项」且 20s idle 默认「完成测量」；删除 `heightResultVisible`；独立体重点击不重置测量循环。
+- **`standard-next-step.html`**：「结束测量」改为「完成测量」。
+- **测量完成收敛**：体态/肩/颈/平衡测量结束统一进入 `standard-next-step.html`；`pro-result.html`、`single-result-*.html` 改为 legacy 重定向。
+- **`settings-height.html`**：重定向文案与 Hub 职责一致。
+
+---
+
 ## v1.9.4（综合测量 / 体成分四步准备链路）
 
 - **`standard-user-prep.html`**：准备清单增加通栏「足底对准转台脚印」项；进入下一步副文案改为站上转台采集。

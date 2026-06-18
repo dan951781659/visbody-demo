@@ -8,7 +8,7 @@
   </head>
   <body>
     <main class="device-stage">
-      <section class="device device--shoulder-measure">
+      <section class="device device--shoulder-measure" data-set-measurement-mode="singleShoulder" data-measuring-flow>
         <div class="status-bar"><span>18:32</span><span>肩部功能</span></div>
         <div class="topbar">
           <a class="back-link" href="./single-measuring-shoulder-left.html">← 返回</a>
@@ -72,14 +72,11 @@
           <div class="button-row">
             <a
               class="button primary"
-              href="./single-result-shoulder.html"
-              data-action-link="noop"
-              data-complete-group="singleShoulder"
+              href="./standard-next-step.html"
+              data-stateful-link="./standard-next-step.html"
+              data-measuring-next
               >查看肩部结果</a
             >
-          </div>
-          <div class="button-row" style="margin-top:12px">
-            <a class="button secondary" href="./single-measuring-shoulder-right.html?autoDetectMode=warning">姿势异常示例</a>
           </div>
         </div>
       </section>

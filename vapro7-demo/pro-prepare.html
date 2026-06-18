@@ -3,43 +3,51 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>专业测量 · 体态测量准备</title>
+    <title>站上转台</title>
     <link rel="stylesheet" href="./shared.css" />
   </head>
   <body>
     <main class="device-stage">
-      <section class="device">
-        <div class="status-bar"><span>18:32</span><span>专业测量</span></div>
+      <section
+        class="device device--guide"
+        data-set-measurement-mode="pro"
+        data-turntable-anthropometry
+        data-anthropometry-skip="1"
+        data-anthropometry-next="./pro-countdown.html"
+        data-auto-detect-delay="2600"
+        data-voice-text="请站上转台，双手自然垂放，面向屏幕，保持静止。"
+      >
+        <div class="status-bar"><span>18:32</span><span>转台站姿</span></div>
         <div class="topbar">
-          <a class="back-link" href="./home.html">← 返回</a>
-          <span class="text-link">自然站立</span>
+          <a class="back-link" href="./pro-user-prep.html" data-stateful-link="./pro-user-prep.html">← 返回</a>
         </div>
-        <div class="section-label">专业测量 · 体态测量</div>
-        <h1 class="screen-title">请双手自然下垂</h1>
-        <p class="screen-subtitle" data-live-voice>面向屏幕站稳，姿势正确后进入下一步。</p>
-        <div class="device-visual">
-          <div class="live-stage demo-click-zone" data-stage-next="./pro-countdown.html" data-stage-delay="2600" data-voice-text="请双手自然下垂，面向屏幕站稳。">
-            <div class="camera-corner tl"></div><div class="camera-corner tr"></div><div class="camera-corner bl"></div><div class="camera-corner br"></div>
+        <h1 class="screen-title">站上转台</h1>
+        <p class="screen-subtitle">双手自然垂放，面向屏幕站稳，保持身体静止直至识别通过。</p>
+        <div class="device-visual guide-visual">
+          <div class="live-stage guide-scene-wrap bodycomp-prep-scene">
+            <div class="camera-corner tl"></div>
+            <div class="camera-corner tr"></div>
+            <div class="camera-corner bl"></div>
+            <div class="camera-corner br"></div>
             <div class="live-glow"></div>
-            <div class="live-status">
-              <span class="live-chip ok">姿势正确</span>
-              <span class="live-chip">头部保持正直</span>
-            </div>
-            <div class="guide-line circle"></div>
-            <div class="guide-line feet"></div>
-            <div class="human pose-down">
-              <div class="head"></div><div class="torso"></div>
-              <div class="limb arm left"></div><div class="limb arm right"></div>
-              <div class="limb leg left"></div><div class="limb leg right"></div>
-            </div>
-            <div class="live-focus">请保持静止</div>
+            <div class="live-status live-status--single"><span class="live-chip ok">站姿识别中</span></div>
+            <img
+              class="bodycomp-prep-hero-svg bodycomp-prep-turntable-figure"
+              src="./assets/weight-measure/turntable-figure.svg"
+              alt="站上转台、双手自然垂放示意"
+              width="320"
+              height="260"
+            />
+            <div class="live-focus" data-auto-detect-status>正在识别站姿，请保持站立不动。</div>
           </div>
         </div>
         <div class="footer-hint">
-          <div class="button-row">
-            <a class="button primary" href="./pro-countdown.html" data-demo-next="./pro-countdown.html">下一步</a>
-            <a class="button secondary" href="./pro-prepare.html?autoDetectMode=warning">姿势异常示例</a>
-          </div>
+          <a
+            class="button primary"
+            href="./pro-countdown.html"
+            data-anthropometry-next-btn
+            data-stateful-link="./pro-countdown.html"
+          >下一步</a>
         </div>
       </section>
     </main>

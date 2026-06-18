@@ -10,9 +10,10 @@
     <main class="device-stage">
       <section
         class="device device--measurement"
+        data-set-measurement-mode="singleNeck"
         data-measuring-flow
         data-measuring-duration="9200"
-        data-measuring-next="./single-result-neck.html"
+        data-measuring-next="./standard-next-step.html"
         data-voice-text="颈部测量中，请缓慢转头并保持稳定。"
       >
         <audio class="turntable-audio" data-turntable-audio preload="auto" loop playsinline hidden>
@@ -59,10 +60,7 @@
         </div>
         <div class="footer-hint">
           <div class="button-row">
-            <a class="button primary" href="./single-result-neck.html" data-action-link="noop" data-complete-group="singleNeck">查看颈部结果</a>
-          </div>
-          <div class="button-row" style="margin-top:12px">
-            <a class="button secondary" href="./single-measuring-neck.html?autoDetectMode=warning">姿势异常示例</a>
+            <a class="button primary" href="./standard-next-step.html" data-stateful-link="./standard-next-step.html" data-measuring-next>查看颈部结果</a>
           </div>
         </div>
       </section>

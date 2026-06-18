@@ -10,9 +10,10 @@
     <main class="device-stage">
       <section
         class="device device--measurement"
+        data-set-measurement-mode="balance"
         data-measuring-flow
         data-measuring-duration="10000"
-        data-measuring-next="./single-result-balance.html"
+        data-measuring-next="./standard-next-step.html"
         data-voice-text="平衡测量中，请保持站稳并不要晃动。"
       >
         <audio class="turntable-audio" data-turntable-audio preload="auto" loop playsinline hidden>
@@ -57,10 +58,7 @@
         </div>
         <div class="footer-hint">
           <div class="button-row">
-            <a class="button primary" href="./single-result-balance.html" data-action-link="noop" data-complete-group="balance">查看平衡结果</a>
-          </div>
-          <div class="button-row" style="margin-top:12px">
-            <a class="button secondary" href="./single-measuring-balance.html?autoDetectMode=warning">姿势异常示例</a>
+            <a class="button primary" href="./standard-next-step.html" data-stateful-link="./standard-next-step.html" data-measuring-next>查看平衡结果</a>
           </div>
         </div>
       </section>

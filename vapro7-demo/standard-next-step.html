@@ -20,8 +20,8 @@
           <a class="back-link" href="./standard-measuring.html">← 返回</a>
           <span class="text-link">测量完成</span>
         </div>
+        <div class="section-label" data-finish-section hidden></div>
         <h1 class="screen-title">测量已完成</h1>
-        <p class="screen-subtitle">请举手选择下一步，或直接点击上方选项进入对应流程。</p>
 
         <div class="scheme-three-summary" data-finish-summary aria-label="本次已采集项"></div>
 
@@ -78,18 +78,16 @@
         <div
           class="footer-hint finish-touch-footer"
           data-choice-group
-          data-default-index="1"
+          data-default-index="0"
           data-finish-group
           data-finish-flow="standard"
           data-finish-current=""
-          data-idle-default-next="1"
-          data-idle-start="on-first-click"
-          data-idle-seconds="20"
+          data-idle-default-next="off"
         >
           <div class="scheme-three-action-row">
-            <a class="scheme-three-action-card" href="./report-scan-login.html" data-choice-item data-choice-label="结束测量" data-finish-option="report">
-              <strong>结束测量</strong>
-              <span>查看报告</span>
+            <a class="scheme-three-action-card" href="./report-scan-login.html" data-choice-item data-choice-label="完成测量" data-finish-option="report">
+              <strong>完成测量</strong>
+              <span>扫码查看报告</span>
             </a>
             <a class="scheme-three-action-card" href="#" data-choice-item data-choice-label="继续下一项测量" data-finish-option="next">
               <strong data-next-title>继续下一项测量</strong>
@@ -97,20 +95,7 @@
             </a>
           </div>
           <div class="scheme-one-weak scheme-one-weak--minimal">
-            <a href="#" data-finish-remeasure>重新测量当前项目</a>
-          </div>
-          <div class="scheme-one-footer footer-hint scheme-three-idle-footer touch-footnote-wrap">
-            <div class="auto-hint">
-              <strong><span data-idle-label>空闲倒计时</span></strong>
-              <span class="count-badge" data-idle-countdown>20</span>
-            </div>
-            <div class="auto-hint">
-              <strong><span data-auto-prefix>空闲默认：</span><span data-auto-label>继续下一项测量</span></strong>
-            </div>
-            <p class="touch-footnote">
-              <span class="demo-ui-caption">Demo 演示</span>
-              点击上方选项将直接进入对应流程；点击页面空白处后将启动空闲倒计时（与显式点击等价，均为演示用）。
-            </p>
+            <a href="#" data-finish-remeasure>重新测量</a>
           </div>
         </div>
       </section>
