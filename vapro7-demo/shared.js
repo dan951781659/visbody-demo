@@ -7,6 +7,35 @@ const DEVICE_PERSISTED_KEYS = new Set([
   "bodyCompositionPrepEnabled"
 ]);
 
+/** WellnessHub 下发项：只存 vapro7-measurement-config，不写回 vapro7-demo-state。 */
+const HUB_MANAGED_STATE_KEYS = [
+  "measurementRuntimeMode",
+  "comprehensiveEnabled",
+  "postureModeEnabled",
+  "bodyCompSingleEnabled",
+  "circumferenceSingleEnabled",
+  "bodycompGirthModeEnabled",
+  "girthOnlyModeEnabled",
+  "balanceModeEnabled",
+  "singleShoulderEnabled",
+  "singleNeckEnabled",
+  "dynamicLabEnabled",
+  "heightMeasurementEnabled",
+  "heightConfirmRequired",
+  "weightStandaloneEnabled",
+  "homeMeasurementOrderKeys",
+  "reportVisibility"
+];
+
+function stripHubManagedState(state) {
+  if (!state || typeof state !== "object") return state;
+  const out = { ...state };
+  HUB_MANAGED_STATE_KEYS.forEach((key) => {
+    delete out[key];
+  });
+  return out;
+}
+
 let __vapro7DemoStateMemory = null;
 const REPORT_URL = "./report-scan-login.html";
 const DEMO_VERSION_FALLBACK = "1.9.7";
@@ -619,23 +648,26 @@ function applyDevicePersistedFromSaved(merged, saved) {
 function loadState() {
   const fallback = defaultState();
   const hub = mapMeasurementConfigFromWellnessHubDemo();
-  const saved = parseSavedState();
+  const rawSaved = parseSavedState();
+  const savedSession =
+    rawSaved && typeof rawSaved === "object" ? stripHubManagedState(rawSaved) : null;
   const merged = {
     ...fallback,
-    ...(saved && typeof saved === "object" ? saved : {}),
+    ...(savedSession || {}),
     ...getQueryOverrides(),
     ...hub
   };
-  applyDevicePersistedFromSaved(merged, saved && typeof saved === "object" ? saved : null);
+  applyDevicePersistedFromSaved(merged, rawSaved && typeof rawSaved === "object" ? rawSaved : null);
   return normalizeState(merged);
 }
 
 function saveState(state) {
+  const persisted = stripHubManagedState(state);
   try {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(persisted));
     __vapro7DemoStateMemory = null;
   } catch {
-    __vapro7DemoStateMemory = state;
+    __vapro7DemoStateMemory = persisted;
   }
 }
 
@@ -4090,6 +4122,9 @@ function setupMeasurementConfigSync() {
     if (event.key !== MEASUREMENT_CONFIG_KEY) return;
     renderState(loadState());
   });
+  window.addEventListener("pageshow", () => {
+    renderState(loadState());
+  });
 }
 
 document.addEventListener("DOMContentLoaded", () => {
@@ -4102,6 +4137,7 @@ document.addEventListener("DOMContentLoaded", () => {
     return;
   }
   renderState();
+  setupMeasurementConfigSync();
   setupVersionDisplay();
   setupChoiceHighlight();
   setupFinishCompletionPage();
