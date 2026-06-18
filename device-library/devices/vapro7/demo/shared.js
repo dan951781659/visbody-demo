@@ -623,8 +623,8 @@ function loadState() {
   const merged = {
     ...fallback,
     ...(saved && typeof saved === "object" ? saved : {}),
-    ...hub,
-    ...getQueryOverrides()
+    ...getQueryOverrides(),
+    ...hub
   };
   applyDevicePersistedFromSaved(merged, saved && typeof saved === "object" ? saved : null);
   return normalizeState(merged);
@@ -4085,6 +4085,13 @@ function redirectLegacyFinishPages() {
   navigateToTarget(withStateQuery("./standard-next-step.html", loadState()));
 }
 
+function setupMeasurementConfigSync() {
+  window.addEventListener("storage", (event) => {
+    if (event.key !== MEASUREMENT_CONFIG_KEY) return;
+    renderState(loadState());
+  });
+}
+
 document.addEventListener("DOMContentLoaded", () => {
   bindConfigControls();
   bindDemoPlaceholders();
@@ -4095,6 +4102,7 @@ document.addEventListener("DOMContentLoaded", () => {
     return;
   }
   renderState();
+  setupMeasurementConfigSync();
   setupVersionDisplay();
   setupChoiceHighlight();
   setupFinishCompletionPage();
