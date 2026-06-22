@@ -4,8 +4,21 @@ const MEASUREMENT_CONFIG_KEY = "vapro7-measurement-config";
 /** Device-side toggles (PRD §11): localStorage wins over stale URL query. Hub 下发项不在此集合。 */
 const DEVICE_PERSISTED_KEYS = new Set([
   "voiceEnabled",
-  "bodyCompositionPrepEnabled"
+  "bodyCompositionPrepEnabled",
+  "deviceLanguage"
 ]);
+
+function t(key, fallback, params) {
+  if (typeof window.Vapro7I18n?.t === "function") {
+    return window.Vapro7I18n.t(key, fallback, params);
+  }
+  return fallback ?? key;
+}
+
+function getSpeechLang() {
+  const lang = window.Vapro7I18n?.getDeviceLanguage?.(loadState()) || "zh";
+  return lang === "de" ? "de-DE" : "zh-CN";
+}
 
 /** WellnessHub 下发项：只存 vapro7-measurement-config，不写回 vapro7-demo-state。 */
 const HUB_MANAGED_STATE_KEYS = [
@@ -324,6 +337,7 @@ function defaultState() {
     heightConfirmed: false,
     lastStandaloneWeightAt: null,
     reportVisibility: { ...DEFAULT_REPORT_VISIBILITY },
+    deviceLanguage: "zh",
     currentSessionId: null,
     currentMeasurementMode: "standard",
     completedGroups: {
@@ -376,6 +390,7 @@ function normalizeState(state) {
   delete merged.soundEffectsEnabled;
   if (typeof merged.voiceEnabled !== "boolean") merged.voiceEnabled = true;
   if (typeof merged.bodyCompositionPrepEnabled !== "boolean") merged.bodyCompositionPrepEnabled = true;
+  if (merged.deviceLanguage !== "zh" && merged.deviceLanguage !== "de") merged.deviceLanguage = "zh";
   if (typeof merged.heightMeasurementEnabled !== "boolean") merged.heightMeasurementEnabled = false;
   if (typeof merged.heightConfirmRequired !== "boolean") merged.heightConfirmRequired = false;
   if (typeof merged.weightStandaloneEnabled !== "boolean") merged.weightStandaloneEnabled = false;
@@ -641,7 +656,13 @@ function parseSavedState() {
 function applyDevicePersistedFromSaved(merged, saved) {
   if (!saved || typeof saved !== "object") return;
   DEVICE_PERSISTED_KEYS.forEach((key) => {
-    if (typeof saved[key] === "boolean") merged[key] = saved[key];
+    if (key === "deviceLanguage") {
+      if (saved.deviceLanguage === "zh" || saved.deviceLanguage === "de") {
+        merged.deviceLanguage = saved.deviceLanguage;
+      }
+    } else if (typeof saved[key] === "boolean") {
+      merged[key] = saved[key];
+    }
   });
 }
 
@@ -814,10 +835,10 @@ function isDynamicLabVisible(state) {
 function getDynamicLabSubtitle(state) {
   const shoulder = !!state.singleShoulderEnabled;
   const neck = !!state.singleNeckEnabled;
-  if (shoulder && neck) return "肩 · 颈活动度专项；进入后请先选择测量部位";
-  if (shoulder) return "将直接进入肩部专项测量流程";
-  if (neck) return "将直接进入颈部专项测量流程";
-  return "活动度测量";
+  if (shoulder && neck) return t("dynamicLab.both");
+  if (shoulder) return t("dynamicLab.shoulder");
+  if (neck) return t("dynamicLab.neck");
+  return t("dynamicLab.generic");
 }
 
 function resolveDynamicLabEntryHref(state) {
@@ -878,19 +899,25 @@ function getHomeMeasurementTiles(state) {
       key === "dynamicLab" ? getDynamicLabSubtitle(s) : meta.benefitDesc || meta.descLong || descBase;
     let gestureHint = "";
     if (Object.prototype.hasOwnProperty.call(meta, "gestureHint")) {
-      gestureHint = meta.gestureHint;
+      gestureHint = meta.gestureHint ? t(`tile.${key}.gestureHint`, meta.gestureHint) : "";
     } else {
-      gestureHint = "请按图示动作进入测量";
+      gestureHint = t("home.gestureHint");
     }
     return {
       key,
-      title: meta.title || MEASUREMENT_ITEMS[key]?.title || key,
-      displayTitle: meta.displayTitle || meta.title || MEASUREMENT_ITEMS[key]?.title || key,
-      desc: descBase,
-      benefitDesc,
+      title: t(`tile.${key}.title`, meta.title || MEASUREMENT_ITEMS[key]?.title || key),
+      displayTitle: t(
+        `tile.${key}.displayTitle`,
+        meta.displayTitle || meta.title || MEASUREMENT_ITEMS[key]?.title || key
+      ),
+      desc: key === "dynamicLab" ? getDynamicLabSubtitle(s) : t(`tile.${key}.desc`, descBase),
+      benefitDesc:
+        key === "dynamicLab"
+          ? getDynamicLabSubtitle(s)
+          : t(`tile.${key}.benefitDesc`, meta.benefitDesc || meta.descLong || descBase),
       gestureHint,
       illustration: meta.illustration || HOME_SELECT_ILLUSTRATIONS.generic,
-      glyph: HOME_TILE_GLYPH[key] || meta.title?.slice(0, 2) || "测量",
+      glyph: t(`glyph.${key}`, HOME_TILE_GLYPH[key] || meta.title?.slice(0, 2) || "测量"),
       href,
       recommended: !!meta.recommended || index === 0,
       primaryCard: index === 0,
@@ -1012,9 +1039,21 @@ function getQuickItemMeta(value) {
   if (!isQuickSingleAvailable(state, value)) return null;
   const map = {
     none: null,
-    shoulder: { title: "肩部测量", desc: "抬手完成肩部活动测量", href: "./single-prepare-shoulder.html" },
-    neck: { title: "颈部测量", desc: "缓慢转头完成颈部活动测量", href: "./single-prepare-neck.html" },
-    balance: { title: "平衡测量", desc: "站稳保持平衡并完成评估", href: "./single-prepare-balance.html" }
+    shoulder: {
+      title: t("quick.shoulderTitle"),
+      desc: t("quick.shoulderDesc"),
+      href: "./single-prepare-shoulder.html"
+    },
+    neck: {
+      title: t("quick.neckTitle"),
+      desc: t("quick.neckDesc"),
+      href: "./single-prepare-neck.html"
+    },
+    balance: {
+      title: t("quick.balanceTitle"),
+      desc: t("quick.balanceDesc"),
+      href: "./single-prepare-balance.html"
+    }
   };
   return map[value] || null;
 }
@@ -1151,9 +1190,10 @@ function resolveFinishKeyForPage(state) {
 
 function finishKeyDisplayName(finishKey) {
   const key = normalizeFinishKey(finishKey, loadState());
+  const itemKey = `item.${key}.title`;
   const meta = HOME_TILE_META[key];
-  if (meta?.displayTitle) return meta.displayTitle;
-  return MEASUREMENT_ITEMS[key]?.title || key;
+  const fallback = meta?.displayTitle || meta?.title || MEASUREMENT_ITEMS[key]?.title || key;
+  return t(itemKey, fallback);
 }
 
 function finishKeyShortLabel(finishKey) {
@@ -1165,34 +1205,41 @@ function finishKeyShortLabel(finishKey) {
 const MEASUREMENT_PREP_COPY = {
   withPosture: [
     {
+      labelKey: "prep.item.fittedClothing",
       label: "穿着贴身衣物",
       icon: "./assets/prep/fitted-clothing.svg"
     },
     {
+      labelKey: "prep.item.hairTied",
       label: "扎起长发，露出头颈",
       icon: "./assets/prep/hair-tied.svg"
     },
     {
+      labelKey: "prep.item.barefootElectrode",
       label: "赤脚，贴合电极",
       icon: "./assets/prep/barefoot.svg",
       requiresBodyComp: true
     },
     {
+      labelKey: "prep.item.naturalStance",
       label: "自然站姿即可",
       icon: "./assets/prep/natural-stance.svg"
     }
   ],
   bodycompGirthOnly: [
-    { label: "保持赤脚", icon: "./assets/prep/barefoot.svg" },
+    { labelKey: "prep.item.barefoot", label: "保持赤脚", icon: "./assets/prep/barefoot.svg" },
     {
+      labelKey: "prep.item.footElectrode",
       label: "足底贴合电极",
       icon: "./assets/bodycomp-prep/footprint-turntable-alignment.svg"
     },
     {
+      labelKey: "prep.item.fittedClothing",
       label: "穿着贴身衣物",
       icon: "./assets/prep/fitted-clothing.svg"
     },
     {
+      labelKey: "prep.item.noExercise",
       label: "避免剧烈运动与大量饮食",
       icon: "./assets/prep/no-exercise.svg"
     }
@@ -1200,18 +1247,8 @@ const MEASUREMENT_PREP_COPY = {
 };
 
 const MEASUREMENT_TIPS_COPY = {
-  withPosture: [
-    "请保持身体静止",
-    "保持自然站姿，不要刻意挺胸或收腹",
-    "保持自然呼吸，请勿憋气",
-    "请目视前方，避免低头或转头"
-  ],
-  bodycompGirthOnly: [
-    "请保持身体静止",
-    "双脚与电极充分接触",
-    "请保持自然呼吸",
-    "请勿吸气收腹或刻意挺胸"
-  ]
+  withPosture: ["tip.still", "tip.naturalStance", "tip.breath", "tip.lookForward"],
+  bodycompGirthOnly: ["tip.still", "tip.feetContact", "tip.breath", "tip.noChest"]
 };
 
 function resolveMeasurementModeKey(state) {
@@ -1264,7 +1301,10 @@ function renderPrepChecklist(container, state) {
       const visual = item.icon
         ? `<img class="prep-check-visual" src="${item.icon}" alt="" width="40" height="40" />`
         : "";
-      return `<div class="prep-check-cell${wide}">${visual}<p class="prep-check-label">${item.label}</p></div>`;
+      return `<div class="prep-check-cell${wide}">${visual}<p class="prep-check-label">${t(
+        item.labelKey,
+        item.label
+      )}</p></div>`;
     })
     .join("");
 }
@@ -1275,14 +1315,16 @@ function renderMeasurementTips(container, state) {
   const titleEl = container.querySelector(".measurement-tips-title");
   const titleHtml = titleEl
     ? titleEl.outerHTML
-    : '<p class="measurement-tips-title">测量注意事项</p>';
+    : `<p class="measurement-tips-title">${t("prep.tipsTitle")}</p>`;
   container.innerHTML =
     titleHtml +
     lines
-      .map(
-        (line, index) =>
-          `<p class="measurement-tip-item${index === 0 ? " is-active" : ""}" data-tip-item>${line}</p>`
-      )
+      .map((lineKey, index) => {
+        const line = typeof lineKey === "string" && lineKey.startsWith("tip.")
+          ? t(lineKey)
+          : lineKey;
+        return `<p class="measurement-tip-item${index === 0 ? " is-active" : ""}" data-tip-item>${line}</p>`;
+      })
       .join("");
 }
 
@@ -1304,28 +1346,39 @@ function getProFlowEntryHref(state) {
 /** 完成页摘要：与刚完成项目一致（PRD §6.1）；身高/体重在 getFinishSummaryRows 中按开关插入 */
 const FINISH_SUMMARY_BASE_ROWS = {
   standard: [
-    { name: "体成分", detail: "已测完" },
-    { name: "体态", detail: "已测完" },
-    { name: "体围", detail: "已测完" }
+    { nameKey: "metric.bodyComp", name: "体成分", detailKey: "common.measuredDone", detail: "已测完" },
+    { nameKey: "metric.posture", name: "体态", detailKey: "common.measuredDone", detail: "已测完" },
+    { nameKey: "metric.girth", name: "体围", detailKey: "common.measuredDone", detail: "已测完" }
   ],
-  bodyCompSingle: [{ name: "体成分", detail: "已测完" }],
-  pro: [{ name: "体态", detail: "已测完" }],
-  circumferenceSingle: [{ name: "体围", detail: "已测完" }],
-  balance: [{ name: "平衡", detail: "已测完" }],
+  bodyCompSingle: [
+    { nameKey: "metric.bodyComp", name: "体成分", detailKey: "common.measuredDone", detail: "已测完" }
+  ],
+  pro: [{ nameKey: "metric.posture", name: "体态", detailKey: "common.measuredDone", detail: "已测完" }],
+  circumferenceSingle: [
+    { nameKey: "metric.girth", name: "体围", detailKey: "common.measuredDone", detail: "已测完" }
+  ],
+  balance: [{ nameKey: "metric.balance", name: "平衡", detailKey: "common.measuredDone", detail: "已测完" }],
   singleNeck: [
-    { name: "颈部屈伸", detail: "已测完" },
-    { name: "颈部侧屈", detail: "已测完" },
-    { name: "颈部旋转", detail: "已测完" }
+    { nameKey: "metric.neckFlex", name: "颈部屈伸", detailKey: "common.measuredDone", detail: "已测完" },
+    { nameKey: "metric.neckSide", name: "颈部侧屈", detailKey: "common.measuredDone", detail: "已测完" },
+    { nameKey: "metric.neckRotate", name: "颈部旋转", detailKey: "common.measuredDone", detail: "已测完" }
   ],
   singleShoulder: [
-    { name: "外展上举", detail: "已测完" },
-    { name: "前屈上举", detail: "已测完" }
+    { nameKey: "metric.shoulderAbduction", name: "外展上举", detailKey: "common.measuredDone", detail: "已测完" },
+    { nameKey: "metric.shoulderFlexion", name: "前屈上举", detailKey: "common.measuredDone", detail: "已测完" }
   ],
   bodycompGirth: [
-    { name: "体成分", detail: "已测完" },
-    { name: "体围", detail: "已测完" }
+    { nameKey: "metric.bodyComp", name: "体成分", detailKey: "common.measuredDone", detail: "已测完" },
+    { nameKey: "metric.girth", name: "体围", detailKey: "common.measuredDone", detail: "已测完" }
   ]
 };
+
+function localizeSummaryRow(row) {
+  return {
+    name: t(row.nameKey, row.name),
+    detail: row.detailKey ? t(row.detailKey, row.detail) : row.detail
+  };
+}
 
 function getRemeasureHref(finishKey, state) {
   if (finishKey === "pro") return getProFlowEntryHref(state);
@@ -1345,32 +1398,32 @@ function getFinishSummaryRows(state) {
   const finishKey = resolveFinishKeyForPage(s);
   const base = FINISH_SUMMARY_BASE_ROWS[finishKey];
   if (base) {
-    const rows = base.map((r) => ({ ...r }));
+    const rows = base.map((r) => localizeSummaryRow(r));
     if (finishKey === "bodyCompSingle") {
       if (deriveHeightMeasurementEnabled(s)) {
-        rows.push({ name: "身高", detail: formatSessionHeight(s) });
+        rows.push({ name: t("metric.height"), detail: formatSessionHeight(s) });
       }
-      rows.push({ name: "体重", detail: formatSessionWeight(s) });
+      rows.push({ name: t("metric.weight"), detail: formatSessionWeight(s) });
       return rows;
     }
     if (finishKey === "bodycompGirth") {
       if (deriveHeightMeasurementEnabled(s)) {
-        rows.splice(2, 0, { name: "身高", detail: formatSessionHeight(s) });
+        rows.splice(2, 0, { name: t("metric.height"), detail: formatSessionHeight(s) });
       }
-      rows.push({ name: "体重", detail: formatSessionWeight(s) });
+      rows.push({ name: t("metric.weight"), detail: formatSessionWeight(s) });
       return rows;
     }
     if (finishKey === "standard") {
       if (deriveHeightMeasurementEnabled(s)) {
-        rows.splice(3, 0, { name: "身高", detail: formatSessionHeight(s) });
+        rows.splice(3, 0, { name: t("metric.height"), detail: formatSessionHeight(s) });
       }
-      rows.push({ name: "体重", detail: formatSessionWeight(s) });
+      rows.push({ name: t("metric.weight"), detail: formatSessionWeight(s) });
       return rows;
     }
     return rows;
   }
 
-  return [{ name: finishKeyDisplayName(finishKey), detail: "已测完" }];
+  return [{ name: finishKeyDisplayName(finishKey), detail: t("common.measuredDone") }];
 }
 
 function renderFinishSummary(container, state) {
@@ -1383,7 +1436,7 @@ function renderFinishSummary(container, state) {
     <div class="summary-check-row">
       <div class="summary-check-main">
         <span class="summary-check-name">${row.name}</span>
-        <span class="summary-check-detail">${row.detail || "已测完"}</span>
+        <span class="summary-check-detail">${row.detail || t("common.measuredDone")}</span>
       </div>
       <span class="summary-check-mark" aria-hidden="true">✓</span>
     </div>`
@@ -1393,7 +1446,7 @@ function renderFinishSummary(container, state) {
 
 function renderFinishPageHeadings(root, finishKey, state) {
   const isPro = getMeasurementRuntimeMode(state) === RUNTIME_MODE_PROFESSIONAL;
-  const modeLabel = isPro ? "专业测量" : "快速测量";
+  const modeLabel = isPro ? t("common.proMode") : t("common.quickMode");
   const sectionEl = root.querySelector("[data-finish-section]");
   if (sectionEl) {
     sectionEl.textContent = `${modeLabel} · ${finishKeyDisplayName(finishKey)}`;
@@ -1416,23 +1469,26 @@ function syncFinishGroupActions(group, state) {
     const href = reportOption.getAttribute("href");
     const reportHref = href && href !== "#" ? href : REPORT_URL;
     reportOption.setAttribute("href", withStateQuery(reportHref, s));
-    reportOption.dataset.choiceLabel = "完成测量";
+    reportOption.dataset.choiceLabel = t("finish.completeMeasure");
     const reportStrong = reportOption.querySelector("strong");
-    if (reportStrong) reportStrong.textContent = "完成测量";
+    if (reportStrong) reportStrong.textContent = t("finish.completeMeasure");
     const reportSpan = reportOption.querySelector("span:not(strong)");
-    if (reportSpan) reportSpan.textContent = "扫码查看报告";
+    if (reportSpan) reportSpan.textContent = t("finish.scanReportShort");
   }
 
   if (nextOption) {
     if (recommendation && recommendation.href) {
       nextOption.hidden = false;
       nextOption.setAttribute("href", withStateQuery(recommendation.href, s));
-      nextOption.dataset.choiceLabel = `继续${recommendation.title}`;
+      const recTitle = finishKeyDisplayName(recommendation.key);
+      const continueLabel = t("finish.continueItem", `继续${recTitle}`, { title: recTitle });
+      nextOption.dataset.choiceLabel = continueLabel;
       nextOption.dataset.nextMeasurementKey = recommendation.key;
       const title = nextOption.querySelector("[data-next-title]");
-      if (title) title.textContent = `继续${recommendation.title}`;
+      if (title) title.textContent = continueLabel;
       const desc = nextOption.querySelector("[data-next-desc]");
-      if (desc) desc.textContent = NEXT_RECOMMEND_DESC[recommendation.key] || "";
+      if (desc)
+        desc.textContent = t(`recommend.${recommendation.key}`, NEXT_RECOMMEND_DESC[recommendation.key] || "");
       if (!nextOption.dataset.finishNextBound) {
         nextOption.dataset.finishNextBound = "1";
         nextOption.addEventListener("click", () => {
@@ -1480,14 +1536,12 @@ function applyFinishPageUi(root, state) {
   });
 
   root.querySelectorAll("[data-gesture-bubble]").forEach((el) => {
-    el.textContent = isLast ? "请举手确认完成测量。" : "请举手确认下方操作。";
+    el.textContent = isLast ? t("finish.gestureLast") : t("finish.gestureNext");
   });
 
   const voiceRoot = root.closest("[data-voice-text]") || root;
   if (voiceRoot.dataset) {
-    voiceRoot.dataset.voiceText = isLast
-      ? "测量已完成。请举手确认完成测量。"
-      : "测量已完成。请举手确认下一步操作。";
+    voiceRoot.dataset.voiceText = isLast ? t("finish.voiceLast") : t("finish.voiceNext");
   }
 
   const remeasure = root.querySelector("[data-finish-remeasure]");
@@ -1495,7 +1549,7 @@ function applyFinishPageUi(root, state) {
     const href = getRemeasureHref(finishKey, s);
     remeasure.dataset.finishRemeasureKey = finishKey;
     remeasure.setAttribute("href", appendReturnToFromPage(withStateQuery(href, s)));
-    remeasure.textContent = "重新测量";
+    remeasure.textContent = t("finish.remeasure");
     if (!remeasure.dataset.finishRemeasureBound) {
       remeasure.dataset.finishRemeasureBound = "1";
       remeasure.addEventListener("click", (event) => {
@@ -1719,7 +1773,7 @@ function speakText(text) {
   if (!text || !("speechSynthesis" in window)) return;
   window.speechSynthesis.cancel();
   const utterance = new SpeechSynthesisUtterance(text);
-  utterance.lang = "zh-CN";
+  utterance.lang = getSpeechLang();
   utterance.rate = 1;
   utterance.pitch = 1;
   window.setTimeout(() => {
@@ -1744,7 +1798,7 @@ function speakTextThen(text, onDone) {
   }
   window.speechSynthesis.cancel();
   const utterance = new SpeechSynthesisUtterance(trimmed);
-  utterance.lang = "zh-CN";
+  utterance.lang = getSpeechLang();
   utterance.rate = 1;
   utterance.pitch = 1;
   utterance.onend = () => {
@@ -2193,6 +2247,15 @@ function bindActionLinks() {
         patchState({ currentMeasurementMode: measurementMode });
       }
 
+      if (action === "set-language") {
+        event.preventDefault();
+        const lang = el.dataset.lang;
+        if (lang === "zh" || lang === "de") {
+          patchState({ deviceLanguage: lang });
+        }
+        return;
+      }
+
       if (action === "open-report") {
         event.preventDefault();
         openReport();
@@ -2325,7 +2388,7 @@ function setupFinishAutoAdvance() {
         el.textContent = activeLabel;
       });
       section.querySelectorAll("[data-auto-prefix]").forEach((el) => {
-        el.textContent = idleEnabled ? "空闲默认：" : "请点击上方选项";
+        el.textContent = idleEnabled ? t("common.idleDefault") : t("common.clickOptions");
       });
       section.querySelectorAll("[data-auto-countdown]").forEach((el) => {
         el.hidden = true;
@@ -2347,7 +2410,7 @@ function setupFinishAutoAdvance() {
     function syncIdlePendingHint() {
       const idleLabelEl = section.querySelector("[data-idle-label]");
       const idleCountEl = section.querySelector("[data-idle-countdown]");
-      if (idleLabelEl) idleLabelEl.textContent = "点击空白处后启动空闲倒计时（演示）";
+      if (idleLabelEl) idleLabelEl.textContent = t("finish.idleClick");
       if (idleCountEl) {
         idleCountEl.textContent = "";
         idleCountEl.hidden = true;
@@ -2360,7 +2423,7 @@ function setupFinishAutoAdvance() {
       const idleLabelEl = section.querySelector("[data-idle-label]");
       const idleCountEl = section.querySelector("[data-idle-countdown]");
       if (idleLabelEl) {
-        idleLabelEl.textContent = `${remain} 秒无操作将默认进入：${label}`;
+        idleLabelEl.textContent = t("finish.idleCountdown", null, { sec: remain, label });
       }
       if (idleCountEl) {
         idleCountEl.hidden = false;
@@ -3160,6 +3223,15 @@ function renderState(nextState) {
   });
 
   renderStandbyPage(state);
+  if (typeof window.Vapro7I18n?.applyDeviceI18n === "function") {
+    window.Vapro7I18n.applyDeviceI18n(state);
+  }
+  document.querySelectorAll("[data-prep-checklist]").forEach((el) => {
+    renderPrepChecklist(el, state);
+  });
+  document.querySelectorAll("[data-tip-carousel]").forEach((el) => {
+    renderMeasurementTips(el, state);
+  });
 }
 
 function setupVersionDisplay() {
@@ -3192,7 +3264,7 @@ function setupGeneratingFlow() {
     started = true;
     const target = root.dataset.generatingNext || "./report-detail.html";
     const delay = Number(root.dataset.generatingDelay || 3000);
-    const voice = root.dataset.voiceText || "正在生成三维模型，请稍候。";
+    const voice = root.dataset.voiceText || t("generating.voice");
     speakText(voice);
     const fill = root.querySelector("[data-generating-progress]");
     const label = root.querySelector("[data-generating-label]");
@@ -3204,9 +3276,9 @@ function setupGeneratingFlow() {
       const pct = Math.min(100, Math.round((elapsed / delay) * 100));
       if (fill) fill.style.width = `${pct}%`;
       body3dRenderer?.setProgress(pct / 100);
-      if (label && pct < 100) label.textContent = `模型生成中 ${pct}%`;
+      if (label && pct < 100) label.textContent = t("generating.progress", null, { pct });
       if (elapsed >= delay) {
-        if (label) label.textContent = "模型生成完成";
+        if (label) label.textContent = t("generating.done");
         body3dRenderer?.setProgress(1);
         panel?.classList.add("is-generating-complete");
         window.setTimeout(() => {
@@ -3630,7 +3702,7 @@ function setupMeasureSelectGesture(grid) {
     if (!card) return;
     card.classList.add("is-entering");
     holdTimer = window.setTimeout(() => {
-      speakText(`识别通过，请点击「${card.dataset.choiceLabel || "测量"}」进入。`);
+      speakText(t("home.gesturePass", null, { label: card.dataset.choiceLabel || t("common.measure") }));
       cards.forEach((c) => c.classList.remove("is-entering"));
     }, holdMs);
   }

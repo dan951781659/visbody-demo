@@ -15,6 +15,10 @@
   --radius: 26px;
   --shadow: 0 24px 70px rgba(0, 0, 0, 0.4);
   --device-glow: radial-gradient(circle at 50% 0%, rgba(43, 124, 255, 0.16), transparent 32%);
+  --device-width: 1080px;
+  --device-height: 1920px;
+  --device-preview-scale: min(1, calc((100vw - 32px) / 1080), calc((100vh - 48px) / 1920));
+  --ds: 2.512;
 }
 
 * { box-sizing: border-box; }
@@ -88,25 +92,36 @@ a { color: inherit; text-decoration: none; }
   border-radius:999px; background:rgba(255,255,255,0.08); color:#d8e5ff; font-size:12px; margin-bottom:10px;
 }
 
-.device-stage { display:flex; align-items:center; justify-content:center; min-height: calc(100vh - 48px); }
+.device-stage {
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  min-height: calc(100vh - 48px);
+  width: 100%;
+  padding: 16px 0 32px;
+  overflow: auto;
+}
 .device {
   position: relative;
-  width: 430px;
-  min-height: 860px;
-  padding: 22px 20px 150px;
-  border-radius: 42px;
+  width: var(--device-width);
+  height: var(--device-height);
+  min-height: var(--device-height);
+  padding: calc(22px * var(--ds)) calc(20px * var(--ds)) calc(150px * var(--ds));
+  border-radius: calc(42px * var(--ds));
   border: 1px solid rgba(255,255,255,0.1);
   background: var(--device-glow), linear-gradient(180deg, #060a0f 0%, #05070b 100%);
   box-shadow: 0 28px 82px rgba(0,0,0,.48), inset 0 1px 0 rgba(255,255,255,0.04);
   overflow: hidden;
+  flex-shrink: 0;
+  zoom: var(--device-preview-scale);
 }
 .status-bar, .topbar { display:flex; justify-content:space-between; align-items:center; }
-.status-bar { color: var(--muted); font-size:13px; margin-bottom:18px; }
-.topbar { margin-bottom:22px; display:flex; justify-content:space-between; align-items:center; gap:12px; }
+.status-bar { color: var(--muted); font-size: calc(13px * var(--ds)); margin-bottom: calc(18px * var(--ds)); }
+.topbar { margin-bottom: calc(22px * var(--ds)); display:flex; justify-content:space-between; align-items:center; gap: calc(12px * var(--ds)); }
 .topbar .text-link { display: none; }
-.back-link, .text-link { color:#8fb7ff; font-size:14px; }
-.screen-title { margin: 8px 0 8px; font-size: 34px; line-height:1.14; font-weight:700; }
-.screen-subtitle { margin:0 0 18px; color:var(--muted); line-height:1.55; font-size:15px; }
+.back-link, .text-link { color:#8fb7ff; font-size: calc(14px * var(--ds)); }
+.screen-title { margin: calc(8px * var(--ds)) 0 calc(8px * var(--ds)); font-size: calc(34px * var(--ds)); line-height:1.14; font-weight:700; }
+.screen-subtitle { margin:0 0 calc(18px * var(--ds)); color:var(--muted); line-height:1.55; font-size: calc(15px * var(--ds)); }
 
 .home-promo-slot {
   display: block;
@@ -127,12 +142,12 @@ a { color: inherit; text-decoration: none; }
 .device.device--home {
   display: flex;
   flex-direction: column;
-  min-height: 860px;
-  padding-bottom: 28px;
+  min-height: var(--device-height);
+  padding-bottom: calc(28px * var(--ds));
 }
 .screen-title--home {
-  margin-bottom: 12px;
-  font-size: 28px;
+  margin-bottom: calc(12px * var(--ds));
+  font-size: calc(28px * var(--ds));
 }
 .home-measure-grid {
   flex: 1 1 auto;
@@ -143,7 +158,7 @@ a { color: inherit; text-decoration: none; }
 }
 .home-measure-grid--dense {
   grid-template-columns: 1fr;
-  max-height: min(720px, calc(100vh - 240px));
+  max-height: min(calc(720px * var(--ds)), calc(var(--device-height) - 240px * var(--ds)));
   overflow-y: auto;
   scrollbar-width: thin;
 }
@@ -292,7 +307,7 @@ a { color: inherit; text-decoration: none; }
 .device--bodycomp-prep {
   display: flex;
   flex-direction: column;
-  min-height: 860px;
+  min-height: var(--device-height);
   padding-bottom: 22px;
 }
 .device--bodycomp-prep .prep-checklist-grid {
@@ -1258,7 +1273,7 @@ audio.turntable-audio {
 }
 
 .device.device--scheme-one {
-  min-height: 900px;
+  min-height: calc(900px * var(--ds));
   padding: 20px 20px 26px;
   overflow-x: hidden;
   overflow-y: auto;
@@ -1483,7 +1498,7 @@ audio.turntable-audio {
 .device.device--scheme-three {
   display: flex;
   flex-direction: column;
-  min-height: 900px;
+  min-height: calc(900px * var(--ds));
   padding: 20px 20px 22px;
   overflow-y: auto;
 }
@@ -2049,8 +2064,8 @@ audio.turntable-audio {
 .device--settings-scroll {
   display: flex;
   flex-direction: column;
-  min-height: 900px;
-  max-height: min(900px, calc(100vh - 48px));
+  min-height: calc(900px * var(--ds));
+  max-height: min(calc(900px * var(--ds)), calc(var(--device-height) - 48px));
   overflow: hidden;
   padding-bottom: 16px;
 }
@@ -2690,7 +2705,7 @@ audio.turntable-audio {
 .device.device--measure-select {
   display: flex;
   flex-direction: column;
-  min-height: 860px;
+  min-height: var(--device-height);
   padding-bottom: 16px;
 }
 .screen-title--measure-select {
@@ -2799,7 +2814,7 @@ audio.turntable-audio {
   position: relative;
   display: flex;
   flex-direction: column;
-  min-height: 900px;
+  min-height: calc(900px * var(--ds));
   padding: 18px 20px 24px;
   background:
     radial-gradient(circle at 70% 28%, rgba(43, 124, 255, 0.18), transparent 42%),
@@ -3186,7 +3201,7 @@ audio.turntable-audio {
 .device--weight-standalone.weight-measure-flow {
   display: flex;
   flex-direction: column;
-  min-height: 860px;
+  min-height: var(--device-height);
 }
 .weight-measure-main {
   flex: 1 1 auto;
