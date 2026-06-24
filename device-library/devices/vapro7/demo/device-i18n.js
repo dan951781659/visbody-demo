@@ -194,7 +194,219 @@
       "item.balance.title": "平衡测量",
       "item.weightStandalone.title": "体重测量",
       "item.singleShoulder.title": "肩部测量",
-      "item.singleNeck.title": "颈部测量"
+      "item.singleNeck.title": "颈部测量",
+      "common.nextButton": "下一步",
+      "common.startMeasure": "开始测量",
+      "common.demoBadge": "Demo 演示",
+      "common.recommended": "推荐",
+      "common.ok": "OK",
+      "common.loading": "加载中…",
+      "common.prepPage": "测量准备页",
+      "common.backProjectSelect": "← 项目选择",
+      "common.confirm": "确认设置",
+      "common.returnNow": "立即返回",
+      "common.measureTime": "测量时间",
+      "common.standbyEmptyHint": "当前未开启任何测量项目，请联系门店工作人员。",
+      "common.standbyHubHint": "长按 ⊕ 键查看报告列表，长按 ⊖ 键进入设置。",
+      "measuring.status": "测量中",
+      "measuring.stillTitle": "请保持静止",
+      "measuring.voice": "转台正在旋转采集，请保持当前姿势勿动。",
+      "measuring.postureOk": "姿态正确",
+      "measuring.turntableRotating": "转台旋转中",
+      "measuring.doNotMove": "请不要移动",
+      "measuring.almostDone": "即将完成，请保持静止",
+      "measuring.almostDoneChip": "即将完成",
+      "measuring.completeTapNext": "测量完成，请点击下一步。",
+      "measuring.voiceStill": "测量中，请不要移动。",
+      "measuring.completeSoonVoice": "即将完成，请继续保持静止。",
+      "finishDone.title": "测量已完成",
+      "finishDone.status": "测量完成",
+      "finishDone.voice": "测量已完成。请举手确认下一步操作。",
+      "finishDone.voiceTouch": "测量已完成。请触控选择下一步。",
+      "boarding.title": "站上转台",
+      "boarding.status": "转台站姿",
+      "boarding.subtitle": "双手自然下垂，面向屏幕，保持身体稳定直至身高与体重测量结束。",
+      "boarding.subtitlePro": "双手自然垂放，面向屏幕站稳，保持身体静止直至识别通过。",
+      "boarding.recognizingStance": "正在识别站姿，请保持站立不动。",
+      "boarding.stanceChip": "站姿识别中",
+      "boarding.voice": "请站上转台，双手自然下垂，身体放松并保持静止。",
+      "boarding.voicePro": "请站上转台，双手自然垂放，面向屏幕，保持静止。",
+      "boarding.voiceFoot": "请站上转台，并确保足底与金属脚印充分接触。",
+      "countdown.startStatus": "开始测量",
+      "countdown.still": "请保持静止",
+      "countdown.soonTitle": "即将开始测量",
+      "countdown.soonCaption": "秒后开始",
+      "countdown.keepPose": "请保持以上动作",
+      "countdown.poseCaption": "请保持：握住扶手，双臂约 45°，身体静止",
+      "countdown.poseCaptionPro": "请保持：双手自然垂放，面向屏幕站稳",
+      "countdown.voice": "请保持姿态，测量即将开始。",
+      "countdown.voiceStill": "请保持静止，测量即将开始。",
+      "countdown.prepDone": "准备完成 · 进入 3 秒倒计时",
+      "position.angleStatus": "角度准备",
+      "position.title": "双臂自然打开 45°",
+      "position.subtitle": "请保持面向屏幕，双臂自然打开并维持约 45° 夹角。",
+      "position.poseChip": "姿态识别中",
+      "position.armHint": "若夹角不足，请再张开一些",
+      "position.recognizing": "正在识别手臂姿态...",
+      "position.voice": "请双臂自然打开，保持约四十五度夹角。",
+      "grip.title": "握持扶手",
+      "grip.subtitle": "请双手握住扶手，保持接触稳定。",
+      "grip.voice": "请双手握住扶手，双臂展开约四十五度并保持静止。",
+      "grip.contactStatus": "扶手准备",
+      "grip.contactTitle": "双手接触扶手金属",
+      "grip.contactSubtitle": "请双手拇指及四指与扶手金属区域充分接触。",
+      "grip.voiceContact": "请双手握住扶手，拇指与四指充分接触金属区域。",
+      "gesture.leftHand": "举左手：{label}。",
+      "gesture.rightHand": "举右手：{label}。",
+      "gesture.rightHandHold": "请举起右手并保持，以{label}。",
+      "gesture.rightHandOnly": "请举起右手",
+      "gesture.wrongHand": "请举起右手，左手无效",
+      "gesture.recognizedDone": "已识别 · 完成测量",
+      "gesture.recognizedRight": "已识别 · 举右手",
+      "gesture.gestureLabel": "手势",
+      "gesture.raiseRightNext": "请举右手进入下一步。",
+      "pose.abnormal": "姿势异常",
+      "pose.adjust": "请调整姿势",
+      "pose.abnormalSubtitle": "检测到姿态异常，请先调整姿势后再继续。",
+      "pose.abnormalTip": "姿势异常时请先调整后再继续测量。",
+      "pose.detectAbnormal": "检测到姿态异常，请先调整姿势。",
+      "pose.passNext": "识别通过，可进入下一步",
+      "pose.enteringCountdown": "即将进入倒计时",
+      "height.title": "身高确认",
+      "height.status": "身高确认",
+      "height.subtitle": "测量成功！身高数值可进行手动调整。",
+      "height.hint": "您可以直接输入数字，或使用 −、+ 微调数值。",
+      "height.confirm": "确认设置",
+      "height.measuring": "身高测量中…",
+      "height.measuringVoice": "正在测量身高，请保持不动。",
+      "height.doneToast": "身高测量已完成",
+      "height.doneVoice": "身高测量已完成。",
+      "weight.title": "体重测量",
+      "weight.tipStand": "请站上转台",
+      "weight.tipStill": "双手垂放，自然站立，保持静止",
+      "weight.tipStand2": "站在转台上，双手垂放，自然站立",
+      "weight.tipHold": "保持静止",
+      "weight.measuring": "体重测量中…",
+      "weight.measuringVoice": "正在测量体重，请保持不动。",
+      "weight.doneToast": "体重测量已完成",
+      "weight.doneVoice": "体重测量已完成。",
+      "weight.voicePrep": "请站上转台，双手自然下垂，准备测量体重。",
+      "weight.voiceStand": "请站在转台上，双手垂放，自然站立，保持静止。",
+      "weight.voiceReading": "正在读取体重，请保持不动。",
+      "weight.resultTime": "测量时间",
+      "weight.idleReturn": "20 秒无操作将返回项目选择",
+      "shoulder.status": "肩部测量",
+      "shoulder.prepTitle": "请站上转台并抬起左手",
+      "shoulder.prepSubtitle": "准备完成后将进入倒计时，再依次采集左手侧与右手侧。",
+      "shoulder.leftGuide": "左手引导",
+      "shoulder.recognizing": "识别中",
+      "shoulder.leftRaise": "左手缓慢抬高约与肩平",
+      "shoulder.labKicker": "动态实验室",
+      "shoulder.voice": "请缓慢抬起左手，与肩平齐并保持稳定。",
+      "shoulder.countdownVoice": "肩部左手测量即将开始，请保持外展姿态。",
+      "neck.status": "颈部测量",
+      "neck.prepTitle": "请缓慢转头",
+      "neck.prepSubtitle": "左右缓慢转头并保持肩部稳定，准备完成后进入倒计时。",
+      "neck.armHint": "缓慢向左、向右转头，幅度不宜过大",
+      "neck.recognizing": "正在识别头颈姿态...",
+      "neck.voice": "请缓慢转头，保持肩部稳定。",
+      "neck.countdownVoice": "颈部测量即将开始，请保持当前动作。",
+      "neck.measuringVoice": "颈部测量中，请缓慢转头并保持稳定。",
+      "balance.measuringTitle": "平衡测量中",
+      "balance.voice": "平衡测量中，请保持站稳并不要晃动。",
+      "balance.prepTitle": "请站稳保持平衡",
+      "balance.prepSubtitle": "双脚站稳，保持身体稳定，准备完成后进入倒计时。",
+      "balance.prepVoice": "请站稳并保持平衡。",
+      "balance.countdownVoice": "平衡测量即将开始，请保持站稳。",
+      "report.title": "报告详情",
+      "report.detail": "详细报告",
+      "report.loading": "加载中…",
+      "report.youthGrowth": "青少年成长报告",
+      "report.circumference": "体围",
+      "report.postureReport": "体态报告",
+      "report.scanTitle": "扫码查看报告",
+      "pro.measuringTitle": "体态测量中",
+      "pro.countdownTitle": "体态测量 · 开始测量",
+      "pro.prep.voice": "请按清单逐项准备好。举右手继续测量，举左手退出测量。",
+      "pro.prep.nextHint": "站上转台，开始姿态引导",
+      "guide.phase1.voice": "请先脱鞋脱袜，并将双脚站稳在脚印位置。",
+      "guide.phase1.subtitle": "站上转台，双脚对准脚印与电机片位置。",
+      "guide.phase1.focus": "请站上转台并对准脚印",
+      "guide.phase2.voice": "请双手握住扶手，双臂展开约四十五度并保持静止。",
+      "guide.phase2.subtitle": "握住扶手，双臂自然展开约 45°。",
+      "guide.phase2.focus": "请握住扶手并保持双臂展开",
+      "guide.legacy1.voice": "请先脱鞋脱袜。",
+      "guide.legacy2.voice": "请双脚站稳，足底与脚印充分接触。",
+      "guide.legacy3.voice": "请双手握住扶手，并保持接触。",
+      "guide.legacy4.voice": "请面向屏幕，双臂展开四十五度并保持静止。",
+      "legacy.girthSubtitle": "请站上转台，按引导完成体围测量。",
+      "legacy.bodycompGirthSubtitle": "请站上转台，依次完成体成分与体围测量。",
+      "generating.title": "模型生成中",
+      "generating.status": "生成中",
+      "measuring.completePosture": "采集完成，请点击「下一步」",
+      "measuring.turntableStopped": "转台已停，请点击「下一步」",
+      "measuring.collectionDone": "采集完成",
+      "measuring.turntableStoppedChip": "转台已停",
+      "gesture.raiseRightContinue": "请举起右手以继续。",
+      "guide.phase1.label": "阶段 1/2",
+      "guide.phase2.label": "阶段 2/2",
+      "guide.phase1.title": "上台前准备",
+      "guide.phase2.title": "扶手与手臂姿势",
+      "guide.phase1.chipA": "阶段一 · 上台前",
+      "guide.phase2.chipA": "阶段二 · 扶手姿势",
+      "guide.phase1.point1.title": "脱鞋脱袜",
+      "guide.phase1.point1.body": "保持足底可完整接触转台。",
+      "guide.phase1.point2.title": "双脚接触脚印",
+      "guide.phase1.point2.body": "双脚站稳，足底与脚印充分接触。",
+      "guide.phase2.point1.title": "双手握住扶手",
+      "guide.phase2.point1.body": "双手握住扶手，保持手掌充分接触。",
+      "guide.phase2.point2.title": "双臂展开 45°",
+      "guide.phase2.point2.body": "面向屏幕，双臂展开并保持静止。",
+      "guide.legacy1.index": "1/4",
+      "guide.legacy2.index": "2/4",
+      "guide.legacy3.index": "3/4",
+      "guide.legacy4.index": "4/4",
+      "guide.legacy1.title": "脱鞋脱袜",
+      "guide.legacy1.body": "保持足底可完整接触转台。",
+      "guide.legacy1.focus": "请脱鞋脱袜",
+      "guide.legacy1.subtitle": "请先脱鞋脱袜。",
+      "guide.legacy2.title": "双脚接触脚印",
+      "guide.legacy2.body": "双脚站稳，足底与脚印充分接触。",
+      "guide.legacy2.focus": "请双脚充分接触脚印",
+      "guide.legacy2.subtitle": "请双脚站稳并充分接触脚印。",
+      "guide.legacy3.title": "双手握住扶手",
+      "guide.legacy3.body": "双手握住扶手，保持手掌与金属充分接触。",
+      "guide.legacy3.focus": "请双手握住扶手",
+      "guide.legacy3.subtitle": "请双手握住扶手。",
+      "guide.legacy4.title": "双臂展开 45°",
+      "guide.legacy4.body": "面向屏幕，双臂展开并保持静止。",
+      "guide.legacy4.focus": "请双臂展开 45°",
+      "guide.legacy4.subtitle": "请面向屏幕，双臂展开四十五度。",
+      "gesture.raiseRightFor": "请举起右手以{label}。",
+      "gesture.raiseLeftHold": "举起左手 · {label}",
+      "gesture.raiseRightHold": "举起右手 · {label}",
+      "gesture.raiseRightContinueShort": "举起右手 · 继续",
+      "gesture.keepStill": "请保持",
+      "boarding.voiceStill": "请站上转台，双手自然垂放，保持静止。",
+      "boarding.enterGripPrep": "即将进入扶手准备",
+      "boarding.tapContinueMeasure": "请点击「继续测量」进入下一步",
+      "common.collecting": "采集中…",
+      "common.continueMeasure": "继续测量",
+      "common.completed": "已完成",
+      "common.notMeasured": "未测量",
+      "common.shoulderShort": "肩部",
+      "countdown.digit3": "三",
+      "countdown.digit2": "二",
+      "countdown.digit1": "一",
+      "weight.idleReturnSec": "{sec} 秒无操作将返回项目选择",
+      "shoulder.warningTip1": "检测到姿势异常，请先调整后再继续。",
+      "shoulder.warningTip2": "恢复稳定姿态后，可重新开始当前动作。",
+      "shoulder.warningAdjust": "请先调整",
+      "placeholder.flowTitle": "请选择测量部位",
+      "placeholder.status": "单项测量",
+      "legacy.prepareMerged": "扶手准备已合并",
+      "settings.redirectHint": "测量流程设置已合并到「设备设置」。若未自动跳转，请",
+      "settings.redirectLink": "点此打开设备设置"
     },
     de: {
       "common.backHome": "← Start",
@@ -388,8 +600,556 @@
       "item.balance.title": "Balancemessung",
       "item.weightStandalone.title": "Gewichtsmessung",
       "item.singleShoulder.title": "Schultermessung",
-      "item.singleNeck.title": "Nackenmessung"
+      "item.singleNeck.title": "Nackenmessung",
+      "common.nextButton": "Weiter",
+      "common.startMeasure": "Messung starten",
+      "common.demoBadge": "Demo",
+      "common.recommended": "Empfohlen",
+      "common.ok": "OK",
+      "common.loading": "Lädt…",
+      "common.prepPage": "Vorbereitung",
+      "common.backProjectSelect": "← Auswahl",
+      "common.confirm": "Bestätigen",
+      "common.returnNow": "Sofort zurück",
+      "common.measureTime": "Messzeit",
+      "common.standbyEmptyHint": "Keine Messung aktiv. Bitte Mitarbeiter kontaktieren.",
+      "common.standbyHubHint": "⊕ lang: Berichte. ⊖ lang: Einstellungen.",
+      "measuring.status": "Messung läuft",
+      "measuring.stillTitle": "Bitte stillhalten",
+      "measuring.voice": "Drehteller dreht sich. Bitte Pose halten.",
+      "measuring.postureOk": "Pose korrekt",
+      "measuring.turntableRotating": "Drehteller dreht",
+      "measuring.doNotMove": "Bitte nicht bewegen",
+      "measuring.almostDone": "Fast fertig, bitte stillhalten",
+      "measuring.almostDoneChip": "Fast fertig",
+      "measuring.completeTapNext": "Messung fertig. Bitte Weiter antippen.",
+      "measuring.voiceStill": "Messung läuft. Bitte nicht bewegen.",
+      "measuring.completeSoonVoice": "Fast fertig. Bitte weiter stillhalten.",
+      "finishDone.title": "Messung abgeschlossen",
+      "finishDone.status": "Messung fertig",
+      "finishDone.voice": "Messung abgeschlossen. Bitte nächsten Schritt bestätigen.",
+      "finishDone.voiceTouch": "Messung abgeschlossen. Bitte per Touch wählen.",
+      "boarding.title": "Auf Drehteller stehen",
+      "boarding.status": "Standposition",
+      "boarding.subtitle": "Arme locker, zum Bildschirm, stabil bis Größe und Gewicht erfasst sind.",
+      "boarding.subtitlePro": "Arme locker, zum Bildschirm, still bis Erkennung abgeschlossen.",
+      "boarding.recognizingStance": "Standposition wird erkannt. Bitte still stehen.",
+      "boarding.stanceChip": "Stand wird erkannt",
+      "boarding.voice": "Auf Drehteller stehen, Arme locker, entspannt und still.",
+      "boarding.voicePro": "Auf Drehteller stehen, Arme locker, zum Bildschirm, still.",
+      "boarding.voiceFoot": "Auf Drehteller stehen, Füße auf Elektroden.",
+      "countdown.startStatus": "Messung starten",
+      "countdown.still": "Bitte stillhalten",
+      "countdown.soonTitle": "Messung startet gleich",
+      "countdown.soonCaption": "Sekunden bis Start",
+      "countdown.keepPose": "Bitte Pose beibehalten",
+      "countdown.poseCaption": "Griff halten, Arme ~45°, Körper still",
+      "countdown.poseCaptionPro": "Arme locker, zum Bildschirm, stabil stehen",
+      "countdown.voice": "Pose halten, Messung startet gleich.",
+      "countdown.voiceStill": "Bitte stillhalten, Messung startet gleich.",
+      "countdown.prepDone": "Bereit · 3-Sekunden-Countdown",
+      "position.angleStatus": "Winkelvorbereitung",
+      "position.title": "Arme ~45° öffnen",
+      "position.subtitle": "Zum Bildschirm, Arme ~45° öffnen und halten.",
+      "position.poseChip": "Pose wird erkannt",
+      "position.armHint": "Bei zu engem Winkel weiter öffnen",
+      "position.recognizing": "Armposition wird erkannt…",
+      "position.voice": "Arme öffnen, etwa 45 Grad halten.",
+      "grip.title": "Griff halten",
+      "grip.subtitle": "Beide Hände am Griff, stabil halten.",
+      "grip.voice": "Griff halten, Arme ~45° geöffnet und still.",
+      "grip.contactStatus": "Griffvorbereitung",
+      "grip.contactTitle": "Metallkontakt am Griff",
+      "grip.contactSubtitle": "Daumen und Finger vollständig auf Metallbereich.",
+      "grip.voiceContact": "Griff halten, Daumen und Finger auf Metall.",
+      "gesture.leftHand": "Linke Hand: {label}.",
+      "gesture.rightHand": "Rechte Hand: {label}.",
+      "gesture.rightHandHold": "Rechte Hand heben und halten für: {label}.",
+      "gesture.rightHandOnly": "Bitte rechte Hand heben",
+      "gesture.wrongHand": "Nur rechte Hand, linke ungültig",
+      "gesture.recognizedDone": "Erkannt · Abschluss",
+      "gesture.recognizedRight": "Erkannt · Rechte Hand",
+      "gesture.gestureLabel": "Geste",
+      "gesture.raiseRightNext": "Bitte rechte Hand zum Weiter.",
+      "pose.abnormal": "Pose abnormal",
+      "pose.adjust": "Pose anpassen",
+      "pose.abnormalSubtitle": "Pose abnormal. Bitte korrigieren und fortfahren.",
+      "pose.abnormalTip": "Bei abnormaler Pose bitte erst korrigieren.",
+      "pose.detectAbnormal": "Pose abnormal erkannt. Bitte anpassen.",
+      "pose.passNext": "Erkannt, weiter möglich",
+      "pose.enteringCountdown": "Countdown startet gleich",
+      "height.title": "Größe bestätigen",
+      "height.status": "Größe bestätigen",
+      "height.subtitle": "Messung erfolgreich! Größe kann angepasst werden.",
+      "height.hint": "Zahl eingeben oder mit − / + feinjustieren.",
+      "height.confirm": "Bestätigen",
+      "height.measuring": "Größe wird gemessen…",
+      "height.measuringVoice": "Größe wird gemessen. Bitte stillhalten.",
+      "height.doneToast": "Größenmessung abgeschlossen",
+      "height.doneVoice": "Größenmessung abgeschlossen.",
+      "weight.title": "Gewichtsmessung",
+      "weight.tipStand": "Auf Drehteller stehen",
+      "weight.tipStill": "Arme locker, natürlich stehen, still",
+      "weight.tipStand2": "Auf Drehteller, Arme locker, stehen",
+      "weight.tipHold": "Stillhalten",
+      "weight.measuring": "Gewicht wird gemessen…",
+      "weight.measuringVoice": "Gewicht wird gemessen. Bitte stillhalten.",
+      "weight.doneToast": "Gewichtsmessung abgeschlossen",
+      "weight.doneVoice": "Gewichtsmessung abgeschlossen.",
+      "weight.voicePrep": "Auf Drehteller stehen, Gewichtsmessung vorbereiten.",
+      "weight.voiceStand": "Auf Drehteller stehen, Arme locker, still.",
+      "weight.voiceReading": "Gewicht wird gelesen. Bitte stillhalten.",
+      "weight.resultTime": "Messzeit",
+      "weight.idleReturn": "20 s bis Rückkehr zur Auswahl",
+      "shoulder.status": "Schultermessung",
+      "shoulder.prepTitle": "Auf Drehteller stehen, linke Hand heben",
+      "shoulder.prepSubtitle": "Danach Countdown, dann links und rechts erfassen.",
+      "shoulder.leftGuide": "Linke Hand",
+      "shoulder.recognizing": "Erkennung",
+      "shoulder.leftRaise": "Linke Hand langsam auf Schulterhöhe",
+      "shoulder.labKicker": "Dynamiklabor",
+      "shoulder.voice": "Linke Hand langsam auf Schulterhöhe heben.",
+      "shoulder.countdownVoice": "Schultermessung links startet gleich. Abduktion halten.",
+      "neck.status": "Nackenmessung",
+      "neck.prepTitle": "Kopf langsam drehen",
+      "neck.prepSubtitle": "Langsam links/rechts drehen, Schultern stabil, dann Countdown.",
+      "neck.armHint": "Langsam links und rechts drehen, nicht zu weit",
+      "neck.recognizing": "Kopf-/Nackenhaltung wird erkannt…",
+      "neck.voice": "Kopf langsam drehen, Schultern stabil.",
+      "neck.countdownVoice": "Nackenmessung startet gleich. Pose halten.",
+      "neck.measuringVoice": "Nackenmessung läuft. Kopf langsam drehen.",
+      "balance.measuringTitle": "Balancemessung",
+      "balance.voice": "Balancemessung. Bitte stabil stehen.",
+      "balance.prepTitle": "Balance halten",
+      "balance.prepSubtitle": "Stabil stehen, danach Countdown.",
+      "balance.prepVoice": "Bitte stabil stehen und Balance halten.",
+      "balance.countdownVoice": "Balancemessung startet gleich. Stabil stehen.",
+      "report.title": "Berichtdetails",
+      "report.detail": "Detailbericht",
+      "report.loading": "Lädt…",
+      "report.youthGrowth": "Jugendwachstumsbericht",
+      "report.circumference": "Umfang",
+      "report.postureReport": "Haltungsbericht",
+      "report.scanTitle": "Bericht per QR",
+      "pro.measuringTitle": "Haltungsmessung läuft",
+      "pro.countdownTitle": "Haltung · Messstart",
+      "pro.prep.voice": "Checkliste abarbeiten. Rechte Hand: weiter. Linke Hand: beenden.",
+      "pro.prep.nextHint": "Auf Drehteller, Haltungsführung starten",
+      "guide.phase1.voice": "Schuhe und Socken aus, Füße auf Fußabdruck.",
+      "guide.phase1.subtitle": "Auf Drehteller, Füße auf Fußabdruck und Elektroden.",
+      "guide.phase1.focus": "Auf Drehteller und Fußabdruck ausrichten",
+      "guide.phase2.voice": "Griff halten, Arme ~45° geöffnet und still.",
+      "guide.phase2.subtitle": "Griff halten, Arme ~45° geöffnet.",
+      "guide.phase2.focus": "Griff halten, Arme geöffnet",
+      "guide.legacy1.voice": "Bitte Schuhe und Socken ausziehen.",
+      "guide.legacy2.voice": "Füße stabil, voller Kontakt mit Fußabdruck.",
+      "guide.legacy3.voice": "Griff mit beiden Händen halten.",
+      "guide.legacy4.voice": "Zum Bildschirm, Arme ~45° geöffnet und still.",
+      "legacy.girthSubtitle": "Auf Drehteller stehen, Umfangsmessung folgen.",
+      "legacy.bodycompGirthSubtitle": "Auf Drehteller, KZ und Umfang nacheinander.",
+      "generating.title": "Modell wird erstellt",
+      "generating.status": "Erstellung",
+      "measuring.completePosture": "Erfassung fertig. Bitte Weiter antippen.",
+      "measuring.turntableStopped": "Drehteller gestoppt. Bitte Weiter antippen.",
+      "measuring.collectionDone": "Erfassung fertig",
+      "measuring.turntableStoppedChip": "Drehteller gestoppt",
+      "gesture.raiseRightContinue": "Bitte rechte Hand heben zum Fortfahren.",
+      "guide.phase1.label": "Phase 1/2",
+      "guide.phase2.label": "Phase 2/2",
+      "guide.phase1.title": "Vorbereitung",
+      "guide.phase2.title": "Griff und Arme",
+      "guide.phase1.chipA": "Phase 1 · Aufstieg",
+      "guide.phase2.chipA": "Phase 2 · Griff",
+      "guide.phase1.point1.title": "Schuhe und Socken aus",
+      "guide.phase1.point1.body": "Fußsohlen vollständig auf Drehteller.",
+      "guide.phase1.point2.title": "Füße auf Fußabdruck",
+      "guide.phase1.point2.body": "Stabil stehen, voller Kontakt mit Fußabdruck.",
+      "guide.phase2.point1.title": "Griff mit beiden Händen",
+      "guide.phase2.point1.body": "Griff halten, Handflächen vollständig berühren.",
+      "guide.phase2.point2.title": "Arme ~45° öffnen",
+      "guide.phase2.point2.body": "Zum Bildschirm, Arme geöffnet und still.",
+      "guide.legacy1.index": "1/4",
+      "guide.legacy2.index": "2/4",
+      "guide.legacy3.index": "3/4",
+      "guide.legacy4.index": "4/4",
+      "guide.legacy1.title": "Schuhe und Socken aus",
+      "guide.legacy1.body": "Fußsohlen vollständig auf Drehteller.",
+      "guide.legacy1.focus": "Schuhe und Socken ausziehen",
+      "guide.legacy1.subtitle": "Bitte Schuhe und Socken ausziehen.",
+      "guide.legacy2.title": "Füße auf Fußabdruck",
+      "guide.legacy2.body": "Stabil stehen, voller Kontakt mit Fußabdruck.",
+      "guide.legacy2.focus": "Voller Fußkontakt",
+      "guide.legacy2.subtitle": "Füße stabil auf Fußabdruck.",
+      "guide.legacy3.title": "Griff mit beiden Händen",
+      "guide.legacy3.body": "Griff halten, voller Metallkontakt.",
+      "guide.legacy3.focus": "Griff mit beiden Händen",
+      "guide.legacy3.subtitle": "Bitte Griff mit beiden Händen halten.",
+      "guide.legacy4.title": "Arme ~45° öffnen",
+      "guide.legacy4.body": "Zum Bildschirm, Arme geöffnet und still.",
+      "guide.legacy4.focus": "Arme ~45° öffnen",
+      "guide.legacy4.subtitle": "Zum Bildschirm, Arme ~45° geöffnet.",
+      "gesture.raiseRightFor": "Bitte rechte Hand heben für {label}.",
+      "gesture.raiseLeftHold": "Linke Hand · {label}",
+      "gesture.raiseRightHold": "Rechte Hand · {label}",
+      "gesture.raiseRightContinueShort": "Rechte Hand · Weiter",
+      "gesture.keepStill": "Bitte halten",
+      "boarding.voiceStill": "Auf Drehteller, Arme locker, still.",
+      "boarding.enterGripPrep": "Griffvorbereitung folgt",
+      "boarding.tapContinueMeasure": "Bitte „Weiter messen“ antippen",
+      "common.collecting": "Erfassung läuft…",
+      "common.continueMeasure": "Weiter messen",
+      "common.completed": "Abgeschlossen",
+      "common.notMeasured": "Nicht gemessen",
+      "common.shoulderShort": "Schulter",
+      "countdown.digit3": "drei",
+      "countdown.digit2": "zwei",
+      "countdown.digit1": "eins",
+      "weight.idleReturnSec": "{sec} s bis Rückkehr zur Auswahl",
+      "shoulder.warningTip1": "Haltung abnormal. Bitte zuerst anpassen.",
+      "shoulder.warningTip2": "Nach stabiler Haltung neu starten.",
+      "shoulder.warningAdjust": "Bitte anpassen",
+      "placeholder.flowTitle": "Messbereich wählen",
+      "placeholder.status": "Einzelmessung",
+      "legacy.prepareMerged": "Griffvorbereitung zusammengeführt",
+      "settings.redirectHint": "Messablauf in „Geräteeinstellungen“ zusammengeführt. Falls kein Sprung:",
+      "settings.redirectLink": "Geräteeinstellungen öffnen"
     }
+  };
+
+  let _activeState = null;
+
+  const BIND = {
+    back: { sel: ".back-link", key: "common.back" },
+    backHome: { sel: ".back-link", key: "common.backHome" },
+    nextBtn: { sel: ".footer-hint .button.primary", key: "common.nextButton" },
+    tipsTitle: { sel: ".measurement-tips-title", key: "prep.tipsTitle" },
+    gestureBubble: { sel: "[data-gesture-bubble]", key: "common.gestureConfirm" },
+    gestureHold: { sel: "[data-gesture-hold-hint]", key: "common.gestureHold" }
+  };
+
+  const MEASURING_BINDINGS = [
+    { sel: ".status-bar span:nth-child(2)", key: "measuring.status" },
+    { sel: ".screen-title", key: "measuring.stillTitle" },
+    { sel: "[data-live-voice]", key: "measuring.voice" },
+    { sel: ".live-chip.ok", key: "measuring.postureOk" },
+    { sel: "[data-measuring-chip]", key: "measuring.turntableRotating" },
+    { sel: "[data-measuring-focus]", key: "measuring.doNotMove" },
+    BIND.tipsTitle,
+    BIND.nextBtn
+  ];
+
+  const BOARDING_BINDINGS = [
+    { sel: ".status-bar span:nth-child(2)", key: "boarding.status" },
+    BIND.back,
+    { sel: ".text-link", key: "common.prepPage" },
+    { sel: ".screen-title", key: "boarding.title" },
+    { sel: ".screen-subtitle", key: "boarding.subtitle" },
+    { sel: ".live-chip.ok", key: "boarding.stanceChip" },
+    { sel: "[data-auto-detect-status]", key: "boarding.recognizingStance" },
+    BIND.nextBtn
+  ];
+
+  const COUNTDOWN_BINDINGS = [
+    { sel: ".status-bar span:nth-child(2)", key: "countdown.startStatus" },
+    BIND.back,
+    { sel: ".text-link", key: "countdown.still" },
+    { sel: ".screen-title", key: "countdown.soonTitle" },
+    { sel: ".countdown-pose-caption", key: "countdown.poseCaption" },
+    { sel: ".countdown-soon-caption", key: "countdown.soonCaption" },
+    { sel: "[data-stage-done-hint]", key: "countdown.keepPose" },
+    BIND.tipsTitle,
+    BIND.nextBtn
+  ];
+
+  const FINISH_DONE_BINDINGS = [
+    { sel: ".status-bar span:nth-child(2)", key: "finishDone.status" },
+    BIND.back,
+    { sel: ".text-link", key: "finishDone.status" },
+    { sel: ".screen-title", key: "finishDone.title" },
+    BIND.gestureBubble,
+    BIND.gestureHold,
+    { sel: "[data-finish-option='report'] strong", key: "finish.completeMeasure" },
+    { sel: "[data-finish-option='report'] span:not(strong)", key: "finish.scanReportShort" },
+    { sel: "[data-next-title]", key: "finish.continueNext" },
+    { sel: "[data-next-desc]", key: "finish.continueOrder" },
+    { sel: ".scheme-one-weak a", key: "common.done" },
+    { sel: "[data-finish-remeasure]", key: "finish.remeasure" }
+  ];
+
+  const POSITION_BINDINGS = [
+    { sel: ".status-bar span:nth-child(2)", key: "position.angleStatus" },
+    BIND.back,
+    { sel: ".text-link", key: "common.prepPage" },
+    { sel: ".screen-title", key: "position.title" },
+    { sel: ".screen-subtitle", key: "position.subtitle" },
+    { sel: ".live-chip.ok", key: "position.poseChip" },
+    { sel: ".guide-arm-hint", key: "position.armHint" },
+    { sel: "[data-auto-detect-status]", key: "position.recognizing" },
+    BIND.nextBtn
+  ];
+
+  const PAGE_BINDINGS = {
+    "standby.html": [
+      { sel: "[data-standby-no-nav].standby-settings-link", key: "standby.settings" },
+      { sel: ".standby-home-hit__label", key: "standby.enterHome" },
+      { sel: ".standby-start-hint", key: "standby.startHint" },
+      { sel: ".standby-weight-entry__label", key: "standby.weightEntry" },
+      { sel: ".standby-hub-hint", key: "common.standbyHubHint" },
+      { sel: ".settings-group-hint", key: "common.standbyEmptyHint" },
+      { sel: "a.standby-settings-link:not(.standby-settings-link--top)", key: "standby.settings" }
+    ],
+    "home.html": [
+      { sel: ".status-bar span:last-child", key: "home.status" },
+      { sel: ".back-link", key: "common.backHome" },
+      { sel: ".screen-title", key: "home.title" },
+      { sel: "[data-show-if-no-home-tiles]", key: "home.emptyHint" }
+    ],
+    "settings.html": [
+      { sel: ".status-bar span:last-child", key: "common.settings" },
+      { sel: ".back-link", key: "common.backHome" },
+      { sel: ".screen-title", key: "settings.title" },
+      { sel: "#settings-group-measure-flow", key: "settings.measureFlow" },
+      { sel: "#settings-group-system", key: "settings.system" }
+    ],
+    "settings-language.html": [
+      { sel: ".status-bar span:last-child", key: "settings.language" },
+      { sel: ".back-link", key: "common.backSettings" },
+      { sel: ".screen-title", key: "settings.languageTitle" }
+    ],
+    "single-select.html": [
+      { sel: ".status-bar span:last-child", key: "singleSelect.status" },
+      { sel: ".text-link", key: "singleSelect.pickPart" },
+      { sel: ".screen-title", key: "singleSelect.title" },
+      { sel: ".dynamic-lab-scope-hint", key: "singleSelect.hint" },
+      { sel: "[data-show-if-no-single]", key: "singleSelect.emptyHint" },
+      { sel: "[data-show-if-single-key='singleShoulder'] .card-title", key: "singleSelect.shoulderTitle" },
+      { sel: "[data-show-if-single-key='singleShoulder'] .card-desc", key: "singleSelect.shoulderDesc" },
+      { sel: "[data-show-if-single-key='singleNeck'] .card-title", key: "singleSelect.neckTitle" },
+      { sel: "[data-show-if-single-key='singleNeck'] .card-desc", key: "singleSelect.neckDesc" }
+    ],
+    "standard-user-prep.html": [
+      { sel: ".status-bar span:last-child", key: "prep.title" },
+      { sel: ".text-link", key: "prep.title" },
+      { sel: ".screen-title", key: "prep.title" },
+      { sel: ".screen-subtitle", key: "prep.subtitle" },
+      BIND.gestureBubble,
+      BIND.gestureHold,
+      { sel: "[data-prep-option='exit'] strong", key: "common.exitMeasure" },
+      { sel: "[data-prep-option='exit'] span", key: "common.returnMeasureList" },
+      { sel: "[data-prep-option='next'] strong", key: "common.nextStep" },
+      { sel: "[data-prep-option='next'] span", key: "prep.nextHint" }
+    ],
+    "pro-user-prep.html": [
+      { sel: ".status-bar span:last-child", key: "prep.title" },
+      { sel: ".text-link", key: "prep.title" },
+      { sel: ".screen-title", key: "prep.title" },
+      { sel: ".screen-subtitle", key: "prep.subtitle" },
+      BIND.gestureBubble,
+      BIND.gestureHold,
+      { sel: "[data-prep-option='exit'] strong", key: "common.exitMeasure" },
+      { sel: "[data-prep-option='exit'] span", key: "common.returnMeasureList" },
+      { sel: "[data-prep-option='next'] strong", key: "common.nextStep" },
+      { sel: "[data-prep-option='next'] span", key: "pro.prep.nextHint" }
+    ],
+    "standard-measuring.html": MEASURING_BINDINGS,
+    "pro-measuring.html": [
+      { sel: ".status-bar span:nth-child(2)", key: "measuring.status" },
+      { sel: ".screen-title", key: "measuring.stillTitle" },
+      { sel: "[data-live-voice]", key: "measuring.voice" },
+      { sel: ".live-chip.ok", key: "measuring.postureOk" },
+      BIND.tipsTitle,
+      BIND.nextBtn
+    ],
+    "standard-bodycomp-prep.html": BOARDING_BINDINGS,
+    "pro-prepare.html": [
+      { sel: ".status-bar span:nth-child(2)", key: "boarding.status" },
+      BIND.back,
+      { sel: ".screen-title", key: "boarding.title" },
+      { sel: ".screen-subtitle", key: "boarding.subtitlePro" },
+      { sel: ".live-chip.ok", key: "boarding.stanceChip" },
+      { sel: "[data-auto-detect-status]", key: "boarding.recognizingStance" },
+      BIND.nextBtn
+    ],
+    "standard-position.html": POSITION_BINDINGS,
+    "standard-grip-prep.html": [
+      { sel: ".status-bar span:nth-child(2)", key: "grip.contactStatus" },
+      BIND.back,
+      { sel: ".text-link", key: "common.prepPage" },
+      { sel: ".screen-title", key: "grip.contactTitle" },
+      { sel: ".screen-subtitle", key: "grip.contactSubtitle" },
+      BIND.nextBtn
+    ],
+    "standard-countdown.html": COUNTDOWN_BINDINGS,
+    "pro-countdown.html": [
+      { sel: ".status-bar span:nth-child(2)", key: "common.startMeasure" },
+      BIND.back,
+      { sel: ".screen-title", key: "countdown.soonTitle" },
+      { sel: ".countdown-pose-caption", key: "countdown.poseCaptionPro" },
+      { sel: ".countdown-soon-caption", key: "countdown.soonCaption" },
+      { sel: "[data-stage-done-hint]", key: "countdown.keepPose" },
+      BIND.tipsTitle,
+      BIND.nextBtn
+    ],
+    "standard-next-step.html": FINISH_DONE_BINDINGS,
+    "standard-next-step-touch.html": FINISH_DONE_BINDINGS,
+    "standard-result.html": [
+      { sel: ".status-bar span:nth-child(2)", key: "finish.title" },
+      { sel: ".back-link", key: "common.returnHome" },
+      { sel: ".text-link", key: "common.viewResult" },
+      { sel: ".screen-title", key: "finish.title" },
+      { sel: ".screen-subtitle", key: "finish.subtitle" },
+      { sel: "[data-finish-option='report'] strong", key: "finish.scanReport" },
+      { sel: "[data-finish-option='report'] span", key: "finish.scanPhone" },
+      { sel: "[data-next-title]", key: "finish.continueNext" },
+      { sel: "[data-next-desc]", key: "finish.continueOrder" },
+      { sel: ".scheme-one-weak a", key: "common.done" }
+    ],
+    "pro-result.html": [
+      { sel: ".status-bar span:nth-child(2)", key: "finish.title" },
+      { sel: ".back-link", key: "common.returnHome" },
+      { sel: ".screen-title", key: "finish.title" },
+      { sel: ".screen-subtitle", key: "finish.subtitle" }
+    ],
+    "standard-generating.html": [
+      { sel: ".status-bar span:nth-child(2)", key: "generating.status" },
+      { sel: ".screen-title", key: "generating.title" },
+      { sel: "[data-generating-label]", key: "generating.progress", fallback: "模型生成中" }
+    ],
+    "height-confirm.html": [
+      { sel: ".status-bar span:nth-child(2)", key: "height.status" },
+      BIND.back,
+      { sel: ".screen-title", key: "height.title" },
+      { sel: ".screen-subtitle", key: "height.subtitle" },
+      { sel: ".height-adjust-value-hint", key: "height.hint" },
+      { sel: ".height-adjust-confirm", key: "height.confirm" }
+    ],
+    "weight-standalone-measuring.html": [
+      { sel: ".status-bar span:nth-child(2)", key: "weight.title" },
+      { sel: ".back-link", key: "common.backProjectSelect" },
+      { sel: ".screen-title", key: "weight.title" },
+      { sel: ".weight-measure-tip-list li:nth-child(1)", key: "weight.tipStand" },
+      { sel: ".weight-measure-tip-list li:nth-child(2)", key: "weight.tipStill" }
+    ],
+    "weight-standalone-result.html": [
+      { sel: ".status-bar span:nth-child(2)", key: "weight.title" },
+      { sel: ".back-link", key: "common.backProjectSelect" },
+      { sel: ".screen-title", key: "weight.title" },
+      { sel: ".weight-result-info-card__label", key: "weight.resultTime" },
+      { sel: "[data-weight-return-now]", key: "common.returnNow" },
+      { sel: "[data-weight-idle-label]", key: "weight.idleReturn" }
+    ],
+    "single-prepare-shoulder.html": [
+      { sel: ".status-bar span:nth-child(2)", key: "shoulder.status" },
+      BIND.back,
+      { sel: ".text-link", key: "common.prepPage" },
+      { sel: ".section-label__kicker", key: "shoulder.labKicker" },
+      { sel: ".section-label__title", key: "shoulder.status" },
+      { sel: ".screen-title", key: "shoulder.prepTitle" },
+      { sel: ".screen-subtitle", key: "shoulder.prepSubtitle" },
+      { sel: ".live-chip:not(.ok)", key: "shoulder.leftGuide" },
+      { sel: ".live-chip.ok", key: "shoulder.recognizing" },
+      { sel: ".live-focus", key: "shoulder.leftRaise" },
+      { sel: ".auto-hint strong", key: "countdown.prepDone" }
+    ],
+    "single-prepare-neck.html": [
+      { sel: ".status-bar span:nth-child(2)", key: "neck.status" },
+      BIND.back,
+      { sel: ".text-link", key: "common.prepPage" },
+      { sel: ".section-label__kicker", key: "shoulder.labKicker" },
+      { sel: ".section-label__title", key: "neck.status" },
+      { sel: ".screen-title", key: "neck.prepTitle" },
+      { sel: ".screen-subtitle", key: "neck.prepSubtitle" },
+      { sel: ".guide-arm-hint", key: "neck.armHint" },
+      { sel: ".live-chip.ok", key: "position.poseChip" },
+      { sel: "[data-auto-detect-status]", key: "neck.recognizing" },
+      { sel: ".guide-phase-btn", key: "countdown.prepDone" }
+    ],
+    "single-prepare-balance.html": [
+      { sel: ".status-bar span:nth-child(2)", key: "item.balance.title" },
+      BIND.back,
+      { sel: ".text-link", key: "common.prepPage" },
+      { sel: ".screen-title", key: "balance.prepTitle" },
+      { sel: ".screen-subtitle", key: "balance.prepSubtitle" },
+      { sel: ".guide-phase-btn", key: "countdown.prepDone" }
+    ],
+    "single-countdown-shoulder.html": COUNTDOWN_BINDINGS,
+    "single-countdown-neck.html": COUNTDOWN_BINDINGS,
+    "single-countdown-balance.html": COUNTDOWN_BINDINGS,
+    "single-measuring-shoulder-left.html": [
+      { sel: ".text-link", key: "measuring.status" },
+      { sel: ".single-shoulder-progress-status", key: "measuring.status" }
+    ],
+    "single-measuring-shoulder-right.html": [
+      { sel: ".text-link", key: "measuring.status" },
+      { sel: ".single-shoulder-progress-status", key: "measuring.status" }
+    ],
+    "single-measuring-neck.html": [
+      { sel: ".status-bar span:nth-child(2)", key: "measuring.status" },
+      { sel: ".screen-title", key: "measuring.stillTitle" },
+      BIND.tipsTitle
+    ],
+    "single-measuring-balance.html": [
+      { sel: ".status-bar span:nth-child(2)", key: "measuring.status" },
+      { sel: ".screen-title", key: "balance.measuringTitle" },
+      BIND.tipsTitle
+    ],
+    "single-result-shoulder.html": FINISH_DONE_BINDINGS,
+    "single-result-neck.html": FINISH_DONE_BINDINGS,
+    "single-result-balance.html": FINISH_DONE_BINDINGS,
+    "report-detail.html": [
+      { sel: ".status-bar span:nth-child(2)", key: "report.title" },
+      BIND.back,
+      { sel: ".text-link", key: "report.detail" },
+      { sel: ".screen-title", key: "report.title" },
+      { sel: "[data-report-metric] strong", key: "metric.weight", match: "体重" },
+      { sel: "[data-report-value]", key: "report.loading" }
+    ],
+    "report-scan-login.html": [
+      { sel: ".screen-title", key: "report.scanTitle" }
+    ],
+    "legacy-girth-prep.html": [
+      { sel: ".screen-subtitle", key: "legacy.girthSubtitle" },
+      BIND.back
+    ],
+    "legacy-bodycomp-girth-prep.html": [
+      { sel: ".screen-subtitle", key: "legacy.bodycompGirthSubtitle" },
+      BIND.back
+    ],
+    "standard-prepare.html": [
+      { sel: ".screen-title", key: "legacy.prepareMerged" }
+    ],
+    "single-flow-placeholder.html": [
+      { sel: ".status-bar span:nth-child(2)", key: "placeholder.status" },
+      { sel: ".screen-title", key: "placeholder.flowTitle" }
+    ],
+    "settings-modes.html": [
+      { sel: "main p", key: "settings.redirectHint" },
+      { sel: "main a", key: "settings.redirectLink" }
+    ]
+  };
+
+  const PAGE_VOICE_KEYS = {
+    "standard-measuring.html": "measuring.voice",
+    "pro-measuring.html": "measuring.voiceStill",
+    "standard-bodycomp-prep.html": "boarding.voice",
+    "pro-prepare.html": "boarding.voicePro",
+    "standard-position.html": "position.voice",
+    "standard-grip-prep.html": "grip.voiceContact",
+    "standard-countdown.html": "countdown.voice",
+    "pro-countdown.html": "countdown.voiceStill",
+    "standard-next-step.html": "finishDone.voice",
+    "standard-next-step-touch.html": "finishDone.voiceTouch",
+    "standard-user-prep.html": "prep.voice",
+    "pro-user-prep.html": "pro.prep.voice",
+    "single-prepare-shoulder.html": "shoulder.voice",
+    "single-prepare-neck.html": "neck.voice",
+    "single-prepare-balance.html": "balance.prepVoice",
+    "single-countdown-shoulder.html": "shoulder.countdownVoice",
+    "single-countdown-neck.html": "neck.countdownVoice",
+    "single-countdown-balance.html": "balance.countdownVoice",
+    "single-measuring-neck.html": "neck.measuringVoice",
+    "single-measuring-balance.html": "balance.voice",
+    "standard-generating.html": "generating.voice"
   };
 
   const PAGE_TITLE_KEYS = {
@@ -401,7 +1161,28 @@
     "pro-user-prep.html": "prep.title",
     "standard-result.html": "finish.title",
     "pro-result.html": "finish.title",
-    "single-select.html": "singleSelect.title"
+    "single-select.html": "singleSelect.title",
+    "standard-measuring.html": "measuring.status",
+    "pro-measuring.html": "pro.measuringTitle",
+    "standard-bodycomp-prep.html": "boarding.title",
+    "pro-prepare.html": "boarding.title",
+    "standard-position.html": "position.title",
+    "standard-grip-prep.html": "grip.title",
+    "standard-countdown.html": "countdown.soonTitle",
+    "pro-countdown.html": "pro.countdownTitle",
+    "standard-next-step.html": "finishDone.title",
+    "standard-next-step-touch.html": "finishDone.title",
+    "standard-generating.html": "generating.title",
+    "height-confirm.html": "height.title",
+    "weight-standalone-measuring.html": "weight.title",
+    "weight-standalone-result.html": "weight.title",
+    "single-prepare-shoulder.html": "shoulder.status",
+    "single-prepare-neck.html": "neck.status",
+    "single-prepare-balance.html": "balance.prepTitle",
+    "single-measuring-neck.html": "neck.status",
+    "single-measuring-balance.html": "balance.measuringTitle",
+    "report-detail.html": "report.title",
+    "report-scan-login.html": "report.scanTitle"
   };
 
   function parseSavedLanguage() {
@@ -424,7 +1205,7 @@
   }
 
   function t(key, fallback, params) {
-    const lang = getDeviceLanguage();
+    const lang = getDeviceLanguage(_activeState);
     const dict = DEVICE_LOCALES[lang] || DEVICE_LOCALES.zh;
     let str = dict[key] ?? DEVICE_LOCALES.zh[key] ?? fallback ?? key;
     if (params && typeof params === "object") {
@@ -456,12 +1237,12 @@
   function applyPageBindings(state) {
     const page = (window.location.pathname.split("/").pop() || "").toLowerCase();
     const root = document;
+    const s = state || { deviceLanguage: getDeviceLanguage() };
 
     document.querySelectorAll("[data-i18n]").forEach((el) => {
       const key = el.dataset.i18n;
       if (!key) return;
-      const fb = el.dataset.i18nFallback || el.textContent;
-      el.textContent = t(key, fb);
+      el.textContent = t(key, el.dataset.i18nFallback || el.textContent);
     });
 
     document.querySelectorAll("[data-i18n-placeholder]").forEach((el) => {
@@ -476,45 +1257,28 @@
       el.dataset.voiceText = t(key, el.dataset.voiceText);
     });
 
-    const lang = getDeviceLanguage(state);
-    document.documentElement.lang = lang === "de" ? "de" : "zh-CN";
-
-    const titleKey = PAGE_TITLE_KEYS[page];
-    if (titleKey) {
-      document.title = t(titleKey);
+    const voiceKey = PAGE_VOICE_KEYS[page];
+    if (voiceKey) {
+      document.querySelectorAll("[data-voice-text]").forEach((el) => {
+        if (!el.dataset.i18nVoice) {
+          el.dataset.voiceText = t(voiceKey, el.dataset.voiceText);
+        }
+      });
     }
 
-    document.querySelectorAll("[data-lang-indicator]").forEach((el) => {
-      el.hidden = el.dataset.langIndicator !== state.deviceLanguage;
+    (PAGE_BINDINGS[page] || []).forEach((binding) => {
+      if (binding.match) {
+        root.querySelectorAll(binding.sel).forEach((el) => {
+          if (el.textContent.trim() === binding.match) {
+            el.textContent = t(binding.key, binding.match);
+          }
+        });
+        return;
+      }
+      applyBinding(binding, root);
     });
 
-    if (page === "standby.html") {
-      applyBinding({ sel: "[data-standby-no-nav].standby-settings-link", key: "standby.settings" }, root);
-      applyBinding({ sel: ".standby-home-hit__label", key: "standby.enterHome" }, root);
-      applyBinding({ sel: ".standby-start-hint", key: "standby.startHint" }, root);
-      applyBinding({ sel: ".standby-weight-entry__label", key: "standby.weightEntry" }, root);
-    }
-
-    if (page === "home.html") {
-      applyBinding({ sel: ".status-bar span:last-child", key: "home.status" }, root);
-      applyBinding({ sel: ".back-link", key: "common.backHome" }, root);
-      applyBinding({ sel: ".screen-title", key: "home.title" }, root);
-      applyBinding({ sel: "[data-show-if-no-home-tiles]", key: "home.emptyHint" }, root);
-    }
-
     if (page === "settings.html") {
-      applyBinding({ sel: ".status-bar span:last-child", key: "common.settings" }, root);
-      applyBinding({ sel: ".back-link", key: "common.backHome" }, root);
-      applyBinding({ sel: ".screen-title", key: "settings.title" }, root);
-      applyBinding({ sel: "#settings-group-measure-flow", key: "settings.measureFlow" }, root);
-      applyBinding({ sel: "#settings-group-system", key: "settings.system" }, root);
-      const settingsLabels = [
-        ["[data-config-key='bodyCompositionPrepEnabled']", "settings.showPrepPage", ".settings-row__label"],
-        ["", "settings.showPrepHint", ".settings-row__value--hint"],
-        ["", "settings.voiceBroadcast", ".settings-row:nth-child(2) .settings-row__label"],
-        ["", "settings.voiceDemoHint", ".settings-row__subhint"],
-        ["", "settings.voiceGuide", ".settings-row:nth-child(2) .settings-row__value--hint"]
-      ];
       const measureRows = root.querySelectorAll("#measurement-flow .settings-row");
       if (measureRows[0]) {
         const label = measureRows[0].querySelector(".settings-row__label");
@@ -547,57 +1311,48 @@
         if (systemKeys[i]) el.textContent = t(systemKeys[i]);
       });
       root.querySelectorAll(".settings-row__value").forEach((el) => {
-        if (el.textContent.trim() === "已开启") el.textContent = t("settings.on");
+        const raw = el.textContent.trim();
+        if (raw === "已开启" || raw === "Ein") el.textContent = t("settings.on");
       });
     }
 
-    if (page === "single-select.html") {
-      applyBinding({ sel: ".status-bar span:last-child", key: "singleSelect.status" }, root);
-      applyBinding({ sel: ".text-link", key: "singleSelect.pickPart" }, root);
-      applyBinding({ sel: ".screen-title", key: "singleSelect.title" }, root);
-      applyBinding({ sel: ".dynamic-lab-scope-hint", key: "singleSelect.hint" }, root);
-      applyBinding({ sel: "[data-show-if-no-single]", key: "singleSelect.emptyHint" }, root);
-      applyBinding({ sel: "[data-show-if-single-key='singleShoulder'] .card-title", key: "singleSelect.shoulderTitle" }, root);
-      applyBinding({ sel: "[data-show-if-single-key='singleShoulder'] .card-desc", key: "singleSelect.shoulderDesc" }, root);
-      applyBinding({ sel: "[data-show-if-single-key='singleNeck'] .card-title", key: "singleSelect.neckTitle" }, root);
-      applyBinding({ sel: "[data-show-if-single-key='singleNeck'] .card-desc", key: "singleSelect.neckDesc" }, root);
+    if (page === "report-detail.html") {
+      const metricKeys = {
+        体重: "metric.weight",
+        身高: "metric.height",
+        体成分: "metric.bodyComp",
+        青少年成长报告: "report.youthGrowth",
+        体围: "report.circumference",
+        体态报告: "report.postureReport"
+      };
+      root.querySelectorAll("[data-report-metric] strong").forEach((el) => {
+        const key = metricKeys[el.textContent.trim()];
+        if (key) el.textContent = t(key);
+      });
+      root.querySelectorAll("[data-report-value]").forEach((el) => {
+        if (el.textContent.includes("加载")) el.textContent = t("report.loading");
+      });
     }
 
-    if (page === "standard-user-prep.html" || page === "pro-user-prep.html") {
-      applyBinding({ sel: ".status-bar span:last-child", key: "prep.title" }, root);
-      applyBinding({ sel: ".text-link", key: "prep.title" }, root);
-      applyBinding({ sel: ".screen-title", key: "prep.title" }, root);
-      applyBinding({ sel: ".screen-subtitle", key: "prep.subtitle" }, root);
-      applyBinding({ sel: "[data-gesture-bubble]", key: "common.gestureConfirm" }, root);
-      applyBinding({ sel: "[data-gesture-hold-hint]", key: "common.gestureHold" }, root);
-      applyBinding({ sel: "[data-prep-option='exit'] strong", key: "common.exitMeasure" }, root);
-      applyBinding({ sel: "[data-prep-option='exit'] span", key: "common.returnMeasureList" }, root);
-      applyBinding({ sel: "[data-prep-option='next'] strong", key: "common.nextStep" }, root);
-      applyBinding({ sel: "[data-prep-option='next'] span", key: "prep.nextHint" }, root);
-      const prepRoot = root.querySelector("[data-prep-gesture-advance], [data-prep-exit]");
-      if (prepRoot?.dataset) {
-        prepRoot.dataset.voiceText = t("prep.voice", prepRoot.dataset.voiceText);
-      }
-    }
-
-    if (page.endsWith("-result.html") || page === "standard-result.html" || page === "pro-result.html") {
-      applyBinding({ sel: ".status-bar span:last-child", key: "finish.title" }, root);
-      applyBinding({ sel: ".back-link", key: "common.returnHome" }, root);
-      applyBinding({ sel: ".text-link", key: "common.viewResult" }, root);
-      applyBinding({ sel: ".screen-title", key: "finish.title" }, root);
+    if (page.endsWith("-result.html")) {
       root.querySelectorAll(".screen-subtitle").forEach((el) => {
         el.textContent = t("finish.subtitle");
       });
-      applyBinding({ sel: "[data-finish-option='report'] strong", key: "finish.scanReport" }, root);
-      applyBinding({ sel: "[data-finish-option='report'] span", key: "finish.scanPhone" }, root);
-      applyBinding({ sel: "[data-next-title]", key: "finish.continueNext" }, root);
-      applyBinding({ sel: "[data-next-desc]", key: "finish.continueOrder" }, root);
-      applyBinding({ sel: ".scheme-one-weak a", key: "common.done" }, root);
     }
+
+    document.documentElement.lang = getDeviceLanguage(s) === "de" ? "de" : "zh-CN";
+
+    const titleKey = PAGE_TITLE_KEYS[page];
+    if (titleKey) document.title = t(titleKey);
+
+    document.querySelectorAll("[data-lang-indicator]").forEach((el) => {
+      el.hidden = el.dataset.langIndicator !== s.deviceLanguage;
+    });
   }
 
   function applyDeviceI18n(state) {
-    applyPageBindings(state || { deviceLanguage: getDeviceLanguage() });
+    _activeState = state || { deviceLanguage: getDeviceLanguage() };
+    applyPageBindings(_activeState);
   }
 
   window.Vapro7I18n = {

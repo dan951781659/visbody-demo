@@ -989,7 +989,7 @@ function appendHomeTileContent(link, tile) {
   if (tile.recommended) {
     const tag = document.createElement("div");
     tag.className = "tag";
-    tag.textContent = "推荐";
+    tag.textContent = t("common.recommended");
     link.appendChild(tag);
   }
 
@@ -1840,32 +1840,34 @@ function setupGuideSequence() {
   const phases = [
     {
       id: 1,
-      label: "阶段 1/2",
-      voice: "请先脱鞋脱袜，并将双脚站稳在脚印位置。",
-      subtitle: "站上转台，双脚对准脚印与电机片位置。",
-      focus: "请站上转台并对准脚印",
-      chipA: "阶段一 · 上台前",
+      labelKey: "guide.phase1.label",
+      voiceKey: "guide.phase1.voice",
+      subtitleKey: "guide.phase1.subtitle",
+      focusKey: "guide.phase1.focus",
+      chipAKey: "guide.phase1.chipA",
+      titleKey: "guide.phase1.title",
       pose: "pose-boarding",
       sceneClass: "phase-stage-boarding",
       showFeet: true,
       points: [
-        { title: "脱鞋脱袜", body: "保持足底可完整接触转台。" },
-        { title: "双脚接触脚印", body: "双脚站稳，足底与脚印充分接触。" }
+        { titleKey: "guide.phase1.point1.title", bodyKey: "guide.phase1.point1.body" },
+        { titleKey: "guide.phase1.point2.title", bodyKey: "guide.phase1.point2.body" }
       ]
     },
     {
       id: 2,
-      label: "阶段 2/2",
-      voice: "请双手握住扶手，双臂展开约四十五度并保持静止。",
-      subtitle: "先握扶手，再将双臂展开至约 45°。",
-      focus: "请握住扶手并展开双臂",
-      chipA: "阶段二 · 扶手姿势",
+      labelKey: "guide.phase2.label",
+      voiceKey: "guide.phase2.voice",
+      subtitleKey: "guide.phase2.subtitle",
+      focusKey: "guide.phase2.focus",
+      chipAKey: "guide.phase2.chipA",
+      titleKey: "guide.phase2.title",
       pose: "pose-hold",
       sceneClass: "phase-stage-rails",
       showFeet: false,
       points: [
-        { title: "双手握住扶手", body: "双手握住扶手，保持手掌充分接触。" },
-        { title: "双臂展开 45°", body: "面向屏幕，双臂展开并保持静止。" }
+        { titleKey: "guide.phase2.point1.title", bodyKey: "guide.phase2.point1.body" },
+        { titleKey: "guide.phase2.point2.title", bodyKey: "guide.phase2.point2.body" }
       ]
     }
   ];
@@ -1896,8 +1898,8 @@ function setupGuideSequence() {
   let phaseTwoUnlocked = initialPhase === 2;
 
   function speakPhase(phase) {
-    if (!phase?.voice) return;
-    speakText(phase.voice);
+    if (!phase?.voiceKey) return;
+    speakText(t(phase.voiceKey));
   }
 
   function renderPhase(phaseId, shouldSpeak = false) {
@@ -1905,15 +1907,15 @@ function setupGuideSequence() {
     if (!phase) return;
     currentPhase = phaseId;
 
-    if (phaseLabelEl) phaseLabelEl.textContent = phase.label;
-    if (titleEl) titleEl.textContent = phaseId === 1 ? "上台前准备" : "扶手与手臂姿势";
-    if (subtitleEl) subtitleEl.textContent = phase.subtitle;
-    if (focusEl) focusEl.textContent = phase.focus;
-    if (chipAEl) chipAEl.textContent = phase.chipA;
-    if (titleAEl) titleAEl.textContent = phase.points[0]?.title || "";
-    if (bodyAEl) bodyAEl.textContent = phase.points[0]?.body || "";
-    if (titleBEl) titleBEl.textContent = phase.points[1]?.title || "";
-    if (bodyBEl) bodyBEl.textContent = phase.points[1]?.body || "";
+    if (phaseLabelEl) phaseLabelEl.textContent = t(phase.labelKey);
+    if (titleEl) titleEl.textContent = t(phase.titleKey);
+    if (subtitleEl) subtitleEl.textContent = t(phase.subtitleKey);
+    if (focusEl) focusEl.textContent = t(phase.focusKey);
+    if (chipAEl) chipAEl.textContent = t(phase.chipAKey);
+    if (titleAEl) titleAEl.textContent = t(phase.points[0]?.titleKey || "");
+    if (bodyAEl) bodyAEl.textContent = t(phase.points[0]?.bodyKey || "");
+    if (titleBEl) titleBEl.textContent = t(phase.points[1]?.titleKey || "");
+    if (bodyBEl) bodyBEl.textContent = t(phase.points[1]?.bodyKey || "");
     stage.querySelectorAll("[data-guide-points] li").forEach((item) => {
       item.classList.add("is-active");
     });
@@ -1931,7 +1933,7 @@ function setupGuideSequence() {
     const boardingHints = stage.querySelector("[data-guide-boarding-hints]");
     if (boardingHints) boardingHints.hidden = phaseId !== 1;
     if (circleEl) circleEl.hidden = false;
-    stage.dataset.voiceText = phase.voice;
+    stage.dataset.voiceText = t(phase.voiceKey);
 
     phaseTabs.forEach((tab) => {
       const tabPhase = Number(tab.dataset.guidePhaseTab);
@@ -1987,36 +1989,36 @@ function setupGuideSequence() {
 function setupGuideSequenceLegacyLoop(stage) {
   const steps = [
     {
-      index: "1/4",
-      title: "脱鞋脱袜",
-      body: "保持足底可完整接触转台。",
-      focus: "请脱鞋脱袜",
-      subtitle: "请先脱鞋脱袜。",
-      voice: "请先脱鞋脱袜。"
+      indexKey: "guide.legacy1.index",
+      titleKey: "guide.legacy1.title",
+      bodyKey: "guide.legacy1.body",
+      focusKey: "guide.legacy1.focus",
+      subtitleKey: "guide.legacy1.subtitle",
+      voiceKey: "guide.legacy1.voice"
     },
     {
-      index: "2/4",
-      title: "双脚接触脚印",
-      body: "双脚站稳，足底与脚印充分接触。",
-      focus: "请双脚充分接触脚印",
-      subtitle: "请双脚站稳并充分接触脚印。",
-      voice: "请双脚站稳，足底与脚印充分接触。"
+      indexKey: "guide.legacy2.index",
+      titleKey: "guide.legacy2.title",
+      bodyKey: "guide.legacy2.body",
+      focusKey: "guide.legacy2.focus",
+      subtitleKey: "guide.legacy2.subtitle",
+      voiceKey: "guide.legacy2.voice"
     },
     {
-      index: "3/4",
-      title: "双手握住扶手",
-      body: "双手握住扶手，保持手掌与金属充分接触。",
-      focus: "请双手握住扶手",
-      subtitle: "请双手握住扶手。",
-      voice: "请双手握住扶手，并保持接触。"
+      indexKey: "guide.legacy3.index",
+      titleKey: "guide.legacy3.title",
+      bodyKey: "guide.legacy3.body",
+      focusKey: "guide.legacy3.focus",
+      subtitleKey: "guide.legacy3.subtitle",
+      voiceKey: "guide.legacy3.voice"
     },
     {
-      index: "4/4",
-      title: "双臂展开 45°",
-      body: "面向屏幕，双臂展开并保持静止。",
-      focus: "请双臂展开 45°",
-      subtitle: "请面向屏幕，双臂展开四十五度。",
-      voice: "请面向屏幕，双臂展开四十五度并保持静止。"
+      indexKey: "guide.legacy4.index",
+      titleKey: "guide.legacy4.title",
+      bodyKey: "guide.legacy4.body",
+      focusKey: "guide.legacy4.focus",
+      subtitleKey: "guide.legacy4.subtitle",
+      voiceKey: "guide.legacy4.voice"
     }
   ];
 
@@ -2032,13 +2034,13 @@ function setupGuideSequenceLegacyLoop(stage) {
     const step = steps[stepIndex];
     if (!step) return;
     currentIndex = stepIndex;
-    if (indexEl) indexEl.textContent = step.index;
-    if (titleEl) titleEl.textContent = step.title;
-    if (bodyEl) bodyEl.textContent = step.body;
-    if (focusEl) focusEl.textContent = step.focus;
-    if (subtitleEl) subtitleEl.textContent = step.subtitle;
-    stage.dataset.voiceText = step.voice;
-    if (shouldSpeak) speakText(step.voice);
+    if (indexEl) indexEl.textContent = t(step.indexKey);
+    if (titleEl) titleEl.textContent = t(step.titleKey);
+    if (bodyEl) bodyEl.textContent = t(step.bodyKey);
+    if (focusEl) focusEl.textContent = t(step.focusKey);
+    if (subtitleEl) subtitleEl.textContent = t(step.subtitleKey);
+    stage.dataset.voiceText = t(step.voiceKey);
+    if (shouldSpeak) speakText(t(step.voiceKey));
   }
 
   function advanceStep() {
@@ -2094,7 +2096,7 @@ function setupDemoAdvance() {
 }
 
 function speakCountdownDigit(seconds) {
-  const spoken = { 3: "三", 2: "二", 1: "一" };
+  const spoken = { 3: t("countdown.digit3"), 2: t("countdown.digit2"), 1: t("countdown.digit1") };
   if (spoken[seconds]) speakText(spoken[seconds]);
 }
 
@@ -2553,8 +2555,8 @@ function setupGestureRingModule(prepRoot) {
 
   const reportLabel = context === "finish" ? finishOptionShortLabel(reportEl) : "";
   const nextLabel = context === "finish" ? finishOptionShortLabel(nextEl) : "";
-  const prepExitLabel = prepDualHand ? finishOptionShortLabel(prepExitEl) : "退出测量";
-  const prepNextLabel = prepDualHand ? finishOptionShortLabel(prepNextEl) : "进入下一步";
+  const prepExitLabel = prepDualHand ? finishOptionShortLabel(prepExitEl) : t("common.exitMeasure");
+  const prepNextLabel = prepDualHand ? finishOptionShortLabel(prepNextEl) : t("common.nextStep");
 
   if (context === "finish" && finishPlan?.neither) return;
 
@@ -2562,15 +2564,15 @@ function setupGestureRingModule(prepRoot) {
     (module.dataset.gestureIdleHint && module.dataset.gestureIdleHint.trim()) ||
     (context === "finish"
       ? finishPlan.both
-        ? `举左手：${reportLabel}。举右手：${nextLabel}。`
+        ? `${t("gesture.leftHand", null, { label: reportLabel })} ${t("gesture.rightHand", null, { label: nextLabel })}`
         : finishPlan.onlyNext
-          ? `请举起右手并保持，以${nextLabel}。`
+          ? t("gesture.rightHandHold", null, { label: nextLabel })
           : finishPlan.onlyReport
-            ? `请举起右手并保持，以${reportLabel}。`
+            ? t("gesture.rightHandHold", null, { label: reportLabel })
             : ""
       : prepDualHand
-        ? `举左手：${prepExitLabel}。举右手：${prepNextLabel}。`
-        : "请举起右手");
+        ? `${t("gesture.leftHand", null, { label: prepExitLabel })} ${t("gesture.rightHand", null, { label: prepNextLabel })}`
+        : t("gesture.rightHandOnly"));
 
   let complete = false;
   let isRaised = false;
@@ -2642,7 +2644,7 @@ function setupGestureRingModule(prepRoot) {
       return;
     }
     if (hand === "left") {
-      flashFinishHint("请举起右手以继续。");
+      flashFinishHint(t("gesture.raiseRightContinue"));
       return;
     }
     beginHold("right");
@@ -2655,7 +2657,7 @@ function setupGestureRingModule(prepRoot) {
     }
     if (finishPlan.onlyNext) {
       if (hand === "left") {
-        flashFinishHint(`请举起右手以${nextLabel}。`);
+        flashFinishHint(t("gesture.raiseRightFor", { label: nextLabel }));
         return;
       }
       beginHold("right");
@@ -2663,7 +2665,7 @@ function setupGestureRingModule(prepRoot) {
     }
     if (finishPlan.onlyReport) {
       if (hand === "left") {
-        flashFinishHint(`请举起右手以${reportLabel}。`);
+        flashFinishHint(t("gesture.raiseRightFor", { label: reportLabel }));
         return;
       }
       beginHold("right");
@@ -2707,16 +2709,20 @@ function setupGestureRingModule(prepRoot) {
   function holdingBubbleFor(hand) {
     if (context === "prep") {
       if (prepDualHand) {
-        return hand === "left" ? `举起左手 · ${prepExitLabel}` : `举起右手 · ${prepNextLabel}`;
+        return hand === "left"
+          ? t("gesture.raiseLeftHold", { label: prepExitLabel })
+          : t("gesture.raiseRightHold", { label: prepNextLabel });
       }
-      return "举起右手 · 继续";
+      return t("gesture.raiseRightContinueShort");
     }
     if (finishPlan.both) {
-      return hand === "left" ? `举起左手 · ${reportLabel}` : `举起右手 · ${nextLabel}`;
+      return hand === "left"
+        ? t("gesture.raiseLeftHold", { label: reportLabel })
+        : t("gesture.raiseRightHold", { label: nextLabel });
     }
-    if (finishPlan.onlyNext) return `举起右手 · ${nextLabel}`;
-    if (finishPlan.onlyReport) return `举起右手 · ${reportLabel}`;
-    return "请保持";
+    if (finishPlan.onlyNext) return t("gesture.raiseRightHold", { label: nextLabel });
+    if (finishPlan.onlyReport) return t("gesture.raiseRightHold", { label: reportLabel });
+    return t("gesture.keepStill");
   }
 
   function prepTargetKey(hand) {
@@ -2749,9 +2755,9 @@ function setupGestureRingModule(prepRoot) {
     if (context === "prep") {
       setHumanPoseForHand(prepDualHand && poseHand ? poseHand : "right");
       if (bubble) {
-        bubble.textContent = "识别通过";
+        bubble.textContent = t("common.recognitionPass");
       }
-      speakText("识别通过。");
+      speakText(t("voice.recognitionPass"));
       if (prepDualHand && prepChoiceGroup) {
         const card = prepChoiceGroup.querySelector(`[data-prep-option="${prepKey}"]`);
         prepChoiceGroup.querySelectorAll("[data-prep-option]").forEach((el) => {
@@ -2775,9 +2781,9 @@ function setupGestureRingModule(prepRoot) {
     const card = key ? finishGroup?.querySelector(`[data-finish-option="${key}"]`) : null;
     setHumanPoseForHand(poseHand === "left" ? "left" : "right");
     if (bubble) {
-      bubble.textContent = "识别通过";
+      bubble.textContent = t("common.recognitionPass");
     }
-    speakText("识别通过。");
+    speakText(t("voice.recognitionPass"));
     if (finishGroup) {
       finishGroup.querySelectorAll("[data-finish-option]").forEach((el) => {
         el.classList.toggle("is-active", el === card);
@@ -2789,7 +2795,7 @@ function setupGestureRingModule(prepRoot) {
   function showWrongHand() {
     if (complete || context !== "prep") return;
     if (wrongHandTimer) window.clearTimeout(wrongHandTimer);
-    if (bubble) bubble.textContent = "请举起右手，左手无效";
+    if (bubble) bubble.textContent = t("gesture.wrongHand");
     module.classList.add("is-gesture-wrong");
     wrongHandTimer = window.setTimeout(() => {
       module.classList.remove("is-gesture-wrong");
@@ -2873,10 +2879,10 @@ function setupGestureRingModule(prepRoot) {
   speakText(
     prepRoot.dataset.voiceText ||
       (context === "finish"
-        ? "测量已完成。请举手确认下一步操作。"
+        ? t("finishDone.voice")
         : prepDualHand
-          ? "请按清单准备好后举手：右手进入下一步，左手退出测量。"
-          : "请举右手进入下一步。")
+          ? t("prep.voice")
+          : t("gesture.raiseRightNext"))
   );
 
   if (context === "prep" && autoDelayNum > 0) {
@@ -2915,12 +2921,12 @@ function setupAutoDetectAdvance() {
     let navigateTimer = null;
 
     if (warningMode) {
-      if (statusEl) statusEl.textContent = "正在识别...";
-      speakText("检测到姿态异常，请先调整姿势。");
+      if (statusEl) statusEl.textContent = t("common.recognizing");
+      speakText(t("pose.detectAbnormal"));
       root.classList.add("is-warning");
-      if (subtitleEl) subtitleEl.textContent = "检测到姿态异常，请先调整姿势后再继续。";
-      if (focusEl) focusEl.textContent = "请调整姿势";
-      if (statusEl) statusEl.textContent = "姿势异常";
+      if (subtitleEl) subtitleEl.textContent = t("pose.abnormalSubtitle");
+      if (focusEl) focusEl.textContent = t("pose.adjust");
+      if (statusEl) statusEl.textContent = t("pose.abnormal");
       return;
     }
 
@@ -2940,16 +2946,16 @@ function setupAutoDetectAdvance() {
       root.classList.add("is-aligned");
       const scene = root.querySelector(".bodycomp-prep-scene");
       if (scene) scene.classList.add("is-aligned");
-      if (statusEl) statusEl.textContent = "识别通过";
-      if (!skipRecognizedSpeak) speakText("识别通过。");
+      if (statusEl) statusEl.textContent = t("common.recognitionPass");
+      if (!skipRecognizedSpeak) speakText(t("voice.recognitionPass"));
     }
 
     if (voiceAdvanceNext && !isDemoManualAdvance()) {
       const autoHint = root.querySelector("[data-voice-auto-hint]");
       if (autoHint) autoHint.hidden = false;
-      if (statusEl) statusEl.textContent = "正在识别...";
+      if (statusEl) statusEl.textContent = t("common.recognizing");
       const voiceLine =
-        root.dataset.voiceText || "正在识别姿态，请保持不动。";
+        root.dataset.voiceText || t("voice.poseDetect");
       speakTextThen(voiceLine, () => {
         navigateTimer = window.setTimeout(() => {
           navigateToTarget(withStateQuery(voiceAdvanceNext, loadState()));
@@ -2960,8 +2966,8 @@ function setupAutoDetectAdvance() {
       return;
     }
 
-    if (statusEl) statusEl.textContent = "正在识别...";
-    speakText(root.dataset.voiceText || "正在识别姿态，请保持不动。");
+    if (statusEl) statusEl.textContent = t("common.recognizing");
+    speakText(root.dataset.voiceText || t("voice.poseDetect"));
 
     demoTimer = window.setTimeout(() => completeDemo(false), delay);
     setActivePageDemo({ cancel: cancelDemo });
@@ -3027,12 +3033,13 @@ function setupSchemeThreeGestureDemo() {
   function simulate(option) {
     const card = group.querySelector(`[data-finish-option="${option}"]`);
     if (!card || card.hidden) return;
-    if (chipA) chipA.textContent = "手势";
+    if (chipA) chipA.textContent = t("gesture.gestureLabel");
     if (chipB) {
-      chipB.textContent = option === "report" ? "已识别 · 完成测量" : "已识别 · 举右手";
+      chipB.textContent =
+        option === "report" ? t("gesture.recognizedDone") : t("gesture.recognizedRight");
     }
     showToast(
-      option === "report" ? "已识别：完成测量" : "已识别：举右手 · 继续下一项"
+      option === "report" ? t("finish.gestureDone") : t("finish.gestureContinue")
     );
     pulseGestureTarget();
     window.setTimeout(() => card.click(), 280);
@@ -3167,13 +3174,13 @@ function renderState(nextState) {
   }
 
   document.querySelectorAll("[data-result-summary='standard']").forEach((el) => {
-    el.textContent = state.completedGroups.standard ? "已完成" : "未测量";
+    el.textContent = state.completedGroups.standard ? t("common.completed") : t("common.notMeasured");
   });
   document.querySelectorAll("[data-result-summary='pro']").forEach((el) => {
-    el.textContent = state.completedGroups.pro ? "已完成" : "未测量";
+    el.textContent = state.completedGroups.pro ? t("common.completed") : t("common.notMeasured");
   });
   document.querySelectorAll("[data-result-summary='single']").forEach((el) => {
-    el.textContent = state.completedGroups.singleShoulder ? "肩部" : "未测量";
+    el.textContent = state.completedGroups.singleShoulder ? t("common.shoulderShort") : t("common.notMeasured");
   });
 
   document.querySelectorAll("[data-show-if-weight-standalone]").forEach((el) => {
@@ -3450,12 +3457,12 @@ function setupMeasuringTurntable() {
     const chipEl = root.querySelector("[data-measuring-chip]");
     const titleEl = root.querySelector(".screen-title");
     const tipEl = root.querySelector("[data-live-voice]");
-    if (titleEl) titleEl.textContent = "请调整姿势";
-    if (subtitle) subtitle.textContent = "检测到姿态异常，请先调整姿势后再继续。";
-    if (focusEl) focusEl.textContent = "请调整姿势";
-    if (chipEl) chipEl.textContent = "姿势异常";
-    if (tipEl) tipEl.textContent = "姿势异常时请先调整后再继续测量。";
-    speakText("检测到姿态异常，请先调整姿势。");
+    if (titleEl) titleEl.textContent = t("pose.adjust");
+    if (subtitle) subtitle.textContent = t("pose.abnormalSubtitle");
+    if (focusEl) focusEl.textContent = t("pose.adjust");
+    if (chipEl) chipEl.textContent = t("pose.abnormal");
+    if (tipEl) tipEl.textContent = t("pose.abnormalTip");
+    speakText(t("pose.detectAbnormal"));
     setActivePageDemo({ cancel: () => {} });
     return;
   }
@@ -3581,7 +3588,7 @@ function setupMeasuringTurntable() {
   const measuringVoiceIntro =
     root.dataset.voiceText?.trim() ||
     root.querySelector("[data-live-voice]")?.textContent?.trim() ||
-    "转台正在旋转采集，请保持当前姿势勿动。";
+    t("measuring.voice");
   speakText(measuringVoiceIntro);
 
   const finaleThresholdMs = Math.min(3000, durationMs * 0.35);
@@ -3603,11 +3610,11 @@ function setupMeasuringTurntable() {
     if (progressFill) progressFill.style.width = `${pct.toFixed(1)}%`;
     const remaining = Math.max(0, durationMs - elapsed);
     if (remaining <= finaleThresholdMs && remaining > 0 && focusEl) {
-      focusEl.textContent = "即将完成，请保持静止";
-      if (chipEl) chipEl.textContent = "即将完成";
+      focusEl.textContent = t("measuring.almostDone");
+      if (chipEl) chipEl.textContent = t("measuring.almostDoneChip");
       if (!finaleSpoken) {
         finaleSpoken = true;
-        speakText("即将完成，请继续保持静止。");
+        speakText(t("measuring.completeSoonVoice"));
       }
     }
     if (elapsed < durationMs) {
@@ -3619,11 +3626,15 @@ function setupMeasuringTurntable() {
     if (progressFill) progressFill.style.width = "100%";
     if (focusEl) {
       focusEl.textContent = isPostureMeasuring
-        ? "采集完成，请点击「下一步」"
-        : "转台已停，请点击「下一步」";
+        ? t("measuring.completePosture")
+        : t("measuring.turntableStopped");
     }
-    if (chipEl) chipEl.textContent = isPostureMeasuring ? "采集完成" : "转台已停";
-    speakText("测量完成，请点击下一步。");
+    if (chipEl) {
+      chipEl.textContent = isPostureMeasuring
+        ? t("measuring.collectionDone")
+        : t("measuring.turntableStoppedChip");
+    }
+    speakText(t("measuring.completeTapNext"));
   }
 
   rafId = window.requestAnimationFrame(tick);
@@ -3759,10 +3770,10 @@ function setupTurntableAnthropometryCapture() {
 
   if (warningMode) {
     root.classList.add("is-warning");
-    if (subtitleEl) subtitleEl.textContent = "检测到姿态异常，请先调整姿势后再继续。";
-    if (focusEl) focusEl.textContent = "请调整姿势";
-    if (statusEl) statusEl.textContent = "姿势异常";
-    speakText("检测到姿态异常，请先调整姿势。");
+    if (subtitleEl) subtitleEl.textContent = t("pose.abnormalSubtitle");
+    if (focusEl) focusEl.textContent = t("pose.adjust");
+    if (statusEl) statusEl.textContent = t("pose.abnormal");
+    speakText(t("pose.detectAbnormal"));
     return;
   }
 
@@ -3774,8 +3785,8 @@ function setupTurntableAnthropometryCapture() {
       root.classList.add("is-aligned");
       const scene = root.querySelector(".bodycomp-prep-scene");
       if (scene) scene.classList.add("is-aligned");
-      if (statusEl) statusEl.textContent = "识别通过";
-      speakText("识别通过。");
+      if (statusEl) statusEl.textContent = t("common.recognitionPass");
+      speakText(t("voice.recognitionPass"));
       if (btn) {
         btn.removeAttribute("disabled");
         btn.setAttribute("aria-disabled", "false");
@@ -3783,11 +3794,11 @@ function setupTurntableAnthropometryCapture() {
     }
 
     if (!isDemoManualAdvance()) {
-      if (statusEl) statusEl.textContent = "正在识别…";
-      speakText(root.dataset.voiceText || "请站上转台，双手自然垂放，保持静止。");
+      if (statusEl) statusEl.textContent = t("common.recognizing");
+      speakText(root.dataset.voiceText || t("boarding.voiceStill"));
       const detectTimer = window.setTimeout(() => {
         completePostureDetectionVisual();
-        if (statusEl) statusEl.textContent = "即将进入倒计时";
+        if (statusEl) statusEl.textContent = t("pose.enteringCountdown");
         window.setTimeout(goNext, 700);
       }, delay);
       setActivePageDemo({ cancel: () => window.clearTimeout(detectTimer) });
@@ -3803,15 +3814,15 @@ function setupTurntableAnthropometryCapture() {
       });
       btn.setAttribute("disabled", "disabled");
       btn.setAttribute("aria-disabled", "true");
-      btn.textContent = "下一步";
+      btn.textContent = t("common.nextButton");
     }
-    if (statusEl) statusEl.textContent = "正在识别…";
-    speakText(root.dataset.voiceText || "请站上转台，双手自然垂放，保持静止。");
+    if (statusEl) statusEl.textContent = t("common.recognizing");
+    speakText(root.dataset.voiceText || t("boarding.voiceStill"));
     const detectTimer = window.setTimeout(() => {
       detectionComplete = true;
       completePostureDetectionVisual();
-      if (statusEl) statusEl.textContent = "识别通过，可进入下一步";
-      if (btn) btn.textContent = "下一步";
+      if (statusEl) statusEl.textContent = t("pose.passNext");
+      if (btn) btn.textContent = t("common.nextButton");
     }, delay);
     setActivePageDemo({ cancel: () => window.clearTimeout(detectTimer) });
     return;
@@ -3824,28 +3835,32 @@ function setupTurntableAnthropometryCapture() {
 
     if (state.heightMeasurementEnabled) {
       steps.push([at, () => {
-        if (statusEl) statusEl.textContent = "身高测量中…";
-        speakText("正在测量身高，请保持不动。");
+        if (statusEl) statusEl.textContent = t("height.measuring");
+        speakText(t("height.measuringVoice"));
       }]);
       at += 1600;
       steps.push([at, () => {
         patchState({ sessionHeightCm: state.sessionHeightCm || 165 });
-        showDeviceToast("身高测量已完成");
-        speakText("身高测量已完成。");
+        showDeviceToast(t("height.doneToast"));
+        speakText(t("height.doneVoice"));
       }]);
       at += 900;
     }
 
     steps.push([at, () => {
-      if (statusEl) statusEl.textContent = "体重测量中…";
-      speakText("正在测量体重，请保持不动。");
+      if (statusEl) statusEl.textContent = t("weight.measuring");
+      speakText(t("weight.measuringVoice"));
     }]);
     at += 1400;
     steps.push([at, () => {
       patchState({ sessionWeightKg: state.sessionWeightKg || 56.8 });
-      showDeviceToast("体重测量已完成");
-      speakText("体重测量已完成。");
-      if (statusEl) statusEl.textContent = autoNavigate ? "即将进入扶手准备" : "请点击「继续测量」进入下一步";
+      showDeviceToast(t("weight.doneToast"));
+      speakText(t("weight.doneVoice"));
+      if (statusEl) {
+        statusEl.textContent = autoNavigate
+          ? t("boarding.enterGripPrep")
+          : t("boarding.tapContinueMeasure");
+      }
       if (autoNavigate) window.setTimeout(goNext, 700);
     }]);
 
@@ -3856,8 +3871,8 @@ function setupTurntableAnthropometryCapture() {
     root.classList.add("is-aligned");
     const scene = root.querySelector(".bodycomp-prep-scene");
     if (scene) scene.classList.add("is-aligned");
-    if (statusEl) statusEl.textContent = "识别通过";
-    speakText("识别通过。");
+    if (statusEl) statusEl.textContent = t("common.recognitionPass");
+    speakText(t("voice.recognitionPass"));
     if (btn) {
       btn.removeAttribute("disabled");
       btn.setAttribute("aria-disabled", "false");
@@ -3872,8 +3887,8 @@ function setupTurntableAnthropometryCapture() {
       completeDetectionVisual();
       runAnthropometryToastsAndMaybeNavigate(true);
     }
-    if (statusEl) statusEl.textContent = "正在识别…";
-    speakText(root.dataset.voiceText || "请站上转台，并确保足底与金属脚印充分接触。");
+    if (statusEl) statusEl.textContent = t("common.recognizing");
+    speakText(root.dataset.voiceText || t("boarding.voiceFoot"));
     window.setTimeout(runAnthropometrySequenceAuto, delay);
     return;
   }
@@ -3896,15 +3911,15 @@ function setupTurntableAnthropometryCapture() {
     if (!detectionComplete) return;
     if (!toastsDone) {
       btn.disabled = true;
-      setBtnLabel("采集中…");
+      setBtnLabel(t("common.collecting"));
       runAnthropometryToastsAndMaybeNavigate(false);
       const s = loadState();
       const toastEndMs = s.heightMeasurementEnabled ? 2500 + 1400 : 1400;
       const doneId = window.setTimeout(() => {
         toastsDone = true;
         btn.disabled = false;
-        setBtnLabel("继续测量");
-        if (statusEl) statusEl.textContent = "识别通过，可进入下一步";
+        setBtnLabel(t("common.continueMeasure"));
+        if (statusEl) statusEl.textContent = t("pose.passNext");
       }, toastEndMs + 200);
       toastTimers.push(doneId);
       return;
@@ -3916,16 +3931,16 @@ function setupTurntableAnthropometryCapture() {
     btn.addEventListener("click", onAnthropometryBtnClick);
     btn.setAttribute("disabled", "disabled");
     btn.setAttribute("aria-disabled", "true");
-    setBtnLabel("下一步");
+    setBtnLabel(t("common.nextButton"));
   }
 
-  if (statusEl) statusEl.textContent = "正在识别…";
-  speakText(root.dataset.voiceText || "请站上转台，并确保足底与金属脚印充分接触。");
+  if (statusEl) statusEl.textContent = t("common.recognizing");
+  speakText(root.dataset.voiceText || t("boarding.voiceFoot"));
 
   const detectTimer = window.setTimeout(() => {
     detectionComplete = true;
     completeDetectionVisual();
-    setBtnLabel("下一步");
+    setBtnLabel(t("common.nextButton"));
   }, delay);
 
   setActivePageDemo({
@@ -4083,19 +4098,19 @@ function setupWeightStandaloneFlow() {
       }
     }
 
-    speakText("请站上转台，双手自然下垂，准备测量体重。");
+    speakText(t("weight.voicePrep"));
 
     timers.push(
       window.setTimeout(() => {
         setPhase("gauge-idle");
-        speakText("请站在转台上，双手垂放，自然站立，保持静止。");
+        speakText(t("weight.voiceStand"));
       }, 2200)
     );
 
     timers.push(
       window.setTimeout(() => {
         setPhase("gauge-measuring");
-        speakText("正在读取体重，请保持不动。");
+        speakText(t("weight.voiceReading"));
         startGaugeAnimationThenResult();
       }, 4500)
     );
@@ -4120,7 +4135,7 @@ function setupWeightStandaloneFlow() {
   function syncIdleHint() {
     const labelEl = resultRoot.querySelector("[data-weight-idle-label]");
     const countEl = resultRoot.querySelector("[data-weight-idle-countdown]");
-    if (labelEl) labelEl.textContent = `${remain} 秒无操作将返回项目选择`;
+    if (labelEl) labelEl.textContent = t("weight.idleReturnSec", { sec: remain });
     if (countEl) countEl.textContent = String(remain);
   }
 
@@ -4164,15 +4179,15 @@ function setupMeasurementWarningState() {
   const stepsEl = shoulderRoot.querySelector(".single-shoulder-progress-steps");
   const infoList = shoulderRoot.querySelector(".single-shoulder-info-list");
   const liveStage = shoulderRoot.querySelector(".single-shoulder-live");
-  if (statusEl) statusEl.textContent = "姿势异常";
+  if (statusEl) statusEl.textContent = t("pose.abnormal");
   if (stepsEl) {
-    stepsEl.innerHTML = '<span class="is-current">姿势异常</span><span class="single-shoulder-progress-sep">››</span><span class="is-next">请先调整</span>';
+    stepsEl.innerHTML = `<span class="is-current">${t("pose.abnormal")}</span><span class="single-shoulder-progress-sep">››</span><span class="is-next">${t("shoulder.warningAdjust")}</span>`;
   }
   if (infoList) {
-    infoList.innerHTML = '<li>检测到姿势异常，请先调整后再继续。</li><li>恢复稳定姿态后，可重新开始当前动作。</li>';
+    infoList.innerHTML = `<li>${t("shoulder.warningTip1")}</li><li>${t("shoulder.warningTip2")}</li>`;
   }
   if (liveStage) liveStage.classList.add("is-warning");
-  speakText("检测到姿势异常，请先调整姿势。");
+  speakText(t("pose.detectAbnormal"));
 }
 
 function syncPageMeasurementMode() {
@@ -4199,7 +4214,31 @@ function setupMeasurementConfigSync() {
   });
 }
 
+let __deviceCanvasResizeTimer = null;
+
+function detectNativeCanvas() {
+  const coarse = window.matchMedia("(pointer: coarse)").matches;
+  return coarse && window.innerWidth >= 1080 && window.innerHeight >= 1920;
+}
+
+function applyDeviceCanvas() {
+  document.documentElement.dataset.deviceCanvas = detectNativeCanvas() ? "1080" : "540";
+}
+
+function setupDeviceCanvas() {
+  applyDeviceCanvas();
+  if (setupDeviceCanvas.__bound) return;
+  setupDeviceCanvas.__bound = true;
+  window.addEventListener("resize", () => {
+    if (__deviceCanvasResizeTimer) window.clearTimeout(__deviceCanvasResizeTimer);
+    __deviceCanvasResizeTimer = window.setTimeout(applyDeviceCanvas, 150);
+  });
+}
+
+applyDeviceCanvas();
+
 document.addEventListener("DOMContentLoaded", () => {
+  setupDeviceCanvas();
   bindConfigControls();
   bindDemoPlaceholders();
   bindActionLinks();
