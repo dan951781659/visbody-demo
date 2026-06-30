@@ -1207,41 +1207,44 @@ const MEASUREMENT_PREP_COPY = {
     {
       labelKey: "prep.item.fittedClothing",
       label: "穿着贴身衣物",
-      icon: "./assets/prep/fitted-clothing.svg"
-    },
-    {
-      labelKey: "prep.item.hairTied",
-      label: "扎起长发，露出头颈",
-      icon: "./assets/prep/hair-tied.svg"
-    },
-    {
-      labelKey: "prep.item.barefootElectrode",
-      label: "赤脚，贴合电极",
-      icon: "./assets/prep/barefoot.svg",
-      requiresBodyComp: true
-    },
-    {
-      labelKey: "prep.item.naturalStance",
-      label: "自然站姿即可",
-      icon: "./assets/prep/natural-stance.svg"
-    }
-  ],
-  bodycompGirthOnly: [
-    { labelKey: "prep.item.barefoot", label: "保持赤脚", icon: "./assets/prep/barefoot.svg" },
-    {
-      labelKey: "prep.item.footElectrode",
-      label: "足底贴合电极",
-      icon: "./assets/bodycomp-prep/footprint-turntable-alignment.svg"
-    },
-    {
-      labelKey: "prep.item.fittedClothing",
-      label: "穿着贴身衣物",
-      icon: "./assets/prep/fitted-clothing.svg"
+      visual: "arms"
     },
     {
       labelKey: "prep.item.noExercise",
-      label: "避免剧烈运动与大量饮食",
-      icon: "./assets/prep/no-exercise.svg"
+      label: "测前避免剧烈运动",
+      visual: "still"
+    },
+    {
+      labelKey: "prep.item.barefoot",
+      label: "赤脚测量",
+      visual: "feet"
+    },
+    {
+      labelKey: "prep.item.footElectrode",
+      label: "足底贴合电极片",
+      visual: "electrode"
+    }
+  ],
+  bodycompGirthOnly: [
+    {
+      labelKey: "prep.item.fittedClothing",
+      label: "穿着贴身衣物",
+      visual: "arms"
+    },
+    {
+      labelKey: "prep.item.noExercise",
+      label: "测前避免剧烈运动",
+      visual: "still"
+    },
+    {
+      labelKey: "prep.item.barefoot",
+      label: "赤脚测量",
+      visual: "feet"
+    },
+    {
+      labelKey: "prep.item.footElectrode",
+      label: "足底贴合电极片",
+      visual: "electrode"
     }
   ]
 };
@@ -1292,30 +1295,41 @@ function getMeasurementTipLines(state) {
   return MEASUREMENT_TIPS_COPY[profile] || MEASUREMENT_TIPS_COPY.withPosture;
 }
 
+const PREP_VISUAL_KEYS = ["feet", "electrode", "arms", "still"];
+
 function renderPrepChecklist(container, state) {
   if (!container) return;
   const items = getPrepChecklistItems(state);
+  container.classList.add("bodycomp-prep-grid");
+  container.classList.remove("prep-checklist-grid");
   container.innerHTML = items
-    .map((item) => {
-      const wide = item.wide ? " prep-check-cell--wide" : "";
-      const visual = item.icon
-        ? `<img class="prep-check-visual" src="${item.icon}" alt="" width="40" height="40" />`
-        : "";
-      return `<div class="prep-check-cell${wide}">${visual}<p class="prep-check-label">${t(
-        item.labelKey,
-        item.label
-      )}</p></div>`;
+    .map((item, index) => {
+      const visualKey = item.visual || PREP_VISUAL_KEYS[index] || "still";
+      const highlight = index === 0 ? " is-highlight" : "";
+      const speaker =
+        index === 0
+          ? '<img class="bodycomp-prep-speaker" src="./assets/lanhu/prep-speaker.png" alt="" />'
+          : "";
+      return `<div class="bodycomp-prep-cell${highlight}">
+        <div class="bodycomp-prep-visual bodycomp-prep-visual--${visualKey}">${speaker}</div>
+        <p class="bodycomp-prep-caption">${t(item.labelKey, item.label)}</p>
+      </div>`;
     })
     .join("");
 }
 
 function renderMeasurementTips(container, state) {
-  if (!container) return;
+  if (!container || container.hasAttribute("data-tip-static")) return;
   const lines = getMeasurementTipLines(state);
+  const noIndex = container.hasAttribute("data-tip-no-index");
   const titleEl = container.querySelector(".measurement-tips-title");
-  const titleHtml = titleEl
-    ? titleEl.outerHTML
-    : `<p class="measurement-tips-title">${t("prep.tipsTitle")}</p>`;
+  const externalTitle = container.closest(".device-tips-carousel-section")?.querySelector(".countdown-tips-heading");
+  const titleHtml =
+    noIndex || externalTitle
+      ? ""
+      : titleEl
+        ? titleEl.outerHTML
+        : `<p class="measurement-tips-title">${t("prep.tipsTitle")}</p>`;
   container.innerHTML =
     titleHtml +
     lines
@@ -1335,6 +1349,62 @@ function setupMeasurementCopyPages() {
   });
   document.querySelectorAll("[data-tip-carousel]").forEach((el) => {
     renderMeasurementTips(el, state);
+  });
+  mountAllTipCarousels();
+}
+
+const tipCarouselTimers = new WeakMap();
+
+function mountTipCarousel(root) {
+  const existing = tipCarouselTimers.get(root);
+  if (existing) {
+    window.clearInterval(existing);
+    tipCarouselTimers.delete(root);
+  }
+
+  const items = [...root.querySelectorAll("[data-tip-item]")];
+  if (items.length < 2) return;
+
+  let idx = 0;
+  const intervalMs = Number(root.dataset.tipInterval || 2600);
+  const noIndex = root.hasAttribute("data-tip-no-index");
+  let indexEl = root.querySelector(".measurement-tips-index");
+
+  if (!noIndex) {
+    if (!indexEl) {
+      indexEl = document.createElement("p");
+      indexEl.className = "measurement-tips-index";
+      indexEl.setAttribute("aria-live", "polite");
+      const section = root.closest(".device-tips-carousel-section");
+      const titleEl =
+        section?.querySelector(".countdown-tips-heading") ||
+        root.querySelector(".measurement-tips-title");
+      if (titleEl) titleEl.insertAdjacentElement("afterend", indexEl);
+      else root.prepend(indexEl);
+    }
+  } else if (indexEl) {
+    indexEl.remove();
+    indexEl = null;
+  }
+
+  function render() {
+    items.forEach((item, i) => {
+      item.classList.toggle("is-active", i === idx);
+    });
+    if (indexEl) indexEl.textContent = `${idx + 1}/${items.length}`;
+  }
+
+  render();
+  const timerId = window.setInterval(() => {
+    idx = (idx + 1) % items.length;
+    render();
+  }, intervalMs);
+  tipCarouselTimers.set(root, timerId);
+}
+
+function mountAllTipCarousels() {
+  document.querySelectorAll("[data-tip-carousel]").forEach((root) => {
+    mountTipCarousel(root);
   });
 }
 
@@ -1660,6 +1730,12 @@ function showDeviceToast(message, durationMs = 2200) {
     toast.classList.remove("is-visible");
     toast.hidden = true;
   }, durationMs);
+}
+
+/** 瞬时识别/采集状态：Toast + 可选语音，不写 panel。 */
+function notifyDeviceStatus(messageKey, { speakKey = null, durationMs = 2400 } = {}) {
+  showDeviceToast(t(messageKey), durationMs);
+  if (speakKey) speakText(t(speakKey));
 }
 
 function withStateQuery(target, state) {
@@ -2911,9 +2987,7 @@ function setupAutoDetectAdvance() {
   document.querySelectorAll("[data-auto-detect-next]").forEach((root) => {
     if (root.hasAttribute("data-turntable-anthropometry")) return;
     const delay = Number(root.dataset.autoDetectDelay || 2600);
-    const statusEl = root.querySelector("[data-auto-detect-status]");
     const subtitleEl = root.closest("section")?.querySelector(".screen-subtitle");
-    const focusEl = root.querySelector(".live-focus");
     const warningMode = new URLSearchParams(window.location.search).get("autoDetectMode") === "warning";
     const voiceAdvanceNext = root.dataset.voiceAdvanceNext;
     const voiceAdvanceAfterMs = Number(root.dataset.voiceAdvanceAfterMs || 3000);
@@ -2921,12 +2995,9 @@ function setupAutoDetectAdvance() {
     let navigateTimer = null;
 
     if (warningMode) {
-      if (statusEl) statusEl.textContent = t("common.recognizing");
-      speakText(t("pose.detectAbnormal"));
+      notifyDeviceStatus("pose.abnormal", { speakKey: "pose.detectAbnormal" });
       root.classList.add("is-warning");
       if (subtitleEl) subtitleEl.textContent = t("pose.abnormalSubtitle");
-      if (focusEl) focusEl.textContent = t("pose.adjust");
-      if (statusEl) statusEl.textContent = t("pose.abnormal");
       return;
     }
 
@@ -2946,27 +3017,27 @@ function setupAutoDetectAdvance() {
       root.classList.add("is-aligned");
       const scene = root.querySelector(".bodycomp-prep-scene");
       if (scene) scene.classList.add("is-aligned");
-      if (statusEl) statusEl.textContent = t("common.recognitionPass");
-      if (!skipRecognizedSpeak) speakText(t("voice.recognitionPass"));
+      if (!skipRecognizedSpeak) {
+        notifyDeviceStatus("common.recognitionPass", { speakKey: "voice.recognitionPass" });
+      } else {
+        notifyDeviceStatus("common.recognitionPass", { speakKey: null });
+      }
     }
 
-    if (voiceAdvanceNext && !isDemoManualAdvance()) {
+    if (voiceAdvanceNext) {
       const autoHint = root.querySelector("[data-voice-auto-hint]");
       if (autoHint) autoHint.hidden = false;
-      if (statusEl) statusEl.textContent = t("common.recognizing");
-      const voiceLine =
-        root.dataset.voiceText || t("voice.poseDetect");
+      const voiceLine = root.dataset.voiceText || t("voice.poseDetect");
       speakTextThen(voiceLine, () => {
         navigateTimer = window.setTimeout(() => {
           navigateToTarget(withStateQuery(voiceAdvanceNext, loadState()));
         }, voiceAdvanceAfterMs);
       });
-      demoTimer = window.setTimeout(() => completeDemo(true), delay);
       setActivePageDemo({ cancel: cancelDemo });
       return;
     }
 
-    if (statusEl) statusEl.textContent = t("common.recognizing");
+    notifyDeviceStatus("common.recognizing");
     speakText(root.dataset.voiceText || t("voice.poseDetect"));
 
     demoTimer = window.setTimeout(() => completeDemo(false), delay);
@@ -2975,24 +3046,7 @@ function setupAutoDetectAdvance() {
 }
 
 function setupTipCarousel() {
-  document.querySelectorAll("[data-tip-carousel]").forEach((root) => {
-    const items = [...root.querySelectorAll("[data-tip-item]")];
-    if (items.length < 2) return;
-    let idx = 0;
-    const intervalMs = Number(root.dataset.tipInterval || 2600);
-
-    function render() {
-      items.forEach((item, i) => {
-        item.classList.toggle("is-active", i === idx);
-      });
-    }
-
-    render();
-    window.setInterval(() => {
-      idx = (idx + 1) % items.length;
-      render();
-    }, intervalMs);
-  });
+  mountAllTipCarousels();
 }
 
 function setupSchemeThreeGestureDemo() {
@@ -3239,6 +3293,7 @@ function renderState(nextState) {
   document.querySelectorAll("[data-tip-carousel]").forEach((el) => {
     renderMeasurementTips(el, state);
   });
+  mountAllTipCarousels();
 }
 
 function setupVersionDisplay() {
@@ -3470,7 +3525,6 @@ function setupMeasuringTurntable() {
   const durationMs = Number(root.dataset.measuringDuration || 10000);
   const isPostureMeasuring = resolveMeasurementModeKey(loadState()) === "pro";
   const progressFill = root.querySelector("[data-measuring-progress]");
-  const focusEl = root.querySelector("[data-measuring-focus]");
   const chipEl = root.querySelector("[data-measuring-chip]");
   const audioEl = root.querySelector("[data-turntable-audio]");
   const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
@@ -3609,12 +3663,11 @@ function setupMeasuringTurntable() {
     const pct = Math.min(100, (elapsed / durationMs) * 100);
     if (progressFill) progressFill.style.width = `${pct.toFixed(1)}%`;
     const remaining = Math.max(0, durationMs - elapsed);
-    if (remaining <= finaleThresholdMs && remaining > 0 && focusEl) {
-      focusEl.textContent = t("measuring.almostDone");
+    if (remaining <= finaleThresholdMs && remaining > 0) {
       if (chipEl) chipEl.textContent = t("measuring.almostDoneChip");
       if (!finaleSpoken) {
         finaleSpoken = true;
-        speakText(t("measuring.completeSoonVoice"));
+        notifyDeviceStatus("measuring.almostDone", { speakKey: "measuring.completeSoonVoice" });
       }
     }
     if (elapsed < durationMs) {
@@ -3624,17 +3677,11 @@ function setupMeasuringTurntable() {
     spinComplete = true;
     stopSound();
     if (progressFill) progressFill.style.width = "100%";
-    if (focusEl) {
-      focusEl.textContent = isPostureMeasuring
-        ? t("measuring.completePosture")
-        : t("measuring.turntableStopped");
-    }
     if (chipEl) {
       chipEl.textContent = isPostureMeasuring
         ? t("measuring.collectionDone")
-        : t("measuring.turntableStoppedChip");
+        : t("measuring.turntableRotating");
     }
-    speakText(t("measuring.completeTapNext"));
   }
 
   rafId = window.requestAnimationFrame(tick);
@@ -3757,9 +3804,6 @@ function setupTurntableAnthropometryCapture() {
   root.dataset.anthropometryInit = "1";
 
   const nextHref = root.dataset.anthropometryNext || "./standard-grip-prep.html";
-  const statusEl = root.querySelector("[data-auto-detect-status]");
-  const subtitleEl = root.closest("section")?.querySelector(".screen-subtitle");
-  const focusEl = root.querySelector(".live-focus");
   const delay = Number(root.dataset.autoDetectDelay || 2600);
   const btn = root.querySelector("[data-anthropometry-next-btn]");
   const warningMode = new URLSearchParams(window.location.search).get("autoDetectMode") === "warning";
@@ -3770,10 +3814,7 @@ function setupTurntableAnthropometryCapture() {
 
   if (warningMode) {
     root.classList.add("is-warning");
-    if (subtitleEl) subtitleEl.textContent = t("pose.abnormalSubtitle");
-    if (focusEl) focusEl.textContent = t("pose.adjust");
-    if (statusEl) statusEl.textContent = t("pose.abnormal");
-    speakText(t("pose.detectAbnormal"));
+    notifyDeviceStatus("pose.abnormal", { speakKey: "pose.detectAbnormal" });
     return;
   }
 
@@ -3785,8 +3826,7 @@ function setupTurntableAnthropometryCapture() {
       root.classList.add("is-aligned");
       const scene = root.querySelector(".bodycomp-prep-scene");
       if (scene) scene.classList.add("is-aligned");
-      if (statusEl) statusEl.textContent = t("common.recognitionPass");
-      speakText(t("voice.recognitionPass"));
+      notifyDeviceStatus("common.recognitionPass", { speakKey: "voice.recognitionPass" });
       if (btn) {
         btn.removeAttribute("disabled");
         btn.setAttribute("aria-disabled", "false");
@@ -3794,11 +3834,11 @@ function setupTurntableAnthropometryCapture() {
     }
 
     if (!isDemoManualAdvance()) {
-      if (statusEl) statusEl.textContent = t("common.recognizing");
+      notifyDeviceStatus("common.recognizing");
       speakText(root.dataset.voiceText || t("boarding.voiceStill"));
       const detectTimer = window.setTimeout(() => {
         completePostureDetectionVisual();
-        if (statusEl) statusEl.textContent = t("pose.enteringCountdown");
+        notifyDeviceStatus("pose.enteringCountdown");
         window.setTimeout(goNext, 700);
       }, delay);
       setActivePageDemo({ cancel: () => window.clearTimeout(detectTimer) });
@@ -3816,12 +3856,12 @@ function setupTurntableAnthropometryCapture() {
       btn.setAttribute("aria-disabled", "true");
       btn.textContent = t("common.nextButton");
     }
-    if (statusEl) statusEl.textContent = t("common.recognizing");
+    notifyDeviceStatus("common.recognizing");
     speakText(root.dataset.voiceText || t("boarding.voiceStill"));
     const detectTimer = window.setTimeout(() => {
       detectionComplete = true;
       completePostureDetectionVisual();
-      if (statusEl) statusEl.textContent = t("pose.passNext");
+      notifyDeviceStatus("pose.passNext");
       if (btn) btn.textContent = t("common.nextButton");
     }, delay);
     setActivePageDemo({ cancel: () => window.clearTimeout(detectTimer) });
@@ -3835,7 +3875,7 @@ function setupTurntableAnthropometryCapture() {
 
     if (state.heightMeasurementEnabled) {
       steps.push([at, () => {
-        if (statusEl) statusEl.textContent = t("height.measuring");
+        showDeviceToast(t("height.measuring"), 2000);
         speakText(t("height.measuringVoice"));
       }]);
       at += 1600;
@@ -3848,7 +3888,7 @@ function setupTurntableAnthropometryCapture() {
     }
 
     steps.push([at, () => {
-      if (statusEl) statusEl.textContent = t("weight.measuring");
+      showDeviceToast(t("weight.measuring"), 2000);
       speakText(t("weight.measuringVoice"));
     }]);
     at += 1400;
@@ -3856,12 +3896,12 @@ function setupTurntableAnthropometryCapture() {
       patchState({ sessionWeightKg: state.sessionWeightKg || 56.8 });
       showDeviceToast(t("weight.doneToast"));
       speakText(t("weight.doneVoice"));
-      if (statusEl) {
-        statusEl.textContent = autoNavigate
-          ? t("boarding.enterGripPrep")
-          : t("boarding.tapContinueMeasure");
+      if (autoNavigate) {
+        notifyDeviceStatus("boarding.enterGripPrep");
+        window.setTimeout(goNext, 700);
+      } else {
+        notifyDeviceStatus("boarding.tapContinueMeasure");
       }
-      if (autoNavigate) window.setTimeout(goNext, 700);
     }]);
 
     steps.forEach(([ms, fn]) => window.setTimeout(fn, ms));
@@ -3871,8 +3911,7 @@ function setupTurntableAnthropometryCapture() {
     root.classList.add("is-aligned");
     const scene = root.querySelector(".bodycomp-prep-scene");
     if (scene) scene.classList.add("is-aligned");
-    if (statusEl) statusEl.textContent = t("common.recognitionPass");
-    speakText(t("voice.recognitionPass"));
+    notifyDeviceStatus("common.recognitionPass", { speakKey: "voice.recognitionPass" });
     if (btn) {
       btn.removeAttribute("disabled");
       btn.setAttribute("aria-disabled", "false");
@@ -3887,7 +3926,7 @@ function setupTurntableAnthropometryCapture() {
       completeDetectionVisual();
       runAnthropometryToastsAndMaybeNavigate(true);
     }
-    if (statusEl) statusEl.textContent = t("common.recognizing");
+    notifyDeviceStatus("common.recognizing");
     speakText(root.dataset.voiceText || t("boarding.voiceFoot"));
     window.setTimeout(runAnthropometrySequenceAuto, delay);
     return;
@@ -3919,7 +3958,7 @@ function setupTurntableAnthropometryCapture() {
         toastsDone = true;
         btn.disabled = false;
         setBtnLabel(t("common.continueMeasure"));
-        if (statusEl) statusEl.textContent = t("pose.passNext");
+        notifyDeviceStatus("pose.passNext");
       }, toastEndMs + 200);
       toastTimers.push(doneId);
       return;
@@ -3934,7 +3973,7 @@ function setupTurntableAnthropometryCapture() {
     setBtnLabel(t("common.nextButton"));
   }
 
-  if (statusEl) statusEl.textContent = t("common.recognizing");
+  notifyDeviceStatus("common.recognizing");
   speakText(root.dataset.voiceText || t("boarding.voiceFoot"));
 
   const detectTimer = window.setTimeout(() => {

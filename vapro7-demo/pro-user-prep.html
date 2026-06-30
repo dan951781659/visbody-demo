@@ -23,85 +23,82 @@
           <a class="back-link" href="./home.html" data-stateful-link="./home.html">← 返回</a>
         </div>
         <h1 class="screen-title screen-title--home">测量准备</h1>
-        <p class="screen-subtitle">请按下方清单逐项完成准备，确认无误后再举手选择操作。</p>
+        <p class="screen-subtitle screen-subtitle--prep">请按下方清单逐项完成准备，确认无误后再举手选择操作。</p>
 
-        <div class="prep-checklist-grid" data-prep-checklist aria-label="测量准备事项"></div>
+        <div class="bodycomp-prep-grid" data-prep-checklist aria-label="测量准备事项"></div>
 
-        <div class="prep-gesture-block" aria-label="手势确认">
+        <div
+          class="prep-gesture-zone prep-touch-footer"
+          data-prep-choice-group
+          data-choice-group
+          aria-label="手势确认"
+        >
+          <div class="prep-gesture-zone__hero" aria-hidden="true"></div>
           <div
-            class="gesture-ring-module"
+            class="gesture-ring-module prep-gesture-zone__ring"
             data-gesture-ring
             data-gesture-hand="both"
             role="region"
             aria-label="举手确认"
           >
-            <div class="gesture-ring-row">
-              <div class="gesture-ring-stage" data-gesture-stage tabindex="0">
-                <div class="human pose-down" data-gesture-human aria-hidden="true">
-                  <div class="head"></div><div class="torso"></div>
-                  <div class="limb arm left"></div><div class="limb arm right"></div>
-                  <div class="limb leg left"></div><div class="limb leg right"></div>
-                </div>
-                <svg class="gesture-ring-svg" viewBox="0 0 200 220" aria-hidden="true" data-gesture-ring-svg>
-                  <circle
-                    class="gesture-ring-track"
-                    cx="142"
-                    cy="70"
-                    r="38"
-                    fill="none"
-                    stroke="rgba(255,255,255,0.14)"
-                    stroke-width="7"
-                  />
-                  <circle
-                    class="gesture-ring-progress"
-                    data-gesture-ring-progress
-                    cx="142"
-                    cy="70"
-                    r="38"
-                    fill="none"
-                    stroke="#2b7cff"
-                    stroke-width="7"
-                    stroke-linecap="round"
-                    transform="rotate(-90 142 70)"
-                    stroke-dasharray="238.76"
-                    stroke-dashoffset="238.76"
-                  />
-                </svg>
+            <div class="gesture-ring-stage" data-gesture-stage tabindex="0">
+              <div class="human pose-down" data-gesture-human aria-hidden="true">
+                <div class="head"></div><div class="torso"></div>
+                <div class="limb arm left"></div><div class="limb arm right"></div>
+                <div class="limb leg left"></div><div class="limb leg right"></div>
               </div>
-              <div class="gesture-ring-callout">
-                <p class="gesture-ring-hold" data-gesture-hold-hint hidden>*请保持当前动作</p>
-                <p class="gesture-ring-bubble" data-gesture-bubble>请举手确认下方操作。</p>
-              </div>
+              <svg class="gesture-ring-svg" viewBox="0 0 200 220" aria-hidden="true" data-gesture-ring-svg>
+                <circle
+                  class="gesture-ring-track"
+                  cx="142"
+                  cy="70"
+                  r="38"
+                  fill="none"
+                  stroke="rgba(255,255,255,0.14)"
+                  stroke-width="7"
+                />
+                <circle
+                  class="gesture-ring-progress"
+                  data-gesture-ring-progress
+                  cx="142"
+                  cy="70"
+                  r="38"
+                  fill="none"
+                  stroke="#32d583"
+                  stroke-width="7"
+                  stroke-linecap="round"
+                  transform="rotate(-90 142 70)"
+                  stroke-dasharray="238.76"
+                  stroke-dashoffset="238.76"
+                />
+              </svg>
             </div>
+            <p class="gesture-ring-hold" data-gesture-hold-hint hidden>*请保持当前动作</p>
+            <p class="gesture-ring-bubble prep-gesture-zone__bubble" data-gesture-bubble>请举手确认下方操作。</p>
           </div>
-        </div>
-
-        <div class="footer-hint finish-touch-footer prep-touch-footer" data-prep-choice-group data-choice-group data-default-index="1">
-          <div class="scheme-three-action-row">
-            <a
-              class="scheme-three-action-card"
-              href="./home.html"
-              data-stateful-link="./home.html"
-              data-prep-option="exit"
-              data-choice-item
-              data-choice-label="退出测量"
-            >
-              <strong>退出测量</strong>
-              <span>返回测量项目</span>
-            </a>
-            <a
-              class="scheme-three-action-card"
-              href="./pro-prepare.html"
-              data-stateful-link="./pro-prepare.html"
-              data-demo-next="./pro-prepare.html"
-              data-prep-option="next"
-              data-choice-item
-              data-choice-label="继续测量"
-            >
-              <strong>继续测量</strong>
-              <span>站上转台，开始姿态引导</span>
-            </a>
-          </div>
+          <a
+            class="prep-gesture-action-card prep-gesture-zone__action prep-gesture-zone__action--left"
+            href="./home.html"
+            data-stateful-link="./home.html"
+            data-prep-option="exit"
+            data-choice-item
+            data-choice-label="退出测量"
+          >
+            <span class="prep-gesture-action-card__hint">举起左手</span>
+            <strong>退出测量</strong>
+          </a>
+          <a
+            class="prep-gesture-action-card prep-gesture-zone__action prep-gesture-zone__action--right"
+            href="./pro-prepare.html"
+            data-stateful-link="./pro-prepare.html"
+            data-demo-next="./pro-prepare.html"
+            data-prep-option="next"
+            data-choice-item
+            data-choice-label="继续测量"
+          >
+            <span class="prep-gesture-action-card__hint">举起右手</span>
+            <strong>继续测量</strong>
+          </a>
         </div>
       </section>
     </main>

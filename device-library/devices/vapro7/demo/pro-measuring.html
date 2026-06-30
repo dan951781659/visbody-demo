@@ -9,7 +9,7 @@
   <body>
     <main class="device-stage">
       <section
-        class="device"
+        class="device device--measuring device--pro-measuring"
         data-set-measurement-mode="pro"
         data-measuring-flow
         data-measuring-duration="10000"
@@ -27,8 +27,7 @@
           <source src="./assets/turntable-loop.wav" type="audio/wav" />
         </audio>
         <div class="status-bar"><span>18:32</span><span>测量中</span></div>
-        <h1 class="screen-title">请保持静止</h1>
-        <p class="screen-subtitle" data-live-voice>正在采集体态数据，请保持当前姿势勿动。</p>
+        <h1 class="screen-title">体态测量中</h1>
         <div class="device-visual">
           <div class="live-stage measuring-stage">
             <div class="live-glow"></div>
@@ -47,12 +46,20 @@
               <div class="limb leg right"></div>
             </div>
             <div class="scan-line"></div>
-            <div class="live-focus" data-measuring-focus>请不要移动</div>
           </div>
         </div>
         <div class="progress-track"><div class="progress-fill" data-measuring-progress style="width:0%;"></div></div>
-        <div class="measurement-tips-carousel" data-tip-carousel data-tip-interval="2600">
-          <p class="measurement-tips-title">测量注意事项</p>
+        <div class="measuring-info-panel">
+          <img class="measuring-info-panel__badge" src="./assets/lanhu/info-badge-i.png" alt="" />
+          <div class="measuring-info-panel__row">
+            <img class="measuring-info-panel__dot" src="./assets/lanhu/tip-dot.png" alt="" />
+            <p class="measuring-info-panel__text" data-measuring-focus>测量中，请保持身体静止</p>
+          </div>
+        </div>
+        <div class="device-tips-carousel-section">
+          <div class="device-tips-carousel-box">
+            <div class="measurement-tips-carousel" data-tip-carousel data-tip-interval="2600" data-tip-no-index></div>
+          </div>
         </div>
         <div class="footer-hint">
           <div class="button-row">

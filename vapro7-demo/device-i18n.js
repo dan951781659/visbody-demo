@@ -73,9 +73,9 @@
       "prep.item.hairTied": "扎起长发，露出头颈",
       "prep.item.barefootElectrode": "赤脚，贴合电极",
       "prep.item.naturalStance": "自然站姿即可",
-      "prep.item.barefoot": "保持赤脚",
-      "prep.item.footElectrode": "足底贴合电极",
-      "prep.item.noExercise": "避免剧烈运动与大量饮食",
+      "prep.item.barefoot": "赤脚测量",
+      "prep.item.footElectrode": "足底贴合电极片",
+      "prep.item.noExercise": "测前避免剧烈运动",
       "tip.still": "请保持身体静止",
       "tip.naturalStance": "保持自然站姿，不要刻意挺胸或收腹",
       "tip.breath": "保持自然呼吸，请勿憋气",
@@ -209,11 +209,15 @@
       "common.standbyEmptyHint": "当前未开启任何测量项目，请联系门店工作人员。",
       "common.standbyHubHint": "长按 ⊕ 键查看报告列表，长按 ⊖ 键进入设置。",
       "measuring.status": "测量中",
+      "measuring.kicker": "身体成分",
+      "measuring.flowTitle": "身体成分测量",
       "measuring.stillTitle": "请保持静止",
       "measuring.voice": "转台正在旋转采集，请保持当前姿势勿动。",
       "measuring.postureOk": "姿态正确",
       "measuring.turntableRotating": "转台旋转中",
       "measuring.doNotMove": "请不要移动",
+      "measuring.gripPoseTip": "请双手握紧扶手，双臂打开并保持45°夹角",
+      "measuring.keepStillDuring": "测量中，请保持身体静止",
       "measuring.almostDone": "即将完成，请保持静止",
       "measuring.almostDoneChip": "即将完成",
       "measuring.completeTapNext": "测量完成，请点击下一步。",
@@ -228,6 +232,8 @@
       "boarding.subtitle": "双手自然下垂，面向屏幕，保持身体稳定直至身高与体重测量结束。",
       "boarding.subtitlePro": "双手自然垂放，面向屏幕站稳，保持身体静止直至识别通过。",
       "boarding.recognizingStance": "正在识别站姿，请保持站立不动。",
+      "boarding.panelLead": "请站上转台",
+      "boarding.panelHint": "双手垂放，自然站立，保持静止",
       "boarding.stanceChip": "站姿识别中",
       "boarding.voice": "请站上转台，双手自然下垂，身体放松并保持静止。",
       "boarding.voicePro": "请站上转台，双手自然垂放，面向屏幕，保持静止。",
@@ -246,6 +252,7 @@
       "position.title": "双臂自然打开 45°",
       "position.subtitle": "请保持面向屏幕，双臂自然打开并维持约 45° 夹角。",
       "position.poseChip": "姿态识别中",
+      "guide.instructionChip": "请按提示操作",
       "position.armHint": "若夹角不足，请再张开一些",
       "position.recognizing": "正在识别手臂姿态...",
       "position.voice": "请双臂自然打开，保持约四十五度夹角。",
@@ -256,6 +263,9 @@
       "grip.contactTitle": "双手接触扶手金属",
       "grip.contactSubtitle": "请双手拇指及四指与扶手金属区域充分接触。",
       "grip.voiceContact": "请双手握住扶手，拇指与四指充分接触金属区域。",
+      "grip.recognizingChip": "扶手识别中",
+      "grip.recognizing": "正在识别手部接触...",
+      "grip.railHint": "拇指与四指贴合金属区",
       "gesture.leftHand": "举左手：{label}。",
       "gesture.rightHand": "举右手：{label}。",
       "gesture.rightHandHold": "请举起右手并保持，以{label}。",
@@ -312,12 +322,16 @@
       "neck.voice": "请缓慢转头，保持肩部稳定。",
       "neck.countdownVoice": "颈部测量即将开始，请保持当前动作。",
       "neck.measuringVoice": "颈部测量中，请缓慢转头并保持稳定。",
+      "neck.measuringChip": "颈部采集中",
+      "neck.measuringFocus": "请缓慢转头",
       "balance.measuringTitle": "平衡测量中",
       "balance.voice": "平衡测量中，请保持站稳并不要晃动。",
       "balance.prepTitle": "请站稳保持平衡",
       "balance.prepSubtitle": "双脚站稳，保持身体稳定，准备完成后进入倒计时。",
       "balance.prepVoice": "请站稳并保持平衡。",
       "balance.countdownVoice": "平衡测量即将开始，请保持站稳。",
+      "balance.measuringChip": "平衡采集中",
+      "balance.measuringFocus": "请不要晃动",
       "report.title": "报告详情",
       "report.detail": "详细报告",
       "report.loading": "加载中…",
@@ -326,6 +340,8 @@
       "report.postureReport": "体态报告",
       "report.scanTitle": "扫码查看报告",
       "pro.measuringTitle": "体态测量中",
+      "pro.measuring.kicker": "体态",
+      "pro.measuring.chip": "体态采集中",
       "pro.countdownTitle": "体态测量 · 开始测量",
       "pro.prep.voice": "请按清单逐项准备好。举右手继续测量，举左手退出测量。",
       "pro.prep.nextHint": "站上转台，开始姿态引导",
@@ -383,6 +399,8 @@
       "guide.legacy4.focus": "请双臂展开 45°",
       "guide.legacy4.subtitle": "请面向屏幕，双臂展开四十五度。",
       "gesture.raiseRightFor": "请举起右手以{label}。",
+      "gesture.raiseLeftLabel": "举起左手",
+      "gesture.raiseRightLabel": "举起右手",
       "gesture.raiseLeftHold": "举起左手 · {label}",
       "gesture.raiseRightHold": "举起右手 · {label}",
       "gesture.raiseRightContinueShort": "举起右手 · 继续",
@@ -436,11 +454,11 @@
       "settings.language": "Sprache",
       "settings.languageTitle": "Sprache",
       "settings.measureFlow": "Messablauf",
-      "settings.showPrepPage": "Vorbereitungsseite anzeigen",
+      "settings.showPrepPage": "Vorbereitung anzeigen",
       "settings.showPrepHint": "Vor Schnellmessung",
       "settings.voiceBroadcast": "Sprachausgabe",
       "settings.voiceDemoHint": "Nur Demo",
-      "settings.voiceGuide": "Messanleitung per Sprache",
+      "settings.voiceGuide": "Sprachführung",
       "settings.system": "System",
       "settings.sound": "Ton",
       "settings.brightness": "Helligkeit",
@@ -479,9 +497,9 @@
       "prep.item.hairTied": "Haare binden, Nacken frei",
       "prep.item.barefootElectrode": "Barfuß, Elektroden berühren",
       "prep.item.naturalStance": "Natürliche Standposition",
-      "prep.item.barefoot": "Barfuß bleiben",
-      "prep.item.footElectrode": "Füße auf Elektroden",
-      "prep.item.noExercise": "Kein Sport oder große Mahlzeit",
+      "prep.item.barefoot": "Barfuß messen",
+      "prep.item.footElectrode": "Fußsohlen auf Elektroden",
+      "prep.item.noExercise": "Vor der Messung kein Sport",
       "tip.still": "Bitte ruhig stehen",
       "tip.naturalStance": "Natürliche Haltung, nicht anspannen",
       "tip.breath": "Normal atmen, nicht die Luft anhalten",
@@ -615,11 +633,15 @@
       "common.standbyEmptyHint": "Keine Messung aktiv. Bitte Mitarbeiter kontaktieren.",
       "common.standbyHubHint": "⊕ lang: Berichte. ⊖ lang: Einstellungen.",
       "measuring.status": "Messung läuft",
+      "measuring.kicker": "Körperzusammensetzung",
+      "measuring.flowTitle": "Körperzusammensetzungsmessung",
       "measuring.stillTitle": "Bitte stillhalten",
       "measuring.voice": "Drehteller dreht sich. Bitte Pose halten.",
       "measuring.postureOk": "Pose korrekt",
       "measuring.turntableRotating": "Drehteller dreht",
       "measuring.doNotMove": "Bitte nicht bewegen",
+      "measuring.gripPoseTip": "Griff festhalten, Arme ~45° geöffnet",
+      "measuring.keepStillDuring": "Messung läuft — bitte stillhalten",
       "measuring.almostDone": "Fast fertig, bitte stillhalten",
       "measuring.almostDoneChip": "Fast fertig",
       "measuring.completeTapNext": "Messung fertig. Bitte Weiter antippen.",
@@ -634,6 +656,8 @@
       "boarding.subtitle": "Arme locker, zum Bildschirm, stabil bis Größe und Gewicht erfasst sind.",
       "boarding.subtitlePro": "Arme locker, zum Bildschirm, still bis Erkennung abgeschlossen.",
       "boarding.recognizingStance": "Standposition wird erkannt. Bitte still stehen.",
+      "boarding.panelLead": "Auf Drehteller stehen",
+      "boarding.panelHint": "Arme locker, natürlich stehen, stillhalten",
       "boarding.stanceChip": "Stand wird erkannt",
       "boarding.voice": "Auf Drehteller stehen, Arme locker, entspannt und still.",
       "boarding.voicePro": "Auf Drehteller stehen, Arme locker, zum Bildschirm, still.",
@@ -652,6 +676,7 @@
       "position.title": "Arme ~45° öffnen",
       "position.subtitle": "Zum Bildschirm, Arme ~45° öffnen und halten.",
       "position.poseChip": "Pose wird erkannt",
+      "guide.instructionChip": "Anleitung befolgen",
       "position.armHint": "Bei zu engem Winkel weiter öffnen",
       "position.recognizing": "Armposition wird erkannt…",
       "position.voice": "Arme öffnen, etwa 45 Grad halten.",
@@ -662,6 +687,9 @@
       "grip.contactTitle": "Metallkontakt am Griff",
       "grip.contactSubtitle": "Daumen und Finger vollständig auf Metallbereich.",
       "grip.voiceContact": "Griff halten, Daumen und Finger auf Metall.",
+      "grip.recognizingChip": "Grifferkennung",
+      "grip.recognizing": "Handkontakt wird erkannt…",
+      "grip.railHint": "Daumen und Finger auf Metall",
       "gesture.leftHand": "Linke Hand: {label}.",
       "gesture.rightHand": "Rechte Hand: {label}.",
       "gesture.rightHandHold": "Rechte Hand heben und halten für: {label}.",
@@ -718,12 +746,16 @@
       "neck.voice": "Kopf langsam drehen, Schultern stabil.",
       "neck.countdownVoice": "Nackenmessung startet gleich. Pose halten.",
       "neck.measuringVoice": "Nackenmessung läuft. Kopf langsam drehen.",
+      "neck.measuringChip": "Nacken wird erfasst",
+      "neck.measuringFocus": "Kopf langsam drehen",
       "balance.measuringTitle": "Balancemessung",
       "balance.voice": "Balancemessung. Bitte stabil stehen.",
       "balance.prepTitle": "Balance halten",
       "balance.prepSubtitle": "Stabil stehen, danach Countdown.",
       "balance.prepVoice": "Bitte stabil stehen und Balance halten.",
       "balance.countdownVoice": "Balancemessung startet gleich. Stabil stehen.",
+      "balance.measuringChip": "Balance wird erfasst",
+      "balance.measuringFocus": "Bitte nicht wackeln",
       "report.title": "Berichtdetails",
       "report.detail": "Detailbericht",
       "report.loading": "Lädt…",
@@ -732,6 +764,8 @@
       "report.postureReport": "Haltungsbericht",
       "report.scanTitle": "Bericht per QR",
       "pro.measuringTitle": "Haltungsmessung läuft",
+      "pro.measuring.kicker": "Haltung",
+      "pro.measuring.chip": "Haltungserfassung",
       "pro.countdownTitle": "Haltung · Messstart",
       "pro.prep.voice": "Checkliste abarbeiten. Rechte Hand: weiter. Linke Hand: beenden.",
       "pro.prep.nextHint": "Auf Drehteller, Haltungsführung starten",
@@ -789,6 +823,8 @@
       "guide.legacy4.focus": "Arme ~45° öffnen",
       "guide.legacy4.subtitle": "Zum Bildschirm, Arme ~45° geöffnet.",
       "gesture.raiseRightFor": "Bitte rechte Hand heben für {label}.",
+      "gesture.raiseLeftLabel": "Linke Hand heben",
+      "gesture.raiseRightLabel": "Rechte Hand heben",
       "gesture.raiseLeftHold": "Linke Hand · {label}",
       "gesture.raiseRightHold": "Rechte Hand · {label}",
       "gesture.raiseRightContinueShort": "Rechte Hand · Weiter",
@@ -829,12 +865,10 @@
 
   const MEASURING_BINDINGS = [
     { sel: ".status-bar span:nth-child(2)", key: "measuring.status" },
-    { sel: ".screen-title", key: "measuring.stillTitle" },
-    { sel: "[data-live-voice]", key: "measuring.voice" },
+    { sel: ".screen-title", key: "measuring.flowTitle" },
     { sel: ".live-chip.ok", key: "measuring.postureOk" },
     { sel: "[data-measuring-chip]", key: "measuring.turntableRotating" },
-    { sel: "[data-measuring-focus]", key: "measuring.doNotMove" },
-    BIND.tipsTitle,
+    { sel: "[data-measuring-focus]", key: "measuring.gripPoseTip" },
     BIND.nextBtn
   ];
 
@@ -843,9 +877,9 @@
     BIND.back,
     { sel: ".text-link", key: "common.prepPage" },
     { sel: ".screen-title", key: "boarding.title" },
-    { sel: ".screen-subtitle", key: "boarding.subtitle" },
-    { sel: ".live-chip.ok", key: "boarding.stanceChip" },
-    { sel: "[data-auto-detect-status]", key: "boarding.recognizingStance" },
+    { sel: ".live-chip.ok", key: "guide.instructionChip" },
+    { sel: "[data-boarding-panel-lead]", key: "boarding.panelLead" },
+    { sel: "[data-boarding-panel-hint]", key: "boarding.panelHint" },
     BIND.nextBtn
   ];
 
@@ -854,10 +888,8 @@
     BIND.back,
     { sel: ".text-link", key: "countdown.still" },
     { sel: ".screen-title", key: "countdown.soonTitle" },
-    { sel: ".countdown-pose-caption", key: "countdown.poseCaption" },
     { sel: ".countdown-soon-caption", key: "countdown.soonCaption" },
-    { sel: "[data-stage-done-hint]", key: "countdown.keepPose" },
-    BIND.tipsTitle,
+    { sel: "[data-countdown-panel-lead]", key: "countdown.poseCaption" },
     BIND.nextBtn
   ];
 
@@ -881,10 +913,9 @@
     BIND.back,
     { sel: ".text-link", key: "common.prepPage" },
     { sel: ".screen-title", key: "position.title" },
-    { sel: ".screen-subtitle", key: "position.subtitle" },
-    { sel: ".live-chip.ok", key: "position.poseChip" },
+    { sel: "[data-panel-hint]", key: "position.subtitle" },
+    { sel: ".live-chip.ok", key: "guide.instructionChip" },
     { sel: ".guide-arm-hint", key: "position.armHint" },
-    { sel: "[data-auto-detect-status]", key: "position.recognizing" },
     BIND.nextBtn
   ];
 
@@ -931,52 +962,46 @@
       { sel: ".status-bar span:last-child", key: "prep.title" },
       { sel: ".text-link", key: "prep.title" },
       { sel: ".screen-title", key: "prep.title" },
-      { sel: ".screen-subtitle", key: "prep.subtitle" },
+      { sel: ".screen-subtitle--prep", key: "prep.subtitle" },
       BIND.gestureBubble,
       BIND.gestureHold,
+      { sel: "[data-prep-option='exit'] .prep-gesture-action-card__hint", key: "gesture.raiseLeftLabel" },
       { sel: "[data-prep-option='exit'] strong", key: "common.exitMeasure" },
-      { sel: "[data-prep-option='exit'] span", key: "common.returnMeasureList" },
-      { sel: "[data-prep-option='next'] strong", key: "common.nextStep" },
-      { sel: "[data-prep-option='next'] span", key: "prep.nextHint" }
+      { sel: "[data-prep-option='next'] .prep-gesture-action-card__hint", key: "gesture.raiseRightLabel" },
+      { sel: "[data-prep-option='next'] strong", key: "common.continueMeasure" }
     ],
     "pro-user-prep.html": [
       { sel: ".status-bar span:last-child", key: "prep.title" },
       { sel: ".text-link", key: "prep.title" },
       { sel: ".screen-title", key: "prep.title" },
-      { sel: ".screen-subtitle", key: "prep.subtitle" },
+      { sel: ".screen-subtitle--prep", key: "prep.subtitle" },
       BIND.gestureBubble,
       BIND.gestureHold,
+      { sel: "[data-prep-option='exit'] .prep-gesture-action-card__hint", key: "gesture.raiseLeftLabel" },
       { sel: "[data-prep-option='exit'] strong", key: "common.exitMeasure" },
-      { sel: "[data-prep-option='exit'] span", key: "common.returnMeasureList" },
-      { sel: "[data-prep-option='next'] strong", key: "common.nextStep" },
-      { sel: "[data-prep-option='next'] span", key: "pro.prep.nextHint" }
+      { sel: "[data-prep-option='next'] .prep-gesture-action-card__hint", key: "gesture.raiseRightLabel" },
+      { sel: "[data-prep-option='next'] strong", key: "common.continueMeasure" }
     ],
     "standard-measuring.html": MEASURING_BINDINGS,
     "pro-measuring.html": [
       { sel: ".status-bar span:nth-child(2)", key: "measuring.status" },
-      { sel: ".screen-title", key: "measuring.stillTitle" },
-      { sel: "[data-live-voice]", key: "measuring.voice" },
+      { sel: ".screen-title", key: "pro.measuringTitle" },
       { sel: ".live-chip.ok", key: "measuring.postureOk" },
-      BIND.tipsTitle,
+      { sel: "[data-measuring-chip]", key: "pro.measuring.chip" },
+      { sel: "[data-measuring-focus]", key: "measuring.keepStillDuring" },
       BIND.nextBtn
     ],
     "standard-bodycomp-prep.html": BOARDING_BINDINGS,
-    "pro-prepare.html": [
-      { sel: ".status-bar span:nth-child(2)", key: "boarding.status" },
-      BIND.back,
-      { sel: ".screen-title", key: "boarding.title" },
-      { sel: ".screen-subtitle", key: "boarding.subtitlePro" },
-      { sel: ".live-chip.ok", key: "boarding.stanceChip" },
-      { sel: "[data-auto-detect-status]", key: "boarding.recognizingStance" },
-      BIND.nextBtn
-    ],
+    "pro-prepare.html": BOARDING_BINDINGS,
     "standard-position.html": POSITION_BINDINGS,
     "standard-grip-prep.html": [
       { sel: ".status-bar span:nth-child(2)", key: "grip.contactStatus" },
       BIND.back,
       { sel: ".text-link", key: "common.prepPage" },
       { sel: ".screen-title", key: "grip.contactTitle" },
-      { sel: ".screen-subtitle", key: "grip.contactSubtitle" },
+      { sel: "[data-panel-hint]", key: "grip.contactSubtitle" },
+      { sel: ".live-chip.ok", key: "guide.instructionChip" },
+      { sel: ".guide-rail-hint", key: "grip.railHint" },
       BIND.nextBtn
     ],
     "standard-countdown.html": COUNTDOWN_BINDINGS,
@@ -984,10 +1009,8 @@
       { sel: ".status-bar span:nth-child(2)", key: "common.startMeasure" },
       BIND.back,
       { sel: ".screen-title", key: "countdown.soonTitle" },
-      { sel: ".countdown-pose-caption", key: "countdown.poseCaptionPro" },
       { sel: ".countdown-soon-caption", key: "countdown.soonCaption" },
-      { sel: "[data-stage-done-hint]", key: "countdown.keepPose" },
-      BIND.tipsTitle,
+      { sel: "[data-countdown-panel-lead]", key: "countdown.poseCaptionPro" },
       BIND.nextBtn
     ],
     "standard-next-step.html": FINISH_DONE_BINDINGS,
@@ -1086,12 +1109,16 @@
     "single-measuring-neck.html": [
       { sel: ".status-bar span:nth-child(2)", key: "measuring.status" },
       { sel: ".screen-title", key: "measuring.stillTitle" },
-      BIND.tipsTitle
+      { sel: "[data-measuring-chip]", key: "neck.measuringChip" },
+      { sel: "[data-measuring-focus]", key: "neck.measuringFocus" },
+      BIND.nextBtn
     ],
     "single-measuring-balance.html": [
       { sel: ".status-bar span:nth-child(2)", key: "measuring.status" },
       { sel: ".screen-title", key: "balance.measuringTitle" },
-      BIND.tipsTitle
+      { sel: "[data-measuring-chip]", key: "balance.measuringChip" },
+      { sel: "[data-measuring-focus]", key: "balance.measuringFocus" },
+      BIND.nextBtn
     ],
     "single-result-shoulder.html": FINISH_DONE_BINDINGS,
     "single-result-neck.html": FINISH_DONE_BINDINGS,
@@ -1282,17 +1309,16 @@
       const measureRows = root.querySelectorAll("#measurement-flow .settings-row");
       if (measureRows[0]) {
         const label = measureRows[0].querySelector(".settings-row__label");
-        const hint = measureRows[0].querySelector(".settings-row__value--hint");
+        const hint = measureRows[0].querySelector(".settings-row__subhint");
         if (label) label.textContent = t("settings.showPrepPage");
         if (hint) hint.textContent = t("settings.showPrepHint");
       }
       if (measureRows[1]) {
         const label = measureRows[1].querySelector(".settings-row__label");
-        const sub = measureRows[1].querySelector(".settings-row__subhint");
-        const hint = measureRows[1].querySelector(".settings-row__value--hint");
+        const subhints = measureRows[1].querySelectorAll(".settings-row__subhint");
         if (label) label.textContent = t("settings.voiceBroadcast");
-        if (sub) sub.textContent = t("settings.voiceDemoHint");
-        if (hint) hint.textContent = t("settings.voiceGuide");
+        if (subhints[0]) subhints[0].textContent = t("settings.voiceDemoHint");
+        if (subhints[1]) subhints[1].textContent = t("settings.voiceGuide");
       }
       const systemRows = root.querySelectorAll(".settings-group:not(#measurement-flow) .settings-row__label");
       const systemKeys = [
@@ -1341,6 +1367,10 @@
     }
 
     document.documentElement.lang = getDeviceLanguage(s) === "de" ? "de" : "zh-CN";
+    document.documentElement.style.setProperty(
+      "--demo-badge-label",
+      `"${t("common.demoBadge")}"`
+    );
 
     const titleKey = PAGE_TITLE_KEYS[page];
     if (titleKey) document.title = t(titleKey);

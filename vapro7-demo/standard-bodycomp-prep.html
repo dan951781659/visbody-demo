@@ -9,7 +9,7 @@
   <body>
     <main class="device-stage">
       <section
-        class="device device--guide"
+        class="device device--guide device--guide-panel"
         data-turntable-anthropometry
         data-anthropometry-next="./standard-grip-prep.html"
         data-auto-detect-delay="2600"
@@ -22,7 +22,6 @@
           <span class="text-link">测量准备页</span>
         </div>
         <h1 class="screen-title">站上转台</h1>
-        <p class="screen-subtitle">双手自然下垂，面向屏幕，保持身体稳定直至身高与体重测量结束。</p>
         <div class="device-visual guide-visual">
           <div class="live-stage guide-scene-wrap bodycomp-prep-scene">
             <div class="camera-corner tl"></div>
@@ -30,7 +29,7 @@
             <div class="camera-corner bl"></div>
             <div class="camera-corner br"></div>
             <div class="live-glow"></div>
-            <div class="live-status live-status--single"><span class="live-chip ok">站姿识别中</span></div>
+            <div class="live-status live-status--single"><span class="live-chip ok">请按提示操作</span></div>
             <img
               class="bodycomp-prep-hero-svg bodycomp-prep-turntable-figure"
               src="./assets/weight-measure/turntable-figure.svg"
@@ -38,7 +37,16 @@
               width="320"
               height="260"
             />
-            <div class="live-focus" data-auto-detect-status>正在识别站姿，请保持站立不动。</div>
+          </div>
+        </div>
+        <div class="measuring-info-panel">
+          <img class="measuring-info-panel__badge" src="./assets/lanhu/info-badge-i.png" alt="" />
+          <div class="measuring-info-panel__row">
+            <img class="measuring-info-panel__dot" src="./assets/lanhu/tip-dot.png" alt="" />
+            <div class="measuring-info-panel__stack">
+              <p class="measuring-info-panel__text" data-boarding-panel-lead>请站上转台</p>
+              <p class="measuring-info-panel__text measuring-info-panel__text--sub" data-boarding-panel-hint>双手垂放，自然站立，保持静止</p>
+            </div>
           </div>
         </div>
         <div class="footer-hint">

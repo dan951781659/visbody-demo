@@ -14,6 +14,7 @@
           <a class="back-link" href="./pro-prepare.html" data-stateful-link="./pro-prepare.html">← 返回</a>
         </div>
         <h1 class="screen-title">即将开始测量</h1>
+        <div class="countdown-body">
         <div
           class="countdown-layout"
           data-stage-next="./pro-measuring.html"
@@ -23,24 +24,35 @@
           data-stage-manual-next
           data-voice-text="请双手自然垂放，保持静止，测量即将开始。"
         >
-          <div class="device-visual countdown-pose-wrap">
-            <div class="live-stage countdown-pose-stage">
-              <div class="human pose-down" aria-hidden="true">
-                <div class="head"></div><div class="torso"></div>
-                <div class="limb arm left"></div><div class="limb arm right"></div>
-                <div class="limb leg left"></div><div class="limb leg right"></div>
-              </div>
-            </div>
-            <p class="countdown-pose-caption">请保持：双手自然垂放，面向屏幕站稳</p>
-          </div>
           <div class="countdown-digit-block">
             <div class="headline countdown-seconds" data-stage-seconds aria-label="倒计时秒数">3</div>
             <p class="countdown-soon-caption">秒后开始</p>
-            <p class="screen-subtitle countdown-done-hint" data-stage-done-hint>请保持以上动作</p>
           </div>
-          <div class="measurement-tips-carousel" data-tip-carousel data-tip-interval="2600">
-            <p class="measurement-tips-title">测量注意事项</p>
+          <div class="countdown-pose-panel">
+            <div class="countdown-pose-stage countdown-pose-stage--flat">
+              <div class="human pose-down" aria-hidden="true">
+                <div class="head"></div>
+                <div class="torso"></div>
+                <div class="limb arm left"></div>
+                <div class="limb arm right"></div>
+                <div class="limb leg left"></div>
+                <div class="limb leg right"></div>
+              </div>
+            </div>
+            <div class="measuring-info-panel countdown-pose-panel__copy">
+              <img class="measuring-info-panel__badge" src="./assets/lanhu/info-badge-i.png" alt="" />
+              <div class="measuring-info-panel__row">
+                <img class="measuring-info-panel__dot" src="./assets/lanhu/tip-dot.png" alt="" />
+                <p class="measuring-info-panel__text" data-countdown-panel-lead>请保持：双手自然垂放，面向屏幕站稳</p>
+              </div>
+            </div>
           </div>
+        </div>
+        <div class="device-tips-carousel-section">
+          <div class="device-tips-carousel-box">
+            <div class="measurement-tips-carousel" data-tip-carousel data-tip-interval="2600" data-tip-no-index></div>
+          </div>
+        </div>
         </div>
         <div class="footer-hint">
           <a

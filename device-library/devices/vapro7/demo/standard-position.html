@@ -9,9 +9,11 @@
   <body>
     <main class="device-stage">
       <section
-        class="device device--guide"
+        class="device device--guide device--guide-panel"
         data-auto-detect-next="./standard-countdown.html"
         data-auto-detect-delay="2600"
+        data-voice-advance-next="./standard-countdown.html"
+        data-voice-advance-after-ms="3000"
         data-voice-text="请双臂自然打开，保持约四十五度夹角。"
       >
         <div class="status-bar"><span>18:32</span><span>角度准备</span></div>
@@ -20,7 +22,6 @@
           <span class="text-link">测量准备页</span>
         </div>
         <h1 class="screen-title">双臂自然打开 45°</h1>
-        <p class="screen-subtitle guide-caption">请保持面向屏幕，双臂自然打开并维持约 45° 夹角。</p>
         <div class="device-visual guide-visual">
           <div class="live-stage guide-scene-wrap phase-stage-rails">
             <div class="camera-corner tl"></div>
@@ -28,49 +29,58 @@
             <div class="camera-corner bl"></div>
             <div class="camera-corner br"></div>
             <div class="live-glow"></div>
-            <div class="live-status live-status--single"><span class="live-chip ok">姿态识别中</span></div>
+            <div class="live-status live-status--single"><span class="live-chip ok">请按提示操作</span></div>
             <div class="turntable-base" aria-hidden="true"></div>
             <div class="guide-line circle"></div>
             <div class="human pose-hold">
               <div class="head"></div><div class="torso"></div><div class="limb arm left"></div><div class="limb arm right"></div><div class="limb leg left"></div><div class="limb leg right"></div>
             </div>
             <p class="guide-arm-hint">若夹角不足，请再张开一些</p>
-            <div class="live-focus" data-auto-detect-status>正在识别手臂姿态...</div>
+            <div class="guide-grip-nudge" aria-label="握持提示">
+              <svg
+                class="guide-grip-nudge__icon"
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 240 160"
+                width="72"
+                height="48"
+                aria-hidden="true"
+              >
+                <defs>
+                  <linearGradient id="nudgeHgRail" x1="0%" y1="0%" x2="0%" y2="100%">
+                    <stop offset="0%" stop-color="#5a6d88"/>
+                    <stop offset="100%" stop-color="#3d4d64"/>
+                  </linearGradient>
+                  <linearGradient id="nudgeHgMetal" x1="0%" y1="0%" x2="100%" y2="0%">
+                    <stop offset="0%" stop-color="#8aa4c4"/>
+                    <stop offset="50%" stop-color="#c8d6ea"/>
+                    <stop offset="100%" stop-color="#7a93b5"/>
+                  </linearGradient>
+                </defs>
+                <rect width="240" height="160" fill="#141c28" rx="12"/>
+                <rect x="72" y="28" width="96" height="22" rx="5" fill="url(#nudgeHgMetal)" stroke="#6eb0ff" stroke-width="1.2"/>
+                <rect x="60" y="52" width="120" height="14" rx="4" fill="url(#nudgeHgRail)"/>
+                <ellipse cx="88" cy="108" rx="22" ry="28" fill="#2a3344" stroke="#4a5d78" stroke-width="1.5"/>
+                <ellipse cx="152" cy="108" rx="22" ry="28" fill="#2a3344" stroke="#4a5d78" stroke-width="1.5"/>
+                <path d="M78 86 Q88 72 98 78 L104 62 Q108 52 118 58 L112 82 Q120 78 126 88 L118 100 Q108 96 100 104 Z" fill="#d4a574" stroke="#b8895a" stroke-width="1"/>
+                <path d="M162 86 Q152 72 142 78 L136 62 Q132 52 122 58 L128 82 Q120 78 114 88 L122 100 Q132 96 140 104 Z" fill="#d4a574" stroke="#b8895a" stroke-width="1"/>
+                <rect x="92" y="48" width="14" height="18" rx="3" fill="url(#nudgeHgMetal)" opacity="0.95"/>
+                <rect x="134" y="48" width="14" height="18" rx="3" fill="url(#nudgeHgMetal)" opacity="0.95"/>
+              </svg>
+              <span class="guide-grip-nudge__text">请保持握住扶手</span>
+            </div>
           </div>
-          <div class="guide-grip-nudge" aria-label="握持提示">
-            <svg
-              class="guide-grip-nudge__icon"
-              xmlns="http://www.w3.org/2000/svg"
-              viewBox="0 0 240 160"
-              width="72"
-              height="48"
-              aria-hidden="true"
-            >
-              <defs>
-                <linearGradient id="nudgeHgRail" x1="0%" y1="0%" x2="0%" y2="100%">
-                  <stop offset="0%" stop-color="#5a6d88"/>
-                  <stop offset="100%" stop-color="#3d4d64"/>
-                </linearGradient>
-                <linearGradient id="nudgeHgMetal" x1="0%" y1="0%" x2="100%" y2="0%">
-                  <stop offset="0%" stop-color="#8aa4c4"/>
-                  <stop offset="50%" stop-color="#c8d6ea"/>
-                  <stop offset="100%" stop-color="#7a93b5"/>
-                </linearGradient>
-              </defs>
-              <rect width="240" height="160" fill="#141c28" rx="12"/>
-              <rect x="72" y="28" width="96" height="22" rx="5" fill="url(#nudgeHgMetal)" stroke="#6eb0ff" stroke-width="1.2"/>
-              <rect x="60" y="52" width="120" height="14" rx="4" fill="url(#nudgeHgRail)"/>
-              <ellipse cx="88" cy="108" rx="22" ry="28" fill="#2a3344" stroke="#4a5d78" stroke-width="1.5"/>
-              <ellipse cx="152" cy="108" rx="22" ry="28" fill="#2a3344" stroke="#4a5d78" stroke-width="1.5"/>
-              <path d="M78 86 Q88 72 98 78 L104 62 Q108 52 118 58 L112 82 Q120 78 126 88 L118 100 Q108 96 100 104 Z" fill="#d4a574" stroke="#b8895a" stroke-width="1"/>
-              <path d="M162 86 Q152 72 142 78 L136 62 Q132 52 122 58 L128 82 Q120 78 114 88 L122 100 Q132 96 140 104 Z" fill="#d4a574" stroke="#b8895a" stroke-width="1"/>
-              <rect x="92" y="48" width="14" height="18" rx="3" fill="url(#nudgeHgMetal)" opacity="0.95"/>
-              <rect x="134" y="48" width="14" height="18" rx="3" fill="url(#nudgeHgMetal)" opacity="0.95"/>
-            </svg>
-            <span class="guide-grip-nudge__text">请保持握住扶手</span>
+        </div>
+        <div class="measuring-info-panel">
+          <img class="measuring-info-panel__badge" src="./assets/lanhu/info-badge-i.png" alt="" />
+          <div class="measuring-info-panel__row">
+            <img class="measuring-info-panel__dot" src="./assets/lanhu/tip-dot.png" alt="" />
+            <p class="measuring-info-panel__text" data-panel-hint>请保持面向屏幕，双臂自然打开并维持约 45° 夹角。</p>
           </div>
         </div>
         <div class="footer-hint guide-footer">
+          <p class="footer-muted" hidden data-voice-auto-hint>
+            语音播报结束后将自动进入下一页。
+          </p>
           <div class="button-row">
             <a
               class="button primary guide-phase-btn"

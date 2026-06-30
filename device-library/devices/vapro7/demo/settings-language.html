@@ -10,29 +10,46 @@
     <main class="device-stage">
       <section class="device device--settings device--settings-scroll">
         <div class="settings-scroll-header">
-          <div class="status-bar"><span>18:32</span><span data-i18n="settings.language">语言</span></div>
+          <div class="status-bar status-bar--device-settings">
+            <span>18:32</span>
+            <span class="status-icons" aria-hidden="true">
+              <span class="status-icon status-icon--wifi"></span>
+              <span class="status-icon status-icon--signal"></span>
+              <span class="status-icon status-icon--gesture"></span>
+              <span class="status-icon status-icon--printer status-icon--ok"></span>
+              <span class="status-icon status-icon--mute"></span>
+            </span>
+          </div>
           <div class="topbar">
             <a
               class="back-link"
               href="./settings.html"
               data-stateful-link="./settings.html"
               data-i18n="common.backSettings"
-              >← 设置</a>
+            >
+              <span class="back-link__icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24" focusable="false">
+                  <path d="M19 12H5M12 5l-7 7 7 7" />
+                </svg>
+              </span>
+              <span>设置</span>
+            </a>
           </div>
           <h1 class="screen-title" data-i18n="settings.languageTitle">语言</h1>
+          <div class="settings-page-divider" aria-hidden="true"></div>
         </div>
 
         <div class="settings-scroll-list" tabindex="0" aria-label="语言列表">
           <section class="settings-group">
             <div class="settings-group-body">
               <a
-                class="settings-row settings-row--static"
+                class="settings-row settings-row--static settings-row--accent"
                 href="#"
                 data-action-link="set-language"
                 data-lang="zh"
                 style="text-decoration: none; color: inherit"
               >
-                <span class="settings-row__icon">🇨🇳</span>
+                <span class="settings-row__icon settings-row__icon--badge" aria-hidden="true">中</span>
                 <span class="settings-row__label" data-i18n="lang.zh">中文</span>
                 <span class="settings-row__value" data-lang-indicator="zh" hidden>✓</span>
                 <span class="settings-row__chev">›</span>
@@ -44,7 +61,7 @@
                 data-lang="de"
                 style="text-decoration: none; color: inherit"
               >
-                <span class="settings-row__icon">🇩🇪</span>
+                <span class="settings-row__icon settings-row__icon--badge" aria-hidden="true">DE</span>
                 <span class="settings-row__label" data-i18n="lang.de">Deutsch</span>
                 <span class="settings-row__value" data-lang-indicator="de" hidden>✓</span>
                 <span class="settings-row__chev">›</span>
