@@ -4255,28 +4255,168 @@ function setupMeasurementConfigSync() {
 
 let __deviceCanvasResizeTimer = null;
 
+function readForcedDeviceCanvas() {
+  try {
+    const params = new URLSearchParams(window.location.search);
+    const fromQuery = params.get("canvas") || params.get("deviceCanvas");
+    if (fromQuery === "1080" || fromQuery === "native") return "1080";
+    if (fromQuery === "540" || fromQuery === "preview") return "540";
+    const fromStorage = localStorage.getItem("vapro7-device-canvas");
+    if (fromStorage === "1080" || fromStorage === "540") return fromStorage;
+  } catch {
+    /* ignore */
+  }
+  return null;
+}
+
+function getDeviceViewportMetrics() {
+  const vw = Math.round(window.visualViewport?.width || window.innerWidth || document.documentElement.clientWidth || 0);
+  const vh = Math.round(window.visualViewport?.height || window.innerHeight || document.documentElement.clientHeight || 0);
+  const sw = Math.round(window.screen?.width || 0);
+  const sh = Math.round(window.screen?.height || 0);
+  const dpr = window.devicePixelRatio || 1;
+  return {
+    vw,
+    vh,
+    sw,
+    sh,
+    dpr,
+    maxInner: Math.max(vw, vh),
+    minInner: Math.min(vw, vh),
+    maxScreen: Math.max(sw, sh),
+    minScreen: Math.min(sw, sh)
+  };
+}
+
 function detectNativeCanvas() {
-  const coarse = window.matchMedia("(pointer: coarse)").matches;
-  return coarse && window.innerWidth >= 1080 && window.innerHeight >= 1920;
+  const forced = readForcedDeviceCanvas();
+  if (forced) return forced === "1080";
+
+  const { vw, vh, maxInner, minInner, maxScreen, minScreen } = getDeviceViewportMetrics();
+
+  // CSS 视口即 1080×1920 竖屏面板
+  if (vw >= 999 && vh >= 1700) return true;
+  if (maxInner >= 1700 && minInner >= 999) return true;
+
+  // screen 为 1080p 竖屏，CSS 视口为全宽（部分 WebView 仍报 1080 宽）
+  if (maxScreen >= 1700 && minScreen >= 999 && vw >= 900 && vh >= 1600) return true;
+
+  return false;
+}
+
+function applyDeviceCanvasScale() {
+  if (document.documentElement.dataset.deviceCanvas !== "1080") return;
+
+  const { vw, vh } = getDeviceViewportMetrics();
+  const scale = Math.min(vw / 1080, vh / 1920);
+  if (scale > 0 && scale < 0.999) {
+    document.documentElement.style.setProperty("--device-preview-scale", String(scale));
+  } else {
+    document.documentElement.style.setProperty("--device-preview-scale", "1");
+  }
 }
 
 function applyDeviceCanvas() {
-  document.documentElement.dataset.deviceCanvas = detectNativeCanvas() ? "1080" : "540";
+  const use1080 = detectNativeCanvas();
+  document.documentElement.dataset.deviceCanvas = use1080 ? "1080" : "540";
+  if (use1080) applyDeviceCanvasScale();
+  else document.documentElement.style.removeProperty("--device-preview-scale");
+}
+
+function ensureDeviceViewportMeta() {
+  let meta = document.querySelector('meta[name="viewport"]');
+  if (!meta) {
+    meta = document.createElement("meta");
+    meta.name = "viewport";
+    document.head.appendChild(meta);
+  }
+  const desired = "width=device-width, initial-scale=1.0, maximum-scale=1.0, viewport-fit=cover";
+  if (meta.getAttribute("content") !== desired) meta.setAttribute("content", desired);
 }
 
 function setupDeviceCanvas() {
+  ensureDeviceViewportMeta();
   applyDeviceCanvas();
   if (setupDeviceCanvas.__bound) return;
   setupDeviceCanvas.__bound = true;
-  window.addEventListener("resize", () => {
+  const onResize = () => {
     if (__deviceCanvasResizeTimer) window.clearTimeout(__deviceCanvasResizeTimer);
-    __deviceCanvasResizeTimer = window.setTimeout(applyDeviceCanvas, 150);
-  });
+    __deviceCanvasResizeTimer = window.setTimeout(() => {
+      applyDeviceCanvas();
+    }, 150);
+  };
+  window.addEventListener("resize", onResize);
+  window.addEventListener("orientationchange", onResize);
+  window.visualViewport?.addEventListener("resize", onResize);
 }
 
 applyDeviceCanvas();
 
+const STATUS_BAR_ICONS_HTML = `<span class="status-icons" aria-hidden="true">
+  <span class="status-icon status-icon--wifi"></span>
+  <span class="status-icon status-icon--signal"></span>
+  <span class="status-icon status-icon--gesture"></span>
+  <span class="status-icon status-icon--printer status-icon--ok"></span>
+  <span class="status-icon status-icon--mute"></span>
+</span>`;
+
+function setupDeviceStatusBars() {
+  document.querySelectorAll(".status-bar").forEach((bar) => {
+    bar.querySelector(".status-bar__context")?.remove();
+
+    if (bar.dataset.statusBarEnhanced === "true") return;
+
+    const isSettingsBar = bar.classList.contains("status-bar--device-settings");
+    if (isSettingsBar) {
+      if (bar.querySelector(".status-bar__row")) {
+        bar.dataset.statusBarEnhanced = "true";
+        return;
+      }
+      const timeText = bar.querySelector(":scope > .status-bar__time, :scope > span:first-child")?.textContent?.trim() || "18:32";
+      const icons = bar.querySelector(".status-icons");
+      bar.classList.add("status-bar--device");
+      bar.innerHTML = "";
+      const row = document.createElement("div");
+      row.className = "status-bar__row";
+      const timeEl = document.createElement("span");
+      timeEl.className = "status-bar__time";
+      timeEl.textContent = timeText;
+      row.appendChild(timeEl);
+      if (icons) row.appendChild(icons);
+      else row.insertAdjacentHTML("beforeend", STATUS_BAR_ICONS_HTML);
+      bar.appendChild(row);
+      bar.dataset.statusBarEnhanced = "true";
+      return;
+    }
+
+    if (bar.querySelector(".status-bar__row")) {
+      bar.dataset.statusBarEnhanced = "true";
+      return;
+    }
+
+    const badge = bar.querySelector(":scope > .demo-version-badge");
+    const spans = [...bar.querySelectorAll(":scope > span:not(.demo-version-badge)")];
+    const timeText = spans[0]?.textContent?.trim() || "18:32";
+
+    bar.classList.add("status-bar--device");
+    bar.innerHTML = "";
+
+    const row = document.createElement("div");
+    row.className = "status-bar__row";
+    const timeEl = document.createElement("span");
+    timeEl.className = "status-bar__time";
+    timeEl.textContent = timeText;
+    row.appendChild(timeEl);
+    row.insertAdjacentHTML("beforeend", STATUS_BAR_ICONS_HTML);
+    bar.appendChild(row);
+
+    if (badge) bar.appendChild(badge);
+    bar.dataset.statusBarEnhanced = "true";
+  });
+}
+
 document.addEventListener("DOMContentLoaded", () => {
+  setupDeviceStatusBars();
   setupDeviceCanvas();
   bindConfigControls();
   bindDemoPlaceholders();

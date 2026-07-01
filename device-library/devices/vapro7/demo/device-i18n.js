@@ -864,7 +864,6 @@
   };
 
   const MEASURING_BINDINGS = [
-    { sel: ".status-bar span:nth-child(2)", key: "measuring.status" },
     { sel: ".screen-title", key: "measuring.flowTitle" },
     { sel: ".live-chip.ok", key: "measuring.postureOk" },
     { sel: "[data-measuring-chip]", key: "measuring.turntableRotating" },
@@ -873,7 +872,6 @@
   ];
 
   const BOARDING_BINDINGS = [
-    { sel: ".status-bar span:nth-child(2)", key: "boarding.status" },
     BIND.back,
     { sel: ".text-link", key: "common.prepPage" },
     { sel: ".screen-title", key: "boarding.title" },
@@ -884,7 +882,6 @@
   ];
 
   const COUNTDOWN_BINDINGS = [
-    { sel: ".status-bar span:nth-child(2)", key: "countdown.startStatus" },
     BIND.back,
     { sel: ".text-link", key: "countdown.still" },
     { sel: ".screen-title", key: "countdown.soonTitle" },
@@ -894,7 +891,6 @@
   ];
 
   const FINISH_DONE_BINDINGS = [
-    { sel: ".status-bar span:nth-child(2)", key: "finishDone.status" },
     BIND.back,
     { sel: ".text-link", key: "finishDone.status" },
     { sel: ".screen-title", key: "finishDone.title" },
@@ -909,7 +905,6 @@
   ];
 
   const POSITION_BINDINGS = [
-    { sel: ".status-bar span:nth-child(2)", key: "position.angleStatus" },
     BIND.back,
     { sel: ".text-link", key: "common.prepPage" },
     { sel: ".screen-title", key: "position.title" },
@@ -930,25 +925,21 @@
       { sel: "a.standby-settings-link:not(.standby-settings-link--top)", key: "standby.settings" }
     ],
     "home.html": [
-      { sel: ".status-bar span:last-child", key: "home.status" },
       { sel: ".back-link", key: "common.backHome" },
       { sel: ".screen-title", key: "home.title" },
       { sel: "[data-show-if-no-home-tiles]", key: "home.emptyHint" }
     ],
     "settings.html": [
-      { sel: ".status-bar span:last-child", key: "common.settings" },
       { sel: ".back-link", key: "common.backHome" },
       { sel: ".screen-title", key: "settings.title" },
       { sel: "#settings-group-measure-flow", key: "settings.measureFlow" },
       { sel: "#settings-group-system", key: "settings.system" }
     ],
     "settings-language.html": [
-      { sel: ".status-bar span:last-child", key: "settings.language" },
       { sel: ".back-link", key: "common.backSettings" },
       { sel: ".screen-title", key: "settings.languageTitle" }
     ],
     "single-select.html": [
-      { sel: ".status-bar span:last-child", key: "singleSelect.status" },
       { sel: ".text-link", key: "singleSelect.pickPart" },
       { sel: ".screen-title", key: "singleSelect.title" },
       { sel: ".dynamic-lab-scope-hint", key: "singleSelect.hint" },
@@ -959,7 +950,6 @@
       { sel: "[data-show-if-single-key='singleNeck'] .card-desc", key: "singleSelect.neckDesc" }
     ],
     "standard-user-prep.html": [
-      { sel: ".status-bar span:last-child", key: "prep.title" },
       { sel: ".text-link", key: "prep.title" },
       { sel: ".screen-title", key: "prep.title" },
       { sel: ".screen-subtitle--prep", key: "prep.subtitle" },
@@ -971,7 +961,6 @@
       { sel: "[data-prep-option='next'] strong", key: "common.continueMeasure" }
     ],
     "pro-user-prep.html": [
-      { sel: ".status-bar span:last-child", key: "prep.title" },
       { sel: ".text-link", key: "prep.title" },
       { sel: ".screen-title", key: "prep.title" },
       { sel: ".screen-subtitle--prep", key: "prep.subtitle" },
@@ -984,7 +973,6 @@
     ],
     "standard-measuring.html": MEASURING_BINDINGS,
     "pro-measuring.html": [
-      { sel: ".status-bar span:nth-child(2)", key: "measuring.status" },
       { sel: ".screen-title", key: "pro.measuringTitle" },
       { sel: ".live-chip.ok", key: "measuring.postureOk" },
       { sel: "[data-measuring-chip]", key: "pro.measuring.chip" },
@@ -995,7 +983,6 @@
     "pro-prepare.html": BOARDING_BINDINGS,
     "standard-position.html": POSITION_BINDINGS,
     "standard-grip-prep.html": [
-      { sel: ".status-bar span:nth-child(2)", key: "grip.contactStatus" },
       BIND.back,
       { sel: ".text-link", key: "common.prepPage" },
       { sel: ".screen-title", key: "grip.contactTitle" },
@@ -1006,7 +993,6 @@
     ],
     "standard-countdown.html": COUNTDOWN_BINDINGS,
     "pro-countdown.html": [
-      { sel: ".status-bar span:nth-child(2)", key: "common.startMeasure" },
       BIND.back,
       { sel: ".screen-title", key: "countdown.soonTitle" },
       { sel: ".countdown-soon-caption", key: "countdown.soonCaption" },
@@ -1016,7 +1002,6 @@
     "standard-next-step.html": FINISH_DONE_BINDINGS,
     "standard-next-step-touch.html": FINISH_DONE_BINDINGS,
     "standard-result.html": [
-      { sel: ".status-bar span:nth-child(2)", key: "finish.title" },
       { sel: ".back-link", key: "common.returnHome" },
       { sel: ".text-link", key: "common.viewResult" },
       { sel: ".screen-title", key: "finish.title" },
@@ -1028,18 +1013,15 @@
       { sel: ".scheme-one-weak a", key: "common.done" }
     ],
     "pro-result.html": [
-      { sel: ".status-bar span:nth-child(2)", key: "finish.title" },
       { sel: ".back-link", key: "common.returnHome" },
       { sel: ".screen-title", key: "finish.title" },
       { sel: ".screen-subtitle", key: "finish.subtitle" }
     ],
     "standard-generating.html": [
-      { sel: ".status-bar span:nth-child(2)", key: "generating.status" },
       { sel: ".screen-title", key: "generating.title" },
       { sel: "[data-generating-label]", key: "generating.progress", fallback: "模型生成中" }
     ],
     "height-confirm.html": [
-      { sel: ".status-bar span:nth-child(2)", key: "height.status" },
       BIND.back,
       { sel: ".screen-title", key: "height.title" },
       { sel: ".screen-subtitle", key: "height.subtitle" },
@@ -1047,14 +1029,12 @@
       { sel: ".height-adjust-confirm", key: "height.confirm" }
     ],
     "weight-standalone-measuring.html": [
-      { sel: ".status-bar span:nth-child(2)", key: "weight.title" },
       { sel: ".back-link", key: "common.backProjectSelect" },
       { sel: ".screen-title", key: "weight.title" },
       { sel: ".weight-measure-tip-list li:nth-child(1)", key: "weight.tipStand" },
       { sel: ".weight-measure-tip-list li:nth-child(2)", key: "weight.tipStill" }
     ],
     "weight-standalone-result.html": [
-      { sel: ".status-bar span:nth-child(2)", key: "weight.title" },
       { sel: ".back-link", key: "common.backProjectSelect" },
       { sel: ".screen-title", key: "weight.title" },
       { sel: ".weight-result-info-card__label", key: "weight.resultTime" },
@@ -1062,7 +1042,6 @@
       { sel: "[data-weight-idle-label]", key: "weight.idleReturn" }
     ],
     "single-prepare-shoulder.html": [
-      { sel: ".status-bar span:nth-child(2)", key: "shoulder.status" },
       BIND.back,
       { sel: ".text-link", key: "common.prepPage" },
       { sel: ".section-label__kicker", key: "shoulder.labKicker" },
@@ -1075,7 +1054,6 @@
       { sel: ".auto-hint strong", key: "countdown.prepDone" }
     ],
     "single-prepare-neck.html": [
-      { sel: ".status-bar span:nth-child(2)", key: "neck.status" },
       BIND.back,
       { sel: ".text-link", key: "common.prepPage" },
       { sel: ".section-label__kicker", key: "shoulder.labKicker" },
@@ -1088,7 +1066,6 @@
       { sel: ".guide-phase-btn", key: "countdown.prepDone" }
     ],
     "single-prepare-balance.html": [
-      { sel: ".status-bar span:nth-child(2)", key: "item.balance.title" },
       BIND.back,
       { sel: ".text-link", key: "common.prepPage" },
       { sel: ".screen-title", key: "balance.prepTitle" },
@@ -1107,14 +1084,12 @@
       { sel: ".single-shoulder-progress-status", key: "measuring.status" }
     ],
     "single-measuring-neck.html": [
-      { sel: ".status-bar span:nth-child(2)", key: "measuring.status" },
       { sel: ".screen-title", key: "measuring.stillTitle" },
       { sel: "[data-measuring-chip]", key: "neck.measuringChip" },
       { sel: "[data-measuring-focus]", key: "neck.measuringFocus" },
       BIND.nextBtn
     ],
     "single-measuring-balance.html": [
-      { sel: ".status-bar span:nth-child(2)", key: "measuring.status" },
       { sel: ".screen-title", key: "balance.measuringTitle" },
       { sel: "[data-measuring-chip]", key: "balance.measuringChip" },
       { sel: "[data-measuring-focus]", key: "balance.measuringFocus" },
@@ -1124,7 +1099,6 @@
     "single-result-neck.html": FINISH_DONE_BINDINGS,
     "single-result-balance.html": FINISH_DONE_BINDINGS,
     "report-detail.html": [
-      { sel: ".status-bar span:nth-child(2)", key: "report.title" },
       BIND.back,
       { sel: ".text-link", key: "report.detail" },
       { sel: ".screen-title", key: "report.title" },
@@ -1146,7 +1120,6 @@
       { sel: ".screen-title", key: "legacy.prepareMerged" }
     ],
     "single-flow-placeholder.html": [
-      { sel: ".status-bar span:nth-child(2)", key: "placeholder.status" },
       { sel: ".screen-title", key: "placeholder.flowTitle" }
     ],
     "settings-modes.html": [

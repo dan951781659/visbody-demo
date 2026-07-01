@@ -34,6 +34,7 @@
   --device-shell-card-radius: calc(24px * var(--ds));
   --device-shell-gutter: calc(24px * var(--ds));
   --device-shell-gutter-tight: calc(20px * var(--ds));
+  --figure-scale: calc(var(--ds) / 1.256);
 }
 
 :root,
@@ -51,6 +52,16 @@
   --device-preview-scale: 1;
 }
 
+/* 真机 1080×1920：在 JS 写入 data-device-canvas 前先用媒体查询兜底 */
+@media screen and (min-width: 999px) and (min-height: 1700px) {
+  :root {
+    --device-width: 1080px;
+    --device-height: 1920px;
+    --ds: 2.512;
+    --device-preview-scale: 1;
+  }
+}
+
 * { box-sizing: border-box; }
 html, body {
   margin: 0;
@@ -61,9 +72,24 @@ html, body {
 }
 body { padding: 24px; }
 body:has(.device-stage) { padding: calc(12px * var(--ds));}
+@media screen and (min-width: 999px) and (min-height: 1700px) {
+  body:has(.device-stage) {
+    padding: 0;
+    min-height: 100%;
+    min-height: 100dvh;
+  }
+  .device-stage {
+    min-height: 100vh;
+    min-height: 100dvh;
+    padding: 0;
+    align-items: stretch;
+    overflow: hidden;
+  }
+}
 html[data-device-canvas="1080"] body:has(.device-stage) {
   padding: 0;
   min-height: 100%;
+  min-height: 100dvh;
 }
 a { color: inherit; text-decoration: none; }
 
@@ -136,8 +162,52 @@ a { color: inherit; text-decoration: none; }
 }
 html[data-device-canvas="1080"] .device-stage {
   min-height: 100vh;
+  min-height: 100dvh;
   padding: 0;
   align-items: stretch;
+  overflow: hidden;
+}
+html[data-device-canvas="1080"] .device {
+  width: var(--device-width);
+  max-width: 100%;
+  margin: 0 auto;
+  zoom: var(--device-preview-scale);
+}
+html[data-device-canvas="1080"] .device--guide.device--guide-panel {
+  padding-top: calc(16px * var(--ds));
+  padding-bottom: calc(20px * var(--ds));
+}
+html[data-device-canvas="1080"] .device--guide.device--guide-panel .guide-visual {
+  flex: 0 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: auto;
+  margin-top: calc(8px * var(--ds));
+  margin-bottom: calc(8px * var(--ds));
+}
+html[data-device-canvas="1080"] .device--guide.device--guide-panel .guide-visual .live-stage,
+html[data-device-canvas="1080"] .device--guide.device--guide-panel .bodycomp-prep-scene {
+  min-height: calc(240px * var(--ds));
+  max-height: calc(320px * var(--ds));
+  width: 100%;
+}
+html[data-device-canvas="1080"] .device--countdown .countdown-pose-stage--flat {
+  min-height: calc(140px * var(--ds));
+  max-height: calc(180px * var(--ds));
+}
+html[data-device-canvas="1080"] .device--guide.device--guide-panel .bodycomp-prep-hero-svg {
+  width: min(100%, calc(420px * var(--ds)));
+}
+html[data-device-canvas="1080"] .device--guide.device--guide-panel .measuring-info-panel {
+  flex-shrink: 0;
+}
+html[data-device-canvas="1080"] .device--countdown,
+html[data-device-canvas="1080"] .device--measuring,
+html[data-device-canvas="1080"] .device[data-measuring-flow] {
+  width: 100%;
+  max-width: var(--device-width);
+  margin: 0 auto;
 }
 .device {
   position: relative;
@@ -156,10 +226,141 @@ html[data-device-canvas="1080"] .device-stage {
 .status-bar, .topbar { display:flex; justify-content:space-between; align-items:center; }
 .status-bar {
   color: rgba(255, 255, 255, 0.94);
-  font-size: calc(14px * var(--ds));
-  margin-bottom: calc(24px * var(--ds));
+  font-size: 14px;
+  margin-bottom: 12px;
   padding: 0 var(--device-shell-gutter);
   letter-spacing: 0.01em;
+}
+[data-device-canvas="1080"] .status-bar {
+  font-size: 18px;
+  margin-bottom: 16px;
+}
+.status-bar--device {
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0;
+  min-height: 0;
+}
+.status-bar--device .status-bar__row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  min-height: 22px;
+}
+[data-device-canvas="1080"] .status-bar--device .status-bar__row {
+  min-height: 24px;
+}
+.status-bar__time {
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 1;
+  color: rgba(255, 255, 255, 0.94);
+  flex-shrink: 0;
+}
+[data-device-canvas="1080"] .status-bar__time {
+  font-size: 18px;
+}
+.status-bar--device .status-icons,
+.status-bar--device-settings .status-icons {
+  gap: 10px;
+  flex-shrink: 0;
+}
+.status-bar--device .status-icon--wifi,
+.status-bar--device-settings .status-icon--wifi {
+  width: 18px;
+  height: 13px;
+  border-top: 2px solid currentColor;
+  border-left: 2px solid currentColor;
+  border-right: 2px solid currentColor;
+  border-radius: 16px 16px 0 0;
+  transform: translateY(2px) rotate(45deg);
+}
+.status-bar--device .status-icon--wifi::after,
+.status-bar--device-settings .status-icon--wifi::after {
+  right: 1px;
+  bottom: 1px;
+  width: 4px;
+  height: 4px;
+}
+.status-bar--device .status-icon--signal,
+.status-bar--device-settings .status-icon--signal {
+  width: 12px;
+  height: 15px;
+  border-left: 2px solid currentColor;
+  border-bottom: 2px solid currentColor;
+}
+.status-bar--device .status-icon--signal::before,
+.status-bar--device-settings .status-icon--signal::before {
+  right: 3px;
+  bottom: -2px;
+  height: 8px;
+}
+.status-bar--device .status-icon--signal::after,
+.status-bar--device-settings .status-icon--signal::after {
+  right: -1px;
+  height: 12px;
+}
+.status-bar--device .status-icon--gesture,
+.status-bar--device-settings .status-icon--gesture {
+  width: 14px;
+  height: 16px;
+}
+.status-bar--device .status-icon--gesture::before,
+.status-bar--device-settings .status-icon--gesture::before {
+  height: 14px;
+}
+.status-bar--device .status-icon--gesture::after,
+.status-bar--device-settings .status-icon--gesture::after {
+  width: 8px;
+  height: 4px;
+  margin-left: -4px;
+  border-width: 2px;
+  border-radius: 6px 6px 0 0;
+}
+.status-bar--device .status-icon--printer,
+.status-bar--device-settings .status-icon--printer {
+  width: 16px;
+  height: 12px;
+  border-width: 2px;
+  border-radius: 2px;
+}
+.status-bar--device .status-icon--printer::before,
+.status-bar--device-settings .status-icon--printer::before {
+  top: -6px;
+  width: 10px;
+  height: 5px;
+  margin-left: -5px;
+  border-width: 2px;
+  border-radius: 2px 2px 0 0;
+}
+.status-bar--device .status-icon--ok::after,
+.status-bar--device-settings .status-icon--ok::after {
+  right: -4px;
+  bottom: -3px;
+  width: 5px;
+  height: 5px;
+}
+.status-bar--device .status-icon--mute,
+.status-bar--device-settings .status-icon--mute {
+  width: 16px;
+  height: 14px;
+}
+.status-bar--device .status-icon--mute::before,
+.status-bar--device-settings .status-icon--mute::before {
+  top: 3px;
+  width: 10px;
+  height: 8px;
+  border-width: 2px;
+}
+.status-bar--device .status-icon--mute::after,
+.status-bar--device-settings .status-icon--mute::after {
+  height: 16px;
+}
+.status-bar--device .demo-version-badge {
+  align-self: flex-start;
+  margin-top: 2px;
 }
 .topbar {
   margin-bottom: calc(28px * var(--ds));
@@ -422,7 +623,7 @@ html[data-device-canvas="1080"] .device-stage {
   flex: 0 0 auto;
   margin: 0;
   padding: calc(8px * var(--ds)) calc(10px * var(--ds)) calc(10px * var(--ds));
-  font-size: calc(20px * var(--ds));
+  font-size: calc(16px * var(--ds));
   line-height: calc(25px * var(--ds));
   color: #898f99;
   text-align: left;
@@ -878,10 +1079,10 @@ html[data-device-canvas="1080"] .device-stage {
   flex: 1 1 auto;
   display: flex;
   flex-direction: column;
-  justify-content: center;
-  gap: calc(12px * var(--ds));
+  justify-content: flex-start;
+  gap: 0;
   min-height: 0;
-  padding: calc(4px * var(--ds)) 0;
+  padding: calc(28px * var(--ds)) 0 calc(4px * var(--ds));
 }
 .countdown-layout {
   display: flex;
@@ -889,28 +1090,20 @@ html[data-device-canvas="1080"] .device-stage {
   flex: 0 0 auto;
   align-items: stretch;
   justify-content: flex-start;
-  gap: calc(12px * var(--ds));
+  gap: calc(16px * var(--ds));
   margin: 0 var(--device-shell-gutter);
   min-height: 0;
-}
-.countdown-pose-panel {
-  display: flex;
-  flex-direction: column;
-  gap: 0;
-  flex-shrink: 0;
-  border-radius: calc(16px * var(--ds));
-  overflow: hidden;
-  background: rgba(255, 255, 255, 0.04);
-  border: 1px solid rgba(255, 255, 255, 0.06);
 }
 .countdown-pose-stage--flat {
   position: relative;
   margin: 0;
-  min-height: calc(88px * var(--ds));
-  max-height: calc(104px * var(--ds));
-  padding: calc(8px * var(--ds)) calc(12px * var(--ds));
-  border: none;
-  background: transparent;
+  flex-shrink: 0;
+  min-height: calc(120px * var(--ds));
+  max-height: calc(150px * var(--ds));
+  padding: calc(12px * var(--ds));
+  border-radius: calc(16px * var(--ds));
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  background: rgba(255, 255, 255, 0.04);
   box-shadow: none;
   overflow: hidden;
   display: flex;
@@ -921,20 +1114,17 @@ html[data-device-canvas="1080"] .device-stage {
   position: relative;
   left: auto;
   top: auto;
-  transform: scale(0.82);
+  transform: scale(calc(0.82 * var(--figure-scale)));
   margin: 0 auto;
 }
-.countdown-pose-panel__copy.measuring-info-panel {
+.device.device--countdown .countdown-pose-hint.measuring-info-panel {
   margin: 0;
   width: 100%;
-  border-radius: 0;
-  min-height: 0;
-  padding: calc(10px * var(--ds)) calc(14px * var(--ds)) calc(12px * var(--ds));
-  background: #555;
+  flex-shrink: 0;
 }
 .device.device--countdown .countdown-pose-stage--flat {
-  min-height: calc(88px * var(--ds));
-  max-height: calc(104px * var(--ds));
+  min-height: calc(120px * var(--ds));
+  max-height: calc(150px * var(--ds));
 }
 .device.device--countdown .countdown-digit-block {
   min-height: 0;
@@ -984,11 +1174,10 @@ html[data-device-canvas="1080"] .device-stage {
   background: #fff;
 }
 .device.device--countdown .device-tips-carousel-section {
-  margin: 0 var(--device-shell-gutter);
+  margin: auto var(--device-shell-gutter) calc(8px * var(--ds));
   flex-shrink: 0;
 }
 .device.device--countdown .countdown-layout .measuring-info-panel {
-  margin-top: 0;
   flex-shrink: 0;
 }
 .countdown-pose-wrap {
@@ -1000,7 +1189,7 @@ html[data-device-canvas="1080"] .device-stage {
   max-height: calc(130px * var(--ds));
 }
 .countdown-pose-stage .human {
-  transform: scale(1.05);
+  transform: scale(calc(1.05 * var(--figure-scale)));
 }
 .countdown-pose-caption {
   margin: calc(12px * var(--ds)) 0 0;
@@ -1468,12 +1657,12 @@ html[data-device-canvas="1080"] .device-stage {
 .camera-corner.bl { bottom:18px; left:18px; border-width: 0 0 2px 2px; border-radius: 0 0 0 14px; }
 .camera-corner.br { bottom:18px; right:18px; border-width: 0 2px 2px 0; border-radius: 0 0 14px 0; }
 .live-glow {
-  position:absolute; inset:auto; width:250px; height:250px; border-radius:50%;
+  position:absolute; inset:auto; width:calc(250px * var(--figure-scale)); height:calc(250px * var(--figure-scale)); border-radius:50%;
   background: radial-gradient(circle, rgba(29,102,230,.16) 0%, rgba(29,102,230,.03) 58%, transparent 74%);
   filter: blur(10px); left:50%; top:50%; transform:translate(-50%,-42%);
 }
 .human {
-  position: absolute; left:50%; top:50%; transform:translate(-50%,-44%);
+  position: absolute; left:50%; top:50%; transform:translate(-50%,-44%) scale(var(--figure-scale));
   width: 130px; height: 208px;
 }
 .human .torso {
@@ -1494,7 +1683,7 @@ html[data-device-canvas="1080"] .device-stage {
 .human .leg.right { right:42px; top:160px; width:14px; height:62px; }
 .human.pose-down .arm.left { left:18px; top:58px; width:14px; height:90px; }
 .human.pose-down .arm.right { right:18px; top:58px; width:14px; height:90px; }
-.human.pose-boarding { transform: translate(-50%, -32%); }
+.human.pose-boarding { transform: translate(-50%, -32%) scale(var(--figure-scale)); }
 .human.pose-boarding .arm.left { left:18px; top:58px; width:14px; height:90px; transform: none; }
 .human.pose-boarding .arm.right { right:18px; top:58px; width:14px; height:90px; transform: none; }
 .human.pose-hold .arm.left { left:4px; top:74px; width:58px; height:14px; transform: rotate(-26deg); transform-origin: right center; }
@@ -1728,7 +1917,7 @@ html[data-device-canvas="1080"] .device-stage {
 .guide-line {
   position:absolute; border:1px dashed rgba(255,255,255,0.18); border-radius:999px;
 }
-.guide-line.circle { width:220px; height:220px; left:50%; top:50%; transform:translate(-50%,-44%); }
+.guide-line.circle { width:calc(220px * var(--figure-scale)); height:calc(220px * var(--figure-scale)); left:50%; top:50%; transform:translate(-50%,-44%); }
 .guide-line.feet { width:140px; height:34px; left:50%; bottom:16px; transform:translateX(-50%); border-style:solid; background: linear-gradient(180deg, #303949, #161d27); }
 .guide-line.neck {
   width: 24px; height: 24px; left:50%; top:92px; transform:translateX(-50%); border-color: rgba(255,154,61,.8);
@@ -2846,16 +3035,16 @@ audio.turntable-audio {
   animation: guide-boarding-step 2.8s ease-in-out infinite;
 }
 @keyframes guide-boarding-step {
-  0%, 100% { transform: translate(-50%, -20%); }
-  45% { transform: translate(-50%, -44%); }
+  0%, 100% { transform: translate(-50%, -20%) scale(var(--figure-scale)); }
+  45% { transform: translate(-50%, -44%) scale(var(--figure-scale)); }
 }
 .guide-scene-wrap.phase-stage-rails .human.pose-hold {
   animation: guide-rails-sequence 4s ease-in-out infinite;
 }
 @keyframes guide-rails-sequence {
-  0%, 25% { transform: translate(-50%, -44%) scale(1); }
-  35%, 55% { transform: translate(-50%, -44%) scale(0.98); }
-  65%, 100% { transform: translate(-50%, -44%) scale(1); }
+  0%, 25% { transform: translate(-50%, -44%) scale(var(--figure-scale)); }
+  35%, 55% { transform: translate(-50%, -44%) scale(calc(0.98 * var(--figure-scale))); }
+  65%, 100% { transform: translate(-50%, -44%) scale(var(--figure-scale)); }
 }
 .guide-scene-wrap.phase-stage-rails .guide-rail-hint {
   display: block;
@@ -2875,7 +3064,7 @@ audio.turntable-audio {
   left: 50%;
   top: 50%;
   transform: translate(-50%, -50%);
-  width: min(92%, 300px);
+  width: min(92%, calc(300px * var(--figure-scale)));
   height: auto;
   z-index: 3;
   border-radius: 14px;
@@ -3675,11 +3864,14 @@ audio.turntable-audio {
   margin-left: calc(8px * var(--ds));
 }
 .status-bar--device-settings {
-  margin-bottom: calc(22px * var(--ds));
+  margin-bottom: 16px;
   color: rgba(255, 255, 255, 0.94);
-  font-size: calc(18px * var(--ds));
+  font-size: 18px;
   font-weight: 500;
   letter-spacing: 0.01em;
+}
+.status-bar--device-settings .status-bar__time {
+  font-size: 18px;
 }
 .status-icons {
   display: inline-flex;
