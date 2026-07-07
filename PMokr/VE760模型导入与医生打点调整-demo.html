@@ -1,0 +1,2542 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>VE760 模型导入与医生打点调整 Demo</title>
+  <style>
+    :root {
+      --bg: #f5f7fb;
+      --panel: #ffffff;
+      --rail: #edf8ff;
+      --soft: #eef7ff;
+      --primary: #165dff;
+      --sky: #0ea5e9;
+      --success: #16a34a;
+      --warning: #f59e0b;
+      --danger: #ef4444;
+      --purple: #8b5cf6;
+      --text: #1f2937;
+      --muted: #64748b;
+      --line: #e2e8f0;
+      --blue-line: #bfdbfe;
+      --shadow: 0 10px 30px rgba(15, 23, 42, .08);
+      --radius: 8px;
+      --font: "DM Sans", "Noto Sans SC", "PingFang SC", "Microsoft YaHei", Arial, sans-serif;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      background: var(--bg);
+      color: var(--text);
+      font-family: var(--font);
+      font-size: 14px;
+      letter-spacing: 0;
+    }
+
+    button, input, select {
+      font: inherit;
+    }
+
+    button {
+      cursor: pointer;
+    }
+
+    .app {
+      min-height: 100vh;
+      display: grid;
+      grid-template-columns: 184px minmax(0, 1fr);
+    }
+
+    .sidebar {
+      background: #f8fbff;
+      border-right: 1px solid var(--line);
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+    }
+
+    .brand {
+      height: 64px;
+      padding: 0 14px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      border-bottom: 1px solid var(--line);
+      color: #111827;
+      font-weight: 900;
+      white-space: nowrap;
+    }
+
+    .brand-word {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      gap: 3px;
+      min-width: 0;
+    }
+
+    .brand-name {
+      font-size: 18px;
+      letter-spacing: 1px;
+      color: #0f172a;
+      line-height: 1;
+    }
+
+    .brand-system {
+      font-size: 12px;
+      color: #475569;
+      font-weight: 800;
+      letter-spacing: 0;
+      line-height: 1;
+    }
+
+    .brand-mark {
+      width: 38px;
+      height: 24px;
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 3px;
+      align-items: end;
+    }
+
+    .brand-mark span {
+      display: block;
+      border-radius: 3px 3px 0 0;
+      background: linear-gradient(180deg, #38bdf8, #165dff);
+    }
+
+    .brand-mark span:nth-child(1) { height: 13px; }
+    .brand-mark span:nth-child(2) { height: 20px; }
+    .brand-mark span:nth-child(3) { height: 24px; }
+    .brand-mark span:nth-child(4) { height: 16px; }
+
+    .nav {
+      padding: 18px 10px;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .nav-btn {
+      height: 44px;
+      width: 100%;
+      border: 0;
+      border-radius: 6px;
+      background: transparent;
+      color: #475569;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 0 14px;
+      font-weight: 800;
+      text-align: left;
+    }
+
+    .nav-btn svg {
+      width: 18px;
+      height: 18px;
+    }
+
+    .nav-btn.active {
+      background: #e8f2ff;
+      color: var(--primary);
+      box-shadow: inset 3px 0 0 var(--primary);
+    }
+
+    .main {
+      min-width: 0;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .topbar {
+      height: 64px;
+      background: var(--panel);
+      border-bottom: 1px solid var(--line);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 28px;
+      position: sticky;
+      top: 0;
+      z-index: 20;
+    }
+
+    .page-title {
+      margin: 0;
+      font-size: 18px;
+      font-weight: 900;
+    }
+
+    .top-actions {
+      display: flex;
+      align-items: center;
+      gap: 18px;
+      color: var(--muted);
+    }
+
+    .lang-select {
+      height: 38px;
+      min-width: 106px;
+      border: 1px solid var(--line);
+      border-radius: 4px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      color: #64748b;
+      background: #fff;
+      font-weight: 700;
+    }
+
+    .bell {
+      width: 26px;
+      height: 26px;
+      display: grid;
+      place-items: center;
+      color: #111827;
+    }
+
+    .user-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      color: #475569;
+      font-weight: 800;
+      position: relative;
+    }
+
+    .user-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: #ef4444;
+      position: absolute;
+      right: 18px;
+      top: 3px;
+    }
+
+    .avatar {
+      width: 34px;
+      height: 34px;
+      border-radius: 50%;
+      background: linear-gradient(180deg, #a7f3d0, #67e8f9);
+      display: grid;
+      place-items: center;
+      color: #0f766e;
+      font-weight: 900;
+      border: 1px solid #99f6e4;
+    }
+
+    .report-list-filter {
+      min-height: 104px;
+      background: var(--bg);
+      border-bottom: 1px solid #d6dbe5;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 22px;
+      padding: 24px 30px;
+    }
+
+    .report-search-group {
+      display: flex;
+      align-items: center;
+      gap: 48px;
+      min-width: 0;
+    }
+
+    .flat-input {
+      height: 42px;
+      width: 236px;
+      border: 1px solid #dfe5ef;
+      border-radius: 5px;
+      background: #fff;
+      color: #94a3b8;
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+      padding: 0 14px;
+      font-size: 13px;
+      white-space: nowrap;
+    }
+
+    .flat-input.search {
+      width: 236px;
+      justify-content: space-between;
+    }
+
+    .flat-input svg {
+      width: 16px;
+      height: 16px;
+      color: #cbd5e1;
+      flex: none;
+    }
+
+    .report-list-shell {
+      padding: 0 36px 64px;
+      background: var(--bg);
+    }
+
+    .vis-report-table {
+      width: 100%;
+      border-collapse: separate;
+      border-spacing: 0 8px;
+      table-layout: fixed;
+    }
+
+    .vis-report-table th {
+      height: 44px;
+      padding: 0 32px;
+      background: transparent;
+      border: 0;
+      color: #8b95a1;
+      font-size: 14px;
+      font-weight: 800;
+      text-align: left;
+    }
+
+    .vis-report-table td {
+      height: 60px;
+      padding: 0 32px;
+      border: 0;
+      background: rgba(255, 255, 255, .72);
+      color: #6b7280;
+      font-size: 16px;
+      vertical-align: middle;
+    }
+
+    .vis-report-table tbody tr.selected td {
+      background: #eaf6ff;
+      border-top: 1px solid #409cff;
+      border-bottom: 1px solid #409cff;
+    }
+
+    .vis-report-table tbody tr.selected td:first-child {
+      border-left: 1px solid #409cff;
+      border-radius: 4px 0 0 4px;
+    }
+
+    .vis-report-table tbody tr.selected td:last-child {
+      border-right: 1px solid #409cff;
+      border-radius: 0 4px 4px 0;
+    }
+
+    .report-time {
+      line-height: 1.15;
+      color: #6b7280;
+    }
+
+    .name-link {
+      color: #2f95ff;
+      font-weight: 800;
+      text-decoration: none;
+      max-width: 140px;
+      display: inline-block;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      vertical-align: middle;
+    }
+
+    .checkmark {
+      color: #18c12a;
+      font-size: 25px;
+      font-weight: 900;
+      line-height: 1;
+    }
+
+    .report-action {
+      height: 34px;
+      min-width: 108px;
+      border-radius: 4px;
+      background: #3497ff;
+      color: #fff;
+      font-weight: 800;
+      border: 0;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      padding: 0 14px;
+    }
+
+    .app-footer {
+      position: fixed;
+      left: 184px;
+      right: 0;
+      bottom: 0;
+      height: 62px;
+      background: var(--bg);
+      border-top: 1px solid #d6dbe5;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      color: #a3a7ae;
+      font-size: 16px;
+      z-index: 15;
+    }
+
+    body.report-page .app-footer {
+      display: flex;
+    }
+
+    .content {
+      padding: 22px 28px 36px;
+      min-width: 0;
+    }
+
+    .view {
+      display: none;
+    }
+
+    .view.active {
+      display: block;
+    }
+
+    .hero-bar {
+      background: #eaf7fc;
+      border: 1px solid #d7eef7;
+      border-radius: var(--radius);
+      padding: 14px 18px;
+      margin-bottom: 16px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+    }
+
+    .hero-bar strong {
+      font-size: 16px;
+    }
+
+    .import-options {
+      display: grid;
+      gap: 16px;
+      margin-bottom: 18px;
+    }
+
+    .import-card {
+      min-height: 214px;
+      background: #fff;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      display: grid;
+      grid-template-columns: 110px minmax(360px, 1fr) 320px;
+      align-items: center;
+      gap: 28px;
+      padding: 24px;
+      box-shadow: 0 1px 2px rgba(15, 23, 42, .03);
+    }
+
+    .model-icon {
+      width: 86px;
+      height: 112px;
+      display: grid;
+      place-items: center;
+      justify-self: center;
+    }
+
+    .import-copy h2 {
+      margin: 0 0 10px;
+      font-size: 17px;
+      font-weight: 900;
+    }
+
+    .import-copy p {
+      margin: 0;
+      color: #334155;
+      line-height: 1.75;
+      font-weight: 600;
+    }
+
+    .file-rule {
+      color: var(--muted);
+      font-size: 13px;
+      margin-top: 8px;
+      line-height: 1.7;
+    }
+
+    .import-action {
+      display: flex;
+      justify-content: center;
+    }
+
+    .workflow-card {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      padding: 28px 32px;
+      margin-bottom: 18px;
+    }
+
+    .workflow-steps {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      position: relative;
+      max-width: 980px;
+      margin: 0 auto;
+    }
+
+    .workflow-steps::before {
+      content: "";
+      position: absolute;
+      left: 12.5%;
+      right: 12.5%;
+      top: 14px;
+      height: 2px;
+      background: #cbd5e1;
+      z-index: 0;
+    }
+
+    .workflow-steps::after {
+      content: "";
+      position: absolute;
+      left: 12.5%;
+      top: 14px;
+      width: var(--progress, 0%);
+      height: 2px;
+      background: #1592ff;
+      z-index: 0;
+      transition: width .2s ease;
+    }
+
+    .workflow-step {
+      position: relative;
+      z-index: 1;
+      text-align: center;
+      color: #334155;
+      font-weight: 900;
+    }
+
+    .workflow-dot {
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      margin: 0 auto 10px;
+      border: 2px solid #94a3b8;
+      background: #fff;
+      color: #334155;
+      display: grid;
+      place-items: center;
+      font-size: 14px;
+      line-height: 1;
+    }
+
+    .workflow-step.done,
+    .workflow-step.active {
+      color: #1592ff;
+    }
+
+    .workflow-step.done .workflow-dot,
+    .workflow-step.active .workflow-dot {
+      border-color: #1592ff;
+      color: #1592ff;
+    }
+
+    .workflow-step.done .workflow-dot::before {
+      content: "✓";
+      font-weight: 900;
+    }
+
+    .workflow-step.done .workflow-dot span {
+      display: none;
+    }
+
+    .workflow-message {
+      margin: 34px 0 0;
+      text-align: center;
+      color: #334155;
+      font-weight: 900;
+      line-height: 1.8;
+    }
+
+    .process-layout {
+      min-height: 520px;
+      display: grid;
+      grid-template-columns: 320px minmax(0, 1fr);
+      gap: 24px;
+    }
+
+    .process-preview {
+      background: #eaf7fc;
+      border: 1px solid #d7eef7;
+      border-radius: var(--radius);
+      display: grid;
+      place-items: center;
+      min-height: 520px;
+    }
+
+    .process-main {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      padding: 48px 42px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      gap: 24px;
+      min-width: 0;
+    }
+
+    .process-main h2 {
+      margin: 0;
+      font-size: 20px;
+      font-weight: 900;
+    }
+
+    .process-main p {
+      margin: 0;
+      max-width: 560px;
+      color: #64748b;
+      line-height: 1.8;
+      font-weight: 700;
+    }
+
+    .filter-bar {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      padding: 16px;
+      display: grid;
+      grid-template-columns: 170px 170px 1fr 150px 150px auto;
+      gap: 12px;
+      align-items: end;
+      margin-bottom: 16px;
+    }
+
+    .field {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      min-width: 0;
+    }
+
+    .field label {
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 800;
+    }
+
+    .input, .select {
+      height: 38px;
+      border: 1px solid var(--line);
+      border-radius: 6px;
+      background: #fff;
+      color: var(--text);
+      padding: 0 12px;
+      min-width: 0;
+      outline: none;
+    }
+
+    .input:focus, .select:focus {
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(22, 93, 255, .12);
+    }
+
+    .btn {
+      min-height: 38px;
+      border: 0;
+      border-radius: 6px;
+      padding: 0 14px;
+      background: #f1f5f9;
+      color: #334155;
+      font-weight: 900;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 7px;
+      white-space: nowrap;
+    }
+
+    .btn.primary {
+      background: var(--primary);
+      color: #fff;
+    }
+
+    .btn.warning {
+      background: var(--warning);
+      color: #fff;
+    }
+
+    .btn.ghost {
+      border: 1px solid var(--line);
+      background: #fff;
+      color: #334155;
+    }
+
+    .btn.danger {
+      background: #fee2e2;
+      color: #b91c1c;
+    }
+
+    .btn:disabled {
+      opacity: .45;
+      cursor: not-allowed;
+    }
+
+    .table-wrap {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      overflow: hidden;
+    }
+
+    .table-head {
+      padding: 14px 16px;
+      border-bottom: 1px solid var(--line);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .table-head h2 {
+      margin: 0;
+      font-size: 16px;
+      font-weight: 900;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      table-layout: fixed;
+    }
+
+    th, td {
+      padding: 14px 16px;
+      border-bottom: 1px solid var(--line);
+      text-align: left;
+      vertical-align: middle;
+    }
+
+    th {
+      background: #f8fafc;
+      color: #64748b;
+      font-size: 13px;
+      font-weight: 900;
+    }
+
+    td {
+      color: #334155;
+      font-size: 14px;
+    }
+
+    tbody tr:hover {
+      background: #f8fbff;
+    }
+
+    .sub {
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.45;
+    }
+
+    .tag {
+      display: inline-flex;
+      align-items: center;
+      height: 24px;
+      border-radius: 999px;
+      padding: 0 9px;
+      font-size: 12px;
+      font-weight: 900;
+      white-space: nowrap;
+    }
+
+    .tag.gray { background: #f1f5f9; color: #64748b; }
+    .tag.blue { background: #e0f2fe; color: #0369a1; }
+    .tag.green { background: #dcfce7; color: #15803d; }
+    .tag.orange { background: #ffedd5; color: #c2410c; }
+    .tag.purple { background: #ede9fe; color: #6d28d9; }
+    .tag.red { background: #fee2e2; color: #b91c1c; }
+
+    .ops {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .link-btn {
+      border: 0;
+      background: transparent;
+      color: var(--primary);
+      font-weight: 900;
+      padding: 0;
+    }
+
+    .review-shell {
+      display: grid;
+      grid-template-columns: 300px minmax(420px, 1fr) 360px;
+      gap: 16px;
+      min-height: calc(100vh - 128px);
+    }
+
+    .panel {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      min-width: 0;
+      overflow: hidden;
+    }
+
+    .panel-head {
+      padding: 14px 16px;
+      border-bottom: 1px solid var(--line);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+    }
+
+    .panel-title {
+      margin: 0;
+      font-size: 15px;
+      font-weight: 900;
+    }
+
+    .panel-body {
+      padding: 16px;
+    }
+
+    .meta-list {
+      display: grid;
+      gap: 12px;
+    }
+
+    .meta-row {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      padding-bottom: 10px;
+      border-bottom: 1px dashed #e2e8f0;
+    }
+
+    .meta-row span:first-child {
+      color: var(--muted);
+    }
+
+    .meta-row span:last-child {
+      font-weight: 900;
+      text-align: right;
+    }
+
+    .model-stage {
+      height: 520px;
+      background:
+        linear-gradient(rgba(14, 165, 233, .14) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(14, 165, 233, .14) 1px, transparent 1px),
+        #f9fdff;
+      background-size: 42px 42px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .model-stage svg {
+      max-width: 96%;
+      max-height: 96%;
+      overflow: visible;
+    }
+
+    .control-point {
+      cursor: pointer;
+      transition: transform .16s ease;
+      transform-box: fill-box;
+      transform-origin: center;
+    }
+
+    .control-point:hover,
+    .control-point.active {
+      transform: scale(1.35);
+    }
+
+    .stage-hint {
+      position: absolute;
+      left: 16px;
+      bottom: 14px;
+      color: #64748b;
+      font-size: 12px;
+      background: rgba(255, 255, 255, .86);
+      border: 1px solid var(--line);
+      border-radius: 6px;
+      padding: 6px 9px;
+    }
+
+    .metric-list {
+      display: grid;
+      gap: 10px;
+    }
+
+    .metric-item {
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 12px;
+      display: grid;
+      grid-template-columns: 1fr 108px;
+      gap: 10px;
+      align-items: center;
+      background: #fff;
+    }
+
+    .metric-item.active {
+      border-color: var(--primary);
+      background: #f8fbff;
+    }
+
+    .metric-name {
+      font-weight: 900;
+      margin-bottom: 6px;
+    }
+
+    .metric-delta {
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    .metric-input {
+      height: 34px;
+      border: 1px solid var(--line);
+      border-radius: 6px;
+      padding: 0 8px;
+      width: 100%;
+      text-align: right;
+      font-weight: 900;
+      color: #1d4ed8;
+    }
+
+    .review-actions {
+      position: sticky;
+      bottom: 0;
+      padding: 12px 16px;
+      background: rgba(255, 255, 255, .96);
+      border-top: 1px solid var(--line);
+      display: flex;
+      justify-content: space-between;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .report-viewer {
+      display: grid;
+      grid-template-columns: 320px minmax(760px, 1fr);
+      gap: 22px;
+    }
+
+    .report-style-switch {
+      display: flex;
+      justify-content: flex-end;
+      gap: 8px;
+      margin: 0 0 14px;
+    }
+
+    .report-style-switch .btn {
+      min-height: 34px;
+    }
+
+    .report-style-switch .active {
+      background: var(--primary);
+      color: #fff;
+      border-color: var(--primary);
+    }
+
+    .report-side {
+      background: #eaf7fc;
+      border: 1px solid #d7eef7;
+      min-height: calc(100vh - 134px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: sticky;
+      top: 86px;
+      align-self: start;
+    }
+
+    .paper-wrap {
+      display: flex;
+      justify-content: center;
+      overflow: auto;
+    }
+
+    .report-paper {
+      width: 900px;
+      min-height: 1260px;
+      background: #fff;
+      box-shadow: var(--shadow);
+      padding: 46px 58px 40px;
+    }
+
+    .assessment-paper {
+      width: 1040px;
+      min-height: 1260px;
+      background: #fff;
+      box-shadow: var(--shadow);
+      padding: 22px 42px 42px;
+      color: #333;
+    }
+
+    .assessment-title {
+      margin: 0;
+      text-align: center;
+      font-size: 56px;
+      line-height: 1.08;
+      font-weight: 500;
+      letter-spacing: 0;
+      color: #333;
+    }
+
+    .assessment-meta {
+      display: flex;
+      gap: 24px;
+      align-items: center;
+      flex-wrap: wrap;
+      font-size: 18px;
+      color: #334155;
+      border-bottom: 4px solid #1592ff;
+      padding: 14px 0 10px;
+      margin-bottom: 18px;
+    }
+
+    .assessment-views {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 18px;
+      margin-bottom: 22px;
+    }
+
+    .assessment-view {
+      border: 2px solid #1e9bff;
+      height: 246px;
+      background:
+        linear-gradient(rgba(96, 165, 250, .28) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(96, 165, 250, .28) 1px, transparent 1px),
+        #fff;
+      background-size: 24px 24px;
+      position: relative;
+      display: grid;
+      place-items: center;
+      overflow: hidden;
+    }
+
+    .assessment-view span {
+      position: absolute;
+      top: 8px;
+      left: 8px;
+      color: #64748b;
+      font-size: 18px;
+      font-weight: 700;
+    }
+
+    .assessment-view svg {
+      width: 92%;
+      height: 210px;
+    }
+
+    .assessment-section-head {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: 16px;
+      margin: 16px 0 8px;
+    }
+
+    .assessment-section-head h3 {
+      margin: 0;
+      font-size: 30px;
+      line-height: 1;
+      font-weight: 500;
+    }
+
+    .assessment-section-head span {
+      color: #64748b;
+      font-size: 15px;
+    }
+
+    .assessment-table {
+      width: 100%;
+      border-collapse: collapse;
+      table-layout: fixed;
+      border: 2px solid #1e9bff;
+      font-size: 17px;
+    }
+
+    .assessment-table th,
+    .assessment-table td {
+      border: 1px solid #bfdbfe;
+      padding: 15px 12px;
+      color: #334155;
+      vertical-align: middle;
+    }
+
+    .assessment-table th {
+      background: #eef7ff;
+      color: #64748b;
+      text-align: center;
+      font-weight: 500;
+    }
+
+    .assessment-table td:first-child {
+      font-size: 19px;
+      color: #1f2937;
+    }
+
+    .assessment-value {
+      color: #438bff;
+      font-weight: 500;
+      text-align: center;
+    }
+
+    .assessment-detail {
+      border: 2px solid #1e9bff;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      min-height: 300px;
+      margin-top: 22px;
+    }
+
+    .assessment-detail > div {
+      padding: 24px 26px;
+      min-width: 0;
+    }
+
+    .assessment-detail > div + div {
+      border-left: 2px solid #1e9bff;
+    }
+
+    .assessment-detail h3 {
+      margin: 0 0 18px;
+      font-size: 26px;
+      font-weight: 500;
+    }
+
+    .assessment-badge {
+      display: inline-flex;
+      background: #f2a900;
+      color: #fff;
+      font-size: 22px;
+      padding: 8px 20px;
+      margin-bottom: 24px;
+    }
+
+    .assessment-detail p {
+      margin: 0;
+      color: #7a7f87;
+      line-height: 1.7;
+      font-size: 17px;
+    }
+
+    .report-head {
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+      border-bottom: 3px solid var(--sky);
+      padding-bottom: 9px;
+      margin-bottom: 12px;
+    }
+
+    .report-title {
+      margin: 0;
+      font-size: 28px;
+      line-height: 1;
+      font-weight: 900;
+    }
+
+    .report-brand {
+      display: flex;
+      align-items: center;
+      gap: 9px;
+      color: #172554;
+      font-size: 21px;
+      font-weight: 900;
+    }
+
+    .report-table {
+      width: 100%;
+      border-collapse: collapse;
+      table-layout: fixed;
+    }
+
+    .report-table th,
+    .report-table td {
+      border: 1px solid #dbeafe;
+      text-align: center;
+      padding: 10px;
+    }
+
+    .report-table th {
+      background: #eef7ff;
+      color: #475569;
+      font-weight: 900;
+    }
+
+    .report-section {
+      margin-top: 18px;
+      border: 1px solid #bfdbfe;
+      overflow: hidden;
+    }
+
+    .report-section-title {
+      background: #cfe9ff;
+      color: #1e3a8a;
+      padding: 10px 18px;
+      font-size: 18px;
+      font-weight: 900;
+    }
+
+    .posture-report-grid {
+      display: grid;
+      grid-template-columns: 1.25fr .9fr;
+      gap: 14px;
+      padding: 14px;
+      background: rgba(239, 247, 255, .48);
+    }
+
+    .posture-report-figure {
+      border: 1px solid #dbeafe;
+      background:
+        linear-gradient(rgba(96, 165, 250, .22) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(96, 165, 250, .22) 1px, transparent 1px),
+        #fbfdff;
+      background-size: 32px 32px;
+      min-height: 310px;
+      display: grid;
+      place-items: center;
+      overflow: hidden;
+    }
+
+    .posture-report-figure svg {
+      width: 100%;
+      height: 310px;
+      max-width: 360px;
+    }
+
+    .posture-analysis-list {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 12px;
+      padding: 14px;
+    }
+
+    .posture-analysis-card {
+      border: 1px solid #dbeafe;
+      background: #f8fbff;
+      padding: 12px 14px;
+      min-height: 116px;
+    }
+
+    .posture-analysis-card strong {
+      display: block;
+      color: #1e3a8a;
+      margin-bottom: 7px;
+    }
+
+    .posture-analysis-card p {
+      margin: 0;
+      color: #475569;
+      font-size: 13px;
+      line-height: 1.65;
+    }
+
+    .feet-stage {
+      padding: 16px;
+      background:
+        linear-gradient(rgba(14, 165, 233, .18) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(14, 165, 233, .18) 1px, transparent 1px),
+        #fbfdff;
+      background-size: 48px 48px;
+      border-bottom: 1px solid #dbeafe;
+    }
+
+    .analysis-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 14px;
+      padding: 18px;
+    }
+
+    .analysis-item {
+      border: 1px solid #dbeafe;
+      background: #f8fbff;
+      padding: 14px;
+      min-height: 120px;
+    }
+
+    .analysis-kicker {
+      color: var(--muted);
+      font-size: 13px;
+      font-weight: 900;
+      margin-bottom: 8px;
+    }
+
+    .analysis-value {
+      color: #1d4ed8;
+      font-size: 22px;
+      font-weight: 900;
+      margin-bottom: 8px;
+    }
+
+    .analysis-text {
+      color: #475569;
+      font-size: 13px;
+      line-height: 1.65;
+    }
+
+    .summary-box {
+      border-top: 1px solid #dbeafe;
+      background: #f8fbff;
+      padding: 18px;
+      display: grid;
+      grid-template-columns: 1.2fr .8fr;
+      gap: 18px;
+    }
+
+    .summary-box h3 {
+      margin: 0 0 8px;
+      color: #1e3a8a;
+    }
+
+    .summary-box p,
+    .summary-box li {
+      color: #475569;
+      line-height: 1.75;
+    }
+
+    .summary-box p {
+      margin: 0;
+    }
+
+    .modal-mask {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(15, 23, 42, .38);
+      z-index: 100;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+    }
+
+    .modal-mask.show {
+      display: flex;
+    }
+
+    .modal {
+      width: min(640px, 100%);
+      background: #fff;
+      border-radius: 10px;
+      box-shadow: 0 24px 80px rgba(15, 23, 42, .22);
+      overflow: hidden;
+    }
+
+    .modal-head {
+      height: 58px;
+      padding: 0 20px;
+      border-bottom: 1px solid var(--line);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .modal-title {
+      margin: 0;
+      font-size: 16px;
+      font-weight: 900;
+    }
+
+    .modal-body {
+      padding: 20px;
+    }
+
+    .upload-box {
+      min-height: 164px;
+      border: 1px dashed #93c5fd;
+      border-radius: 8px;
+      background: #f8fbff;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      text-align: center;
+      padding: 16px;
+    }
+
+    .progress {
+      height: 8px;
+      background: #e2e8f0;
+      border-radius: 99px;
+      overflow: hidden;
+      margin-top: 14px;
+    }
+
+    .progress span {
+      display: block;
+      height: 100%;
+      width: 0;
+      background: linear-gradient(90deg, var(--primary), var(--sky));
+      transition: width .3s ease;
+    }
+
+    .modal-foot {
+      padding: 16px 20px;
+      border-top: 1px solid var(--line);
+      display: flex;
+      justify-content: flex-end;
+      gap: 10px;
+    }
+
+    .toast {
+      position: fixed;
+      left: 50%;
+      bottom: 24px;
+      transform: translateX(-50%) translateY(80px);
+      background: #111827;
+      color: #fff;
+      padding: 11px 18px;
+      border-radius: 8px;
+      opacity: 0;
+      transition: .24s ease;
+      z-index: 200;
+      font-weight: 900;
+    }
+
+    .toast.show {
+      opacity: 1;
+      transform: translateX(-50%) translateY(0);
+    }
+
+    @media (max-width: 1180px) {
+      .filter-bar { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+      .import-card { grid-template-columns: 90px 1fr; }
+      .import-action { grid-column: 1 / -1; justify-content: flex-start; padding-left: 118px; }
+      .process-layout { grid-template-columns: 1fr; }
+      .process-preview { min-height: 260px; }
+      .review-shell { grid-template-columns: 1fr; }
+      .report-viewer { grid-template-columns: 1fr; }
+      .report-side { display: none; }
+    }
+
+    @media (max-width: 640px) {
+      .app { grid-template-columns: 1fr; }
+      .sidebar { min-height: auto; border-right: 0; }
+      .brand { height: 54px; }
+      .brand-system { display: none; }
+      .nav { flex-direction: row; padding: 10px; overflow-x: auto; }
+      .nav-btn { min-width: 116px; }
+      .topbar { padding: 0 14px; }
+      .top-actions { gap: 8px; }
+      .lang-select { display: none; }
+      .bell { display: none; }
+      .content { padding: 14px; }
+      .report-list-filter { padding: 14px; align-items: stretch; flex-direction: column; }
+      .report-search-group { flex-direction: column; align-items: stretch; gap: 10px; }
+      .flat-input, .flat-input.search { width: 100%; }
+      .report-list-shell { padding: 0 0 72px; overflow-x: auto; }
+      .vis-report-table { min-width: 1080px; }
+      .app-footer { left: 0; height: 46px; font-size: 13px; }
+      .filter-bar { grid-template-columns: 1fr; }
+      .import-card { grid-template-columns: 1fr; padding: 18px; }
+      .import-action { grid-column: auto; padding-left: 0; }
+      .workflow-card { padding: 20px 12px; }
+      .workflow-step { font-size: 12px; }
+      .workflow-dot { width: 24px; height: 24px; }
+      .workflow-steps::before { top: 11px; }
+      .workflow-steps::after { top: 11px; }
+      .process-main { padding: 26px 16px; }
+      .table-wrap { overflow-x: auto; }
+      table { min-width: 980px; }
+      .analysis-grid, .summary-box { grid-template-columns: 1fr; }
+      .report-paper { width: 100%; min-width: 0; padding: 24px 16px; }
+      .report-head { align-items: flex-start; gap: 14px; flex-direction: column; }
+    }
+  </style>
+</head>
+<body>
+  <div class="app">
+    <aside class="sidebar">
+      <div class="brand">
+        <div class="brand-mark" aria-hidden="true"><span></span><span></span><span></span><span></span></div>
+        <span class="brand-word"><span class="brand-name">VISBODY</span><span class="brand-system">3D评估 管理系统</span></span>
+      </div>
+      <nav class="nav" aria-label="主菜单">
+        <button class="nav-btn" type="button" data-nav="binding">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M8 7h8"/><path d="M8 12h8"/><path d="M6 17h12"/><rect x="4" y="5" width="16" height="14" rx="2"/></svg>
+          绑定列表
+        </button>
+        <button class="nav-btn" type="button" data-nav="reports">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 5h16"/><path d="M4 12h16"/><path d="M4 19h10"/></svg>
+          报告列表
+        </button>
+        <button class="nav-btn active" type="button" data-nav="models">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3 4 7l8 4 8-4-8-4Z"/><path d="m4 12 8 4 8-4"/><path d="m4 17 8 4 8-4"/></svg>
+          模型导入
+        </button>
+      </nav>
+    </aside>
+
+    <main class="main">
+      <header class="topbar">
+        <h1 class="page-title" id="pageTitle">模型导入</h1>
+        <div class="top-actions">
+          <span class="lang-select">中文 <span>⌄</span></span>
+          <span class="bell" aria-label="通知">
+            <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor"><path d="M12 22a2.8 2.8 0 0 0 2.7-2h-5.4A2.8 2.8 0 0 0 12 22Zm7-6v-5a7 7 0 0 0-5-6.7V3a2 2 0 0 0-4 0v1.3A7 7 0 0 0 5 11v5l-2 2v1h18v-1l-2-2Z"/></svg>
+          </span>
+          <span class="user-chip"><span class="avatar">医</span><span class="user-dot"></span>ces <span>⌄</span></span>
+        </div>
+      </header>
+
+      <section class="content">
+        <div class="view active" id="importHomeView">
+          <div class="hero-bar">
+            <strong>欢迎使用 VE760 三维模型数据处理工具</strong>
+            <span class="sub">模型导入后可独立审核并生成报告，不依赖已有测量报告。</span>
+          </div>
+
+          <div class="import-options">
+            <article class="import-card">
+              <div class="model-icon" aria-hidden="true">
+                <svg viewBox="0 0 90 120" width="86" height="112">
+                  <circle cx="45" cy="16" r="12" fill="#fff" stroke="#94a3b8" stroke-width="2"/>
+                  <path d="M35 30h20l12 44-11 7-5-28v55H39V53l-5 28-11-7 12-44Z" fill="#e0f2fe" stroke="#94a3b8" stroke-width="2"/>
+                  <path d="M41 108h-9M49 108h9" stroke="#94a3b8" stroke-width="2" stroke-linecap="round"/>
+                </svg>
+              </div>
+              <div class="import-copy">
+                <h2>体态模型</h2>
+                <p>3D人体扫描，基于3D模型进行算法计算得出。</p>
+                <div class="file-rule">
+                  文件命名规范：BODY-姓名-性别（男/女）-年龄(数字)-体重（kg）-就诊号码（唯一标识）<br>
+                  文件命名示例：BODY-张三-男-10-45-23423.obj
+                </div>
+              </div>
+              <div class="import-action">
+                <button class="btn primary" type="button" data-import-type="body">点击导入3D人体模型文件</button>
+              </div>
+            </article>
+
+            <article class="import-card">
+              <div class="model-icon" aria-hidden="true">
+                <svg viewBox="0 0 100 120" width="90" height="112">
+                  <defs>
+                    <radialGradient id="heatL" cx="48%" cy="48%" r="60%"><stop offset="0" stop-color="#ef4444"/><stop offset=".35" stop-color="#facc15"/><stop offset=".68" stop-color="#93c5fd"/><stop offset="1" stop-color="#e0f2fe"/></radialGradient>
+                    <radialGradient id="heatR" cx="52%" cy="48%" r="60%"><stop offset="0" stop-color="#ef4444"/><stop offset=".35" stop-color="#facc15"/><stop offset=".68" stop-color="#93c5fd"/><stop offset="1" stop-color="#e0f2fe"/></radialGradient>
+                  </defs>
+                  <path d="M29 18c-15 7-19 33-15 58 4 24 15 37 29 31 14-6 14-28 11-50-2-17-8-47-25-39Z" fill="url(#heatL)" opacity=".92"/>
+                  <path d="M71 18c15 7 19 33 15 58-4 24-15 37-29 31-14-6-14-28-11-50 2-17 8-47 25-39Z" fill="url(#heatR)" opacity=".92"/>
+                </svg>
+              </div>
+              <div class="import-copy">
+                <h2>足压模型</h2>
+                <p>3D足部扫描，基于3D模型进行算法计算得出。</p>
+                <div class="file-rule">
+                  文件命名规范：FEET-姓名-性别（男/女）-年龄(数字)-体重（kg）-就诊号码（唯一标识）<br>
+                  文件命名示例：FEET-张三-男-10-45-23423.obj
+                </div>
+              </div>
+              <div class="import-action">
+                <button class="btn primary" type="button" data-import-type="feet">点击导入3D足部模型文件</button>
+              </div>
+            </article>
+          </div>
+        </div>
+
+        <div class="view" id="reportsView">
+          <div class="report-list-filter">
+            <div class="report-search-group">
+              <div class="flat-input" aria-label="扫描时间范围">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="17" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>
+                <span>开始日期</span>
+                <span>-</span>
+                <span>结束日期</span>
+              </div>
+              <div class="flat-input search" aria-label="搜索">
+                <span>请输入ID或姓名</span>
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+              </div>
+            </div>
+            <button class="btn primary" type="button">数据预览</button>
+          </div>
+          <div class="report-list-shell">
+            <table class="vis-report-table">
+              <thead>
+                <tr>
+                  <th style="width: 140px;">扫描时间</th>
+                  <th style="width: 160px;">ID</th>
+                  <th style="width: 100px;">性别</th>
+                  <th style="width: 110px;">年龄</th>
+                  <th style="width: 190px;">姓名</th>
+                  <th style="width: 150px;">体态评估</th>
+                  <th style="width: 150px;">脊柱评估</th>
+                  <th style="width: 180px;">足底压力评估</th>
+                  <th style="width: 150px;">操作</th>
+                </tr>
+              </thead>
+              <tbody id="reportTbody"></tbody>
+            </table>
+          </div>
+        </div>
+
+        <div class="view" id="processView"></div>
+        <div class="view" id="reviewView"></div>
+        <div class="view" id="reportView"></div>
+      </section>
+    </main>
+  </div>
+
+  <footer class="app-footer">1.2.45（2606280850）</footer>
+
+  <div class="modal-mask" id="importModal">
+    <div class="modal">
+      <div class="modal-head">
+        <h2 class="modal-title" id="modalTitle">导入模型</h2>
+        <button class="link-btn" type="button" data-close-modal>关闭</button>
+      </div>
+      <div class="modal-body">
+        <div class="upload-box">
+          <strong id="modalModelName">体态模型</strong>
+          <span class="sub" id="modalModelDesc">文件命名示例：BODY-张三-男-10-45-23423.obj</span>
+          <button class="btn ghost" type="button" id="mockChooseBtn">选择模型文件</button>
+        </div>
+        <div class="meta-list" id="parsedMeta" style="margin-top:16px;"></div>
+        <div class="progress"><span id="importProgress"></span></div>
+        <p class="sub" id="importStatusText" style="margin:10px 0 0;">等待上传，系统将按文件命名规范解析用户信息。</p>
+      </div>
+      <div class="modal-foot">
+        <button class="btn ghost" type="button" data-close-modal>取消</button>
+        <button class="btn primary" type="button" id="startImportBtn">开始导入</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="toast" id="toast"></div>
+
+  <script>
+    const statusClass = {
+      "导入中": "blue",
+      "待审核": "orange",
+      "已修订": "purple",
+      "已生成报告": "green",
+      "导入失败": "red"
+    };
+
+    const importRecords = [
+      {
+        id: "t1",
+        importedAt: "2026-07-06 16:37:55",
+        modelType: "体态模型",
+        fileName: "BODY-CESHIO-男-28-82.75-1.obj",
+        name: "CESHIO",
+        gender: "男",
+        age: 28,
+        weight: "82.75kg",
+        visitNo: "1",
+        status: "待审核",
+        doctor: "--",
+        reportStatus: "未生成"
+      },
+      {
+        id: "f1",
+        importedAt: "2026-07-06 15:22:10",
+        modelType: "足压模型",
+        fileName: "FEET-李十-女-24-50-23423.obj",
+        name: "李十",
+        gender: "女",
+        age: 24,
+        weight: "50.0kg",
+        visitNo: "23423",
+        status: "已生成报告",
+        doctor: "张医生",
+        reportStatus: "足部尺寸报告"
+      },
+      {
+        id: "f2",
+        importedAt: "2026-07-06 14:54:24",
+        modelType: "足压模型",
+        fileName: "FEET-足压边界测试-男-36-74.2-13900000066.obj",
+        name: "足压边界测试",
+        gender: "男",
+        age: 36,
+        weight: "74.2kg",
+        visitNo: "13900000066",
+        status: "已修订",
+        doctor: "张医生",
+        reportStatus: "草稿"
+      },
+      {
+        id: "t2",
+        importedAt: "2026-07-05 18:12:08",
+        modelType: "体态模型",
+        fileName: "BODY-王二-女-31-58.3-13900000063.obj",
+        name: "王二",
+        gender: "女",
+        age: 31,
+        weight: "58.3kg",
+        visitNo: "13900000063",
+        status: "导入失败",
+        doctor: "--",
+        reportStatus: "未生成",
+        error: "文件命名不完整或模型解析失败"
+      },
+      {
+        id: "f3",
+        importedAt: "2026-07-05 11:40:23",
+        modelType: "足压模型",
+        fileName: "FEET-赵三-女-29-56.8-13900000064.obj",
+        name: "赵三",
+        gender: "女",
+        age: 29,
+        weight: "56.8kg",
+        visitNo: "13900000064",
+        status: "导入中",
+        doctor: "--",
+        reportStatus: "未生成"
+      }
+    ];
+
+    let reportListRows = [
+      { scanTime: "2026-07-06 16:37:55", idNo: "1", gender: "男", age: 28, name: "CESHIO", modelType: "足压模型", posture: "--", spine: "--", foot: true, recordId: "f1" },
+      { scanTime: "2026-07-06 14:54:24", idNo: "13900000066", gender: "男", age: 36, name: "足压边界测试...", modelType: "足压模型", posture: "--", spine: "--", foot: true, recordId: "f1" },
+      { scanTime: "2026-07-06 14:54:24", idNo: "13900000065", gender: "男", age: 36, name: "足压边界测试...", modelType: "足压模型", posture: "--", spine: "--", foot: true, recordId: "f1" },
+      { scanTime: "2026-07-06 14:54:23", idNo: "13900000063", gender: "男", age: 36, name: "足压边界测试...", modelType: "足压模型", posture: "--", spine: "--", foot: true, recordId: "f1" },
+      { scanTime: "2026-07-06 14:54:23", idNo: "13900000061", gender: "男", age: 36, name: "足压边界测试...", modelType: "足压模型", posture: "--", spine: "--", foot: true, recordId: "f1" },
+      { scanTime: "2026-07-06 14:54:23", idNo: "13900000064", gender: "男", age: 36, name: "足压边界测试...", modelType: "足压模型", posture: "--", spine: "--", foot: true, recordId: "f1" },
+      { scanTime: "2026-07-06 14:54:23", idNo: "13900000062", gender: "男", age: 36, name: "足压边界测试...", modelType: "足压模型", posture: "--", spine: "--", foot: true, recordId: "f1" },
+      { scanTime: "2026-07-06 14:54:22", idNo: "13900000058", gender: "男", age: 36, name: "足压边界测试...", modelType: "足压模型", posture: "--", spine: "--", foot: true, recordId: "f1" },
+      { scanTime: "2026-07-06 14:54:22", idNo: "13900000060", gender: "男", age: 36, name: "足压边界测试...", modelType: "足压模型", posture: "--", spine: "--", foot: true, recordId: "f1" },
+      { scanTime: "2026-07-06 14:54:22", idNo: "13900000059", gender: "男", age: 36, name: "足压边界测试...", modelType: "足压模型", posture: "--", spine: "--", foot: true, recordId: "f1" }
+    ];
+
+    const postureMetrics = [
+      { key: "shoulder", name: "肩平衡角度", unit: "°", min: -90, max: 90, original: 0.3, value: 0.3 },
+      { key: "neck", name: "头颈部前倾角度", unit: "°", min: -90, max: 90, original: 28.9, value: 28.9 },
+      { key: "pelvis", name: "骨盆前后倾角度", unit: "°", min: -90, max: 90, original: -73.1, value: -73.1 },
+      { key: "leftHyper", name: "左腿膝超伸角度", unit: "°", min: -180, max: 180, original: 2.3, value: 2.3 },
+      { key: "rightHyper", name: "右腿膝超伸角度", unit: "°", min: -180, max: 180, original: 2.6, value: 2.6 },
+      { key: "leftValgus", name: "左膝关节内外翻角度", unit: "°", min: -180, max: 180, original: 5.1, value: 5.1 },
+      { key: "rightValgus", name: "右膝关节内外翻角度", unit: "°", min: -180, max: 180, original: 4.0, value: 4.0 }
+    ];
+
+    const footMetrics = [
+      { key: "leftLength", name: "左足长", unit: "mm", original: 223.2, value: 223.2 },
+      { key: "rightLength", name: "右足长", unit: "mm", original: 226.2, value: 226.2 },
+      { key: "leftWidth", name: "左足宽", unit: "mm", original: 95.4, value: 95.4 },
+      { key: "rightWidth", name: "右足宽", unit: "mm", original: 94.8, value: 94.8 }
+    ];
+
+    let currentRecord = importRecords[1];
+    let activeMetricKey = "leftLength";
+    let importType = "feet";
+    let parsedImport = null;
+    let activeNavKey = "models";
+    let reportStyle = "standard";
+
+    const $ = (selector) => document.querySelector(selector);
+    const $$ = (selector) => [...document.querySelectorAll(selector)];
+
+    function showToast(text) {
+      const toast = $("#toast");
+      toast.textContent = text;
+      toast.classList.add("show");
+      setTimeout(() => toast.classList.remove("show"), 1900);
+    }
+
+    function setView(viewId, title) {
+      $$(".view").forEach((view) => view.classList.remove("active"));
+      $("#" + viewId).classList.add("active");
+      $("#pageTitle").textContent = title;
+      document.body.classList.toggle("report-page", viewId === "reportsView");
+      if (viewId === "reportsView") activeNavKey = "reports";
+      if (viewId === "importHomeView" || viewId === "processView" || viewId === "reviewView") activeNavKey = "models";
+      $$(".nav-btn").forEach((btn) => btn.classList.toggle("active", btn.dataset.nav === activeNavKey));
+      if (viewId === "reportsView") renderReports();
+    }
+
+    function renderReports() {
+      $("#reportTbody").innerHTML = reportListRows.map((row, index) => `
+        <tr class="${index === 0 ? "selected" : ""}">
+          <td><div class="report-time">${row.scanTime.replace(" ", "<br>")}</div></td>
+          <td>${row.idNo}</td>
+          <td>${row.gender}</td>
+          <td>${row.age}</td>
+          <td><a class="name-link" href="javascript:void(0)" data-open-report="report-row-${index}">${row.name}</a></td>
+          <td>${row.posture === true ? `<span class="checkmark">✓</span>` : row.posture}</td>
+          <td>${row.spine}</td>
+          <td>${row.foot ? `<span class="checkmark">✓</span>` : "--"}</td>
+          <td><button class="report-action" type="button" data-open-report="report-row-${index}">查看报告 <span>›</span></button></td>
+        </tr>
+      `).join("");
+    }
+
+    function workflowStepper(stage) {
+      const stageIndex = { process: 1, review: 2, report: 3 }[stage] ?? 0;
+      const progress = { process: "25%", review: "50%", report: "75%" }[stage] || "0%";
+      const steps = ["导入模型", "数据处理", "医生审核", "生成报告"];
+      return `
+        <div class="workflow-card">
+          <div class="workflow-steps" style="--progress:${progress};">
+            ${steps.map((step, index) => `
+              <div class="workflow-step ${index < stageIndex ? "done" : ""} ${index === stageIndex ? "active" : ""}">
+                <div class="workflow-dot"><span>${index + 1}</span></div>
+                <div>${step}</div>
+              </div>
+            `).join("")}
+          </div>
+          ${stage === "process" ? `<div class="workflow-message">数据处理完成，请点击医生审核</div>` : ""}
+        </div>
+      `;
+    }
+
+    function renderProcessView() {
+      const isBody = currentRecord.modelType === "体态模型";
+      $("#processView").innerHTML = `
+        ${workflowStepper("process")}
+        <div class="process-layout">
+          <aside class="process-preview">
+            ${isBody ? postureSvg() : footSvg()}
+          </aside>
+          <section class="process-main">
+            <span class="tag green">数据处理完成</span>
+            <h2>${currentRecord.modelType}已完成算法识别</h2>
+            <p>系统已基于导入的模型文件完成基础点位识别与测量数据处理。请进入医生审核页面，对异常或不准确点位进行确认和调整。</p>
+            <button class="btn primary" type="button" data-open-current-review>医生审核</button>
+          </section>
+        </div>
+      `;
+      setView("processView", "数据处理");
+    }
+
+    function openImport(type) {
+      importType = type;
+      const isBody = type === "body";
+      parsedImport = isBody
+        ? { modelType: "体态模型", fileName: "BODY-张三-男-10-45-23423.obj", name: "张三", gender: "男", age: 10, weight: "45.0kg", visitNo: "23423" }
+        : { modelType: "足压模型", fileName: "FEET-张三-男-10-45-23423.obj", name: "张三", gender: "男", age: 10, weight: "45.0kg", visitNo: "23423" };
+      $("#modalTitle").textContent = isBody ? "导入体态模型" : "导入足压模型";
+      $("#modalModelName").textContent = parsedImport.modelType;
+      $("#modalModelDesc").textContent = `文件命名示例：${parsedImport.fileName}`;
+      renderParsedMeta(false);
+      $("#importProgress").style.width = "0%";
+      $("#importStatusText").textContent = "等待上传，系统将按文件命名规范解析用户信息。";
+      $("#importModal").classList.add("show");
+    }
+
+    function renderParsedMeta(parsed) {
+      $("#parsedMeta").innerHTML = parsed ? `
+        <div class="meta-row"><span>文件名</span><span>${parsedImport.fileName}</span></div>
+        <div class="meta-row"><span>解析信息</span><span>${parsedImport.name} · ${parsedImport.gender} · ${parsedImport.age}岁 · ${parsedImport.weight}</span></div>
+        <div class="meta-row"><span>就诊号</span><span>${parsedImport.visitNo}</span></div>
+      ` : `
+        <div class="meta-row"><span>待解析文件</span><span>${parsedImport.fileName}</span></div>
+        <div class="meta-row"><span>命名校验</span><span>未开始</span></div>
+      `;
+    }
+
+    function startImport() {
+      $("#importProgress").style.width = "38%";
+      $("#importStatusText").textContent = "正在上传模型文件...";
+      setTimeout(() => {
+        $("#importProgress").style.width = "72%";
+        $("#importStatusText").textContent = "正在解析姓名、性别、年龄、体重和就诊号...";
+        renderParsedMeta(true);
+      }, 450);
+      setTimeout(() => {
+        $("#importProgress").style.width = "100%";
+        const newRecord = {
+          id: "new-" + Date.now(),
+          importedAt: "2026-07-06 18:30:00",
+          status: "待审核",
+          doctor: "--",
+          reportStatus: "未生成",
+          ...parsedImport
+        };
+        importRecords.unshift(newRecord);
+        currentRecord = newRecord;
+        $("#importStatusText").textContent = "导入成功，已生成初始算法识别结果。";
+        showToast("导入成功，数据处理完成");
+        setTimeout(() => {
+          $("#importModal").classList.remove("show");
+          renderProcessView();
+        }, 450);
+      }, 950);
+    }
+
+    function openReview(recordId) {
+      currentRecord = importRecords.find((record) => record.id === recordId) || importRecords[0];
+      activeMetricKey = currentRecord.modelType === "体态模型" ? "shoulder" : "leftLength";
+      renderReview();
+      setView("reviewView", "医生审核");
+    }
+
+    function renderReview() {
+      const isBody = currentRecord.modelType === "体态模型";
+      $("#reviewView").innerHTML = `
+        ${workflowStepper("review")}
+        <div class="review-shell">
+          <aside class="panel">
+            <div class="panel-head">
+              <h2 class="panel-title">模型信息</h2>
+              <span class="tag ${statusClass[currentRecord.status]}">${currentRecord.status}</span>
+            </div>
+            <div class="panel-body">
+              <div class="meta-list">
+                <div class="meta-row"><span>文件名</span><span>${currentRecord.fileName}</span></div>
+                <div class="meta-row"><span>模型类型</span><span>${currentRecord.modelType}</span></div>
+                <div class="meta-row"><span>姓名</span><span>${currentRecord.name}</span></div>
+                <div class="meta-row"><span>性别 / 年龄</span><span>${currentRecord.gender} / ${currentRecord.age}岁</span></div>
+                <div class="meta-row"><span>体重</span><span>${currentRecord.weight}</span></div>
+                <div class="meta-row"><span>就诊号</span><span>${currentRecord.visitNo}</span></div>
+              </div>
+              <p class="sub" style="line-height:1.8;margin:18px 0 0;">本页只展示当前模型类型支持的审核指标。医生调整点位后，点击保存并生成报告进入报告详情。</p>
+            </div>
+          </aside>
+
+          <section class="panel">
+            <div class="panel-head">
+              <h2 class="panel-title">${isBody ? "体态模型审核" : "足压模型审核"}</h2>
+              <span class="tag blue">${isBody ? "7 项角度指标" : "4 项尺寸指标"}</span>
+            </div>
+            <div class="model-stage">
+              ${isBody ? postureSvg() : footSvg()}
+              <div class="stage-hint">点击红色控制点可模拟选中指标；真实系统支持拖动控制点调整。</div>
+            </div>
+            <div class="review-actions">
+              <div class="ops">
+                <button class="btn ghost" type="button" data-reset>还原初始点位</button>
+                <button class="btn ghost" type="button" data-rotate>自由旋转</button>
+              </div>
+              <div class="ops">
+                <button class="btn primary" type="button" data-generate-current>保存并生成报告</button>
+              </div>
+            </div>
+          </section>
+
+          <aside class="panel">
+            <div class="panel-head">
+              <h2 class="panel-title">${isBody ? "体态测量项目" : "足部尺寸测量项目"}</h2>
+            </div>
+            <div class="panel-body">
+              <div class="metric-list">${renderMetricItems(isBody)}</div>
+              ${isBody ? `<p class="sub" style="margin-top:14px;line-height:1.8;">体态角度修改后，相关结论由算法服务按最新控制点重新计算；本页不允许直接编辑结论文案。</p>` : renderFootDiagnosis()}
+            </div>
+          </aside>
+        </div>
+      `;
+    }
+
+    function renderMetricItems(isBody) {
+      const metrics = isBody ? postureMetrics : footMetrics;
+      return metrics.map((metric) => {
+        const delta = +(metric.value - metric.original).toFixed(1);
+        const sign = delta > 0 ? "+" : "";
+        return `
+          <div class="metric-item ${activeMetricKey === metric.key ? "active" : ""}" data-metric-row="${metric.key}">
+            <div>
+              <div class="metric-name">${metric.name}</div>
+              <div class="metric-delta">原始 ${metric.original}${metric.unit} · 差值 ${sign}${delta}${metric.unit}</div>
+            </div>
+            <input class="metric-input" type="number" step="0.1" value="${metric.value}" data-metric-input="${metric.key}" aria-label="${metric.name}">
+          </div>
+        `;
+      }).join("");
+    }
+
+    function postureSvg() {
+      return `
+        <svg viewBox="0 0 560 520" aria-label="体态模型审核">
+          <defs><linearGradient id="bodyFill" x1="0" x2="1"><stop offset="0" stop-color="#e5e7eb"/><stop offset=".5" stop-color="#fff"/><stop offset="1" stop-color="#cbd5e1"/></linearGradient></defs>
+          <path d="M280 58c38 0 69 31 69 69 0 25-13 46-32 58l32 118 38 148h-52l-38-138-17 138h-38l-17-138-38 138h-52l38-148 32-118c-19-12-32-33-32-58 0-38 31-69 69-69Z" fill="url(#bodyFill)" stroke="#94a3b8" stroke-width="2"/>
+          <line x1="159" y1="194" x2="401" y2="194" stroke="#22c55e" stroke-width="5"/>
+          <line x1="280" y1="76" x2="308" y2="178" stroke="#22c55e" stroke-width="5"/>
+          <line x1="235" y1="245" x2="325" y2="246" stroke="#22c55e" stroke-width="5"/>
+          <line x1="216" y1="451" x2="244" y2="300" stroke="#22c55e" stroke-width="5"/>
+          <line x1="344" y1="451" x2="316" y2="300" stroke="#22c55e" stroke-width="5"/>
+          ${[[159,194],[401,194],[280,76],[308,178],[235,245],[325,246],[216,451],[244,300],[344,451],[316,300]].map((point, index) => `<circle class="control-point" data-point="${index}" cx="${point[0]}" cy="${point[1]}" r="7" fill="#ef4444"/>`).join("")}
+          <text x="280" y="502" text-anchor="middle" fill="#64748b" font-size="14">体态 7 项角度审核</text>
+        </svg>
+      `;
+    }
+
+    function footSvg() {
+      return `
+        <svg viewBox="0 0 720 520" aria-label="足部尺寸审核">
+          <defs>
+            <linearGradient id="footFill" x1="0" x2="1"><stop offset="0" stop-color="#e5dcda"/><stop offset=".5" stop-color="#fff"/><stop offset="1" stop-color="#c8babb"/></linearGradient>
+            <filter id="footShadow" x="-20%" y="-20%" width="140%" height="140%"><feDropShadow dx="0" dy="10" stdDeviation="9" flood-color="#64748b" flood-opacity=".2"/></filter>
+          </defs>
+          <line x1="360" y1="36" x2="360" y2="470" stroke="#cbd5e1" stroke-dasharray="8 8"/>
+          <g transform="translate(155 58) rotate(4 90 185)">
+            <path d="M91 22c-36 8-62 43-65 98-4 60 10 180 58 226 20 20 50 13 65-13 20-37 16-88 10-136-4-31 10-66-7-104-13-31-34-77-61-71z" fill="url(#footFill)" stroke="#a8a0a3" stroke-width="2" filter="url(#footShadow)"/>
+            <path d="M91 22c-4-17 6-33 21-35 15-2 29 11 31 29 2 16-10 28-25 29-13 1-22-6-27-23z" fill="#f7eeee" stroke="#a8a0a3" stroke-width="2"/>
+            <line x1="101" y1="27" x2="101" y2="356" stroke="#00d72f" stroke-width="5" stroke-linecap="round"/>
+            <line x1="42" y1="164" x2="154" y2="108" stroke="#00d72f" stroke-width="5" stroke-linecap="round"/>
+            <circle class="control-point" data-point="leftLength" cx="101" cy="27" r="7" fill="#ef4444"/>
+            <circle class="control-point" data-point="leftLength" cx="101" cy="356" r="7" fill="#ef4444"/>
+            <circle class="control-point" data-point="leftWidth" cx="42" cy="164" r="7" fill="#ef4444"/>
+            <circle class="control-point" data-point="leftWidth" cx="154" cy="108" r="7" fill="#ef4444"/>
+            <text x="82" y="392" fill="#2563eb" font-size="16" font-weight="700">左足</text>
+          </g>
+          <g transform="translate(435 54) rotate(-4 90 185)">
+            <path d="M89 18c36 8 63 44 66 99 4 60-10 181-59 227-21 20-51 13-65-14-20-37-15-88-9-137 4-31-10-66 7-104 14-31 34-77 60-71z" fill="url(#footFill)" stroke="#a8a0a3" stroke-width="2" filter="url(#footShadow)"/>
+            <path d="M89 19c5-17-5-33-20-36-15-2-29 11-31 29-2 16 10 28 25 29 13 1 21-6 26-22z" fill="#f7eeee" stroke="#a8a0a3" stroke-width="2"/>
+            <line x1="82" y1="27" x2="82" y2="357" stroke="#00d72f" stroke-width="5" stroke-linecap="round"/>
+            <line x1="34" y1="106" x2="151" y2="166" stroke="#00d72f" stroke-width="5" stroke-linecap="round"/>
+            <circle class="control-point" data-point="rightLength" cx="82" cy="27" r="7" fill="#ef4444"/>
+            <circle class="control-point" data-point="rightLength" cx="82" cy="357" r="7" fill="#ef4444"/>
+            <circle class="control-point" data-point="rightWidth" cx="34" cy="106" r="7" fill="#ef4444"/>
+            <circle class="control-point" data-point="rightWidth" cx="151" cy="166" r="7" fill="#ef4444"/>
+            <text x="104" y="392" fill="#2563eb" font-size="16" font-weight="700">右足</text>
+          </g>
+        </svg>
+      `;
+    }
+
+    function renderFootDiagnosis() {
+      const leftLength = footMetrics.find((metric) => metric.key === "leftLength").value;
+      const rightLength = footMetrics.find((metric) => metric.key === "rightLength").value;
+      const leftWidth = footMetrics.find((metric) => metric.key === "leftWidth").value;
+      const rightWidth = footMetrics.find((metric) => metric.key === "rightWidth").value;
+      const lengthDiff = Math.abs(rightLength - leftLength).toFixed(1);
+      const widthDiff = Math.abs(rightWidth - leftWidth).toFixed(1);
+      const longer = rightLength >= leftLength ? "右足" : "左足";
+      return `
+        <div style="margin-top:16px;border-top:1px solid var(--line);padding-top:14px;">
+          <div class="metric-name">实时诊断</div>
+          <p class="sub" style="line-height:1.8;margin:8px 0 0;">左右足长差 ${lengthDiff}mm，${longer}略长；左右足宽差 ${widthDiff}mm。鞋码和鞋垫适配建议优先参考较长一侧足长。</p>
+        </div>
+      `;
+    }
+
+    function renderReport(recordId = currentRecord.id) {
+      if (recordId && recordId.startsWith("report-row-")) {
+        const row = reportListRows[Number(recordId.replace("report-row-", ""))] || reportListRows[0];
+        const cleanName = row.name.replace("...", "");
+        const isBodyRow = row.modelType === "体态模型";
+        currentRecord = {
+          id: recordId,
+          importedAt: row.scanTime,
+          modelType: row.modelType || "足压模型",
+          fileName: `${isBodyRow ? "BODY" : "FEET"}-${cleanName}-${row.gender}-${row.age}-70-${row.idNo}.obj`,
+          name: cleanName,
+          gender: row.gender,
+          age: row.age,
+          weight: "--",
+          visitNo: row.idNo,
+          status: "已生成报告",
+          doctor: "张医生",
+          reportStatus: isBodyRow ? "体态报告" : "足部尺寸报告"
+        };
+      } else {
+        currentRecord = importRecords.find((record) => record.id === recordId) || currentRecord;
+      }
+      if (currentRecord.modelType === "体态模型") {
+        renderPostureReport();
+      } else {
+        renderFootReport();
+      }
+    }
+
+    function reportStyleSwitch() {
+      return `
+        <div class="report-style-switch">
+          <button class="btn ghost ${reportStyle === "standard" ? "active" : ""}" type="button" data-report-style="standard">标准版</button>
+          <button class="btn ghost ${reportStyle === "assessment" ? "active" : ""}" type="button" data-report-style="assessment">评估表版</button>
+        </div>
+      `;
+    }
+
+    function metricByKey(key) {
+      return postureMetrics.find((metric) => metric.key === key);
+    }
+
+    function postureResult(metric) {
+      const value = metric.value;
+      if (metric.key === "shoulder") return Math.abs(value) <= 3 ? "肩部基本平衡" : `${value > 0 ? "右肩偏高" : "左肩偏高"}，建议结合肩颈状态复核`;
+      if (metric.key === "neck") return value <= 15 ? "头颈前倾不明显" : "存在头颈部前倾倾向";
+      if (metric.key === "pelvis") return Math.abs(value) <= 10 ? "骨盆前后倾基本正常" : `${value > 0 ? "骨盆前倾倾向" : "骨盆后倾倾向"}`;
+      if (metric.key === "leftHyper" || metric.key === "rightHyper") return Math.abs(value) <= 5 ? "膝超伸风险较低" : "存在膝超伸风险";
+      if (metric.key === "leftValgus" || metric.key === "rightValgus") return Math.abs(value) <= 8 ? "膝关节内外翻基本正常" : `${value > 0 ? "外翻" : "内翻"}倾向，建议复核下肢力线`;
+      return "待复核";
+    }
+
+    function metricRow(metric, range) {
+      return `<tr><td>${metric.name}</td><td style="color:#165dff;font-weight:900;">${metric.value.toFixed(1)}${metric.unit}</td><td>${range}</td><td>${postureResult(metric)}</td></tr>`;
+    }
+
+    function postureFrontReportSvg() {
+      return `
+        <svg viewBox="0 0 360 360" aria-label="正面体态评估图">
+          <defs><linearGradient id="frontBody" x1="0" x2="1"><stop offset="0" stop-color="#d7dde3"/><stop offset=".5" stop-color="#fff"/><stop offset="1" stop-color="#bdc6d0"/></linearGradient></defs>
+          <path d="M180 36c27 0 49 22 49 49 0 18-9 34-24 42l26 78 27 112h-36l-28-96-14 96h-28l-14-96-28 96H74l27-112 26-78c-15-8-24-24-24-42 0-27 22-49 49-49Z" fill="url(#frontBody)" stroke="#94a3b8" stroke-width="1.5"/>
+          <line x1="105" y1="116" x2="255" y2="116" stroke="#22c55e" stroke-width="4"/>
+          <line x1="137" y1="215" x2="121" y2="305" stroke="#22c55e" stroke-width="4"/>
+          <line x1="223" y1="215" x2="239" y2="305" stroke="#22c55e" stroke-width="4"/>
+          ${[[105,116],[255,116],[137,215],[121,305],[223,215],[239,305]].map((point) => `<circle cx="${point[0]}" cy="${point[1]}" r="5" fill="#ef4444"/>`).join("")}
+          <text x="180" y="342" text-anchor="middle" fill="#64748b" font-size="13">正面点位：肩平衡、左右膝内外翻</text>
+        </svg>
+      `;
+    }
+
+    function postureSideReportSvg() {
+      return `
+        <svg viewBox="0 0 360 360" aria-label="侧面体态评估图">
+          <defs><linearGradient id="sideBody" x1="0" x2="1"><stop offset="0" stop-color="#cbd5e1"/><stop offset=".55" stop-color="#fff"/><stop offset="1" stop-color="#b7c0cc"/></linearGradient></defs>
+          <g transform="translate(68 18)">
+            <path d="M86 25c25-2 47 16 49 41 2 18-7 34-21 43l23 76 18 122h-31l-25-99-10 100H64l-7-102-26 101H0l25-122 23-75C35 101 27 87 28 70c2-24 30-43 58-45Z" fill="url(#sideBody)" stroke="#94a3b8" stroke-width="1.5"/>
+            <line x1="80" y1="34" x2="103" y2="98" stroke="#22c55e" stroke-width="4"/>
+            <line x1="68" y1="145" x2="117" y2="145" stroke="#22c55e" stroke-width="4"/>
+            <line x1="67" y1="205" x2="48" y2="303" stroke="#22c55e" stroke-width="4"/>
+            <line x1="112" y1="205" x2="135" y2="303" stroke="#22c55e" stroke-width="4"/>
+            ${[[80,34],[103,98],[68,145],[117,145],[67,205],[48,303],[112,205],[135,303]].map((point) => `<circle cx="${point[0]}" cy="${point[1]}" r="5" fill="#ef4444"/>`).join("")}
+          </g>
+          <g transform="translate(222 18) scale(-1 1)">
+            <path d="M86 25c25-2 47 16 49 41 2 18-7 34-21 43l23 76 18 122h-31l-25-99-10 100H64l-7-102-26 101H0l25-122 23-75C35 101 27 87 28 70c2-24 30-43 58-45Z" fill="url(#sideBody)" stroke="#94a3b8" stroke-width="1.5"/>
+            <line x1="80" y1="34" x2="103" y2="98" stroke="#22c55e" stroke-width="4"/>
+            <line x1="68" y1="145" x2="117" y2="145" stroke="#22c55e" stroke-width="4"/>
+          </g>
+          <text x="180" y="342" text-anchor="middle" fill="#64748b" font-size="13">侧面点位：头颈、骨盆、左右膝超伸</text>
+        </svg>
+      `;
+    }
+
+    function miniBodySvg() {
+      return `
+        <svg width="150" height="260" viewBox="0 0 170 300" aria-label="体态模型缩略图">
+          <defs><linearGradient id="miniBody" x1="0" x2="1"><stop offset="0" stop-color="#d7dde3"/><stop offset=".5" stop-color="#fff"/><stop offset="1" stop-color="#bdc6d0"/></linearGradient></defs>
+          <path d="M85 20c22 0 40 18 40 40 0 15-8 28-20 35l21 65 22 112h-31l-22-86-10 86H65l-10-86-22 86H2l22-112 21-65c-12-7-20-20-20-35 0-22 18-40 40-40Z" fill="url(#miniBody)" stroke="#94a3b8" stroke-width="1.5"/>
+        </svg>
+      `;
+    }
+
+    function renderPostureReport() {
+      if (reportStyle === "assessment") {
+        renderPostureAssessmentReport();
+        return;
+      }
+      const shoulder = metricByKey("shoulder");
+      const neck = metricByKey("neck");
+      const pelvis = metricByKey("pelvis");
+      const leftHyper = metricByKey("leftHyper");
+      const rightHyper = metricByKey("rightHyper");
+      const leftValgus = metricByKey("leftValgus");
+      const rightValgus = metricByKey("rightValgus");
+
+      $("#reportView").innerHTML = `
+        ${workflowStepper("report")}
+        ${reportStyleSwitch()}
+        <div class="report-viewer">
+          <aside class="report-side">${miniBodySvg()}</aside>
+          <section class="paper-wrap">
+            <article class="report-paper">
+              <header class="report-head">
+                <h2 class="report-title">3D人体模型检测报告</h2>
+                <div class="report-brand"><div class="brand-mark" aria-hidden="true"><span></span><span></span><span></span><span></span></div>VISBODY</div>
+              </header>
+              <table class="report-table">
+                <thead><tr><th>姓名</th><th>性别</th><th>年龄</th><th>体重</th><th>就诊号</th><th>来源文件</th></tr></thead>
+                <tbody><tr><td>${currentRecord.name}</td><td>${currentRecord.gender}</td><td>${currentRecord.age}</td><td>${currentRecord.weight}</td><td>${currentRecord.visitNo}</td><td>${currentRecord.fileName}</td></tr></tbody>
+              </table>
+
+              <section class="report-section">
+                <div class="report-section-title">正面体态评估</div>
+                <div class="posture-report-grid">
+                  <div>
+                    <table class="report-table">
+                      <thead><tr><th>测量项目</th><th>测量值</th><th>测量范围</th><th>评估结论</th></tr></thead>
+                      <tbody>
+                        ${metricRow(shoulder, "-90°~90°")}
+                        ${metricRow(leftValgus, "-180°~180°")}
+                        ${metricRow(rightValgus, "-180°~180°")}
+                      </tbody>
+                    </table>
+                  </div>
+                  <div class="posture-report-figure">${postureFrontReportSvg()}</div>
+                </div>
+              </section>
+
+              <section class="report-section">
+                <div class="report-section-title">侧面体态评估</div>
+                <div class="posture-report-grid">
+                  <div>
+                    <table class="report-table">
+                      <thead><tr><th>测量项目</th><th>测量值</th><th>测量范围</th><th>评估结论</th></tr></thead>
+                      <tbody>
+                        ${metricRow(neck, "-90°~90°")}
+                        ${metricRow(pelvis, "-90°~90°")}
+                        ${metricRow(leftHyper, "-180°~180°")}
+                        ${metricRow(rightHyper, "-180°~180°")}
+                      </tbody>
+                    </table>
+                  </div>
+                  <div class="posture-report-figure">${postureSideReportSvg()}</div>
+                </div>
+              </section>
+
+              <section class="report-section">
+                <div class="report-section-title">诊断分析</div>
+                <div class="posture-analysis-list">
+                  <div class="posture-analysis-card"><strong>肩颈姿态</strong><p>${postureResult(shoulder)}；${postureResult(neck)}。建议结合日常坐姿、肩颈活动度与疼痛反馈综合判断。</p></div>
+                  <div class="posture-analysis-card"><strong>骨盆姿态</strong><p>${postureResult(pelvis)}。骨盆前后倾会影响腰椎受力和下肢代偿，必要时建议复核核心稳定性。</p></div>
+                  <div class="posture-analysis-card"><strong>下肢力线</strong><p>左膝：${postureResult(leftValgus)}；右膝：${postureResult(rightValgus)}。用于评估双膝内外翻及站姿对称性。</p></div>
+                  <div class="posture-analysis-card"><strong>膝超伸风险</strong><p>左腿：${postureResult(leftHyper)}；右腿：${postureResult(rightHyper)}。建议结合步态、膝关节稳定性和训练史复核。</p></div>
+                </div>
+              </section>
+            </article>
+          </section>
+        </div>
+      `;
+      setView("reportView", "3D人体模型检测报告");
+    }
+
+    function assessmentMiniBody(label, pose = "front") {
+      const rotate = pose === "left" ? "rotate(-8 85 140)" : pose === "right" ? "rotate(8 85 140)" : "";
+      const top = pose === "top";
+      return `
+        <svg viewBox="0 0 170 230" aria-label="${label}">
+          <defs><linearGradient id="assessBody${pose}" x1="0" x2="1"><stop offset="0" stop-color="#cfd8e3"/><stop offset=".52" stop-color="#fff"/><stop offset="1" stop-color="#b5c0cc"/></linearGradient></defs>
+          ${top ? `
+            <ellipse cx="85" cy="112" rx="58" ry="30" fill="url(#assessBody${pose})" stroke="#94a3b8"/>
+            <line x1="42" y1="104" x2="128" y2="104" stroke="#22c55e" stroke-width="3"/>
+            <path d="M50 100c18 10 52 10 70 0" fill="none" stroke="#ef4444" stroke-dasharray="4 3"/>
+          ` : `
+            <g transform="${rotate}">
+              <path d="M85 18c22 0 40 18 40 40 0 14-7 27-18 34l22 52 21 66h-30l-23-60-12 60H65l-12-60-23 60H0l21-66 22-52c-11-7-18-20-18-34 0-22 18-40 40-40Z" transform="translate(12 0)" fill="url(#assessBody${pose})" stroke="#94a3b8" stroke-width="1.2"/>
+              <line x1="44" y1="83" x2="126" y2="83" stroke="#22c55e" stroke-width="3"/>
+              <line x1="66" y1="132" x2="55" y2="202" stroke="#22c55e" stroke-width="3"/>
+              <line x1="104" y1="132" x2="115" y2="202" stroke="#22c55e" stroke-width="3"/>
+              ${[[44,83],[126,83],[66,132],[55,202],[104,132],[115,202]].map((p) => `<circle cx="${p[0]}" cy="${p[1]}" r="3.5" fill="#ef4444"/>`).join("")}
+            </g>
+          `}
+        </svg>
+      `;
+    }
+
+    function postureAssessmentRows() {
+      const row = (name, value, compare, conclusion, risk) => `
+        <tr>
+          <td>${name}</td>
+          <td class="assessment-value">${value}</td>
+          <td class="assessment-value">${compare}</td>
+          <td>${conclusion}</td>
+          <td>${risk}</td>
+        </tr>
+      `;
+      const shoulder = metricByKey("shoulder").value.toFixed(1);
+      const neck = metricByKey("neck").value.toFixed(1);
+      const pelvis = metricByKey("pelvis").value.toFixed(1);
+      const leftHyper = metricByKey("leftHyper").value.toFixed(1);
+      const rightHyper = metricByKey("rightHyper").value.toFixed(1);
+      const leftValgus = metricByKey("leftValgus").value.toFixed(1);
+      const rightValgus = metricByKey("rightValgus").value.toFixed(1);
+      return [
+        row("肩平衡角度", `${shoulder}°`, "↓ 0.3°", postureResult(metricByKey("shoulder")), "肩平衡异常可能提示肩颈代偿，建议结合双肩高度和斜方肌紧张度复核。"),
+        row("头颈部前倾角度", `${neck}°`, "↑ 2.8°", postureResult(metricByKey("neck")), "头颈前倾易导致颈肩部酸痛不适，久之造成颈椎退化、生理曲度改变等问题。"),
+        row("骨盆前后倾角度", `${pelvis}°`, "↑ 8.3°", postureResult(metricByKey("pelvis")), "骨盆前后倾会影响腰椎受力和下肢代偿，建议结合核心稳定性复核。"),
+        row("左腿膝超伸角度", `${leftHyper}°`, "↓ 1.1°", postureResult(metricByKey("leftHyper")), "膝超伸会增加膝关节压力，建议结合步态和下肢力量训练复核。"),
+        row("右腿膝超伸角度", `${rightHyper}°`, "↓ 1.2°", postureResult(metricByKey("rightHyper")), "膝超伸会增加膝关节压力，建议结合步态和下肢力量训练复核。"),
+        row("左膝关节内外翻角度", `${leftValgus}°`, "↓ 4.3°", postureResult(metricByKey("leftValgus")), "膝关节内外翻会影响髋膝踝力线，运动时可能增加膝关节负荷。"),
+        row("右膝关节内外翻角度", `${rightValgus}°`, "↓ 3.4°", postureResult(metricByKey("rightValgus")), "膝关节内外翻会影响髋膝踝力线，运动时可能增加膝关节负荷。")
+      ].join("");
+    }
+
+    function renderPostureAssessmentReport() {
+      $("#reportView").innerHTML = `
+        ${workflowStepper("report")}
+        ${reportStyleSwitch()}
+        <section class="paper-wrap">
+          <article class="assessment-paper">
+            <h2 class="assessment-title">体态评估测量报告</h2>
+            <div class="assessment-meta">
+              <span>ID：${currentRecord.visitNo}</span>
+              <span>姓名：${currentRecord.name}</span>
+              <span>性别：${currentRecord.gender}</span>
+              <span>身高：--</span>
+              <span>体重：${currentRecord.weight}</span>
+              <span>年龄：${currentRecord.age}岁</span>
+            </div>
+            <div class="assessment-views">
+              <div class="assessment-view"><span>正视图</span>${assessmentMiniBody("正视图", "front")}</div>
+              <div class="assessment-view"><span>左视图</span>${assessmentMiniBody("左视图", "left")}</div>
+              <div class="assessment-view"><span>后视图</span>${assessmentMiniBody("后视图", "back")}</div>
+              <div class="assessment-view"><span>右视图</span>${assessmentMiniBody("右视图", "right")}</div>
+              <div class="assessment-view"><span>顶视图</span>${assessmentMiniBody("顶视图", "top")}</div>
+            </div>
+            <div class="assessment-section-head">
+              <h3>体态评估概览</h3>
+              <span>*报告内容仅供参考，最终意见以临床检查为准</span>
+            </div>
+            <table class="assessment-table">
+              <thead><tr><th style="width:16%;">测量项目</th><th style="width:14%;">偏移值</th><th style="width:14%;">与上次对比</th><th style="width:22%;">评估结论</th><th>风险提示</th></tr></thead>
+              <tbody>${postureAssessmentRows()}</tbody>
+            </table>
+            <div class="assessment-detail">
+              <div>
+                <h3>骨盆前后倾</h3>
+                ${postureSideReportSvg()}
+                <p>正视图</p>
+              </div>
+              <div>
+                <div class="assessment-badge">评估结论：异常</div>
+                <h3>${metricByKey("pelvis").value < 0 ? "骨盆后倾" : "骨盆前倾"}</h3>
+                <p>骨盆前后倾会影响腰椎受力、髋部活动和下肢代偿。建议结合核心稳定性、髂腰肌与臀肌力量进行进一步复核。</p>
+              </div>
+            </div>
+          </article>
+        </section>
+      `;
+      setView("reportView", "体态评估测量报告");
+    }
+
+    function renderFootReport() {
+      if (reportStyle === "assessment") {
+        renderFootAssessmentReport();
+        return;
+      }
+      const leftLength = footMetrics.find((metric) => metric.key === "leftLength").value;
+      const rightLength = footMetrics.find((metric) => metric.key === "rightLength").value;
+      const leftWidth = footMetrics.find((metric) => metric.key === "leftWidth").value;
+      const rightWidth = footMetrics.find((metric) => metric.key === "rightWidth").value;
+      const lengthDiff = Math.abs(rightLength - leftLength).toFixed(1);
+      const widthDiff = Math.abs(rightWidth - leftWidth).toFixed(1);
+      const longer = rightLength >= leftLength ? "右足" : "左足";
+
+      $("#reportView").innerHTML = `
+        ${workflowStepper("report")}
+        ${reportStyleSwitch()}
+        <div class="report-viewer">
+          <aside class="report-side">
+            <svg width="150" height="110" viewBox="0 0 260 180" aria-label="足部模型缩略图">
+              <defs><linearGradient id="miniFoot" x1="0" x2="1"><stop offset="0" stop-color="#d7dde3"/><stop offset=".52" stop-color="#f8fafc"/><stop offset="1" stop-color="#b7c0cc"/></linearGradient></defs>
+              <path d="M78 48c-21 4-36 22-41 44-5 25 4 44 24 49 26 7 50-12 53-41 3-29-10-57-36-52z" fill="url(#miniFoot)"/>
+              <path d="M182 48c21 4 36 22 41 44 5 25-4 44-24 49-26 7-50-12-53-41-3-29 10-57 36-52z" fill="url(#miniFoot)"/>
+            </svg>
+          </aside>
+          <section class="paper-wrap">
+            <article class="report-paper">
+              <header class="report-head">
+                <h2 class="report-title">足部尺寸测量报告</h2>
+                <div class="report-brand"><div class="brand-mark" aria-hidden="true"><span></span><span></span><span></span><span></span></div>VISBODY</div>
+              </header>
+              <table class="report-table">
+                <thead><tr><th>姓名</th><th>性别</th><th>年龄</th><th>体重</th><th>就诊号</th><th>来源文件</th></tr></thead>
+                <tbody><tr><td>${currentRecord.name}</td><td>${currentRecord.gender}</td><td>${currentRecord.age}</td><td>${currentRecord.weight}</td><td>${currentRecord.visitNo}</td><td>${currentRecord.fileName}</td></tr></tbody>
+              </table>
+              <section class="report-section">
+                <div class="report-section-title">尺寸测量</div>
+                <div class="feet-stage">${footSvg().replace("viewBox=\"0 0 720 520\"", "viewBox=\"0 0 720 520\" width=\"100%\" height=\"390\"")}</div>
+                <table class="report-table">
+                  <thead><tr><th>测量部位</th><th>测量值(mm)</th></tr></thead>
+                  <tbody>
+                    <tr><td>左足长</td><td style="color:#165dff;font-weight:900;">${leftLength.toFixed(1)}</td></tr>
+                    <tr><td>右足长</td><td style="color:#165dff;font-weight:900;">${rightLength.toFixed(1)}</td></tr>
+                    <tr><td>左足宽</td><td style="color:#165dff;font-weight:900;">${leftWidth.toFixed(1)}</td></tr>
+                    <tr><td>右足宽</td><td style="color:#165dff;font-weight:900;">${rightWidth.toFixed(1)}</td></tr>
+                  </tbody>
+                </table>
+              </section>
+              <section class="report-section">
+                <div class="report-section-title">诊断分析</div>
+                <div class="analysis-grid">
+                  <div class="analysis-item"><div class="analysis-kicker">左右足长差</div><div class="analysis-value">${lengthDiff} mm</div><div class="analysis-text">${longer}略长，差异较小。鞋码选择建议以较长一侧作为主要参考。</div></div>
+                  <div class="analysis-item"><div class="analysis-kicker">左右足宽差</div><div class="analysis-value">${widthDiff} mm</div><div class="analysis-text">双足宽度接近，前掌横向尺寸基本对称，常规鞋楦适配风险较低。</div></div>
+                  <div class="analysis-item"><div class="analysis-kicker">尺寸对称性</div><div class="analysis-value">基本对称</div><div class="analysis-text">足长与足宽左右差值均较小，建议结合试穿反馈确认足趾空间。</div></div>
+                </div>
+                <div class="summary-box">
+                  <div><h3>综合结论</h3><p>本次足部尺寸测量显示：${longer}长度略大，左右足宽基本一致。用于鞋码、鞋垫或足部模型适配时，应优先参考较长一侧足长。</p></div>
+                  <div><h3>应用建议</h3><ul><li>鞋码选择以较长一侧足长为基准。</li><li>定制鞋垫需分别保留左右足尺寸数据。</li><li>本报告仅用于足部尺寸和适配参考。</li></ul></div>
+                </div>
+              </section>
+            </article>
+          </section>
+        </div>
+      `;
+      setView("reportView", "足部尺寸测量报告");
+    }
+
+    function assessmentFootSvg(label, mode = "both") {
+      return `
+        <svg viewBox="0 0 220 230" aria-label="${label}">
+          <defs><linearGradient id="assessFoot${mode}" x1="0" x2="1"><stop offset="0" stop-color="#e5dcda"/><stop offset=".5" stop-color="#fff"/><stop offset="1" stop-color="#c8babb"/></linearGradient></defs>
+          ${mode !== "right" ? `
+            <g transform="translate(38 18) rotate(3 42 92)">
+              <path d="M42 5c-29 7-42 38-37 91 5 55 27 99 56 91 25-7 31-51 27-91C84 52 69-2 42 5Z" fill="url(#assessFoot${mode})" stroke="#a8a0a3"/>
+              <line x1="46" y1="16" x2="52" y2="178" stroke="#22c55e" stroke-width="3"/>
+              <line x1="13" y1="82" x2="82" y2="55" stroke="#22c55e" stroke-width="3"/>
+              ${[[46,16],[52,178],[13,82],[82,55]].map(p => `<circle cx="${p[0]}" cy="${p[1]}" r="4" fill="#ef4444"/>`).join("")}
+            </g>
+          ` : ""}
+          ${mode !== "left" ? `
+            <g transform="translate(128 18) rotate(-3 42 92)">
+              <path d="M48 5c29 7 42 38 37 91-5 55-27 99-56 91-25-7-31-51-27-91C6 52 21-2 48 5Z" fill="url(#assessFoot${mode})" stroke="#a8a0a3"/>
+              <line x1="44" y1="16" x2="38" y2="178" stroke="#22c55e" stroke-width="3"/>
+              <line x1="77" y1="82" x2="8" y2="55" stroke="#22c55e" stroke-width="3"/>
+              ${[[44,16],[38,178],[77,82],[8,55]].map(p => `<circle cx="${p[0]}" cy="${p[1]}" r="4" fill="#ef4444"/>`).join("")}
+            </g>
+          ` : ""}
+        </svg>
+      `;
+    }
+
+    function renderFootAssessmentReport() {
+      const leftLength = footMetrics.find((metric) => metric.key === "leftLength").value;
+      const rightLength = footMetrics.find((metric) => metric.key === "rightLength").value;
+      const leftWidth = footMetrics.find((metric) => metric.key === "leftWidth").value;
+      const rightWidth = footMetrics.find((metric) => metric.key === "rightWidth").value;
+      const lengthDiff = Math.abs(rightLength - leftLength).toFixed(1);
+      const widthDiff = Math.abs(rightWidth - leftWidth).toFixed(1);
+      const longer = rightLength >= leftLength ? "右足" : "左足";
+      const row = (name, value, compare, conclusion, risk) => `
+        <tr><td>${name}</td><td class="assessment-value">${value}</td><td class="assessment-value">${compare}</td><td>${conclusion}</td><td>${risk}</td></tr>
+      `;
+      $("#reportView").innerHTML = `
+        ${workflowStepper("report")}
+        ${reportStyleSwitch()}
+        <section class="paper-wrap">
+          <article class="assessment-paper">
+            <h2 class="assessment-title">足部尺寸测量报告</h2>
+            <div class="assessment-meta">
+              <span>ID：${currentRecord.visitNo}</span>
+              <span>姓名：${currentRecord.name}</span>
+              <span>性别：${currentRecord.gender}</span>
+              <span>体重：${currentRecord.weight}</span>
+              <span>年龄：${currentRecord.age}岁</span>
+            </div>
+            <div class="assessment-views" style="grid-template-columns:repeat(3,1fr);">
+              <div class="assessment-view"><span>双足测量</span>${assessmentFootSvg("双足测量", "both")}</div>
+              <div class="assessment-view"><span>左足</span>${assessmentFootSvg("左足", "left")}</div>
+              <div class="assessment-view"><span>右足</span>${assessmentFootSvg("右足", "right")}</div>
+            </div>
+            <div class="assessment-section-head">
+              <h3>足部尺寸评估概览</h3>
+              <span>*报告内容仅供鞋码、鞋垫和足部模型适配参考</span>
+            </div>
+            <table class="assessment-table">
+              <thead><tr><th style="width:16%;">测量项目</th><th style="width:14%;">测量值</th><th style="width:14%;">与上次对比</th><th style="width:22%;">评估结论</th><th>适配提示</th></tr></thead>
+              <tbody>
+                ${row("左足长", `${leftLength.toFixed(1)}mm`, "↓ 0.8mm", "用于左足鞋码参考", "左足长度用于确认鞋内前端余量和鞋垫长度。")}
+                ${row("右足长", `${rightLength.toFixed(1)}mm`, "↑ 0.6mm", "用于右足鞋码参考", "右足长度用于确认鞋内前端余量和鞋垫长度。")}
+                ${row("左足宽", `${leftWidth.toFixed(1)}mm`, "↓ 0.3mm", "用于左足鞋楦参考", "足宽用于判断前掌空间，避免鞋头挤压。")}
+                ${row("右足宽", `${rightWidth.toFixed(1)}mm`, "↑ 0.2mm", "用于右足鞋楦参考", "足宽用于判断前掌空间，避免鞋头挤压。")}
+              </tbody>
+            </table>
+            <div class="assessment-detail">
+              <div>
+                <h3>左右足尺寸差</h3>
+                ${assessmentFootSvg("左右足尺寸差", "both")}
+                <p>俯视图</p>
+              </div>
+              <div>
+                <div class="assessment-badge">评估结论：基本对称</div>
+                <h3>${longer}略长</h3>
+                <p>左右足长差 ${lengthDiff}mm，左右足宽差 ${widthDiff}mm。鞋码和鞋垫适配建议优先参考较长一侧足长，并保留双足独立尺寸数据。</p>
+              </div>
+            </div>
+          </article>
+        </section>
+      `;
+      setView("reportView", "足部尺寸测量报告");
+    }
+
+    function generateReport(recordId = currentRecord.id) {
+      currentRecord = importRecords.find((record) => record.id === recordId) || currentRecord;
+      currentRecord.status = "已生成报告";
+      currentRecord.doctor = "张医生";
+      currentRecord.reportStatus = currentRecord.modelType === "足压模型" ? "足部尺寸报告" : "体态报告";
+      syncGeneratedReportRow(currentRecord);
+      activeNavKey = "models";
+      reportStyle = "standard";
+      showToast("报告已生成，进入报告详情");
+      renderReport(currentRecord.id);
+    }
+
+    function syncGeneratedReportRow(record) {
+      const exists = reportListRows.some((row) => row.recordId === record.id);
+      if (exists) return;
+      reportListRows.unshift({
+        scanTime: record.importedAt,
+        idNo: record.visitNo,
+        gender: record.gender,
+        age: record.age,
+        name: record.name,
+        modelType: record.modelType,
+        posture: record.modelType === "体态模型" ? true : "--",
+        spine: "--",
+        foot: record.modelType === "足压模型",
+        recordId: record.id
+      });
+    }
+
+    function resetMetrics() {
+      [...postureMetrics, ...footMetrics].forEach((metric) => metric.value = metric.original);
+      renderReview();
+      showToast("已还原初始点位");
+    }
+
+    document.addEventListener("click", (event) => {
+      const target = event.target.closest("button, .metric-item, .control-point");
+      if (!target) return;
+
+      if (target.matches("[data-nav='binding']")) showToast("演示模式：绑定列表入口");
+      if (target.matches("[data-nav='reports']")) setView("reportsView", "报告列表");
+      if (target.matches("[data-nav='models']")) setView("importHomeView", "模型导入");
+      if (target.matches("[data-import-type]")) openImport(target.dataset.importType);
+      if (target.matches("[data-review]")) openReview(target.dataset.review);
+      if (target.matches("[data-open-current-review]")) openReview(currentRecord.id);
+      if (target.matches("[data-open-report]")) {
+        reportStyle = "standard";
+        renderReport(target.dataset.openReport);
+      }
+      if (target.matches("[data-generate]")) generateReport(target.dataset.generate);
+      if (target.matches("[data-report-style]")) {
+        reportStyle = target.dataset.reportStyle;
+        renderReport(currentRecord.id);
+      }
+      if (target.matches("[data-error]")) {
+        const record = importRecords.find((item) => item.id === target.dataset.error);
+        showToast(record.error || "导入失败，请检查文件命名或模型格式");
+      }
+      if (target.matches("[data-progress]")) showToast("模型解析进度 64%，后台处理中");
+      if (target.matches("[data-close-modal]")) $("#importModal").classList.remove("show");
+      if (target.matches("#mockChooseBtn")) {
+        renderParsedMeta(true);
+        showToast("已选择示例模型文件");
+      }
+      if (target.matches("#startImportBtn")) startImport();
+      if (target.matches("[data-back-home]")) setView("importHomeView", "模型导入");
+      if (target.matches("[data-generate-current]")) generateReport(currentRecord.id);
+      if (target.matches("[data-reset]")) resetMetrics();
+      if (target.matches("[data-rotate]")) showToast("已切换自由旋转模式");
+      if (target.matches(".metric-item")) {
+        activeMetricKey = target.dataset.metricRow;
+        renderReview();
+      }
+      if (target.matches(".control-point")) {
+        const point = target.dataset.point;
+        if (point && footMetrics.some((metric) => metric.key === point)) activeMetricKey = point;
+        showToast("已选中模型控制点");
+        renderReview();
+      }
+    });
+
+    document.addEventListener("input", (event) => {
+      const input = event.target.closest("[data-metric-input]");
+      if (!input) return;
+      const metrics = currentRecord.modelType === "体态模型" ? postureMetrics : footMetrics;
+      const metric = metrics.find((item) => item.key === input.dataset.metricInput);
+      metric.value = Number(input.value);
+      activeMetricKey = metric.key;
+      renderReview();
+    });
+
+    renderReports();
+  </script>
+</body>
+</html>
