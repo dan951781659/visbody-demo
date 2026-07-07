@@ -902,15 +902,18 @@
       font-size: 12px;
     }
 
-    .metric-input {
-      height: 34px;
+    .metric-value {
+      min-height: 34px;
       border: 1px solid var(--line);
       border-radius: 6px;
-      padding: 0 8px;
+      padding: 0 10px;
       width: 100%;
-      text-align: right;
+      display: inline-flex;
+      align-items: center;
+      justify-content: flex-end;
       font-weight: 900;
       color: #1d4ed8;
+      background: #f8fafc;
     }
 
     .review-actions {
@@ -975,51 +978,51 @@
     }
 
     .assessment-paper {
-      width: 1040px;
+      width: 900px;
       min-height: 1260px;
       background: #fff;
       box-shadow: var(--shadow);
-      padding: 22px 42px 42px;
-      color: #333;
+      padding: 46px 58px 40px;
+      color: var(--text);
     }
 
-    .assessment-title {
-      margin: 0;
+    .assessment-paper > .report-title {
       text-align: center;
-      font-size: 56px;
-      line-height: 1.08;
-      font-weight: 500;
-      letter-spacing: 0;
-      color: #333;
+      margin-bottom: 16px;
     }
 
     .assessment-meta {
       display: flex;
-      gap: 24px;
+      gap: 20px 28px;
       align-items: center;
       flex-wrap: wrap;
-      font-size: 18px;
+      font-size: 14px;
+      font-weight: 600;
       color: #334155;
-      border-bottom: 4px solid #1592ff;
-      padding: 14px 0 10px;
+      border-bottom: 3px solid var(--sky);
+      padding: 0 0 12px;
       margin-bottom: 18px;
     }
 
     .assessment-views {
       display: grid;
       grid-template-columns: repeat(5, 1fr);
-      gap: 18px;
-      margin-bottom: 22px;
+      gap: 12px;
+      margin-bottom: 18px;
+    }
+
+    .assessment-views.is-foot {
+      grid-template-columns: repeat(2, 1fr);
     }
 
     .assessment-view {
-      border: 2px solid #1e9bff;
-      height: 246px;
+      border: 1px solid #dbeafe;
+      min-height: 220px;
       background:
-        linear-gradient(rgba(96, 165, 250, .28) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(96, 165, 250, .28) 1px, transparent 1px),
-        #fff;
-      background-size: 24px 24px;
+        linear-gradient(rgba(96, 165, 250, .22) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(96, 165, 250, .22) 1px, transparent 1px),
+        #fbfdff;
+      background-size: 32px 32px;
       position: relative;
       display: grid;
       place-items: center;
@@ -1029,108 +1032,42 @@
     .assessment-view span {
       position: absolute;
       top: 8px;
-      left: 8px;
-      color: #64748b;
-      font-size: 18px;
+      left: 10px;
+      color: var(--muted);
+      font-size: 13px;
       font-weight: 700;
     }
 
     .assessment-view svg {
-      width: 92%;
-      height: 210px;
+      width: 90%;
+      max-height: 200px;
+      height: auto;
     }
 
-    .assessment-section-head {
+    .report-section-title--with-note {
       display: flex;
-      align-items: baseline;
+      align-items: center;
       justify-content: space-between;
       gap: 16px;
-      margin: 16px 0 8px;
     }
 
-    .assessment-section-head h3 {
-      margin: 0;
-      font-size: 30px;
-      line-height: 1;
-      font-weight: 500;
-    }
-
-    .assessment-section-head span {
-      color: #64748b;
-      font-size: 15px;
-    }
-
-    .assessment-table {
-      width: 100%;
-      border-collapse: collapse;
-      table-layout: fixed;
-      border: 2px solid #1e9bff;
-      font-size: 17px;
-    }
-
-    .assessment-table th,
-    .assessment-table td {
-      border: 1px solid #bfdbfe;
-      padding: 15px 12px;
-      color: #334155;
-      vertical-align: middle;
-    }
-
-    .assessment-table th {
-      background: #eef7ff;
-      color: #64748b;
-      text-align: center;
-      font-weight: 500;
-    }
-
-    .assessment-table td:first-child {
-      font-size: 19px;
-      color: #1f2937;
+    .report-section-note {
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 600;
+      white-space: nowrap;
     }
 
     .assessment-value {
-      color: #438bff;
-      font-weight: 500;
+      color: var(--primary);
+      font-weight: 900;
       text-align: center;
+      white-space: nowrap;
     }
 
-    .assessment-detail {
-      border: 2px solid #1e9bff;
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      min-height: 300px;
-      margin-top: 22px;
-    }
-
-    .assessment-detail > div {
-      padding: 24px 26px;
-      min-width: 0;
-    }
-
-    .assessment-detail > div + div {
-      border-left: 2px solid #1e9bff;
-    }
-
-    .assessment-detail h3 {
-      margin: 0 0 18px;
-      font-size: 26px;
-      font-weight: 500;
-    }
-
-    .assessment-badge {
-      display: inline-flex;
-      background: #f2a900;
-      color: #fff;
-      font-size: 22px;
-      padding: 8px 20px;
-      margin-bottom: 24px;
-    }
-
-    .assessment-detail p {
-      margin: 0;
-      color: #7a7f87;
-      line-height: 1.7;
-      font-size: 17px;
+    .report-section .report-table td:first-child {
+      font-weight: 700;
+      color: #1f2937;
     }
 
     .report-head {
@@ -1243,6 +1180,36 @@
       color: #475569;
       font-size: 13px;
       line-height: 1.65;
+    }
+
+    .manual-analysis-box {
+      min-height: 180px;
+      background: #fff;
+      border: 1px solid #dbeafe;
+      margin: 14px;
+      padding: 14px;
+      white-space: pre-wrap;
+      line-height: 1.8;
+      color: #334155;
+    }
+
+
+    .diagnosis-input {
+      width: 100%;
+      min-height: 128px;
+      resize: vertical;
+      border: 1px solid var(--line);
+      border-radius: 6px;
+      padding: 12px;
+      color: #1f2937;
+      background: #fff;
+      line-height: 1.7;
+      outline: none;
+    }
+
+    .diagnosis-input:focus {
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(22, 93, 255, .12);
     }
 
     .feet-stage {
@@ -1440,7 +1407,7 @@
       .report-search-group { flex-direction: column; align-items: stretch; gap: 10px; }
       .flat-input, .flat-input.search { width: 100%; }
       .report-list-shell { padding: 0 0 72px; overflow-x: auto; }
-      .vis-report-table { min-width: 1080px; }
+      .vis-report-table { min-width: 940px; }
       .app-footer { left: 0; height: 46px; font-size: 13px; }
       .filter-bar { grid-template-columns: 1fr; }
       .import-card { grid-template-columns: 1fr; padding: 18px; }
@@ -1455,6 +1422,10 @@
       table { min-width: 980px; }
       .analysis-grid, .summary-box { grid-template-columns: 1fr; }
       .report-paper { width: 100%; min-width: 0; padding: 24px 16px; }
+      .assessment-paper { width: 100%; min-width: 0; padding: 24px 16px; }
+      .assessment-views { grid-template-columns: repeat(2, 1fr); }
+      .report-section-title--with-note { flex-direction: column; align-items: flex-start; gap: 4px; }
+      .report-section-note { white-space: normal; }
       .report-head { align-items: flex-start; gap: 14px; flex-direction: column; }
     }
   </style>
@@ -1496,11 +1467,6 @@
 
       <section class="content">
         <div class="view active" id="importHomeView">
-          <div class="hero-bar">
-            <strong>欢迎使用 VE760 三维模型数据处理工具</strong>
-            <span class="sub">模型导入后可独立审核并生成报告，不依赖已有测量报告。</span>
-          </div>
-
           <div class="import-options">
             <article class="import-card">
               <div class="model-icon" aria-hidden="true">
@@ -1575,7 +1541,6 @@
                   <th style="width: 110px;">年龄</th>
                   <th style="width: 190px;">姓名</th>
                   <th style="width: 150px;">体态评估</th>
-                  <th style="width: 150px;">脊柱评估</th>
                   <th style="width: 180px;">足底压力评估</th>
                   <th style="width: 150px;">操作</th>
                 </tr>
@@ -1639,9 +1604,9 @@
         age: 28,
         weight: "82.75kg",
         visitNo: "1",
-        status: "待审核",
-        doctor: "--",
-        reportStatus: "未生成"
+        status: "已生成报告",
+        doctor: "张医生",
+        reportStatus: "体态报告"
       },
       {
         id: "f1",
@@ -1703,7 +1668,8 @@
     ];
 
     let reportListRows = [
-      { scanTime: "2026-07-06 16:37:55", idNo: "1", gender: "男", age: 28, name: "CESHIO", modelType: "足压模型", posture: "--", spine: "--", foot: true, recordId: "f1" },
+      { scanTime: "2026-07-06 16:37:55", idNo: "1", gender: "男", age: 28, name: "CESHIO", modelType: "体态模型", posture: true, spine: "--", foot: "--", recordId: "t1" },
+      { scanTime: "2026-07-06 15:22:10", idNo: "23423", gender: "女", age: 24, name: "李十", modelType: "足压模型", posture: "--", spine: "--", foot: true, recordId: "f1" },
       { scanTime: "2026-07-06 14:54:24", idNo: "13900000066", gender: "男", age: 36, name: "足压边界测试...", modelType: "足压模型", posture: "--", spine: "--", foot: true, recordId: "f1" },
       { scanTime: "2026-07-06 14:54:24", idNo: "13900000065", gender: "男", age: 36, name: "足压边界测试...", modelType: "足压模型", posture: "--", spine: "--", foot: true, recordId: "f1" },
       { scanTime: "2026-07-06 14:54:23", idNo: "13900000063", gender: "男", age: 36, name: "足压边界测试...", modelType: "足压模型", posture: "--", spine: "--", foot: true, recordId: "f1" },
@@ -1738,6 +1704,7 @@
     let parsedImport = null;
     let activeNavKey = "models";
     let reportStyle = "standard";
+    let showReportWorkflow = false;
 
     const $ = (selector) => document.querySelector(selector);
     const $$ = (selector) => [...document.querySelectorAll(selector)];
@@ -1769,8 +1736,7 @@
           <td>${row.age}</td>
           <td><a class="name-link" href="javascript:void(0)" data-open-report="report-row-${index}">${row.name}</a></td>
           <td>${row.posture === true ? `<span class="checkmark">✓</span>` : row.posture}</td>
-          <td>${row.spine}</td>
-          <td>${row.foot ? `<span class="checkmark">✓</span>` : "--"}</td>
+          <td>${row.foot === true ? `<span class="checkmark">✓</span>` : "--"}</td>
           <td><button class="report-action" type="button" data-open-report="report-row-${index}">查看报告 <span>›</span></button></td>
         </tr>
       `).join("");
@@ -1925,7 +1891,10 @@
             </div>
             <div class="panel-body">
               <div class="metric-list">${renderMetricItems(isBody)}</div>
-              ${isBody ? `<p class="sub" style="margin-top:14px;line-height:1.8;">体态角度修改后，相关结论由算法服务按最新控制点重新计算；本页不允许直接编辑结论文案。</p>` : renderFootDiagnosis()}
+              <div style="margin-top:16px;border-top:1px solid var(--line);padding-top:14px;">
+                <div class="metric-name" style="margin-bottom:8px;">医生诊断</div>
+                <textarea class="diagnosis-input" data-diagnosis-input placeholder="请输入医生诊断分析内容，生成报告后将同步显示在报告详情页。">${escapeHtml(currentRecord.diagnosis || "")}</textarea>
+              </div>
             </div>
           </aside>
         </div>
@@ -1943,10 +1912,28 @@
               <div class="metric-name">${metric.name}</div>
               <div class="metric-delta">原始 ${metric.original}${metric.unit} · 差值 ${sign}${delta}${metric.unit}</div>
             </div>
-            <input class="metric-input" type="number" step="0.1" value="${metric.value}" data-metric-input="${metric.key}" aria-label="${metric.name}">
+            <span class="metric-value" aria-label="${metric.name}">${metric.value}${metric.unit}</span>
           </div>
         `;
       }).join("");
+    }
+
+    function escapeHtml(value) {
+      return String(value ?? "")
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#39;");
+    }
+
+    function diagnosisContent() {
+      return escapeHtml(currentRecord.diagnosis || "");
+    }
+
+    function saveReviewDiagnosis() {
+      const input = $("[data-diagnosis-input]");
+      if (input && currentRecord) currentRecord.diagnosis = input.value;
     }
 
     function postureSvg() {
@@ -1999,23 +1986,8 @@
       `;
     }
 
-    function renderFootDiagnosis() {
-      const leftLength = footMetrics.find((metric) => metric.key === "leftLength").value;
-      const rightLength = footMetrics.find((metric) => metric.key === "rightLength").value;
-      const leftWidth = footMetrics.find((metric) => metric.key === "leftWidth").value;
-      const rightWidth = footMetrics.find((metric) => metric.key === "rightWidth").value;
-      const lengthDiff = Math.abs(rightLength - leftLength).toFixed(1);
-      const widthDiff = Math.abs(rightWidth - leftWidth).toFixed(1);
-      const longer = rightLength >= leftLength ? "右足" : "左足";
-      return `
-        <div style="margin-top:16px;border-top:1px solid var(--line);padding-top:14px;">
-          <div class="metric-name">实时诊断</div>
-          <p class="sub" style="line-height:1.8;margin:8px 0 0;">左右足长差 ${lengthDiff}mm，${longer}略长；左右足宽差 ${widthDiff}mm。鞋码和鞋垫适配建议优先参考较长一侧足长。</p>
-        </div>
-      `;
-    }
-
-    function renderReport(recordId = currentRecord.id) {
+    function renderReport(recordId = currentRecord.id, options = {}) {
+      showReportWorkflow = Boolean(options.fromImportFlow);
       if (recordId && recordId.startsWith("report-row-")) {
         const row = reportListRows[Number(recordId.replace("report-row-", ""))] || reportListRows[0];
         const cleanName = row.name.replace("...", "");
@@ -2032,7 +2004,8 @@
           visitNo: row.idNo,
           status: "已生成报告",
           doctor: "张医生",
-          reportStatus: isBodyRow ? "体态报告" : "足部尺寸报告"
+          reportStatus: isBodyRow ? "体态报告" : "足部尺寸报告",
+          diagnosis: ""
         };
       } else {
         currentRecord = importRecords.find((record) => record.id === recordId) || currentRecord;
@@ -2057,18 +2030,8 @@
       return postureMetrics.find((metric) => metric.key === key);
     }
 
-    function postureResult(metric) {
-      const value = metric.value;
-      if (metric.key === "shoulder") return Math.abs(value) <= 3 ? "肩部基本平衡" : `${value > 0 ? "右肩偏高" : "左肩偏高"}，建议结合肩颈状态复核`;
-      if (metric.key === "neck") return value <= 15 ? "头颈前倾不明显" : "存在头颈部前倾倾向";
-      if (metric.key === "pelvis") return Math.abs(value) <= 10 ? "骨盆前后倾基本正常" : `${value > 0 ? "骨盆前倾倾向" : "骨盆后倾倾向"}`;
-      if (metric.key === "leftHyper" || metric.key === "rightHyper") return Math.abs(value) <= 5 ? "膝超伸风险较低" : "存在膝超伸风险";
-      if (metric.key === "leftValgus" || metric.key === "rightValgus") return Math.abs(value) <= 8 ? "膝关节内外翻基本正常" : `${value > 0 ? "外翻" : "内翻"}倾向，建议复核下肢力线`;
-      return "待复核";
-    }
-
     function metricRow(metric, range) {
-      return `<tr><td>${metric.name}</td><td style="color:#165dff;font-weight:900;">${metric.value.toFixed(1)}${metric.unit}</td><td>${range}</td><td>${postureResult(metric)}</td></tr>`;
+      return `<tr><td>${metric.name}</td><td style="color:#165dff;font-weight:900;">${metric.value.toFixed(1)}${metric.unit}</td><td>${range}</td></tr>`;
     }
 
     function postureFrontReportSvg() {
@@ -2130,7 +2093,7 @@
       const rightValgus = metricByKey("rightValgus");
 
       $("#reportView").innerHTML = `
-        ${workflowStepper("report")}
+        ${showReportWorkflow ? workflowStepper("report") : ""}
         ${reportStyleSwitch()}
         <div class="report-viewer">
           <aside class="report-side">${miniBodySvg()}</aside>
@@ -2150,7 +2113,7 @@
                 <div class="posture-report-grid">
                   <div>
                     <table class="report-table">
-                      <thead><tr><th>测量项目</th><th>测量值</th><th>测量范围</th><th>评估结论</th></tr></thead>
+                      <thead><tr><th>测量项目</th><th>测量值</th><th>测量范围</th></tr></thead>
                       <tbody>
                         ${metricRow(shoulder, "-90°~90°")}
                         ${metricRow(leftValgus, "-180°~180°")}
@@ -2167,7 +2130,7 @@
                 <div class="posture-report-grid">
                   <div>
                     <table class="report-table">
-                      <thead><tr><th>测量项目</th><th>测量值</th><th>测量范围</th><th>评估结论</th></tr></thead>
+                      <thead><tr><th>测量项目</th><th>测量值</th><th>测量范围</th></tr></thead>
                       <tbody>
                         ${metricRow(neck, "-90°~90°")}
                         ${metricRow(pelvis, "-90°~90°")}
@@ -2182,12 +2145,7 @@
 
               <section class="report-section">
                 <div class="report-section-title">诊断分析</div>
-                <div class="posture-analysis-list">
-                  <div class="posture-analysis-card"><strong>肩颈姿态</strong><p>${postureResult(shoulder)}；${postureResult(neck)}。建议结合日常坐姿、肩颈活动度与疼痛反馈综合判断。</p></div>
-                  <div class="posture-analysis-card"><strong>骨盆姿态</strong><p>${postureResult(pelvis)}。骨盆前后倾会影响腰椎受力和下肢代偿，必要时建议复核核心稳定性。</p></div>
-                  <div class="posture-analysis-card"><strong>下肢力线</strong><p>左膝：${postureResult(leftValgus)}；右膝：${postureResult(rightValgus)}。用于评估双膝内外翻及站姿对称性。</p></div>
-                  <div class="posture-analysis-card"><strong>膝超伸风险</strong><p>左腿：${postureResult(leftHyper)}；右腿：${postureResult(rightHyper)}。建议结合步态、膝关节稳定性和训练史复核。</p></div>
-                </div>
+                <div class="manual-analysis-box">${diagnosisContent()}</div>
               </section>
             </article>
           </section>
@@ -2220,13 +2178,12 @@
     }
 
     function postureAssessmentRows() {
-      const row = (name, value, compare, conclusion, risk) => `
+      const row = (name, value, range, compare) => `
         <tr>
           <td>${name}</td>
           <td class="assessment-value">${value}</td>
+          <td>${range}</td>
           <td class="assessment-value">${compare}</td>
-          <td>${conclusion}</td>
-          <td>${risk}</td>
         </tr>
       `;
       const shoulder = metricByKey("shoulder").value.toFixed(1);
@@ -2237,23 +2194,23 @@
       const leftValgus = metricByKey("leftValgus").value.toFixed(1);
       const rightValgus = metricByKey("rightValgus").value.toFixed(1);
       return [
-        row("肩平衡角度", `${shoulder}°`, "↓ 0.3°", postureResult(metricByKey("shoulder")), "肩平衡异常可能提示肩颈代偿，建议结合双肩高度和斜方肌紧张度复核。"),
-        row("头颈部前倾角度", `${neck}°`, "↑ 2.8°", postureResult(metricByKey("neck")), "头颈前倾易导致颈肩部酸痛不适，久之造成颈椎退化、生理曲度改变等问题。"),
-        row("骨盆前后倾角度", `${pelvis}°`, "↑ 8.3°", postureResult(metricByKey("pelvis")), "骨盆前后倾会影响腰椎受力和下肢代偿，建议结合核心稳定性复核。"),
-        row("左腿膝超伸角度", `${leftHyper}°`, "↓ 1.1°", postureResult(metricByKey("leftHyper")), "膝超伸会增加膝关节压力，建议结合步态和下肢力量训练复核。"),
-        row("右腿膝超伸角度", `${rightHyper}°`, "↓ 1.2°", postureResult(metricByKey("rightHyper")), "膝超伸会增加膝关节压力，建议结合步态和下肢力量训练复核。"),
-        row("左膝关节内外翻角度", `${leftValgus}°`, "↓ 4.3°", postureResult(metricByKey("leftValgus")), "膝关节内外翻会影响髋膝踝力线，运动时可能增加膝关节负荷。"),
-        row("右膝关节内外翻角度", `${rightValgus}°`, "↓ 3.4°", postureResult(metricByKey("rightValgus")), "膝关节内外翻会影响髋膝踝力线，运动时可能增加膝关节负荷。")
+        row("肩平衡角度", `${shoulder}°`, "-90°~90°", "↓ 0.3°"),
+        row("左膝关节内外翻角度", `${leftValgus}°`, "-180°~180°", "↓ 4.3°"),
+        row("右膝关节内外翻角度", `${rightValgus}°`, "-180°~180°", "↓ 3.4°"),
+        row("头颈部前倾角度", `${neck}°`, "-90°~90°", "↑ 2.8°"),
+        row("骨盆前后倾角度", `${pelvis}°`, "-90°~90°", "↑ 8.3°"),
+        row("左腿膝超伸角度", `${leftHyper}°`, "-180°~180°", "↓ 1.1°"),
+        row("右腿膝超伸角度", `${rightHyper}°`, "-180°~180°", "↓ 1.2°")
       ].join("");
     }
 
     function renderPostureAssessmentReport() {
       $("#reportView").innerHTML = `
-        ${workflowStepper("report")}
+        ${showReportWorkflow ? workflowStepper("report") : ""}
         ${reportStyleSwitch()}
         <section class="paper-wrap">
           <article class="assessment-paper">
-            <h2 class="assessment-title">体态评估测量报告</h2>
+            <h2 class="report-title">体态评估测量报告</h2>
             <div class="assessment-meta">
               <span>ID：${currentRecord.visitNo}</span>
               <span>姓名：${currentRecord.name}</span>
@@ -2269,26 +2226,20 @@
               <div class="assessment-view"><span>右视图</span>${assessmentMiniBody("右视图", "right")}</div>
               <div class="assessment-view"><span>顶视图</span>${assessmentMiniBody("顶视图", "top")}</div>
             </div>
-            <div class="assessment-section-head">
-              <h3>体态评估概览</h3>
-              <span>*报告内容仅供参考，最终意见以临床检查为准</span>
-            </div>
-            <table class="assessment-table">
-              <thead><tr><th style="width:16%;">测量项目</th><th style="width:14%;">偏移值</th><th style="width:14%;">与上次对比</th><th style="width:22%;">评估结论</th><th>风险提示</th></tr></thead>
-              <tbody>${postureAssessmentRows()}</tbody>
-            </table>
-            <div class="assessment-detail">
-              <div>
-                <h3>骨盆前后倾</h3>
-                ${postureSideReportSvg()}
-                <p>正视图</p>
+            <section class="report-section">
+              <div class="report-section-title report-section-title--with-note">
+                <span>体态评估概览</span>
+                <span class="report-section-note">*报告内容仅供参考，最终意见以临床检查为准</span>
               </div>
-              <div>
-                <div class="assessment-badge">评估结论：异常</div>
-                <h3>${metricByKey("pelvis").value < 0 ? "骨盆后倾" : "骨盆前倾"}</h3>
-                <p>骨盆前后倾会影响腰椎受力、髋部活动和下肢代偿。建议结合核心稳定性、髂腰肌与臀肌力量进行进一步复核。</p>
-              </div>
-            </div>
+              <table class="report-table">
+                <thead><tr><th>测量项目</th><th>测量值</th><th>测量范围</th><th>与上次对比</th></tr></thead>
+                <tbody>${postureAssessmentRows()}</tbody>
+              </table>
+            </section>
+            <section class="report-section">
+              <div class="report-section-title">诊断分析</div>
+              <div class="manual-analysis-box">${diagnosisContent()}</div>
+            </section>
           </article>
         </section>
       `;
@@ -2304,12 +2255,9 @@
       const rightLength = footMetrics.find((metric) => metric.key === "rightLength").value;
       const leftWidth = footMetrics.find((metric) => metric.key === "leftWidth").value;
       const rightWidth = footMetrics.find((metric) => metric.key === "rightWidth").value;
-      const lengthDiff = Math.abs(rightLength - leftLength).toFixed(1);
-      const widthDiff = Math.abs(rightWidth - leftWidth).toFixed(1);
-      const longer = rightLength >= leftLength ? "右足" : "左足";
 
       $("#reportView").innerHTML = `
-        ${workflowStepper("report")}
+        ${showReportWorkflow ? workflowStepper("report") : ""}
         ${reportStyleSwitch()}
         <div class="report-viewer">
           <aside class="report-side">
@@ -2344,15 +2292,7 @@
               </section>
               <section class="report-section">
                 <div class="report-section-title">诊断分析</div>
-                <div class="analysis-grid">
-                  <div class="analysis-item"><div class="analysis-kicker">左右足长差</div><div class="analysis-value">${lengthDiff} mm</div><div class="analysis-text">${longer}略长，差异较小。鞋码选择建议以较长一侧作为主要参考。</div></div>
-                  <div class="analysis-item"><div class="analysis-kicker">左右足宽差</div><div class="analysis-value">${widthDiff} mm</div><div class="analysis-text">双足宽度接近，前掌横向尺寸基本对称，常规鞋楦适配风险较低。</div></div>
-                  <div class="analysis-item"><div class="analysis-kicker">尺寸对称性</div><div class="analysis-value">基本对称</div><div class="analysis-text">足长与足宽左右差值均较小，建议结合试穿反馈确认足趾空间。</div></div>
-                </div>
-                <div class="summary-box">
-                  <div><h3>综合结论</h3><p>本次足部尺寸测量显示：${longer}长度略大，左右足宽基本一致。用于鞋码、鞋垫或足部模型适配时，应优先参考较长一侧足长。</p></div>
-                  <div><h3>应用建议</h3><ul><li>鞋码选择以较长一侧足长为基准。</li><li>定制鞋垫需分别保留左右足尺寸数据。</li><li>本报告仅用于足部尺寸和适配参考。</li></ul></div>
-                </div>
+                <div class="manual-analysis-box">${diagnosisContent()}</div>
               </section>
             </article>
           </section>
@@ -2390,18 +2330,15 @@
       const rightLength = footMetrics.find((metric) => metric.key === "rightLength").value;
       const leftWidth = footMetrics.find((metric) => metric.key === "leftWidth").value;
       const rightWidth = footMetrics.find((metric) => metric.key === "rightWidth").value;
-      const lengthDiff = Math.abs(rightLength - leftLength).toFixed(1);
-      const widthDiff = Math.abs(rightWidth - leftWidth).toFixed(1);
-      const longer = rightLength >= leftLength ? "右足" : "左足";
-      const row = (name, value, compare, conclusion, risk) => `
-        <tr><td>${name}</td><td class="assessment-value">${value}</td><td class="assessment-value">${compare}</td><td>${conclusion}</td><td>${risk}</td></tr>
+      const row = (name, value, compare) => `
+        <tr><td>${name}</td><td class="assessment-value">${value}</td><td class="assessment-value">${compare}</td></tr>
       `;
       $("#reportView").innerHTML = `
-        ${workflowStepper("report")}
+        ${showReportWorkflow ? workflowStepper("report") : ""}
         ${reportStyleSwitch()}
         <section class="paper-wrap">
           <article class="assessment-paper">
-            <h2 class="assessment-title">足部尺寸测量报告</h2>
+            <h2 class="report-title">足部尺寸测量报告</h2>
             <div class="assessment-meta">
               <span>ID：${currentRecord.visitNo}</span>
               <span>姓名：${currentRecord.name}</span>
@@ -2409,36 +2346,29 @@
               <span>体重：${currentRecord.weight}</span>
               <span>年龄：${currentRecord.age}岁</span>
             </div>
-            <div class="assessment-views" style="grid-template-columns:repeat(3,1fr);">
-              <div class="assessment-view"><span>双足测量</span>${assessmentFootSvg("双足测量", "both")}</div>
+            <div class="assessment-views is-foot">
               <div class="assessment-view"><span>左足</span>${assessmentFootSvg("左足", "left")}</div>
               <div class="assessment-view"><span>右足</span>${assessmentFootSvg("右足", "right")}</div>
             </div>
-            <div class="assessment-section-head">
-              <h3>足部尺寸评估概览</h3>
-              <span>*报告内容仅供鞋码、鞋垫和足部模型适配参考</span>
-            </div>
-            <table class="assessment-table">
-              <thead><tr><th style="width:16%;">测量项目</th><th style="width:14%;">测量值</th><th style="width:14%;">与上次对比</th><th style="width:22%;">评估结论</th><th>适配提示</th></tr></thead>
-              <tbody>
-                ${row("左足长", `${leftLength.toFixed(1)}mm`, "↓ 0.8mm", "用于左足鞋码参考", "左足长度用于确认鞋内前端余量和鞋垫长度。")}
-                ${row("右足长", `${rightLength.toFixed(1)}mm`, "↑ 0.6mm", "用于右足鞋码参考", "右足长度用于确认鞋内前端余量和鞋垫长度。")}
-                ${row("左足宽", `${leftWidth.toFixed(1)}mm`, "↓ 0.3mm", "用于左足鞋楦参考", "足宽用于判断前掌空间，避免鞋头挤压。")}
-                ${row("右足宽", `${rightWidth.toFixed(1)}mm`, "↑ 0.2mm", "用于右足鞋楦参考", "足宽用于判断前掌空间，避免鞋头挤压。")}
-              </tbody>
-            </table>
-            <div class="assessment-detail">
-              <div>
-                <h3>左右足尺寸差</h3>
-                ${assessmentFootSvg("左右足尺寸差", "both")}
-                <p>俯视图</p>
+            <section class="report-section">
+              <div class="report-section-title report-section-title--with-note">
+                <span>足部尺寸评估概览</span>
+                <span class="report-section-note">*报告内容仅供鞋码、鞋垫和足部模型适配参考</span>
               </div>
-              <div>
-                <div class="assessment-badge">评估结论：基本对称</div>
-                <h3>${longer}略长</h3>
-                <p>左右足长差 ${lengthDiff}mm，左右足宽差 ${widthDiff}mm。鞋码和鞋垫适配建议优先参考较长一侧足长，并保留双足独立尺寸数据。</p>
-              </div>
-            </div>
+              <table class="report-table">
+                <thead><tr><th>测量部位</th><th>测量值(mm)</th><th>与上次对比</th></tr></thead>
+                <tbody>
+                  ${row("左足长", leftLength.toFixed(1), "↓ 0.8mm")}
+                  ${row("右足长", rightLength.toFixed(1), "↑ 0.6mm")}
+                  ${row("左足宽", leftWidth.toFixed(1), "↓ 0.3mm")}
+                  ${row("右足宽", rightWidth.toFixed(1), "↑ 0.2mm")}
+                </tbody>
+              </table>
+            </section>
+            <section class="report-section">
+              <div class="report-section-title">诊断分析</div>
+              <div class="manual-analysis-box">${diagnosisContent()}</div>
+            </section>
           </article>
         </section>
       `;
@@ -2446,6 +2376,7 @@
     }
 
     function generateReport(recordId = currentRecord.id) {
+      saveReviewDiagnosis();
       currentRecord = importRecords.find((record) => record.id === recordId) || currentRecord;
       currentRecord.status = "已生成报告";
       currentRecord.doctor = "张医生";
@@ -2454,7 +2385,7 @@
       activeNavKey = "models";
       reportStyle = "standard";
       showToast("报告已生成，进入报告详情");
-      renderReport(currentRecord.id);
+      renderReport(currentRecord.id, { fromImportFlow: true });
     }
 
     function syncGeneratedReportRow(record) {
@@ -2492,12 +2423,12 @@
       if (target.matches("[data-open-current-review]")) openReview(currentRecord.id);
       if (target.matches("[data-open-report]")) {
         reportStyle = "standard";
-        renderReport(target.dataset.openReport);
+        renderReport(target.dataset.openReport, { fromImportFlow: false });
       }
       if (target.matches("[data-generate]")) generateReport(target.dataset.generate);
       if (target.matches("[data-report-style]")) {
         reportStyle = target.dataset.reportStyle;
-        renderReport(currentRecord.id);
+        renderReport(currentRecord.id, { fromImportFlow: showReportWorkflow });
       }
       if (target.matches("[data-error]")) {
         const record = importRecords.find((item) => item.id === target.dataset.error);
@@ -2515,25 +2446,30 @@
       if (target.matches("[data-reset]")) resetMetrics();
       if (target.matches("[data-rotate]")) showToast("已切换自由旋转模式");
       if (target.matches(".metric-item")) {
+        saveReviewDiagnosis();
         activeMetricKey = target.dataset.metricRow;
         renderReview();
       }
       if (target.matches(".control-point")) {
+        saveReviewDiagnosis();
         const point = target.dataset.point;
-        if (point && footMetrics.some((metric) => metric.key === point)) activeMetricKey = point;
-        showToast("已选中模型控制点");
+        const metrics = currentRecord.modelType === "体态模型" ? postureMetrics : footMetrics;
+        if (point && metrics.some((metric) => metric.key === point)) {
+          activeMetricKey = point;
+        } else {
+          activeMetricKey = metrics[Number(point) % metrics.length]?.key || metrics[0].key;
+        }
+        const metric = metrics.find((item) => item.key === activeMetricKey);
+        metric.value = Number((metric.value + 0.1).toFixed(1));
+        showToast("已调整点位，测量值已更新");
         renderReview();
       }
     });
 
     document.addEventListener("input", (event) => {
-      const input = event.target.closest("[data-metric-input]");
-      if (!input) return;
-      const metrics = currentRecord.modelType === "体态模型" ? postureMetrics : footMetrics;
-      const metric = metrics.find((item) => item.key === input.dataset.metricInput);
-      metric.value = Number(input.value);
-      activeMetricKey = metric.key;
-      renderReview();
+      if (event.target.matches("[data-diagnosis-input]") && currentRecord) {
+        currentRecord.diagnosis = event.target.value;
+      }
     });
 
     renderReports();
