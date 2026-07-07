@@ -1,0 +1,1373 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>2026 H2 - 2027 H1 研发产品关键里程碑计划</title>
+  <style>
+    :root {
+      --ink: #14211f;
+      --muted: #66736f;
+      --paper: #f6f4ee;
+      --paper-2: #ebe6dc;
+      --line: rgba(20, 33, 31, .16);
+      --teal: #1b6f68;
+      --teal-dark: #0f4945;
+      --amber: #c9862d;
+      --red: #b34a3d;
+      --white: #fffdf8;
+      --shadow: 0 20px 60px rgba(22, 30, 29, .12);
+      --radius: 8px;
+      --max: 1180px;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      margin: 0;
+      color: var(--ink);
+      background:
+        linear-gradient(90deg, rgba(20, 33, 31, .045) 1px, transparent 1px) 0 0 / 72px 72px,
+        linear-gradient(180deg, var(--paper), #fffaf0 58%, #f4efe5);
+      font-family: "Aptos", "Inter", "PingFang SC", "Microsoft YaHei", system-ui, sans-serif;
+      line-height: 1.55;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    .topbar {
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      backdrop-filter: blur(18px);
+      background: rgba(246, 244, 238, .82);
+      border-bottom: 1px solid var(--line);
+    }
+
+    .topbar-inner {
+      width: min(var(--max), calc(100% - 40px));
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 18px;
+      min-height: 64px;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-weight: 800;
+      letter-spacing: .02em;
+      white-space: nowrap;
+    }
+
+    .brand-mark {
+      width: 34px;
+      height: 34px;
+      border-radius: 8px;
+      background:
+        linear-gradient(135deg, var(--teal), var(--teal-dark));
+      position: relative;
+      box-shadow: 0 10px 24px rgba(27, 111, 104, .22);
+    }
+
+    .brand-mark::after {
+      content: "";
+      position: absolute;
+      inset: 8px 7px;
+      border: 2px solid rgba(255, 253, 248, .9);
+      border-left: 0;
+      border-top: 0;
+      transform: skewX(-12deg);
+    }
+
+    nav {
+      display: flex;
+      align-items: center;
+      gap: 2px;
+      overflow: auto;
+      scrollbar-width: none;
+    }
+
+    nav::-webkit-scrollbar {
+      display: none;
+    }
+
+    nav a {
+      color: var(--muted);
+      font-size: 13px;
+      padding: 9px 12px;
+      border-radius: 999px;
+      white-space: nowrap;
+      transition: .18s ease;
+    }
+
+    nav a:hover,
+    nav a.active {
+      color: var(--ink);
+      background: rgba(27, 111, 104, .1);
+    }
+
+    .print-btn {
+      border: 1px solid rgba(20, 33, 31, .2);
+      color: var(--ink);
+      background: var(--white);
+      border-radius: 999px;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 9px 13px;
+      font: inherit;
+      font-size: 13px;
+      cursor: pointer;
+      box-shadow: 0 8px 20px rgba(20, 33, 31, .08);
+    }
+
+    .print-btn svg {
+      width: 16px;
+      height: 16px;
+      stroke-width: 2;
+    }
+
+    .hero {
+      min-height: 88vh;
+      position: relative;
+      display: grid;
+      align-items: end;
+      overflow: hidden;
+      color: var(--white);
+      background: #15201f;
+    }
+
+    .hero img {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center;
+      opacity: .88;
+      transform: scale(1.02);
+      animation: imageSettle 1.4s cubic-bezier(.2, .7, .1, 1) both;
+    }
+
+    .hero::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background:
+        linear-gradient(90deg, rgba(11, 18, 17, .92) 0%, rgba(11, 18, 17, .72) 34%, rgba(11, 18, 17, .20) 72%),
+        linear-gradient(180deg, rgba(11, 18, 17, .10), rgba(11, 18, 17, .60));
+      z-index: 1;
+    }
+
+    .hero-content {
+      position: relative;
+      z-index: 2;
+      width: min(var(--max), calc(100% - 40px));
+      margin: 0 auto;
+      padding: 128px 0 58px;
+    }
+
+    .kicker {
+      font-size: 13px;
+      color: rgba(255, 253, 248, .72);
+      letter-spacing: .16em;
+      text-transform: uppercase;
+      margin-bottom: 20px;
+      animation: rise .72s ease both;
+    }
+
+    h1 {
+      margin: 0;
+      max-width: 760px;
+      font-size: clamp(42px, 7vw, 86px);
+      line-height: .98;
+      letter-spacing: 0;
+      font-weight: 900;
+      animation: rise .86s .05s ease both;
+    }
+
+    .hero-copy {
+      margin: 24px 0 0;
+      max-width: 650px;
+      font-size: clamp(17px, 2vw, 22px);
+      color: rgba(255, 253, 248, .82);
+      animation: rise .86s .12s ease both;
+    }
+
+    .hero-meta {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 1px;
+      width: min(100%, 980px);
+      margin-top: 48px;
+      background: rgba(255, 253, 248, .2);
+      border: 1px solid rgba(255, 253, 248, .2);
+      animation: rise .86s .22s ease both;
+    }
+
+    .hero-meta div {
+      padding: 17px 18px;
+      background: rgba(10, 18, 17, .42);
+      backdrop-filter: blur(8px);
+    }
+
+    .hero-meta strong {
+      display: block;
+      font-size: 25px;
+      line-height: 1;
+      margin-bottom: 8px;
+    }
+
+    .hero-meta span {
+      display: block;
+      font-size: 12px;
+      color: rgba(255, 253, 248, .68);
+    }
+
+    main {
+      overflow: hidden;
+    }
+
+    section {
+      padding: 86px 0;
+      position: relative;
+    }
+
+    .band-dark {
+      background: #12211f;
+      color: var(--white);
+    }
+
+    .band-dark .section-eyebrow,
+    .band-dark .section-lead,
+    .band-dark .muted {
+      color: rgba(255, 253, 248, .68);
+    }
+
+    .container {
+      width: min(var(--max), calc(100% - 40px));
+      margin: 0 auto;
+    }
+
+    .section-head {
+      display: grid;
+      grid-template-columns: 1fr minmax(260px, 420px);
+      gap: 36px;
+      align-items: end;
+      margin-bottom: 34px;
+    }
+
+    .section-eyebrow {
+      margin: 0 0 10px;
+      color: var(--teal);
+      font-size: 13px;
+      font-weight: 800;
+      letter-spacing: .15em;
+      text-transform: uppercase;
+    }
+
+    h2 {
+      margin: 0;
+      font-size: clamp(30px, 4vw, 56px);
+      line-height: 1.05;
+      letter-spacing: 0;
+    }
+
+    .section-lead {
+      margin: 0;
+      color: var(--muted);
+      font-size: 17px;
+    }
+
+    .summary-grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      border: 1px solid var(--line);
+      background: rgba(20, 33, 31, .14);
+      box-shadow: var(--shadow);
+    }
+
+    .phase {
+      min-height: 310px;
+      padding: 26px;
+      background: rgba(255, 253, 248, .88);
+      display: flex;
+      flex-direction: column;
+      gap: 22px;
+      position: relative;
+    }
+
+    .phase + .phase {
+      border-left: 1px solid var(--line);
+    }
+
+    .phase time {
+      font-size: 13px;
+      color: var(--muted);
+      font-weight: 800;
+      letter-spacing: .08em;
+    }
+
+    .phase h3 {
+      margin: 0;
+      font-size: 25px;
+      line-height: 1.16;
+    }
+
+    .phase p {
+      margin: 0;
+      color: var(--muted);
+    }
+
+    .phase-list {
+      margin: auto 0 0;
+      padding: 0;
+      list-style: none;
+      display: grid;
+      gap: 10px;
+    }
+
+    .phase-list li {
+      display: flex;
+      gap: 10px;
+      align-items: flex-start;
+      font-size: 14px;
+    }
+
+    .phase-list li::before {
+      content: "";
+      width: 7px;
+      height: 7px;
+      border-radius: 99px;
+      background: var(--amber);
+      margin-top: 8px;
+      flex: 0 0 auto;
+    }
+
+    .thesis {
+      margin-top: 28px;
+      padding: 26px 0 0;
+      border-top: 1px solid var(--line);
+      font-size: clamp(22px, 3vw, 36px);
+      line-height: 1.18;
+      font-weight: 850;
+      max-width: 940px;
+    }
+
+    .changes {
+      display: grid;
+      grid-template-columns: 1.05fr .95fr;
+      gap: 26px;
+      align-items: stretch;
+    }
+
+    .change-visual {
+      min-height: 560px;
+      background:
+        linear-gradient(180deg, rgba(255, 253, 248, .08), rgba(255, 253, 248, .02)),
+        radial-gradient(circle at 72% 18%, rgba(201, 134, 45, .24), transparent 34%),
+        #172927;
+      border: 1px solid rgba(255, 253, 248, .14);
+      border-radius: var(--radius);
+      padding: 28px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .change-visual::before {
+      content: "";
+      position: absolute;
+      left: 42px;
+      top: 86px;
+      bottom: 62px;
+      width: 2px;
+      background: linear-gradient(var(--amber), rgba(255, 253, 248, .18));
+    }
+
+    .change-visual h3 {
+      margin: 0;
+      font-size: 30px;
+      line-height: 1.12;
+      max-width: 360px;
+    }
+
+    .signal-stack {
+      position: relative;
+      display: grid;
+      gap: 22px;
+      margin-top: 38px;
+      padding-left: 42px;
+    }
+
+    .signal {
+      position: relative;
+      padding: 16px 18px;
+      background: rgba(255, 253, 248, .08);
+      border: 1px solid rgba(255, 253, 248, .13);
+      border-radius: var(--radius);
+    }
+
+    .signal::before {
+      content: "";
+      position: absolute;
+      left: -33px;
+      top: 22px;
+      width: 12px;
+      height: 12px;
+      border-radius: 99px;
+      background: var(--amber);
+      box-shadow: 0 0 0 7px rgba(201, 134, 45, .14);
+    }
+
+    .signal strong {
+      display: block;
+      margin-bottom: 4px;
+    }
+
+    .signal span {
+      color: rgba(255, 253, 248, .68);
+      font-size: 14px;
+    }
+
+    .change-table {
+      display: grid;
+      border: 1px solid rgba(255, 253, 248, .14);
+      border-radius: var(--radius);
+      overflow: hidden;
+      background: rgba(255, 253, 248, .04);
+    }
+
+    .change-row {
+      display: grid;
+      grid-template-columns: 1.05fr .95fr;
+      gap: 0;
+      border-bottom: 1px solid rgba(255, 253, 248, .12);
+    }
+
+    .change-row:last-child {
+      border-bottom: 0;
+    }
+
+    .change-row > div {
+      padding: 18px 20px;
+    }
+
+    .change-row > div:first-child {
+      border-right: 1px solid rgba(255, 253, 248, .12);
+    }
+
+    .change-row strong {
+      display: block;
+      margin-bottom: 6px;
+    }
+
+    .tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      min-height: 24px;
+      padding: 3px 9px;
+      border-radius: 999px;
+      font-size: 12px;
+      font-weight: 800;
+      color: #2a1c0a;
+      background: #e6b56d;
+      margin-bottom: 8px;
+    }
+
+    .portfolio-grid {
+      display: grid;
+      grid-template-columns: repeat(5, minmax(0, 1fr));
+      border: 1px solid var(--line);
+      background: rgba(20, 33, 31, .12);
+      box-shadow: var(--shadow);
+    }
+
+    .portfolio {
+      background: rgba(255, 253, 248, .9);
+      min-height: 410px;
+      padding: 24px 20px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .portfolio + .portfolio {
+      border-left: 1px solid var(--line);
+    }
+
+    .portfolio::after {
+      content: "";
+      position: absolute;
+      right: -40px;
+      bottom: -40px;
+      width: 120px;
+      height: 120px;
+      border: 1px solid rgba(27, 111, 104, .22);
+      border-radius: 50%;
+    }
+
+    .icon-line {
+      width: 48px;
+      height: 48px;
+      border: 1px solid rgba(27, 111, 104, .28);
+      border-radius: 8px;
+      display: grid;
+      place-items: center;
+      margin-bottom: 20px;
+      color: var(--teal);
+      background: rgba(27, 111, 104, .06);
+    }
+
+    .icon-line svg {
+      width: 25px;
+      height: 25px;
+      stroke-width: 1.8;
+    }
+
+    .portfolio h3 {
+      margin: 0 0 18px;
+      font-size: 22px;
+      line-height: 1.15;
+    }
+
+    .quarter {
+      border-top: 1px solid var(--line);
+      padding: 13px 0;
+    }
+
+    .quarter:last-child {
+      padding-bottom: 0;
+    }
+
+    .quarter b {
+      display: block;
+      font-size: 12px;
+      color: var(--teal);
+      letter-spacing: .08em;
+      margin-bottom: 5px;
+    }
+
+    .quarter span {
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    .risk-layout {
+      display: grid;
+      grid-template-columns: .9fr 1.1fr;
+      gap: 32px;
+      align-items: start;
+    }
+
+    .risk-poster {
+      position: sticky;
+      top: 96px;
+      border-radius: var(--radius);
+      overflow: hidden;
+      background: #12211f;
+      min-height: 520px;
+      color: var(--white);
+      padding: 32px;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+    }
+
+    .risk-poster img {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      opacity: .48;
+    }
+
+    .risk-poster::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(180deg, rgba(18, 33, 31, .05), rgba(18, 33, 31, .94));
+    }
+
+    .risk-poster > * {
+      position: relative;
+      z-index: 1;
+    }
+
+    .risk-poster h3 {
+      margin: 0;
+      font-size: clamp(30px, 4vw, 48px);
+      line-height: 1.02;
+    }
+
+    .risk-poster p {
+      color: rgba(255, 253, 248, .76);
+      margin: 18px 0 0;
+    }
+
+    .risk-list {
+      display: grid;
+      gap: 14px;
+    }
+
+    .risk-item,
+    .decision-item {
+      display: grid;
+      grid-template-columns: 160px 1fr;
+      gap: 20px;
+      padding: 20px 0;
+      border-top: 1px solid var(--line);
+    }
+
+    .risk-item:first-child,
+    .decision-item:first-child {
+      border-top: 0;
+      padding-top: 0;
+    }
+
+    .risk-item b,
+    .decision-item b {
+      font-size: 15px;
+      color: var(--teal-dark);
+    }
+
+    .risk-item p,
+    .decision-item p {
+      margin: 0;
+      color: var(--muted);
+    }
+
+    .decision-strip {
+      display: grid;
+      grid-template-columns: repeat(5, minmax(0, 1fr));
+      gap: 1px;
+      background: var(--line);
+      border: 1px solid var(--line);
+      box-shadow: var(--shadow);
+    }
+
+    .decision-card {
+      background: var(--white);
+      padding: 22px;
+      min-height: 220px;
+      transition: transform .18s ease, background .18s ease;
+    }
+
+    .decision-card:hover {
+      transform: translateY(-4px);
+      background: #fff8e7;
+    }
+
+    .decision-card small {
+      display: block;
+      color: var(--amber);
+      font-weight: 900;
+      letter-spacing: .12em;
+      margin-bottom: 14px;
+    }
+
+    .decision-card h3 {
+      margin: 0 0 12px;
+      font-size: 20px;
+      line-height: 1.16;
+    }
+
+    .decision-card p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    .gantt-shell {
+      background: var(--white);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      overflow: auto;
+      box-shadow: var(--shadow);
+    }
+
+    .gantt {
+      min-width: 980px;
+      display: grid;
+      grid-template-columns: 170px repeat(8, 1fr);
+      font-size: 13px;
+    }
+
+    .gantt > div {
+      min-height: 54px;
+      border-bottom: 1px solid var(--line);
+      border-right: 1px solid var(--line);
+      padding: 12px;
+      position: relative;
+      display: flex;
+      align-items: center;
+    }
+
+    .gantt > div:nth-child(9n) {
+      border-right: 0;
+    }
+
+    .gantt .head {
+      background: #e7e1d5;
+      font-weight: 850;
+      color: var(--ink);
+      min-height: 46px;
+    }
+
+    .gantt .project {
+      font-weight: 850;
+      background: rgba(27, 111, 104, .06);
+    }
+
+    .bar {
+      width: 100%;
+      min-height: 30px;
+      border-radius: 999px;
+      background: rgba(27, 111, 104, .14);
+      border: 1px solid rgba(27, 111, 104, .28);
+      color: var(--teal-dark);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 4px 8px;
+      font-weight: 800;
+      white-space: nowrap;
+    }
+
+    .bar.amber {
+      background: rgba(201, 134, 45, .18);
+      border-color: rgba(201, 134, 45, .32);
+      color: #6e4311;
+    }
+
+    .bar.red {
+      background: rgba(179, 74, 61, .13);
+      border-color: rgba(179, 74, 61, .26);
+      color: #7a2920;
+    }
+
+    .footer-note {
+      padding: 42px 0 64px;
+      color: var(--muted);
+      font-size: 14px;
+      border-top: 1px solid var(--line);
+    }
+
+    .reveal {
+      opacity: 0;
+      transform: translateY(28px);
+      transition: opacity .6s ease, transform .6s ease;
+    }
+
+    .reveal.in {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    @keyframes rise {
+      from {
+        opacity: 0;
+        transform: translateY(26px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @keyframes imageSettle {
+      from {
+        transform: scale(1.08);
+        filter: saturate(.85);
+      }
+      to {
+        transform: scale(1.02);
+        filter: saturate(1);
+      }
+    }
+
+    @media (max-width: 1040px) {
+      .section-head,
+      .changes,
+      .risk-layout {
+        grid-template-columns: 1fr;
+      }
+
+      .summary-grid,
+      .portfolio-grid,
+      .decision-strip {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
+      .phase + .phase,
+      .portfolio + .portfolio {
+        border-left: 0;
+      }
+
+      .risk-poster {
+        position: relative;
+        top: auto;
+        min-height: 360px;
+      }
+    }
+
+    @media (max-width: 720px) {
+      .topbar-inner {
+        width: min(100% - 28px, var(--max));
+        flex-wrap: wrap;
+        padding: 10px 0;
+      }
+
+      .print-btn {
+        display: none;
+      }
+
+      .hero {
+        min-height: 760px;
+      }
+
+      .hero-content,
+      .container {
+        width: min(100% - 28px, var(--max));
+      }
+
+      .hero-meta,
+      .summary-grid,
+      .portfolio-grid,
+      .decision-strip {
+        grid-template-columns: 1fr;
+      }
+
+      .hero-meta {
+        margin-top: 34px;
+      }
+
+      section {
+        padding: 62px 0;
+      }
+
+      .change-row,
+      .risk-item,
+      .decision-item {
+        grid-template-columns: 1fr;
+        gap: 8px;
+      }
+
+      .change-row > div:first-child {
+        border-right: 0;
+        border-bottom: 1px solid rgba(255, 253, 248, .12);
+      }
+    }
+
+    @media print {
+      body {
+        background: #fff;
+      }
+
+      .topbar,
+      .print-btn {
+        display: none;
+      }
+
+      .hero {
+        min-height: 520px;
+      }
+
+      section {
+        break-inside: avoid;
+        padding: 44px 0;
+      }
+
+      .reveal {
+        opacity: 1;
+        transform: none;
+      }
+
+      .risk-poster {
+        position: relative;
+        top: auto;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header class="topbar">
+    <div class="topbar-inner">
+      <a class="brand" href="#top" aria-label="返回顶部">
+        <span class="brand-mark" aria-hidden="true"></span>
+        <span>研发产品规划</span>
+      </a>
+      <nav aria-label="页面导航">
+        <a href="#overview">总览</a>
+        <a href="#changes">节点变化</a>
+        <a href="#portfolio">产品线</a>
+        <a href="#risks">风险</a>
+        <a href="#decisions">决策</a>
+        <a href="#gantt">甘特附录</a>
+      </nav>
+      <button class="print-btn" type="button" onclick="window.print()" aria-label="打印或导出 PDF">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true">
+          <path d="M6 9V3h12v6" />
+          <path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2" />
+          <path d="M6 14h12v7H6z" />
+        </svg>
+        导出
+      </button>
+    </div>
+  </header>
+
+  <main id="top">
+    <section class="hero" aria-label="封面">
+      <img src="assets/rd-roadmap-hero.png" alt="研发产品路线图汇报场景，会议室中有产品原型和抽象时间线" />
+      <div class="hero-content">
+        <p class="kicker">2026-07-07 Version · Executive Milestone Plan</p>
+        <h1>2026 H2 - 2027 H1 研发产品关键里程碑计划</h1>
+        <p class="hero-copy">以老板视角汇报产品能力落地、商业交付支撑、节点变化和需要协调的关键事项。</p>
+        <div class="hero-meta" aria-label="关键摘要">
+          <div>
+            <strong>29</strong>
+            <span>规划事项</span>
+          </div>
+          <div>
+            <strong>6</strong>
+            <span>重点节点变化</span>
+          </div>
+          <div>
+            <strong>4</strong>
+            <span>阶段里程碑</span>
+          </div>
+          <div>
+            <strong>3</strong>
+            <span>展会支撑窗口</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="overview">
+      <div class="container">
+        <div class="section-head reveal">
+          <div>
+            <p class="section-eyebrow">Milestone Overview</p>
+            <h2>先看阶段结论，再看执行细节。</h2>
+          </div>
+          <p class="section-lead">主汇报不展开每个任务的研发工期，而是聚焦每个时间段会形成哪些可销售、可演示、可交付的产品能力。</p>
+        </div>
+
+        <div class="summary-grid reveal">
+          <article class="phase">
+            <time>2026年7-8月</time>
+            <h3>近期销售与能力补齐</h3>
+            <p>A Pro6 AI、伏羲体态、R70、一体化转台和T5X单机版集中推进。</p>
+            <ul class="phase-list">
+              <li>A Pro6 AI图片8月中准出</li>
+              <li>伏羲体态精度提升8月上旬完成</li>
+              <li>R70 8月中完成开发</li>
+            </ul>
+          </article>
+
+          <article class="phase">
+            <time>2026年9-10月</time>
+            <h3>商业线集中落地</h3>
+            <p>Lite6、WH、多型号PC、730儿童模式和大Motion进入关键交付窗口。</p>
+            <ul class="phase-list">
+              <li>Lite6 AI 9月初同步</li>
+              <li>国内H5 10月中完成</li>
+              <li>大Motion 10月中下旬支持发货</li>
+            </ul>
+          </article>
+
+          <article class="phase">
+            <time>2026年11-12月</time>
+            <h3>医疗线进入产品准备期</h3>
+            <p>运动、脊柱、体成分三条医疗产品线陆续进入开发，足底压力板完成首版接入。</p>
+            <ul class="phase-list">
+              <li>海外WH App 11月上旬</li>
+              <li>医疗运动/脊柱11月进入开发</li>
+              <li>足底压力板12月底打通接入</li>
+            </ul>
+          </article>
+
+          <article class="phase">
+            <time>2027年1-4月</time>
+            <h3>支撑迪拜与FIBO</h3>
+            <p>医疗体成分、Motion测力台和Motion App形成展会支撑能力。</p>
+            <ul class="phase-list">
+              <li>医疗3MHz体脂板1月中</li>
+              <li>Motion测力台1月完成</li>
+              <li>Motion App 4月初完成</li>
+            </ul>
+          </article>
+        </div>
+
+        <div class="thesis reveal">当前规划主线：2026下半年完成商业化产品能力补齐，2027上半年围绕医疗产品线和Motion生态形成展会可展示、客户可洽谈、部分产品可交付的阶段性成果。</div>
+      </div>
+    </section>
+
+    <section id="changes" class="band-dark">
+      <div class="container">
+        <div class="section-head reveal">
+          <div>
+            <p class="section-eyebrow">Critical Changes</p>
+            <h2>节点变化需要单独讲清楚。</h2>
+          </div>
+          <p class="section-lead">延期项目要说明影响范围，新增项目要说明资源是否覆盖，避免老板只看到排期变化而看不到经营影响。</p>
+        </div>
+
+        <div class="changes">
+          <div class="change-visual reveal" aria-label="节点变化摘要">
+            <h3>本轮最需要关注的是9-10月交付拥挤。</h3>
+            <div class="signal-stack">
+              <div class="signal">
+                <strong>商业交付后移</strong>
+                <span>大Motion、Lite6握力、VA Pro7/T5X均出现节点后移。</span>
+              </div>
+              <div class="signal">
+                <strong>新增需求进入主线</strong>
+                <span>730儿童模式与医疗产品系列会占用下半年资源。</span>
+              </div>
+              <div class="signal">
+                <strong>展会窗口明确</strong>
+                <span>Medica、迪拜、FIBO需要分别定义演示版和交付版。</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="change-table reveal">
+            <div class="change-row">
+              <div>
+                <span class="tag">节点改变</span>
+                <strong>AI图片能力</strong>
+                <span class="muted">A Pro6 8月中准出；Lite6 9月初同步。</span>
+              </div>
+              <div>
+                <strong>影响</strong>
+                <span class="muted">Lite6由8月中下后移，A Pro6先发承接首批展示。</span>
+              </div>
+            </div>
+            <div class="change-row">
+              <div>
+                <span class="tag">节点改变</span>
+                <strong>Lite6握力接入</strong>
+                <span class="muted">8月底完成。</span>
+              </div>
+              <div>
+                <strong>影响</strong>
+                <span class="muted">运动能力评估销售节奏后移，普拉提暂不预留资源。</span>
+              </div>
+            </div>
+            <div class="change-row">
+              <div>
+                <span class="tag">节点改变</span>
+                <strong>大Motion可销售</strong>
+                <span class="muted">10月中下旬支持发货。</span>
+              </div>
+              <div>
+                <strong>影响</strong>
+                <span class="muted">原8月下旬后移，需要同步销售承诺和客户预期。</span>
+              </div>
+            </div>
+            <div class="change-row">
+              <div>
+                <span class="tag">节点改变</span>
+                <strong>VA Pro7足踝脊/T5X</strong>
+                <span class="muted">9月底上线。</span>
+              </div>
+              <div>
+                <strong>影响</strong>
+                <span class="muted">原8月初后移，影响医疗演示和相关客户沟通节奏。</span>
+              </div>
+            </div>
+            <div class="change-row">
+              <div>
+                <span class="tag">新增重点</span>
+                <strong>730系列儿童模式</strong>
+                <span class="muted">8-10月分阶段完成。</span>
+              </div>
+              <div>
+                <strong>影响</strong>
+                <span class="muted">新增下半年卖点，同时带来网络版与单机版双线资源占用。</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="portfolio">
+      <div class="container">
+        <div class="section-head reveal">
+          <div>
+            <p class="section-eyebrow">Product Lines</p>
+            <h2>按产品线看能力形成路径。</h2>
+          </div>
+          <p class="section-lead">将29项事项收敛到5条产品线，方便老板判断方向、节奏和资源冲突。</p>
+        </div>
+
+        <div class="portfolio-grid reveal">
+          <article class="portfolio">
+            <div class="icon-line" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M12 3v18M4 12h16"/><path d="M7 7l10 10M17 7L7 17"/></svg>
+            </div>
+            <h3>AI / 伏羲</h3>
+            <div class="quarter"><b>2026 Q3</b><span>A Pro6 AI首发；伏羲体态精度提升；体适能8月底。</span></div>
+            <div class="quarter"><b>2026 Q4</b><span>WH-PC端6款产品上线；手机端H5进入开发。</span></div>
+            <div class="quarter"><b>2027 Q1-Q2</b><span>持续优化并向更多商业场景迁移。</span></div>
+          </article>
+
+          <article class="portfolio">
+            <div class="icon-line" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M7 3h10a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2z"/><path d="M9 18h6"/></svg>
+            </div>
+            <h3>WellnessHub</h3>
+            <div class="quarter"><b>2026 Q3</b><span>收费模式9月上旬；国内H5推进。</span></div>
+            <div class="quarter"><b>2026 Q4</b><span>国内H5 10月中；海外App 11月上旬。</span></div>
+            <div class="quarter"><b>2027 Q1-Q2</b><span>Motion App 4月初完成，支撑FIBO。</span></div>
+          </article>
+
+          <article class="portfolio">
+            <div class="icon-line" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><circle cx="12" cy="12" r="3"/><path d="M4 12h5M15 12h5M12 4v5M12 15v5"/></svg>
+            </div>
+            <h3>Motion</h3>
+            <div class="quarter"><b>2026 Q3</b><span>大Motion研发推进，小Motion按明年IWF准备。</span></div>
+            <div class="quarter"><b>2026 Q4</b><span>10月中下旬支持发货；军警单机版按来单45天核实。</span></div>
+            <div class="quarter"><b>2027 Q1-Q2</b><span>测力台1月完成；App 4月初完成。</span></div>
+          </article>
+
+          <article class="portfolio">
+            <div class="icon-line" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M6 20c4-2 6-5 6-9V4"/><path d="M12 11c2 2 4 3 7 3"/><path d="M6 8c2 1 4 1 6 0"/></svg>
+            </div>
+            <h3>足踝脊 / R70 / T5X</h3>
+            <div class="quarter"><b>2026 Q3</b><span>R70 8月中完成；T5X单机版7月底。</span></div>
+            <div class="quarter"><b>2026 Q4</b><span>VA Pro7/T5X 9月底；踝增强10-11月；足底压力板12月底。</span></div>
+            <div class="quarter"><b>2027 Q1-Q2</b><span>进入医疗展会和客户洽谈支撑。</span></div>
+          </article>
+
+          <article class="portfolio">
+            <div class="icon-line" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M4 20h16"/><path d="M6 20V8l6-4 6 4v12"/><path d="M9 20v-6h6v6"/></svg>
+            </div>
+            <h3>医疗产品线</h3>
+            <div class="quarter"><b>2026 Q3</b><span>需求核对与规划，研发7月底完成送检软件开发。</span></div>
+            <div class="quarter"><b>2026 Q4</b><span>运动、脊柱、体成分系列11月进入开发。</span></div>
+            <div class="quarter"><b>2027 Q1-Q2</b><span>1-2月形成版本；VD六频段相位角预计Q2。</span></div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section id="risks">
+      <div class="container">
+        <div class="risk-layout">
+          <aside class="risk-poster reveal">
+            <img src="assets/rd-roadmap-hero.png" alt="" aria-hidden="true" />
+            <p class="section-eyebrow">Risk Focus</p>
+            <h3>风险不是技术列表，而是经营节奏的冲突。</h3>
+            <p>重点关注9-10月交付拥挤、医疗线Q4集中开发，以及展会版本口径。</p>
+          </aside>
+
+          <div>
+            <div class="section-head reveal" style="grid-template-columns: 1fr; margin-bottom: 14px;">
+              <div>
+                <p class="section-eyebrow">Risks &amp; Actions</p>
+                <h2>五个需要提前控住的风险。</h2>
+              </div>
+            </div>
+            <div class="risk-list reveal">
+              <div class="risk-item">
+                <b>资源挤兑</b>
+                <p>Lite6、WH、Motion、730、足踝脊集中在9-10月交付。建议明确优先级，必要时拆分“可演示版”和“可交付版”。</p>
+              </div>
+              <div class="risk-item">
+                <b>销售预期偏差</b>
+                <p>大Motion、Lite6握力、VA Pro7/T5X节点后移。建议销售侧同步客户承诺，并提前准备替代演示方案。</p>
+              </div>
+              <div class="risk-item">
+                <b>医疗线返工</b>
+                <p>医疗运动、脊柱、体成分、3MHz体脂板开发窗口集中。建议8-9月完成需求冻结和版本边界确认。</p>
+              </div>
+              <div class="risk-item">
+                <b>展会倒逼</b>
+                <p>Medica、迪拜、FIBO分别对应不同成果标准。建议每个展会单独定义最低可展示范围和客户沟通口径。</p>
+              </div>
+              <div class="risk-item">
+                <b>多端并行</b>
+                <p>WH-PC、H5、海外App、Motion App并行推进。建议明确复用边界、端侧优先级和版本发布节奏。</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="decisions" class="band-dark">
+      <div class="container">
+        <div class="section-head reveal">
+          <div>
+            <p class="section-eyebrow">Decision Points</p>
+            <h2>老板需要拍板或协调的事项。</h2>
+          </div>
+          <p class="section-lead">这页不要塞研发细节，只保留会影响销售承诺、资源分配和产品战略的判断题。</p>
+        </div>
+
+        <div class="decision-strip reveal">
+          <article class="decision-card">
+            <small>01</small>
+            <h3>大Motion延期</h3>
+            <p>是否调整销售承诺和重点客户交付节奏。</p>
+          </article>
+          <article class="decision-card">
+            <small>02</small>
+            <h3>Lite6运动能力</h3>
+            <p>握力先做，普拉提暂不预留资源是否确认。</p>
+          </article>
+          <article class="decision-card">
+            <small>03</small>
+            <h3>医疗产品并行</h3>
+            <p>是否确认运动、脊柱、体成分三条线Q4并行推进。</p>
+          </article>
+          <article class="decision-card">
+            <small>04</small>
+            <h3>展会支撑口径</h3>
+            <p>Medica、迪拜、FIBO分别需要什么程度的产品成果。</p>
+          </article>
+          <article class="decision-card">
+            <small>05</small>
+            <h3>730儿童模式</h3>
+            <p>是否作为下半年重点销售卖点投入资源。</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section id="gantt">
+      <div class="container">
+        <div class="section-head reveal">
+          <div>
+            <p class="section-eyebrow">Appendix</p>
+            <h2>简版甘特图只放附录。</h2>
+          </div>
+          <p class="section-lead">用于追问执行细节时展开，不作为老板汇报的第一视角。</p>
+        </div>
+
+        <div class="gantt-shell reveal" aria-label="简版甘特图">
+          <div class="gantt">
+            <div class="head">项目</div>
+            <div class="head">7月</div>
+            <div class="head">8月</div>
+            <div class="head">9月</div>
+            <div class="head">10月</div>
+            <div class="head">11月</div>
+            <div class="head">12月</div>
+            <div class="head">2027 Q1</div>
+            <div class="head">2027 Q2</div>
+
+            <div class="project">AI图片能力</div>
+            <div></div>
+            <div><span class="bar">A Pro6</span></div>
+            <div><span class="bar amber">Lite6</span></div>
+            <div></div><div></div><div></div><div></div><div></div>
+
+            <div class="project">伏羲推演</div>
+            <div><span class="bar">优化</span></div>
+            <div><span class="bar">体态/体适能</span></div>
+            <div><span class="bar">多型号PC</span></div>
+            <div><span class="bar amber">H5开发</span></div>
+            <div></div><div></div><div></div><div></div>
+
+            <div class="project">WellnessHub</div>
+            <div></div><div></div>
+            <div><span class="bar">收费</span></div>
+            <div><span class="bar amber">国内H5</span></div>
+            <div><span class="bar">海外App</span></div>
+            <div></div><div></div><div></div>
+
+            <div class="project">大Motion</div>
+            <div></div><div></div><div></div>
+            <div><span class="bar red">发货</span></div>
+            <div></div><div></div>
+            <div><span class="bar">测力台</span></div>
+            <div><span class="bar amber">App</span></div>
+
+            <div class="project">R70/足踝脊</div>
+            <div></div>
+            <div><span class="bar">R70</span></div>
+            <div><span class="bar red">VA Pro7/T5X</span></div>
+            <div><span class="bar">踝增强</span></div>
+            <div><span class="bar amber">Medica</span></div>
+            <div><span class="bar">足底板</span></div>
+            <div></div><div></div>
+
+            <div class="project">730儿童模式</div>
+            <div></div>
+            <div><span class="bar">V2.0</span></div>
+            <div><span class="bar">单机二期</span></div>
+            <div><span class="bar amber">儿童模式</span></div>
+            <div></div><div></div><div></div><div></div>
+
+            <div class="project">医疗产品系列</div>
+            <div></div><div></div>
+            <div><span class="bar">需求核对</span></div>
+            <div><span class="bar">准备</span></div>
+            <div><span class="bar amber">开发</span></div>
+            <div><span class="bar amber">功能完成</span></div>
+            <div><span class="bar red">版本完成</span></div>
+            <div><span class="bar">VD系列</span></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <footer class="footer-note">
+      <div class="container">
+        页面版本：2026-07-07。建议汇报顺序：一页总览 → 节点变化 → 产品线里程碑 → 风险与决策 → 甘特附录。
+      </div>
+    </footer>
+  </main>
+
+  <script>
+    const reveals = document.querySelectorAll('.reveal');
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('in');
+          observer.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.12 });
+
+    reveals.forEach((el) => observer.observe(el));
+
+    const sections = [...document.querySelectorAll('main section[id]')];
+    const navLinks = [...document.querySelectorAll('nav a')];
+
+    const navObserver = new IntersectionObserver((entries) => {
+      const visible = entries
+        .filter((entry) => entry.isIntersecting)
+        .sort((a, b) => b.intersectionRatio - a.intersectionRatio)[0];
+
+      if (!visible) return;
+      navLinks.forEach((link) => {
+        link.classList.toggle('active', link.getAttribute('href') === `#${visible.target.id}`);
+      });
+    }, { rootMargin: '-22% 0px -62% 0px', threshold: [0.1, 0.3, 0.6] });
+
+    sections.forEach((section) => navObserver.observe(section));
+  </script>
+</body>
+</html>
