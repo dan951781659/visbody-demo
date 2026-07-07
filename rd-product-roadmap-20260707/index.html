@@ -451,9 +451,6 @@
     }
 
     .change-row {
-      display: grid;
-      grid-template-columns: 1.05fr .95fr;
-      gap: 0;
       border-bottom: 1px solid rgba(255, 253, 248, .12);
     }
 
@@ -466,7 +463,7 @@
     }
 
     .change-row > div:first-child {
-      border-right: 1px solid rgba(255, 253, 248, .12);
+      border-right: 0;
     }
 
     .change-row strong {
@@ -496,6 +493,11 @@
       box-shadow: var(--shadow);
     }
 
+    .band-dark .portfolio-grid {
+      border-color: rgba(255, 253, 248, .15);
+      background: rgba(255, 253, 248, .12);
+    }
+
     .portfolio {
       background: rgba(255, 253, 248, .9);
       min-height: 410px;
@@ -504,8 +506,17 @@
       overflow: hidden;
     }
 
+    .band-dark .portfolio {
+      background: rgba(255, 253, 248, .055);
+      color: var(--white);
+    }
+
     .portfolio + .portfolio {
       border-left: 1px solid var(--line);
+    }
+
+    .band-dark .portfolio + .portfolio {
+      border-left-color: rgba(255, 253, 248, .15);
     }
 
     .portfolio::after {
@@ -519,6 +530,10 @@
       border-radius: 50%;
     }
 
+    .band-dark .portfolio::after {
+      border-color: rgba(255, 253, 248, .16);
+    }
+
     .icon-line {
       width: 48px;
       height: 48px;
@@ -529,6 +544,12 @@
       margin-bottom: 20px;
       color: var(--teal);
       background: rgba(27, 111, 104, .06);
+    }
+
+    .band-dark .icon-line {
+      border-color: rgba(111, 198, 188, .34);
+      color: #79c9c0;
+      background: rgba(111, 198, 188, .08);
     }
 
     .icon-line svg {
@@ -548,6 +569,10 @@
       padding: 13px 0;
     }
 
+    .band-dark .quarter {
+      border-top-color: rgba(255, 253, 248, .13);
+    }
+
     .quarter:last-child {
       padding-bottom: 0;
     }
@@ -560,9 +585,17 @@
       margin-bottom: 5px;
     }
 
+    .band-dark .quarter b {
+      color: #79c9c0;
+    }
+
     .quarter span {
       color: var(--muted);
       font-size: 14px;
+    }
+
+    .band-dark .quarter span {
+      color: rgba(255, 253, 248, .68);
     }
 
     .risk-layout {
@@ -699,64 +732,203 @@
       box-shadow: var(--shadow);
     }
 
-    .gantt {
-      min-width: 980px;
-      display: grid;
-      grid-template-columns: 170px repeat(8, 1fr);
+    .band-dark .gantt-shell {
+      background: #10201e;
+      border-color: rgba(255, 253, 248, .15);
+      box-shadow: 0 22px 60px rgba(0, 0, 0, .24);
+    }
+
+    .gantt-table {
+      min-width: 1620px;
+      width: 100%;
+      border-collapse: collapse;
+      table-layout: fixed;
       font-size: 13px;
     }
 
-    .gantt > div {
-      min-height: 54px;
-      border-bottom: 1px solid var(--line);
+    .gantt-table th,
+    .gantt-table td {
       border-right: 1px solid var(--line);
-      padding: 12px;
-      position: relative;
-      display: flex;
-      align-items: center;
+      border-bottom: 1px solid var(--line);
+      padding: 11px 12px;
+      min-height: 54px;
+      vertical-align: middle;
     }
 
-    .gantt > div:nth-child(9n) {
+    .band-dark .gantt-table th,
+    .band-dark .gantt-table td {
+      border-color: rgba(255, 253, 248, .12);
+      color: rgba(255, 253, 248, .78);
+      background: #132522;
+    }
+
+    .gantt-table th:last-child,
+    .gantt-table td:last-child {
       border-right: 0;
     }
 
-    .gantt .head {
+    .gantt-table tr:last-child td {
+      border-bottom: 0;
+    }
+
+    .gantt-table th {
       background: #e7e1d5;
       font-weight: 850;
       color: var(--ink);
-      min-height: 46px;
+      text-align: left;
+      position: sticky;
+      top: 0;
+      z-index: 2;
     }
 
-    .gantt .project {
+    .band-dark .gantt-table th {
+      background: #1c302d;
+      color: var(--white);
+    }
+
+    .gantt-table th:first-child,
+    .gantt-table td:first-child {
+      width: 260px;
+      position: sticky;
+      left: 0;
+      z-index: 3;
+    }
+
+    .gantt-table td:first-child {
       font-weight: 850;
-      background: rgba(27, 111, 104, .06);
+      background: #eef2ea;
+      color: var(--ink);
+      box-shadow: 14px 0 24px rgba(20, 33, 31, .08);
+    }
+
+    .gantt-table th:first-child {
+      background: #ded8cc;
+      z-index: 4;
+    }
+
+    .band-dark .gantt-table td:first-child {
+      background: #10201e;
+      color: var(--white);
+      box-shadow: 16px 0 28px rgba(0, 0, 0, .28);
+    }
+
+    .band-dark .gantt-table th:first-child {
+      background: #10201e;
+    }
+
+    .event-mark {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      margin-top: 5px;
+      padding: 2px 7px;
+      border-radius: 999px;
+      color: #2f2105;
+      background: #f3d59d;
+      border: 1px solid #d89a3a;
+      font-size: 12px;
+      line-height: 1.2;
+      font-weight: 900;
+      white-space: nowrap;
+    }
+
+    .event-mark::before {
+      content: "★";
+      color: #a66d13;
+    }
+
+    .project-title {
+      display: block;
+      line-height: 1.3;
+    }
+
+    .project-status {
+      display: inline-flex;
+      align-items: center;
+      min-height: 22px;
+      padding: 2px 8px;
+      border-radius: 999px;
+      background: rgba(102, 115, 111, .12);
+      color: var(--muted);
+      font-size: 12px;
+      margin-top: 4px;
+      font-weight: 700;
+    }
+
+    .band-dark .project-status {
+      color: rgba(255, 253, 248, .78);
+      background: rgba(255, 253, 248, .1);
+      border: 1px solid rgba(255, 253, 248, .12);
+    }
+
+    .project-status.status-change {
+      color: #6e4311;
+      background: rgba(201, 134, 45, .18);
+      border: 1px solid rgba(201, 134, 45, .28);
+    }
+
+    .band-dark .project-status.status-change {
+      color: #f0bf77;
+      background: rgba(201, 134, 45, .15);
+      border-color: rgba(201, 134, 45, .35);
+    }
+
+    .project-status.status-new {
+      color: var(--teal-dark);
+      background: rgba(27, 111, 104, .12);
+      border: 1px solid rgba(27, 111, 104, .24);
+    }
+
+    .band-dark .project-status.status-new {
+      color: #79c9c0;
+      background: rgba(111, 198, 188, .1);
+      border-color: rgba(111, 198, 188, .3);
     }
 
     .bar {
       width: 100%;
       min-height: 30px;
       border-radius: 999px;
-      background: rgba(27, 111, 104, .14);
-      border: 1px solid rgba(27, 111, 104, .28);
-      color: var(--teal-dark);
+      background: #cfe9e3;
+      border: 1px solid #7fc3b9;
+      color: #073c38;
       display: flex;
       align-items: center;
       justify-content: center;
       padding: 4px 8px;
-      font-weight: 800;
+      font-weight: 900;
       white-space: nowrap;
+      box-shadow: 0 8px 18px rgba(0, 0, 0, .14);
+    }
+
+    .band-dark .bar {
+      background: #cfe9e3;
+      border-color: #7fc3b9;
+      color: #073c38;
     }
 
     .bar.amber {
-      background: rgba(201, 134, 45, .18);
-      border-color: rgba(201, 134, 45, .32);
-      color: #6e4311;
+      background: #f3d59d;
+      border-color: #d89a3a;
+      color: #4b2b05;
+    }
+
+    .band-dark .bar.amber {
+      background: #f3d59d;
+      border-color: #d89a3a;
+      color: #4b2b05;
     }
 
     .bar.red {
-      background: rgba(179, 74, 61, .13);
-      border-color: rgba(179, 74, 61, .26);
-      color: #7a2920;
+      background: #efb8ad;
+      border-color: #cf6b5c;
+      color: #5e1f17;
+    }
+
+    .band-dark .bar.red {
+      background: #efb8ad;
+      border-color: #cf6b5c;
+      color: #5e1f17;
     }
 
     .footer-note {
@@ -911,12 +1083,9 @@
         <span>研发产品规划</span>
       </a>
       <nav aria-label="页面导航">
-        <a href="#overview">总览</a>
         <a href="#changes">节点变化</a>
         <a href="#portfolio">产品线</a>
-        <a href="#risks">风险</a>
-        <a href="#decisions">决策</a>
-        <a href="#gantt">甘特附录</a>
+        <a href="#gantt">详情甘特</a>
       </nav>
       <button class="print-btn" type="button" onclick="window.print()" aria-label="打印或导出 PDF">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true">
@@ -935,7 +1104,7 @@
       <div class="hero-content">
         <p class="kicker">2026-07-07 Version · Executive Milestone Plan</p>
         <h1>2026 H2 - 2027 H1 研发产品关键里程碑计划</h1>
-        <p class="hero-copy">以老板视角汇报产品能力落地、商业交付支撑、节点变化和需要协调的关键事项。</p>
+        <p class="hero-copy">以产品规划视角汇报产品能力落地、商业交付支撑、节点变化和完整排期。</p>
         <div class="hero-meta" aria-label="关键摘要">
           <div>
             <strong>29</strong>
@@ -957,66 +1126,6 @@
       </div>
     </section>
 
-    <section id="overview">
-      <div class="container">
-        <div class="section-head reveal">
-          <div>
-            <p class="section-eyebrow">Milestone Overview</p>
-            <h2>先看阶段结论，再看执行细节。</h2>
-          </div>
-          <p class="section-lead">主汇报不展开每个任务的研发工期，而是聚焦每个时间段会形成哪些可销售、可演示、可交付的产品能力。</p>
-        </div>
-
-        <div class="summary-grid reveal">
-          <article class="phase">
-            <time>2026年7-8月</time>
-            <h3>近期销售与能力补齐</h3>
-            <p>A Pro6 AI、伏羲体态、R70、一体化转台和T5X单机版集中推进。</p>
-            <ul class="phase-list">
-              <li>A Pro6 AI图片8月中准出</li>
-              <li>伏羲体态精度提升8月上旬完成</li>
-              <li>R70 8月中完成开发</li>
-            </ul>
-          </article>
-
-          <article class="phase">
-            <time>2026年9-10月</time>
-            <h3>商业线集中落地</h3>
-            <p>Lite6、WH、多型号PC、730儿童模式和大Motion进入关键交付窗口。</p>
-            <ul class="phase-list">
-              <li>Lite6 AI 9月初同步</li>
-              <li>国内H5 10月中完成</li>
-              <li>大Motion 10月中下旬支持发货</li>
-            </ul>
-          </article>
-
-          <article class="phase">
-            <time>2026年11-12月</time>
-            <h3>医疗线进入产品准备期</h3>
-            <p>运动、脊柱、体成分三条医疗产品线陆续进入开发，足底压力板完成首版接入。</p>
-            <ul class="phase-list">
-              <li>海外WH App 11月上旬</li>
-              <li>医疗运动/脊柱11月进入开发</li>
-              <li>足底压力板12月底打通接入</li>
-            </ul>
-          </article>
-
-          <article class="phase">
-            <time>2027年1-4月</time>
-            <h3>支撑迪拜与FIBO</h3>
-            <p>医疗体成分、Motion测力台和Motion App形成展会支撑能力。</p>
-            <ul class="phase-list">
-              <li>医疗3MHz体脂板1月中</li>
-              <li>Motion测力台1月完成</li>
-              <li>Motion App 4月初完成</li>
-            </ul>
-          </article>
-        </div>
-
-        <div class="thesis reveal">当前规划主线：2026下半年完成商业化产品能力补齐，2027上半年围绕医疗产品线和Motion生态形成展会可展示、客户可洽谈、部分产品可交付的阶段性成果。</div>
-      </div>
-    </section>
-
     <section id="changes" class="band-dark">
       <div class="container">
         <div class="section-head reveal">
@@ -1024,7 +1133,7 @@
             <p class="section-eyebrow">Critical Changes</p>
             <h2>节点变化需要单独讲清楚。</h2>
           </div>
-          <p class="section-lead">延期项目要说明影响范围，新增项目要说明资源是否覆盖，避免老板只看到排期变化而看不到经营影响。</p>
+          <p class="section-lead">保留本轮节点改变和当前排期，便于快速核对哪些事项发生了时间变化。</p>
         </div>
 
         <div class="changes">
@@ -1053,20 +1162,12 @@
                 <strong>AI图片能力</strong>
                 <span class="muted">A Pro6 8月中准出；Lite6 9月初同步。</span>
               </div>
-              <div>
-                <strong>影响</strong>
-                <span class="muted">Lite6由8月中下后移，A Pro6先发承接首批展示。</span>
-              </div>
             </div>
             <div class="change-row">
               <div>
                 <span class="tag">节点改变</span>
                 <strong>Lite6握力接入</strong>
                 <span class="muted">8月底完成。</span>
-              </div>
-              <div>
-                <strong>影响</strong>
-                <span class="muted">运动能力评估销售节奏后移，普拉提暂不预留资源。</span>
               </div>
             </div>
             <div class="change-row">
@@ -1075,20 +1176,12 @@
                 <strong>大Motion可销售</strong>
                 <span class="muted">10月中下旬支持发货。</span>
               </div>
-              <div>
-                <strong>影响</strong>
-                <span class="muted">原8月下旬后移，需要同步销售承诺和客户预期。</span>
-              </div>
             </div>
             <div class="change-row">
               <div>
                 <span class="tag">节点改变</span>
                 <strong>VA Pro7足踝脊/T5X</strong>
                 <span class="muted">9月底上线。</span>
-              </div>
-              <div>
-                <strong>影响</strong>
-                <span class="muted">原8月初后移，影响医疗演示和相关客户沟通节奏。</span>
               </div>
             </div>
             <div class="change-row">
@@ -1097,17 +1190,13 @@
                 <strong>730系列儿童模式</strong>
                 <span class="muted">8-10月分阶段完成。</span>
               </div>
-              <div>
-                <strong>影响</strong>
-                <span class="muted">新增下半年卖点，同时带来网络版与单机版双线资源占用。</span>
-              </div>
             </div>
           </div>
         </div>
       </div>
     </section>
 
-    <section id="portfolio">
+    <section id="portfolio" class="band-dark">
       <div class="container">
         <div class="section-head reveal">
           <div>
@@ -1171,171 +1260,270 @@
       </div>
     </section>
 
-    <section id="risks">
-      <div class="container">
-        <div class="risk-layout">
-          <aside class="risk-poster reveal">
-            <img src="assets/rd-roadmap-hero.png" alt="" aria-hidden="true" />
-            <p class="section-eyebrow">Risk Focus</p>
-            <h3>风险不是技术列表，而是经营节奏的冲突。</h3>
-            <p>重点关注9-10月交付拥挤、医疗线Q4集中开发，以及展会版本口径。</p>
-          </aside>
-
-          <div>
-            <div class="section-head reveal" style="grid-template-columns: 1fr; margin-bottom: 14px;">
-              <div>
-                <p class="section-eyebrow">Risks &amp; Actions</p>
-                <h2>五个需要提前控住的风险。</h2>
-              </div>
-            </div>
-            <div class="risk-list reveal">
-              <div class="risk-item">
-                <b>资源挤兑</b>
-                <p>Lite6、WH、Motion、730、足踝脊集中在9-10月交付。建议明确优先级，必要时拆分“可演示版”和“可交付版”。</p>
-              </div>
-              <div class="risk-item">
-                <b>销售预期偏差</b>
-                <p>大Motion、Lite6握力、VA Pro7/T5X节点后移。建议销售侧同步客户承诺，并提前准备替代演示方案。</p>
-              </div>
-              <div class="risk-item">
-                <b>医疗线返工</b>
-                <p>医疗运动、脊柱、体成分、3MHz体脂板开发窗口集中。建议8-9月完成需求冻结和版本边界确认。</p>
-              </div>
-              <div class="risk-item">
-                <b>展会倒逼</b>
-                <p>Medica、迪拜、FIBO分别对应不同成果标准。建议每个展会单独定义最低可展示范围和客户沟通口径。</p>
-              </div>
-              <div class="risk-item">
-                <b>多端并行</b>
-                <p>WH-PC、H5、海外App、Motion App并行推进。建议明确复用边界、端侧优先级和版本发布节奏。</p>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <section id="decisions" class="band-dark">
+    <section id="gantt" class="band-dark">
       <div class="container">
         <div class="section-head reveal">
           <div>
-            <p class="section-eyebrow">Decision Points</p>
-            <h2>老板需要拍板或协调的事项。</h2>
+            <p class="section-eyebrow">Detailed Gantt</p>
+            <h2>研发产品规划详情甘特图。</h2>
           </div>
-          <p class="section-lead">这页不要塞研发细节，只保留会影响销售承诺、资源分配和产品战略的判断题。</p>
+          <p class="section-lead">按原始29项规划逐条展开，保留关键月份节点，横向滚动查看完整时间轴。</p>
         </div>
 
-        <div class="decision-strip reveal">
-          <article class="decision-card">
-            <small>01</small>
-            <h3>大Motion延期</h3>
-            <p>是否调整销售承诺和重点客户交付节奏。</p>
-          </article>
-          <article class="decision-card">
-            <small>02</small>
-            <h3>Lite6运动能力</h3>
-            <p>握力先做，普拉提暂不预留资源是否确认。</p>
-          </article>
-          <article class="decision-card">
-            <small>03</small>
-            <h3>医疗产品并行</h3>
-            <p>是否确认运动、脊柱、体成分三条线Q4并行推进。</p>
-          </article>
-          <article class="decision-card">
-            <small>04</small>
-            <h3>展会支撑口径</h3>
-            <p>Medica、迪拜、FIBO分别需要什么程度的产品成果。</p>
-          </article>
-          <article class="decision-card">
-            <small>05</small>
-            <h3>730儿童模式</h3>
-            <p>是否作为下半年重点销售卖点投入资源。</p>
-          </article>
-        </div>
-      </div>
-    </section>
-
-    <section id="gantt">
-      <div class="container">
-        <div class="section-head reveal">
-          <div>
-            <p class="section-eyebrow">Appendix</p>
-            <h2>简版甘特图只放附录。</h2>
-          </div>
-          <p class="section-lead">用于追问执行细节时展开，不作为老板汇报的第一视角。</p>
-        </div>
-
-        <div class="gantt-shell reveal" aria-label="简版甘特图">
-          <div class="gantt">
-            <div class="head">项目</div>
-            <div class="head">7月</div>
-            <div class="head">8月</div>
-            <div class="head">9月</div>
-            <div class="head">10月</div>
-            <div class="head">11月</div>
-            <div class="head">12月</div>
-            <div class="head">2027 Q1</div>
-            <div class="head">2027 Q2</div>
-
-            <div class="project">AI图片能力</div>
-            <div></div>
-            <div><span class="bar">A Pro6</span></div>
-            <div><span class="bar amber">Lite6</span></div>
-            <div></div><div></div><div></div><div></div><div></div>
-
-            <div class="project">伏羲推演</div>
-            <div><span class="bar">优化</span></div>
-            <div><span class="bar">体态/体适能</span></div>
-            <div><span class="bar">多型号PC</span></div>
-            <div><span class="bar amber">H5开发</span></div>
-            <div></div><div></div><div></div><div></div>
-
-            <div class="project">WellnessHub</div>
-            <div></div><div></div>
-            <div><span class="bar">收费</span></div>
-            <div><span class="bar amber">国内H5</span></div>
-            <div><span class="bar">海外App</span></div>
-            <div></div><div></div><div></div>
-
-            <div class="project">大Motion</div>
-            <div></div><div></div><div></div>
-            <div><span class="bar red">发货</span></div>
-            <div></div><div></div>
-            <div><span class="bar">测力台</span></div>
-            <div><span class="bar amber">App</span></div>
-
-            <div class="project">R70/足踝脊</div>
-            <div></div>
-            <div><span class="bar">R70</span></div>
-            <div><span class="bar red">VA Pro7/T5X</span></div>
-            <div><span class="bar">踝增强</span></div>
-            <div><span class="bar amber">Medica</span></div>
-            <div><span class="bar">足底板</span></div>
-            <div></div><div></div>
-
-            <div class="project">730儿童模式</div>
-            <div></div>
-            <div><span class="bar">V2.0</span></div>
-            <div><span class="bar">单机二期</span></div>
-            <div><span class="bar amber">儿童模式</span></div>
-            <div></div><div></div><div></div><div></div>
-
-            <div class="project">医疗产品系列</div>
-            <div></div><div></div>
-            <div><span class="bar">需求核对</span></div>
-            <div><span class="bar">准备</span></div>
-            <div><span class="bar amber">开发</span></div>
-            <div><span class="bar amber">功能完成</span></div>
-            <div><span class="bar red">版本完成</span></div>
-            <div><span class="bar">VD系列</span></div>
-          </div>
+        <div class="gantt-shell reveal" aria-label="研发产品规划详情甘特图">
+          <table class="gantt-table">
+            <thead>
+              <tr>
+                <th>项目</th>
+                <th>2026年7月</th>
+                <th>8月</th>
+                <th>9月</th>
+                <th>10月</th>
+                <th>11月<br><span class="event-mark">Medica</span></th>
+                <th>12月</th>
+                <th>2027年1月</th>
+                <th>2月<br><span class="event-mark">迪拜</span></th>
+                <th>3月<br><span class="event-mark">IWF</span></th>
+                <th>4月<br><span class="event-mark">FIBO</span></th>
+                <th>2027 Q2</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><span class="project-title">AI图片能力</span><span class="project-status status-change">节点改变</span></td>
+                <td></td>
+                <td><span class="bar red">A Pro6 8月中准出</span></td>
+                <td><span class="bar amber">Lite6 9月初同步</span></td>
+                <td></td><td></td><td></td><td></td><td></td>
+                <td></td><td></td><td></td>
+              </tr>
+              <tr>
+                <td><span class="project-title">伏羲推演系统优化</span><span class="project-status">维持</span></td>
+                <td><span class="bar">体脂时间再确认</span></td>
+                <td><span class="bar">体态精度/体适能</span></td>
+                <td></td><td></td><td></td><td></td><td></td><td></td>
+                <td></td><td></td><td></td>
+              </tr>
+              <tr>
+                <td><span class="project-title">伏羲多型号上线</span><span class="project-status">维持</span></td>
+                <td></td><td></td>
+                <td><span class="bar">WH-PC 6款上线</span></td>
+                <td></td>
+                <td></td><td></td><td></td><td></td>
+                <td></td><td></td><td></td>
+              </tr>
+              <tr>
+                <td><span class="project-title">Lite6运动能力评估</span><span class="project-status status-change">节点改变</span></td>
+                <td></td>
+                <td><span class="bar red">握力接入完成</span></td>
+                <td><span class="bar">尚体需求核对</span></td>
+                <td><span class="bar">版本安排</span></td>
+                <td><span class="bar">版本安排</span></td>
+                <td><span class="bar">版本安排</span></td>
+                <td></td><td></td>
+                <td></td><td></td><td></td>
+              </tr>
+              <tr>
+                <td><span class="project-title">WellnessHub国内商业</span><span class="project-status">维持</span></td>
+                <td></td><td></td>
+                <td><span class="bar">收费模式</span></td>
+                <td><span class="bar amber">国内H5</span></td>
+                <td><span class="bar">海外WH App</span></td>
+                <td></td><td></td><td></td>
+                <td></td><td></td><td></td>
+              </tr>
+              <tr>
+                <td><span class="project-title">红外热成像/视觉生命体征配件</span><span class="project-status">维持</span></td>
+                <td></td>
+                <td><span class="bar">红外</span></td>
+                <td><span class="bar">视觉</span></td>
+                <td></td><td></td><td></td><td></td><td></td>
+                <td></td><td></td><td></td>
+              </tr>
+              <tr>
+                <td><span class="project-title">大Motion可销售</span><span class="project-status status-change">节点改变</span></td>
+                <td></td><td></td><td></td>
+                <td><span class="bar red">10月中下旬发货</span></td>
+                <td></td><td></td><td></td><td></td>
+                <td></td><td></td><td></td>
+              </tr>
+              <tr>
+                <td><span class="project-title">小Motion可销售</span><span class="project-status">维持</span></td>
+                <td></td><td></td><td></td><td></td><td></td><td></td>
+                <td></td>
+                <td></td>
+                <td><span class="bar">IWF可销售</span></td>
+                <td></td><td></td>
+              </tr>
+              <tr>
+                <td><span class="project-title">一体化转台</span><span class="project-status">维持</span></td>
+                <td><span class="bar">订单可下</span></td>
+                <td><span class="bar">正式出货</span></td>
+                <td></td><td></td><td></td><td></td><td></td><td></td>
+                <td></td><td></td><td></td>
+              </tr>
+              <tr>
+                <td><span class="project-title">R70足踝/脊柱增强/伏羲融入</span><span class="project-status">维持</span></td>
+                <td></td>
+                <td><span class="bar">开发完成</span></td>
+                <td></td><td></td><td></td><td></td><td></td><td></td>
+                <td></td><td></td><td></td>
+              </tr>
+              <tr>
+                <td><span class="project-title">VA Pro7足踝脊/T5X</span><span class="project-status status-change">节点改变</span></td>
+                <td></td><td></td>
+                <td><span class="bar red">9月底上线</span></td>
+                <td></td><td></td><td></td><td></td><td></td>
+                <td></td><td></td><td></td>
+              </tr>
+              <tr>
+                <td><span class="project-title">踝增强相机配件适配</span><span class="project-status">维持</span></td>
+                <td></td><td></td><td></td>
+                <td><span class="bar">R70/VE768</span></td>
+                <td><span class="bar amber">A Pro7 11月下</span></td>
+                <td></td><td></td><td></td>
+                <td></td><td></td><td></td>
+              </tr>
+              <tr>
+                <td><span class="project-title">行走足底压力板</span><span class="project-status">维持</span></td>
+                <td></td><td></td><td></td><td></td>
+                <td><span class="bar amber">Medica</span></td>
+                <td></td>
+                <td></td><td></td>
+                <td></td><td></td><td></td>
+              </tr>
+              <tr>
+                <td><span class="project-title">扶手可升降</span><span class="project-status">维持</span></td>
+                <td></td><td></td>
+                <td><span class="bar">手动样品</span></td>
+                <td><span class="bar">导入预计</span></td>
+                <td></td><td></td><td></td><td></td>
+                <td></td><td></td><td></td>
+              </tr>
+              <tr>
+                <td><span class="project-title">足脊软件证</span><span class="project-status">维持</span></td>
+                <td><span class="bar">送检软件完成</span></td>
+                <td></td><td></td><td></td><td></td><td></td><td></td><td></td>
+                <td></td><td></td><td></td>
+              </tr>
+              <tr>
+                <td><span class="project-title">商业体脂板全掌握</span><span class="project-status">维持</span></td>
+                <td></td>
+                <td><span class="bar">理想节点</span></td>
+                <td><span class="bar amber">保守节点</span></td>
+                <td></td><td></td><td></td><td></td><td></td>
+                <td></td><td></td><td></td>
+              </tr>
+              <tr>
+                <td><span class="project-title">医疗3MHz相位角体脂板</span><span class="project-status">维持</span></td>
+                <td></td><td></td><td></td><td></td><td></td><td></td>
+                <td><span class="bar red">1月中</span></td>
+                <td></td>
+                <td></td><td></td><td></td>
+              </tr>
+              <tr>
+                <td><span class="project-title">医疗部分迪拜展会成果</span><span class="project-status">维持</span></td>
+                <td></td><td></td><td></td><td></td><td></td><td></td>
+                <td><span class="bar red">1月底完成</span></td>
+                <td><span class="bar amber">支撑迪拜</span></td>
+                <td></td>
+                <td></td><td></td>
+              </tr>
+              <tr>
+                <td><span class="project-title">Motionstation App</span><span class="project-status">维持</span></td>
+                <td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td>
+                <td></td>
+                <td><span class="bar red">4月初完成</span></td>
+                <td></td>
+              </tr>
+              <tr>
+                <td><span class="project-title">Motionstation测力台版本</span><span class="project-status">维持</span></td>
+                <td></td><td></td><td></td><td></td><td></td><td></td>
+                <td><span class="bar red">1月完成</span></td>
+                <td></td>
+                <td></td><td></td><td></td>
+              </tr>
+              <tr>
+                <td><span class="project-title">T5X/Motion军警单机版</span><span class="project-status">维持</span></td>
+                <td></td>
+                <td><span class="bar">T5X 8月</span></td>
+                <td></td><td><span class="bar amber">Motion按单核实</span></td>
+                <td></td><td></td><td></td><td></td>
+                <td></td><td></td><td></td>
+              </tr>
+              <tr>
+                <td><span class="project-title">730系列+儿童模式</span><span class="project-status status-change">节点改变</span></td>
+                <td></td>
+                <td><span class="bar">V2.0二期</span></td>
+                <td><span class="bar">单机二期</span></td>
+                <td><span class="bar amber">儿童模式导入</span></td>
+                <td></td><td></td><td></td><td></td>
+                <td></td><td></td><td></td>
+              </tr>
+              <tr>
+                <td><span class="project-title">VD系列六频段相位角板</span><span class="project-status">维持</span></td>
+                <td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td>
+                <td></td><td></td>
+                <td><span class="bar">预计Q2</span></td>
+              </tr>
+              <tr>
+                <td><span class="project-title">Lite6后续功能/新架构迁移</span><span class="project-status">维持</span></td>
+                <td><span class="bar">7月底启动</span></td>
+                <td></td><td></td><td></td><td></td><td></td><td></td><td></td>
+                <td></td><td></td><td></td>
+              </tr>
+              <tr>
+                <td><span class="project-title">R70/R60网络版迁移</span><span class="project-status">维持</span></td>
+                <td></td><td></td><td></td>
+                <td><span class="bar">10月底启动</span></td>
+                <td><span class="bar">开发推进</span></td>
+                <td><span class="bar red">整体完成</span></td>
+                <td></td><td></td>
+                <td></td><td></td><td></td>
+              </tr>
+              <tr>
+                <td><span class="project-title">维塑自有小转台</span><span class="project-status">维持</span></td>
+                <td></td>
+                <td><span class="bar">8月初启动</span></td>
+                <td></td><td></td><td></td><td></td><td></td><td></td>
+                <td></td><td></td>
+                <td><span class="bar red">6/20小批量试产</span></td>
+              </tr>
+              <tr>
+                <td><span class="project-title">医疗运动评估产品系列</span><span class="project-status status-new">新增</span></td>
+                <td></td><td></td><td></td><td></td>
+                <td><span class="bar amber">进入开发</span></td>
+                <td><span class="bar red">功能列表完成</span></td>
+                <td></td><td></td>
+                <td></td><td></td><td></td>
+              </tr>
+              <tr>
+                <td><span class="project-title">医疗脊柱产品系列</span><span class="project-status status-new">新增</span></td>
+                <td></td><td></td><td></td><td></td>
+                <td><span class="bar amber">进入开发</span></td>
+                <td><span class="bar red">功能列表完成</span></td>
+                <td></td><td></td>
+                <td></td><td></td><td></td>
+              </tr>
+              <tr>
+                <td><span class="project-title">医疗体成分/体态产品系列</span><span class="project-status status-new">新增</span></td>
+                <td></td><td></td><td></td><td></td>
+                <td><span class="bar amber">进入开发</span></td>
+                <td><span class="bar">开发推进</span></td>
+                <td><span class="bar red">典型/首版</span></td>
+                <td><span class="bar red">全部完成</span></td>
+                <td></td>
+                <td></td><td></td>
+              </tr>
+            </tbody>
+          </table>
         </div>
       </div>
     </section>
 
     <footer class="footer-note">
       <div class="container">
-        页面版本：2026-07-07。建议汇报顺序：一页总览 → 节点变化 → 产品线里程碑 → 风险与决策 → 甘特附录。
+        页面版本：2026-07-07。页面结构：封面 → 节点变化 → 产品线里程碑 → 详情甘特图。
       </div>
     </footer>
   </main>
