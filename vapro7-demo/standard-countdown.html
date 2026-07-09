@@ -8,7 +8,7 @@
   </head>
   <body>
     <main class="device-stage">
-      <section class="device device--countdown">
+      <section class="device device--countdown device--bodycomp-countdown">
         <div class="status-bar"><span>18:32</span><span>身体成分</span></div>
         <div class="topbar">
           <a class="back-link" href="./standard-position.html" data-stateful-link="./standard-position.html">← 返回</a>
@@ -29,15 +29,24 @@
             <div class="headline countdown-seconds" data-stage-seconds aria-label="倒计时秒数">3</div>
             <p class="countdown-soon-caption">秒后开始</p>
           </div>
-          <div class="countdown-pose-stage countdown-pose-stage--flat">
-            <div class="human pose-hold" aria-hidden="true">
-              <div class="head"></div>
-              <div class="torso"></div>
-              <div class="limb arm left"></div>
-              <div class="limb arm right"></div>
-              <div class="limb leg left"></div>
-              <div class="limb leg right"></div>
-            </div>
+          <div class="countdown-pose-stage countdown-pose-stage--flat countdown-video-stage">
+            <div class="camera-corner tl"></div>
+            <div class="camera-corner tr"></div>
+            <div class="camera-corner bl"></div>
+            <div class="camera-corner br"></div>
+            <video
+              class="bodycomp-flow-video bodycomp-flow-video--countdown"
+              autoplay
+              muted
+              loop
+              playsinline
+              preload="auto"
+              controlslist="nodownload nofullscreen noremoteplayback"
+              disablepictureinpicture
+              aria-label="双臂自然打开约四十五度夹角倒计时示意动画"
+            >
+              <source src="./assets/bodycomp-flow/arms-45.mp4" type="video/mp4" />
+            </video>
           </div>
           <div class="measuring-info-panel countdown-pose-hint">
             <img class="measuring-info-panel__badge" src="./assets/lanhu/info-badge-i.png" alt="" />

@@ -1180,6 +1180,66 @@ html[data-device-canvas="1080"] .device[data-measuring-flow] {
 .device.device--countdown .countdown-layout .measuring-info-panel {
   flex-shrink: 0;
 }
+.device.device--bodycomp-countdown {
+  overflow: visible;
+}
+.device.device--bodycomp-countdown .countdown-body {
+  padding: calc(12px * var(--ds)) 0 0;
+}
+.device.device--bodycomp-countdown .countdown-layout {
+  gap: calc(10px * var(--ds));
+}
+.device.device--bodycomp-countdown .countdown-digit-block {
+  position: relative;
+  z-index: 3;
+  min-height: calc(112px * var(--ds));
+}
+.device.device--bodycomp-countdown .countdown-seconds {
+  font-size: calc(104px * var(--ds));
+  line-height: 0.92;
+  color: #d8e9ff;
+  text-shadow: 0 calc(8px * var(--ds)) calc(28px * var(--ds)) rgba(43, 124, 255, 0.28);
+}
+.device.device--bodycomp-countdown .countdown-soon-caption {
+  margin-top: calc(4px * var(--ds));
+  font-size: calc(19px * var(--ds));
+  color: rgba(216, 233, 255, 0.86);
+}
+.device.device--bodycomp-countdown .countdown-video-stage {
+  width: 100%;
+  min-height: auto;
+  max-height: none;
+  aspect-ratio: 1 / 1;
+  padding: 0;
+  border-radius: calc(18px * var(--ds));
+  border-color: rgba(43, 124, 255, 0.38);
+  background: #05070b;
+  box-shadow:
+    inset 0 0 0 1px rgba(255, 255, 255, 0.04),
+    0 calc(14px * var(--ds)) calc(38px * var(--ds)) rgba(0, 0, 0, 0.32);
+}
+.device.device--bodycomp-countdown .countdown-video-stage .bodycomp-flow-video {
+  width: 100%;
+  height: 100%;
+  border-radius: calc(18px * var(--ds));
+}
+.device.device--bodycomp-countdown .countdown-pose-hint.measuring-info-panel {
+  margin-top: calc(2px * var(--ds));
+  padding: calc(10px * var(--ds)) calc(14px * var(--ds));
+  border-radius: calc(14px * var(--ds));
+}
+.device.device--bodycomp-countdown .device-tips-carousel-section {
+  margin: calc(10px * var(--ds)) var(--device-shell-gutter) 0;
+}
+.device.device--bodycomp-countdown .footer-hint {
+  position: absolute;
+  left: var(--device-shell-gutter);
+  right: var(--device-shell-gutter);
+  top: calc(100% + calc(18px * var(--ds)));
+  bottom: auto;
+  margin: 0;
+  padding: 0;
+}
 .countdown-pose-wrap {
   margin: 0;
   flex-shrink: 0;
@@ -1483,18 +1543,19 @@ html[data-device-canvas="1080"] .device[data-measuring-flow] {
 }
 .device--measuring .screen-title,
 .device[data-measuring-flow] .screen-title {
-  margin: calc(2px * var(--ds)) var(--device-shell-gutter) calc(8px * var(--ds));
-  font-size: calc(22px * var(--ds));
+  margin: calc(2px * var(--ds)) var(--device-shell-gutter) calc(6px * var(--ds));
+  font-size: calc(21px * var(--ds));
 }
 .device--measuring .device-visual,
 .device[data-measuring-flow] .device-visual {
-  margin: 0 var(--device-shell-gutter);
+  margin: 0 calc(18px * var(--ds));
   flex-shrink: 0;
 }
 .device--measuring .measuring-stage,
 .device[data-measuring-flow] .measuring-stage {
-  min-height: calc(200px * var(--ds));
-  max-height: calc(240px * var(--ds));
+  min-height: calc(300px * var(--ds));
+  max-height: calc(360px * var(--ds));
+  padding: calc(28px * var(--ds)) calc(14px * var(--ds)) calc(24px * var(--ds));
 }
 .device--measuring .measuring-stage .live-focus,
 .device[data-measuring-flow] .measuring-stage .live-focus {
@@ -1502,7 +1563,7 @@ html[data-device-canvas="1080"] .device[data-measuring-flow] {
 }
 .device--measuring .progress-track,
 .device[data-measuring-flow] .progress-track {
-  margin: calc(8px * var(--ds)) var(--device-shell-gutter) 0;
+  margin: calc(12px * var(--ds)) var(--device-shell-gutter) 0;
 }
 .device--measuring .footer-hint,
 .device[data-measuring-flow] .footer-hint {
@@ -1517,7 +1578,7 @@ html[data-device-canvas="1080"] .device[data-measuring-flow] {
 .device--measuring .device-tips-carousel-section,
 .device[data-measuring-flow] .device-tips-carousel-section {
   flex-shrink: 0;
-  margin: calc(8px * var(--ds)) var(--device-shell-gutter) 0;
+  margin: calc(6px * var(--ds)) var(--device-shell-gutter) 0;
 }
 .device--measuring .measuring-grip-hero,
 .device[data-measuring-flow] .measuring-grip-hero {
@@ -1530,6 +1591,35 @@ html[data-device-canvas="1080"] .device[data-measuring-flow] {
   object-fit: contain;
   z-index: 2;
   pointer-events: none;
+}
+.bodycomp-flow-video {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  z-index: 2;
+  width: calc(100% - calc(12px * var(--ds)));
+  height: calc(100% - calc(12px * var(--ds)));
+  max-width: none;
+  max-height: none;
+  transform: translate(-50%, -50%);
+  border-radius: calc(14px * var(--ds));
+  background: #05070b;
+  object-fit: contain;
+  pointer-events: none;
+  box-shadow: 0 calc(8px * var(--ds)) calc(28px * var(--ds)) rgba(0, 0, 0, 0.35);
+}
+.bodycomp-flow-video::-webkit-media-controls,
+.bodycomp-flow-video::-webkit-media-controls-enclosure,
+.bodycomp-flow-video::-webkit-media-controls-panel {
+  display: none !important;
+  opacity: 0 !important;
+  pointer-events: none !important;
+}
+.bodycomp-flow-video--guide {
+  top: 50%;
+}
+.bodycomp-flow-video--measuring {
+  top: 50%;
 }
 .device--measuring.device--pro-measuring,
 .device[data-measuring-flow].device--pro-measuring {
@@ -1561,26 +1651,71 @@ html[data-device-canvas="1080"] .device[data-measuring-flow] {
   padding-bottom: calc(12px * var(--ds));
 }
 .device--guide.device--guide-panel .screen-title {
-  margin: 0 var(--device-shell-gutter) calc(8px * var(--ds));
+  margin: 0 var(--device-shell-gutter) calc(6px * var(--ds));
 }
 .device--guide.device--guide-panel .guide-scene-wrap .measuring-stage,
 .device--guide.device--guide-panel .guide-scene-wrap .live-stage {
-  min-height: calc(200px * var(--ds));
-  max-height: calc(240px * var(--ds));
+  min-height: calc(300px * var(--ds));
+  max-height: calc(360px * var(--ds));
 }
 .device--guide.device--guide-panel .guide-visual {
   min-height: auto;
 }
 .device--guide.device--guide-panel .guide-visual .live-stage {
-  min-height: calc(200px * var(--ds));
-  max-height: calc(240px * var(--ds));
-  padding-top: calc(40px * var(--ds));
-  padding-bottom: calc(48px * var(--ds));
+  min-height: calc(300px * var(--ds));
+  max-height: calc(360px * var(--ds));
+  padding: calc(28px * var(--ds)) calc(14px * var(--ds)) calc(24px * var(--ds));
 }
 .device--guide.device--guide-panel .bodycomp-prep-scene {
   min-height: calc(200px * var(--ds));
   max-height: calc(240px * var(--ds));
   padding-bottom: calc(16px * var(--ds));
+}
+
+.device--bodycomp-video-page .screen-title {
+  margin: 0 var(--device-shell-gutter) calc(6px * var(--ds));
+  line-height: 1.08;
+}
+.device--bodycomp-video-page.device--measuring .screen-title {
+  margin: calc(2px * var(--ds)) var(--device-shell-gutter) calc(6px * var(--ds));
+}
+.device--bodycomp-video-page.device--guide .guide-visual,
+.device--bodycomp-video-page.device--measuring .device-visual {
+  margin: 0 calc(-12px * var(--ds)) calc(6px * var(--ds));
+  min-height: auto;
+  flex-shrink: 0;
+}
+.device--bodycomp-video-page .guide-visual .live-stage,
+.device--bodycomp-video-page .measuring-stage {
+  width: 100%;
+  min-height: auto !important;
+  max-height: none !important;
+  aspect-ratio: 1 / 1;
+  padding: 0 !important;
+}
+.device--bodycomp-video-page .bodycomp-flow-video {
+  width: 100%;
+  height: 100%;
+  border-radius: calc(12px * var(--ds));
+}
+.device--bodycomp-video-page .measuring-info-panel {
+  margin-top: calc(8px * var(--ds));
+  padding: calc(11px * var(--ds)) calc(14px * var(--ds)) calc(10px * var(--ds));
+  border-radius: calc(14px * var(--ds));
+}
+.device--bodycomp-video-page .measuring-info-panel__badge {
+  top: calc(-10px * var(--ds));
+  width: calc(26px * var(--ds));
+  height: calc(22px * var(--ds));
+}
+.device--bodycomp-video-page .progress-track {
+  margin-top: calc(8px * var(--ds));
+}
+.device--bodycomp-video-page .device-tips-carousel-section {
+  margin-top: calc(4px * var(--ds));
+}
+.device--bodycomp-video-page .footer-hint {
+  padding-top: calc(8px * var(--ds));
 }
 
 .bodycomp-prep-scene {

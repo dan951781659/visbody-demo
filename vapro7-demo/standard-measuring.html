@@ -9,7 +9,7 @@
   <body>
     <main class="device-stage">
       <section
-        class="device device--measuring"
+        class="device device--measuring device--bodycomp-video-page"
         data-measuring-flow
         data-measuring-duration="10000"
         data-measuring-next="./standard-next-step.html"
@@ -35,16 +35,19 @@
               <span class="live-chip ok">姿态正确</span>
               <span class="live-chip" data-measuring-chip>转台旋转中</span>
             </div>
-            <img
-              class="measuring-grip-hero"
-              src="./assets/lanhu/measuring-grip-hero.png"
-              alt=""
-              width="300"
-              height="220"
-            />
-            <div class="turntable-plate" aria-hidden="true"></div>
-            <div class="guide-line circle"></div>
-            <div class="scan-line"></div>
+            <video
+              class="bodycomp-flow-video bodycomp-flow-video--measuring"
+              autoplay
+              muted
+              loop
+              playsinline
+              preload="auto"
+              controlslist="nodownload nofullscreen noremoteplayback"
+              disablepictureinpicture
+              aria-label="身体成分测量中示意动画"
+            >
+              <source src="./assets/bodycomp-flow/measuring-loop.mp4" type="video/mp4" />
+            </video>
           </div>
         </div>
         <div class="progress-track"><div class="progress-fill" data-measuring-progress style="width:0%;"></div></div>
