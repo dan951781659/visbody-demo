@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="398" height="300" viewBox="0 0 398 300" role="img" aria-label="body measurement model">
+  <rect width="398" height="300" rx="12" fill="#f5f8fb"/>
+  <ellipse cx="199" cy="46" rx="26" ry="30" fill="#d0d8e0"/>
+  <path d="M164 100c8-24 22-36 35-36s27 12 35 36l18 96H146z" fill="#b9c4cf"/>
+  <path d="M158 108l-40 30M240 108l40 30" stroke="#9aa7b5" stroke-width="14" stroke-linecap="round"/>
+  <path d="M174 196l-14 58M224 196l14 58" stroke="#9aa7b5" stroke-width="14" stroke-linecap="round"/>
+  <ellipse cx="199" cy="78" rx="22" ry="7" fill="none" stroke="#38bdf8" stroke-width="3" opacity="0.9"/>
+  <ellipse cx="199" cy="118" rx="48" ry="10" fill="none" stroke="#0ea5e9" stroke-width="3.5"/>
+  <ellipse cx="199" cy="152" rx="42" ry="9" fill="none" stroke="#0284c7" stroke-width="3.5"/>
+  <ellipse cx="199" cy="178" rx="46" ry="10" fill="none" stroke="#0369a1" stroke-width="3.5"/>
+  <ellipse cx="168" cy="128" rx="14" ry="6" fill="none" stroke="#7dd3fc" stroke-width="2.5"/>
+  <ellipse cx="230" cy="128" rx="14" ry="6" fill="none" stroke="#7dd3fc" stroke-width="2.5"/>
+  <ellipse cx="178" cy="220" rx="18" ry="7" fill="none" stroke="#38bdf8" stroke-width="2.5"/>
+  <ellipse cx="220" cy="220" rx="18" ry="7" fill="none" stroke="#38bdf8" stroke-width="2.5"/>
+  <ellipse cx="176" cy="248" rx="14" ry="6" fill="none" stroke="#0ea5e9" stroke-width="2.5"/>
+  <ellipse cx="222" cy="248" rx="14" ry="6" fill="none" stroke="#0ea5e9" stroke-width="2.5"/>
+  <text x="199" y="284" text-anchor="middle" font-size="12" fill="#64748b" font-family="PingFang SC,sans-serif">BODY MEASUREMENT</text>
+</svg>

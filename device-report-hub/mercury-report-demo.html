@@ -1,0 +1,1941 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>水星睡眠科技AI智配系统 Demo</title>
+    <style>
+      * { box-sizing: border-box; }
+      body {
+        margin: 0;
+        background: #e8edf2;
+        color: #0f172a;
+        font-family: "PingFang SC", "Microsoft YaHei", system-ui, sans-serif;
+      }
+      .page {
+        width: 100%;
+        max-width: 430px;
+        min-height: 100vh;
+        margin: 0 auto;
+        background: #f4f7f9;
+        padding-bottom: 32px;
+      }
+      .hero {
+        position: relative;
+        overflow: hidden;
+        padding: 22px 16px 18px;
+        background: linear-gradient(155deg, #e6f8ff 0%, #fff 42%, #d8f1fb 100%);
+      }
+      .hero::after {
+        content: "";
+        position: absolute;
+        inset: auto 0 0;
+        height: 80px;
+        background: radial-gradient(circle at 50% 100%, rgba(14, 165, 233, .22), transparent 70%);
+      }
+      .eyebrow {
+        color: #0284c7;
+        font-size: 12px;
+        font-weight: 700;
+        letter-spacing: .22em;
+      }
+      h1 {
+        margin: 4px 0 0;
+        font-size: 24px;
+        line-height: 1.18;
+      }
+      .hero-row {
+        position: relative;
+        z-index: 1;
+        display: grid;
+        grid-template-columns: 1fr auto;
+        gap: 12px;
+        align-items: end;
+        margin-top: 18px;
+      }
+      .pill {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        border-radius: 999px;
+        padding: 5px 12px;
+        font-size: 12px;
+        font-weight: 600;
+        border: 1px solid #bbf7d0;
+        background: #ecfdf5;
+        color: #059669;
+      }
+      .dot {
+        width: 6px;
+        height: 6px;
+        border-radius: 999px;
+        background: #10b981;
+      }
+      .hero p {
+        margin: 12px 0 0;
+        color: #475569;
+        font-size: 13px;
+      }
+      .score {
+        width: 80px;
+        height: 80px;
+        border-radius: 50%;
+        display: grid;
+        place-items: center;
+        background: rgba(255, 255, 255, .72);
+        border: 1px solid #fff;
+        color: #0284c7;
+        font-size: 22px;
+        font-weight: 800;
+        box-shadow: inset 0 1px 8px rgba(255, 255, 255, .9);
+      }
+      .content { padding: 16px; }
+      .tab-panel > section:first-child { margin-top: 12px; }
+      .panel-pad { padding: 14px; }
+      .stack-top { margin-top: 10px; }
+      .stack-top-lg { margin-top: 12px; }
+      .panel {
+        background: #fff;
+        border: 1px solid #e2e8f0;
+        border-radius: 16px;
+        box-shadow: 0 4px 16px rgba(15, 23, 42, 0.04);
+      }
+      .profile {
+        padding: 16px;
+      }
+      .profile-head {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+      }
+      .muted { color: #64748b; font-size: 12px; }
+      .name { margin-top: 3px; font-size: 20px; font-weight: 800; }
+      .tag {
+        border: 1px solid #e2e8f0;
+        border-radius: 999px;
+        padding: 5px 10px;
+        background: #f0f9ff;
+        color: #0284c7;
+        font-size: 12px;
+        font-weight: 600;
+      }
+      .stats {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 8px;
+        margin-top: 14px;
+      }
+      .stat {
+        border-radius: 12px;
+        padding: 8px 6px;
+        text-align: center;
+        background: #f8fafc;
+      }
+      .stat b {
+        display: block;
+        margin-top: 4px;
+        font-size: 14px;
+      }
+      .tabs {
+        position: sticky;
+        top: 0;
+        z-index: 10;
+        display: flex;
+        gap: 8px;
+        overflow-x: auto;
+        padding: 10px 16px;
+        background: rgba(244, 247, 249, .96);
+        border-block: 1px solid #e2e8f0;
+        scrollbar-width: none;
+      }
+      .tabs::-webkit-scrollbar { display: none; }
+      .tabs button {
+        flex: none;
+        border: 1px solid #e2e8f0;
+        border-radius: 999px;
+        background: #fff;
+        color: #64748b;
+        padding: 8px 15px;
+        font-size: 13px;
+        font-weight: 500;
+      }
+      .tabs button.active {
+        border-color: #bae6fd;
+        background: #e0f2fe;
+        color: #0284c7;
+        font-weight: 700;
+        box-shadow: none;
+      }
+      section { margin-top: 18px; }
+      .section-kicker {
+        color: #0284c7;
+        font-size: 11px;
+        font-weight: 700;
+        letter-spacing: .18em;
+      }
+      h2 {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        margin: 0 0 12px;
+        font-size: 17px;
+        font-weight: 600;
+        line-height: 26px;
+        color: #1e293b;
+      }
+      h2::before {
+        content: "";
+        flex: 0 0 auto;
+        width: 4px;
+        height: 16px;
+        border-radius: 2px;
+        background: #0284c7;
+      }
+      h3 {
+        margin: 0;
+        font-size: 16px;
+      }
+      .grid-2 {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 10px;
+      }
+      .grid-3 {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 8px;
+      }
+      .info {
+        min-width: 0;
+        border: 1px solid #e2e8f0;
+        border-radius: 16px;
+        background: #fff;
+        padding: 14px 12px;
+      }
+      .info b {
+        display: block;
+        margin-top: 5px;
+        font-size: 15px;
+        line-height: 1.35;
+      }
+      .image-box {
+        padding: 12px;
+      }
+      .image-box img {
+        width: 100%;
+        height: 190px;
+        object-fit: contain;
+        border-radius: 12px;
+        background: #eff2f5;
+      }
+      .media-hero {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        min-height: 200px;
+        margin-bottom: 12px;
+        padding: 10px;
+        border-radius: 16px;
+        background: #eff2f5;
+        border: 1px solid #e2e8f0;
+        overflow: hidden;
+      }
+      .media-hero img {
+        width: 100%;
+        max-height: 220px;
+        object-fit: contain;
+      }
+      .metric {
+        border: 1px solid #e2e8f0;
+        border-radius: 16px;
+        background: #fff;
+        padding: 12px;
+      }
+      .metric-head {
+        display: flex;
+        align-items: flex-start;
+        gap: 6px;
+      }
+      .metric-code { color: #0284c7; font-size: 13px; font-weight: 800; }
+      .metric-title { font-size: 14px; font-weight: 700; }
+      .metric-value {
+        margin-left: auto;
+        color: #0f172a;
+        font-size: 15px;
+        font-weight: 800;
+        white-space: nowrap;
+      }
+      .metric p {
+        margin: 8px 0 0;
+        color: #64748b;
+        font-size: 12px;
+        line-height: 1.55;
+      }
+      .metric-guide { margin-top:8px; border-top:1px solid #f1f5f9; padding-top:8px; }
+      .metric > .metric-guide { display:none; }
+      .sales-only { display:none; }
+      body.sales-mode .sales-only { display:block; }
+      .sales-tab { display:none; }
+      body.sales-mode .sales-tab { display:block; }
+      .sales-metric { margin-top:8px;border:1px solid #e0f2fe;border-radius:12px;background:#f8fdff;padding:10px; }
+      .sales-metric > b { color:#1e293b;font-size:12px; }
+      .guide-group > summary, .sales-metric > summary { display:flex;align-items:center;justify-content:space-between;cursor:pointer;list-style:none;color:#1e293b;font-size:13px;font-weight:700; }
+      .guide-group > summary span { color:#0284c7;font-size:11px;font-weight:500; }
+      .guide-group[open] > summary { padding-bottom:10px;border-bottom:1px solid #e2e8f0; }
+      .sales-metric[open] > summary { padding-bottom:8px;border-bottom:1px solid #e0f2fe; }
+      .definition-copy { margin-top:10px;border-top:1px solid #edf2f7;padding-top:10px;color:#718097;font-size:11px;line-height:1.7; }
+      .definition-copy b { color:#354158; }
+      .definition-row { cursor:pointer; }
+      .grade-explanation, .demo-data-note { margin:10px 2px 0;color:#94a3b8;font-size:10px;line-height:1.6; }
+      .metric-guide summary { display:flex; justify-content:space-between; color:#0284c7; font-size:11px; font-weight:700; cursor:pointer; list-style:none; }
+      .metric-guide summary::after { content:"⌄"; }
+      .metric-guide[open] summary::after { transform:rotate(180deg); }
+      .guide-note { margin-top:7px; border-radius:8px; padding:8px; color:#475569; font-size:11px; line-height:1.55; }
+      .guide-note b { display:inline; margin:0; font-size:11px; }
+      .guide-note.pillow { background:#f0f9ff; }.guide-note.pillow b { color:#0369a1; }
+      .guide-note.mattress { background:#ecfdf5; }.guide-note.mattress b { color:#047857; }
+      .guide-note.talk { background:#fffbeb; }.guide-note.talk b { color:#b45309; }
+      .survey-recommend { overflow:hidden; }
+      .recommend-head { padding:16px; color:#fff; background:linear-gradient(135deg,#0f6f9c,#12a6b7); }
+      .recommend-head span { color:rgba(255,255,255,.75); font-size:12px; }
+      .recommend-head h3 { margin:5px 0 0; font-size:18px; }
+      .recommend-head p { margin:8px 0 0; color:rgba(255,255,255,.85); font-size:12px; line-height:1.65; }
+      .recommend-body { padding:14px; }
+      .recommend-grid { display:grid; grid-template-columns:1fr 1fr; gap:8px; margin-top:9px; }
+      .recommend-grid div { border-radius:9px; background:#f8fafc; padding:8px; color:#475569; font-size:11px; line-height:1.5; }
+      .recommend-grid b { color:#0284c7; }
+      .trial-checks { display:flex; flex-wrap:wrap; gap:7px; margin-top:9px; }
+      .trial-checks span { border:1px solid #d1fae5; border-radius:999px; background:#ecfdf5; padding:5px 9px; color:#047857; font-size:11px; }
+      .guide-steps { display:grid; gap:8px; }
+      .guide-step { display:grid; grid-template-columns:24px 1fr; gap:8px; border-radius:12px; background:#f0f9ff; padding:10px; }
+      .guide-step > b { width:24px; height:24px; border-radius:50%; display:grid; place-items:center; background:#0284c7; color:#fff; font-size:11px; }
+      .guide-step strong { color:#1e293b; font-size:12px; }.guide-step p { margin:3px 0 0; color:#64748b; font-size:11px; line-height:1.5; }
+      .product-kicker { color: rgba(255, 255, 255, .78); }
+      .product {
+        overflow: hidden;
+      }
+      .score-display {
+        font-size: 34px;
+        font-weight: 800;
+        color: #0284c7;
+      }
+      .score-row {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+      .section-h3 { margin-bottom: 10px; }
+      .product-inner {
+        min-height: 160px;
+        padding: 16px;
+        color: #fff;
+        background: linear-gradient(135deg, #123457, #16a3c7);
+      }
+      .product-title {
+        margin-top: 6px;
+        font-size: 20px;
+        font-weight: 800;
+        line-height: 1.3;
+      }
+      .match {
+        display: inline-block;
+        margin-top: 18px;
+        border-radius: 999px;
+        padding: 6px 12px;
+        background: rgba(255,255,255,.2);
+        font-size: 13px;
+        font-weight: 700;
+      }
+      .health-card {
+        padding: 14px;
+        margin-bottom: 10px;
+      }
+      .analysis-source {
+        display: flex;
+        align-items: flex-start;
+        gap: 8px;
+        margin-bottom: 10px;
+        border-radius: 12px;
+        background: #f0f9ff;
+        padding: 9px 11px;
+        color: #0369a1;
+        font-size: 11px;
+        line-height: 1.65;
+      }
+      .analysis-source::before {
+        content: "";
+        flex: none;
+        width: 8px;
+        height: 8px;
+        margin-top: 5px;
+        border-radius: 50%;
+        background: #0ea5e9;
+      }
+      .spine-source { margin: 0 0 12px; background: #e8f3ff; color: #3174ae; }
+      .spine-source::before { background: #438ff5; }
+      .insight-head { display: flex; align-items: center; justify-content: space-between; gap: 10px; }
+      .insight-head h3 { margin: 0; font-size: 16px; }
+      .insight-head span { flex: none; color: #94a3b8; font-size: 10px; }
+      .insight-copy { margin-top: 11px; padding-top: 10px; border-top: 1px solid #f1f5f9; }
+      .health-card .insight-copy p { margin: 0 0 7px; color: #475569; font-size: 11px; line-height: 1.65; }
+      .health-card .insight-copy p:last-child { margin-bottom: 0; border-radius: 8px; background: #fffbeb; padding: 8px 9px; }
+      .insight-copy b { color: #1e293b; }
+      .insight-copy .factor-label { color: #0369a1; }
+      .insight-copy .notice-label { color: #b45309; }
+      .level {
+        display: inline-block;
+        margin-left: 8px;
+        border-radius: 999px;
+        border: 1px solid;
+        padding: 2px 8px;
+        font-size: 11px;
+        font-weight: 700;
+      }
+      .level-3 { background: #fff1f2; color: #e34b62; border-color: #fecdd3; }
+      .level-2 { background: #fff7ed; color: #ea580c; border-color: #fed7aa; }
+      .level-1 { background: #fffbeb; color: #ca8a04; border-color: #fde68a; }
+      .section-heading { display:flex; align-items:center; justify-content:space-between; gap:12px; }
+      .detail-link { border:0; background:transparent; color:#0284c7; font-size:12px; font-weight:700; white-space:nowrap; }
+      .guide-flow { display:flex; flex-wrap:wrap; gap:8px; }
+      .guide-flow span { border-radius:9px; background:#f0f9ff; padding:8px 10px; color:#334155; font-size:12px; font-weight:600; }
+      .guide-flow b { margin-right:5px; color:#0284c7; }
+      .health-card p {
+        margin: 6px 0 12px;
+        color: #64748b;
+        font-size: 12px;
+        line-height: 1.55;
+      }
+      .mini {
+        overflow: hidden;
+        border: 1px solid #e2e8f0;
+        border-radius: 14px;
+        background: #f8fafc;
+      }
+      .mini img {
+        display: block;
+        width: 100%;
+        height: 86px;
+        object-fit: contain;
+        background: #eff2f5;
+        border-bottom: 1px solid #e2e8f0;
+      }
+      .mini-body {
+        padding: 8px;
+        font-size: 12px;
+      }
+      .mini-body b {
+        display: flex;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 6px;
+        margin-top: 3px;
+        color: #0f172a;
+        font-size: 14px;
+      }
+      .signal-state {
+        border: 1px solid;
+        border-radius: 6px;
+        padding: 2px 6px;
+        font-size: 10px;
+        font-weight: 700;
+      }
+      .signal-state.light { border-color: #fde68a; background: #fffbeb; color: #ca8a04; }
+      .signal-state.severe { border-color: #fecdd3; background: #fff1f2; color: #e34b62; }
+      .signal-state.normal { border-color: #a7f3d0; background: #ecfdf5; color: #16a36a; }
+      .pressure-card {
+        padding: 8px;
+      }
+      .pressure-mark {
+        aspect-ratio: 1 / 1.12;
+        border-radius: 14px;
+        display: grid;
+        place-items: center;
+        background: radial-gradient(circle at 50% 35%, #e0f2fe, #fff 60%);
+        color: #0284c7;
+        font-size: 24px;
+        font-weight: 800;
+      }
+      .pressure-card b {
+        display: block;
+        margin-top: 8px;
+        text-align: center;
+        font-size: 13px;
+      }
+      .pressure-card p {
+        margin: 5px 0 0;
+        color: #64748b;
+        font-size: 10.5px;
+        line-height: 1.35;
+      }
+      .table-wrap {
+        overflow-x: auto;
+        border-radius: 16px;
+      }
+      table {
+        width: 100%;
+        min-width: 560px;
+        border-collapse: collapse;
+        background: #fff;
+        font-size: 12px;
+      }
+      th, td {
+        padding: 9px 10px;
+        border-bottom: 1px solid #f1f5f9;
+        text-align: center;
+      }
+      th:first-child, td:first-child {
+        text-align: left;
+      }
+      th {
+        color: #64748b;
+        font-weight: 600;
+      }
+      td {
+        font-weight: 700;
+      }
+      .table-title {
+        border-radius: 16px 16px 0 0;
+        background: #f8fafc;
+        color: #64748b;
+        padding: 10px 12px;
+        font-size: 13px;
+        font-weight: 700;
+      }
+      .zones-img {
+        width: 100%;
+        border-radius: 14px;
+        border: 1px solid #e2e8f0;
+      }
+      .zone {
+        border: 1px solid #e2e8f0;
+        border-radius: 14px;
+        background: #fff;
+        padding: 9px;
+      }
+      .zone.active {
+        border-color: #7dd3fc;
+        background: #f0f9ff;
+      }
+      .zone-head {
+        display: flex;
+        gap: 6px;
+        align-items: center;
+        font-size: 12px;
+        font-weight: 700;
+      }
+      .num {
+        flex: none;
+        width: 20px;
+        height: 20px;
+        border-radius: 50%;
+        display: grid;
+        place-items: center;
+        background: #0284c7;
+        color: #fff;
+        font-size: 11px;
+      }
+      .zone-value {
+        margin-top: 8px;
+        font-size: 14px;
+        font-weight: 800;
+      }
+      .chip {
+        margin-left: 6px;
+        border: 1px solid #dbeafe;
+        border-radius: 999px;
+        padding: 2px 7px;
+        color: #0284c7;
+        font-size: 10px;
+        font-weight: 600;
+      }
+      .zone-source {
+        margin-top: 4px;
+        color: #94a3b8;
+        font-size: 10px;
+        line-height: 1.4;
+      }
+      .zone-grid-3 {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 8px;
+      }
+      .info small {
+        display: block;
+        margin-top: 4px;
+        color: #94a3b8;
+        font-size: 10px;
+        line-height: 1.4;
+      }
+      .universal-zone-map {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        overflow: hidden;
+        margin-top: 0;
+        border: 1px solid #e2e8f0;
+        border-radius: 14px;
+        text-align: center;
+      }
+      .uz {
+        min-height: 54px;
+        display: grid;
+        place-items: center;
+        border-right: 1px solid #e2e8f0;
+        border-bottom: 1px solid #e2e8f0;
+        color: #0f172a;
+        font-size: 12px;
+      }
+      .uz b { display: block; font-size: 16px; }
+      .uz span { display: block; margin-top: 2px; color: #475569; }
+      .uz-z7 { background:#eadfff; }
+      .uz-z3, .uz-z1 { background:#fff2f2; }
+      .uz-z5 { grid-row: span 2; background:#dcf7d7; }
+      .uz-z6 { background:#dfe9ff; }
+      .uz-z2 { background:#f3efff; }
+      .uz-z4 { grid-column: 3; background:#ffe9c9; }
+      .generation-toggle {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 6px;
+        border-radius: 12px;
+        background: #f8fafc;
+        padding: 4px;
+      }
+      .generation-toggle button {
+        min-height: 40px;
+        border: 0;
+        border-radius: 9px;
+        background: transparent;
+        color: #64748b;
+        font-size: 13px;
+        font-weight: 700;
+      }
+      .generation-toggle button.active {
+        background: #fff;
+        color: #0369a1;
+        box-shadow: 0 2px 8px rgba(15,23,42,.08);
+      }
+      .pillow-stage {
+        position: relative;
+        overflow: hidden;
+        aspect-ratio: 16 / 9;
+        background: #f8fafc;
+      }
+      .pillow-stage > img {
+        width: 100%;
+        height: 100%;
+        display: block;
+        object-fit: cover;
+      }
+      .pillow-hotspot {
+        position: absolute;
+        z-index: 2;
+        width: 32px;
+        height: 32px;
+        transform: translate(-50%, -50%);
+        display: grid;
+        place-items: center;
+        border: 3px solid #60a5fa;
+        border-radius: 50%;
+        background: rgba(255,255,255,.92);
+        color: #3b82f6;
+        font-size: 13px;
+        font-weight: 800;
+        box-shadow: 0 2px 6px rgba(15,23,42,.12);
+      }
+      .pillow-hotspot.active {
+        border-color: #3b82f6;
+        background: #3b82f6;
+        color: #fff;
+      }
+      .pillow-tooltip {
+        position: relative;
+        z-index: 3;
+        pointer-events: none;
+        width: max-content;
+        min-width: 112px;
+        margin: -20px auto 0;
+        border-radius: 12px;
+        background: rgba(255,255,255,.96);
+        padding: 8px 12px;
+        text-align: center;
+        box-shadow: 0 8px 24px rgba(15,23,42,.14);
+      }
+      .pillow-tooltip::after {
+        content: "";
+        position: absolute;
+        left: 50%;
+        top: -6px;
+        width: 12px;
+        height: 12px;
+        transform: translateX(-50%) rotate(45deg);
+        background: #fff;
+      }
+      .pillow-tooltip b { display:block;color:#1e293b;font-size:12px;white-space:nowrap; }
+      .pillow-tooltip span { display:block;margin-top:2px;color:#3b82f6;font-size:16px;font-weight:800; }
+      .selected-zone-panel { padding: 12px; }
+      .selected-zone-head { display:flex;align-items:center;justify-content:space-between;gap:10px; }
+      .selected-zone-head h3 { margin:0;color:#0f172a;font-size:14px; }
+      .selected-zone-head p { margin:4px 0 0;color:#94a3b8;font-size:10px; }
+      .zone-stats { display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:12px; }
+      .zone-stat { border-radius:12px;background:#f8fafc;padding:8px 4px;text-align:center; }
+      .zone-stat.recommended { background:#f0f9ff; }
+      .zone-stat.current { background:#eff6ff; }
+      .zone-stat span { display:block;color:#94a3b8;font-size:10px; }
+      .zone-stat b { display:block;margin-top:4px;color:#1e293b;font-size:13px; }
+      .zone-stat.recommended span,.zone-stat.recommended b { color:#0369a1; }
+      .zone-stat.current span,.zone-stat.current b { color:#1d4ed8; }
+      .selected-stepper { display:flex;align-items:center;justify-content:center;gap:12px;margin-top:12px; }
+      .selected-stepper button { width:40px;height:40px;border:0;border-radius:50%;background:#f1f5f9;color:#475569;font-size:20px; }
+      .selected-stepper button:last-child { background:#0284c7;color:#fff; }
+      .selected-stepper label { position:relative;width:116px; }
+      .selected-stepper input { width:100%;box-sizing:border-box;border:1px solid #bae6fd;border-radius:12px;padding:9px 28px 9px 10px;text-align:center;font-size:16px;font-weight:800; }
+      .selected-stepper label span { position:absolute;right:9px;top:50%;transform:translateY(-50%);color:#94a3b8;font-size:11px; }
+      .mapping-details > summary { display:flex;align-items:center;justify-content:space-between;cursor:pointer;list-style:none;padding:12px;color:#1e293b;font-size:13px;font-weight:700; }
+      .mapping-details > summary span { color:#0284c7;font-size:11px;font-weight:500; }
+      .note {
+        margin-top: 12px;
+        border-radius: 14px;
+        background: #f8fafc;
+        padding: 12px;
+        color: #64748b;
+        font-size: 12px;
+        line-height: 1.6;
+      }
+      .wide-table { min-width: 620px; }
+      .actions {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 8px;
+      }
+      .actions button, .btn {
+        border: 0;
+        border-radius: 999px;
+        padding: 10px 8px;
+        background: #f8fafc;
+        color: #475569;
+        font-size: 12px;
+      }
+      .actions button.active, .btn.primary {
+        background: #0284c7;
+        color: #fff;
+        font-weight: 700;
+      }
+      .trade-head, .trade-row {
+        display: grid;
+        grid-template-columns: 40px 1fr 58px 82px;
+        font-size: 12px;
+      }
+      .trade-head {
+        border-radius: 14px 14px 0 0;
+        background: #f8fafc;
+        color: #64748b;
+      }
+      .trade-row {
+        border: 1px solid #e2e8f0;
+        border-top: 0;
+        border-radius: 0 0 14px 14px;
+      }
+      .trade-head div, .trade-row div { padding: 9px 8px; }
+      .footer {
+        padding: 24px 16px 0;
+        color: #94a3b8;
+        text-align: center;
+        font-size: 11px;
+        line-height: 1.6;
+      }
+      .tab-panel { display: none; }
+      .tab-panel.active { display: block; }
+      .summary {
+        padding: 16px;
+      }
+      .summary-title {
+        margin-top: 4px;
+        color: #0f172a;
+        font-size: 18px;
+        font-weight: 800;
+        line-height: 1.35;
+      }
+      .summary p {
+        margin: 10px 0 0;
+        color: #64748b;
+        font-size: 12px;
+        line-height: 1.6;
+      }
+      .summary > p:first-child {
+        margin-top: 0;
+      }
+      .chips {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+        margin-top: 12px;
+      }
+      .chips span {
+        border: 1px solid #fef3c7;
+        border-radius: 999px;
+        background: #fffbeb;
+        color: #d97706;
+        padding: 5px 10px;
+        font-size: 12px;
+        font-weight: 600;
+      }
+      .status-grid {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 8px;
+        margin-top: 10px;
+      }
+      .status-cell {
+        border-radius: 12px;
+        background: #f8fafc;
+        padding: 8px;
+      }
+      .status-cell span {
+        color: #64748b;
+        font-size: 11px;
+      }
+      .status-cell b {
+        display: block;
+        margin-top: 4px;
+        color: #0f172a;
+        font-size: 13px;
+        line-height: 1.35;
+      }
+      .kuj-page {
+        margin: -16px;
+        padding: 16px;
+        background: #eef6ff;
+      }
+      .kuj-hero {
+        min-height: 330px;
+        border: 1px solid #dcecff;
+        border-radius: 18px;
+        background: linear-gradient(180deg, #eefaff 0%, #fff 100%);
+        display: grid;
+        place-items: center;
+        overflow: hidden;
+      }
+      .kuj-hero img {
+        max-width: 90%;
+        max-height: 300px;
+        object-fit: contain;
+      }
+      .warn-box {
+        display: flex;
+        align-items: flex-start;
+        gap: 9px;
+        border: 1px solid #fde68a;
+        border-radius: 12px;
+        background: #fffbeb;
+        color: #b45309;
+        padding: 10px 12px;
+        font-size: 12px;
+        line-height: 1.65;
+      }
+      .warn-icon {
+        flex: none;
+        width: 20px;
+        height: 20px;
+        border-radius: 50%;
+        background: #fbbf24;
+        color: #fff;
+        display: grid;
+        place-items: center;
+        font-weight: 800;
+      }
+      .kuj-title {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        margin: 18px 0 12px;
+        color: #1e293b;
+        font-size: 18px;
+        font-weight: 800;
+      }
+      .kuj-title::before {
+        content: "";
+        width: 5px;
+        height: 18px;
+        border-radius: 99px;
+        background: #22b8e8;
+      }
+      .white-card {
+        border: 1px solid #e6f0fb;
+        border-radius: 16px;
+        background: #fff;
+        box-shadow: 0 6px 18px rgba(68, 108, 150, .06);
+      }
+      .body-type-card {
+        position: relative;
+        overflow: hidden;
+        padding: 16px;
+        background: linear-gradient(135deg, #e5f1ff 0%, #cfe3fb 100%);
+      }
+      .body-type-card h3 {
+        margin-top: 4px;
+        color: #1f2a44;
+        font-size: 18px;
+      }
+      .body-type-card p {
+        margin: 8px 0 0;
+        max-width: 72%;
+        color: #64748b;
+        font-size: 12px;
+        line-height: 1.55;
+      }
+      .body-type-card img {
+        position: absolute;
+        right: 14px;
+        bottom: 16px;
+        width: 70px;
+        opacity: .72;
+      }
+      .simple-table {
+        width: 100%;
+        min-width: 0;
+        border-collapse: collapse;
+      }
+      .simple-table th {
+        background: #f0f9ff;
+        color: #0284c7;
+      }
+      .simple-table th,
+      .simple-table td {
+        padding: 10px 12px;
+        border-bottom: 1px solid #eef4fb;
+        font-size: 12px;
+      }
+      .posture-card {
+        overflow: hidden;
+        margin-top: 12px;
+      }
+      .figure-main {
+        min-height: 250px;
+        display: grid;
+        place-items: center;
+        background:
+          repeating-linear-gradient(90deg, rgba(148, 163, 184, .12) 0 1px, transparent 1px 24px),
+          repeating-linear-gradient(0deg, rgba(148, 163, 184, .10) 0 1px, transparent 1px 24px),
+          #fff;
+      }
+      .figure-main img {
+        max-height: 230px;
+        max-width: 92%;
+        object-fit: contain;
+      }
+      .figure-caption {
+        padding: 9px 12px 2px;
+        text-align: center;
+        color: #1f2937;
+        font-size: 13px;
+        font-weight: 700;
+      }
+      .tri-mini {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 8px;
+        padding: 8px 18px 4px;
+      }
+      .tri-mini img {
+        width: 100%;
+        height: 82px;
+        object-fit: contain;
+        opacity: .78;
+      }
+      .tri-bar {
+        margin: 8px 16px 12px;
+      }
+      .tri-track {
+        position: relative;
+        display: grid;
+        grid-template-columns: 1fr 1fr 1fr;
+        height: 7px;
+        overflow: hidden;
+        border-radius: 999px;
+      }
+      .tri-track span:nth-child(1),
+      .tri-track span:nth-child(3) { background: #ef4444; }
+      .tri-track span:nth-child(2) { background: #22c55e; }
+      .tri-marker {
+        position: absolute;
+        top: -4px;
+        width: 3px;
+        height: 15px;
+        border-radius: 999px;
+        background: #0f172a;
+      }
+      .tri-labels {
+        display: flex;
+        justify-content: space-between;
+        margin-top: 6px;
+        color: #64748b;
+        font-size: 10px;
+      }
+      .score-ring {
+        width: 150px;
+        height: 150px;
+        margin: 14px auto;
+        border-radius: 50%;
+        display: grid;
+        place-items: center;
+        background:
+          radial-gradient(circle at center, #fff 0 52%, transparent 53%),
+          conic-gradient(#fb923c 0 58%, #eef2f7 58% 100%);
+      }
+      .score-ring strong {
+        color: #f97316;
+        font-size: 32px;
+      }
+      .risk-line {
+        margin-top: 24px;
+      }
+      .risk-line > b {
+        display: flex;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 8px;
+        margin-bottom: 0;
+        font-size: 16px;
+      }
+      .risk-line > .risk-track { margin-top: 22px; }
+      .risk-track {
+        position: relative;
+        display: grid;
+        grid-template-columns: 22% 28% 22% 28%;
+        height: 8px;
+        border-radius: 999px;
+        overflow: visible;
+      }
+      .risk-track span:nth-child(1) { background: #22c55e; border-radius: 999px 0 0 999px; }
+      .risk-track span:nth-child(2) { background: #facc15; }
+      .risk-track span:nth-child(3) { background: #fdba74; }
+      .risk-track span:nth-child(4) { background: #fb7185; border-radius: 0 999px 999px 0; }
+      .risk-pin {
+        position: absolute;
+        top: -21px;
+        transform: translateX(-50%);
+        color: #ef3f51;
+        font-size: 12px;
+        font-weight: 800;
+        white-space: nowrap;
+      }
+      .pain-card {
+        padding: 18px 16px;
+        margin-top: 12px;
+      }
+      .pain-title {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 10px;
+        margin-bottom: 18px;
+      }
+      .pain-title span {
+        width: 36px;
+        height: 36px;
+        border-radius: 10px;
+        background: #f7f9fc;
+        color: #687587;
+        display: grid;
+        place-items: center;
+      }
+      .pain-title h3 { margin: 0; font-size: 16px; }
+      .pain-main {
+        display: grid;
+        grid-template-columns: 86px minmax(0, 1fr);
+        gap: 14px;
+        align-items: center;
+      }
+      .pain-card img {
+        width: 78px;
+        height: 96px;
+        object-fit: contain;
+      }
+      .pain-score-row {
+        display: grid;
+        grid-template-columns: 52px minmax(80px, 1fr) 54px;
+        gap: 8px;
+        align-items: end;
+      }
+      .pain-score-row .risk-track { margin-top: 0; margin-bottom: 3px; }
+      .pain-score-row b { color: #f0a000; font-size: 13px; text-align: right; }
+      .pain-score-row .score-value { color: #ef3f51; font-weight: 800; }
+      .pain-copy {
+        display: flex;
+        gap: 10px;
+        margin-top: 18px;
+        padding-top: 14px;
+        border-top: 1px dashed #d7dfe8;
+        color: #536176;
+        font-size: 12px;
+        line-height: 1.7;
+      }
+      .spine-page {
+        margin: -16px;
+        padding: 16px 12px 30px;
+        background: #edf6ff;
+      }
+      .spine-page .kuj-hero {
+        min-height: 0;
+        aspect-ratio: 1150 / 1120;
+        border: 0;
+        border-radius: 14px;
+        background: transparent;
+      }
+      .spine-page .kuj-hero img { width: 100%; height: 100%; max-width: none; max-height: none; }
+      .spine-section-title {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        margin: 18px 0 12px;
+        color: #172033;
+        font-size: 19px;
+        font-weight: 800;
+      }
+      .spine-section-title span {
+        display: grid;
+        place-items: center;
+        width: 28px;
+        height: 28px;
+        border-radius: 6px;
+        background: #438ff5;
+        color: #fff;
+        font-size: 15px;
+      }
+      .spine-overview {
+        padding: 24px 16px 20px;
+        border-color: #dfe7ef;
+        border-radius: 14px;
+        box-shadow: 0 2px 8px rgba(53, 85, 120, .04);
+      }
+      .spine-page .score-ring {
+        position: relative;
+        width: 154px;
+        height: 154px;
+        margin: 0 auto;
+        background: repeating-conic-gradient(#dfe5ec 0deg 1deg, transparent 1deg 7deg);
+      }
+      .spine-page .score-ring::before {
+        content: "";
+        position: absolute;
+        inset: 14px;
+        border-radius: 50%;
+        background: conic-gradient(from 210deg, #ff7417 0 58%, #edf1f5 58% 100%);
+      }
+      .spine-page .score-ring > div {
+        position: absolute;
+        inset: 28px;
+        display: grid;
+        place-items: center;
+        border-radius: 50%;
+        background: #fff;
+        text-align: center;
+      }
+      .spine-page .score-ring strong { color: #ff6d11; font-size: 36px; line-height: 1; }
+      .spine-page .score-ring small {
+        display: inline-block;
+        margin-top: 8px;
+        padding: 2px 8px;
+        border-radius: 6px;
+        background: #fff3e8;
+        color: #f08a24;
+        font-size: 12px;
+        font-weight: 700;
+      }
+      .spine-overview-title { margin: 16px 0 0; text-align: center; color: #172033; font-size: 17px; }
+      .spine-overview-note {
+        margin: 16px 0 0;
+        padding: 12px 14px;
+        border-radius: 10px;
+        background: #f7f9fb;
+        color: #69778c;
+        font-size: 12px;
+        line-height: 1.7;
+        text-align: left;
+      }
+      .spine-overview-note > summary {
+        display: flex;
+        align-items: flex-start;
+        gap: 12px;
+        cursor: pointer;
+        list-style: none;
+      }
+      .spine-overview-note > summary::-webkit-details-marker { display: none; }
+      .spine-overview-note > summary > span:first-child { flex: 1; }
+      .score-help {
+        display: grid;
+        flex: none;
+        width: 24px;
+        height: 24px;
+        place-items: center;
+        border: 1px solid #8fc7f6;
+        border-radius: 50%;
+        background: #fff;
+        color: #3588cf;
+        font-size: 13px;
+        font-weight: 800;
+        line-height: 1;
+        box-shadow: 0 2px 5px rgba(53, 136, 207, .12);
+      }
+      .spine-overview-note .score-formula { text-align: left; }
+      .score-formula, .data-note, .pain-rule-body {
+        margin-top: 10px;
+        padding: 10px 12px;
+        border: 1px solid #d9ebff;
+        border-radius: 10px;
+        background: #f3f8ff;
+        color: #486784;
+        font-size: 11px;
+        line-height: 1.75;
+      }
+      .score-formula p, .data-note p, .pain-rule-body p { margin: 3px 0; }
+      .score-formula b, .data-note b, .pain-rule-body b { color: #2f5f8b; }
+      .spine-detail {
+        padding-top: 20px;
+        border-top: 1px solid #edf1f5;
+      }
+      .spine-detail:first-of-type { padding-top: 0; border-top: 0; }
+      .spine-detail + .spine-detail { margin-top: 20px; }
+      .spine-detail > summary { list-style: none; cursor: pointer; }
+      .spine-detail > summary::-webkit-details-marker { display: none; }
+      .spine-detail-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+      .spine-detail-head b { display: flex; align-items: center; gap: 8px; min-width: 0; color: #172033; font-size: 15px; }
+      .spine-detail-head b::before { content: "⌁"; color: #58b9e8; font-size: 22px; font-weight: 400; }
+      .spine-detail .risk-track { grid-template-columns: 6fr 10fr 14fr 30fr; margin-top: 26px; }
+      .spine-track-wrap { position: relative; margin-top: 18px; padding-top: 22px; }
+      .spine-track-wrap .risk-track { margin-top: 0; }
+      .spine-score {
+        position: absolute;
+        top: 0;
+        transform: translateX(-50%);
+        color: #ef5368;
+        font-size: 12px;
+        font-weight: 800;
+        white-space: nowrap;
+      }
+      .spine-track-wrap .risk-marker {
+        position: absolute;
+        top: -4px;
+        width: 3px;
+        height: 16px;
+        transform: translateX(-50%);
+        border-radius: 999px;
+        background: #20283a;
+      }
+      .spine-ticks { position: relative; height: 15px; margin-top: 5px; color: #9aa6b6; font-size: 9px; }
+      .spine-ticks span { position: absolute; transform: translateX(-50%); }
+      .spine-detail-copy { margin-top: 14px; color: #536176; font-size: 12px; line-height: 1.8; }
+      .spine-detail-copy h4 { margin: 0 0 6px; color: #28364b; font-size: 12px; }
+      .spine-detail-copy p { margin: 5px 0; }
+      .spine-detail-copy .non-diagnostic { padding: 9px 10px; border-radius: 8px; background: #f7f9fb; color: #6f7d90; }
+      .spine-toggle { display: flex; justify-content: center; margin-top: 10px; color: #b3bdc9; font-size: 11px; }
+      .spine-detail .open-copy { display: none; }
+      .spine-detail[open] .closed-copy { display: none; }
+      .spine-detail[open] .open-copy { display: inline; }
+      .spine-page .pain-card { padding: 20px 16px; border-color: #dfe7ef; border-radius: 14px; box-shadow: 0 2px 8px rgba(53, 85, 120, .04); }
+      .spine-page .pain-title { gap: 10px; margin-bottom: 18px; }
+      .spine-page .pain-title span { border-radius: 10px; }
+      .spine-page .pain-main { grid-template-columns: 104px minmax(0, 1fr); gap: 12px; }
+      .spine-page .pain-card img { width: 100px; height: 112px; object-fit: contain; }
+      .spine-page .pain-score-row { grid-template-columns: 54px minmax(70px, 1fr) 48px; gap: 7px; }
+      .pain-bar-wrap { position: relative; padding-top: 19px; }
+      .pain-bar-score { position: absolute; top: 0; left: var(--marker); transform: translateX(-50%); color: #172033; font-size: 12px; font-weight: 700; }
+      .pain-risk-track { position: relative; display: grid; grid-template-columns: repeat(3, 1fr); height: 8px; overflow: visible; }
+      .pain-risk-track span:first-child { border-radius: 999px 0 0 999px; background: #24c770; }
+      .pain-risk-track span:nth-child(2) { background: #ffd069; }
+      .pain-risk-track span:nth-child(3) { border-radius: 0 999px 999px 0; background: #f29aaa; }
+      .pain-risk-track i { position: absolute; top: -4px; left: var(--marker); width: 3px; height: 16px; border-radius: 999px; background: #172033; }
+      .spine-page .pain-copy { margin-top: 18px; padding-top: 14px; font-size: 12px; line-height: 1.7; }
+      .pain-rule { margin-top: 14px; padding-top: 10px; border-top: 1px solid #edf1f5; color: #4380b5; font-size: 11px; }
+      .pain-rule summary { display: flex; justify-content: space-between; cursor: pointer; list-style: none; font-weight: 700; }
+      .spine-disclaimer { margin: 24px 16px 0; color: #a5b2c1; font-size: 10px; line-height: 1.8; text-align: center; }
+      .measure-stats {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 12px;
+      }
+      .measure-stat {
+        padding: 18px 8px;
+        text-align: center;
+      }
+      .measure-stat .icon {
+        color: #19aee5;
+        font-size: 25px;
+      }
+      .measure-stat b {
+        display: block;
+        margin-top: 8px;
+        color: #334155;
+      }
+      .measure-card {
+        min-height: 100px;
+        padding: 14px;
+        position: relative;
+        overflow: hidden;
+      }
+      .measure-card::before {
+        content: "";
+        position: absolute;
+        top: 15px;
+        left: 14px;
+        width: 7px;
+        height: 7px;
+        border-radius: 50%;
+        background: #22b8e8;
+      }
+      .measure-card strong {
+        display: block;
+        padding-left: 10px;
+        color: #1e293b;
+        font-size: 27px;
+        line-height: 1;
+      }
+      .measure-card span {
+        display: block;
+        margin-top: 8px;
+        padding-left: 10px;
+        color: #64748b;
+        font-size: 13px;
+      }
+      .measure-card img {
+        position: absolute;
+        right: 8px;
+        bottom: 4px;
+        width: 66px;
+        opacity: .5;
+      }
+      .composition-overview {
+        position: relative;
+        padding: 20px;
+        overflow: hidden;
+      }
+      .weight-value { margin-top: 4px; color: #111a2e; font-size: 54px; line-height: 1; font-weight: 800; }
+      .weight-value small { margin-left: 5px; color: #75849a; font-size: 15px; }
+      .weight-stamp {
+        position: absolute;
+        top: 24px;
+        right: 24px;
+        width: 116px;
+        height: 116px;
+        border: 2px solid #35c4e9;
+        border-radius: 50%;
+        color: #12afe0;
+        font-size: 18px;
+        font-weight: 800;
+        display: grid;
+        place-items: center;
+        transform: rotate(-12deg);
+        box-shadow: inset 0 0 0 7px #fff, inset 0 0 0 8px #35c4e9;
+      }
+      .composition-summary { display: grid; grid-template-columns: 105px 1fr; gap: 14px; margin-top: 28px; }
+      .summary-mini { border-radius: 12px; background: #eff9ff; padding: 12px; margin-bottom: 10px; }
+      .summary-mini b { display: block; color: #172033; font-size: 24px; margin: 3px 0; }
+      .summary-list { border: 1px solid #e7edf3; border-radius: 12px; overflow: hidden; }
+      .summary-list div { display: flex; justify-content: space-between; padding: 9px 11px; border-bottom: 1px solid #edf2f7; font-size: 12px; color: #718097; }
+      .summary-list div:last-child { border-bottom: 0; }
+      .composition-card { padding: 16px; }
+      .composition-head,
+      .composition-row { display: grid; grid-template-columns: 70px minmax(0, 1fr) 68px; gap: 8px; align-items: center; }
+      .composition-head { color: #91a0b2; font-size: 11px; }
+      .range-head { display: grid; grid-template-columns: repeat(3, 1fr); overflow: hidden; border-radius: 5px; text-align: center; }
+      .range-head span { padding: 5px 1px; }
+      .range-head span:nth-child(1) { color: #159bd0; background: #dff4ff; }
+      .range-head span:nth-child(2) { color: #29ad69; background: #dcf8e8; }
+      .range-head span:nth-child(3) { color: #eb6575; background: #ffe3e7; }
+      .composition-row { padding: 13px 0; border-bottom: 1px solid #edf2f7; }
+      .composition-row b { display: block; color: #354158; font-size: 13px; }
+      .composition-row small { color: #8d9aae; }
+      .composition-range { text-align: right; color: #718097; font-size: 11px; }
+      .composition-track { position: relative; height: 8px; overflow: hidden; border-radius: 99px; background: linear-gradient(90deg,#d9f2ff 0 33%,#d9f7e5 33% 66%,#ffe2e6 66% 100%); }
+      .composition-track i { position: absolute; inset: 0 auto 0 0; border-radius: 99px; background: #18abe0; }
+      .definition-row { display: flex; justify-content: space-between; padding-top: 13px; color: #718097; font-size: 12px; }
+      .ai-card {
+        overflow: hidden;
+      }
+      .ai-card-head {
+        padding: 9px 12px;
+        color: #fff;
+        font-size: 13px;
+        font-weight: 700;
+        background: linear-gradient(90deg, #20c8c2, #2f80ed);
+      }
+      .ai-card-value {
+        margin: 12px;
+        border-radius: 10px;
+        background: #f8fafc;
+        padding: 14px 8px;
+        text-align: center;
+        color: #334155;
+        font-weight: 800;
+      }
+      .bed-slider {
+        padding: 18px;
+      }
+      .slider-row {
+        display: grid;
+        grid-template-columns: 24px 1fr 34px;
+        gap: 10px;
+        align-items: center;
+        margin-top: 18px;
+      }
+      .slider-track {
+        position: relative;
+        height: 8px;
+        border-radius: 999px;
+        background: linear-gradient(90deg, #93c5fd, #86efac, #fecaca);
+      }
+      .slider-dot {
+        position: absolute;
+        top: -13px;
+        transform: translateX(-50%);
+        text-align: center;
+        color: #059669;
+        font-size: 13px;
+        font-weight: 800;
+      }
+      .slider-dot::after {
+        content: "";
+        display: block;
+        width: 14px;
+        height: 14px;
+        margin: 1px auto 0;
+        border: 3px solid #0ea5e9;
+        border-radius: 50%;
+        background: #fff;
+      }
+      .zone-table {
+        display: grid;
+        grid-template-columns: 64px repeat(7, 1fr);
+        overflow: hidden;
+        border: 1px solid #edf2f7;
+        border-radius: 14px;
+        font-size: 11px;
+        color: #64748b;
+      }
+      .zone-table div {
+        min-height: 36px;
+        display: grid;
+        place-items: center;
+        border-left: 1px solid #edf2f7;
+        border-top: 1px solid #edf2f7;
+      }
+      .zone-table div:nth-child(-n+8) {
+        border-top: 0;
+        background: #f8fafc;
+      }
+      .bar-cell span {
+        align-self: end;
+        width: 13px;
+        border-radius: 9px 9px 0 0;
+        background: linear-gradient(180deg, #7dd3fc, #0ea5e9);
+      }
+      .icon-btn { width:32px;height:32px;border:1px solid #bae6fd;border-radius:50%;background:#f0f9ff;color:#0284c7;cursor:pointer; }
+      .pressure-stack { display:grid;gap:12px; }
+      .pressure-photo { overflow:hidden; }
+      .pressure-title { display:flex;align-items:center;gap:8px;padding:10px 12px;color:#1e293b;font-size:14px;font-weight:700; }
+      .pressure-title::before { content:"";width:8px;height:8px;border-radius:50%;background:#0ea5e9; }
+      .pressure-media { position:relative;aspect-ratio:720/361;background:#000;overflow:hidden; }
+      .pressure-media img { display:block;width:100%;height:100%;object-fit:cover; }
+      .pressure-media span { position:absolute;left:8px;top:8px;border-radius:6px;background:rgba(0,0,0,.55);backdrop-filter:blur(4px);padding:4px 8px;color:#fff;font-size:11px;font-weight:600; }
+      .pressure-photo p { margin:0;padding:10px 12px;color:#64748b;font-size:11px; }
+      .pressure-bars i { display:block;width:14px;margin:auto;background:linear-gradient(#fb923c,#14b8a6);border-radius:6px 6px 0 0; }
+      .zone-stepper { display:grid;grid-template-columns:28px 1fr 28px;gap:4px;align-items:center;margin-top:8px; }
+      .zone-stepper button { width:28px;height:28px;border:0;border-radius:50%;background:#e0f2fe;color:#0284c7; }
+      .zone-stepper input { min-width:0;width:100%;padding:5px 2px;border:1px solid #bae6fd;border-radius:8px;text-align:center;font-weight:700; }
+      .stars { display:flex;align-items:center;gap:3px;margin-top:10px; }.stars button { border:0;background:transparent;color:#e5e7eb;font-size:30px;padding:0;cursor:pointer; }.stars button.active { color:#f5b400; }.stars span { margin-left:6px;color:#475569; }
+      .action-message { min-height:18px;margin-top:8px;text-align:center;color:#059669;font-size:12px; }
+      .trade-row select,.trade-row input { width:100%;min-width:0;border:0;background:transparent;font-size:10px; }.qty { display:flex;justify-content:center;gap:4px; }.qty button { border:0;background:transparent; }
+    </style>
+  </head>
+  <body>
+    <main class="page">
+      <header class="hero" data-banner-src="" data-qr-src="">
+        <div class="eyebrow">MERCURY SLEEP</div>
+        <h1>水星睡眠科技AI智配系统</h1>
+        <p>基于本次测量数据生成的睡眠承托分析报告</p>
+      </header>
+
+      <div class="content">
+        <div class="panel profile">
+          <div class="profile-head">
+            <div>
+              <div class="muted">检测用户</div>
+              <div class="name">郭英俊</div>
+            </div>
+            <div style="display:flex;align-items:center;gap:8px"><button id="privacyToggle" class="icon-btn" aria-label="显示用户数据">◉</button><div class="tag">设备报告</div></div>
+          </div>
+          <div class="stats">
+            <div class="stat"><span class="muted">身高</span><b data-private="161.0cm">***</b></div>
+            <div class="stat"><span class="muted">体重</span><b data-private="51.2kg">***</b></div>
+            <div class="stat"><span class="muted">年龄</span><b data-private="31岁">***</b></div>
+            <div class="stat"><span class="muted">BMI</span><b data-private="19.8">***</b></div>
+          </div>
+        </div>
+      </div>
+
+      <nav class="tabs">
+        <button class="active" data-tab="AI推荐">AI推荐</button>
+        <button data-tab="脊柱评估">脊柱评估</button>
+        <button data-tab="身体成分">身体成分</button>
+        <button data-tab="体围测量">体围测量</button>
+        <button class="sales-tab" data-tab="导购操作">导购操作</button>
+      </nav>
+
+      <div class="content tab-panel active" data-panel="AI推荐">
+        <section>
+          <h2>问卷信息</h2>
+          <div class="grid-2">
+            <div class="info"><span class="muted">主睡姿</span><b>俯卧</b></div>
+            <div class="info"><span class="muted">床垫硬度</span><b>中等</b></div>
+            <div class="info"><span class="muted">颈椎曲度</span><b>颈椎曲度变直</b></div>
+            <div class="info"><span class="muted">睡眠问题</span><b>颈肩酸痛</b></div>
+          </div>
+        </section>
+
+        <section>
+          <div class="section-heading"><h2>肩颈尺寸测量</h2></div>
+          <div class="grid-2">
+            <div class="panel image-box"><div class="muted">正面</div><img src="src/assets/neck-front.png" alt="正面肩颈尺寸测量" /></div>
+            <div class="panel image-box"><div class="muted">侧面</div><img src="src/assets/neck-side.png" alt="侧面肩颈尺寸测量" /></div>
+          </div>
+          <div class="grid-2 stack-top">
+            <div class="metric"><div class="metric-head"><span class="metric-code">L1</span><span class="metric-title">耳宽</span><span class="metric-value">17.5 cm</span></div><p>两侧耳廓最外侧水平距离</p><details class="metric-guide"><summary>如何解读</summary><div class="guide-note pillow"><b>枕头适配关系：</b>辅助确定侧睡时耳部接触区与头侧区宽度，不直接决定枕高。</div><div class="guide-note talk"><b>导购话术：</b>这个尺寸主要帮助调整头侧区域的接触空间，最终以耳部没有明显压迫为准。</div></details></div>
+            <div class="metric"><div class="metric-head"><span class="metric-code">L2</span><span class="metric-title">颈宽</span><span class="metric-value">16.6 cm</span></div><p>颈部最宽处的水平横向距离</p><details class="metric-guide"><summary>如何解读</summary><div class="guide-note pillow"><b>枕头适配关系：</b>用于确定颈托区宽度和受力面积，避免颈托过窄或延伸到肩部。</div><div class="guide-note talk"><b>导购话术：</b>颈托需要覆盖颈部但不能顶到肩部，宽度合适后受力会更均匀。</div></details></div>
+            <div class="metric"><div class="metric-head"><span class="metric-code">L3</span><span class="metric-title">肩宽</span><span class="metric-value">40.2 cm</span></div><p>左右肩峰点间水平直线距离</p><details class="metric-guide"><summary>如何解读</summary><div class="guide-note pillow"><b>枕头关系：</b>是侧睡头肩间隙的重要参考；肩部越宽，侧睡区通常需要更高的有效承托。</div><div class="guide-note mattress"><b>床垫关系：</b>床垫越软、肩部下沉越多，实际所需侧睡枕高可能越低。</div><div class="guide-note talk"><b>导购话术：</b>肩宽不能直接换算枕高，还要看肩膀在床垫上的实际下沉量。</div></details></div>
+            <div class="metric"><div class="metric-head"><span class="metric-code">L4</span><span class="metric-title">头背距</span><span class="metric-value">8.2 cm</span></div><p>背部后缘至后脑最突出点</p><details class="metric-guide"><summary>如何解读</summary><div class="guide-note pillow"><b>枕头关系：</b>用于判断仰睡头窝深度，以及后脑与颈托之间的高度差。</div><div class="guide-note mattress"><b>床垫关系：</b>上背部下沉会改变实际头背高度差，需要试躺修正。</div><div class="guide-note talk"><b>导购话术：</b>这个值帮助判断头窝要多深，目标是后脑稳定落入头窝且下巴不过度内收。</div></details></div>
+            <div class="metric"><div class="metric-head"><span class="metric-code">L5</span><span class="metric-title">颈深</span><span class="metric-value">9.6 cm</span></div><p>背部后缘至第七颈椎点距离</p><details class="metric-guide"><summary>如何解读</summary><div class="guide-note pillow"><b>枕头关系：</b>影响颈托凸起高度和承托曲面深度，不等于整枕高度。</div><div class="guide-note mattress"><b>床垫关系：</b>与床垫关系较弱，主要用于枕头颈托轮廓。</div><div class="guide-note talk"><b>导购话术：</b>颈深决定颈托曲面怎么贴合，不应把这个数字直接当作推荐枕高。</div></details></div>
+            <div class="metric"><div class="metric-head"><span class="metric-code">L6</span><span class="metric-title">背深</span><span class="metric-value">11.8 cm</span></div><p>背部后缘至肩峰点水平距离</p><details class="metric-guide"><summary>如何解读</summary><div class="guide-note pillow"><b>枕头关系：</b>辅助判断肩背到头颈的过渡，以及枕头肩部避让区域。</div><div class="guide-note mattress"><b>床垫关系：</b>肩背下沉会改变过渡关系，应结合床垫承托表现观察。</div><div class="guide-note talk"><b>导购话术：</b>主要看肩背能否自然贴合，避免枕头边缘顶住肩部。</div></details></div>
+            <div class="metric"><div class="metric-head"><span class="metric-code">H1</span><span class="metric-title">头颈高</span><span class="metric-value">16.4 cm</span></div><p>头顶至第七颈椎点垂直高度</p><details class="metric-guide"><summary>如何解读</summary><div class="guide-note pillow"><b>枕头关系：</b>用于定位头区和颈托区的纵向尺寸，不能单独换算为枕高。</div><div class="guide-note mattress"><b>床垫关系：</b>与床垫软硬度无直接关系。</div><div class="guide-note talk"><b>导购话术：</b>这个值用于确定枕头分区位置，而不是告诉用户枕头必须有多高。</div></details></div>
+            <div class="metric"><div class="metric-head"><span class="metric-code">H2</span><span class="metric-title">头背高</span><span class="metric-value">29.3 cm</span></div><p>头顶至肩峰点垂直高度</p><details class="metric-guide"><summary>如何解读</summary><div class="guide-note pillow"><b>枕头关系：</b>辅助判断头、颈、肩整体比例及分区位置。</div><div class="guide-note mattress"><b>床垫关系：</b>需要结合肩背在床垫上的实际下沉量使用。</div><div class="guide-note talk"><b>导购话术：</b>它帮助确认头颈肩整体比例，最终仍要通过常用睡姿试躺确认。</div></details></div>
+          </div>
+        </section>
+
+        <section>
+          <h2>通用 7 分区推荐高度</h2>
+          <div class="panel panel-pad">
+            <div class="universal-zone-map">
+              <div class="uz uz-z7"><b>Z7</b><span>10.4cm</span></div>
+              <div class="uz uz-z3"><b>Z3</b><span>5.0cm</span></div>
+              <div class="uz uz-z5"><b>Z5</b><span>10.4cm</span></div>
+              <div class="uz uz-z6"><b>Z6</b><span>14.5cm</span></div>
+              <div class="uz uz-z2"><b>Z2</b><span>4.4cm</span></div>
+              <div class="uz uz-z1"><b>Z1</b><span>10.4cm</span></div>
+              <div class="uz uz-z4"><b>Z4</b><span>15.5cm</span></div>
+            </div>
+          </div>
+        </section>
+
+        <section>
+          <div class="section-heading"><h2>颈脊健康分析</h2></div>
+          <div class="analysis-source">基于单项体态测量，用于解释当前姿态表现，不代表脊柱综合评分。</div>
+          <div class="panel health-card">
+            <div class="insight-head"><h3>头颈姿态</h3><span class="level level-1">轻度异常</span></div>
+            <div class="grid-2">
+              <div class="mini"><img src="src/assets/spine/neck-forward.png" /><div class="mini-body">颈椎前伸<b><span class="signal-state light">前伸</span><span>6.2cm</span></b></div></div>
+              <div class="mini"><img src="src/assets/spine/neck-tilt.png" /><div class="mini-body">颈椎侧偏<b><span class="signal-state light">偏右</span><span>4.9°</span></b></div></div>
+            </div>
+            <div class="insight-copy"><p><b>评估说明：</b>本次测量显示头部相对躯干有前移并向右偏的表现，可能与长时间低头、习惯性单侧转头或本次检测站姿有关。</p><p><b class="notice-label">日常注意：</b>减少持续低头，将屏幕调整至视线前方；睡眠时以颈部有承托、下巴不过度上扬或内收为准。</p></div>
+          </div>
+          <div class="panel health-card">
+            <div class="insight-head"><h3>肩背姿态</h3><span class="level level-3">重度异常</span></div>
+            <div class="grid-2">
+              <div class="mini"><img src="src/assets/spine/shoulder-right.png" /><div class="mini-body">右肩内收度<b><span class="signal-state severe">圆肩倾向</span><span>0.3cm</span></b></div></div>
+              <div class="mini"><img src="src/assets/spine/shoulder-left.png" /><div class="mini-body">左肩内收度<b><span class="signal-state normal">正常</span><span>-1.6cm</span></b></div></div>
+            </div>
+            <div class="insight-copy"><p><b>评估说明：</b>右肩存在轻微前移倾向，左右肩背姿态不完全一致，可能与含胸、伏案、单侧用肩或检测时肩部未完全放松有关。</p><p><b class="notice-label">日常注意：</b>减少长时间含胸和单侧负重，试躺时观察两侧肩部是否自然放松。</p></div>
+          </div>
+          <div class="panel health-card">
+            <div class="insight-head"><h3>躯干平衡</h3><span class="level level-3">重度异常</span></div>
+            <div class="grid-2">
+              <div class="mini"><img src="src/assets/spine/shoulder-balance.png" /><div class="mini-body">肩部平衡<b><span class="signal-state severe">左高右低</span><span>5.1°</span></b></div></div>
+              <div class="mini"><img src="src/assets/spine/pelvis-forward.png" /><div class="mini-body">骨盆位置<b><span class="signal-state severe">前移</span><span>5.4cm</span></b></div></div>
+            </div>
+            <div class="insight-copy"><p><b>评估说明：</b>肩部水平和骨盆位置存在一定偏移，可能与久坐、站姿重心习惯或本次测量状态有关。</p><p><b class="notice-label">日常注意：</b>保持坐姿、站姿重心均衡，避免依据单项结果直接判断腰椎问题。</p></div>
+          </div>
+          <p class="grade-explanation">体态表现可能受到穿着、站姿和检测状态影响；相关因素为健康管理参考，不代表确定原因。</p>
+        </section>
+
+        <section>
+          <h2>压力分布</h2>
+          <div class="pressure-stack">
+            <div class="panel pressure-photo"><div class="pressure-title">仰睡</div><div class="pressure-media"><img src="src/assets/mercury-pressure-supine.png" alt="仰睡压力分布"></div><p>压力集中于肩背与臀部，需增强头颈承托</p></div>
+            <div class="panel pressure-photo"><div class="pressure-title">左侧睡</div><div class="pressure-media"><img src="src/assets/mercury-pressure-left.png" alt="左侧睡压力分布"></div><p>侧卧肩颈压力较高，建议分区缓冲</p></div>
+            <div class="panel pressure-photo"><div class="pressure-title">右侧睡</div><div class="pressure-media"><img src="src/assets/mercury-pressure-right.png" alt="右侧睡压力分布"></div><p>右侧支撑相对均衡，保留腰臀贴合</p></div>
+          </div>
+        </section>
+
+        <section>
+          <h2>最优压力平衡分析</h2>
+          <div class="panel table-wrap">
+            <div class="table-title">正躺最佳平衡比</div>
+            <canvas id="balanceChartSupine" width="760" height="300" style="width:100%;height:220px;background:#fff"></canvas>
+            <table>
+              <tr><th>分区</th><th>头部</th><th>颈部</th><th>肩背</th><th>腰部</th><th>臀部</th><th>大腿</th><th>小腿</th><th>足部</th></tr>
+              <tr class="pressure-bars"><td>压力分布</td><td><i style="height:8px"></i></td><td><i style="height:24px"></i></td><td><i style="height:39px"></i></td><td><i style="height:12px"></i></td><td><i style="height:44px"></i></td><td><i style="height:5px"></i></td><td><i style="height:18px"></i></td><td><i style="height:6px"></i></td></tr>
+              <tr><td>分布占比</td><td>5</td><td>16</td><td>26</td><td>8</td><td>29</td><td>3</td><td>12</td><td>4</td></tr>
+            </table>
+          </div>
+          <div class="panel table-wrap stack-top">
+            <div class="table-title">侧躺最佳平衡比</div>
+            <canvas id="balanceChartSide" width="760" height="300" style="width:100%;height:220px;background:#fff"></canvas>
+            <table>
+              <tr><th>分区</th><th>头部</th><th>颈部</th><th>肩背</th><th>腰部</th><th>臀部</th><th>大腿</th><th>小腿</th><th>足部</th></tr>
+              <tr class="pressure-bars"><td>压力分布</td><td><i style="height:20px"></i></td><td><i style="height:35px"></i></td><td><i style="height:24px"></i></td><td><i style="height:11px"></i></td><td><i style="height:30px"></i></td><td><i style="height:35px"></i></td><td><i style="height:4px"></i></td><td><i style="height:3px"></i></td></tr>
+              <tr><td>分布占比</td><td>13</td><td>23</td><td>16</td><td>7</td><td>20</td><td>23</td><td>2</td><td>1</td></tr>
+            </table>
+          </div>
+        </section>
+
+      </div>
+
+      <div class="content tab-panel" data-panel="导购操作">
+
+        <section>
+          <h2>产品选择与型号匹配</h2>
+          <div class="panel panel-pad">
+            <div class="generation-toggle product-type-actions"><button data-type="一代枕" class="active">一代枕</button><button data-type="二代枕">二代枕</button></div>
+            <div id="generationOneSelection">
+              <div class="note" style="background:#ecfdf5;color:#047857"><b>推荐型号：4号枕</b><br />与通用七分区推荐高度的平均差异最小，可作为试躺起始型号。</div>
+              <div class="actions model-actions"><button data-model="1号枕">1号枕</button><button data-model="2号枕">2号枕</button><button data-model="3号枕">3号枕</button><button data-model="4号枕" class="active">4号枕</button></div>
+              <div class="grid-2 stack-top"><div class="info"><span class="muted">当前型号</span><b id="selectedModelLabel">4号枕</b></div><div class="info"><span class="muted">平均高度差</span><b id="selectedModelDiff">1.1cm</b></div></div>
+            </div>
+            <div id="generationTwoSelection" class="note" style="display:none;background:#f0f9ff;color:#0369a1"><b>二代定制枕</b><br />二代仅一款产品，直接根据通用推荐高度调节十一分区。</div>
+          </div>
+        </section>
+
+        <section>
+          <h2>分区调节</h2>
+          <div class="panel" style="overflow:hidden">
+            <div id="pillowStage" class="pillow-stage">
+              <img id="pillowStageImage" src="src/assets/mercury-pillow-gen1-clean.png" alt="一代枕分区调节" />
+              <div id="pillowHotspots"></div>
+            </div>
+            <div id="pillowTooltip" class="pillow-tooltip"><b>下头窝区</b><span>4.7cm</span></div>
+            <div class="selected-zone-panel">
+              <div class="selected-zone-head"><div><h3 id="selectedZoneTitle">3区 · 下头窝区</h3><p id="selectedZoneSource">映射来源：Z2</p></div><span id="selectedZoneWeight" class="chip">PDF重量 50g</span></div>
+              <div class="zone-stats"><div class="zone-stat"><span>原始高度</span><b id="originalZoneHeight">4.7cm</b></div><div class="zone-stat recommended"><span>推荐高度</span><b id="recommendedZoneHeight">4.4cm</b></div><div class="zone-stat current"><span>当前高度</span><b id="currentZoneHeight">4.7cm</b></div></div>
+              <div class="selected-stepper"><button id="selectedZoneMinus" type="button" aria-label="降低当前分区高度">−</button><label><input id="selectedZoneInput" type="number" min="0" max="20" step="0.1" value="4.7" aria-label="当前分区高度" /><span>cm</span></label><button id="selectedZonePlus" type="button" aria-label="提高当前分区高度">+</button></div>
+              <div class="grid-2 stack-top-lg"><button id="resetZones" class="btn">重置原始高度</button><button id="saveZones" class="btn primary">保存设置</button></div>
+              <div id="zoneMessage" class="action-message"></div>
+            </div>
+          </div>
+        </section>
+
+        <section>
+          <h2>通用分区映射规则</h2>
+          <div class="panel table-wrap">
+            <details class="mapping-details">
+              <summary>查看固定映射关系 <span>展开查看</span></summary>
+              <table class="wide-table">
+                <tr><th>通用分区</th><th>说明</th><th>一代映射</th><th>二代映射</th></tr>
+                <tr><td>Z2 头窝区</td><td>头部上方凹陷支撑</td><td>3区</td><td>2区</td></tr>
+                <tr><td>Z1 仰睡区1</td><td>仰睡颈部核心支撑</td><td>1区、2区</td><td>1区</td></tr>
+                <tr><td>Z3 仰睡区2</td><td>仰睡颈部核心支撑</td><td>4区</td><td>3区</td></tr>
+                <tr><td>Z4 左侧睡区1</td><td>左侧睡肩颈支撑</td><td>5区</td><td>4、8区</td></tr>
+                <tr><td>Z5 左侧睡区2</td><td>左侧睡肩颈支撑</td><td>7区</td><td>5、9区</td></tr>
+                <tr><td>Z6 右侧睡区1</td><td>右侧睡肩颈支撑</td><td>6区</td><td>6、10区</td></tr>
+                <tr><td>Z7 右侧睡区2</td><td>右侧睡肩颈支撑</td><td>8区</td><td>7、11区</td></tr>
+              </table>
+            </details>
+          </div>
+        </section>
+
+        <section>
+          <h2>臻享定制枕 · 定制方案预览</h2>
+          <div class="panel table-wrap">
+            <div id="previewModel" class="table-title">当前方案：一代枕 · 4号枕</div>
+            <p class="muted" style="padding:8px 12px;margin:0;border-bottom:1px solid #eef2f7;font-size:11px">分区高度随调节结果同步，确认试躺满意后保存方案。</p>
+            <table class="wide-table"><thead><tr><th>分区</th><th>映射来源</th><th>PDF重量(g)</th><th>当前高度(cm)</th></tr></thead><tbody id="previewRows"></tbody></table>
+          </div>
+        </section>
+
+        <section>
+          <h2>选枕建议</h2>
+          <div class="grid-2"><div class="info"><span class="muted">建议枕高</span><b>偏低</b></div><div class="info"><span class="muted">头窝设计</span><b>浅头窝</b></div><div class="info"><span class="muted">颈托方式</span><b>柔和承托</b></div><div class="info"><span class="muted">适配睡姿</span><b>俯卧 / 混合睡</b></div></div>
+        </section>
+
+        <section>
+          <div class="section-heading"><h2>床垫搭配参考</h2></div>
+          <div class="grid-2"><div class="info"><span class="muted">参考软硬度</span><b>中等（5-6级）</b></div><div class="info"><span class="muted">肩部下沉</span><b>适度</b></div><div class="info"><span class="muted">关键支撑区</span><b>腰部 / 骨盆</b></div><div class="info"><span class="muted">搭配原则</span><b>先确认下沉，再微调枕高</b></div></div>
+          <div class="note">床垫下沉情况用于修正实际枕高，不作为独立的床垫销售结论。</div>
+        </section>
+
+        <section id="salesGuide">
+          <div class="section-heading"><h2>导购解读</h2></div>
+          <details class="panel panel-pad guide-group"><summary>肩颈尺寸解读 <span>展开查看</span></summary><div id="salesMetricGuides" class="sales-metric-list"></div></details>
+          <details class="panel panel-pad stack-top guide-group"><summary>颈脊结果解读 <span>展开查看</span></summary><div class="sales-metric-list"><details class="sales-metric"><summary><b>颈椎</b><span class="level level-3">重度异常</span></summary><div class="guide-note pillow"><b>评估结果：</b>结合头前倾、头部侧偏及躯干对齐等测量结果，本次评估处于重度异常区间，提示头颈前后位置及左右平衡与参考范围偏离较多。</div><div class="guide-note"><b>日常建议：</b>减少长时间低头和单侧转头，保持屏幕与视线平齐；持续不适时咨询专业人员。</div><div class="guide-note talk"><b>选枕引导方向：</b>优先确认颈托区与后脑区域贴合，再调整分区高度。</div></details><details class="sales-metric"><summary><b>胸椎</b><span class="level level-2">中度异常</span></summary><div class="guide-note pillow"><b>评估结果：</b>结合左右肩部高度和躯干前后方向的位置表现，本次评估处于中度异常区间，提示肩背左右平衡及躯干位置与参考范围存在一定偏离。</div><div class="guide-note"><b>日常建议：</b>注意双肩放松和左右用力均衡，减少长时间含胸、伏案或单侧负重。</div><div class="guide-note talk"><b>选枕引导方向：</b>试躺时观察肩背两侧受力是否均衡。</div></details><details class="sales-metric"><summary><b>腰椎</b><span class="level level-1">轻度异常</span></summary><div class="guide-note pillow"><b>评估结果：</b>结合双腿姿态、膝关节角度及躯干前后和左右方向的位置表现，本次评估处于轻度异常区间，提示腰部整体平衡与参考范围存在轻微偏离。</div><div class="guide-note"><b>日常建议：</b>减少久坐，保持坐姿、站姿重心均衡，并适当活动腰背。</div><div class="guide-note talk"><b>选枕引导方向：</b>以头颈舒适和脊柱自然延伸为准。</div></details><p class="note">导购话术：脊柱结构评分是多项体态数据综合判断，不是单个角度或距离直接换算；结合用户实际感受进行解读，不直接作为疾病判断。</p></div></details>
+        </section>
+
+        <section>
+          <h2>方案确认与成交</h2>
+          <div class="panel panel-pad"><h3>型号选择</h3><p id="modelCopy" class="muted">一代枕需在4个型号中匹配最接近推荐高度的款式。</p><div id="businessModelActions" class="actions"></div></div>
+          <div class="panel panel-pad stack-top"><div><h3>舒适度评分</h3><p class="muted">请根据用户试躺反馈选择1-5星。</p><div id="starRating" class="stars"><button data-score="1">★</button><button data-score="2">★</button><button data-score="3">★</button><button data-score="4">★</button><button data-score="5">★</button><span>5分</span></div></div><div class="grid-2 stack-top-lg"><button id="continueAdjust" class="btn">返回分区调节</button><button id="confirmChoice" class="btn primary">确认试躺方案</button></div></div>
+          <div class="panel panel-pad stack-top"><h3 class="section-h3">成交信息</h3><div class="trade-head"><div>序号</div><div>枕头型号</div><div>成交数量</div><div>成交日期</div></div><div id="tradeRows"><div class="trade-row"><div>1</div><select></select><div class="qty"><button>-</button><b>1</b><button>+</button></div><input type="date" /></div></div><div class="grid-2 stack-top-lg"><button id="addTrade" class="btn">添加商品</button><button id="saveTrade" class="btn primary">保存成交信息</button></div><div id="businessMessage" class="action-message"></div></div>
+        </section>
+      </div>
+
+      <div class="content tab-panel" data-panel="脊柱评估">
+        <div class="spine-page">
+          <div class="kuj-hero"><img src="src/assets/spine/spine-hero-reference.png" alt="脊柱结构可视化" /></div>
+          <section><div class="warn-box"><span class="warn-icon">!</span><span>由于您穿着衣物，本次测量仅作为参考使用。</span></div></section>
+          <section>
+            <div class="spine-section-title"><span>⌁</span>脊柱结构异常评估</div>
+            <div class="analysis-source spine-source">基于脊柱综合评分模型，与AI推荐页的单项体态分析采用不同计算规则。</div>
+            <div class="white-card spine-overview">
+              <div class="score-ring"><div><div><strong>26</strong><span>分</span><br /><small>中度异常</small></div></div></div>
+              <h3 class="spine-overview-title">脊柱结构异常评估</h3>
+              <details class="spine-overview-note">
+                <summary><span>本次脊柱结构综合评分为26分，处于中度异常区间。评分由颈椎、胸椎和腰椎三部分测量结果综合得出，用于反映本次测量中身体姿态与参考范围的偏离程度。</span><span class="score-help" aria-label="查看综合评分计算规则">?</span></summary>
+                <div class="score-formula"><p><b>综合评分 = 颈椎评分×35% + 胸椎评分×25% + 腰椎评分×40%</b></p><p>该评分用于健康管理和姿态参考，不作为医学诊断。</p></div>
+              </details>
+              <div style="margin-top:20px">
+                <details class="spine-detail" open>
+                  <summary><div class="spine-detail-head"><b>颈椎结构评估</b><span class="level level-3">重度异常</span></div><div class="spine-track-wrap"><span class="spine-score" style="left:90%">54分</span><div class="risk-track"><span></span><span></span><span></span><span></span><i class="risk-marker" style="left:90%"></i></div><div class="spine-ticks"><span style="left:0">0</span><span style="left:10%">6</span><span style="left:26.67%">16</span><span style="left:50%">30</span><span style="left:100%">60</span></div></div><div class="spine-toggle"><span class="closed-copy">展开详情⌄</span><span class="open-copy">收起⌃</span></div></summary>
+                  <div class="spine-detail-copy"><p><b>评估结果：</b>结合头前倾、头部侧偏及躯干对齐等测量结果，本次评估处于重度异常区间，提示头颈前后位置及左右平衡与参考范围偏离较多。</p><p><b>日常建议：</b>日常注意减少长时间低头和单侧转头，保持屏幕与视线平齐；如持续出现颈肩疼痛或活动不适，建议咨询专业人员。</p><p class="non-diagnostic">本结果基于脊柱综合评分模型，用于健康管理参考，不作为疾病诊断；如持续不适，请咨询专业人员。</p></div>
+                </details>
+                <details class="spine-detail">
+                  <summary><div class="spine-detail-head"><b>胸椎结构评估</b><span class="level level-2">中度异常</span></div><div class="spine-track-wrap"><span class="spine-score" style="left:31.67%">19分</span><div class="risk-track"><span></span><span></span><span></span><span></span><i class="risk-marker" style="left:31.67%"></i></div><div class="spine-ticks"><span style="left:0">0</span><span style="left:10%">6</span><span style="left:26.67%">16</span><span style="left:50%">30</span><span style="left:100%">60</span></div></div><div class="spine-toggle"><span class="closed-copy">展开详情⌄</span><span class="open-copy">收起⌃</span></div></summary>
+                  <div class="spine-detail-copy"><p><b>评估结果：</b>结合左右肩部高度和躯干前后方向的位置表现，本次评估处于中度异常区间，提示肩背左右平衡及躯干位置与参考范围存在一定偏离。</p><p><b>日常建议：</b>日常注意双肩放松和左右用力均衡，减少长时间含胸、伏案或单侧负重；建议在相同测量条件下复测观察。</p><p class="non-diagnostic">本结果基于脊柱综合评分模型，用于健康管理参考，不作为疾病诊断；如持续不适，请咨询专业人员。</p></div>
+                </details>
+                <details class="spine-detail">
+                  <summary><div class="spine-detail-head"><b>腰椎结构评估</b><span class="level level-1">轻度异常</span></div><div class="spine-track-wrap"><span class="spine-score" style="left:11.67%">7分</span><div class="risk-track"><span></span><span></span><span></span><span></span><i class="risk-marker" style="left:11.67%"></i></div><div class="spine-ticks"><span style="left:0">0</span><span style="left:10%">6</span><span style="left:26.67%">16</span><span style="left:50%">30</span><span style="left:100%">60</span></div></div><div class="spine-toggle"><span class="closed-copy">展开详情⌄</span><span class="open-copy">收起⌃</span></div></summary>
+                  <div class="spine-detail-copy"><p><b>评估结果：</b>结合双腿姿态、膝关节角度及躯干前后和左右方向的位置表现，本次评估处于轻度异常区间，提示腰部整体平衡与参考范围存在轻微偏离。</p><p><b>日常建议：</b>日常注意减少久坐，保持坐姿、站姿重心均衡，并适当活动腰背；如有持续不适，建议咨询专业人员。</p><p class="non-diagnostic">本结果基于脊柱综合评分模型，用于健康管理参考，不作为疾病诊断；如持续不适，请咨询专业人员。</p></div>
+                </details>
+              </div>
+            </div>
+          </section>
+          <section>
+            <div class="spine-section-title"><span>ϟ</span>疼痛潜在风险评估</div>
+            <div class="white-card pain-card">
+              <div class="pain-title"><span>⌁</span><h3>颈椎疼痛潜在风险评分</h3></div>
+              <div class="pain-main"><img src="src/assets/spine/pain-neck-reference.png" alt="颈椎疼痛示意" /><div><div class="pain-score-row"><span><b class="score-value">23</b>分</span><div class="pain-bar-wrap" style="--marker:46%"><span class="pain-bar-score">23</span><div class="pain-risk-track"><span></span><span></span><span></span><i></i></div></div><b>中风险</b></div><div class="pain-copy"><span>▣</span><span>颈椎疼痛风险中等，建议关注姿势调整</span></div></div></div>
+            </div>
+            <div class="white-card pain-card">
+              <div class="pain-title"><span>⌁</span><h3>背部疼痛潜在风险评分</h3></div>
+              <div class="pain-main"><img src="src/assets/spine/pain-back-reference.png" alt="背部疼痛示意" /><div><div class="pain-score-row"><span><b class="score-value">19</b>分</span><div class="pain-bar-wrap" style="--marker:38%"><span class="pain-bar-score">19</span><div class="pain-risk-track"><span></span><span></span><span></span><i></i></div></div><b>中风险</b></div><div class="pain-copy"><span>▣</span><span>背部疼痛风险中等，建议关注姿势调整</span></div></div></div>
+            </div>
+            <div class="white-card pain-card">
+              <div class="pain-title"><span>⌁</span><h3>腰部疼痛潜在风险评分</h3></div>
+              <div class="pain-main"><img src="src/assets/spine/pain-waist-reference.png" alt="腰部疼痛示意" /><div><div class="pain-score-row"><span><b class="score-value" style="color:#19ae75">7</b>分</span><div class="pain-bar-wrap" style="--marker:14%"><span class="pain-bar-score">7</span><div class="pain-risk-track"><span></span><span></span><span></span><i></i></div></div><b style="color:#19ae75">低风险</b></div><div class="pain-copy"><span>▣</span><span>腰部疼痛风险低，状态良好</span></div></div></div>
+            </div>
+            <p class="spine-disclaimer">本报告仅供参考，具体方案请遵医嘱。本品不能替代药品及医疗器械，不用于疾病的诊断、治疗。</p>
+          </section>
+        </div>
+      </div>
+
+      <div class="content tab-panel" data-panel="体围测量">
+        <div class="kuj-page">
+          <div class="kuj-hero"><img src="src/assets/illustrations/body-measure.svg?v=2" alt="体围测量模型" /></div>
+          <section><div class="warn-box"><span class="warn-icon">!</span><span>由于您未按照规范扫描，本页面采用 AI+三维立体融合算法，为您呈现更接近真实净体测量的数据结果。</span></div></section>
+          <section>
+            <div class="kuj-title">身体数据</div>
+            <div class="measure-stats">
+              <div class="white-card measure-stat"><div class="icon">▥</div><span class="muted">身高(cm)</span><b>161.0</b></div>
+              <div class="white-card measure-stat"><div class="icon">▣</div><span class="muted">体重(kg)</span><b>51.2</b></div>
+              <div class="white-card measure-stat"><div class="icon">⌒</div><span class="muted">BMI</span><b>19.8</b></div>
+            </div>
+          </section>
+          <section>
+            <div class="kuj-title">详细数据 <span class="muted">（单位：cm）</span></div>
+            <div class="grid-2">
+              <div class="white-card measure-card"><strong>57.0</strong><span>颈围</span><img src="src/assets/spine/neck-tilt.png" alt="" /></div>
+              <div class="white-card measure-card"><strong>23.5</strong><span>左上臂围</span><img src="src/assets/spine/shoulder-left.png" alt="" /></div>
+              <div class="white-card measure-card"><strong>23.7</strong><span>右上臂围</span><img src="src/assets/spine/shoulder-right.png" alt="" /></div>
+              <div class="white-card measure-card"><strong>87.9</strong><span>胸围</span><img src="src/assets/spine/shoulder-balance.png" alt="" /></div>
+              <div class="white-card measure-card"><strong>80.8</strong><span>高腰围</span><img src="src/assets/spine/pelvis-forward.png" alt="" /></div>
+              <div class="white-card measure-card"><strong>82.6</strong><span>中腰围</span><img src="src/assets/spine/neck-forward.png" alt="" /></div>
+              <div class="white-card measure-card"><strong>90.7</strong><span>低腰围</span><img src="src/assets/spine/pelvis-forward.png" alt="" /></div>
+              <div class="white-card measure-card"><strong>98.2</strong><span>臀围</span><img src="src/assets/spine/shoulder-left.png" alt="" /></div>
+              <div class="white-card measure-card"><strong>66.6</strong><span>左大腿围</span><img src="src/assets/spine/pelvis-forward.png" alt="" /></div>
+              <div class="white-card measure-card"><strong>60.9</strong><span>左大腿最小围</span><img src="src/assets/spine/neck-forward.png" alt="" /></div>
+              <div class="white-card measure-card"><strong>67.6</strong><span>右大腿围</span><img src="src/assets/spine/pelvis-forward.png" alt="" /></div>
+              <div class="white-card measure-card"><strong>61.9</strong><span>右大腿最小围</span><img src="src/assets/spine/shoulder-balance.png" alt="" /></div>
+              <div class="white-card measure-card"><strong>53.6</strong><span>左小腿围</span><img src="src/assets/spine/neck-tilt.png" alt="" /></div>
+              <div class="white-card measure-card"><strong>53.8</strong><span>右小腿围</span><img src="src/assets/spine/shoulder-right.png" alt="" /></div>
+            </div>
+          </section>
+          <section><details class="white-card panel-pad guide-group"><summary>指标定义说明 <span>展开查看</span></summary><div class="definition-copy"><p><b>颈围：</b>颈部水平围度，用于观察颈部尺寸及枕头颈托接触范围。</p><p><b>上臂围：</b>上臂测量位置的围度，用于记录左右侧尺寸差异。</p><p><b>胸围：</b>胸部最突出位置的水平围度，用于体型记录。</p><p><b>腰围：</b>不同腰部高度的水平围度，用于观察躯干轮廓。</p><p><b>臀围：</b>臀部最突出位置的水平围度，用于体型记录。</p><p><b>大腿围、小腿围：</b>腿部指定位置的水平围度，用于记录左右侧尺寸。</p></div></details></section>
+          <section><div class="warn-box"><span class="warn-icon">!</span><span>系统检测到您本次测量状态异常，可能是因为穿着衣物过厚或动作不标准。建议穿着贴身衣物重新测量。</span></div></section>
+        </div>
+      </div>
+
+      <div class="content tab-panel" data-panel="身体成分">
+        <div class="kuj-page">
+          <section>
+            <div class="kuj-title">身体成分总览</div>
+            <div class="white-card composition-overview">
+              <span class="muted">体重</span>
+              <div class="weight-value">51.2<small>kg</small></div>
+              <div class="weight-stamp">体重正常</div>
+              <div class="composition-summary">
+                <div><div class="summary-mini"><span class="muted">体脂率</span><b>24.5<small>%</small></b><span class="muted">正常</span></div><div class="summary-mini"><span class="muted">BMI</span><b>19.8</b><span class="muted">正常</span></div></div>
+                <div class="summary-list"><div><span>当前体重</span><b>51.2kg</b></div><div><span>目标体重</span><b>54.4kg</b></div><div><span>体重控制</span><b>标准</b></div><div><span>脂肪控制</span><b>标准</b></div><div><span>肌肉控制</span><b>标准</b></div><div><span>基础代谢</span><b>1204.6kcal/d</b></div></div>
+              </div>
+            </div>
+          </section>
+          <section>
+            <div class="kuj-title">身体成分分析 <span class="muted">单位：kg</span></div>
+            <div class="white-card composition-card"><div class="composition-head"><span>部位</span><div class="range-head"><span>低标准</span><span>正常</span><span>超标准</span></div><span>标准区间</span></div><div class="composition-row"><div><b>水分</b><small>28.8 kg</small></div><div class="composition-track"><i style="width:40%"></i></div><span class="composition-range">27.5~33.7</span></div><div class="composition-row"><div><b>蛋白质</b><small>7.0 kg</small></div><div class="composition-track"><i style="width:19%"></i></div><span class="composition-range">7.8~9.6</span></div><div class="composition-row"><div><b>体脂重量</b><small>12.6 kg</small></div><div class="composition-track"><i style="width:43%"></i></div><span class="composition-range">10.0~20.0</span></div><div class="definition-row"><span>指标定义说明</span><span>展开⌄</span></div></div>
+          </section>
+          <section>
+            <div class="kuj-title">肌肉脂肪分析 <span class="muted">体重与骨骼肌</span></div>
+            <div class="white-card composition-card"><div class="composition-head"><span>部位</span><div class="range-head"><span>低标准</span><span>正常</span><span>超标准</span></div><span>标准区间</span></div><div class="composition-row"><div><b>体重</b><small>51.2 kg</small></div><div class="composition-track"><i style="width:40%"></i></div><span class="composition-range">49.0~59.9</span></div><div class="composition-row"><div><b>骨骼肌量</b><small>21.0 kg</small></div><div class="composition-track"><i style="width:36%"></i></div><span class="composition-range">20.6~25.1</span></div><div class="definition-row"><span>指标定义说明</span><span>展开⌄</span></div></div>
+          </section>
+          <section>
+            <div class="kuj-title">肥胖分析 <span class="muted">BMI 与体脂率</span></div>
+            <div class="white-card composition-card"><div class="composition-head"><span>部位</span><div class="range-head"><span>低标准</span><span>正常</span><span>超标准</span></div><span>标准区间</span></div><div class="composition-row"><div><b>BMI</b><small>19.8 kg/m²</small></div><div class="composition-track"><i style="width:41%"></i></div><span class="composition-range">18.5~23.9</span></div><div class="composition-row"><div><b>体脂率</b><small>24.5 %</small></div><div class="composition-track"><i style="width:54%"></i></div><span class="composition-range">18.0~28.0</span></div><div class="definition-row"><span>指标定义说明</span><span>展开⌄</span></div></div>
+          </section>
+          <p class="muted" style="text-align:center;margin:24px 0 8px;font-size:11px">身体成分数据仅供参考，不作为医学诊断依据。</p>
+        </div>
+      </div>
+
+      <div class="footer">本页面为水星报告静态兼容预览 · mercury-v1.9.5</div>
+    </main>
+    <script>
+      const isSalesMode = window.location.pathname.endsWith("mercury-report-sales-demo.html") || new URLSearchParams(window.location.search).get("mode") === "sales" || window.location.hash === "#sales";
+      document.body.classList.toggle("sales-mode", isSalesMode);
+      document.querySelectorAll(".metric").forEach((metric) => {
+        const guide = metric.querySelector(".metric-guide");
+        if (!guide) return;
+        guide.querySelector(".guide-note.mattress")?.remove();
+        const item = document.createElement("div");
+        item.className = "sales-metric";
+        const heading = metric.querySelector(".metric-head").cloneNode(true);
+        item.appendChild(heading);
+        item.appendChild(guide);
+        guide.open = false;
+        document.getElementById("salesMetricGuides").appendChild(item);
+      });
+
+      const compositionDefinitions = {
+        "水分": "身体所含水分的估算重量。",
+        "蛋白质": "身体蛋白质成分的估算重量。",
+        "体脂重量": "身体脂肪组织的估算重量。",
+        "体重": "本次测量得到的身体总重量。",
+        "骨骼肌量": "附着于骨骼、参与身体活动的肌肉估算重量。",
+        "BMI": "体重与身高平方的比值，用于体重状态参考。",
+        "体脂率": "体脂重量占总体重的估算比例。"
+      };
+      document.querySelectorAll(".composition-card .definition-row").forEach((row) => {
+        row.setAttribute("role", "button");
+        row.setAttribute("tabindex", "0");
+        const toggleDefinition = () => {
+          const card = row.closest(".composition-card");
+          let copy = card.querySelector(".definition-copy");
+          if (!copy) {
+            copy = document.createElement("div");
+            copy.className = "definition-copy";
+            copy.innerHTML = [...card.querySelectorAll(".composition-row b")].map((label) => `<p><b>${label.textContent}：</b>${compositionDefinitions[label.textContent] || "用于展示该指标与参考区间的相对关系。"}</p>`).join("") + '<p>指标仅供健康管理参考，不作为医学诊断依据。</p>';
+            card.appendChild(copy);
+          } else {
+            copy.remove();
+          }
+          row.lastElementChild.textContent = copy.isConnected ? "收起⌃" : "展开⌄";
+        };
+        row.addEventListener("click", toggleDefinition);
+        row.addEventListener("keydown", (event) => { if (event.key === "Enter" || event.key === " ") toggleDefinition(); });
+      });
+
+      let privateVisible = false;
+      document.getElementById("privacyToggle").addEventListener("click", (event) => {
+        privateVisible = !privateVisible;
+        document.querySelectorAll("[data-private]").forEach((item) => item.textContent = privateVisible ? item.dataset.private : "***");
+        event.currentTarget.textContent = privateVisible ? "◉̸" : "◉";
+        event.currentTarget.setAttribute("aria-label", privateVisible ? "隐藏用户数据" : "显示用户数据");
+      });
+
+      const universalZones = [
+        { id:"Z1", title:"仰睡区1", height:10.4, gen1:[1,2], gen2:[1] }, { id:"Z2", title:"头窝区", height:4.4, gen1:[3], gen2:[2] }, { id:"Z3", title:"仰睡区2", height:5.0, gen1:[4], gen2:[3] },
+        { id:"Z4", title:"左侧睡区1", height:15.5, gen1:[5], gen2:[4,8] }, { id:"Z5", title:"左侧睡区2", height:10.4, gen1:[7], gen2:[5,9] }, { id:"Z6", title:"右侧睡区1", height:14.5, gen1:[6], gen2:[6,10] }, { id:"Z7", title:"右侧睡区2", height:10.4, gen1:[8], gen2:[7,11] }
+      ];
+      const gen1ZoneNames = ["仰睡肩颈承托区","仰睡颈部承托区","下头窝区","上头窝区","左颈承托区","右颈承托区","左上侧睡区","右上侧睡区"];
+      const gen1Hotspots = [[52,70],[51,55],[49,40],[48,25],[77,65],[24,65],[77,31],[24,31]];
+      const gen2Hotspots = [[50,73],[50,55],[50,30],[68,62],[68,36],[32,62],[32,36],[88,62],[88,36],[12,62],[12,36]];
+      const gen1Recommended = [10.4,10.4,4.4,5.0,15.5,14.5,10.4,10.4];
+      const gen1ModelDiffs = {"1号枕":"3.1cm","2号枕":"2.3cm","3号枕":"1.5cm","4号枕":"1.1cm"};
+      const gen1Models = {"1号枕": { zones:[[90,7.0],[60,6.5],[50,4.2],[50,4.8],[180,9.0],[180,9.0],[300,8.3],[300,8.3]] },"2号枕": { zones:[[110,8.0],[80,7.5],[50,4.2],[50,4.8],[200,10.0],[200,10.0],[300,8.3],[300,8.3]] },"3号枕": { zones:[[130,9.0],[100,8.5],[50,4.7],[50,5.3],[220,11.0],[220,11.0],[300,9.3],[300,9.3]] },"4号枕": { zones:[[150,10.0],[120,9.5],[50,4.7],[50,5.3],[240,12.0],[240,12.0],[300,9.3],[300,9.3]] }};
+      const gen2Zones = Array.from({length:11}, (_,i) => { const id=i+1; const source=universalZones.find(zone => zone.gen2.includes(id)); return { id, name:source ? source.title : `${id}区`, source: source ? `${source.id} ${source.title}` : "通用推荐", weight:"-", height: source ? source.height : 10, recommended:source ? source.height : 10, hotspot:gen2Hotspots[i] }; });
+      let productType = "一代枕"; let selectedModel = "4号枕"; let selectedZoneId = 3; let currentHeights = [];
+      function currentZones() { if (productType === "二代枕") return gen2Zones; return gen1Models[selectedModel].zones.map((zone, index) => ({ id:index+1, name:gen1ZoneNames[index], source:(universalZones.find(item => item.gen1.includes(index+1)) || {}).id || "-", weight:zone[0], height:zone[1], recommended:gen1Recommended[index], hotspot:gen1Hotspots[index] })); }
+      function originalHeights() { return currentZones().map(zone => zone.height); }
+      function renderBusinessModels() { const models = productType === "一代枕" ? Object.keys(gen1Models) : ["二代定制枕"]; document.getElementById("businessModelActions").innerHTML = models.map(model => `<button data-model="${model}" class="${model === selectedModel ? "active" : ""}">${model}</button>`).join(""); document.querySelector(".trade-row select").innerHTML = models.map(model => `<option ${model === selectedModel ? "selected" : ""}>${model}</option>`).join(""); document.getElementById("modelCopy").textContent = productType === "一代枕" ? "一代枕需在4个型号中匹配最接近推荐高度的款式。" : "二代枕只有一款，导购直接调节11个分区高度。"; document.querySelectorAll("#businessModelActions button").forEach(button => button.addEventListener("click", () => { selectedModel = button.dataset.model; selectedZoneId = productType === "一代枕" ? 3 : 2; currentHeights = originalHeights(); renderAllZones(); })); }
+      function renderProductSelection() { document.querySelectorAll(".product-type-actions button").forEach(button => button.classList.toggle("active", button.dataset.type === productType)); document.getElementById("generationOneSelection").style.display = productType === "一代枕" ? "block" : "none"; document.getElementById("generationTwoSelection").style.display = productType === "二代枕" ? "block" : "none"; if (productType === "一代枕") { document.querySelectorAll(".model-actions button").forEach(button => button.classList.toggle("active", button.dataset.model === selectedModel)); document.getElementById("selectedModelLabel").textContent = selectedModel; document.getElementById("selectedModelDiff").textContent = gen1ModelDiffs[selectedModel]; } }
+      function clampHeight(value) { return Math.min(20, Math.max(0, Math.round(Number(value) * 10) / 10)); }
+      function renderZoneStage() { const zones = currentZones(); if (!zones.some(zone => zone.id === selectedZoneId)) selectedZoneId = zones[0].id; const selectedIndex = zones.findIndex(zone => zone.id === selectedZoneId); const selectedZone = zones[selectedIndex]; const image = document.getElementById("pillowStageImage"); image.src = productType === "一代枕" ? "src/assets/mercury-pillow-gen1-clean.png" : "src/assets/mercury-pillow-gen2-clean.png"; image.alt = `${productType}分区调节`; document.getElementById("pillowHotspots").innerHTML = zones.map(zone => `<button type="button" class="pillow-hotspot ${zone.id === selectedZoneId ? "active" : ""}" data-zone-id="${zone.id}" style="left:${zone.hotspot[0]}%;top:${zone.hotspot[1]}%" aria-label="选择${zone.name}" aria-pressed="${zone.id === selectedZoneId}">${zone.id}</button>`).join(""); document.querySelectorAll(".pillow-hotspot").forEach(button => button.addEventListener("click", () => { selectedZoneId = Number(button.dataset.zoneId); renderZoneStage(); })); document.getElementById("pillowTooltip").innerHTML = `<b>${selectedZone.name}</b><span>${currentHeights[selectedIndex].toFixed(1)}cm</span>`; document.getElementById("selectedZoneTitle").textContent = `${selectedZone.id}区 · ${selectedZone.name}`; document.getElementById("selectedZoneSource").textContent = `映射来源：${selectedZone.source}`; document.getElementById("selectedZoneWeight").style.display = selectedZone.weight === "-" ? "none" : "inline-block"; document.getElementById("selectedZoneWeight").textContent = selectedZone.weight === "-" ? "" : `PDF重量 ${selectedZone.weight}g`; document.getElementById("originalZoneHeight").textContent = `${selectedZone.height.toFixed(1)}cm`; document.getElementById("recommendedZoneHeight").textContent = `${selectedZone.recommended.toFixed(1)}cm`; document.getElementById("currentZoneHeight").textContent = `${currentHeights[selectedIndex].toFixed(1)}cm`; document.getElementById("selectedZoneInput").value = currentHeights[selectedIndex].toFixed(1); }
+      function updateSelectedZone(value) { const zones = currentZones(); const selectedIndex = zones.findIndex(zone => zone.id === selectedZoneId); currentHeights[selectedIndex] = clampHeight(value); renderZoneStage(); renderPreview(); }
+      function renderAllZones() { renderProductSelection(); renderZoneStage(); renderPreview(); renderBusinessModels(); }
+      function renderPreview() { document.getElementById("previewModel").textContent = `当前方案：${productType} · ${selectedModel}`; document.getElementById("previewRows").innerHTML = currentZones().map((zone, index) => `<tr><td>${zone.id}区 ${zone.name}</td><td>${zone.source}</td><td>${zone.weight}</td><td data-preview-height>${currentHeights[index].toFixed(1)}</td></tr>`).join(""); }
+      document.querySelectorAll(".product-type-actions button").forEach(button => button.addEventListener("click", () => { productType = button.dataset.type; selectedModel = productType === "一代枕" ? "4号枕" : "二代定制枕"; selectedZoneId = productType === "一代枕" ? 3 : 2; currentHeights = originalHeights(); renderAllZones(); }));
+      document.querySelectorAll(".model-actions button").forEach(button => button.addEventListener("click", () => { selectedModel = button.dataset.model; selectedZoneId = 3; currentHeights = originalHeights(); renderAllZones(); }));
+      document.getElementById("selectedZoneMinus").addEventListener("click", () => updateSelectedZone(Number(document.getElementById("selectedZoneInput").value) - .1));
+      document.getElementById("selectedZonePlus").addEventListener("click", () => updateSelectedZone(Number(document.getElementById("selectedZoneInput").value) + .1));
+      document.getElementById("selectedZoneInput").addEventListener("input", (event) => updateSelectedZone(event.target.value));
+      document.getElementById("saveZones").addEventListener("click", () => document.getElementById("zoneMessage").textContent = "分区高度设置已保存");
+      document.getElementById("resetZones").addEventListener("click", () => { currentHeights = originalHeights(); renderAllZones(); document.getElementById("zoneMessage").textContent = "已恢复原始分区高度"; });
+      currentHeights = originalHeights();
+      renderAllZones();
+      let comfortScore = 5;
+      const stars = Array.from(document.querySelectorAll("#starRating button"));
+      function renderStars() { stars.forEach((star) => star.classList.toggle("active", Number(star.dataset.score) <= comfortScore)); document.querySelector("#starRating span").textContent = `${comfortScore}分`; }
+      stars.forEach((star) => star.addEventListener("click", () => { comfortScore = Number(star.dataset.score); renderStars(); }));
+      renderStars();
+      document.getElementById("continueAdjust").addEventListener("click", () => document.getElementById("zoneMessage").scrollIntoView({ behavior: "smooth", block: "center" }));
+      document.getElementById("confirmChoice").addEventListener("click", () => document.getElementById("businessMessage").textContent = `已确认${selectedModel}，舒适度${comfortScore}分`);
+
+      function bindQuantity(row) { row.querySelectorAll(".qty button").forEach((button) => button.addEventListener("click", () => { const value = row.querySelector(".qty b"); value.textContent = Math.max(1, Number(value.textContent) + (button.textContent === "+" ? 1 : -1)); })); }
+      bindQuantity(document.querySelector(".trade-row"));
+      document.getElementById("addTrade").addEventListener("click", () => { const source = document.querySelector(".trade-row"); const row = source.cloneNode(true); row.querySelector("input").value = ""; row.querySelector(".qty b").textContent = "1"; row.children[0].textContent = document.querySelectorAll(".trade-row").length + 1; document.getElementById("tradeRows").appendChild(row); bindQuantity(row); document.getElementById("businessMessage").textContent = "已添加一项商品"; });
+      document.getElementById("saveTrade").addEventListener("click", () => { const valid = [...document.querySelectorAll(".trade-row input")].every((input) => input.value); document.getElementById("businessMessage").textContent = valid ? "成交信息已保存" : "请填写成交日期"; });
+
+      const zones = ["头部","颈部","肩背","腰部","臀部","大腿","小腿","足部"];
+      const idealBalance = [.08,.035,.305,.08,.26,.065,.105,.065];
+      function drawBalanceChart(canvasId, actual) {
+        const canvas = document.getElementById(canvasId);
+        const context = canvas.getContext("2d");
+        const xAt = (index) => 72 + index * 92;
+        const yAt = (value) => 250 - value / .35 * 190;
+        context.clearRect(0, 0, canvas.width, canvas.height);
+        context.font = "14px sans-serif";
+        context.fillStyle = "#475569";
+        context.fillText("压力（N）", 18, 24);
+        context.strokeStyle = "#e5e7eb";
+        context.fillStyle = "#64748b";
+        for (let i = 0; i <= 7; i++) {
+          const y = 250 - i * 27;
+          context.beginPath(); context.moveTo(60, y); context.lineTo(735, y); context.stroke();
+          context.fillText((i * .05).toFixed(2).replace(/0+$/, "").replace(/\.$/, ""), 20, y + 4);
+        }
+        zones.forEach((zone, index) => context.fillText(zone, xAt(index) - 15, 278));
+        function drawLine(values, color) {
+          context.strokeStyle = color; context.lineWidth = 4; context.beginPath();
+          values.forEach((value, index) => index ? context.lineTo(xAt(index), yAt(value)) : context.moveTo(xAt(index), yAt(value)));
+          context.stroke();
+          values.forEach((value, index) => { context.fillStyle = color; context.beginPath(); context.arc(xAt(index), yAt(value), 6, 0, Math.PI * 2); context.fill(); });
+        }
+        drawLine(actual, "#ef4444");
+        drawLine(idealBalance, "#10b981");
+        context.fillStyle = "#ef4444"; context.fillText("● 实际测量值", 250, 296);
+        context.fillStyle = "#10b981"; context.fillText("● 黄金理想值", 390, 296);
+      }
+      drawBalanceChart("balanceChartSupine", [.05,.13,.26,.065,.285,.03,.125,.045]);
+      drawBalanceChart("balanceChartSide", [.13,.23,.16,.07,.20,.23,.02,.01]);
+
+      const tabButtons = Array.from(document.querySelectorAll(".tabs button"));
+      const tabPanels = Array.from(document.querySelectorAll(".tab-panel"));
+
+      function activateTab(tab) {
+        const activeButton = tabButtons.find((button) => button.dataset.tab === tab);
+        tabButtons.forEach((item) => item.classList.toggle("active", item === activeButton));
+        tabPanels.forEach((panel) => panel.classList.toggle("active", panel.dataset.panel === tab));
+        activeButton?.scrollIntoView({ behavior: "smooth", inline: "center", block: "nearest" });
+        window.scrollTo({ top: 0, behavior: "smooth" });
+      }
+      tabButtons.forEach((button) => button.addEventListener("click", () => activateTab(button.dataset.tab)));
+      document.querySelectorAll("[data-target-tab]").forEach((button) => button.addEventListener("click", () => activateTab(button.dataset.targetTab)));
+      const requestedTab = new URLSearchParams(window.location.search).get("tab");
+      const tabAliases = { spine: "脊柱评估", composition: "身体成分", measure: "体围测量", operations: "导购操作" };
+      const initialTab = tabAliases[requestedTab] || requestedTab;
+      if (initialTab && tabButtons.some((button) => button.dataset.tab === initialTab) && (initialTab !== "导购操作" || isSalesMode)) activateTab(initialTab);
+    </script>
+  </body>
+</html>

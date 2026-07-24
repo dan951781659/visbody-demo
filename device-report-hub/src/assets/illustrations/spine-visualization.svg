@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="398" height="280" viewBox="0 0 398 280" role="img" aria-label="spine visualization">
+  <defs>
+    <linearGradient id="spineGrad" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#2563eb"/>
+      <stop offset="28%" stop-color="#22c55e"/>
+      <stop offset="55%" stop-color="#eab308"/>
+      <stop offset="78%" stop-color="#f97316"/>
+      <stop offset="100%" stop-color="#ef4444"/>
+    </linearGradient>
+  </defs>
+  <rect width="398" height="280" rx="12" fill="#f5f8fb"/>
+  <ellipse cx="199" cy="48" rx="26" ry="30" fill="#d5dde6"/>
+  <path d="M158 98c10-28 28-42 41-42s31 14 41 42l22 112H136z" fill="#c4ced9"/>
+  <path d="M152 108l-42 28M246 108l42 28" stroke="#a8b4c0" stroke-width="18" stroke-linecap="round" opacity="0.75"/>
+  <path d="M199 58 C196 78 202 95 199 112 C196 130 202 148 199 165 C196 182 201 198 199 214 C198 224 200 232 199 240" fill="none" stroke="url(#spineGrad)" stroke-width="14" stroke-linecap="round"/>
+  <circle cx="199" cy="72" r="5" fill="#fff" opacity="0.9"/>
+  <circle cx="199" cy="98" r="5" fill="#fff" opacity="0.9"/>
+  <circle cx="199" cy="124" r="5" fill="#fff" opacity="0.9"/>
+  <circle cx="199" cy="150" r="5" fill="#fff" opacity="0.9"/>
+  <circle cx="199" cy="176" r="5" fill="#fff" opacity="0.9"/>
+  <circle cx="199" cy="202" r="5" fill="#fff" opacity="0.9"/>
+  <circle cx="199" cy="226" r="6" fill="#fff" opacity="0.95"/>
+  <text x="199" y="266" text-anchor="middle" font-size="12" fill="#64748b" font-family="PingFang SC,sans-serif">SPINE VISUALIZATION</text>
+</svg>
