@@ -1,0 +1,35 @@
+# Dependencies
+node_modules/
+
+# Expo
+.expo/
+.expo-shared/
+
+# Web build output (regenerate with: npm run export:web)
+dist-web/
+dist-web-single/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+npm-debug.log*
+
+# Environment & secrets
+.env
+.env.*
+!.env.example
+.dev-backup.env
+
+# TypeScript
+*.tsbuildinfo
+
+# IDE (optional local settings)
+.idea/
+*.swp
+*.swo
+
+# Metro / bundler cache
+.metro-health-check*
