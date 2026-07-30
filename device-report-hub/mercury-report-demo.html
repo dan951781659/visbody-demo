@@ -313,6 +313,43 @@
         color: #43546b;
         line-height: 1.65;
       }
+      .universal-zone-card {
+        overflow: hidden;
+        padding: 12px;
+        border: 1px solid #e2e8f0;
+        border-radius: 16px;
+        background: #fff;
+        box-shadow: 0 6px 18px rgba(67, 112, 148, .05);
+      }
+      .universal-zone-map {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        grid-template-rows: repeat(4, 47px);
+        overflow: hidden;
+        border: 1px solid #dbe4ee;
+        border-radius: 12px;
+        background: #fff;
+      }
+      .universal-zone-map .zone {
+        display: grid;
+        place-items: center;
+        padding: 0;
+        border: 0;
+        border-right: 1px solid rgba(255,255,255,.9);
+        border-bottom: 1px solid rgba(255,255,255,.9);
+        border-radius: 0;
+        color: #0f172a;
+        text-align: center;
+      }
+      .universal-zone-map .zone b { display: block; font-size: 17px; line-height: 1; }
+      .universal-zone-map .zone span { display: block; margin-top: 8px; color: #475569; font-size: 12px; }
+      .universal-zone-map .zone-z7 { grid-column: 1; grid-row: 1 / span 2; background: #eadfff; }
+      .universal-zone-map .zone-z6 { grid-column: 1; grid-row: 3 / span 2; background: #dfe9ff; }
+      .universal-zone-map .zone-z3 { grid-column: 2; grid-row: 1; background: #fff2f2; }
+      .universal-zone-map .zone-z2 { grid-column: 2; grid-row: 2 / span 2; background: #f3efff; }
+      .universal-zone-map .zone-z1 { grid-column: 2; grid-row: 4; background: #fff2f2; }
+      .universal-zone-map .zone-z5 { grid-column: 3; grid-row: 1 / span 2; background: #dcf7d7; }
+      .universal-zone-map .zone-z4 { grid-column: 3; grid-row: 3 / span 2; background: #ffe9c9; }
       .guide-note.mattress { background:#ecfdf5; }.guide-note.mattress b { color:#047857; }
       .guide-note.talk { background:#fffbeb; }.guide-note.talk b { color:#b45309; }
       .survey-recommend { overflow:hidden; }
@@ -1503,6 +1540,21 @@
             <div class="metric"><div class="metric-head"><span class="metric-code">L6</span><span class="metric-title">背深</span><span class="metric-value">11.8 cm</span></div><p>背部后缘至肩峰点水平距离</p><div class="metric-guide"><div class="guide-note pillow">帮助理解肩背到头颈的过渡关系，以及枕头肩部避让区域，使肩背能够更自然地贴合。</div></div></div>
             <div class="metric"><div class="metric-head"><span class="metric-code">H1</span><span class="metric-title">头颈高</span><span class="metric-value">16.4 cm</span></div><p>头顶至第七颈椎点垂直高度</p><div class="metric-guide"><div class="guide-note pillow">用于判断头区和颈托区的纵向尺寸与分区位置，反映头颈比例，不能单独换算为枕高。</div></div></div>
             <div class="metric"><div class="metric-head"><span class="metric-code">H2</span><span class="metric-title">头背高</span><span class="metric-value">29.3 cm</span></div><p>头顶至肩峰点垂直高度</p><div class="metric-guide"><div class="guide-note pillow">帮助判断头、颈、肩的整体比例及枕头分区位置，最终仍需结合常用睡姿和实际体验确认。</div></div></div>
+          </div>
+        </section>
+
+        <section>
+          <div class="section-heading"><h2>通用 7 分区推荐高度</h2></div>
+          <div class="universal-zone-card">
+            <div class="universal-zone-map" aria-label="通用七分区推荐高度">
+              <div class="zone zone-z7"><div><b>Z7</b><span>10.4cm</span></div></div>
+              <div class="zone zone-z6"><div><b>Z6</b><span>14.5cm</span></div></div>
+              <div class="zone zone-z3"><div><b>Z3</b><span>5.0cm</span></div></div>
+              <div class="zone zone-z2"><div><b>Z2</b><span>4.4cm</span></div></div>
+              <div class="zone zone-z1"><div><b>Z1</b><span>10.4cm</span></div></div>
+              <div class="zone zone-z5"><div><b>Z5</b><span>10.4cm</span></div></div>
+              <div class="zone zone-z4"><div><b>Z4</b><span>15.5cm</span></div></div>
+            </div>
           </div>
         </section>
 
