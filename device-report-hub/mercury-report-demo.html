@@ -246,11 +246,15 @@
         object-fit: contain;
       }
       .metric {
-        border: 1px solid #e2e8f0;
+        border: 1px solid #dce8f2;
         border-radius: 16px;
         background: #fff;
-        padding: 12px;
+        padding: 13px 12px 14px;
+        box-shadow: 0 4px 14px rgba(67, 112, 148, .05);
+        cursor: pointer;
+        transition: border-color .2s ease, box-shadow .2s ease;
       }
+      .metric.is-open { border-color: #bae6fd; box-shadow: 0 6px 18px rgba(67, 112, 148, .08); }
       .metric-head {
         display: flex;
         align-items: flex-start;
@@ -265,14 +269,24 @@
         font-weight: 800;
         white-space: nowrap;
       }
+      .metric-head::after {
+        content: "⌄";
+        flex: none;
+        margin: -1px 0 0 2px;
+        color: #0ea5e9;
+        font-size: 16px;
+        line-height: 1;
+        transition: transform .2s ease;
+      }
+      .metric.is-open .metric-head::after { transform: rotate(180deg); }
       .metric p {
         margin: 8px 0 0;
         color: #64748b;
         font-size: 12px;
         line-height: 1.55;
       }
-      .metric-guide { margin-top:8px; border-top:1px solid #f1f5f9; padding-top:8px; }
-      .metric > .metric-guide { display:none; }
+      .metric-guide { display:none; margin-top:12px; }
+      .metric.is-open .metric-guide { display:block; }
       .sales-only { display:none; }
       body.sales-mode .sales-only { display:block; }
       .sales-tab { display:none; }
@@ -287,12 +301,18 @@
       .definition-copy b { color:#354158; }
       .definition-row { cursor:pointer; }
       .grade-explanation, .demo-data-note { margin:10px 2px 0;color:#94a3b8;font-size:10px;line-height:1.6; }
-      .metric-guide summary { display:flex; justify-content:space-between; color:#0284c7; font-size:11px; font-weight:700; cursor:pointer; list-style:none; }
-      .metric-guide summary::after { content:"⌄"; }
-      .metric-guide[open] summary::after { transform:rotate(180deg); }
       .guide-note { margin-top:7px; border-radius:8px; padding:8px; color:#475569; font-size:11px; line-height:1.55; }
       .guide-note b { display:inline; margin:0; font-size:11px; }
       .guide-note.pillow { background:#f0f9ff; }.guide-note.pillow b { color:#0369a1; }
+      .metric .guide-note {
+        margin-top: 0;
+        border-left: 3px solid #7dd3fc;
+        border-radius: 0;
+        background: transparent;
+        padding: 1px 0 1px 10px;
+        color: #43546b;
+        line-height: 1.65;
+      }
       .guide-note.mattress { background:#ecfdf5; }.guide-note.mattress b { color:#047857; }
       .guide-note.talk { background:#fffbeb; }.guide-note.talk b { color:#b45309; }
       .survey-recommend { overflow:hidden; }
@@ -382,6 +402,8 @@
       .insight-copy b { color: #1e293b; }
       .insight-copy .factor-label { color: #0369a1; }
       .insight-copy .notice-label { color: #b45309; }
+      .signal-copy + .signal-copy { margin-top: 10px; }
+      .signal-copy h4 { margin: 0 0 5px; color: #1e293b; font-size: 12px; }
       .level {
         display: inline-block;
         margin-left: 8px;
@@ -566,32 +588,6 @@
         font-size: 10px;
         line-height: 1.4;
       }
-      .universal-zone-map {
-        display: grid;
-        grid-template-columns: repeat(3, 1fr);
-        overflow: hidden;
-        margin-top: 0;
-        border: 1px solid #e2e8f0;
-        border-radius: 14px;
-        text-align: center;
-      }
-      .uz {
-        min-height: 54px;
-        display: grid;
-        place-items: center;
-        border-right: 1px solid #e2e8f0;
-        border-bottom: 1px solid #e2e8f0;
-        color: #0f172a;
-        font-size: 12px;
-      }
-      .uz b { display: block; font-size: 16px; }
-      .uz span { display: block; margin-top: 2px; color: #475569; }
-      .uz-z7 { background:#eadfff; }
-      .uz-z3, .uz-z1 { background:#fff2f2; }
-      .uz-z5 { grid-row: span 2; background:#dcf7d7; }
-      .uz-z6 { background:#dfe9ff; }
-      .uz-z2 { background:#f3efff; }
-      .uz-z4 { grid-column: 3; background:#ffe9c9; }
       .generation-toggle {
         display: grid;
         grid-template-columns: 1fr 1fr;
@@ -1487,8 +1483,8 @@
           <div class="grid-2">
             <div class="info"><span class="muted">主睡姿</span><b>俯卧</b></div>
             <div class="info"><span class="muted">床垫硬度</span><b>中等</b></div>
-            <div class="info"><span class="muted">颈椎曲度</span><b>颈椎曲度变直</b></div>
             <div class="info"><span class="muted">睡眠问题</span><b>颈肩酸痛</b></div>
+            <div class="info" style="border-color:#fde68a;background:#fffbeb"><span class="muted" style="color:#b45309">枕高偏好 · 算法输入</span><b style="color:#92400e">偏低</b></div>
           </div>
         </section>
 
@@ -1499,29 +1495,14 @@
             <div class="panel image-box"><div class="muted">侧面</div><img src="src/assets/neck-side.png" alt="侧面肩颈尺寸测量" /></div>
           </div>
           <div class="grid-2 stack-top">
-            <div class="metric"><div class="metric-head"><span class="metric-code">L1</span><span class="metric-title">耳宽</span><span class="metric-value">17.5 cm</span></div><p>两侧耳廓最外侧水平距离</p><details class="metric-guide"><summary>如何解读</summary><div class="guide-note pillow"><b>枕头适配关系：</b>辅助确定侧睡时耳部接触区与头侧区宽度，不直接决定枕高。</div><div class="guide-note talk"><b>导购话术：</b>这个尺寸主要帮助调整头侧区域的接触空间，最终以耳部没有明显压迫为准。</div></details></div>
-            <div class="metric"><div class="metric-head"><span class="metric-code">L2</span><span class="metric-title">颈宽</span><span class="metric-value">16.6 cm</span></div><p>颈部最宽处的水平横向距离</p><details class="metric-guide"><summary>如何解读</summary><div class="guide-note pillow"><b>枕头适配关系：</b>用于确定颈托区宽度和受力面积，避免颈托过窄或延伸到肩部。</div><div class="guide-note talk"><b>导购话术：</b>颈托需要覆盖颈部但不能顶到肩部，宽度合适后受力会更均匀。</div></details></div>
-            <div class="metric"><div class="metric-head"><span class="metric-code">L3</span><span class="metric-title">肩宽</span><span class="metric-value">40.2 cm</span></div><p>左右肩峰点间水平直线距离</p><details class="metric-guide"><summary>如何解读</summary><div class="guide-note pillow"><b>枕头关系：</b>是侧睡头肩间隙的重要参考；肩部越宽，侧睡区通常需要更高的有效承托。</div><div class="guide-note mattress"><b>床垫关系：</b>床垫越软、肩部下沉越多，实际所需侧睡枕高可能越低。</div><div class="guide-note talk"><b>导购话术：</b>肩宽不能直接换算枕高，还要看肩膀在床垫上的实际下沉量。</div></details></div>
-            <div class="metric"><div class="metric-head"><span class="metric-code">L4</span><span class="metric-title">头背距</span><span class="metric-value">8.2 cm</span></div><p>背部后缘至后脑最突出点</p><details class="metric-guide"><summary>如何解读</summary><div class="guide-note pillow"><b>枕头关系：</b>用于判断仰睡头窝深度，以及后脑与颈托之间的高度差。</div><div class="guide-note mattress"><b>床垫关系：</b>上背部下沉会改变实际头背高度差，需要试躺修正。</div><div class="guide-note talk"><b>导购话术：</b>这个值帮助判断头窝要多深，目标是后脑稳定落入头窝且下巴不过度内收。</div></details></div>
-            <div class="metric"><div class="metric-head"><span class="metric-code">L5</span><span class="metric-title">颈深</span><span class="metric-value">9.6 cm</span></div><p>背部后缘至第七颈椎点距离</p><details class="metric-guide"><summary>如何解读</summary><div class="guide-note pillow"><b>枕头关系：</b>影响颈托凸起高度和承托曲面深度，不等于整枕高度。</div><div class="guide-note mattress"><b>床垫关系：</b>与床垫关系较弱，主要用于枕头颈托轮廓。</div><div class="guide-note talk"><b>导购话术：</b>颈深决定颈托曲面怎么贴合，不应把这个数字直接当作推荐枕高。</div></details></div>
-            <div class="metric"><div class="metric-head"><span class="metric-code">L6</span><span class="metric-title">背深</span><span class="metric-value">11.8 cm</span></div><p>背部后缘至肩峰点水平距离</p><details class="metric-guide"><summary>如何解读</summary><div class="guide-note pillow"><b>枕头关系：</b>辅助判断肩背到头颈的过渡，以及枕头肩部避让区域。</div><div class="guide-note mattress"><b>床垫关系：</b>肩背下沉会改变过渡关系，应结合床垫承托表现观察。</div><div class="guide-note talk"><b>导购话术：</b>主要看肩背能否自然贴合，避免枕头边缘顶住肩部。</div></details></div>
-            <div class="metric"><div class="metric-head"><span class="metric-code">H1</span><span class="metric-title">头颈高</span><span class="metric-value">16.4 cm</span></div><p>头顶至第七颈椎点垂直高度</p><details class="metric-guide"><summary>如何解读</summary><div class="guide-note pillow"><b>枕头关系：</b>用于定位头区和颈托区的纵向尺寸，不能单独换算为枕高。</div><div class="guide-note mattress"><b>床垫关系：</b>与床垫软硬度无直接关系。</div><div class="guide-note talk"><b>导购话术：</b>这个值用于确定枕头分区位置，而不是告诉用户枕头必须有多高。</div></details></div>
-            <div class="metric"><div class="metric-head"><span class="metric-code">H2</span><span class="metric-title">头背高</span><span class="metric-value">29.3 cm</span></div><p>头顶至肩峰点垂直高度</p><details class="metric-guide"><summary>如何解读</summary><div class="guide-note pillow"><b>枕头关系：</b>辅助判断头、颈、肩整体比例及分区位置。</div><div class="guide-note mattress"><b>床垫关系：</b>需要结合肩背在床垫上的实际下沉量使用。</div><div class="guide-note talk"><b>导购话术：</b>它帮助确认头颈肩整体比例，最终仍要通过常用睡姿试躺确认。</div></details></div>
-          </div>
-        </section>
-
-        <section>
-          <h2>通用 7 分区推荐高度</h2>
-          <div class="panel panel-pad">
-            <div class="universal-zone-map">
-              <div class="uz uz-z7"><b>Z7</b><span>10.4cm</span></div>
-              <div class="uz uz-z3"><b>Z3</b><span>5.0cm</span></div>
-              <div class="uz uz-z5"><b>Z5</b><span>10.4cm</span></div>
-              <div class="uz uz-z6"><b>Z6</b><span>14.5cm</span></div>
-              <div class="uz uz-z2"><b>Z2</b><span>4.4cm</span></div>
-              <div class="uz uz-z1"><b>Z1</b><span>10.4cm</span></div>
-              <div class="uz uz-z4"><b>Z4</b><span>15.5cm</span></div>
-            </div>
+            <div class="metric"><div class="metric-head"><span class="metric-code">L1</span><span class="metric-title">耳宽</span><span class="metric-value">17.5 cm</span></div><p>两侧耳廓最外侧水平距离</p><div class="metric-guide"><div class="guide-note pillow">反映头部侧面宽度，帮助判断侧睡时耳部和头侧区域所需的接触空间，不用于单独确定枕高。</div></div></div>
+            <div class="metric"><div class="metric-head"><span class="metric-code">L2</span><span class="metric-title">颈宽</span><span class="metric-value">16.6 cm</span></div><p>颈部最宽处的水平横向距离</p><div class="metric-guide"><div class="guide-note pillow">帮助判断颈托区域的宽度和受力面积，使颈部获得较均匀的承托，并避免枕头延伸到肩部。</div></div></div>
+            <div class="metric"><div class="metric-head"><span class="metric-code">L3</span><span class="metric-title">肩宽</span><span class="metric-value">40.2 cm</span></div><p>左右肩峰点间水平直线距离</p><div class="metric-guide"><div class="guide-note pillow">是判断侧睡头肩间隙的重要参考；还需结合睡姿、床垫软硬和肩部实际下沉情况理解。</div></div></div>
+            <div class="metric"><div class="metric-head"><span class="metric-code">L4</span><span class="metric-title">头背距</span><span class="metric-value">8.2 cm</span></div><p>背部后缘至后脑最突出点</p><div class="metric-guide"><div class="guide-note pillow">帮助判断仰睡时头窝深度，以及后脑与颈托之间的高度差，需结合上背部实际下沉情况使用。</div></div></div>
+            <div class="metric"><div class="metric-head"><span class="metric-code">L5</span><span class="metric-title">颈深</span><span class="metric-value">9.6 cm</span></div><p>背部后缘至第七颈椎点距离</p><div class="metric-guide"><div class="guide-note pillow">帮助判断颈托凸起高度和承托曲面的深度，反映颈部需要怎样贴合，不等于整只枕头的高度。</div></div></div>
+            <div class="metric"><div class="metric-head"><span class="metric-code">L6</span><span class="metric-title">背深</span><span class="metric-value">11.8 cm</span></div><p>背部后缘至肩峰点水平距离</p><div class="metric-guide"><div class="guide-note pillow">帮助理解肩背到头颈的过渡关系，以及枕头肩部避让区域，使肩背能够更自然地贴合。</div></div></div>
+            <div class="metric"><div class="metric-head"><span class="metric-code">H1</span><span class="metric-title">头颈高</span><span class="metric-value">16.4 cm</span></div><p>头顶至第七颈椎点垂直高度</p><div class="metric-guide"><div class="guide-note pillow">用于判断头区和颈托区的纵向尺寸与分区位置，反映头颈比例，不能单独换算为枕高。</div></div></div>
+            <div class="metric"><div class="metric-head"><span class="metric-code">H2</span><span class="metric-title">头背高</span><span class="metric-value">29.3 cm</span></div><p>头顶至肩峰点垂直高度</p><div class="metric-guide"><div class="guide-note pillow">帮助判断头、颈、肩的整体比例及枕头分区位置，最终仍需结合常用睡姿和实际体验确认。</div></div></div>
           </div>
         </section>
 
@@ -1534,7 +1515,9 @@
               <div class="mini"><img src="src/assets/spine/neck-forward.png" /><div class="mini-body">颈椎前伸<b><span class="signal-state light">前伸</span><span>6.2cm</span></b></div></div>
               <div class="mini"><img src="src/assets/spine/neck-tilt.png" /><div class="mini-body">颈椎侧偏<b><span class="signal-state light">偏右</span><span>4.9°</span></b></div></div>
             </div>
-            <div class="insight-copy"><p><b>评估说明：</b>本次测量显示头部相对躯干有前移并向右偏的表现，可能与长时间低头、习惯性单侧转头或本次检测站姿有关。</p><p><b class="notice-label">日常注意：</b>减少持续低头，将屏幕调整至视线前方；睡眠时以颈部有承托、下巴不过度上扬或内收为准。</p></div>
+            <div class="insight-copy">
+              <div class="signal-copy"><p><b class="factor-label">常见原因：</b>通常与长期低头、屏幕过低、习惯性前伸或单侧托腮有关；固定单侧睡姿及左右承托不均，也可能让头颈持续偏离自然位置。</p><p><b>重点影响：</b>晨起后颈部可能僵硬、酸胀或一侧更紧，转头不够轻松；部分人还可能出现打鼾、口干或睡醒后头部沉重。</p><p><b class="notice-label">建议怎么做：</b>试躺时确认颈托贴合、后脑自然落入头窝，并按偏斜方向微调左右分区；日常抬高屏幕，每45分钟活动并练习收下巴。</p></div>
+            </div>
           </div>
           <div class="panel health-card">
             <div class="insight-head"><h3>肩背姿态</h3><span class="level level-3">重度异常</span></div>
@@ -1542,7 +1525,9 @@
               <div class="mini"><img src="src/assets/spine/shoulder-right.png" /><div class="mini-body">右肩内收度<b><span class="signal-state severe">圆肩倾向</span><span>0.3cm</span></b></div></div>
               <div class="mini"><img src="src/assets/spine/shoulder-left.png" /><div class="mini-body">左肩内收度<b><span class="signal-state normal">正常</span><span>-1.6cm</span></b></div></div>
             </div>
-            <div class="insight-copy"><p><b>评估说明：</b>右肩存在轻微前移倾向，左右肩背姿态不完全一致，可能与含胸、伏案、单侧用肩或检测时肩部未完全放松有关。</p><p><b class="notice-label">日常注意：</b>减少长时间含胸和单侧负重，试躺时观察两侧肩部是否自然放松。</p></div>
+            <div class="insight-copy">
+              <div class="signal-copy"><p><b class="factor-label">常见原因：</b>通常与伏案含胸、长期单侧用鼠或提重物有关；固定侧卧且侧睡区高度不足、肩部缺少避让，也可能让左右肩背受力不均。</p><p><b>重点影响：</b>右侧肩峰或肩胛骨内侧可能更易酸胀、牵拉，手臂上举不够轻松；侧睡时还可能出现肩部受压或频繁翻身。</p><p><b class="notice-label">建议怎么做：</b>试躺时确认侧睡区高度合适、肩部不被枕边顶住；日常减少单侧负重，并做门框胸肌拉伸和双手背后交握扩胸。</p></div>
+            </div>
           </div>
           <div class="panel health-card">
             <div class="insight-head"><h3>躯干平衡</h3><span class="level level-3">重度异常</span></div>
@@ -1550,7 +1535,9 @@
               <div class="mini"><img src="src/assets/spine/shoulder-balance.png" /><div class="mini-body">肩部平衡<b><span class="signal-state severe">左高右低</span><span>5.1°</span></b></div></div>
               <div class="mini"><img src="src/assets/spine/pelvis-forward.png" /><div class="mini-body">骨盆位置<b><span class="signal-state severe">前移</span><span>5.4cm</span></b></div></div>
             </div>
-            <div class="insight-copy"><p><b>评估说明：</b>肩部水平和骨盆位置存在一定偏移，可能与久坐、站姿重心习惯或本次测量状态有关。</p><p><b class="notice-label">日常注意：</b>保持坐姿、站姿重心均衡，避免依据单项结果直接判断腰椎问题。</p></div>
+            <div class="insight-copy">
+              <div class="signal-copy"><p><b class="factor-label">常见原因：</b>可能与长期偏侧承重、单肩背包或久坐时臀部前滑、腰部悬空有关；站立重心靠前也可能让肩部和骨盆位置出现偏移。</p><p><b>重点影响：</b>偏高侧颈肩可能更容易发紧，晨起下背部可能酸沉；久坐后腰部更易疲劳，也可能感觉身体左右不易同时放松。</p><p><b class="notice-label">建议怎么做：</b>枕头调整以头颈中立和身体自然延伸为准，不依据单项结果定枕高；日常双脚均匀承重、交替背包，坐满椅面并使用腰靠。</p></div>
+            </div>
           </div>
           <p class="grade-explanation">体态表现可能受到穿着、站姿和检测状态影响；相关因素为健康管理参考，不代表确定原因。</p>
         </section>
@@ -1589,87 +1576,50 @@
       </div>
 
       <div class="content tab-panel" data-panel="导购操作">
-
-        <section>
+        <section id="product-selection">
           <h2>产品选择与型号匹配</h2>
           <div class="panel panel-pad">
-            <div class="generation-toggle product-type-actions"><button data-type="一代枕" class="active">一代枕</button><button data-type="二代枕">二代枕</button></div>
-            <div id="generationOneSelection">
-              <div class="note" style="background:#ecfdf5;color:#047857"><b>推荐型号：4号枕</b><br />与通用七分区推荐高度的平均差异最小，可作为试躺起始型号。</div>
-              <div class="actions model-actions"><button data-model="1号枕">1号枕</button><button data-model="2号枕">2号枕</button><button data-model="3号枕">3号枕</button><button data-model="4号枕" class="active">4号枕</button></div>
-              <div class="grid-2 stack-top"><div class="info"><span class="muted">当前型号</span><b id="selectedModelLabel">4号枕</b></div><div class="info"><span class="muted">平均高度差</span><b id="selectedModelDiff">1.1cm</b></div></div>
+            <p class="muted" style="margin:0 0 8px;font-size:11px">选型与最终确认已合并为一步；选定后分区垫片参数立即联动，无需二次确认。</p>
+            <div class="generation-toggle product-type-actions"><button data-type="二代枕" class="active">二代枕<span style="font-size:10px;margin-left:4px;opacity:.8">默认</span></button><button data-type="一代枕">一代枕</button></div>
+            <div id="generationOneSelection" style="display:none">
+              <div class="note" style="background:#ecfdf5;color:#047857"><b>推荐型号：3号枕</b><br />结合测量高度与问卷「枕高偏好：偏低」仲裁得出，可作为试躺起始型号；导购可按试睡体验自由改选。</div>
+              <div class="actions model-actions"><button data-model="1号枕">1号枕</button><button data-model="2号枕">2号枕</button><button data-model="3号枕" class="active">3号枕</button><button data-model="4号枕">4号枕</button></div>
+              <div class="grid-2 stack-top"><div class="info"><span class="muted">当前型号</span><b id="selectedModelLabel">3号枕</b></div><div class="info"><span class="muted">平均高度差</span><b id="selectedModelDiff">1.5cm</b></div></div>
             </div>
-            <div id="generationTwoSelection" class="note" style="display:none;background:#f0f9ff;color:#0369a1"><b>二代定制枕</b><br />二代仅一款产品，直接根据通用推荐高度调节十一分区。</div>
+            <div id="generationTwoSelection" class="note" style="background:#f0f9ff;color:#0369a1"><b>二代定制枕（已选）</b><br />二代仅一款产品，已自动导入推荐高度；导购按一代垫片规则微调各分区即可。</div>
           </div>
         </section>
 
-        <section>
-          <h2>分区调节</h2>
+        <section id="zone-adjustment">
+          <h2>分区垫片调节</h2>
           <div class="panel" style="overflow:hidden">
             <div id="pillowStage" class="pillow-stage">
-              <img id="pillowStageImage" src="src/assets/mercury-pillow-gen1-clean.png" alt="一代枕分区调节" />
+              <img id="pillowStageImage" src="src/assets/mercury-pillow-gen2-clean.png" alt="二代枕分区调节" />
               <div id="pillowHotspots"></div>
             </div>
-            <div id="pillowTooltip" class="pillow-tooltip"><b>下头窝区</b><span>4.7cm</span></div>
+            <div id="pillowTooltip" class="pillow-tooltip"><b>头窝区</b><span>4.4cm · 0片</span></div>
             <div class="selected-zone-panel">
-              <div class="selected-zone-head"><div><h3 id="selectedZoneTitle">3区 · 下头窝区</h3><p id="selectedZoneSource">映射来源：Z2</p></div><span id="selectedZoneWeight" class="chip">PDF重量 50g</span></div>
-              <div class="zone-stats"><div class="zone-stat"><span>原始高度</span><b id="originalZoneHeight">4.7cm</b></div><div class="zone-stat recommended"><span>推荐高度</span><b id="recommendedZoneHeight">4.4cm</b></div><div class="zone-stat current"><span>当前高度</span><b id="currentZoneHeight">4.7cm</b></div></div>
-              <div class="selected-stepper"><button id="selectedZoneMinus" type="button" aria-label="降低当前分区高度">−</button><label><input id="selectedZoneInput" type="number" min="0" max="20" step="0.1" value="4.7" aria-label="当前分区高度" /><span>cm</span></label><button id="selectedZonePlus" type="button" aria-label="提高当前分区高度">+</button></div>
-              <div class="grid-2 stack-top-lg"><button id="resetZones" class="btn">重置原始高度</button><button id="saveZones" class="btn primary">保存设置</button></div>
+              <div class="selected-zone-head"><div><h3 id="selectedZoneTitle">2区 · 头窝区</h3><p id="selectedZoneSource">复用一代枕垫片规则：按片数调节，高度与克重自动换算</p></div><span id="selectedZoneWeight" class="chip">克重 0g</span></div>
+              <div class="zone-stats"><div class="zone-stat"><span>基础高度</span><b id="originalZoneHeight">4.4cm</b></div><div class="zone-stat recommended"><span>垫片数</span><b id="recommendedZoneHeight">0片</b></div><div class="zone-stat current"><span>调节后高度</span><b id="currentZoneHeight">4.4cm</b></div></div>
+              <div class="selected-stepper"><button id="selectedZoneMinus" type="button" aria-label="减少垫片">−</button><label><input id="selectedZoneInput" type="number" min="0" max="12" step="1" value="0" aria-label="当前垫片数" /><span>片</span></label><button id="selectedZonePlus" type="button" aria-label="增加垫片">+</button></div>
+              <div class="grid-2 stack-top-lg"><button id="resetZones" class="btn">重置垫片</button><button id="saveZones" class="btn primary">保存设置</button></div>
               <div id="zoneMessage" class="action-message"></div>
             </div>
           </div>
         </section>
 
         <section>
-          <h2>通用分区映射规则</h2>
-          <div class="panel table-wrap">
-            <details class="mapping-details">
-              <summary>查看固定映射关系 <span>展开查看</span></summary>
-              <table class="wide-table">
-                <tr><th>通用分区</th><th>说明</th><th>一代映射</th><th>二代映射</th></tr>
-                <tr><td>Z2 头窝区</td><td>头部上方凹陷支撑</td><td>3区</td><td>2区</td></tr>
-                <tr><td>Z1 仰睡区1</td><td>仰睡颈部核心支撑</td><td>1区、2区</td><td>1区</td></tr>
-                <tr><td>Z3 仰睡区2</td><td>仰睡颈部核心支撑</td><td>4区</td><td>3区</td></tr>
-                <tr><td>Z4 左侧睡区1</td><td>左侧睡肩颈支撑</td><td>5区</td><td>4、8区</td></tr>
-                <tr><td>Z5 左侧睡区2</td><td>左侧睡肩颈支撑</td><td>7区</td><td>5、9区</td></tr>
-                <tr><td>Z6 右侧睡区1</td><td>右侧睡肩颈支撑</td><td>6区</td><td>6、10区</td></tr>
-                <tr><td>Z7 右侧睡区2</td><td>右侧睡肩颈支撑</td><td>8区</td><td>7、11区</td></tr>
-              </table>
-            </details>
-          </div>
-        </section>
-
-        <section>
           <h2>臻享定制枕 · 定制方案预览</h2>
           <div class="panel table-wrap">
-            <div id="previewModel" class="table-title">当前方案：一代枕 · 4号枕</div>
-            <p class="muted" style="padding:8px 12px;margin:0;border-bottom:1px solid #eef2f7;font-size:11px">分区高度随调节结果同步，确认试躺满意后保存方案。</p>
-            <table class="wide-table"><thead><tr><th>分区</th><th>映射来源</th><th>PDF重量(g)</th><th>当前高度(cm)</th></tr></thead><tbody id="previewRows"></tbody></table>
+            <div id="previewModel" class="table-title">当前方案：二代枕 · 二代定制枕</div>
+            <p class="muted" style="padding:8px 12px;margin:0;border-bottom:1px solid #eef2f7;font-size:11px">分区垫片随调节结果同步；确认试躺满意后进入成交。</p>
+            <table class="wide-table"><thead><tr><th>分区</th><th>基础高度(cm)</th><th>垫片数</th><th>克重(g)</th><th>调节后高度(cm)</th></tr></thead><tbody id="previewRows"></tbody></table>
           </div>
         </section>
 
-        <section>
-          <h2>选枕建议</h2>
-          <div class="grid-2"><div class="info"><span class="muted">建议枕高</span><b>偏低</b></div><div class="info"><span class="muted">头窝设计</span><b>浅头窝</b></div><div class="info"><span class="muted">颈托方式</span><b>柔和承托</b></div><div class="info"><span class="muted">适配睡姿</span><b>俯卧 / 混合睡</b></div></div>
-        </section>
-
-        <section>
-          <div class="section-heading"><h2>床垫搭配参考</h2></div>
-          <div class="grid-2"><div class="info"><span class="muted">参考软硬度</span><b>中等（5-6级）</b></div><div class="info"><span class="muted">肩部下沉</span><b>适度</b></div><div class="info"><span class="muted">关键支撑区</span><b>腰部 / 骨盆</b></div><div class="info"><span class="muted">搭配原则</span><b>先确认下沉，再微调枕高</b></div></div>
-          <div class="note">床垫下沉情况用于修正实际枕高，不作为独立的床垫销售结论。</div>
-        </section>
-
-        <section id="salesGuide">
-          <div class="section-heading"><h2>导购解读</h2></div>
-          <details class="panel panel-pad guide-group"><summary>肩颈尺寸解读 <span>展开查看</span></summary><div id="salesMetricGuides" class="sales-metric-list"></div></details>
-          <details class="panel panel-pad stack-top guide-group"><summary>颈脊结果解读 <span>展开查看</span></summary><div class="sales-metric-list"><details class="sales-metric"><summary><b>颈椎</b><span class="level level-3">重度异常</span></summary><div class="guide-note pillow"><b>评估结果：</b>结合头前倾、头部侧偏及躯干对齐等测量结果，本次评估处于重度异常区间，提示头颈前后位置及左右平衡与参考范围偏离较多。</div><div class="guide-note"><b>日常建议：</b>减少长时间低头和单侧转头，保持屏幕与视线平齐；持续不适时咨询专业人员。</div><div class="guide-note talk"><b>选枕引导方向：</b>优先确认颈托区与后脑区域贴合，再调整分区高度。</div></details><details class="sales-metric"><summary><b>胸椎</b><span class="level level-2">中度异常</span></summary><div class="guide-note pillow"><b>评估结果：</b>结合左右肩部高度和躯干前后方向的位置表现，本次评估处于中度异常区间，提示肩背左右平衡及躯干位置与参考范围存在一定偏离。</div><div class="guide-note"><b>日常建议：</b>注意双肩放松和左右用力均衡，减少长时间含胸、伏案或单侧负重。</div><div class="guide-note talk"><b>选枕引导方向：</b>试躺时观察肩背两侧受力是否均衡。</div></details><details class="sales-metric"><summary><b>腰椎</b><span class="level level-1">轻度异常</span></summary><div class="guide-note pillow"><b>评估结果：</b>结合双腿姿态、膝关节角度及躯干前后和左右方向的位置表现，本次评估处于轻度异常区间，提示腰部整体平衡与参考范围存在轻微偏离。</div><div class="guide-note"><b>日常建议：</b>减少久坐，保持坐姿、站姿重心均衡，并适当活动腰背。</div><div class="guide-note talk"><b>选枕引导方向：</b>以头颈舒适和脊柱自然延伸为准。</div></details><p class="note">导购话术：脊柱结构评分是多项体态数据综合判断，不是单个角度或距离直接换算；结合用户实际感受进行解读，不直接作为疾病判断。</p></div></details>
-        </section>
-
-        <section>
+        <section id="deal-confirm">
           <h2>方案确认与成交</h2>
-          <div class="panel panel-pad"><h3>型号选择</h3><p id="modelCopy" class="muted">一代枕需在4个型号中匹配最接近推荐高度的款式。</p><div id="businessModelActions" class="actions"></div></div>
-          <div class="panel panel-pad stack-top"><div><h3>舒适度评分</h3><p class="muted">请根据用户试躺反馈选择1-5星。</p><div id="starRating" class="stars"><button data-score="1">★</button><button data-score="2">★</button><button data-score="3">★</button><button data-score="4">★</button><button data-score="5">★</button><span>5分</span></div></div><div class="grid-2 stack-top-lg"><button id="continueAdjust" class="btn">返回分区调节</button><button id="confirmChoice" class="btn primary">确认试躺方案</button></div></div>
+          <div class="panel panel-pad stack-top"><div><h3>舒适度评分</h3><p class="muted" id="modelCopy">当前方案：二代枕 · 二代定制枕。请根据用户试躺反馈选择1-5星。</p><div id="starRating" class="stars"><button data-score="1">★</button><button data-score="2">★</button><button data-score="3">★</button><button data-score="4">★</button><button data-score="5">★</button><span>5分</span></div></div><div class="stack-top-lg"><button id="confirmChoice" class="btn primary" style="width:100%">确认试躺方案</button></div></div>
           <div class="panel panel-pad stack-top"><h3 class="section-h3">成交信息</h3><div class="trade-head"><div>序号</div><div>枕头型号</div><div>成交数量</div><div>成交日期</div></div><div id="tradeRows"><div class="trade-row"><div>1</div><select></select><div class="qty"><button>-</button><b>1</b><button>+</button></div><input type="date" /></div></div><div class="grid-2 stack-top-lg"><button id="addTrade" class="btn">添加商品</button><button id="saveTrade" class="btn primary">保存成交信息</button></div><div id="businessMessage" class="action-message"></div></div>
         </section>
       </div>
@@ -1686,7 +1636,7 @@
               <h3 class="spine-overview-title">脊柱结构异常评估</h3>
               <details class="spine-overview-note">
                 <summary><span>本次脊柱结构综合评分为26分，处于中度异常区间。评分由颈椎、胸椎和腰椎三部分测量结果综合得出，用于反映本次测量中身体姿态与参考范围的偏离程度。</span><span class="score-help" aria-label="查看综合评分计算规则">?</span></summary>
-                <div class="score-formula"><p><b>综合评分 = 颈椎评分×35% + 胸椎评分×25% + 腰椎评分×40%</b></p><p>该评分用于健康管理和姿态参考，不作为医学诊断。</p></div>
+                <div class="score-formula"><p><b>综合评分 = 颈椎结构评分×35% + 胸椎结构评分×25% + 腰椎结构评分×40%</b></p><p>该评分用于健康管理和姿态参考，不作为医学诊断。</p></div>
               </details>
               <div style="margin-top:20px">
                 <details class="spine-detail" open>
@@ -1789,7 +1739,7 @@
         </div>
       </div>
 
-      <div class="footer">本页面为水星报告静态兼容预览 · mercury-v1.9.5</div>
+      <div class="footer">本页面为水星报告静态兼容预览 · mercury-v1.12.1</div>
     </main>
     <script>
       const isSalesMode = window.location.pathname.endsWith("mercury-report-sales-demo.html") || new URLSearchParams(window.location.search).get("mode") === "sales" || window.location.hash === "#sales";
@@ -1798,13 +1748,19 @@
         const guide = metric.querySelector(".metric-guide");
         if (!guide) return;
         guide.querySelector(".guide-note.mattress")?.remove();
-        const item = document.createElement("div");
-        item.className = "sales-metric";
-        const heading = metric.querySelector(".metric-head").cloneNode(true);
-        item.appendChild(heading);
-        item.appendChild(guide);
-        guide.open = false;
-        document.getElementById("salesMetricGuides").appendChild(item);
+        metric.setAttribute("role", "button");
+        metric.setAttribute("tabindex", "0");
+        metric.setAttribute("aria-expanded", "false");
+        const toggleMetric = () => {
+          const isOpen = metric.classList.toggle("is-open");
+          metric.setAttribute("aria-expanded", String(isOpen));
+        };
+        metric.addEventListener("click", toggleMetric);
+        metric.addEventListener("keydown", (event) => {
+          if (event.key !== "Enter" && event.key !== " ") return;
+          event.preventDefault();
+          toggleMetric();
+        });
       });
 
       const compositionDefinitions = {
@@ -1854,32 +1810,36 @@
       const gen1Recommended = [10.4,10.4,4.4,5.0,15.5,14.5,10.4,10.4];
       const gen1ModelDiffs = {"1号枕":"3.1cm","2号枕":"2.3cm","3号枕":"1.5cm","4号枕":"1.1cm"};
       const gen1Models = {"1号枕": { zones:[[90,7.0],[60,6.5],[50,4.2],[50,4.8],[180,9.0],[180,9.0],[300,8.3],[300,8.3]] },"2号枕": { zones:[[110,8.0],[80,7.5],[50,4.2],[50,4.8],[200,10.0],[200,10.0],[300,8.3],[300,8.3]] },"3号枕": { zones:[[130,9.0],[100,8.5],[50,4.7],[50,5.3],[220,11.0],[220,11.0],[300,9.3],[300,9.3]] },"4号枕": { zones:[[150,10.0],[120,9.5],[50,4.7],[50,5.3],[240,12.0],[240,12.0],[300,9.3],[300,9.3]] }};
-      const gen2Zones = Array.from({length:11}, (_,i) => { const id=i+1; const source=universalZones.find(zone => zone.gen2.includes(id)); return { id, name:source ? source.title : `${id}区`, source: source ? `${source.id} ${source.title}` : "通用推荐", weight:"-", height: source ? source.height : 10, recommended:source ? source.height : 10, hotspot:gen2Hotspots[i] }; });
-      let productType = "一代枕"; let selectedModel = "4号枕"; let selectedZoneId = 3; let currentHeights = [];
-      function currentZones() { if (productType === "二代枕") return gen2Zones; return gen1Models[selectedModel].zones.map((zone, index) => ({ id:index+1, name:gen1ZoneNames[index], source:(universalZones.find(item => item.gen1.includes(index+1)) || {}).id || "-", weight:zone[0], height:zone[1], recommended:gen1Recommended[index], hotspot:gen1Hotspots[index] })); }
-      function originalHeights() { return currentZones().map(zone => zone.height); }
-      function renderBusinessModels() { const models = productType === "一代枕" ? Object.keys(gen1Models) : ["二代定制枕"]; document.getElementById("businessModelActions").innerHTML = models.map(model => `<button data-model="${model}" class="${model === selectedModel ? "active" : ""}">${model}</button>`).join(""); document.querySelector(".trade-row select").innerHTML = models.map(model => `<option ${model === selectedModel ? "selected" : ""}>${model}</option>`).join(""); document.getElementById("modelCopy").textContent = productType === "一代枕" ? "一代枕需在4个型号中匹配最接近推荐高度的款式。" : "二代枕只有一款，导购直接调节11个分区高度。"; document.querySelectorAll("#businessModelActions button").forEach(button => button.addEventListener("click", () => { selectedModel = button.dataset.model; selectedZoneId = productType === "一代枕" ? 3 : 2; currentHeights = originalHeights(); renderAllZones(); })); }
+      const SHIM_HEIGHT_CM = 0.5;
+      const SHIM_WEIGHT_G = 15;
+      const gen2Zones = Array.from({length:11}, (_,i) => { const id=i+1; const source=universalZones.find(zone => zone.gen2.includes(id)); const height = source ? source.height : 10; return { id, name:source ? source.title : `${id}区`, baseHeight: height, recommended: height, hotspot:gen2Hotspots[i] }; });
+      let productType = "二代枕"; let selectedModel = "二代定制枕"; let selectedZoneId = 2; let currentPads = [];
+      function heightFromPads(base, pads) { return Math.round((base + pads * SHIM_HEIGHT_CM) * 10) / 10; }
+      function weightFromPads(pads) { return Math.round(pads * SHIM_WEIGHT_G * 10) / 10; }
+      function padsFromTarget(base, target) { return Math.max(0, Math.round((target - base) / SHIM_HEIGHT_CM)); }
+      function currentZones() { if (productType === "二代枕") return gen2Zones; return gen1Models[selectedModel].zones.map((zone, index) => ({ id:index+1, name:gen1ZoneNames[index], baseHeight:zone[1], recommended:gen1Recommended[index], hotspot:gen1Hotspots[index] })); }
+      function originalPads() { return currentZones().map(zone => padsFromTarget(zone.baseHeight, zone.recommended)); }
+      function renderBusinessModels() { const models = productType === "一代枕" ? Object.keys(gen1Models) : ["二代定制枕"]; document.querySelector(".trade-row select").innerHTML = models.map(model => `<option ${model === selectedModel ? "selected" : ""}>${model}</option>`).join(""); document.getElementById("modelCopy").textContent = `当前方案：${productType} · ${selectedModel}。请根据用户试躺反馈选择1-5星。`; }
       function renderProductSelection() { document.querySelectorAll(".product-type-actions button").forEach(button => button.classList.toggle("active", button.dataset.type === productType)); document.getElementById("generationOneSelection").style.display = productType === "一代枕" ? "block" : "none"; document.getElementById("generationTwoSelection").style.display = productType === "二代枕" ? "block" : "none"; if (productType === "一代枕") { document.querySelectorAll(".model-actions button").forEach(button => button.classList.toggle("active", button.dataset.model === selectedModel)); document.getElementById("selectedModelLabel").textContent = selectedModel; document.getElementById("selectedModelDiff").textContent = gen1ModelDiffs[selectedModel]; } }
-      function clampHeight(value) { return Math.min(20, Math.max(0, Math.round(Number(value) * 10) / 10)); }
-      function renderZoneStage() { const zones = currentZones(); if (!zones.some(zone => zone.id === selectedZoneId)) selectedZoneId = zones[0].id; const selectedIndex = zones.findIndex(zone => zone.id === selectedZoneId); const selectedZone = zones[selectedIndex]; const image = document.getElementById("pillowStageImage"); image.src = productType === "一代枕" ? "src/assets/mercury-pillow-gen1-clean.png" : "src/assets/mercury-pillow-gen2-clean.png"; image.alt = `${productType}分区调节`; document.getElementById("pillowHotspots").innerHTML = zones.map(zone => `<button type="button" class="pillow-hotspot ${zone.id === selectedZoneId ? "active" : ""}" data-zone-id="${zone.id}" style="left:${zone.hotspot[0]}%;top:${zone.hotspot[1]}%" aria-label="选择${zone.name}" aria-pressed="${zone.id === selectedZoneId}">${zone.id}</button>`).join(""); document.querySelectorAll(".pillow-hotspot").forEach(button => button.addEventListener("click", () => { selectedZoneId = Number(button.dataset.zoneId); renderZoneStage(); })); document.getElementById("pillowTooltip").innerHTML = `<b>${selectedZone.name}</b><span>${currentHeights[selectedIndex].toFixed(1)}cm</span>`; document.getElementById("selectedZoneTitle").textContent = `${selectedZone.id}区 · ${selectedZone.name}`; document.getElementById("selectedZoneSource").textContent = `映射来源：${selectedZone.source}`; document.getElementById("selectedZoneWeight").style.display = selectedZone.weight === "-" ? "none" : "inline-block"; document.getElementById("selectedZoneWeight").textContent = selectedZone.weight === "-" ? "" : `PDF重量 ${selectedZone.weight}g`; document.getElementById("originalZoneHeight").textContent = `${selectedZone.height.toFixed(1)}cm`; document.getElementById("recommendedZoneHeight").textContent = `${selectedZone.recommended.toFixed(1)}cm`; document.getElementById("currentZoneHeight").textContent = `${currentHeights[selectedIndex].toFixed(1)}cm`; document.getElementById("selectedZoneInput").value = currentHeights[selectedIndex].toFixed(1); }
-      function updateSelectedZone(value) { const zones = currentZones(); const selectedIndex = zones.findIndex(zone => zone.id === selectedZoneId); currentHeights[selectedIndex] = clampHeight(value); renderZoneStage(); renderPreview(); }
+      function clampPads(value) { return Math.min(12, Math.max(0, Math.round(Number(value) || 0))); }
+      function renderZoneStage() { const zones = currentZones(); if (!zones.some(zone => zone.id === selectedZoneId)) selectedZoneId = zones[0].id; const selectedIndex = zones.findIndex(zone => zone.id === selectedZoneId); const selectedZone = zones[selectedIndex]; const pads = currentPads[selectedIndex] || 0; const height = heightFromPads(selectedZone.baseHeight, pads); const weight = weightFromPads(pads); const image = document.getElementById("pillowStageImage"); image.src = productType === "一代枕" ? "src/assets/mercury-pillow-gen1-clean.png" : "src/assets/mercury-pillow-gen2-clean.png"; image.alt = `${productType}分区调节`; document.getElementById("pillowHotspots").innerHTML = zones.map(zone => `<button type="button" class="pillow-hotspot ${zone.id === selectedZoneId ? "active" : ""}" data-zone-id="${zone.id}" style="left:${zone.hotspot[0]}%;top:${zone.hotspot[1]}%" aria-label="选择${zone.name}" aria-pressed="${zone.id === selectedZoneId}">${zone.id}</button>`).join(""); document.querySelectorAll(".pillow-hotspot").forEach(button => button.addEventListener("click", () => { selectedZoneId = Number(button.dataset.zoneId); renderZoneStage(); })); document.getElementById("pillowTooltip").innerHTML = `<b>${selectedZone.name}</b><span>${height.toFixed(1)}cm · ${pads}片</span>`; document.getElementById("selectedZoneTitle").textContent = `${selectedZone.id}区 · ${selectedZone.name}`; document.getElementById("selectedZoneSource").textContent = "复用一代枕垫片规则：按片数调节，高度与克重自动换算"; document.getElementById("selectedZoneWeight").style.display = "inline-block"; document.getElementById("selectedZoneWeight").textContent = `克重 ${weight}g`; document.getElementById("originalZoneHeight").textContent = `${selectedZone.baseHeight.toFixed(1)}cm`; document.getElementById("recommendedZoneHeight").textContent = `${pads}片`; document.getElementById("currentZoneHeight").textContent = `${height.toFixed(1)}cm`; document.getElementById("selectedZoneInput").value = pads; }
+      function updateSelectedZone(value) { const zones = currentZones(); const selectedIndex = zones.findIndex(zone => zone.id === selectedZoneId); currentPads[selectedIndex] = clampPads(value); renderZoneStage(); renderPreview(); }
       function renderAllZones() { renderProductSelection(); renderZoneStage(); renderPreview(); renderBusinessModels(); }
-      function renderPreview() { document.getElementById("previewModel").textContent = `当前方案：${productType} · ${selectedModel}`; document.getElementById("previewRows").innerHTML = currentZones().map((zone, index) => `<tr><td>${zone.id}区 ${zone.name}</td><td>${zone.source}</td><td>${zone.weight}</td><td data-preview-height>${currentHeights[index].toFixed(1)}</td></tr>`).join(""); }
-      document.querySelectorAll(".product-type-actions button").forEach(button => button.addEventListener("click", () => { productType = button.dataset.type; selectedModel = productType === "一代枕" ? "4号枕" : "二代定制枕"; selectedZoneId = productType === "一代枕" ? 3 : 2; currentHeights = originalHeights(); renderAllZones(); }));
-      document.querySelectorAll(".model-actions button").forEach(button => button.addEventListener("click", () => { selectedModel = button.dataset.model; selectedZoneId = 3; currentHeights = originalHeights(); renderAllZones(); }));
-      document.getElementById("selectedZoneMinus").addEventListener("click", () => updateSelectedZone(Number(document.getElementById("selectedZoneInput").value) - .1));
-      document.getElementById("selectedZonePlus").addEventListener("click", () => updateSelectedZone(Number(document.getElementById("selectedZoneInput").value) + .1));
+      function renderPreview() { document.getElementById("previewModel").textContent = `当前方案：${productType} · ${selectedModel}`; document.getElementById("previewRows").innerHTML = currentZones().map((zone, index) => { const pads = currentPads[index] || 0; return `<tr><td>${zone.id}区 ${zone.name}</td><td>${zone.baseHeight.toFixed(1)}</td><td>${pads}</td><td>${weightFromPads(pads)}</td><td data-preview-height>${heightFromPads(zone.baseHeight, pads).toFixed(1)}</td></tr>`; }).join(""); }
+      document.querySelectorAll(".product-type-actions button").forEach(button => button.addEventListener("click", () => { productType = button.dataset.type; selectedModel = productType === "一代枕" ? "3号枕" : "二代定制枕"; selectedZoneId = productType === "一代枕" ? 3 : 2; currentPads = originalPads(); renderAllZones(); }));
+      document.querySelectorAll(".model-actions button").forEach(button => button.addEventListener("click", () => { selectedModel = button.dataset.model; selectedZoneId = 3; currentPads = originalPads(); renderAllZones(); }));
+      document.getElementById("selectedZoneMinus").addEventListener("click", () => updateSelectedZone(Number(document.getElementById("selectedZoneInput").value) - 1));
+      document.getElementById("selectedZonePlus").addEventListener("click", () => updateSelectedZone(Number(document.getElementById("selectedZoneInput").value) + 1));
       document.getElementById("selectedZoneInput").addEventListener("input", (event) => updateSelectedZone(event.target.value));
-      document.getElementById("saveZones").addEventListener("click", () => document.getElementById("zoneMessage").textContent = "分区高度设置已保存");
-      document.getElementById("resetZones").addEventListener("click", () => { currentHeights = originalHeights(); renderAllZones(); document.getElementById("zoneMessage").textContent = "已恢复原始分区高度"; });
-      currentHeights = originalHeights();
+      document.getElementById("saveZones").addEventListener("click", () => document.getElementById("zoneMessage").textContent = "分区垫片设置已保存");
+      document.getElementById("resetZones").addEventListener("click", () => { currentPads = originalPads(); renderAllZones(); document.getElementById("zoneMessage").textContent = "已恢复原始垫片数"; });
+      currentPads = originalPads();
       renderAllZones();
       let comfortScore = 5;
       const stars = Array.from(document.querySelectorAll("#starRating button"));
       function renderStars() { stars.forEach((star) => star.classList.toggle("active", Number(star.dataset.score) <= comfortScore)); document.querySelector("#starRating span").textContent = `${comfortScore}分`; }
       stars.forEach((star) => star.addEventListener("click", () => { comfortScore = Number(star.dataset.score); renderStars(); }));
       renderStars();
-      document.getElementById("continueAdjust").addEventListener("click", () => document.getElementById("zoneMessage").scrollIntoView({ behavior: "smooth", block: "center" }));
       document.getElementById("confirmChoice").addEventListener("click", () => document.getElementById("businessMessage").textContent = `已确认${selectedModel}，舒适度${comfortScore}分`);
 
       function bindQuantity(row) { row.querySelectorAll(".qty button").forEach((button) => button.addEventListener("click", () => { const value = row.querySelector(".qty b"); value.textContent = Math.max(1, Number(value.textContent) + (button.textContent === "+" ? 1 : -1)); })); }
@@ -1933,8 +1893,8 @@
       tabButtons.forEach((button) => button.addEventListener("click", () => activateTab(button.dataset.tab)));
       document.querySelectorAll("[data-target-tab]").forEach((button) => button.addEventListener("click", () => activateTab(button.dataset.targetTab)));
       const requestedTab = new URLSearchParams(window.location.search).get("tab");
-      const tabAliases = { spine: "脊柱评估", composition: "身体成分", measure: "体围测量", operations: "导购操作" };
-      const initialTab = tabAliases[requestedTab] || requestedTab;
+      const tabAliases = { spine: "脊柱评估", composition: "身体成分", measure: "体围测量", operations: "导购操作", ai: "AI推荐" };
+      const initialTab = tabAliases[requestedTab] || requestedTab || (isSalesMode ? "导购操作" : "");
       if (initialTab && tabButtons.some((button) => button.dataset.tab === initialTab) && (initialTab !== "导购操作" || isSalesMode)) activateTab(initialTab);
     </script>
   </body>
