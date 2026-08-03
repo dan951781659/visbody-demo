@@ -68,9 +68,9 @@ export function useAuthLoginFlow() {
     finishRegisteredLogin();
   };
 
-  const attemptSocialLogin = (policyAgreed: boolean) => {
-    if (!requirePolicy(policyAgreed)) return;
-    finishRegisteredLogin();
+  /** 第三方登录按钮仅展示，暂不接真实能力 */
+  const attemptSocialLogin = (_policyAgreed: boolean) => {
+    showToast(authCopy.toast.socialComingSoon);
   };
 
   return {
