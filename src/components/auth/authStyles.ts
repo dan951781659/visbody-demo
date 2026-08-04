@@ -162,6 +162,24 @@ export function createAuthStyles(colors: ColorPalette) {
     gap: spacing.sm,
     marginTop: spacing.sm,
   },
+  switchLinkRow: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
+    flexWrap: "wrap",
+    gap: spacing.xs,
+    marginTop: spacing.md,
+    paddingVertical: spacing.sm,
+  },
+  switchLinkPrefix: {
+    ...typography.caption,
+    color: colors.textSecondary,
+  },
+  switchLinkAction: {
+    ...typography.caption,
+    color: colors.accent,
+    fontWeight: "600",
+  },
   socialSection: {
     gap: spacing.md,
     marginTop: spacing.sm,

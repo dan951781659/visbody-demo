@@ -8,6 +8,8 @@ const deviceLogo = require("../../assets/device-logo.png");
 type ProductSwitcherProps = {
   productLine: ProductLineOption;
   connection?: DeviceConnection;
+  hasDevice?: boolean;
+  isLoggedIn?: boolean;
   onPressName?: () => void;
   onPressLogo?: () => void;
   onPressScan?: () => void;
@@ -16,11 +18,15 @@ type ProductSwitcherProps = {
 export function ProductSwitcher({
   productLine,
   connection,
+  hasDevice = true,
+  isLoggedIn = true,
   onPressName,
   onPressLogo,
   onPressScan,
 }: ProductSwitcherProps) {
   const online = connection === "connected";
+  const deviceInteractive = isLoggedIn && Boolean(onPressLogo);
+  const showDevice = hasDevice;
 
   return (
     <View style={styles.container}>
@@ -51,17 +57,38 @@ export function ProductSwitcher({
           <Pressable
             accessibilityRole="button"
             accessibilityLabel="我的设备"
+            accessibilityState={{ disabled: !deviceInteractive }}
+            disabled={!deviceInteractive}
             onPress={onPressLogo}
-            style={({ pressed }) => [styles.logoPressable, pressed && styles.pressed]}
+            style={({ pressed }) => [
+              styles.logoPressable,
+              !isLoggedIn && styles.logoPressableDisabled,
+              deviceInteractive && pressed && styles.pressed,
+            ]}
           >
-            <View style={[styles.logoWrap, !online && styles.logoWrapOffline]}>
-              <Image
-                source={deviceLogo}
-                style={[styles.logoImage, !online && styles.logoImageOffline]}
-                resizeMode="cover"
-              />
+            <View
+              style={[
+                styles.logoWrap,
+                (!showDevice || !online || !isLoggedIn) && styles.logoWrapOffline,
+                !showDevice && styles.logoWrapEmpty,
+              ]}
+            >
+              {showDevice ? (
+                <Image
+                  source={deviceLogo}
+                  style={[styles.logoImage, (!online || !isLoggedIn) && styles.logoImageOffline]}
+                  resizeMode="cover"
+                />
+              ) : null}
             </View>
-            <View style={[styles.statusDot, online ? styles.dotOnline : styles.dotOffline]} />
+            {showDevice ? (
+              <View
+                style={[
+                  styles.statusDot,
+                  online && isLoggedIn ? styles.dotOnline : styles.dotOffline,
+                ]}
+              />
+            ) : null}
           </Pressable>
         </View>
       </View>
@@ -115,6 +142,9 @@ const styles = StyleSheet.create({
     flexShrink: 0,
     position: "relative",
   },
+  logoPressableDisabled: {
+    opacity: 0.62,
+  },
   logoWrap: {
     width: 48,
     height: 48,
@@ -127,6 +157,10 @@ const styles = StyleSheet.create({
   logoWrapOffline: {
     borderColor: colors.glassBorder,
     opacity: 0.72,
+  },
+  logoWrapEmpty: {
+    opacity: 1,
+    backgroundColor: colors.glass,
   },
   logoImage: {
     width: "100%",

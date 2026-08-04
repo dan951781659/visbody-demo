@@ -43,7 +43,8 @@ console.log("  Expo Go 局域网预览");
 console.log("========================================");
 console.log(`  地址：${url}`);
 console.log("  请用 Expo Go 扫码，或在 App 内手动输入上方地址");
-console.log("  若连不上：关掉 VPN / Clash，手机与电脑同一 Wi‑Fi");
+console.log("  Reload 后连不上：先关掉 VPN/Clash，再在 Expo Go 重新扫码");
+console.log("  仍失败可试：npm run start:tunnel（公网，更稳）");
 console.log("========================================\n");
 
 const child = spawn(
@@ -55,6 +56,7 @@ const child = spawn(
     env: {
       ...process.env,
       REACT_NATIVE_PACKAGER_HOSTNAME: lanIp,
+      EXPO_DEV_SERVER_ORIGIN: `http://${lanIp}:8081`,
     },
   }
 );

@@ -1,6 +1,7 @@
-import { useEffect, useMemo, useRef, useState } from "react";
-import { Modal, Pressable, StyleSheet, Text, View } from "react-native";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { ActivityIndicator, Pressable, ScrollView, StyleSheet, Text, View } from "react-native";
 import { useRouter } from "expo-router";
+import { SafeAreaView } from "react-native-safe-area-context";
 import { Ionicons } from "@expo/vector-icons";
 import { RadarScan } from "@/components/training/RadarScan";
 import { SwipeableDisconnectRow } from "@/components/training/SwipeableDisconnectRow";
@@ -10,17 +11,10 @@ import { useTraining } from "@/context/TrainingContext";
 import { Device, NearbyDevice } from "@/types/training";
 import { ColorPalette, radius, spacing, typography } from "@/theme";
 
-type PickerMode = "list" | "scanning" | "found";
-
-type ProductPickerModalProps = {
-  visible: boolean;
-  onClose: () => void;
-};
-
 const SCAN_DURATION_MS = 2500;
-const LAN_HINT = "手机与 Motion 设备需在同一局域网内";
+const LAN_HINT = "APP与设备应在同一局域网内";
 
-export function ProductPickerModal({ visible, onClose }: ProductPickerModalProps) {
+export function DevicePickerScreen() {
   const router = useRouter();
   const { showToast } = useToast();
   const { colors } = useTheme();
@@ -28,13 +22,16 @@ export function ProductPickerModal({ visible, onClose }: ProductPickerModalProps
   const {
     devices,
     selectedDevice,
+    lastUsedDeviceId,
     selectDevice,
     reconnectDevice,
     disconnectDevice,
     nearbyDevices,
     addDevice,
   } = useTraining();
-  const [mode, setMode] = useState<PickerMode>("list");
+  const [isScanning, setIsScanning] = useState(false);
+  const [hasScanned, setHasScanned] = useState(false);
+  const [scanCollapsed, setScanCollapsed] = useState(false);
   const [failedDeviceId, setFailedDeviceId] = useState<string | null>(null);
   const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
@@ -47,31 +44,58 @@ export function ProductPickerModal({ visible, onClose }: ProductPickerModalProps
     [devices],
   );
 
-  const clearTimer = () => {
+  const myDeviceNames = useMemo(
+    () => new Set(devices.map((device) => device.name)),
+    [devices],
+  );
+
+  const otherDevices = useMemo(
+    () => nearbyDevices.filter((device) => !myDeviceNames.has(device.name)),
+    [nearbyDevices, myDeviceNames],
+  );
+
+  const clearTimer = useCallback(() => {
     if (timerRef.current) {
       clearTimeout(timerRef.current);
       timerRef.current = null;
     }
-  };
+  }, []);
 
-  const reset = () => {
+  const stopScan = useCallback(() => {
     clearTimer();
-    setMode("list");
+    setIsScanning(false);
+  }, [clearTimer]);
+
+  const startScan = useCallback(() => {
+    clearTimer();
     setFailedDeviceId(null);
-  };
+    setIsScanning(true);
+    setHasScanned(false);
+    setScanCollapsed(false);
+    timerRef.current = setTimeout(() => {
+      setIsScanning(false);
+      setHasScanned(true);
+      setScanCollapsed(true);
+      timerRef.current = null;
+    }, SCAN_DURATION_MS);
+  }, [clearTimer]);
 
   useEffect(() => {
-    if (!visible) {
-      clearTimer();
-      setMode("list");
+    startScan();
+    return () => {
+      stopScan();
+      setHasScanned(false);
+      setScanCollapsed(false);
       setFailedDeviceId(null);
-    }
-    return clearTimer;
-  }, [visible]);
+    };
+  }, [startScan, stopScan]);
 
   const handleClose = () => {
-    reset();
-    onClose();
+    stopScan();
+    setHasScanned(false);
+    setScanCollapsed(false);
+    setFailedDeviceId(null);
+    router.back();
   };
 
   const openHelp = (path: "/help" | "/help/motionstation" = "/help") => {
@@ -79,14 +103,9 @@ export function ProductPickerModal({ visible, onClose }: ProductPickerModalProps
     router.push(path);
   };
 
-  const handleAddDevice = () => {
-    clearTimer();
-    setFailedDeviceId(null);
-    setMode("scanning");
-    timerRef.current = setTimeout(() => {
-      setMode("found");
-      timerRef.current = null;
-    }, SCAN_DURATION_MS);
+  const handleScanAddDevice = () => {
+    handleClose();
+    router.push("/connect/scan");
   };
 
   const handleSelectConnected = (device: Device) => {
@@ -125,225 +144,309 @@ export function ProductPickerModal({ visible, onClose }: ProductPickerModalProps
     router.push(`/connect/qr?device=${encodeURIComponent(device.name)}`);
   };
 
+  const renderLastUsedTag = (deviceId: string) => {
+    if (deviceId !== lastUsedDeviceId) return null;
+    return (
+      <View style={styles.lastUsedPill}>
+        <Text style={styles.lastUsedText}>上次使用</Text>
+      </View>
+    );
+  };
+
   return (
-    <Modal visible={visible} transparent animationType="fade" onRequestClose={handleClose}>
-      <Pressable style={styles.backdrop} onPress={handleClose}>
-        <Pressable style={styles.sheet} onPress={(event) => event.stopPropagation()}>
-          {mode === "list" ? (
-            <>
-              <Text style={styles.title}>我的设备</Text>
+    <SafeAreaView style={styles.container} edges={["top", "bottom"]}>
+      <View style={styles.page}>
+          <View style={styles.header}>
+            <Pressable
+              accessibilityRole="button"
+              accessibilityLabel="返回"
+              onPress={handleClose}
+              style={({ pressed }) => [styles.headerBack, pressed && styles.pressed]}
+            >
+              <Ionicons name="chevron-back" size={24} color={colors.textPrimary} />
+            </Pressable>
+            <Text style={styles.title}>我的设备</Text>
+            <Pressable
+              accessibilityRole="button"
+              accessibilityLabel="帮助"
+              onPress={() => openHelp("/help")}
+              style={({ pressed }) => [styles.headerHelp, pressed && styles.pressed]}
+            >
+              <Ionicons name="help-circle-outline" size={22} color={colors.textSecondary} />
+            </Pressable>
+          </View>
 
-              {connectedDevices.map((device) => {
-                const selected = device.id === selectedDevice.id;
-                return (
-                  <SwipeableDisconnectRow
-                    key={device.id}
-                    onDisconnect={() => handleDisconnect(device)}
-                  >
-                    <Pressable
-                      accessibilityRole="button"
-                      accessibilityHint="左滑可断开连接"
-                      onPress={() => handleSelectConnected(device)}
-                      style={({ pressed }) => [
-                        styles.option,
-                        selected && styles.optionSelected,
-                        pressed && styles.pressed,
-                      ]}
-                    >
-                      <View style={styles.optionText}>
-                        <Text style={styles.optionName}>{device.name}</Text>
-                        <Text style={styles.optionSubtitle}>{device.subtitle}</Text>
-                      </View>
-                      <View style={styles.optionRight}>
-                        <View style={[styles.statusPill, styles.statusOnline]}>
-                          <Text style={[styles.statusText, styles.statusTextOnline]}>已连接</Text>
-                        </View>
-                        {selected ? (
-                          <Ionicons name="checkmark-circle" size={22} color={colors.accent} />
-                        ) : null}
-                      </View>
-                    </Pressable>
-                  </SwipeableDisconnectRow>
-                );
-              })}
-
-              {offlineDevices.map((device) => {
-                const showHelp = failedDeviceId === device.id;
-                return (
-                  <View key={device.id} style={styles.deviceBlock}>
-                    <View style={[styles.option, styles.optionOffline]}>
-                      <View style={styles.optionText}>
-                        <Text style={styles.optionName}>{device.name}</Text>
-                        <Text style={styles.optionSubtitle}>设备已离线，点击刷新重连</Text>
-                      </View>
-                      <Pressable
-                        accessibilityRole="button"
-                        accessibilityLabel={`刷新重连 ${device.name}`}
-                        onPress={() => handleReconnect(device)}
-                        style={({ pressed }) => [styles.refreshBtn, pressed && styles.pressed]}
-                      >
-                        <Ionicons name="refresh" size={20} color={colors.accent} />
-                      </Pressable>
-                    </View>
-                    {showHelp ? (
-                      <Pressable
-                        accessibilityRole="button"
-                        accessibilityLabel="查看连接帮助"
-                        onPress={() => openHelp("/help/motionstation")}
-                        style={({ pressed }) => [styles.helpLink, pressed && styles.pressed]}
-                      >
-                        <Ionicons name="help-circle-outline" size={18} color={colors.accent} />
-                        <Text style={styles.helpLinkText}>查看连接帮助</Text>
-                        <Ionicons name="chevron-forward" size={16} color={colors.accent} />
-                      </Pressable>
-                    ) : null}
+          <ScrollView
+            style={styles.scroll}
+            contentContainerStyle={styles.scrollContent}
+            showsVerticalScrollIndicator={false}
+            onScroll={(event) => {
+              if (event.nativeEvent.contentOffset.y > 8) {
+                setScanCollapsed(true);
+              }
+            }}
+            scrollEventThrottle={16}
+          >
+            <View style={styles.scanStatus}>
+              {isScanning && !scanCollapsed ? (
+                <>
+                  <View style={styles.radarWrap}>
+                    <RadarScan size={120} />
                   </View>
-                );
-              })}
-
-              {connectedDevices.length === 0 && offlineDevices.length === 0 ? (
-                <Text style={styles.emptyHint}>暂无已连接设备，请添加设备</Text>
-              ) : null}
-
-              <Pressable
-                accessibilityRole="button"
-                accessibilityLabel="添加设备"
-                onPress={handleAddDevice}
-                style={({ pressed }) => [styles.addOption, pressed && styles.pressed]}
-              >
-                <Ionicons name="add-circle-outline" size={22} color={colors.accent} />
-                <Text style={styles.addOptionText}>添加设备</Text>
-              </Pressable>
-            </>
-          ) : null}
-
-          {mode === "scanning" ? (
-            <View style={styles.scanPanel}>
-              <View style={styles.scanHeader}>
-                <Text style={[styles.title, styles.scanHeaderTitle]}>添加设备</Text>
-                <View
-                  accessibilityRole="text"
-                  accessibilityLabel="配置 Wi‑Fi"
-                  style={styles.wifiEntry}
-                >
-                  <Ionicons name="wifi-outline" size={18} color={colors.textSecondary} />
-                  <Text style={styles.wifiEntryText}>配置 Wi‑Fi</Text>
+                  <View style={styles.scanStatusText}>
+                    <ActivityIndicator color={colors.accent} size="small" />
+                    <Text style={styles.scanHint}>正在扫描附近设备…</Text>
+                  </View>
+                </>
+              ) : (
+                <View style={styles.scanStatusText}>
+                  <Ionicons
+                    name={
+                      isScanning
+                        ? "radio-outline"
+                        : hasScanned
+                          ? "checkmark-circle-outline"
+                          : "radio-outline"
+                    }
+                    size={18}
+                    color={hasScanned ? colors.green : colors.textMuted}
+                  />
+                  <Text style={styles.scanHint}>
+                    {isScanning ? "正在扫描附近设备…" : hasScanned ? "扫描完成" : "准备扫描"}
+                  </Text>
                 </View>
-              </View>
-              <RadarScan />
-              <Text style={styles.scanHint}>正在扫描附近设备…</Text>
+              )}
               <Text style={styles.lanHint}>{LAN_HINT}</Text>
-              <Pressable
-                accessibilityRole="button"
-                accessibilityLabel="帮助"
-                onPress={() => openHelp("/help")}
-                style={({ pressed }) => [styles.helpButton, pressed && styles.pressed]}
-              >
-                <Ionicons name="help-circle-outline" size={20} color={colors.textSecondary} />
-                <Text style={styles.helpButtonText}>帮助</Text>
-              </Pressable>
-              <Pressable
-                accessibilityRole="button"
-                onPress={handleClose}
-                style={({ pressed }) => [styles.secondaryBtn, pressed && styles.pressed]}
-              >
-                <Text style={styles.secondaryBtnText}>取消</Text>
-              </Pressable>
             </View>
-          ) : null}
 
-          {mode === "found" ? (
-            <View style={styles.scanPanel}>
-              <Text style={styles.title}>发现附近设备</Text>
-              <Text style={styles.scanHint}>空闲设备可点击连接</Text>
-              <Text style={styles.lanHint}>{LAN_HINT}</Text>
-              {nearbyDevices.map((device) => {
-                const busy = device.status === "busy";
-                return (
+            <Text style={styles.sectionLabel}>我的设备</Text>
+            {connectedDevices.map((device) => {
+              const selected = device.id === selectedDevice?.id;
+              return (
+                <SwipeableDisconnectRow
+                  key={device.id}
+                  onDisconnect={() => handleDisconnect(device)}
+                >
                   <Pressable
-                    key={device.id}
                     accessibilityRole="button"
-                    disabled={busy}
-                    onPress={() => handleSelectNearby(device)}
+                    accessibilityHint="左滑可断开连接"
+                    onPress={() => handleSelectConnected(device)}
                     style={({ pressed }) => [
                       styles.option,
-                      busy && styles.optionDisabled,
-                      !busy && pressed && styles.pressed,
+                      selected && styles.optionSelected,
+                      pressed && styles.pressed,
                     ]}
                   >
                     <View style={styles.optionText}>
-                      <Text style={[styles.optionName, busy && styles.optionNameDisabled]}>
-                        {device.name}
-                      </Text>
-                      <Text style={styles.optionSubtitle}>
-                        {busy ? "当前正在被使用" : device.loggedIn ? "已登录当前账号" : "需扫码登录"}
-                      </Text>
+                      <Text style={styles.optionName}>{device.name}</Text>
                     </View>
-                    <View style={[styles.statusPill, busy ? styles.statusBusy : styles.statusIdle]}>
-                      <Text
-                        style={[styles.statusText, busy ? styles.statusTextBusy : styles.statusTextIdle]}
-                      >
-                        {busy ? "忙碌" : "空闲"}
-                      </Text>
+                    <View style={styles.optionRight}>
+                      <View style={[styles.statusPill, styles.statusOnline]}>
+                        <Text style={[styles.statusText, styles.statusTextOnline]}>已连接</Text>
+                      </View>
                     </View>
                   </Pressable>
-                );
-              })}
-              <Pressable
-                accessibilityRole="button"
-                accessibilityLabel="帮助"
-                onPress={() => openHelp("/help")}
-                style={({ pressed }) => [styles.helpButton, pressed && styles.pressed]}
-              >
-                <Ionicons name="help-circle-outline" size={20} color={colors.textSecondary} />
-                <Text style={styles.helpButtonText}>帮助</Text>
-              </Pressable>
-              <Pressable
-                accessibilityRole="button"
-                onPress={handleClose}
-                style={({ pressed }) => [styles.secondaryBtn, pressed && styles.pressed]}
-              >
-                <Text style={styles.secondaryBtnText}>取消</Text>
-              </Pressable>
+                </SwipeableDisconnectRow>
+              );
+            })}
+
+            {offlineDevices.map((device) => {
+              const showHelp = failedDeviceId === device.id;
+              return (
+                <View key={device.id} style={styles.deviceBlock}>
+                  <View style={[styles.option, styles.optionOffline]}>
+                    <View style={styles.optionText}>
+                      <View style={styles.nameRow}>
+                        <Text style={styles.optionName}>{device.name}</Text>
+                        {renderLastUsedTag(device.id)}
+                      </View>
+                      <Text style={styles.optionSubtitle}>设备已离线，点击刷新重连</Text>
+                    </View>
+                    <Pressable
+                      accessibilityRole="button"
+                      accessibilityLabel={`刷新重连 ${device.name}`}
+                      onPress={() => handleReconnect(device)}
+                      style={({ pressed }) => [styles.refreshBtn, pressed && styles.pressed]}
+                    >
+                      <Ionicons name="refresh" size={20} color={colors.accent} />
+                    </Pressable>
+                  </View>
+                  {showHelp ? (
+                    <Pressable
+                      accessibilityRole="button"
+                      accessibilityLabel="查看连接帮助"
+                      onPress={() => openHelp("/help/motionstation")}
+                      style={({ pressed }) => [styles.helpLink, pressed && styles.pressed]}
+                    >
+                      <Ionicons name="help-circle-outline" size={18} color={colors.accent} />
+                      <Text style={styles.helpLinkText}>查看连接帮助</Text>
+                      <Ionicons name="chevron-forward" size={16} color={colors.accent} />
+                    </Pressable>
+                  ) : null}
+                </View>
+              );
+            })}
+
+            {connectedDevices.length === 0 && offlineDevices.length === 0 ? (
+              <Text style={styles.emptyHint}>暂无设备，请添加设备</Text>
+            ) : null}
+
+            <View style={styles.sectionHeader}>
+              <Text style={styles.sectionLabel}>其他设备</Text>
+              {hasScanned && !isScanning ? (
+                <Pressable
+                  accessibilityRole="button"
+                  accessibilityLabel="重新扫描"
+                  onPress={startScan}
+                  style={({ pressed }) => [styles.rescanLink, pressed && styles.pressed]}
+                >
+                  <Ionicons name="refresh" size={16} color={colors.accent} />
+                  <Text style={styles.rescanLinkText}>重新扫描</Text>
+                </Pressable>
+              ) : null}
             </View>
-          ) : null}
-        </Pressable>
-      </Pressable>
-    </Modal>
+
+            {isScanning ? (
+              <Text style={styles.emptyHint}>正在查找设备…</Text>
+            ) : null}
+
+            {!isScanning && hasScanned && otherDevices.length > 0
+              ? otherDevices.map((device) => {
+                  const busy = device.status === "busy";
+                  return (
+                    <Pressable
+                      key={device.id}
+                      accessibilityRole="button"
+                      disabled={busy}
+                      onPress={() => handleSelectNearby(device)}
+                      style={({ pressed }) => [
+                        styles.option,
+                        busy && styles.optionDisabled,
+                        !busy && pressed && styles.pressed,
+                      ]}
+                    >
+                      <View style={styles.optionText}>
+                        <Text style={[styles.optionName, busy && styles.optionNameDisabled]}>
+                          {device.name}
+                        </Text>
+                        <Text style={styles.optionSubtitle}>
+                          {busy
+                            ? "当前正在被使用"
+                            : device.loggedIn
+                              ? "已登录当前账号"
+                              : "需扫码登录"}
+                        </Text>
+                      </View>
+                      <View
+                        style={[styles.statusPill, busy ? styles.statusBusy : styles.statusIdle]}
+                      >
+                        <Text
+                          style={[
+                            styles.statusText,
+                            busy ? styles.statusTextBusy : styles.statusTextIdle,
+                          ]}
+                        >
+                          {busy ? "忙碌" : "空闲"}
+                        </Text>
+                      </View>
+                    </Pressable>
+                  );
+                })
+              : null}
+
+            {!isScanning && hasScanned && otherDevices.length === 0 ? (
+              <View style={styles.otherEmpty}>
+                <Text style={styles.emptyHint}>未发现其他设备</Text>
+                <Pressable
+                  accessibilityRole="button"
+                  accessibilityLabel="重新扫描"
+                  onPress={startScan}
+                  style={({ pressed }) => [styles.primaryBtn, pressed && styles.pressed]}
+                >
+                  <Text style={styles.primaryBtnText}>重新扫描</Text>
+                </Pressable>
+                <Pressable
+                  accessibilityRole="button"
+                  accessibilityLabel="扫码添加设备"
+                  onPress={handleScanAddDevice}
+                  style={({ pressed }) => [styles.outlineBtn, pressed && styles.pressed]}
+                >
+                  <Ionicons name="scan-outline" size={18} color={colors.textSecondary} />
+                  <Text style={styles.outlineBtnText}>扫码添加设备</Text>
+                </Pressable>
+              </View>
+            ) : null}
+
+            {!isScanning && hasScanned && otherDevices.length > 0 ? (
+              <Pressable
+                accessibilityRole="button"
+                accessibilityLabel="扫码添加设备"
+                onPress={handleScanAddDevice}
+                style={({ pressed }) => [styles.outlineBtn, pressed && styles.pressed]}
+              >
+                <Ionicons name="scan-outline" size={18} color={colors.textSecondary} />
+                <Text style={styles.outlineBtnText}>扫码添加设备</Text>
+              </Pressable>
+            ) : null}
+          </ScrollView>
+      </View>
+    </SafeAreaView>
   );
 }
 
 function createStyles(colors: ColorPalette) {
   return StyleSheet.create({
-    backdrop: {
+    container: {
       flex: 1,
-      backgroundColor: colors.overlay,
-      justifyContent: "flex-end",
+      backgroundColor: colors.background,
     },
-    sheet: {
+    page: {
+      flex: 1,
       backgroundColor: colors.surface,
-      borderTopLeftRadius: radius.xl,
-      borderTopRightRadius: radius.xl,
-      paddingHorizontal: spacing.lg,
       paddingTop: spacing.lg,
-      paddingBottom: spacing.xxxl,
-      gap: spacing.sm,
+      paddingBottom: spacing.lg,
+    },
+    header: {
+      flexDirection: "row",
+      alignItems: "center",
+      justifyContent: "space-between",
+      paddingHorizontal: spacing.lg,
+      marginBottom: spacing.sm,
+    },
+    headerBack: {
+      width: 36,
+      height: 36,
+      alignItems: "center",
+      justifyContent: "center",
     },
     title: {
       ...typography.subtitle,
       color: colors.textPrimary,
-      marginBottom: spacing.sm,
     },
-    scanHeader: {
+    headerHelp: {
+      width: 36,
+      height: 36,
+      alignItems: "center",
+      justifyContent: "center",
+    },
+    scroll: {
+      flexGrow: 0,
+    },
+    scrollContent: {
+      paddingHorizontal: spacing.lg,
+      gap: spacing.sm,
+      paddingBottom: spacing.md,
+    },
+    sectionHeader: {
       flexDirection: "row",
       alignItems: "center",
       justifyContent: "space-between",
-      gap: spacing.sm,
-      marginBottom: spacing.sm,
+      marginTop: spacing.md,
     },
-    scanHeaderTitle: {
-      marginBottom: 0,
-      flexShrink: 1,
+    sectionLabel: {
+      ...typography.label,
+      color: colors.textMuted,
+      marginTop: spacing.sm,
     },
     deviceBlock: {
       gap: spacing.xs,
@@ -376,6 +479,12 @@ function createStyles(colors: ColorPalette) {
       flex: 1,
       gap: spacing.xs,
     },
+    nameRow: {
+      flexDirection: "row",
+      alignItems: "center",
+      flexWrap: "wrap",
+      gap: spacing.sm,
+    },
     optionName: {
       ...typography.subtitle,
       color: colors.textPrimary,
@@ -391,6 +500,19 @@ function createStyles(colors: ColorPalette) {
       flexDirection: "row",
       alignItems: "center",
       gap: spacing.sm,
+    },
+    lastUsedPill: {
+      paddingHorizontal: spacing.sm,
+      paddingVertical: 2,
+      borderRadius: radius.pill,
+      backgroundColor: colors.glass,
+      borderWidth: 1,
+      borderColor: colors.glassBorder,
+    },
+    lastUsedText: {
+      ...typography.label,
+      fontSize: 11,
+      color: colors.textMuted,
     },
     refreshBtn: {
       width: 40,
@@ -451,27 +573,25 @@ function createStyles(colors: ColorPalette) {
       textAlign: "center",
       paddingVertical: spacing.sm,
     },
-    addOption: {
-      flexDirection: "row",
+    scanStatus: {
       alignItems: "center",
       gap: spacing.sm,
-      marginTop: spacing.sm,
+      marginTop: spacing.md,
       paddingVertical: spacing.md,
       paddingHorizontal: spacing.md,
       borderRadius: radius.md,
       borderWidth: 1,
       borderColor: colors.glassBorder,
-      borderStyle: "dashed",
-      minHeight: 56,
+      backgroundColor: colors.glass,
     },
-    addOptionText: {
-      ...typography.subtitle,
-      color: colors.accent,
+    radarWrap: {
+      alignItems: "center",
+      justifyContent: "center",
     },
-    scanPanel: {
-      alignItems: "stretch",
-      gap: spacing.md,
-      paddingBottom: spacing.sm,
+    scanStatusText: {
+      flexDirection: "row",
+      alignItems: "center",
+      gap: spacing.sm,
     },
     scanHint: {
       ...typography.caption,
@@ -480,53 +600,56 @@ function createStyles(colors: ColorPalette) {
     },
     lanHint: {
       ...typography.caption,
-      fontSize: 14,
-      lineHeight: 20,
+      fontSize: 13,
+      lineHeight: 18,
       color: colors.textMuted,
       textAlign: "center",
-      paddingHorizontal: spacing.md,
     },
-    wifiEntry: {
+    rescanLink: {
       flexDirection: "row",
       alignItems: "center",
       gap: spacing.xs,
-      paddingVertical: spacing.xs,
-      paddingHorizontal: spacing.md,
-      borderRadius: radius.pill,
-      borderWidth: 1,
-      borderColor: colors.glassBorder,
-      backgroundColor: colors.glass,
+      marginTop: spacing.sm,
     },
-    wifiEntryText: {
+    rescanLinkText: {
       ...typography.label,
       fontSize: 13,
-      color: colors.textSecondary,
+      color: colors.accent,
     },
-    helpButton: {
-      alignSelf: "center",
+    otherEmpty: {
+      gap: spacing.sm,
+      paddingTop: spacing.xs,
+    },
+    primaryBtn: {
+      alignSelf: "stretch",
+      alignItems: "center",
+      justifyContent: "center",
+      paddingVertical: spacing.md,
+      borderRadius: radius.md,
+      backgroundColor: colors.accent,
+      minHeight: 48,
+    },
+    primaryBtnText: {
+      ...typography.subtitle,
+      color: colors.accentText,
+    },
+    outlineBtn: {
+      alignSelf: "stretch",
       flexDirection: "row",
       alignItems: "center",
-      gap: spacing.xs,
-      paddingVertical: spacing.sm,
-      paddingHorizontal: spacing.lg,
-      borderRadius: radius.pill,
+      justifyContent: "center",
+      gap: spacing.sm,
+      paddingVertical: spacing.md,
+      borderRadius: radius.md,
       borderWidth: 1,
       borderColor: colors.glassBorder,
       backgroundColor: colors.glass,
-    },
-    helpButtonText: {
-      ...typography.label,
-      color: colors.textSecondary,
-    },
-    secondaryBtn: {
-      alignSelf: "center",
-      paddingVertical: spacing.sm,
-      paddingHorizontal: spacing.xl,
+      minHeight: 48,
       marginTop: spacing.xs,
     },
-    secondaryBtnText: {
+    outlineBtnText: {
       ...typography.label,
-      color: colors.textMuted,
+      color: colors.textSecondary,
     },
     pressed: {
       opacity: 0.85,

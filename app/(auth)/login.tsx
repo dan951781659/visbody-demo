@@ -10,6 +10,7 @@ import {
 import { PolicyAgreement } from "@/components/auth/AuthWidgets";
 import { VerificationCodeRow } from "@/components/auth/AuthFormParts";
 import { AuthSocialButtons } from "@/components/auth/AuthSocialButtons";
+import { AuthSwitchLink } from "@/components/auth/AuthSwitchLink";
 import { authCopy } from "@/data/authCopy";
 import { useAuthLoginFlow } from "@/hooks/useAuthLoginFlow";
 import { useToast } from "@/components/ToastProvider";
@@ -67,6 +68,12 @@ export default function LoginScreen() {
         <AuthSocialButtons
           onGooglePress={() => attemptSocialLogin(policyAgreed)}
           onFacebookPress={() => attemptSocialLogin(policyAgreed)}
+        />
+
+        <AuthSwitchLink
+          prefix={authCopy.login.noAccount}
+          actionLabel={authCopy.login.goRegister}
+          onPress={() => router.replace("/register")}
         />
       </View>
     </AuthScreen>

@@ -54,7 +54,7 @@ export const defaultDevices: Device[] = [
     id: "ms-1024",
     productId: "motionstation",
     name: "MS-1024",
-    subtitle: "门店1",
+    subtitle: "",
     connection: "connected",
   },
 ];

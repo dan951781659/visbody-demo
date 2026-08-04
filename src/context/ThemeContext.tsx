@@ -33,7 +33,8 @@ function isColorSchemeId(value: string | null): value is ColorSchemeId {
 
 export function ThemeProvider({ children }: { children: ReactNode }) {
   const [schemeId, setSchemeId] = useState<ColorSchemeId>(DEFAULT_COLOR_SCHEME);
-  const [isReady, setIsReady] = useState(false);
+  // 不阻塞首屏：reload 时 AsyncStorage 若变慢，避免一直 return null
+  const [isReady] = useState(true);
 
   useEffect(() => {
     let cancelled = false;
@@ -45,10 +46,7 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
           setSchemeId(stored);
         }
       })
-      .catch(() => undefined)
-      .finally(() => {
-        if (!cancelled) setIsReady(true);
-      });
+      .catch(() => undefined);
 
     return () => {
       cancelled = true;

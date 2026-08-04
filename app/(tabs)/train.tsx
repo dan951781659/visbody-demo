@@ -3,25 +3,26 @@ import { ScrollView, StyleSheet, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useRouter } from "expo-router";
 import { ProductLinePickerModal } from "@/components/training/ProductLinePickerModal";
-import { ProductPickerModal } from "@/components/training/ProductPickerModal";
 import { TrainingModeCard } from "@/components/training/TrainingModeCard";
 import { ProductSwitcher } from "@/components/ProductSwitcher";
 import { SectionHeader } from "@/components/SectionHeader";
 import { useTraining } from "@/context/TrainingContext";
+import { useUser } from "@/context/UserContext";
 import { FREE_TRAINING_OPTIONS } from "@/data/trainingMock";
 import { colors, layout, spacing, typography } from "@/theme";
 
 export default function TrainScreen() {
   const router = useRouter();
+  const { isLoggedIn } = useUser();
   const {
     selectedProductLine,
     selectedDevice,
+    devices,
     productLines,
     selectProductLine,
     selectTrainingType,
   } = useTraining();
   const [lineVisible, setLineVisible] = useState(false);
-  const [deviceVisible, setDeviceVisible] = useState(false);
 
   const handleSelectTraining = (type: (typeof FREE_TRAINING_OPTIONS)[number]["id"]) => {
     selectTrainingType(type);
@@ -37,8 +38,10 @@ export default function TrainScreen() {
         <ProductSwitcher
           productLine={selectedProductLine}
           connection={selectedDevice?.connection}
+          hasDevice={devices.length > 0}
+          isLoggedIn={isLoggedIn}
           onPressName={() => setLineVisible(true)}
-          onPressLogo={() => setDeviceVisible(true)}
+          onPressLogo={isLoggedIn ? () => router.push("/devices") : undefined}
         />
 
         <SectionHeader title="自由训练" />
@@ -60,10 +63,6 @@ export default function TrainScreen() {
         selectedId={selectedProductLine.id}
         onSelect={selectProductLine}
         onClose={() => setLineVisible(false)}
-      />
-      <ProductPickerModal
-        visible={deviceVisible}
-        onClose={() => setDeviceVisible(false)}
       />
     </SafeAreaView>
   );

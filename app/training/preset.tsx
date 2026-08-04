@@ -22,6 +22,13 @@ export default function TrainingPresetScreen() {
 
     setSearching(true);
     try {
+      if (!selectedDevice) {
+        Alert.alert("设备未连接", "请先在「我的设备」中连接 MotionStation，然后重试。", [
+          { text: "知道了" },
+        ]);
+        return;
+      }
+
       const result = await searchMotionStationDevice(selectedDevice);
       if (!result.found) {
         const isOffline = selectedDevice.connection !== "connected";

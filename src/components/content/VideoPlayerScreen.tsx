@@ -69,7 +69,7 @@ export function VideoPlayerScreen({
             <Ionicons name="videocam-off-outline" size={42} color={colors.textMuted} />
             <Text style={styles.fallbackTitle}>视频暂不可用</Text>
             <Text style={styles.fallbackHint}>
-              训练视频素材尚未添加。播放器已就绪，后续补充 mediaUri 即可直接播放。
+              训练视频素材尚未添加。播放器已就绪，后续补充视频资源即可直接播放。
             </Text>
           </View>
         )}

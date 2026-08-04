@@ -5,9 +5,9 @@ import { useRouter } from "expo-router";
 import { AutoScrollCardsMarquee } from "@/components/AutoScrollCardsMarquee";
 import { HorizontalCarousel, CarouselItem } from "@/components/HorizontalCarousel";
 import { LibraryEntryCard } from "@/components/LibraryEntryCard";
+import { LoginRequiredCard } from "@/components/LoginRequiredCard";
 import { MyPlanButton } from "@/components/MyPlanButton";
 import { ProductLinePickerModal } from "@/components/training/ProductLinePickerModal";
-import { ProductPickerModal } from "@/components/training/ProductPickerModal";
 import { ProductSwitcher } from "@/components/ProductSwitcher";
 import { RecommendedPlansMarquee } from "@/components/RecommendedPlansMarquee";
 import { SceneCategoryCard } from "@/components/SceneCategoryCard";
@@ -28,12 +28,12 @@ export default function HomeScreen() {
   const {
     selectedProductLine,
     selectedDevice,
+    devices,
     productLines,
     selectProductLine,
   } = useTraining();
-  const { trainingGoals } = useUser();
+  const { isLoggedIn, trainingGoals } = useUser();
   const [lineVisible, setLineVisible] = useState(false);
-  const [deviceVisible, setDeviceVisible] = useState(false);
   const [selectedDate, setSelectedDate] = useState(DEMO_WEEK_ANCHOR);
   const router = useRouter();
 
@@ -56,32 +56,54 @@ export default function HomeScreen() {
         <ProductSwitcher
           productLine={selectedProductLine}
           connection={selectedDevice?.connection}
+          hasDevice={devices.length > 0}
+          isLoggedIn={isLoggedIn}
           onPressName={() => setLineVisible(true)}
-          onPressLogo={() => setDeviceVisible(true)}
+          onPressLogo={isLoggedIn ? () => router.push("/devices") : undefined}
           onPressScan={() => router.push("/connect/scan")}
         />
 
         <SectionHeader title="今日摘要" />
         <View style={styles.sectionGap}>
-          <WeekStatsCard
-            weekDays={summaryStats.weekDays}
-            metrics={summaryStats.metrics}
-            onSelectDay={setSelectedDate}
-          />
+          {isLoggedIn ? (
+            <WeekStatsCard
+              weekDays={summaryStats.weekDays}
+              metrics={summaryStats.metrics}
+              onSelectDay={setSelectedDate}
+            />
+          ) : (
+            <LoginRequiredCard onPress={() => router.push("/login")}>
+              <WeekStatsCard
+                weekDays={summaryStats.weekDays}
+                metrics={summaryStats.metrics}
+                onSelectDay={setSelectedDate}
+              />
+            </LoginRequiredCard>
+          )}
         </View>
 
         <View style={styles.section}>
           <SectionHeader title="今日训练" />
-          <TodayTrainingCard
-            date={selectedDate}
-            onViewPlan={(planId) =>
-              router.push({
-                pathname: "/content/[type]/[id]",
-                params: { type: "plans", id: planId },
-              })
-            }
-            onFreeTrainingPress={() => router.push("/(tabs)/train")}
-          />
+          {isLoggedIn ? (
+            <TodayTrainingCard
+              date={selectedDate}
+              onViewPlan={(planId) =>
+                router.push({
+                  pathname: "/content/[type]/[id]",
+                  params: { type: "plans", id: planId },
+                })
+              }
+              onFreeTrainingPress={() => router.push("/(tabs)/train")}
+            />
+          ) : (
+            <LoginRequiredCard onPress={() => router.push("/login")}>
+              <TodayTrainingCard
+                date={selectedDate}
+                onViewPlan={() => undefined}
+                onFreeTrainingPress={() => undefined}
+              />
+            </LoginRequiredCard>
+          )}
         </View>
 
         <View style={styles.section}>
@@ -157,10 +179,6 @@ export default function HomeScreen() {
         selectedId={selectedProductLine.id}
         onSelect={selectProductLine}
         onClose={() => setLineVisible(false)}
-      />
-      <ProductPickerModal
-        visible={deviceVisible}
-        onClose={() => setDeviceVisible(false)}
       />
     </SafeAreaView>
   );

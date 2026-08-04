@@ -1,4 +1,5 @@
 import { useEffect } from "react";
+import { ActivityIndicator, View } from "react-native";
 import { Stack } from "expo-router";
 import { StatusBar } from "expo-status-bar";
 import { useFonts, ArchivoBlack_400Regular } from "@expo-google-fonts/archivo-black";
@@ -25,8 +26,20 @@ function RootNavigator() {
     }
   }, [fontsLoaded, fontError, isReady]);
 
+  // reload 时字体加载偶发超时，避免一直卡在启动页
+  useEffect(() => {
+    const timeout = setTimeout(() => {
+      SplashScreen.hideAsync().catch(() => undefined);
+    }, 3500);
+    return () => clearTimeout(timeout);
+  }, []);
+
   if ((!fontsLoaded && !fontError) || !isReady) {
-    return null;
+    return (
+      <View style={{ flex: 1, alignItems: "center", justifyContent: "center", backgroundColor: colors.background }}>
+        <ActivityIndicator color={colors.accent} size="large" />
+      </View>
+    );
   }
 
   return (

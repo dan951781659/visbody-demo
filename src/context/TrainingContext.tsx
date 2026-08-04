@@ -46,12 +46,13 @@ type TrainingContextValue = {
   selectedProductLine: ProductLineOption;
   selectProductLine: (id: ProductLineId) => void;
   devices: Device[];
-  selectedDevice: Device;
+  selectedDevice: Device | undefined;
   selectedProduct: ProductOption;
   selectDevice: (deviceId: string) => void;
   reconnectDevice: (deviceId: string) => ReconnectResult;
   disconnectDevice: (deviceId: string) => void;
   addDevice: (name: string) => void;
+  lastUsedDeviceId: string | null;
   nearbyDevices: NearbyDevice[];
   setSelectedProductId: (id: ProductId) => void;
   connectionStatus: ConnectionStatus;
@@ -91,6 +92,7 @@ export function TrainingProvider({ children }: { children: ReactNode }) {
     useState<ProductLineId>(DEFAULT_PRODUCT_LINE_ID);
   const [devices, setDevices] = useState<Device[]>(defaultDevices);
   const [selectedDeviceId, setSelectedDeviceId] = useState(DEFAULT_DEVICE_ID);
+  const [lastUsedDeviceId, setLastUsedDeviceId] = useState<string | null>(DEFAULT_DEVICE_ID);
   const [connectionStatus, setConnectionStatus] = useState<ConnectionStatus>("disconnected");
   const [preset, setPreset] = useState<TrainingPreset | null>(null);
   const [activeSession, setActiveSession] = useState<ActiveSession | null>(null);
@@ -132,6 +134,7 @@ export function TrainingProvider({ children }: { children: ReactNode }) {
 
   const selectDevice = useCallback((deviceId: string) => {
     setSelectedDeviceId(deviceId);
+    setLastUsedDeviceId(deviceId);
   }, []);
 
   const reconnectDevice = useCallback((deviceId: string): ReconnectResult => {
@@ -151,6 +154,7 @@ export function TrainingProvider({ children }: { children: ReactNode }) {
     );
     reconnectAttemptsRef.current.set(deviceId, 0);
     setSelectedDeviceId(deviceId);
+    setLastUsedDeviceId(deviceId);
     return "connected";
   }, []);
 
@@ -174,6 +178,7 @@ export function TrainingProvider({ children }: { children: ReactNode }) {
       const existing = current.find((device) => device.name === name);
       if (existing) {
         setSelectedDeviceId(existing.id);
+        setLastUsedDeviceId(existing.id);
         return current.map((device) =>
           device.id === existing.id ? { ...device, connection: "connected" } : device,
         );
@@ -184,10 +189,11 @@ export function TrainingProvider({ children }: { children: ReactNode }) {
         id,
         productId: "motionstation",
         name,
-        subtitle: "新添加设备",
+        subtitle: "",
         connection: "connected",
       };
       setSelectedDeviceId(id);
+      setLastUsedDeviceId(id);
       return [...current, next];
     });
   }, []);
@@ -367,6 +373,7 @@ export function TrainingProvider({ children }: { children: ReactNode }) {
       reconnectDevice,
       disconnectDevice,
       addDevice,
+      lastUsedDeviceId,
       nearbyDevices: nearbyDevicesData,
       setSelectedProductId,
       connectionStatus,
@@ -402,6 +409,7 @@ export function TrainingProvider({ children }: { children: ReactNode }) {
       reconnectDevice,
       disconnectDevice,
       addDevice,
+      lastUsedDeviceId,
       setSelectedProductId,
       connectionStatus,
       preset,
