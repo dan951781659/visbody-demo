@@ -79,7 +79,6 @@ export type SettingsMenuItem = {
   icon: SettingsMenuIcon;
 };
 
-export type RecordRangeFilter = "7d" | "30d" | "all";
 export type RecordSourceFilter = "all" | TrainingRecordSource;
 export type UserDataTab = "sport" | "body";
 
@@ -307,12 +306,6 @@ export const trainingRecords: TrainingRecord[] = [
   },
 ];
 
-export const recordRangeOptions: { id: RecordRangeFilter; label: string }[] = [
-  { id: "7d", label: "近 7 天" },
-  { id: "30d", label: "近 30 天" },
-  { id: "all", label: "全部" },
-];
-
 export const recordSourceOptions: { id: RecordSourceFilter; label: string }[] = [
   { id: "all", label: "全部类型" },
   { id: "plan_follow", label: "计划跟练" },
@@ -332,8 +325,9 @@ export function getTrainingRecordById(id: string): TrainingRecord | undefined {
 
 export function filterTrainingRecords(
   records: TrainingRecord[],
-  range: RecordRangeFilter,
   source: RecordSourceFilter,
+  startDate?: string,
+  endDate?: string,
 ): TrainingRecord[] {
   let filtered = [...records];
 
@@ -341,12 +335,8 @@ export function filterTrainingRecords(
     filtered = filtered.filter((record) => record.source === source);
   }
 
-  if (range !== "all") {
-    const days = range === "7d" ? 7 : 30;
-    const cutoff = new Date("2026-07-19T00:00:00");
-    cutoff.setDate(cutoff.getDate() - days);
-    filtered = filtered.filter((record) => new Date(`${record.date}T00:00:00`) >= cutoff);
-  }
+  if (startDate) filtered = filtered.filter((record) => record.date >= startDate);
+  if (endDate) filtered = filtered.filter((record) => record.date <= endDate);
 
   return filtered.sort((a, b) => b.finishedAt - a.finishedAt);
 }
