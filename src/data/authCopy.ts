@@ -161,6 +161,7 @@ export const authCopy = {
     loginSuccess: "登录成功，即将进入首页。",
     emailNotRegistered: "当前邮箱未注册",
     phoneNotRegistered: "当前手机号未注册",
+    socialComingSoon: "功能完善中，敬请期待",
     logoutSuccess: "已退出登录",
     profileUpdated: "个人信息已更新",
   },
