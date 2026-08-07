@@ -21,10 +21,24 @@
         padding-bottom: 32px;
       }
       .hero {
+        padding: 0;
+        background: linear-gradient(180deg, #eaf4f8 0%, #f4f7f9 100%);
+      }
+      .hero-frame {
         position: relative;
         overflow: hidden;
         aspect-ratio: 1080 / 458;
+        border: 1px solid rgba(125, 211, 252, .6);
+        border-radius: 0;
         background: #02050b;
+        box-shadow: 0 10px 28px rgba(15, 23, 42, .16);
+      }
+      .hero-frame::after {
+        content: "";
+        position: absolute;
+        inset: 0;
+        pointer-events: none;
+        background: linear-gradient(115deg, rgba(56, 189, 248, .08), transparent 48%, rgba(255, 255, 255, .05));
       }
       .hero-banner {
         position: absolute;
@@ -39,6 +53,10 @@
         left: 81.1%;
         width: 11.35%;
         height: auto;
+        z-index: 1;
+        border: 2px solid rgba(255, 255, 255, .9);
+        border-radius: 8px;
+        box-shadow: 0 4px 12px rgba(2, 8, 23, .32);
       }
       .hero-row {
         position: relative;
@@ -1478,8 +1496,10 @@
   <body>
     <main class="page">
       <header class="hero">
-        <img class="hero-banner" src="src/assets/mercury-report-hero.jpg" alt="水星睡眠科技AI智配系统" />
-        <img class="hero-qr" src="src/assets/mercury-report-qr.png" alt="报告二维码" />
+        <div class="hero-frame">
+          <img class="hero-banner" src="src/assets/mercury-report-hero.jpg" alt="水星睡眠科技AI智配系统" />
+          <img class="hero-qr" src="src/assets/mercury-report-qr.png" alt="报告二维码" />
+        </div>
       </header>
 
       <div class="content">
