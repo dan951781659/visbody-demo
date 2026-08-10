@@ -101,20 +101,20 @@ export const mockUser: UserProfile = {
 export const sportDataSnapshot: UserDataSnapshot = {
   updatedAt: "2026-07-18 21:30",
   metrics: [
-    { label: "本周训练", value: "4", unit: "次", delta: "较上周 +1 次" },
-    { label: "累计时长", value: "2.5", unit: "小时", delta: "本周 +45 分钟" },
-    { label: "训练容量", value: "18.6", unit: "吨", delta: "较上周 +8%" },
-    { label: "消耗热量", value: "1,240", unit: "千卡", delta: "较上周 +6%" },
+    { label: "本周训练", value: "4", unit: "次" },
+    { label: "累计时长", value: "2.5", unit: "小时" },
+    { label: "训练容量", value: "18.6", unit: "吨" },
+    { label: "消耗热量", value: "1,240", unit: "千卡" },
   ],
 };
 
 export const bodyDataSnapshot: UserDataSnapshot = {
   updatedAt: "2026-07-15 10:20",
   metrics: [
-    { label: "体重", value: "68.5", unit: "kg", delta: "较上次 -0.3 kg" },
-    { label: "体脂率", value: "18.2", unit: "%", delta: "较上次 -0.5%" },
-    { label: "骨骼肌", value: "31.4", unit: "kg", delta: "较上次 +0.2 kg" },
-    { label: "BMI", value: "22.1", unit: "", delta: "正常范围" },
+    { label: "体重", value: "68.5", unit: "kg" },
+    { label: "体脂率", value: "18.2", unit: "%" },
+    { label: "骨骼肌", value: "31.4", unit: "kg" },
+    { label: "BMI", value: "22.1", unit: "" },
   ],
 };
 
