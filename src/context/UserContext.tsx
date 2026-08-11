@@ -1,4 +1,5 @@
-import { createContext, ReactNode, useCallback, useContext, useMemo, useState } from "react";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { createContext, ReactNode, useCallback, useContext, useEffect, useMemo, useState } from "react";
 import { mockUser, UserProfile } from "@/data/userMock";
 import { colors } from "@/theme";
 import {
@@ -49,6 +50,18 @@ type UserContextValue = {
 
 const UserContext = createContext<UserContextValue | null>(null);
 
+const SESSION_STORAGE_KEY = "motionstation.auth.session";
+
+function createDefaultLoggedInUser(): UserProfile {
+  return { ...mockUser, avatarColor: AVATAR_THEME_BLUE, avatarUri: undefined };
+}
+
+function persistSession(loggedIn: boolean) {
+  AsyncStorage.setItem(SESSION_STORAGE_KEY, loggedIn ? "loggedIn" : "loggedOut").catch(
+    () => undefined,
+  );
+}
+
 function buildProfileFields(
   profile: ProfileDraftFields,
   nickname: string,
@@ -73,16 +86,33 @@ function buildProfileFields(
 }
 
 export function UserProvider({ children }: { children: ReactNode }) {
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const [user, setUser] = useState<UserProfile | null>(null);
+  const [isLoggedIn, setIsLoggedIn] = useState(true);
+  const [user, setUser] = useState<UserProfile | null>(createDefaultLoggedInUser);
   const [trainingGoals, setTrainingGoals] = useState<TrainingGoals>(DEFAULT_TRAINING_GOALS);
   const [registerDraft, setRegisterDraft] = useState<RegisterDraft | null>(null);
 
+  useEffect(() => {
+    let cancelled = false;
+
+    AsyncStorage.getItem(SESSION_STORAGE_KEY)
+      .then((stored) => {
+        if (cancelled || stored !== "loggedOut") return;
+        setIsLoggedIn(false);
+        setUser(null);
+      })
+      .catch(() => undefined);
+
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+
   const login = useCallback(() => {
-    setUser({ ...mockUser, avatarColor: AVATAR_THEME_BLUE, avatarUri: undefined });
+    setUser(createDefaultLoggedInUser());
     setTrainingGoals(DEFAULT_TRAINING_GOALS);
     setIsLoggedIn(true);
     setRegisterDraft(null);
+    persistSession(true);
   }, []);
 
   const completeRegistration = useCallback(
@@ -96,6 +126,7 @@ export function UserProvider({ children }: { children: ReactNode }) {
       setTrainingGoals(normalizeTrainingGoals(profile.trainingGoals));
       setIsLoggedIn(true);
       setRegisterDraft(null);
+      persistSession(true);
     },
     [registerDraft],
   );
@@ -117,6 +148,7 @@ export function UserProvider({ children }: { children: ReactNode }) {
     setUser(null);
     setTrainingGoals(DEFAULT_TRAINING_GOALS);
     setRegisterDraft(null);
+    persistSession(false);
   }, []);
 
   const value = useMemo(

@@ -33,7 +33,9 @@ export function UserDataCard({
         onChange={onTabChange}
         accessibilityLabel="用户数据切换"
       />
-      <Text style={styles.updatedAt}>最近更新：{snapshot.updatedAt}</Text>
+      <Text style={styles.updatedAt}>
+        {activeTab === "sport" ? "最近7天训练数据：" : `最近更新：${snapshot.updatedAt}`}
+      </Text>
       <DataMetricGrid metrics={snapshot.metrics} />
     </GlassSurface>
   );
