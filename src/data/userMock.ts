@@ -102,7 +102,7 @@ export const sportDataSnapshot: UserDataSnapshot = {
   updatedAt: "2026-07-18 21:30",
   metrics: [
     { label: "训练次数", value: "4", unit: "次", delta: "较上一周期 +1 次" },
-    { label: "累计时长", value: "2.5", unit: "小时", delta: "最近7天 +45 分钟" },
+    { label: "累计时长", value: "2.5", unit: "小时", delta: "较上一周期 +45 分钟" },
     { label: "训练容量", value: "18.6", unit: "吨", delta: "较上一周期 +8%" },
     { label: "消耗热量", value: "1,240", unit: "千卡", delta: "较上一周期 +6%" },
   ],
