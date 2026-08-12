@@ -1,12 +1,18 @@
-import { useMemo, useState } from "react";
+import { useMemo, useState, type ReactNode } from "react";
 import { Pressable, StyleSheet, Text, View } from "react-native";
+import { Ionicons } from "@expo/vector-icons";
 import { useTheme } from "@/context/ThemeContext";
-import type { PlanScheduleWeek } from "@/types/content";
+import { resolvePlanMoveDetails } from "@/data/exploreLibrary";
+import type { PlanScheduleMove, PlanScheduleWeek } from "@/types/content";
 import { ColorPalette, radius, spacing, typography } from "@/theme";
 
 type PlanScheduleBrowserProps = {
   schedule: PlanScheduleWeek[];
 };
+
+function moveKey(move: PlanScheduleMove, index: number) {
+  return `${move.name}-${move.sets}-${index}`;
+}
 
 export function PlanScheduleBrowser({ schedule }: PlanScheduleBrowserProps) {
   const { colors } = useTheme();
@@ -14,18 +20,44 @@ export function PlanScheduleBrowser({ schedule }: PlanScheduleBrowserProps) {
   const [weekIndex, setWeekIndex] = useState(0);
   const activeWeek = schedule[Math.min(weekIndex, schedule.length - 1)];
   const [dayIndex, setDayIndex] = useState(0);
+  /** null = 使用默认：仅展开第一个动作 */
+  const [expandedIds, setExpandedIds] = useState<Set<string> | null>(null);
 
   const days = activeWeek?.days ?? [];
   const activeDay = days[Math.min(dayIndex, Math.max(days.length - 1, 0))];
+  const moves = activeDay?.moves ?? [];
 
   const weekTabs = useMemo(
     () => schedule.map((week, index) => ({ key: week.week, label: `第 ${week.week} 周`, index })),
     [schedule],
   );
 
+  const resolvedExpanded = useMemo(() => {
+    if (expandedIds) return expandedIds;
+    if (!moves.length) return new Set<string>();
+    return new Set([moveKey(moves[0], 0)]);
+  }, [expandedIds, moves]);
+
   const selectWeek = (index: number) => {
     setWeekIndex(index);
     setDayIndex(0);
+    setExpandedIds(null);
+  };
+
+  const selectDay = (index: number) => {
+    setDayIndex(index);
+    setExpandedIds(null);
+  };
+
+  const toggleMove = (id: string) => {
+    setExpandedIds((prev) => {
+      const base =
+        prev ?? (moves[0] ? new Set([moveKey(moves[0], 0)]) : new Set<string>());
+      const next = new Set(base);
+      if (next.has(id)) next.delete(id);
+      else next.add(id);
+      return next;
+    });
   };
 
   if (!schedule.length) {
@@ -61,7 +93,7 @@ export function PlanScheduleBrowser({ schedule }: PlanScheduleBrowserProps) {
               key={`${activeWeek.week}-${day.day}`}
               accessibilityRole="tab"
               accessibilityState={{ selected }}
-              onPress={() => setDayIndex(index)}
+              onPress={() => selectDay(index)}
               style={[styles.tab, styles.dayTab, selected && styles.tabSelected]}
             >
               <Text style={[styles.tabText, selected && styles.tabTextSelected]}>
@@ -73,86 +105,187 @@ export function PlanScheduleBrowser({ schedule }: PlanScheduleBrowserProps) {
       </View>
 
       <Text style={styles.sectionTitle}>动作列表</Text>
-      {!activeDay?.moves.length ? (
+      {!moves.length ? (
         <Text style={styles.empty}>该训练日还未配置动作。</Text>
       ) : (
         <View style={styles.moveList}>
-          {activeDay.moves.map((move) => (
-            <View key={`${move.name}-${move.sets}`} style={styles.moveCard}>
-              <Text style={styles.moveName}>{move.name}</Text>
-              <Text style={styles.moveMeta}>
-                {move.sets} 组 · {move.repsOrDuration}
-                {move.restSeconds != null ? ` · 休息 ${move.restSeconds} 秒` : ""}
-                {move.weightKg != null ? ` · ${move.weightKg} kg` : ""}
-              </Text>
-            </View>
-          ))}
+          {moves.map((move, index) => {
+            const id = moveKey(move, index);
+            const open = resolvedExpanded.has(id);
+            const details = resolvePlanMoveDetails(move);
+
+            return (
+              <View key={id} style={styles.moveCard}>
+                <Pressable
+                  accessibilityRole="button"
+                  accessibilityState={{ expanded: open }}
+                  accessibilityLabel={`${move.name}${open ? "，已展开" : "，已收起"}`}
+                  onPress={() => toggleMove(id)}
+                  style={({ pressed }) => [styles.moveHeader, pressed && styles.pressed]}
+                >
+                  <View style={styles.moveHeaderText}>
+                    <Text style={styles.moveName}>{move.name}</Text>
+                    <Text style={styles.moveMeta}>
+                      {move.sets} 组 · {move.repsOrDuration}
+                      {move.restSeconds != null ? ` · 休息 ${move.restSeconds} 秒` : ""}
+                      {move.weightKg != null ? ` · ${move.weightKg} kg` : ""}
+                    </Text>
+                  </View>
+                  <Ionicons
+                    name={open ? "chevron-up" : "chevron-down"}
+                    size={18}
+                    color={colors.textSecondary}
+                  />
+                </Pressable>
+
+                {open ? (
+                  <View style={styles.moveDetail}>
+                    <DetailBlock styles={styles} title="动作介绍">
+                      <Text style={styles.detailBody}>{details.description}</Text>
+                    </DetailBlock>
+                    <DetailBlock styles={styles} title="动作要点">
+                      {details.keyPoints.map((point) => (
+                        <Text key={point} style={styles.detailBody}>
+                          • {point}
+                        </Text>
+                      ))}
+                    </DetailBlock>
+                    <DetailBlock styles={styles} title="呼吸建议">
+                      <Text style={styles.detailBody}>{details.breathing}</Text>
+                    </DetailBlock>
+                    <DetailBlock styles={styles} title="错误要点">
+                      {details.commonMistakes.map((mistake) => (
+                        <Text key={mistake} style={styles.detailBody}>
+                          • {mistake}
+                        </Text>
+                      ))}
+                    </DetailBlock>
+                  </View>
+                ) : null}
+              </View>
+            );
+          })}
         </View>
       )}
     </View>
   );
 }
 
+function DetailBlock({
+  title,
+  children,
+  styles,
+}: {
+  title: string;
+  children: ReactNode;
+  styles: ReturnType<typeof createStyles>;
+}) {
+  return (
+    <View style={styles.detailBlock}>
+      <Text style={styles.detailTitle}>{title}</Text>
+      <View style={styles.detailContent}>{children}</View>
+    </View>
+  );
+}
+
 function createStyles(colors: ColorPalette) {
   return StyleSheet.create({
-  wrap: {
-    gap: spacing.md,
-  },
-  sectionTitle: {
-    ...typography.subtitle,
-    color: colors.textPrimary,
-  },
-  tabRow: {
-    flexDirection: "row",
-    flexWrap: "wrap",
-    gap: spacing.sm,
-  },
-  tab: {
-    paddingHorizontal: spacing.md,
-    paddingVertical: spacing.sm,
-    borderRadius: radius.pill,
-    backgroundColor: colors.surface,
-    borderWidth: 1,
-    borderColor: colors.glassBorder,
-  },
-  dayTab: {
-    minWidth: 72,
-    alignItems: "center",
-  },
-  tabSelected: {
-    backgroundColor: colors.accentGlass,
-    borderColor: colors.accent,
-  },
-  tabText: {
-    ...typography.label,
-    color: colors.textSecondary,
-  },
-  tabTextSelected: {
-    color: colors.accent,
-  },
-  moveList: {
-    gap: spacing.sm,
-  },
-  moveCard: {
-    borderRadius: radius.lg,
-    padding: spacing.lg,
-    backgroundColor: colors.surface,
-    borderWidth: 1,
-    borderColor: colors.glassBorder,
-    gap: spacing.xs,
-  },
-  moveName: {
-    ...typography.subtitle,
-    fontSize: 17,
-    color: colors.textPrimary,
-  },
-  moveMeta: {
-    ...typography.caption,
-    color: colors.textSecondary,
-  },
-  empty: {
-    ...typography.caption,
-    color: colors.textMuted,
-  },
+    wrap: {
+      gap: spacing.md,
+    },
+    sectionTitle: {
+      ...typography.subtitle,
+      color: colors.textPrimary,
+    },
+    tabRow: {
+      flexDirection: "row",
+      flexWrap: "wrap",
+      gap: spacing.sm,
+    },
+    tab: {
+      paddingHorizontal: spacing.md,
+      paddingVertical: spacing.sm,
+      borderRadius: radius.pill,
+      backgroundColor: colors.surface,
+      borderWidth: 1,
+      borderColor: colors.glassBorder,
+    },
+    dayTab: {
+      minWidth: 72,
+      alignItems: "center",
+    },
+    tabSelected: {
+      backgroundColor: colors.accentGlass,
+      borderColor: colors.accent,
+    },
+    tabText: {
+      ...typography.label,
+      color: colors.textSecondary,
+    },
+    tabTextSelected: {
+      color: colors.accent,
+    },
+    moveList: {
+      gap: spacing.sm,
+    },
+    moveCard: {
+      borderRadius: radius.lg,
+      backgroundColor: colors.surface,
+      borderWidth: 1,
+      borderColor: colors.glassBorder,
+      overflow: "hidden",
+    },
+    moveHeader: {
+      flexDirection: "row",
+      alignItems: "center",
+      gap: spacing.md,
+      padding: spacing.lg,
+    },
+    moveHeaderText: {
+      flex: 1,
+      gap: spacing.xs,
+      minWidth: 0,
+    },
+    moveName: {
+      ...typography.subtitle,
+      fontSize: 17,
+      color: colors.textPrimary,
+    },
+    moveMeta: {
+      ...typography.caption,
+      color: colors.textSecondary,
+    },
+    moveDetail: {
+      borderTopWidth: StyleSheet.hairlineWidth,
+      borderTopColor: colors.glassBorder,
+      paddingHorizontal: spacing.lg,
+      paddingBottom: spacing.lg,
+      paddingTop: spacing.md,
+      gap: spacing.md,
+    },
+    detailBlock: {
+      gap: spacing.xs,
+    },
+    detailTitle: {
+      ...typography.label,
+      fontSize: 13,
+      color: colors.textMuted,
+    },
+    detailContent: {
+      gap: spacing.xs,
+    },
+    detailBody: {
+      ...typography.caption,
+      fontSize: 13,
+      lineHeight: 20,
+      color: colors.textSecondary,
+    },
+    pressed: {
+      opacity: 0.88,
+    },
+    empty: {
+      ...typography.caption,
+      color: colors.textMuted,
+    },
   });
 }

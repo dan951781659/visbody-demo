@@ -5,6 +5,7 @@ import { useTheme } from "@/context/ThemeContext";
 import { getMetaTags } from "@/data/exploreLibrary";
 import type { LibraryItem, LibraryTab } from "@/types/content";
 import { ColorPalette, radius, spacing, typography } from "@/theme";
+import { getMetaChipPalette } from "@/theme/metaChip";
 
 type ContentListItemProps = {
   item: LibraryItem;
@@ -32,11 +33,23 @@ export function ContentListItem({ item, tab, onPress }: ContentListItemProps) {
           <Text style={styles.summary}>{item.summary}</Text>
         </View>
         <View style={styles.metaRow}>
-          {tags.slice(0, 3).map((tag) => (
-            <View key={tag} style={styles.tag}>
-              <Text style={styles.tagText}>{tag}</Text>
-            </View>
-          ))}
+          {tags.slice(0, 3).map((tag) => {
+            const palette = getMetaChipPalette(tag.style);
+            return (
+              <View
+                key={`${tag.style}-${tag.text}`}
+                style={[
+                  styles.tag,
+                  {
+                    backgroundColor: palette.background,
+                    borderColor: palette.border,
+                  },
+                ]}
+              >
+                <Text style={[styles.tagText, { color: palette.text }]}>{tag.text}</Text>
+              </View>
+            );
+          })}
         </View>
       </View>
     </Pressable>
@@ -92,14 +105,11 @@ function createStyles(colors: ColorPalette) {
       borderRadius: radius.pill,
       paddingHorizontal: spacing.sm,
       paddingVertical: 3,
-      backgroundColor: colors.accentGlass,
       borderWidth: 1,
-      borderColor: colors.glassBorder,
     },
     tagText: {
       ...typography.label,
       fontSize: 11,
-      color: colors.textPrimary,
     },
   });
 }

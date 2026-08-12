@@ -9,6 +9,7 @@ export default function ProfileLayout() {
         contentStyle: { backgroundColor: colors.background },
       }}
     >
+      <Stack.Screen name="index" options={{ headerShown: false }} />
       <Stack.Screen name="edit" />
       <Stack.Screen name="training-goals" />
       <Stack.Screen name="color-scheme" />

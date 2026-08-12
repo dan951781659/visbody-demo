@@ -7,6 +7,7 @@ import { LinearProgressBar } from "@/components/profile/LinearProgressBar";
 import { useTheme } from "@/context/ThemeContext";
 import { MyTrainingPlan, MyTrainingPlansTab } from "@/data/planMock";
 import { ColorPalette, radius, spacing, typography } from "@/theme";
+import { getMetaChipPalette } from "@/theme/metaChip";
 
 type MyTrainingPlanRowProps = {
   plan: MyTrainingPlan;
@@ -31,6 +32,7 @@ export function MyTrainingPlanRow({ plan, tab, onPress }: MyTrainingPlanRowProps
   const { colors } = useTheme();
   const styles = useMemo(() => createStyles(colors), [colors]);
   const badge = statusBadgeStyle(plan.status, colors);
+  const personalizedPalette = getMetaChipPalette("Personalized");
   const showHistoryBadge = tab === "history";
 
   return (
@@ -46,8 +48,18 @@ export function MyTrainingPlanRow({ plan, tab, onPress }: MyTrainingPlanRowProps
             <View style={styles.titleWrap}>
               <Text style={styles.title}>{plan.title}</Text>
               {plan.isPersonalized ? (
-                <View style={styles.personalizedTag}>
-                  <Text style={styles.personalizedText}>个性化</Text>
+                <View
+                  style={[
+                    styles.personalizedTag,
+                    {
+                      backgroundColor: personalizedPalette.background,
+                      borderColor: personalizedPalette.border,
+                    },
+                  ]}
+                >
+                  <Text style={[styles.personalizedText, { color: personalizedPalette.text }]}>
+                    个性化
+                  </Text>
                 </View>
               ) : null}
             </View>
@@ -110,12 +122,11 @@ function createStyles(colors: ColorPalette) {
     paddingHorizontal: spacing.sm,
     paddingVertical: 2,
     borderRadius: radius.pill,
-    backgroundColor: colors.accentGlass,
+    borderWidth: 1,
   },
   personalizedText: {
     ...typography.label,
     fontSize: 11,
-    color: colors.accent,
   },
   badge: {
     paddingHorizontal: spacing.sm,

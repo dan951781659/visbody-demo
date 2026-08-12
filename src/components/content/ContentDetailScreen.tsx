@@ -14,11 +14,14 @@ import { useTheme } from "@/context/ThemeContext";
 import { formatLibraryValue, getItemById } from "@/data/exploreLibrary";
 import type { LibraryTab } from "@/types/content";
 import { ColorPalette, layout, spacing, typography } from "@/theme";
+import type { MetaChipStyle } from "@/theme/metaChip";
 
 type ContentDetailScreenProps = {
   type: LibraryTab;
   id: string;
 };
+
+type DetailTag = { label: string; value: string; style: MetaChipStyle };
 
 export function ContentDetailScreen({ type, id }: ContentDetailScreenProps) {
   const router = useRouter();
@@ -49,25 +52,27 @@ export function ContentDetailScreen({ type, id }: ContentDetailScreenProps) {
       ? description
       : `${description.slice(0, 120).trim()}...`;
 
-  const tags =
+  const tags: DetailTag[] =
     item.kind === "plan"
       ? [
-          { label: "场景", value: formatLibraryValue(item.scene) },
-          { label: "周期", value: formatLibraryValue(item.cycleWeeks) },
-          { label: "频次", value: formatLibraryValue(item.sessionsPerWeek) },
-          { label: "难度", value: formatLibraryValue(item.difficulty) },
-          { label: "目标", value: formatLibraryValue(item.targetArea) },
-          ...(item.isPersonalized ? [{ label: "计划类型", value: "个性化" }] : []),
+          { label: "场景", value: formatLibraryValue(item.scene), style: "Scene" },
+          { label: "周期", value: formatLibraryValue(item.cycleWeeks), style: "Cycle" },
+          { label: "频次", value: formatLibraryValue(item.sessionsPerWeek), style: "Count" },
+          { label: "难度", value: formatLibraryValue(item.difficulty), style: "Difficulty" },
+          { label: "目标", value: formatLibraryValue(item.targetArea), style: "Muscles" },
+          ...(item.isPersonalized
+            ? [{ label: "计划类型", value: "个性化", style: "Personalized" as const }]
+            : []),
         ]
       : [
-          { label: "场景", value: formatLibraryValue(item.scene) },
-          { label: "难度", value: formatLibraryValue(item.difficulty) },
-          { label: "器械", value: formatLibraryValue(item.equipment) },
-          { label: "目标", value: formatLibraryValue(item.targetArea) },
+          { label: "场景", value: formatLibraryValue(item.scene), style: "Scene" },
+          { label: "难度", value: formatLibraryValue(item.difficulty), style: "Difficulty" },
+          { label: "器械", value: formatLibraryValue(item.equipment), style: "Equipment" },
+          { label: "目标", value: formatLibraryValue(item.targetArea), style: "Muscles" },
           ...(item.kind === "move" && item.supportsAi
-            ? [{ label: "AI", value: "支持" }]
+            ? [{ label: "AI", value: "支持", style: "AI" as const }]
             : item.kind === "aiMove"
-              ? [{ label: "AI", value: "指导" }]
+              ? [{ label: "AI", value: "指导", style: "AI" as const }]
               : []),
         ];
 

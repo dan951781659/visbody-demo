@@ -59,6 +59,14 @@ export type PlanScheduleMove = {
   repsOrDuration: string;
   restSeconds?: number;
   weightKg?: number;
+  /** 动作介绍；缺省时由动作库按名称回填 */
+  description?: string;
+  /** 动作要点 */
+  keyPoints?: string[];
+  /** 呼吸建议 */
+  breathing?: string;
+  /** 错误要点 */
+  commonMistakes?: string[];
 };
 
 export type PlanScheduleDay = {

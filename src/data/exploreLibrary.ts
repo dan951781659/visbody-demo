@@ -1,3 +1,4 @@
+import type { MetaChipStyle } from "@/theme/metaChip";
 import type {
   AiMoveItem,
   FilterConfig,
@@ -1040,22 +1041,65 @@ export function getFilterValue(item: LibraryItem, key: string): string | undefin
   return undefined;
 }
 
-export function getMetaTags(item: LibraryItem, tab: LibraryTab): string[] {
-  const tags: string[] = [
-    formatLibraryValue(item.difficulty),
-    formatLibraryValue(item.scene),
-    formatLibraryValue(item.targetArea),
+export type MetaTagItem = {
+  text: string;
+  style: MetaChipStyle;
+};
+
+export function getMetaTags(item: LibraryItem, tab: LibraryTab): MetaTagItem[] {
+  const tags: MetaTagItem[] = [
+    { text: formatLibraryValue(item.difficulty), style: "Difficulty" },
+    { text: formatLibraryValue(item.scene), style: "Scene" },
+    { text: formatLibraryValue(item.targetArea), style: "Muscles" },
   ];
   if (item.kind === "move") {
-    tags.push(formatLibraryValue(item.equipment));
-    if (item.supportsAi) tags.push("AI");
+    tags.push({ text: formatLibraryValue(item.equipment), style: "Equipment" });
+    if (item.supportsAi) tags.push({ text: "AI", style: "AI" });
   }
   if (item.kind === "aiMove") {
-    tags.push(formatLibraryValue(item.equipment), "AI");
+    tags.push(
+      { text: formatLibraryValue(item.equipment), style: "Equipment" },
+      { text: "AI", style: "AI" },
+    );
   }
   if (item.kind === "plan") {
-    tags.push(formatLibraryValue(item.cycleWeeks), formatLibraryValue(item.sessionsPerWeek));
-    if (tab === "plans" && item.isPersonalized) tags.push(formatLibraryValue("Personalized"));
+    tags.push(
+      { text: formatLibraryValue(item.cycleWeeks), style: "Cycle" },
+      { text: formatLibraryValue(item.sessionsPerWeek), style: "Count" },
+    );
+    if (tab === "plans" && item.isPersonalized) {
+      tags.push({ text: formatLibraryValue("Personalized"), style: "Personalized" });
+    }
   }
   return tags;
+}
+
+export type ResolvedPlanMoveDetails = {
+  description: string;
+  keyPoints: string[];
+  breathing: string;
+  commonMistakes: string[];
+};
+
+/** 从动作库按名称回填计划日程动作的详情文案。 */
+export function resolvePlanMoveDetails(move: {
+  name: string;
+  description?: string;
+  keyPoints?: string[];
+  breathing?: string;
+  commonMistakes?: string[];
+}): ResolvedPlanMoveDetails {
+  const libraryMove =
+    moves.find((item) => item.name === move.name) ??
+    aiMoves.find((item) => item.name === move.name);
+
+  return {
+    description:
+      move.description ??
+      libraryMove?.description ??
+      `${move.name}：按既定组数与节奏完成，保持动作质量与呼吸节奏。`,
+    keyPoints: move.keyPoints ?? libraryMove?.keyPoints ?? defaultKeyPoints,
+    breathing: move.breathing ?? libraryMove?.breathing ?? defaultBreathing,
+    commonMistakes: move.commonMistakes ?? libraryMove?.commonMistakes ?? defaultMistakes,
+  };
 }
