@@ -1,0 +1,477 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>水星报告修改点说明 · mercury-v1.12.0</title>
+  <style>
+    :root {
+      --bg: #f4f7fb;
+      --card: #ffffff;
+      --text: #1e293b;
+      --muted: #64748b;
+      --line: #e2e8f0;
+      --accent: #0284c7;
+      --accent-soft: #e0f2fe;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.55;
+    }
+    .wrap {
+      max-width: 980px;
+      margin: 0 auto;
+      padding: 28px 20px 48px;
+    }
+    header {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 16px;
+      flex-wrap: wrap;
+      margin-bottom: 20px;
+    }
+    h1 {
+      margin: 0 0 8px;
+      font-size: 28px;
+      letter-spacing: -0.02em;
+    }
+    h2 {
+      margin: 28px 0 12px;
+      font-size: 20px;
+    }
+    h3 {
+      margin: 0 0 10px;
+      font-size: 16px;
+    }
+    .sub {
+      margin: 0;
+      color: var(--muted);
+      font-size: 14px;
+    }
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      padding: 6px 12px;
+      border-radius: 999px;
+      background: var(--accent-soft);
+      color: var(--accent);
+      font-size: 13px;
+      font-weight: 600;
+      white-space: nowrap;
+    }
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 12px;
+      margin-bottom: 16px;
+    }
+    .stat, .card, .callout {
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: 14px;
+    }
+    .stat {
+      padding: 16px;
+    }
+    .stat .label {
+      color: var(--muted);
+      font-size: 12px;
+    }
+    .stat .value {
+      margin-top: 6px;
+      font-size: 28px;
+      font-weight: 700;
+    }
+    .callout {
+      padding: 14px 16px;
+      background: #f0f9ff;
+      border-color: #bae6fd;
+      margin-bottom: 8px;
+    }
+    .callout strong {
+      display: block;
+      margin-bottom: 4px;
+      color: #0369a1;
+    }
+    .card {
+      margin-bottom: 14px;
+      overflow: hidden;
+    }
+    .card-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 14px 16px;
+      border-bottom: 1px solid var(--line);
+      background: #fafbfc;
+    }
+    .card-head h3 { margin: 0; }
+    .count {
+      font-size: 12px;
+      color: var(--muted);
+      background: #f1f5f9;
+      border-radius: 999px;
+      padding: 4px 10px;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 13px;
+    }
+    th, td {
+      padding: 12px 14px;
+      border-bottom: 1px solid var(--line);
+      text-align: left;
+      vertical-align: top;
+    }
+    th {
+      color: var(--muted);
+      font-weight: 600;
+      background: #fcfdff;
+    }
+    tr:last-child td { border-bottom: 0; }
+    .loc { font-weight: 600; white-space: nowrap; }
+    .pill {
+      display: inline-block;
+      padding: 2px 8px;
+      border-radius: 999px;
+      font-size: 12px;
+      font-weight: 600;
+    }
+    .pill-add { background: #e0f2fe; color: #0369a1; }
+    .pill-edit { background: #ffedd5; color: #c2410c; }
+    .pill-remove { background: #fee2e2; color: #b91c1c; }
+    .pill-opt { background: #dcfce7; color: #15803d; }
+    .files {
+      display: grid;
+      gap: 10px;
+    }
+    .file {
+      padding: 14px 16px;
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: 12px;
+    }
+    .file-top {
+      display: flex;
+      justify-content: space-between;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-bottom: 6px;
+    }
+    .file code {
+      font-family: Consolas, "Courier New", monospace;
+      font-size: 13px;
+      font-weight: 600;
+    }
+    .role {
+      font-size: 12px;
+      color: var(--muted);
+      background: #f1f5f9;
+      border-radius: 999px;
+      padding: 3px 8px;
+    }
+    .checks ol {
+      margin: 0;
+      padding-left: 20px;
+      color: var(--text);
+    }
+    .checks li { margin: 6px 0; }
+    .path-box {
+      margin-top: 18px;
+      padding: 14px 16px;
+      background: #fff;
+      border: 1px dashed #cbd5e1;
+      border-radius: 12px;
+      font-size: 13px;
+      color: var(--muted);
+    }
+    .path-box b { color: var(--text); }
+    footer {
+      margin-top: 24px;
+      color: var(--muted);
+      font-size: 12px;
+    }
+    @media (max-width: 720px) {
+      .stats { grid-template-columns: 1fr; }
+      .loc { white-space: normal; }
+      table, thead, tbody, th, td, tr { display: block; }
+      thead { display: none; }
+      tr {
+        padding: 12px 14px;
+        border-bottom: 1px solid var(--line);
+      }
+      td {
+        padding: 4px 0;
+        border: 0;
+      }
+      td::before {
+        content: attr(data-label);
+        display: block;
+        color: var(--muted);
+        font-size: 11px;
+        margin-bottom: 2px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <header>
+      <div>
+        <h1>水星报告修改点说明</h1>
+        <p class="sub">按页面定位全部会议决策与后续交互优化。可直接对照水星版 Tab 验收。</p>
+      </div>
+      <span class="badge">mercury-v1.12.0</span>
+    </header>
+
+    <div class="stats">
+      <div class="stat"><div class="label">涉及页面</div><div class="value">5</div></div>
+      <div class="stat"><div class="label">改动条目</div><div class="value">16</div></div>
+      <div class="stat"><div class="label">主文件</div><div class="value">3</div></div>
+    </div>
+
+    <div class="callout">
+      <strong>验收范围</strong>
+      主交付为水星版报告（MercuryReport）。基础版/深色版/浅色版未纳入本次会议改动；静态 Demo 已与水星版同步。
+    </div>
+
+    <h2>〇、修改后分别看哪个本地页面</h2>
+    <section class="card">
+      <table>
+        <thead><tr><th>端</th><th>看什么内容</th><th>本地打开哪个文件</th><th>怎么进对应 Tab</th></tr></thead>
+        <tbody>
+          <tr>
+            <td data-label="端"><b>用户端</b></td>
+            <td data-label="看什么内容">AI推荐、脊柱评估、身体成分、体围测量（无「睡眠顾问」Tab）</td>
+            <td data-label="本地打开哪个文件"><code>e:\CusorProject\大客户定制\Device Report Hub\mercury-report-demo.html</code></td>
+            <td data-label="怎么进对应 Tab">直接打开即可，默认在「AI推荐」</td>
+          </tr>
+          <tr>
+            <td data-label="端"><b>导购端</b></td>
+            <td data-label="看什么内容">在用户 Tab 基础上多「睡眠顾问」：选型、垫片调节、成交</td>
+            <td data-label="本地打开哪个文件"><code>e:\CusorProject\大客户定制\Device Report Hub\mercury-report-sales-demo.html</code></td>
+            <td data-label="怎么进对应 Tab">打开后自动跳转销售模式，并默认进入「睡眠顾问」</td>
+          </tr>
+          <tr>
+            <td data-label="端"><b>导购端（备用入口）</b></td>
+            <td data-label="看什么内容">同一套页面，通过参数切销售模式</td>
+            <td data-label="本地打开哪个文件"><code>e:\CusorProject\大客户定制\Device Report Hub\mercury-report-demo.html?mode=sales</code></td>
+            <td data-label="怎么进对应 Tab">加 <code>?mode=sales</code> 或 <code>#sales</code>；加 <code>&tab=ai</code> 可先看用户端 AI推荐</td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+    <div class="callout" style="background:#f8fafc;border-color:#e2e8f0">
+      <strong>开发源码（两端共用一个组件）</strong>
+      React 实现都在 <code>e:\CusorProject\大客户定制\Device Report Hub\src\components\reports\MercuryReport.tsx</code>：用户端是各用户 Tab；导购端是其中的 <code>SalesOperations</code>（仅销售模式显示「睡眠顾问」）。
+    </div>
+
+    <h2>一、按页面看改哪里</h2>
+
+    <section class="card">
+      <div class="card-head"><h3>AI推荐（用户端）</h3><span class="count">5 项</span></div>
+      <table>
+        <thead><tr><th>位置</th><th>类型</th><th>修改说明</th></tr></thead>
+        <tbody>
+          <tr>
+            <td class="loc" data-label="位置">问卷信息</td>
+            <td data-label="类型"><span class="pill pill-edit">修改</span></td>
+            <td data-label="修改说明">压缩为 4 题；「枕高偏好」高亮为算法输入，用于中国·梦 瑧享定制枕高度重叠仲裁</td>
+          </tr>
+          <tr>
+            <td class="loc" data-label="位置">肩颈尺寸测量 · 指标卡</td>
+            <td data-label="类型"><span class="pill pill-opt">优化</span></td>
+            <td data-label="修改说明">解读折叠交互优化（展开箭头）；肩颈尺寸释义与枕头适配说明放在用户端对应模块下</td>
+          </tr>
+          <tr>
+            <td class="loc" data-label="位置">推荐枕型与分区高度</td>
+            <td data-label="类型"><span class="pill pill-remove">移除</span></td>
+            <td data-label="修改说明">用户端不再展示推荐枕型；仅在睡眠顾问页展示“中国·梦 尊享定制枕”优先推荐、“中国·梦 瑧享定制枕”备选与分区高度</td>
+          </tr>
+          <tr>
+            <td class="loc" data-label="位置">体态表现解读</td>
+            <td data-label="类型"><span class="pill pill-edit">修改</span></td>
+            <td data-label="修改说明">承接导购端迁入的体态指标释义与枕头适配说明；模块名头颈/肩背/躯干；指标改为「头部前移/侧偏」减重复</td>
+          </tr>
+          <tr>
+            <td class="loc" data-label="位置">体态解读下方跳转</td>
+            <td data-label="类型"><span class="pill pill-add">新增</span></td>
+            <td data-label="修改说明">增加「查看综合姿态评分」入口，跳转脊柱评估页并说明口径差异</td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section class="card">
+      <div class="card-head"><h3>睡眠顾问</h3><span class="count">7 项</span></div>
+      <table>
+        <thead><tr><th>位置</th><th>类型</th><th>修改说明</th></tr></thead>
+        <tbody>
+          <tr>
+            <td class="loc" data-label="位置">页面范围</td>
+            <td data-label="类型"><span class="pill pill-edit">修改</span></td>
+            <td data-label="修改说明">保留推荐枕型、产品调节与订单成交；解读类内容仍在用户端，顶部提示导购扫码查看</td>
+          </tr>
+          <tr>
+            <td class="loc" data-label="位置">推荐枕型与分区高度</td>
+            <td data-label="类型"><span class="pill pill-add">新增</span></td>
+            <td data-label="修改说明">自用户端迁入；展示“中国·梦 尊享定制枕”优先推荐、“中国·梦 瑧享定制枕”备选型号与通用 7 分区推荐高度</td>
+          </tr>
+          <tr>
+            <td class="loc" data-label="位置">顶部步骤条</td>
+            <td data-label="类型"><span class="pill pill-add">新增</span></td>
+            <td data-label="修改说明">选型 → 垫片调节 → 成交 快捷跳转，缩短长页操作路径</td>
+          </tr>
+          <tr>
+            <td class="loc" data-label="位置">产品选择与型号匹配</td>
+            <td data-label="类型"><span class="pill pill-edit">修改</span></td>
+            <td data-label="修改说明">中国·梦 尊享定制枕默认置前并预选；推荐选型与最终确认合并为一步；选定后分区参数立即联动</td>
+          </tr>
+          <tr>
+            <td class="loc" data-label="位置">分区垫片调节</td>
+            <td data-label="类型"><span class="pill pill-edit">修改</span></td>
+            <td data-label="修改说明">取消直接改 cm；复用中国·梦 瑧享定制枕垫片规则（片数 → 高度/克重）；支持分区快选与一键对齐推荐</td>
+          </tr>
+          <tr>
+            <td class="loc" data-label="位置">定制方案预览</td>
+            <td data-label="类型"><span class="pill pill-edit">修改</span></td>
+            <td data-label="修改说明">去掉映射来源列；改为基础高度/垫片数/克重/调节后高度；默认折叠减少干扰</td>
+          </tr>
+          <tr>
+            <td class="loc" data-label="位置">方案确认与成交 / 一二代切换</td>
+            <td data-label="类型"><span class="pill pill-edit">修改</span></td>
+            <td data-label="修改说明">去掉二次型号选择；切回一代时自动导入推荐高度对应垫片方案</td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section class="card">
+      <div class="card-head"><h3>脊柱评估</h3><span class="count">2 项</span></div>
+      <table>
+        <thead><tr><th>位置</th><th>类型</th><th>修改说明</th></tr></thead>
+        <tbody>
+          <tr>
+            <td class="loc" data-label="位置">模块保留策略</td>
+            <td data-label="类型"><span class="pill pill-edit">修改</span></td>
+            <td data-label="修改说明">模块暂保留；标题由颈椎/胸椎/腰椎改为头颈姿态/肩背姿态/躯干平衡</td>
+          </tr>
+          <tr>
+            <td class="loc" data-label="位置">综合姿态评估说明</td>
+            <td data-label="类型"><span class="pill pill-opt">优化</span></td>
+            <td data-label="修改说明">补充与 AI 推荐页单项解读口径不同的提示文案</td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section class="card">
+      <div class="card-head"><h3>身体成分 / 体围测量 · 全局</h3><span class="count">2 项</span></div>
+      <table>
+        <thead><tr><th>位置</th><th>类型</th><th>修改说明</th></tr></thead>
+        <tbody>
+          <tr>
+            <td class="loc" data-label="位置">身体成分 / 体围测量</td>
+            <td data-label="类型"><span class="pill pill-opt">优化</span></td>
+            <td data-label="修改说明">本次会议范围内无结构性改动；仍作为独立 Tab 保留</td>
+          </tr>
+          <tr>
+            <td class="loc" data-label="位置">销售模式入口</td>
+            <td data-label="类型"><span class="pill pill-opt">优化</span></td>
+            <td data-label="修改说明">销售模式默认进入睡眠顾问；可用 ?tab=ai 回到用户端 AI 推荐</td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+
+    <h2>二、会议决策 ↔ 页面落点</h2>
+    <section class="card">
+      <table>
+        <thead><tr><th>决策主题</th><th>落地规则</th><th>对应页面位置</th></tr></thead>
+        <tbody>
+          <tr>
+            <td data-label="决策主题">推荐枕型逻辑</td>
+            <td data-label="落地规则">保留推荐；问卷加高低枕偏好；重叠区间按偏好仲裁</td>
+            <td data-label="对应页面位置">AI推荐 · 问卷；睡眠顾问 · 推荐枕型 / 选型</td>
+          </tr>
+          <tr>
+            <td data-label="决策主题">内容展示端统一调整</td>
+            <td data-label="落地规则">所有体态指标、肩颈尺寸的释义及枕头适配说明，全部放在用户端 AI 推荐页对应模块下，导购扫码即可查看</td>
+            <td data-label="对应页面位置">AI推荐 · 肩颈尺寸 / 体态表现解读</td>
+          </tr>
+          <tr>
+            <td data-label="决策主题">导购页面精简</td>
+            <td data-label="落地规则">导购端仅保留产品调节、订单成交；不放置解读类内容，避免页面过长</td>
+            <td data-label="对应页面位置">睡眠顾问全页</td>
+          </tr>
+          <tr>
+            <td data-label="决策主题">脊柱评估处理</td>
+            <td data-label="落地规则">暂保留；改称头颈姿态等，降低重复感</td>
+            <td data-label="对应页面位置">脊柱评估 · 综合姿态评估</td>
+          </tr>
+          <tr>
+            <td data-label="决策主题">枕型步骤合并</td>
+            <td data-label="落地规则">推荐选型与最终确认合并；参数联动</td>
+            <td data-label="对应页面位置">睡眠顾问 · 产品选择</td>
+          </tr>
+          <tr>
+            <td data-label="决策主题">垫片逻辑复用</td>
+            <td data-label="落地规则">按片数调节，非直接高度；克重占位待江田表替换</td>
+            <td data-label="对应页面位置">睡眠顾问 · 分区垫片调节</td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+
+    <h2>三、代码文件对照</h2>
+    <div class="files">
+      <div class="file">
+        <div class="file-top"><code>src/components/reports/MercuryReport.tsx</code><span class="role">主界面与导购交互</span></div>
+        <div class="sub">问卷、推荐、体态解读、选型合并、垫片调节、成交、步骤条</div>
+      </div>
+      <div class="file">
+        <div class="file-top"><code>src/components/reports/mercurySpineData.ts</code><span class="role">脊柱/体态文案数据</span></div>
+        <div class="sub">版本号、头颈/肩背/躯干文案、AI 页指标命名</div>
+      </div>
+      <div class="file">
+        <div class="file-top"><code>src/components/reports/MercuryAssessmentReports.tsx</code><span class="role">脊柱评估页渲染</span></div>
+        <div class="sub">综合姿态评分说明与模块展示（沿用新文案）</div>
+      </div>
+      <div class="file">
+        <div class="file-top"><code>mercury-report-demo.html</code><span class="role">静态 Demo 同步</span></div>
+        <div class="sub">与 React 页同口径的问卷、导购、垫片、步骤跳转</div>
+      </div>
+    </div>
+
+    <h2>四、快速验收路径</h2>
+    <section class="card checks">
+      <div style="padding:16px">
+        <ol>
+          <li>用户端打开 AI推荐：看问卷 4 题、枕高偏好高亮；体态指标/肩颈尺寸释义与枕头适配说明均在对应模块下；不展示推荐枕型。</li>
+          <li>销售模式打开睡眠顾问：看推荐枕型（“中国·梦 尊享定制枕”优先 + “中国·梦 瑧享定制枕”备选）、产品选型与垫片调节。</li>
+          <li>切到脊柱评估：确认头颈/肩背/躯干命名，模块仍在。</li>
+          <li>销售模式进入睡眠顾问：默认选择“中国·梦 尊享定制枕”、无映射表/无解读类内容、垫片按片调节、三步跳转可用；顶部提示导购扫码可查看用户端解读。</li>
+        </ol>
+      </div>
+    </section>
+
+    <div class="path-box">
+      <div><b>本地文件速查</b></div>
+      <div>用户端预览页：`e:\CusorProject\大客户定制\Device Report Hub\mercury-report-demo.html`</div>
+      <div>导购端预览页：`e:\CusorProject\大客户定制\Device Report Hub\mercury-report-sales-demo.html`（会自动跳转到销售模式并默认打开「睡眠顾问」）</div>
+      <div>导购端备用：`e:\CusorProject\大客户定制\Device Report Hub\mercury-report-demo.html?mode=sales`</div>
+      <div>源码（两端共用）：`e:\CusorProject\大客户定制\Device Report Hub\src\components\reports\MercuryReport.tsx`</div>
+      <div>本说明页：`e:\CusorProject\大客户定制\Device Report Hub\mercury-change-map.html`</div>
+    </div>
+
+    <footer>Source: Device Report Hub · 水星版会议决策落地与交互优化汇总</footer>
+  </div>
+</body>
+</html>

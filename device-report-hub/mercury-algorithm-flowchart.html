@@ -1,0 +1,350 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>水星报告用户端与导购端算法输出流程图</title>
+  <style>
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      background: #eef4fa;
+      color: #172033;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC",
+        "Microsoft YaHei", sans-serif;
+    }
+    main {
+      width: 1500px;
+      margin: 0 auto;
+      padding: 56px 64px 72px;
+    }
+    h1 {
+      margin: 0 0 12px;
+      text-align: center;
+      font-size: 38px;
+      font-weight: 700;
+    }
+    .subtitle {
+      margin: 0 0 42px;
+      color: #66758d;
+      text-align: center;
+      font-size: 20px;
+    }
+    .flow-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 34px;
+      align-items: start;
+    }
+    .lane {
+      padding: 30px 32px 38px;
+      border: 1px solid #d3dfeb;
+      border-radius: 20px;
+      background: #fff;
+      box-shadow: 0 10px 30px rgba(40, 75, 110, .08);
+    }
+    .lane-title {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 66px;
+      margin: -30px -32px 30px;
+      border-radius: 20px 20px 0 0;
+      color: #fff;
+      font-size: 26px;
+      font-weight: 700;
+    }
+    .user .lane-title { background: #2695d2; }
+    .sales .lane-title { background: #176bc3; }
+    .node {
+      position: relative;
+      width: 100%;
+      min-height: 74px;
+      padding: 18px 24px;
+      border: 1.5px solid #bfcddd;
+      border-radius: 10px;
+      background: #fff;
+      text-align: center;
+      font-size: 20px;
+      line-height: 1.5;
+    }
+    .node strong {
+      display: block;
+      margin-bottom: 4px;
+      font-size: 21px;
+    }
+    .node small {
+      display: block;
+      color: #68778d;
+      font-size: 17px;
+      line-height: 1.5;
+    }
+    .node.input { background: #f1f9ff; border-color: #8ac9ed; }
+    .node.output { background: #eef8f5; border-color: #70c6a4; }
+    .node.action { background: #f6f9fc; }
+    .node.final { background: #eaf4ff; border-color: #5ba9e6; }
+    .arrow {
+      position: relative;
+      width: 2px;
+      height: 34px;
+      margin: 0 auto;
+      background: #76869a;
+    }
+    .arrow::after {
+      content: "";
+      position: absolute;
+      left: -5px;
+      bottom: -1px;
+      border-top: 9px solid #76869a;
+      border-left: 6px solid transparent;
+      border-right: 6px solid transparent;
+    }
+    .decision {
+      position: relative;
+      display: flex;
+      width: 280px;
+      height: 174px;
+      margin: 0 auto;
+      align-items: center;
+      justify-content: center;
+    }
+    .decision::before {
+      content: "";
+      position: absolute;
+      width: 120px;
+      height: 120px;
+      transform: rotate(45deg);
+      border: 1.5px solid #8ab4df;
+      border-radius: 8px;
+      background: #edf6ff;
+    }
+    .decision span {
+      position: relative;
+      z-index: 1;
+      display: flex;
+      width: 150px;
+      min-height: 70px;
+      align-items: center;
+      justify-content: center;
+      padding: 8px;
+      text-align: center;
+      font-size: 19px;
+      font-weight: 600;
+      line-height: 1.4;
+    }
+    .branch {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 18px;
+      margin-top: 6px;
+    }
+    .branch-col {
+      position: relative;
+      padding-top: 30px;
+    }
+    .branch-col::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 50%;
+      width: 2px;
+      height: 24px;
+      background: #76869a;
+    }
+    .branch-label {
+      position: absolute;
+      top: 0;
+      left: calc(50% + 10px);
+      color: #176bc3;
+      font-size: 16px;
+      font-weight: 700;
+    }
+    .branch .node {
+      min-height: 106px;
+      padding: 16px 18px;
+      font-size: 18px;
+    }
+    .branch .node strong { font-size: 19px; }
+    .merge {
+      position: relative;
+      height: 42px;
+      margin-top: 2px;
+    }
+    .merge::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 25%;
+      width: 50%;
+      height: 20px;
+      border-right: 2px solid #76869a;
+      border-bottom: 2px solid #76869a;
+      border-left: 2px solid #76869a;
+    }
+    .merge::after {
+      content: "";
+      position: absolute;
+      left: calc(50% - 5px);
+      bottom: 0;
+      border-top: 9px solid #76869a;
+      border-left: 6px solid transparent;
+      border-right: 6px solid transparent;
+    }
+    .section-label {
+      margin: 2px 0 12px;
+      color: #176bc3;
+      text-align: center;
+      font-size: 17px;
+      font-weight: 700;
+    }
+    .rule {
+      margin-top: 28px;
+      padding: 16px 20px;
+      border-left: 4px solid #36a0dc;
+      border-radius: 4px;
+      background: #f3f8fc;
+      color: #52637a;
+      font-size: 17px;
+      line-height: 1.55;
+    }
+  </style>
+</head>
+<body>
+  <main>
+    <h1>水星报告用户端与导购端算法输出流程图</h1>
+    <p class="subtitle">从问卷与肩颈测量，到通用七分区推荐、产品匹配、试躺确认与成交</p>
+
+    <div class="flow-grid">
+      <section class="lane user">
+        <div class="lane-title">用户端：推荐结果生成与展示</div>
+
+        <div class="node input">
+          <strong>读取问卷信息</strong>
+          <small>主睡姿、床垫硬度、睡眠问题、颈椎状态、高低枕偏好</small>
+        </div>
+        <div class="arrow"></div>
+        <div class="node input">
+          <strong>读取肩颈尺寸</strong>
+          <small>L1-L6、H1-H2</small>
+        </div>
+        <div class="arrow"></div>
+        <div class="node action">
+          <strong>生成基础枕型与承托方向</strong>
+          <small>睡姿决定基本枕型，床垫下沉与尺寸数据共同修正推荐高度</small>
+        </div>
+        <div class="arrow"></div>
+        <div class="node action">
+          <strong>计算通用七分区推荐高度</strong>
+          <small>Z1-Z7分别输出推荐高度或推荐范围</small>
+        </div>
+        <div class="arrow"></div>
+        <div class="node output">
+          <strong>输出七分区推荐示意图</strong>
+          <small>仅展示各分区及推荐高度，不展示代际、型号和垫片信息</small>
+        </div>
+        <div class="arrow"></div>
+        <div class="node final">
+          <strong>用户查看推荐结果</strong>
+        </div>
+
+        <div class="rule">
+          用户端推荐逻辑不读取压力分布、体态评估或脊柱评分；这些内容作为报告分析结果独立展示。
+        </div>
+      </section>
+
+      <section class="lane sales">
+        <div class="lane-title">导购端：产品匹配与试躺确认</div>
+
+        <div class="node input">
+          <strong>读取通用七分区推荐高度</strong>
+        </div>
+        <div class="arrow"></div>
+        <div class="node action">
+          <strong>导购选择产品代际</strong>
+          <small>中国·梦 瑧享定制枕 / 中国·梦 尊享定制枕</small>
+        </div>
+        <div class="arrow"></div>
+        <div class="decision"><span>选择“中国·梦 瑧享定制枕”或“中国·梦 尊享定制枕”？</span></div>
+
+        <div class="branch">
+          <div class="branch-col">
+            <span class="branch-label">中国·梦 瑧享定制枕</span>
+            <div class="node">
+              <strong>映射为一代八分区</strong>
+              <small>将Z1-Z7转换为1-8区目标高度</small>
+            </div>
+            <div class="arrow"></div>
+            <div class="node">
+              <strong>比较1号至4号枕</strong>
+              <small>统计各型号符合推荐范围的分区数量，并计算整体高度偏差</small>
+            </div>
+            <div class="arrow"></div>
+            <div class="node output">
+              <strong>推荐最匹配型号</strong>
+              <small>优先符合分区最多，其次整体偏差最小；仍相同时参考高低枕偏好</small>
+            </div>
+          </div>
+
+          <div class="branch-col">
+            <span class="branch-label">中国·梦 尊享定制枕</span>
+            <div class="node">
+              <strong>映射为二代十一分区</strong>
+              <small>将Z1-Z7转换为1-11区目标高度</small>
+            </div>
+            <div class="arrow"></div>
+            <div class="node">
+              <strong>使用唯一中国·梦 尊享定制枕</strong>
+              <small>不进行1号至4号型号匹配</small>
+            </div>
+            <div class="arrow"></div>
+            <div class="node output">
+              <strong>生成十一分区调节目标</strong>
+            </div>
+          </div>
+        </div>
+
+        <div class="merge"></div>
+        <div class="node action">
+          <strong>加载对应枕头分区图</strong>
+          <small>显示当前型号、分区热点与推荐高度</small>
+        </div>
+        <div class="arrow"></div>
+        <div class="node action">
+          <strong>导购点击需要调节的分区</strong>
+        </div>
+        <div class="arrow"></div>
+        <div class="node output">
+          <strong>显示当前分区信息</strong>
+          <small>原始高度、推荐高度、当前垫片方案</small>
+        </div>
+        <div class="arrow"></div>
+        <div class="node action">
+          <strong>导购增加或减少垫片</strong>
+          <small>调整尚未达到推荐高度的分区</small>
+        </div>
+        <div class="arrow"></div>
+        <div class="node final">
+          <strong>保存分区设置</strong>
+        </div>
+        <div class="arrow"></div>
+        <div class="node action">
+          <strong>用户试躺</strong>
+        </div>
+        <div class="arrow"></div>
+        <div class="node action">
+          <strong>记录1-5星舒适度评分</strong>
+        </div>
+        <div class="arrow"></div>
+        <div class="node final">
+          <strong>确认最终试躺方案</strong>
+          <small>保存产品型号与垫片方案</small>
+        </div>
+        <div class="arrow"></div>
+        <div class="node final">
+          <strong>填写并保存成交信息</strong>
+        </div>
+      </section>
+    </div>
+  </main>
+</body>
+</html>
