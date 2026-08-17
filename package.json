@@ -10,7 +10,7 @@
     "start:share": "expo start --tunnel --clear",
     "android": "node scripts/start-expo.mjs --android",
     "ios": "node scripts/start-expo.mjs --ios",
-    "web": "expo start --web",
+    "web": "node scripts/allow-cursor-preview-cors.mjs && expo start --web",
     "export:web": "expo export --platform web --output-dir dist-web",
     "preview:web": "npx serve dist-web -s -l tcp://0.0.0.0:4173",
     "share:lan": "node scripts/share-lan.mjs",

@@ -47,6 +47,7 @@ export default function LoginScreen() {
         onPress: () => router.push("/login-email-password"),
       }}
       onBack={() => router.replace("/(tabs)/profile")}
+      variant="cinematic"
     >
       <View style={{ gap: 12 }}>
         <AuthField label={authCopy.login.email}>
@@ -56,6 +57,7 @@ export default function LoginScreen() {
             placeholder={authCopy.login.emailPlaceholder}
             keyboardType="email-address"
             accessibilityLabel={authCopy.login.email}
+            icon="mail-outline"
           />
         </AuthField>
 

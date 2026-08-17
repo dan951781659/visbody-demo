@@ -75,6 +75,7 @@ export default function RegisterScreen() {
       title={authCopy.register.title}
       subtitle={authCopy.register.subtitle}
       onBack={() => router.replace("/login")}
+      variant="cinematic"
     >
       <View style={{ gap: 12 }}>
         <AuthField label={authCopy.register.email}>
@@ -84,6 +85,7 @@ export default function RegisterScreen() {
             placeholder={authCopy.register.emailPlaceholder}
             keyboardType="email-address"
             accessibilityLabel={authCopy.register.email}
+            icon="mail-outline"
           />
         </AuthField>
 
@@ -104,6 +106,7 @@ export default function RegisterScreen() {
             showSecureToggle
             onToggleSecure={() => setShowPassword((prev) => !prev)}
             accessibilityLabel={authCopy.register.password}
+            icon="lock-closed-outline"
           />
         </AuthField>
 
@@ -116,6 +119,7 @@ export default function RegisterScreen() {
             showSecureToggle
             onToggleSecure={() => setShowConfirmPassword((prev) => !prev)}
             accessibilityLabel={authCopy.register.confirmPassword}
+            icon="lock-closed-outline"
           />
         </AuthField>
 

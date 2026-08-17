@@ -46,6 +46,7 @@ export default function LoginPhoneCodeScreen() {
         onPress: () => router.replace("/login-phone-password"),
       }}
       onBack={() => router.replace("/(tabs)/profile")}
+      variant="cinematic"
     >
       <View style={{ gap: 12 }}>
         <AuthField label={authCopy.login.phone}>
@@ -55,6 +56,7 @@ export default function LoginPhoneCodeScreen() {
             placeholder={authCopy.login.phonePlaceholder}
             keyboardType="number-pad"
             accessibilityLabel={authCopy.login.phone}
+            icon="call-outline"
           />
         </AuthField>
 

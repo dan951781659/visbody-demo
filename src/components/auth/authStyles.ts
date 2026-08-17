@@ -1,5 +1,5 @@
 import { useMemo } from "react";
-import { StyleSheet } from "react-native";
+import { Platform, StyleSheet } from "react-native";
 import { useTheme } from "@/context/ThemeContext";
 import { ColorPalette, radius, spacing, typography } from "@/theme";
 
@@ -468,6 +468,181 @@ export function createAuthStyles(colors: ColorPalette) {
     height: 2,
     backgroundColor: colors.accent,
     opacity: 0.9,
+  },
+  cinematicScroll: {
+    flexGrow: 1,
+    paddingHorizontal: spacing.lg,
+    paddingTop: spacing.xl,
+    paddingBottom: spacing.xxxl,
+  },
+  cinematicFlex: {
+    flex: 1,
+    backgroundColor: "transparent",
+  },
+  cinematicLogoWrap: {
+    alignItems: "center",
+    marginBottom: spacing.xl,
+  },
+  cinematicGreeting: {
+    ...typography.hero,
+    color: "#FFFFFF",
+    textAlign: "center",
+  },
+  cinematicCard: {
+    backgroundColor: "rgba(255,255,255,0.10)",
+    borderRadius: 28,
+    borderWidth: 1,
+    borderColor: "rgba(255,255,255,0.16)",
+    paddingHorizontal: spacing.xl,
+    paddingTop: spacing.xxl,
+    paddingBottom: spacing.xl,
+    gap: spacing.lg,
+    ...Platform.select({
+      web: {
+        backdropFilter: "blur(22px)",
+        boxShadow: "0 18px 40px rgba(0,0,0,0.28)",
+      },
+      default: {
+        shadowColor: "#000000",
+        shadowOpacity: 0.22,
+        shadowRadius: 20,
+        shadowOffset: { width: 0, height: 10 },
+        elevation: 10,
+      },
+    }),
+  },
+  cinematicTitle: {
+    ...typography.title,
+    color: "#FFFFFF",
+  },
+  cinematicSubtitle: {
+    ...typography.caption,
+    color: "rgba(255,255,255,0.65)",
+    marginTop: spacing.xs,
+  },
+  cinematicTitleActionText: {
+    ...typography.caption,
+    color: colors.accentBright,
+    fontWeight: "600",
+  },
+  cinematicLabel: {
+    ...typography.label,
+    color: "rgba(255,255,255,0.72)",
+  },
+  cinematicInputShell: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: spacing.sm,
+    minHeight: 52,
+    borderRadius: radius.lg,
+    backgroundColor: "rgba(255,255,255,0.08)",
+    borderWidth: 1,
+    borderColor: "rgba(255,255,255,0.12)",
+    paddingHorizontal: spacing.md,
+  },
+  cinematicInput: {
+    ...typography.body,
+    color: "#FFFFFF",
+    flex: 1,
+    paddingVertical: spacing.md,
+    minHeight: 52,
+  },
+  cinematicPrimaryButton: {
+    marginTop: spacing.sm,
+    alignItems: "center",
+    justifyContent: "center",
+    backgroundColor: colors.accent,
+    borderRadius: radius.pill,
+    paddingVertical: spacing.lg,
+    minHeight: 54,
+  },
+  cinematicPrimaryButtonText: {
+    ...typography.subtitle,
+    color: colors.accentText,
+  },
+  cinematicSecondaryButton: {
+    alignItems: "center",
+    justifyContent: "center",
+    backgroundColor: "rgba(255,255,255,0.14)",
+    borderRadius: radius.pill,
+    paddingHorizontal: spacing.md,
+    paddingVertical: spacing.sm,
+    minHeight: 40,
+    minWidth: 96,
+  },
+  cinematicSecondaryButtonText: {
+    ...typography.label,
+    color: "#FFFFFF",
+    fontSize: 13,
+  },
+  cinematicPolicyText: {
+    flex: 1,
+    ...typography.caption,
+    color: "rgba(255,255,255,0.68)",
+    lineHeight: 22,
+  },
+  cinematicPolicyLink: {
+    color: colors.accentBright,
+    fontWeight: "600",
+  },
+  cinematicCheckbox: {
+    width: 22,
+    height: 22,
+    borderRadius: radius.sm,
+    borderWidth: 1,
+    borderColor: "rgba(255,255,255,0.28)",
+    alignItems: "center",
+    justifyContent: "center",
+    marginTop: 2,
+    backgroundColor: "transparent",
+  },
+  cinematicSwitchPrefix: {
+    ...typography.caption,
+    color: "rgba(255,255,255,0.62)",
+  },
+  cinematicSwitchAction: {
+    ...typography.caption,
+    color: colors.accentBright,
+    fontWeight: "700",
+  },
+  cinematicSocialSection: {
+    gap: spacing.md,
+    marginTop: spacing.xs,
+  },
+  cinematicDividerRow: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: spacing.sm,
+  },
+  cinematicDividerLine: {
+    flex: 1,
+    height: StyleSheet.hairlineWidth,
+    backgroundColor: "rgba(255,255,255,0.18)",
+  },
+  cinematicSocialSeparator: {
+    ...typography.caption,
+    color: "rgba(255,255,255,0.45)",
+    fontSize: 13,
+  },
+  cinematicSocialRow: {
+    flexDirection: "row",
+    justifyContent: "center",
+    gap: spacing.lg,
+  },
+  cinematicSocialCircle: {
+    width: 48,
+    height: 48,
+    borderRadius: 24,
+    alignItems: "center",
+    justifyContent: "center",
+    backgroundColor: "rgba(255,255,255,0.08)",
+    borderWidth: 1,
+    borderColor: "rgba(255,255,255,0.12)",
+  },
+  cinematicLinkText: {
+    ...typography.caption,
+    color: colors.accentBright,
+    fontWeight: "600",
   },
 });
 }

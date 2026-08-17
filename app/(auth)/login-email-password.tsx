@@ -47,6 +47,7 @@ export default function LoginEmailPasswordScreen() {
         onPress: () => router.replace("/login"),
       }}
       onBack={() => router.replace("/(tabs)/profile")}
+      variant="cinematic"
     >
       <View style={{ gap: 12 }}>
         <AuthField label={authCopy.login.email}>
@@ -56,6 +57,7 @@ export default function LoginEmailPasswordScreen() {
             placeholder={authCopy.login.emailPlaceholder}
             keyboardType="email-address"
             accessibilityLabel={authCopy.login.email}
+            icon="mail-outline"
           />
         </AuthField>
 
@@ -68,6 +70,7 @@ export default function LoginEmailPasswordScreen() {
             showSecureToggle
             onToggleSecure={() => setShowPassword((prev) => !prev)}
             accessibilityLabel={authCopy.login.password}
+            icon="lock-closed-outline"
           />
         </AuthField>
 

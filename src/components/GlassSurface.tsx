@@ -45,7 +45,9 @@ export function GlassSurface({
 
 const styles = StyleSheet.create({
   webFallback: {
-    backgroundColor: colors.glass,
+    backgroundColor: "rgba(255,255,255,0.08)",
+    // @ts-expect-error web-only backdrop filter
+    backdropFilter: "blur(18px)",
   },
   tint: {
     ...StyleSheet.absoluteFillObject,

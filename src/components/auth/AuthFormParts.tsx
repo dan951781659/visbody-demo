@@ -1,6 +1,8 @@
+import { Ionicons } from "@expo/vector-icons";
 import { useEffect, useState } from "react";
 import { Pressable, Text, TextInput, View } from "react-native";
 import { useAuthStyles } from "@/components/auth/authStyles";
+import { useAuthUi } from "@/components/auth/AuthScreen";
 import { useToast } from "@/components/ToastProvider";
 import { authCopy } from "@/data/authCopy";
 import { AuthChannel, validateEmail, validatePhone } from "@/utils/authValidation";
@@ -26,6 +28,8 @@ export function VerificationCodeRow({
 }: VerificationCodeRowProps) {
   const { showToast } = useToast();
   const authStyles = useAuthStyles();
+  const { variant } = useAuthUi();
+  const cinematic = variant === "cinematic";
   const [countdown, setCountdown] = useState(0);
 
   useEffect(() => {
@@ -49,8 +53,9 @@ export function VerificationCodeRow({
 
   return (
     <View style={authStyles.field}>
-      <Text style={authStyles.label}>{codeLabel}</Text>
-      <View style={authStyles.inputRow}>
+      <Text style={cinematic ? authStyles.cinematicLabel : authStyles.label}>{codeLabel}</Text>
+      <View style={cinematic ? authStyles.cinematicInputShell : authStyles.inputRow}>
+        {cinematic ? <Ionicons name="keypad-outline" size={18} color="rgba(255,255,255,0.55)" /> : null}
         <TextInput
           value={value}
           onChangeText={onChangeText}
@@ -59,7 +64,7 @@ export function VerificationCodeRow({
           keyboardType="number-pad"
           maxLength={4}
           accessibilityLabel={codeLabel}
-          style={[authStyles.input, authStyles.inputFlex]}
+          style={cinematic ? authStyles.cinematicInput : [authStyles.input, authStyles.inputFlex]}
         />
         <Pressable
           accessibilityRole="button"
@@ -67,9 +72,18 @@ export function VerificationCodeRow({
           accessibilityState={{ disabled }}
           disabled={disabled}
           onPress={handleSendCode}
-          style={[authStyles.secondaryButton, disabled && authStyles.secondaryButtonDisabled]}
+          style={[
+            cinematic ? authStyles.cinematicSecondaryButton : authStyles.secondaryButton,
+            disabled && authStyles.secondaryButtonDisabled,
+          ]}
         >
-          <Text style={authStyles.secondaryButtonText}>{sendLabel}</Text>
+          <Text
+            style={
+              cinematic ? authStyles.cinematicSecondaryButtonText : authStyles.secondaryButtonText
+            }
+          >
+            {sendLabel}
+          </Text>
         </Pressable>
       </View>
     </View>

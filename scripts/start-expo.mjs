@@ -3,12 +3,17 @@
  * 启动 Expo Go 局域网预览，自动避开 VPN 虚拟网卡（如 198.18.x.x）。
  */
 import { networkInterfaces } from "node:os";
-import { spawn } from "node:child_process";
+import { spawn, spawnSync } from "node:child_process";
 import { fileURLToPath } from "node:url";
 import { dirname, join } from "node:path";
 
 const root = join(dirname(fileURLToPath(import.meta.url)), "..");
 const extraArgs = process.argv.slice(2);
+
+spawnSync(process.execPath, [join(root, "scripts/allow-cursor-preview-cors.mjs")], {
+  cwd: root,
+  stdio: "inherit",
+});
 
 function getLanIp() {
   if (process.env.REACT_NATIVE_PACKAGER_HOSTNAME) {

@@ -1,5 +1,6 @@
 import { Ionicons } from "@expo/vector-icons";
 import { Pressable, Text, View } from "react-native";
+import { useAuthUi } from "@/components/auth/AuthScreen";
 import { useAuthStyles } from "@/components/auth/authStyles";
 import { useTheme } from "@/context/ThemeContext";
 import { authCopy } from "@/data/authCopy";
@@ -12,6 +13,8 @@ type PolicyAgreementProps = {
 export function PolicyAgreement({ checked, onToggle }: PolicyAgreementProps) {
   const authStyles = useAuthStyles();
   const { colors } = useTheme();
+  const { variant } = useAuthUi();
+  const cinematic = variant === "cinematic";
 
   return (
     <Pressable
@@ -21,14 +24,26 @@ export function PolicyAgreement({ checked, onToggle }: PolicyAgreementProps) {
       onPress={onToggle}
       style={authStyles.policyRow}
     >
-      <View style={[authStyles.checkbox, checked && authStyles.checkboxChecked]}>
-        {checked ? <Ionicons name="checkmark" size={14} color={colors.accentText} /> : null}
+      <View
+        style={[
+          cinematic ? authStyles.cinematicCheckbox : authStyles.checkbox,
+          checked && authStyles.checkboxChecked,
+          cinematic && checked && { backgroundColor: colors.accent, borderColor: colors.accent },
+        ]}
+      >
+        {checked ? (
+          <Ionicons name="checkmark" size={14} color={colors.accentText} />
+        ) : null}
       </View>
-      <Text style={authStyles.policyText}>
+      <Text style={cinematic ? authStyles.cinematicPolicyText : authStyles.policyText}>
         {authCopy.policy.prefix}
-        <Text style={authStyles.policyLink}>{authCopy.policy.userAgreement}</Text>
+        <Text style={cinematic ? authStyles.cinematicPolicyLink : authStyles.policyLink}>
+          {authCopy.policy.userAgreement}
+        </Text>
         {authCopy.policy.connector}
-        <Text style={authStyles.policyLink}>{authCopy.policy.privacyPolicy}</Text>
+        <Text style={cinematic ? authStyles.cinematicPolicyLink : authStyles.policyLink}>
+          {authCopy.policy.privacyPolicy}
+        </Text>
         {authCopy.policy.suffix}
       </Text>
     </Pressable>

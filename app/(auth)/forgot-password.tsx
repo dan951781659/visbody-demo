@@ -69,6 +69,7 @@ export default function ForgotPasswordScreen() {
       onBack={() =>
         router.replace(channel === "phone" ? "/login-phone-password" : "/login-email-password")
       }
+      variant="cinematic"
     >
       <View style={{ gap: 12 }}>
         <AuthField label={channel === "phone" ? authCopy.login.phone : authCopy.login.email}>
@@ -82,6 +83,7 @@ export default function ForgotPasswordScreen() {
             }
             keyboardType={channel === "phone" ? "number-pad" : "email-address"}
             accessibilityLabel={channel === "phone" ? authCopy.login.phone : authCopy.login.email}
+            icon={channel === "phone" ? "call-outline" : "mail-outline"}
           />
         </AuthField>
 
@@ -101,6 +103,7 @@ export default function ForgotPasswordScreen() {
             showSecureToggle
             onToggleSecure={() => setShowPassword((prev) => !prev)}
             accessibilityLabel={authCopy.forgotPassword.newPassword}
+            icon="lock-closed-outline"
           />
         </AuthField>
 
@@ -113,6 +116,7 @@ export default function ForgotPasswordScreen() {
             showSecureToggle
             onToggleSecure={() => setShowConfirmPassword((prev) => !prev)}
             accessibilityLabel={authCopy.forgotPassword.confirmPassword}
+            icon="lock-closed-outline"
           />
         </AuthField>
 

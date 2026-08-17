@@ -51,7 +51,7 @@ function TabIcon({
       <Ionicons
         name={name}
         size={21}
-        color={focused ? colors.accent : colors.tabInactive}
+        color={focused ? colors.accentBright : colors.tabInactive}
         style={styles.icon}
       />
     </View>
@@ -86,7 +86,7 @@ export default function TabsLayout() {
           },
         ],
         tabBarBackground: () => <TabBarBackground colors={colors} />,
-        tabBarActiveTintColor: colors.accent,
+        tabBarActiveTintColor: colors.accentBright,
         tabBarInactiveTintColor: colors.tabInactive,
         tabBarLabelStyle: styles.tabLabel,
         tabBarIconStyle: styles.tabIcon,

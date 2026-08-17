@@ -17,6 +17,7 @@ export type ColorPalette = {
   textMuted: string;
   accent: string;
   accentDark: string;
+  accentBright: string;
   accentGlass: string;
   accentText: string;
   /** Primary glass button fill (native tint / web fallback). */
@@ -62,6 +63,7 @@ export const classicColors: ColorPalette = {
   ...sharedNeutral,
   accent: "#B8FF00",
   accentDark: "#8FCC00",
+  accentBright: "#B8FF00",
   accentGlass: "rgba(184,255,0,0.14)",
   accentText: "#000000",
   accentButtonFill: "rgba(184,255,0,0.68)",
@@ -73,7 +75,8 @@ export const deviceBlueColors: ColorPalette = {
   ...sharedNeutral,
   accent: "#007AFF",
   accentDark: "#0056B3",
-  accentGlass: "rgba(0,122,255,0.18)",
+  accentBright: "#64B5FF",
+  accentGlass: "rgba(0,122,255,0.24)",
   accentText: "#FFFFFF",
   accentButtonFill: "rgba(0,122,255,0.72)",
   accentButtonFillStrong: "rgba(0,122,255,0.82)",
@@ -164,3 +167,13 @@ export const layout = {
   /** Tab 页滚动底部留白：Web 下 Tab 为文档流占位，无需再留整段导航高度 */
   tabScreenBottomInset: Platform.OS === "web" ? spacing.xl : 84,
 } as const;
+
+/** 登录注册与「我的」共用的氛围渐变，随主题切换 */
+export const atmosphereGradients: Record<ColorSchemeId, readonly [string, string, string]> = {
+  classic: ["#003C4B", "#141417", "#000000"],
+  deviceBlue: ["#071429", "#050B16", "#000000"],
+};
+
+export function getAtmosphereGradient(schemeId: ColorSchemeId) {
+  return atmosphereGradients[schemeId] ?? atmosphereGradients.classic;
+}

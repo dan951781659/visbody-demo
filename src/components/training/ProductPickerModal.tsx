@@ -1,8 +1,18 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import { ActivityIndicator, Pressable, ScrollView, StyleSheet, Text, View } from "react-native";
+import {
+  ActivityIndicator,
+  Modal,
+  Pressable,
+  ScrollView,
+  StyleSheet,
+  Text,
+  TextInput,
+  View,
+} from "react-native";
 import { useRouter } from "expo-router";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { Ionicons } from "@expo/vector-icons";
+import { DeviceAddMenu } from "@/components/training/DeviceAddMenu";
 import { RadarScan } from "@/components/training/RadarScan";
 import { SwipeableDisconnectRow } from "@/components/training/SwipeableDisconnectRow";
 import { useToast } from "@/components/ToastProvider";
@@ -33,6 +43,9 @@ export function DevicePickerScreen() {
   const [hasScanned, setHasScanned] = useState(false);
   const [scanCollapsed, setScanCollapsed] = useState(false);
   const [failedDeviceId, setFailedDeviceId] = useState<string | null>(null);
+  const [addMenuVisible, setAddMenuVisible] = useState(false);
+  const [manualAddVisible, setManualAddVisible] = useState(false);
+  const [manualDeviceName, setManualDeviceName] = useState("");
   const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   const connectedDevices = useMemo(
@@ -99,13 +112,29 @@ export function DevicePickerScreen() {
   };
 
   const openHelp = (path: "/help" | "/help/motionstation" = "/help") => {
-    handleClose();
     router.push(path);
   };
 
   const handleScanAddDevice = () => {
-    handleClose();
+    setAddMenuVisible(false);
     router.push("/connect/scan");
+  };
+
+  const handleOpenManualAdd = () => {
+    setManualDeviceName("");
+    setManualAddVisible(true);
+  };
+
+  const handleSubmitManualAdd = () => {
+    const name = manualDeviceName.trim();
+    if (!name) {
+      showToast("请输入设备名称");
+      return;
+    }
+    addDevice(name);
+    showToast(`${name} 连接成功`);
+    setManualAddVisible(false);
+    setManualDeviceName("");
   };
 
   const handleSelectConnected = (device: Device) => {
@@ -156,25 +185,35 @@ export function DevicePickerScreen() {
   return (
     <SafeAreaView style={styles.container} edges={["top", "bottom"]}>
       <View style={styles.page}>
-          <View style={styles.header}>
-            <Pressable
-              accessibilityRole="button"
-              accessibilityLabel="返回"
-              onPress={handleClose}
-              style={({ pressed }) => [styles.headerBack, pressed && styles.pressed]}
-            >
-              <Ionicons name="chevron-back" size={24} color={colors.textPrimary} />
-            </Pressable>
+        <View style={styles.header}>
+          <Pressable
+            accessibilityRole="button"
+            accessibilityLabel="返回"
+            onPress={handleClose}
+            style={({ pressed }) => [styles.headerBack, pressed && styles.pressed]}
+          >
+            <Ionicons name="chevron-back" size={24} color={colors.textPrimary} />
+          </Pressable>
+          <View style={styles.headerCenter}>
             <Text style={styles.title}>我的设备</Text>
             <Pressable
               accessibilityRole="button"
-              accessibilityLabel="帮助"
-              onPress={() => openHelp("/help")}
-              style={({ pressed }) => [styles.headerHelp, pressed && styles.pressed]}
+              accessibilityLabel="连接帮助"
+              onPress={() => openHelp("/help/motionstation")}
+              style={({ pressed }) => [styles.headerHelpInline, pressed && styles.pressed]}
             >
-              <Ionicons name="help-circle-outline" size={22} color={colors.textSecondary} />
+              <Ionicons name="help-circle-outline" size={20} color={colors.textSecondary} />
             </Pressable>
           </View>
+          <Pressable
+            accessibilityRole="button"
+            accessibilityLabel="添加设备"
+            onPress={() => setAddMenuVisible(true)}
+            style={({ pressed }) => [styles.headerAdd, pressed && styles.pressed]}
+          >
+            <Ionicons name="add" size={26} color={colors.textPrimary} />
+          </Pressable>
+        </View>
 
           <ScrollView
             style={styles.scroll}
@@ -365,31 +404,58 @@ export function DevicePickerScreen() {
                 >
                   <Text style={styles.primaryBtnText}>重新扫描</Text>
                 </Pressable>
-                <Pressable
-                  accessibilityRole="button"
-                  accessibilityLabel="扫码添加设备"
-                  onPress={handleScanAddDevice}
-                  style={({ pressed }) => [styles.outlineBtn, pressed && styles.pressed]}
-                >
-                  <Ionicons name="scan-outline" size={18} color={colors.textSecondary} />
-                  <Text style={styles.outlineBtnText}>扫码添加设备</Text>
-                </Pressable>
               </View>
-            ) : null}
-
-            {!isScanning && hasScanned && otherDevices.length > 0 ? (
-              <Pressable
-                accessibilityRole="button"
-                accessibilityLabel="扫码添加设备"
-                onPress={handleScanAddDevice}
-                style={({ pressed }) => [styles.outlineBtn, pressed && styles.pressed]}
-              >
-                <Ionicons name="scan-outline" size={18} color={colors.textSecondary} />
-                <Text style={styles.outlineBtnText}>扫码添加设备</Text>
-              </Pressable>
             ) : null}
           </ScrollView>
       </View>
+
+      <DeviceAddMenu
+        visible={addMenuVisible}
+        onClose={() => setAddMenuVisible(false)}
+        onScanAdd={handleScanAddDevice}
+        onManualAdd={handleOpenManualAdd}
+      />
+
+      <Modal
+        transparent
+        visible={manualAddVisible}
+        animationType="fade"
+        onRequestClose={() => setManualAddVisible(false)}
+      >
+        <Pressable style={styles.manualBackdrop} onPress={() => setManualAddVisible(false)}>
+          <Pressable style={styles.manualSheet} onPress={(event) => event.stopPropagation()}>
+            <Text style={styles.manualTitle}>手动添加设备</Text>
+            <Text style={styles.manualHint}>输入设备名称后即可添加并连接</Text>
+            <TextInput
+              value={manualDeviceName}
+              onChangeText={setManualDeviceName}
+              placeholder="请输入设备名称"
+              placeholderTextColor={colors.textMuted}
+              autoFocus
+              accessibilityLabel="设备名称"
+              style={styles.manualInput}
+              returnKeyType="done"
+              onSubmitEditing={handleSubmitManualAdd}
+            />
+            <Pressable
+              accessibilityRole="button"
+              accessibilityLabel="添加设备"
+              onPress={handleSubmitManualAdd}
+              style={({ pressed }) => [styles.primaryBtn, pressed && styles.pressed]}
+            >
+              <Text style={styles.primaryBtnText}>添加设备</Text>
+            </Pressable>
+            <Pressable
+              accessibilityRole="button"
+              accessibilityLabel="取消"
+              onPress={() => setManualAddVisible(false)}
+              style={({ pressed }) => [styles.manualCancel, pressed && styles.pressed]}
+            >
+              <Text style={styles.manualCancelText}>取消</Text>
+            </Pressable>
+          </Pressable>
+        </Pressable>
+      </Modal>
     </SafeAreaView>
   );
 }
@@ -409,9 +475,9 @@ function createStyles(colors: ColorPalette) {
     header: {
       flexDirection: "row",
       alignItems: "center",
-      justifyContent: "space-between",
       paddingHorizontal: spacing.lg,
       marginBottom: spacing.sm,
+      gap: spacing.sm,
     },
     headerBack: {
       width: 36,
@@ -419,11 +485,23 @@ function createStyles(colors: ColorPalette) {
       alignItems: "center",
       justifyContent: "center",
     },
+    headerCenter: {
+      flex: 1,
+      flexDirection: "row",
+      alignItems: "center",
+      gap: spacing.xs,
+    },
     title: {
       ...typography.subtitle,
       color: colors.textPrimary,
     },
-    headerHelp: {
+    headerHelpInline: {
+      width: 28,
+      height: 28,
+      alignItems: "center",
+      justifyContent: "center",
+    },
+    headerAdd: {
       width: 36,
       height: 36,
       alignItems: "center",
@@ -436,6 +514,49 @@ function createStyles(colors: ColorPalette) {
       paddingHorizontal: spacing.lg,
       gap: spacing.sm,
       paddingBottom: spacing.md,
+    },
+    manualBackdrop: {
+      flex: 1,
+      backgroundColor: colors.overlay,
+      justifyContent: "center",
+      paddingHorizontal: spacing.lg,
+    },
+    manualSheet: {
+      backgroundColor: colors.surface,
+      borderRadius: radius.xl,
+      paddingHorizontal: spacing.lg,
+      paddingTop: spacing.lg,
+      paddingBottom: spacing.lg,
+      gap: spacing.md,
+    },
+    manualTitle: {
+      ...typography.subtitle,
+      color: colors.textPrimary,
+    },
+    manualHint: {
+      ...typography.caption,
+      color: colors.textMuted,
+      marginTop: -spacing.sm,
+    },
+    manualInput: {
+      ...typography.body,
+      color: colors.textPrimary,
+      borderWidth: 1,
+      borderColor: colors.border,
+      borderRadius: radius.md,
+      paddingHorizontal: spacing.md,
+      paddingVertical: spacing.md,
+      minHeight: 48,
+      backgroundColor: colors.background,
+    },
+    manualCancel: {
+      alignSelf: "center",
+      paddingVertical: spacing.sm,
+      paddingHorizontal: spacing.xl,
+    },
+    manualCancelText: {
+      ...typography.label,
+      color: colors.textMuted,
     },
     sectionHeader: {
       flexDirection: "row",
@@ -632,24 +753,6 @@ function createStyles(colors: ColorPalette) {
     primaryBtnText: {
       ...typography.subtitle,
       color: colors.accentText,
-    },
-    outlineBtn: {
-      alignSelf: "stretch",
-      flexDirection: "row",
-      alignItems: "center",
-      justifyContent: "center",
-      gap: spacing.sm,
-      paddingVertical: spacing.md,
-      borderRadius: radius.md,
-      borderWidth: 1,
-      borderColor: colors.glassBorder,
-      backgroundColor: colors.glass,
-      minHeight: 48,
-      marginTop: spacing.xs,
-    },
-    outlineBtnText: {
-      ...typography.label,
-      color: colors.textSecondary,
     },
     pressed: {
       opacity: 0.85,

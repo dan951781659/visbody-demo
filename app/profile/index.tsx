@@ -2,6 +2,7 @@ import { useMemo, useState } from "react";
 import { Alert, Pressable, ScrollView, StyleSheet, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useRouter } from "expo-router";
+import { LinearGradient } from "expo-linear-gradient";
 import { Ionicons } from "@expo/vector-icons";
 import { GlassButton } from "@/components/GlassButton";
 import { GlassSurface } from "@/components/GlassSurface";
@@ -23,13 +24,15 @@ import {
   UserDataTab,
 } from "@/data/userMock";
 import { authCopy } from "@/data/authCopy";
-import { ColorPalette, layout, radius, spacing, typography } from "@/theme";
+import { ColorPalette, getAtmosphereGradient, layout, radius, spacing, typography } from "@/theme";
+import { confirmAction } from "@/utils/confirmAction";
 
 export default function ProfileScreen() {
   const router = useRouter();
   const { showToast } = useToast();
-  const { colors } = useTheme();
+  const { colors, schemeId } = useTheme();
   const styles = useMemo(() => createStyles(colors), [colors]);
+  const atmosphereGradient = getAtmosphereGradient(schemeId);
   const { isLoggedIn, user, logout } = useUser();
   const { clearPendingDeviceLogin } = useTraining();
   const [dataTab, setDataTab] = useState<UserDataTab>("sport");
@@ -44,28 +47,29 @@ export default function ProfileScreen() {
   };
 
   const handleLogoutPress = () => {
-    Alert.alert(authCopy.logout.title, authCopy.logout.message, [
-      { text: authCopy.logout.cancel, style: "cancel" },
-      {
-        text: authCopy.logout.confirm,
-        style: "destructive",
-        onPress: () => {
-          clearPendingDeviceLogin();
-          logout();
-          showToast(authCopy.toast.logoutSuccess);
-          router.replace("/login");
-        },
+    confirmAction({
+      title: authCopy.logout.title,
+      message: authCopy.logout.message,
+      confirmLabel: authCopy.logout.confirm,
+      cancelLabel: authCopy.logout.cancel,
+      destructive: true,
+      onConfirm: () => {
+        clearPendingDeviceLogin();
+        logout();
+        showToast(authCopy.toast.logoutSuccess);
+        router.replace("/login");
       },
-    ]);
+    });
   };
 
   return (
-    <SafeAreaView style={styles.safeArea} edges={["top"]}>
-      <ScrollView
-        style={styles.scroll}
-        contentContainerStyle={styles.content}
-        showsVerticalScrollIndicator={false}
-      >
+    <LinearGradient colors={[...atmosphereGradient]} style={styles.safeArea}>
+      <SafeAreaView style={styles.transparent} edges={["top"]}>
+        <ScrollView
+          style={styles.scroll}
+          contentContainerStyle={styles.content}
+          showsVerticalScrollIndicator={false}
+        >
         <Text style={styles.pageTitle}>我的</Text>
 
         {isLoggedIn && user ? (
@@ -204,7 +208,8 @@ export default function ProfileScreen() {
           </View>
         )}
       </ScrollView>
-    </SafeAreaView>
+      </SafeAreaView>
+    </LinearGradient>
   );
 }
 
@@ -212,7 +217,10 @@ function createStyles(colors: ColorPalette) {
   return StyleSheet.create({
   safeArea: {
     flex: 1,
-    backgroundColor: colors.background,
+  },
+  transparent: {
+    flex: 1,
+    backgroundColor: "transparent",
   },
   scroll: {
     flex: 1,
