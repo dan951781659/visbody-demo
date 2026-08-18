@@ -673,7 +673,7 @@
         width: 100%;
         height: 100%;
         display: block;
-        object-fit: cover;
+        object-fit: contain;
       }
       .pillow-hotspot {
         position: absolute;
@@ -1814,7 +1814,7 @@
       <div class="footer">本页面为水星报告静态兼容预览 · mercury-v1.12.1</div>
     </main>
     <script>
-      const isSalesMode = window.location.pathname.endsWith("mercury-report-sales-demo.html") || new URLSearchParams(window.location.search).get("mode") === "sales" || window.location.hash === "#sales";
+      const isSalesMode = new URLSearchParams(window.location.search).get("mode") === "sales" || window.location.hash === "#sales";
       document.body.classList.toggle("sales-mode", isSalesMode);
       const advisorEntry = document.getElementById("advisorEntry");
       if (advisorEntry) {
@@ -1884,8 +1884,8 @@
         { id:"Z4", title:"左侧睡区1", height:15.5, gen1:[5], gen2:[4,8] }, { id:"Z5", title:"左侧睡区2", height:10.4, gen1:[7], gen2:[5,9] }, { id:"Z6", title:"右侧睡区1", height:14.5, gen1:[6], gen2:[6,10] }, { id:"Z7", title:"右侧睡区2", height:10.4, gen1:[8], gen2:[7,11] }
       ];
       const gen1ZoneNames = ["仰睡肩颈承托区","仰睡颈部承托区","下头窝区","上头窝区","左颈承托区","右颈承托区","左上侧睡区","右上侧睡区"];
-      const gen1Hotspots = [[52,70],[51,55],[49,40],[48,25],[77,65],[24,65],[77,31],[24,31]];
-      const gen2Hotspots = [[50,73],[50,55],[50,30],[68,62],[68,36],[32,62],[32,36],[88,62],[88,36],[12,62],[12,36]];
+      const gen1Hotspots = [[50,83],[50,68],[50,43],[50,19],[72,81],[26,81],[72,32],[26,33]];
+      const gen2Hotspots = [[50,73],[50,46],[50,26],[68,73],[68,26],[32,73],[32,26],[84,73],[84,26],[16,73],[16,26]];
       const gen1Recommended = [10.4,10.4,4.4,5.0,15.5,14.5,10.4,10.4];
       const gen1ModelDiffs = {"1号枕":"3.1cm","2号枕":"2.3cm","3号枕":"1.5cm","4号枕":"1.1cm"};
       const gen1Models = {"1号枕": { zones:[[90,7.0],[60,6.5],[50,4.2],[50,4.8],[180,9.0],[180,9.0],[300,8.3],[300,8.3]] },"2号枕": { zones:[[110,8.0],[80,7.5],[50,4.2],[50,4.8],[200,10.0],[200,10.0],[300,8.3],[300,8.3]] },"3号枕": { zones:[[130,9.0],[100,8.5],[50,4.7],[50,5.3],[220,11.0],[220,11.0],[300,9.3],[300,9.3]] },"4号枕": { zones:[[150,10.0],[120,9.5],[50,4.7],[50,5.3],[240,12.0],[240,12.0],[300,9.3],[300,9.3]] }};
