@@ -1,5 +1,5 @@
 import sidianMattress from "@/assets/heylive-sidian-mattress.jpg";
-import berlinProMattress from "@/assets/heylive-berlin-pro-mattress.jpg";
+import berlinProMattress from "@/assets/heylive-berlin-pro-mattress-clean.png";
 import louisVilanMattress from "@/assets/heylive-louis-vilan-mattress.jpg";
 
 type MattressProduct = {
@@ -12,7 +12,6 @@ type MattressProduct = {
   priceLevel: number;
   label: string;
   bmiRange: string;
-  recommendation: string;
 };
 
 const MATTRESS_PRODUCTS: MattressProduct[] = [
@@ -26,8 +25,6 @@ const MATTRESS_PRODUCTS: MattressProduct[] = [
     priceLevel: 3,
     label: "绿色标签",
     bmiRange: "16–24",
-    recommendation:
-      "您的 BMI 为 18.8，处于斯蒂安 16–24 的适配区间。亲柔软棉配合慢回弹静音层，有助于缓释肩臀压力；七区独立袋装结构可提供更细致的分区承托，最符合当前偏软和高贴合度需求。",
   },
   {
     id: "berlin-pro",
@@ -39,8 +36,6 @@ const MATTRESS_PRODUCTS: MattressProduct[] = [
     priceLevel: 3,
     label: "绿色标签",
     bmiRange: "16–24",
-    recommendation:
-      "您的 BMI 为 18.8，处于柏林-Pro 16–24 的适配区间。凝胶记忆棉与清水棉能够提升包裹和贴合感，九区迷你独立袋装系统兼顾分区支撑，适合作为偏软且承托稳定的进阶选择。",
   },
   {
     id: "louis-vilan",
@@ -52,25 +47,14 @@ const MATTRESS_PRODUCTS: MattressProduct[] = [
     priceLevel: 3,
     label: "绿色标签",
     bmiRange: "16–24",
-    recommendation:
-      "您的 BMI 为 18.8，处于路易威兰 16–24 的适配区间。高支高密纯棉梭织面料触感亲肤，双簧系统配合慢回弹静音层，在保持柔软贴合的同时加强弹性支撑，适合重视舒适包裹感的人群。",
   },
 ];
 
-function MattressProductCard({
-  product,
-  index,
-}: {
-  product: MattressProduct;
-  index: number;
-}) {
+function MattressProductCard({ product }: { product: MattressProduct }) {
   return (
     <article className="overflow-hidden rounded-2xl border border-red-100 bg-white shadow-[0_14px_36px_rgba(80,18,28,0.08)]">
       <div className="relative flex h-[220px] items-center justify-center overflow-hidden bg-[#fbfaf8] px-2">
         <img src={product.image} alt={product.imageAlt} className="h-full w-full object-contain" />
-        <div className="absolute left-3 top-3 rounded-full bg-[#e31937] px-3 py-1 text-[12px] font-semibold text-white shadow-lg">
-          {index === 0 ? "AI 首选" : `AI 推荐 ${index + 1}`}
-        </div>
         <div className="absolute right-3 top-3 rounded-full border border-emerald-200 bg-emerald-50/95 px-2.5 py-1 text-[11px] font-semibold text-emerald-700">
           {product.label}
         </div>
@@ -105,13 +89,6 @@ function MattressProductCard({
             价格等级 {product.priceLevel}
           </span>
         </div>
-
-        <div className="mt-4 rounded-xl bg-[#faf7f7] p-3">
-          <div className="text-[12px] font-semibold text-slate-800">为什么适合您</div>
-          <p className="mt-1.5 text-[12px] leading-5 text-slate-600">
-            {product.recommendation}
-          </p>
-        </div>
       </div>
     </article>
   );
@@ -133,8 +110,8 @@ export function MattressRecommendation() {
       </div>
 
       <div className="space-y-4">
-        {MATTRESS_PRODUCTS.map((product, index) => (
-          <MattressProductCard key={product.id} product={product} index={index} />
+        {MATTRESS_PRODUCTS.map((product) => (
+          <MattressProductCard key={product.id} product={product} />
         ))}
       </div>
     </section>
