@@ -134,7 +134,7 @@ export function BaseReport() {
   };
 
   return (
-    <div className="w-full max-w-[430px] bg-background min-h-screen pb-10 mx-auto">
+    <div className="w-full bg-background min-h-screen pb-10">
       <BrandHero />
 
       <div className="px-4">
