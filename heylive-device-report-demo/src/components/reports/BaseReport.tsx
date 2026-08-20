@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useRef, useState } from "react";
 import neckFront from "@/assets/neck-front.png";
 import neckSide from "@/assets/neck-side.png";
 import pillowIllu from "@/assets/pillow-illu.png";
@@ -124,7 +124,7 @@ const spineGroups: {
 /* ---------- page ---------- */
 export function BaseReport() {
   const [tab, setTab] = useState<string>("床垫智配");
-  const tabs = ["综合报告", "体态评估", "脊柱评估", "体围测量", "身体成分", "枕型智配", "床垫智配"];
+  const tabs = ["床垫智配", "综合报告", "体态评估", "脊柱评估", "体围测量", "身体成分", "枕型智配"];
   const tabRefs = useRef<Record<string, HTMLButtonElement | null>>({});
 
   const handleTabClick = (t: string) => {
@@ -132,14 +132,6 @@ export function BaseReport() {
     const el = tabRefs.current[t];
     el?.scrollIntoView({ behavior: "smooth", inline: "center", block: "nearest" });
   };
-
-  useEffect(() => {
-    tabRefs.current["床垫智配"]?.scrollIntoView({
-      behavior: "auto",
-      inline: "center",
-      block: "nearest",
-    });
-  }, []);
 
   return (
     <div className="w-full max-w-[430px] bg-background min-h-screen pb-10 mx-auto">
