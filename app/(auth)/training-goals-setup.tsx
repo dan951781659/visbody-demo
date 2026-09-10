@@ -5,6 +5,7 @@ import { AuthPrimaryButton, AuthScreen } from "@/components/auth/AuthScreen";
 import { TrainingGoalsEditor } from "@/components/goals/TrainingGoalsEditor";
 import { useToast } from "@/components/ToastProvider";
 import { authCopy } from "@/data/authCopy";
+import { useAuthVerification } from "@/context/AuthVerificationContext";
 import { useTraining } from "@/context/TrainingContext";
 import { useUser } from "@/context/UserContext";
 import { DEFAULT_TRAINING_GOALS } from "@/types/userGoals";
@@ -13,6 +14,7 @@ export default function TrainingGoalsSetupScreen() {
   const router = useRouter();
   const { showToast } = useToast();
   const { registerDraft, completeRegistration } = useUser();
+  const { clearVerification } = useAuthVerification();
   const { pendingDeviceLogin, validateDeviceLoginSession, clearPendingDeviceLogin } = useTraining();
   const [trainingGoals, setTrainingGoals] = useState(DEFAULT_TRAINING_GOALS);
 
@@ -32,6 +34,7 @@ export default function TrainingGoalsSetupScreen() {
       ...registerDraft.profile,
       trainingGoals,
     });
+    clearVerification();
 
     if (pendingDeviceLogin) {
       const result = validateDeviceLoginSession(pendingDeviceLogin.sessionId);

@@ -62,24 +62,24 @@ export default function PlanListScreen() {
             </Text>
             <Text style={styles.emptyHint}>
               {activeTab === "ongoing"
-                ? "点击下方按钮完善身体档案并生成计划"
+                ? "可从训练库加入推荐计划"
                 : "完成或退出的计划会显示在这里"}
             </Text>
           </View>
         }
-        renderItem={({ item }) => <MyTrainingPlanRow plan={item} tab={activeTab} />}
+        renderItem={({ item }) => (
+          <MyTrainingPlanRow
+            plan={item}
+            tab={activeTab}
+            onPress={() =>
+              router.push({
+                pathname: "/content/[type]/[id]",
+                params: { type: "plans", id: item.id },
+              })
+            }
+          />
+        )}
       />
-
-      <View style={styles.footer}>
-        <Pressable
-          accessibilityRole="button"
-          accessibilityLabel="重新生成计划"
-          onPress={() => router.push("/plan/profile-setup")}
-          style={({ pressed }) => [styles.primaryButton, pressed && styles.pressed]}
-        >
-          <Text style={styles.primaryButtonText}>重新生成计划</Text>
-        </Pressable>
-      </View>
     </SafeAreaView>
   );
 }
@@ -152,28 +152,6 @@ function createStyles(colors: ColorPalette) {
       ...typography.caption,
       color: colors.textSecondary,
       textAlign: "center",
-    },
-    footer: {
-      paddingHorizontal: layout.screenPadding,
-      paddingTop: spacing.md,
-      paddingBottom: spacing.lg,
-      borderTopWidth: StyleSheet.hairlineWidth,
-      borderTopColor: colors.glassBorder,
-    },
-    primaryButton: {
-      alignItems: "center",
-      justifyContent: "center",
-      backgroundColor: colors.accent,
-      borderRadius: radius.pill,
-      paddingVertical: spacing.lg,
-      minHeight: 52,
-    },
-    primaryButtonText: {
-      ...typography.subtitle,
-      color: colors.accentText,
-    },
-    pressed: {
-      opacity: 0.88,
     },
   });
 }

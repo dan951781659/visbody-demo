@@ -38,7 +38,23 @@ const defaultMistakes = [
   "在动作末端失去关节对齐。",
 ];
 
-export const moves: MoveItem[] = [
+/** Demo preview videos — public sample MP4s for local playback. */
+const DEMO_MEDIA_URIS = [
+  "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4",
+  "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerEscapes.mp4",
+  "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerFun.mp4",
+  "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerJoyrides.mp4",
+];
+
+function attachDemoMedia<T extends { mediaUri?: string }>(items: T[]): T[] {
+  return items.map((item, index) =>
+    item.mediaUri
+      ? item
+      : { ...item, mediaUri: DEMO_MEDIA_URIS[index % DEMO_MEDIA_URIS.length] },
+  );
+}
+
+const movesRaw: MoveItem[] = [
   {
     id: "move-kettlebell-squat",
     kind: "move",
@@ -85,6 +101,7 @@ export const moves: MoveItem[] = [
     targetArea: "Shoulders",
     difficulty: "Advanced",
     supportsAi: false,
+    available: false,
     gradient: gradientFor(2),
     durationMinutes: 15,
     description:
@@ -121,6 +138,7 @@ export const moves: MoveItem[] = [
     targetArea: "Upper Limbs",
     difficulty: "Advanced",
     supportsAi: false,
+    available: false,
     gradient: gradientFor(4),
     durationMinutes: 14,
     description:
@@ -221,7 +239,9 @@ export const moves: MoveItem[] = [
   },
 ];
 
-export const aiMoves: AiMoveItem[] = [
+export const moves: MoveItem[] = attachDemoMedia(movesRaw);
+
+const aiMovesRaw: AiMoveItem[] = [
   {
     id: "ai-smart-squat-coach",
     kind: "aiMove",
@@ -299,6 +319,7 @@ export const aiMoves: AiMoveItem[] = [
     equipment: "Dual Cable",
     targetArea: "Full Body",
     difficulty: "Advanced",
+    available: false,
     gradient: gradientFor(6),
     durationMinutes: 16,
     description:
@@ -359,6 +380,8 @@ export const aiMoves: AiMoveItem[] = [
     commonMistakes: defaultMistakes,
   },
 ];
+
+export const aiMoves: AiMoveItem[] = attachDemoMedia(aiMovesRaw);
 
 export const plans: PlanItem[] = [
   {

@@ -30,6 +30,8 @@ export type BaseLibraryItem = {
   gradient: [string, string];
   mediaUri?: string;
   thumbnailUri?: string;
+  /** When false, item is unavailable / taken down and cannot open detail. */
+  available?: boolean;
 };
 
 export type MoveItem = BaseLibraryItem & {

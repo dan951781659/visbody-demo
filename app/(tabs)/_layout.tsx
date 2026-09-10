@@ -81,8 +81,10 @@ export default function TabsLayout() {
             height: tabBarHeight,
             paddingTop: 6,
             paddingBottom: bottomInset,
-            // Web 用文档流占位，避免 absolute 沉到浏览器底栏下方被裁切
-            position: isWeb ? "relative" : "absolute",
+            position: "absolute",
+            left: 0,
+            right: 0,
+            bottom: 0,
           },
         ],
         tabBarBackground: () => <TabBarBackground colors={colors} />,
@@ -91,7 +93,7 @@ export default function TabsLayout() {
         tabBarLabelStyle: styles.tabLabel,
         tabBarIconStyle: styles.tabIcon,
         tabBarItemStyle: styles.tabItem,
-        tabBarHideOnKeyboard: true,
+        tabBarHideOnKeyboard: !isWeb,
         sceneStyle: isWeb ? styles.webScene : undefined,
       }}
     >
@@ -153,6 +155,8 @@ function createStyles(colors: ColorPalette) {
       backgroundColor: Platform.OS === "ios" ? "transparent" : "rgba(28,28,30,0.92)",
       borderTopColor: colors.glassBorder,
       borderTopWidth: StyleSheet.hairlineWidth,
+      zIndex: 50,
+      elevation: 8,
     },
     webScene: {
       flex: 1,

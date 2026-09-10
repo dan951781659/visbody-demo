@@ -18,6 +18,7 @@ import {
 import { useToast } from "@/components/ToastProvider";
 import { authCopy } from "@/data/authCopy";
 import { useAuthStyles } from "@/components/auth/authStyles";
+import { useAuthVerification } from "@/context/AuthVerificationContext";
 import { useUser } from "@/context/UserContext";
 import { nicknameFromIdentifier } from "@/utils/authValidation";
 
@@ -26,12 +27,13 @@ export default function ProfileCompletionScreen() {
   const { showToast } = useToast();
   const authStyles = useAuthStyles();
   const { registerDraft, setRegisterDraft } = useUser();
+  const { hasVerifiedSession } = useAuthVerification();
 
   useEffect(() => {
     if (!registerDraft) {
-      router.replace("/login");
+      router.replace(hasVerifiedSession("register") ? "/register-password" : "/login");
     }
-  }, [registerDraft, router]);
+  }, [hasVerifiedSession, registerDraft, router]);
 
   const defaultNickname =
     registerDraft?.profile?.nickname ??
@@ -40,8 +42,8 @@ export default function ProfileCompletionScreen() {
       : "");
 
   const [nickname, setNickname] = useState(defaultNickname);
-  const [gender, setGender] = useState<"male" | "female" | "other">(
-    registerDraft?.profile?.gender ?? "male",
+  const [gender, setGender] = useState<"male" | "female">(
+    registerDraft?.profile?.gender === "female" ? "female" : "male",
   );
   const [birthYear, setBirthYear] = useState(registerDraft?.profile?.birthYear ?? "");
   const [birthMonth, setBirthMonth] = useState(registerDraft?.profile?.birthMonth ?? "");
@@ -67,7 +69,7 @@ export default function ProfileCompletionScreen() {
 
   const handleNext = () => {
     if (!registerDraft) {
-      router.replace("/login");
+      router.replace(hasVerifiedSession("register") ? "/register-password" : "/login");
       return;
     }
     if (!height.trim()) {
@@ -104,7 +106,7 @@ export default function ProfileCompletionScreen() {
     <AuthScreen
       title={authCopy.profileCompletion.title}
       subtitle={authCopy.profileCompletion.subtitle}
-      onBack={() => router.replace("/login")}
+      onBack={() => router.replace("/register-password")}
     >
       <View style={{ gap: 12 }}>
         <AuthField label={authCopy.profileCompletion.nickname}>

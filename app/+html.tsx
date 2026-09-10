@@ -20,8 +20,7 @@ export default function Root({ children }: PropsWithChildren) {
             __html: `
               html, body, #root {
                 height: 100%;
-                height: 100dvh;
-                max-height: 100dvh;
+                max-height: 100%;
                 margin: 0;
                 background-color: #000;
               }

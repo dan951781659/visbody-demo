@@ -168,26 +168,26 @@ export function SelectField({ label, value, options, placeholder, onSelect }: Se
   );
 }
 
-type Gender = "male" | "female" | "other";
+type Gender = "male" | "female";
 
 export function GenderSelector({
   value,
   onChange,
 }: {
-  value: Gender;
+  value: Gender | "other";
   onChange: (value: Gender) => void;
 }) {
   const authStyles = useAuthStyles();
+  const selected: Gender = value === "other" ? "female" : value;
   const options: { value: Gender; label: string }[] = [
     { value: "male", label: authCopy.profileCompletion.genderOptions.male },
     { value: "female", label: authCopy.profileCompletion.genderOptions.female },
-    { value: "other", label: authCopy.profileCompletion.genderOptions.other },
   ];
 
   return (
     <View style={authStyles.genderRow}>
       {options.map((option) => {
-        const isActive = value === option.value;
+        const isActive = selected === option.value;
         return (
           <Pressable
             key={option.value}

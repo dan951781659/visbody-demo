@@ -56,8 +56,18 @@ export default function ExploreScreen() {
     <SafeAreaView style={styles.safeArea} edges={["top"]}>
       <View style={styles.container}>
         <View style={styles.header}>
-          <Text style={styles.kicker}>训练库</Text>
-          <Text style={styles.title}>全部训练</Text>
+          <View style={styles.headerText}>
+            <Text style={styles.kicker}>训练库</Text>
+            <Text style={styles.title}>全部训练</Text>
+          </View>
+          <Pressable
+            accessibilityRole="button"
+            accessibilityLabel="查看收藏列表"
+            onPress={() => router.push("/content/favorites")}
+            style={({ pressed }) => [styles.favoriteEntry, pressed && styles.pressed]}
+          >
+            <Ionicons name="heart-outline" size={22} color={colors.textPrimary} />
+          </Pressable>
         </View>
 
         <View style={styles.tabsWrap}>
@@ -186,6 +196,24 @@ function createStyles(colors: ColorPalette) {
   },
   header: {
     marginBottom: spacing.lg,
+    flexDirection: "row",
+    alignItems: "flex-start",
+    justifyContent: "space-between",
+    gap: spacing.md,
+  },
+  headerText: {
+    flex: 1,
+  },
+  favoriteEntry: {
+    width: 44,
+    height: 44,
+    borderRadius: radius.md,
+    alignItems: "center",
+    justifyContent: "center",
+    backgroundColor: colors.surfaceMuted,
+    borderWidth: 1,
+    borderColor: colors.glassBorder,
+    marginTop: spacing.xs,
   },
   kicker: {
     ...typography.label,

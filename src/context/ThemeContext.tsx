@@ -27,36 +27,21 @@ type ThemeContextValue = {
 
 const ThemeContext = createContext<ThemeContextValue | null>(null);
 
-function isColorSchemeId(value: string | null): value is ColorSchemeId {
-  return value === "classic" || value === "deviceBlue";
-}
-
 export function ThemeProvider({ children }: { children: ReactNode }) {
   const [schemeId, setSchemeId] = useState<ColorSchemeId>(DEFAULT_COLOR_SCHEME);
   // 不阻塞首屏：reload 时 AsyncStorage 若变慢，避免一直 return null
   const [isReady] = useState(true);
 
   useEffect(() => {
-    let cancelled = false;
-
-    AsyncStorage.getItem(STORAGE_KEY)
-      .then((stored) => {
-        if (cancelled) return;
-        if (isColorSchemeId(stored)) {
-          setSchemeId(stored);
-        }
-      })
-      .catch(() => undefined);
-
-    return () => {
-      cancelled = true;
-    };
+    // 产品仅保留设备蓝主题，启动时强制收敛并写回存储。
+    setSchemeId(DEFAULT_COLOR_SCHEME);
+    AsyncStorage.setItem(STORAGE_KEY, DEFAULT_COLOR_SCHEME).catch(() => undefined);
   }, []);
 
-  const setColorScheme = useCallback((id: ColorSchemeId) => {
-    if (!colorSchemes[id]) return;
-    setSchemeId(id);
-    AsyncStorage.setItem(STORAGE_KEY, id).catch(() => undefined);
+  const setColorScheme = useCallback((_id: ColorSchemeId) => {
+    // 对外仍保留 API，但始终落回设备蓝。
+    setSchemeId(DEFAULT_COLOR_SCHEME);
+    AsyncStorage.setItem(STORAGE_KEY, DEFAULT_COLOR_SCHEME).catch(() => undefined);
   }, []);
 
   const value = useMemo<ThemeContextValue>(

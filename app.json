@@ -3,7 +3,7 @@
     "name": "MotionStation",
     "slug": "motionstation-mobile",
     "version": "1.0.0",
-    "orientation": "portrait",
+    "orientation": "default",
     "icon": "./assets/icon.png",
     "scheme": "motionstation",
     "userInterfaceStyle": "dark",
@@ -33,11 +33,20 @@
       "expo-router",
       "expo-asset",
       "expo-font",
+      "expo-screen-orientation",
       [
         "expo-image-picker",
         {
           "photosPermission": "允许 MotionStation 访问相册以设置头像",
           "cameraPermission": "允许 MotionStation 使用相机以拍摄头像"
+        }
+      ],
+      [
+        "expo-media-library",
+        {
+          "photosPermission": "允许 MotionStation 访问相册以保存训练报告长图",
+          "savePhotosPermission": "允许 MotionStation 将训练报告长图保存到相册",
+          "isAccessMediaLocationEnabled": false
         }
       ]
     ]

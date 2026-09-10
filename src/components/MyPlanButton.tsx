@@ -25,7 +25,7 @@ export function MyPlanButton({ onPress }: MyPlanButtonProps) {
           </View>
           <View>
             <Text style={styles.title}>我的训练计划</Text>
-            <Text style={styles.subtitle}>查看与管理训练大纲</Text>
+            <Text style={styles.subtitle}>查看进行中与历史计划</Text>
           </View>
         </View>
         <Ionicons name="arrow-forward-circle" size={30} color={colors.accent} />

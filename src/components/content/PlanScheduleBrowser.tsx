@@ -1,24 +1,33 @@
-import { useMemo, useState, type ReactNode } from "react";
+import { useEffect, useMemo, useState, type ReactNode } from "react";
 import { Pressable, StyleSheet, Text, View } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { useTheme } from "@/context/ThemeContext";
 import { resolvePlanMoveDetails } from "@/data/exploreLibrary";
 import type { PlanScheduleMove, PlanScheduleWeek } from "@/types/content";
+import { planDayKey } from "@/types/plan";
 import { ColorPalette, radius, spacing, typography } from "@/theme";
 
 type PlanScheduleBrowserProps = {
   schedule: PlanScheduleWeek[];
+  dayStatusMap?: Record<string, "finished" | "skipped">;
+  rescheduleMap?: Record<string, string>;
+  onSelectionChange?: (week: number, day: number) => void;
 };
 
 function moveKey(move: PlanScheduleMove, index: number) {
   return `${move.name}-${move.sets}-${index}`;
 }
 
-export function PlanScheduleBrowser({ schedule }: PlanScheduleBrowserProps) {
+export function PlanScheduleBrowser({
+  schedule,
+  dayStatusMap = {},
+  rescheduleMap = {},
+  onSelectionChange,
+}: PlanScheduleBrowserProps) {
   const { colors } = useTheme();
   const styles = useMemo(() => createStyles(colors), [colors]);
   const [weekIndex, setWeekIndex] = useState(0);
-  const activeWeek = schedule[Math.min(weekIndex, schedule.length - 1)];
+  const activeWeek = schedule[Math.min(weekIndex, Math.max(schedule.length - 1, 0))];
   const [dayIndex, setDayIndex] = useState(0);
   /** null = 使用默认：仅展开第一个动作 */
   const [expandedIds, setExpandedIds] = useState<Set<string> | null>(null);
@@ -26,6 +35,13 @@ export function PlanScheduleBrowser({ schedule }: PlanScheduleBrowserProps) {
   const days = activeWeek?.days ?? [];
   const activeDay = days[Math.min(dayIndex, Math.max(days.length - 1, 0))];
   const moves = activeDay?.moves ?? [];
+
+  useEffect(() => {
+    if (!activeWeek || !activeDay) return;
+    onSelectionChange?.(activeWeek.week, activeDay.day);
+    // Only announce when selection indices change
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [activeWeek?.week, activeDay?.day]);
 
   const weekTabs = useMemo(
     () => schedule.map((week, index) => ({ key: week.week, label: `第 ${week.week} 周`, index })),
@@ -88,17 +104,42 @@ export function PlanScheduleBrowser({ schedule }: PlanScheduleBrowserProps) {
       <View style={styles.tabRow}>
         {days.map((day, index) => {
           const selected = index === dayIndex;
+          const key = planDayKey(activeWeek.week, day.day);
+          const status = dayStatusMap[key];
+          const rescheduled = rescheduleMap[key];
+          const label =
+            status === "finished"
+              ? "已完成"
+              : status === "skipped"
+                ? "已跳过"
+                : `第 ${day.day} 天`;
           return (
             <Pressable
               key={`${activeWeek.week}-${day.day}`}
               accessibilityRole="tab"
               accessibilityState={{ selected }}
               onPress={() => selectDay(index)}
-              style={[styles.tab, styles.dayTab, selected && styles.tabSelected]}
+              style={[
+                styles.tab,
+                styles.dayTab,
+                selected && styles.tabSelected,
+                status === "finished" && styles.dayFinished,
+                status === "skipped" && styles.daySkipped,
+              ]}
             >
-              <Text style={[styles.tabText, selected && styles.tabTextSelected]}>
-                第 {day.day} 天
+              <Text
+                style={[
+                  styles.tabText,
+                  selected && styles.tabTextSelected,
+                  status === "finished" && styles.dayFinishedText,
+                  status === "skipped" && styles.daySkippedText,
+                ]}
+              >
+                {label}
               </Text>
+              {rescheduled && !status ? (
+                <Text style={styles.rescheduleHint}>{rescheduled.slice(5)}</Text>
+              ) : null}
             </Pressable>
           );
         })}
@@ -213,6 +254,26 @@ function createStyles(colors: ColorPalette) {
     dayTab: {
       minWidth: 72,
       alignItems: "center",
+      gap: 2,
+    },
+    dayFinished: {
+      borderColor: colors.green,
+      backgroundColor: "rgba(34,197,94,0.12)",
+    },
+    daySkipped: {
+      borderColor: colors.orange,
+      backgroundColor: "rgba(249,115,22,0.12)",
+    },
+    dayFinishedText: {
+      color: colors.green,
+    },
+    daySkippedText: {
+      color: colors.orange,
+    },
+    rescheduleHint: {
+      ...typography.label,
+      fontSize: 10,
+      color: colors.textMuted,
     },
     tabSelected: {
       backgroundColor: colors.accentGlass,

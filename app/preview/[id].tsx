@@ -21,6 +21,7 @@ export default function PreviewRoute() {
     <VideoPlayerScreen
       title={title ?? item?.name ?? "预览"}
       mediaUri={item?.mediaUri}
+      immersive
       onClose={() => router.back()}
     />
   );

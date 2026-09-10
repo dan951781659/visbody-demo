@@ -3,17 +3,17 @@ import { radius, spacing, typography } from "@/theme";
 import { getMetaChipPalette, type MetaChipStyle } from "@/theme/metaChip";
 
 type ContentTagRowProps = {
-  tags: { label: string; value: string; style: MetaChipStyle }[];
+  tags: { label?: string; value: string; style: MetaChipStyle }[];
 };
 
 export function ContentTagRow({ tags }: ContentTagRowProps) {
   return (
     <View style={styles.wrap}>
-      {tags.map(({ label, value, style }) => {
+      {tags.map(({ label, value, style }, index) => {
         const palette = getMetaChipPalette(style);
         return (
           <View
-            key={`${label}-${value}`}
+            key={`${label ?? style}-${value}-${index}`}
             style={[
               styles.tag,
               {
@@ -22,7 +22,6 @@ export function ContentTagRow({ tags }: ContentTagRowProps) {
               },
             ]}
           >
-            <Text style={[styles.tagLabel, { color: palette.text, opacity: 0.72 }]}>{label}</Text>
             <Text style={[styles.tagValue, { color: palette.text }]}>{value}</Text>
           </View>
         );
@@ -38,17 +37,10 @@ const styles = StyleSheet.create({
     gap: spacing.sm,
   },
   tag: {
-    flexDirection: "row",
-    alignItems: "center",
-    gap: spacing.xs,
     borderRadius: radius.pill,
     paddingHorizontal: spacing.md,
     paddingVertical: spacing.xs,
     borderWidth: 1,
-  },
-  tagLabel: {
-    ...typography.label,
-    fontSize: 11,
   },
   tagValue: {
     ...typography.label,

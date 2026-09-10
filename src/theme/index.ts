@@ -1,5 +1,3 @@
-import { Platform } from "react-native";
-
 export type ColorSchemeId = "classic" | "deviceBlue";
 
 export type ColorPalette = {
@@ -105,14 +103,14 @@ export const colorSchemes: Record<
   },
 };
 
-export const DEFAULT_COLOR_SCHEME: ColorSchemeId = "classic";
+export const DEFAULT_COLOR_SCHEME: ColorSchemeId = "deviceBlue";
 
 export function getColorPalette(schemeId: ColorSchemeId): ColorPalette {
-  return colorSchemes[schemeId]?.colors ?? classicColors;
+  return colorSchemes[schemeId]?.colors ?? deviceBlueColors;
 }
 
-/** @deprecated Prefer useTheme().colors for runtime switching. Kept as classic default for static layouts. */
-export const colors = classicColors;
+/** Prefer useTheme().colors for runtime theming. Static fallback stays on device blue. */
+export const colors = deviceBlueColors;
 
 export const spacing = {
   xs: 4,
@@ -164,8 +162,8 @@ export const layout = {
   cardWidth: 280,
   sceneCardSize: 140,
   bottomNavHeight: 84,
-  /** Tab 页滚动底部留白：Web 下 Tab 为文档流占位，无需再留整段导航高度 */
-  tabScreenBottomInset: Platform.OS === "web" ? spacing.xl : 84,
+  /** Tab 悬浮在内容上方，滚动区域需留出导航高度 */
+  tabScreenBottomInset: 84,
 } as const;
 
 /** 登录注册与「我的」共用的氛围渐变，随主题切换 */

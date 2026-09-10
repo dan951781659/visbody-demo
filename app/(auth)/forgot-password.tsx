@@ -10,12 +10,12 @@ import {
 import { VerificationCodeRow } from "@/components/auth/AuthFormParts";
 import { useToast } from "@/components/ToastProvider";
 import { authCopy } from "@/data/authCopy";
+import { useAuthVerification } from "@/context/AuthVerificationContext";
+import { isRegisteredAccount } from "@/utils/authMock";
 import {
   AuthChannel,
   validateCode,
   validateEmail,
-  validatePassword,
-  validatePasswordMatch,
   validatePhone,
 } from "@/utils/authValidation";
 
@@ -24,15 +24,16 @@ export default function ForgotPasswordScreen() {
   const { showToast } = useToast();
   const params = useLocalSearchParams<{ channel?: string }>();
   const channel: AuthChannel = params.channel === "phone" ? "phone" : "email";
+  const { session, setVerifiedSession, clearVerification } = useAuthVerification();
 
-  const [identifier, setIdentifier] = useState("");
+  const [identifier, setIdentifier] = useState(
+    session?.purpose === "reset" && session.channel === channel ? session.identifier : "",
+  );
   const [code, setCode] = useState("");
-  const [password, setPassword] = useState("");
-  const [confirmPassword, setConfirmPassword] = useState("");
-  const [showPassword, setShowPassword] = useState(false);
-  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
-  const handleSave = () => {
+  const loginBackPath = channel === "phone" ? "/login-phone-password" : "/login-email-password";
+
+  const handleNext = () => {
     const idResult = channel === "phone" ? validatePhone(identifier) : validateEmail(identifier);
     if (!idResult.ok) {
       showToast(idResult.message);
@@ -45,30 +46,36 @@ export default function ForgotPasswordScreen() {
       return;
     }
 
-    const passwordResult = validatePassword(password);
-    if (!passwordResult.ok) {
-      showToast(passwordResult.message);
+    const trimmed = identifier.trim();
+    if (!isRegisteredAccount(trimmed, channel)) {
+      showToast(
+        channel === "phone"
+          ? authCopy.forgotPassword.phoneNotRegistered
+          : authCopy.forgotPassword.emailNotRegistered,
+      );
       return;
     }
 
-    const matchResult = validatePasswordMatch(password, confirmPassword);
-    if (!matchResult.ok) {
-      showToast(matchResult.message);
-      return;
-    }
-
-    showToast(authCopy.toast.passwordResetSuccess);
-    setTimeout(() => {
-      router.replace(channel === "phone" ? "/login-phone-password" : "/login-email-password");
-    }, 900);
+    setVerifiedSession({
+      purpose: "reset",
+      identifier: trimmed,
+      channel,
+    });
+    router.push(`/reset-password?channel=${channel}`);
   };
 
   return (
     <AuthScreen
-      title={authCopy.forgotPassword.title}
-      onBack={() =>
-        router.replace(channel === "phone" ? "/login-phone-password" : "/login-email-password")
+      title={authCopy.forgotPassword.verifyTitle}
+      subtitle={
+        channel === "phone"
+          ? authCopy.forgotPassword.phoneSubtitle
+          : authCopy.forgotPassword.emailSubtitle
       }
+      onBack={() => {
+        clearVerification();
+        router.replace(loginBackPath);
+      }}
       variant="cinematic"
     >
       <View style={{ gap: 12 }}>
@@ -94,33 +101,7 @@ export default function ForgotPasswordScreen() {
           onChangeText={setCode}
         />
 
-        <AuthField label={authCopy.forgotPassword.newPassword}>
-          <AuthInput
-            value={password}
-            onChangeText={setPassword}
-            placeholder={authCopy.forgotPassword.newPasswordPlaceholder}
-            secureTextEntry={!showPassword}
-            showSecureToggle
-            onToggleSecure={() => setShowPassword((prev) => !prev)}
-            accessibilityLabel={authCopy.forgotPassword.newPassword}
-            icon="lock-closed-outline"
-          />
-        </AuthField>
-
-        <AuthField label={authCopy.forgotPassword.confirmPassword}>
-          <AuthInput
-            value={confirmPassword}
-            onChangeText={setConfirmPassword}
-            placeholder={authCopy.forgotPassword.confirmPasswordPlaceholder}
-            secureTextEntry={!showConfirmPassword}
-            showSecureToggle
-            onToggleSecure={() => setShowConfirmPassword((prev) => !prev)}
-            accessibilityLabel={authCopy.forgotPassword.confirmPassword}
-            icon="lock-closed-outline"
-          />
-        </AuthField>
-
-        <AuthPrimaryButton label={authCopy.forgotPassword.save} onPress={handleSave} />
+        <AuthPrimaryButton label={authCopy.forgotPassword.next} onPress={handleNext} />
       </View>
     </AuthScreen>
   );

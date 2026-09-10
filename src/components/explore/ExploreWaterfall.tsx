@@ -10,6 +10,8 @@ type ExploreWaterfallProps = {
   onPressItem: (item: LibraryItem) => void;
   colors: ColorPalette;
   emptyText: string;
+  /** Favorites list shows unavailable overlay for taken-down moves. */
+  showUnavailableOverlay?: boolean;
 };
 
 /** Rough relative height so shorter column receives the next card. */
@@ -50,6 +52,7 @@ export function ExploreWaterfall({
   onPressItem,
   colors,
   emptyText,
+  showUnavailableOverlay = false,
 }: ExploreWaterfallProps) {
   const styles = useMemo(() => createStyles(colors), [colors]);
   const [leftItems, rightItems] = useMemo(() => splitIntoColumns(items), [items]);
@@ -70,6 +73,7 @@ export function ExploreWaterfall({
               key={item.id}
               item={item}
               tab={tab}
+              showUnavailableOverlay={showUnavailableOverlay}
               onPress={() => onPressItem(item)}
             />
           ))}
@@ -80,6 +84,7 @@ export function ExploreWaterfall({
               key={item.id}
               item={item}
               tab={tab}
+              showUnavailableOverlay={showUnavailableOverlay}
               onPress={() => onPressItem(item)}
             />
           ))}

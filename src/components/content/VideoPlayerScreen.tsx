@@ -44,7 +44,7 @@ export function VideoPlayerScreen({
 
   return (
     <SafeAreaView style={[styles.safeArea, immersive && styles.immersive]} edges={["top", "bottom"]}>
-      <View style={styles.header}>
+      <View style={[styles.header, immersive && styles.headerImmersive]}>
         <GlassIconButton accessibilityLabel="返回" onPress={onClose}>
           <Ionicons name="chevron-back" size={22} color={colors.textPrimary} />
         </GlassIconButton>
@@ -92,6 +92,10 @@ const styles = StyleSheet.create({
     paddingHorizontal: spacing.lg,
     paddingVertical: spacing.md,
     gap: spacing.md,
+  },
+  headerImmersive: {
+    paddingVertical: spacing.sm,
+    paddingHorizontal: spacing.md,
   },
   headerSpacer: {
     width: 44,

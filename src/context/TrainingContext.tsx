@@ -20,6 +20,7 @@ import {
   validateDeviceLoginSession as validateDeviceLoginSessionMock,
 } from "@/data/deviceLoginMock";
 import { buildTrainingReport, createDefaultPreset } from "@/data/trainingMock";
+import { emitMoveDeviceSync } from "@/data/moveDeviceSyncMock";
 import {
   ActiveSession,
   ConnectionStatus,
@@ -28,8 +29,10 @@ import {
   DeviceLoginSession,
   DeviceLoginValidateResult,
   FreeTrainingType,
+  MoveFollowSession,
   NearbyDevice,
   PendingDeviceLogin,
+  PendingMoveStart,
   ProductId,
   ProductLineId,
   ProductLineOption,
@@ -65,7 +68,9 @@ type TrainingContextValue = {
   pauseSession: () => void;
   resumeSession: () => void;
   endSession: () => TrainingReport | null;
+  publishReport: (report: TrainingReport) => void;
   clearSession: () => void;
+  clearReport: () => void;
   pendingDeviceLogin: PendingDeviceLogin | null;
   deviceLoginSession: DeviceLoginSession | null;
   ensureDeviceLoginSession: () => DeviceLoginSession;
@@ -80,6 +85,17 @@ type TrainingContextValue = {
   cancelDeviceLogin: (sessionId: string) => DeviceLoginValidateResult;
   setPendingDeviceLogin: (pending: PendingDeviceLogin | null) => void;
   clearPendingDeviceLogin: () => void;
+  pendingMoveStart: PendingMoveStart | null;
+  setPendingMoveStart: (pending: PendingMoveStart | null) => void;
+  clearPendingMoveStart: () => void;
+  moveFollowSession: MoveFollowSession | null;
+  startMoveSession: (input: { moveId: string; moveName: string }) => void;
+  beginMoveTraining: () => void;
+  pauseMoveSession: () => void;
+  resumeMoveSession: () => void;
+  updateMovePreset: (patch: Partial<TrainingPreset>) => void;
+  endMoveSession: () => MoveFollowSession | null;
+  clearMoveSession: () => void;
 };
 
 const TrainingContext = createContext<TrainingContextValue | null>(null);
@@ -99,8 +115,13 @@ export function TrainingProvider({ children }: { children: ReactNode }) {
   const [lastReport, setLastReport] = useState<TrainingReport | null>(null);
   const [pendingDeviceLogin, setPendingDeviceLoginState] = useState<PendingDeviceLogin | null>(null);
   const [deviceLoginSession, setDeviceLoginSession] = useState<DeviceLoginSession | null>(null);
+  const [pendingMoveStart, setPendingMoveStartState] = useState<PendingMoveStart | null>(null);
+  const [moveFollowSession, setMoveFollowSession] = useState<MoveFollowSession | null>(null);
   const timerRef = useRef<ReturnType<typeof setInterval> | null>(null);
+  const moveTimerRef = useRef<ReturnType<typeof setInterval> | null>(null);
   const reconnectAttemptsRef = useRef<Map<string, number>>(new Map());
+  const moveFollowSessionRef = useRef<MoveFollowSession | null>(null);
+  moveFollowSessionRef.current = moveFollowSession;
 
   const selectedProductLine = useMemo(
     () => productLines.find((line) => line.id === selectedProductLineId) ?? productLines[2],
@@ -125,6 +146,13 @@ export function TrainingProvider({ children }: { children: ReactNode }) {
     if (timerRef.current) {
       clearInterval(timerRef.current);
       timerRef.current = null;
+    }
+  }, []);
+
+  const clearMoveTimer = useCallback(() => {
+    if (moveTimerRef.current) {
+      clearInterval(moveTimerRef.current);
+      moveTimerRef.current = null;
     }
   }, []);
 
@@ -191,6 +219,8 @@ export function TrainingProvider({ children }: { children: ReactNode }) {
         name,
         subtitle: "",
         connection: "connected",
+        serialNumber: `SN-${name.replace(/\s+/g, "").toUpperCase()}`,
+        currentVersion: "1.0.0",
       };
       setSelectedDeviceId(id);
       setLastUsedDeviceId(id);
@@ -248,11 +278,26 @@ export function TrainingProvider({ children }: { children: ReactNode }) {
   const endSession = useCallback((): TrainingReport | null => {
     clearTimer();
     if (!activeSession) return null;
-    const report = buildTrainingReport(activeSession.preset, activeSession.elapsedSeconds);
+    const report = buildTrainingReport({
+      preset: activeSession.preset,
+      durationSeconds: activeSession.elapsedSeconds,
+      source: "free_training",
+      scene: activeSession.preset.trainingType === "pilates" ? "pilates" : "free",
+      sceneLabel:
+        activeSession.preset.trainingType === "pilates"
+          ? "普拉提"
+          : activeSession.preset.trainingType === "resistance_cardio"
+            ? "阻力有氧"
+            : "力量训练",
+    });
     setLastReport(report);
     setActiveSession(null);
     return report;
   }, [activeSession, clearTimer]);
+
+  const publishReport = useCallback((report: TrainingReport) => {
+    setLastReport(report);
+  }, []);
 
   const clearSession = useCallback(() => {
     clearTimer();
@@ -260,6 +305,10 @@ export function TrainingProvider({ children }: { children: ReactNode }) {
     setPreset(null);
     setConnectionStatus("disconnected");
   }, [clearTimer]);
+
+  const clearReport = useCallback(() => {
+    setLastReport(null);
+  }, []);
 
   const syncDeviceLoginSession = useCallback(() => {
     const session = getActiveDeviceLoginSession();
@@ -343,6 +392,77 @@ export function TrainingProvider({ children }: { children: ReactNode }) {
     setPendingDeviceLoginState(null);
   }, []);
 
+  const setPendingMoveStart = useCallback((pending: PendingMoveStart | null) => {
+    setPendingMoveStartState(pending);
+  }, []);
+
+  const clearPendingMoveStart = useCallback(() => {
+    setPendingMoveStartState(null);
+  }, []);
+
+  const startMoveSession = useCallback(
+    (input: { moveId: string; moveName: string }) => {
+      clearMoveTimer();
+      setMoveFollowSession({
+        moveId: input.moveId,
+        moveName: input.moveName,
+        status: "ready",
+        elapsedSeconds: 0,
+        startedAt: null,
+        preset: createDefaultPreset("strength"),
+      });
+    },
+    [clearMoveTimer],
+  );
+
+  const beginMoveTraining = useCallback(() => {
+    setMoveFollowSession((current) => {
+      if (!current || current.status === "running") return current;
+      return {
+        ...current,
+        status: "running",
+        startedAt: current.startedAt ?? Date.now(),
+      };
+    });
+  }, []);
+
+  const pauseMoveSession = useCallback(() => {
+    setMoveFollowSession((current) => {
+      if (!current || current.status !== "running") return current;
+      emitMoveDeviceSync("pause", current.moveId);
+      return { ...current, status: "paused" };
+    });
+  }, []);
+
+  const resumeMoveSession = useCallback(() => {
+    setMoveFollowSession((current) => {
+      if (!current || current.status !== "paused") return current;
+      emitMoveDeviceSync("resume", current.moveId);
+      return { ...current, status: "running" };
+    });
+  }, []);
+
+  const updateMovePreset = useCallback((patch: Partial<TrainingPreset>) => {
+    setMoveFollowSession((current) => {
+      if (!current) return current;
+      return { ...current, preset: { ...current.preset, ...patch } };
+    });
+  }, []);
+
+  const endMoveSession = useCallback((): MoveFollowSession | null => {
+    clearMoveTimer();
+    const current = moveFollowSessionRef.current;
+    if (!current) return null;
+    emitMoveDeviceSync("end", current.moveId);
+    setMoveFollowSession(null);
+    return { ...current, status: "ended" };
+  }, [clearMoveTimer]);
+
+  const clearMoveSession = useCallback(() => {
+    clearMoveTimer();
+    setMoveFollowSession(null);
+  }, [clearMoveTimer]);
+
   useEffect(() => {
     if (!activeSession || activeSession.status !== "running") {
       clearTimer();
@@ -359,7 +479,29 @@ export function TrainingProvider({ children }: { children: ReactNode }) {
     return clearTimer;
   }, [activeSession?.status, clearTimer]);
 
-  useEffect(() => () => clearTimer(), [clearTimer]);
+  useEffect(() => {
+    if (!moveFollowSession || moveFollowSession.status !== "running") {
+      clearMoveTimer();
+      return;
+    }
+
+    moveTimerRef.current = setInterval(() => {
+      setMoveFollowSession((current) => {
+        if (!current || current.status !== "running") return current;
+        return { ...current, elapsedSeconds: current.elapsedSeconds + 1 };
+      });
+    }, 1000);
+
+    return clearMoveTimer;
+  }, [moveFollowSession?.status, clearMoveTimer]);
+
+  useEffect(
+    () => () => {
+      clearTimer();
+      clearMoveTimer();
+    },
+    [clearTimer, clearMoveTimer],
+  );
 
   const value = useMemo<TrainingContextValue>(
     () => ({
@@ -386,7 +528,9 @@ export function TrainingProvider({ children }: { children: ReactNode }) {
       pauseSession,
       resumeSession,
       endSession,
+      publishReport,
       clearSession,
+      clearReport,
       pendingDeviceLogin,
       deviceLoginSession,
       ensureDeviceLoginSession,
@@ -398,6 +542,17 @@ export function TrainingProvider({ children }: { children: ReactNode }) {
       cancelDeviceLogin,
       setPendingDeviceLogin,
       clearPendingDeviceLogin,
+      pendingMoveStart,
+      setPendingMoveStart,
+      clearPendingMoveStart,
+      moveFollowSession,
+      startMoveSession,
+      beginMoveTraining,
+      pauseMoveSession,
+      resumeMoveSession,
+      updateMovePreset,
+      endMoveSession,
+      clearMoveSession,
     }),
     [
       selectedProductLine,
@@ -421,7 +576,9 @@ export function TrainingProvider({ children }: { children: ReactNode }) {
       pauseSession,
       resumeSession,
       endSession,
+      publishReport,
       clearSession,
+      clearReport,
       pendingDeviceLogin,
       deviceLoginSession,
       ensureDeviceLoginSession,
@@ -433,6 +590,17 @@ export function TrainingProvider({ children }: { children: ReactNode }) {
       cancelDeviceLogin,
       setPendingDeviceLogin,
       clearPendingDeviceLogin,
+      pendingMoveStart,
+      setPendingMoveStart,
+      clearPendingMoveStart,
+      moveFollowSession,
+      startMoveSession,
+      beginMoveTraining,
+      pauseMoveSession,
+      resumeMoveSession,
+      updateMovePreset,
+      endMoveSession,
+      clearMoveSession,
     ],
   );
 

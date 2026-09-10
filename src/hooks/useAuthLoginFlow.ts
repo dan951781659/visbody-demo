@@ -68,9 +68,10 @@ export function useAuthLoginFlow() {
     finishRegisteredLogin();
   };
 
-  /** 第三方登录按钮仅展示，暂不接真实能力 */
-  const attemptSocialLogin = (_policyAgreed: boolean) => {
-    showToast(authCopy.toast.socialComingSoon);
+  /** Google / Facebook 为演示登录：勾选协议后直接进入已登录假数据，无需填写邮箱或手机号 */
+  const attemptSocialLogin = (policyAgreed: boolean) => {
+    if (!requirePolicy(policyAgreed)) return;
+    finishRegisteredLogin();
   };
 
   return {

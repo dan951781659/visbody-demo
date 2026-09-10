@@ -1,9 +1,11 @@
-import { StyleSheet, Text, View } from "react-native";
+import { useMemo } from "react";
+import { StyleSheet, Text } from "react-native";
 import { GlassSurface } from "@/components/GlassSurface";
 import { DataMetricGrid } from "@/components/profile/DataMetricGrid";
 import { SegmentedControl } from "@/components/profile/SegmentedControl";
+import { useTheme } from "@/context/ThemeContext";
 import { UserDataSnapshot, UserDataTab } from "@/data/userMock";
-import { colors, spacing, typography } from "@/theme";
+import { ColorPalette, spacing, typography } from "@/theme";
 
 type UserDataCardProps = {
   activeTab: UserDataTab;
@@ -23,6 +25,8 @@ export function UserDataCard({
   sportSnapshot,
   bodySnapshot,
 }: UserDataCardProps) {
+  const { colors } = useTheme();
+  const styles = useMemo(() => createStyles(colors), [colors]);
   const snapshot = activeTab === "sport" ? sportSnapshot : bodySnapshot;
 
   return (
@@ -37,17 +41,27 @@ export function UserDataCard({
         {activeTab === "sport" ? "最近7天训练数据：" : `最近更新：${snapshot.updatedAt}`}
       </Text>
       <DataMetricGrid metrics={snapshot.metrics} />
+      {activeTab === "sport" ? (
+        <Text style={styles.footnote}>* 数据变化结果由上一周期对比得出</Text>
+      ) : null}
     </GlassSurface>
   );
 }
 
-const styles = StyleSheet.create({
-  card: {
-    padding: spacing.lg,
-    gap: spacing.lg,
-  },
-  updatedAt: {
-    ...typography.caption,
-    color: colors.textMuted,
-  },
-});
+function createStyles(colors: ColorPalette) {
+  return StyleSheet.create({
+    card: {
+      padding: spacing.lg,
+      gap: spacing.lg,
+    },
+    updatedAt: {
+      ...typography.caption,
+      color: colors.textMuted,
+    },
+    footnote: {
+      ...typography.caption,
+      fontSize: 12,
+      color: colors.textMuted,
+    },
+  });
+}

@@ -56,6 +56,8 @@ export const defaultDevices: Device[] = [
     name: "MS-1024",
     subtitle: "",
     connection: "connected",
+    serialNumber: "MS1024A8C3E1",
+    currentVersion: "1.4.2",
   },
 ];
 

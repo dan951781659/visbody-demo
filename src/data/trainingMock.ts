@@ -6,9 +6,18 @@ import {
   FreeTrainingType,
   ResistanceBounds,
   ResistanceMode,
+  ReportPlanMove,
   TrainingPreset,
   TrainingReport,
+  TrainingReportScene,
+  TrainingReportSource,
 } from "@/types/training";
+import {
+  buildIntensityDistribution,
+  buildPowerSeries,
+  calcConsistency,
+  getCoachNote,
+} from "@/utils/trainingReport";
 
 export const FREE_TRAINING_OPTIONS: FreeTrainingOption[] = [
   {
@@ -50,6 +59,12 @@ export const MODE_LABELS: Record<ResistanceMode, string> = {
 export const EQUIPMENT_LABELS: Record<EquipmentType, string> = {
   barbell: "杠铃",
   nonbarbell: "非杠铃",
+};
+
+export const SOURCE_LABELS: Record<TrainingReportSource, string> = {
+  plan_follow: "计划跟练",
+  free_training: "自由训练",
+  movement_follow: "动作跟练",
 };
 
 export function getAvailableModes(trainingType: FreeTrainingType): ResistanceMode[] {
@@ -115,24 +130,170 @@ export function resolveSessionCaloriesKcal(capacityKg: number, trainingType: Fre
   return Math.round(capacityKg * 0.38 * 0.24);
 }
 
-export function buildTrainingReport(preset: TrainingPreset, durationSeconds: number): TrainingReport {
-  const capacityKg = getTotalResistance(preset) * Math.max(1, durationSeconds / 60);
-  const energyKj = Math.round(capacityKg * 0.38 * 10) / 10;
+function hashSeed(text: string): number {
+  let hash = 0;
+  for (let i = 0; i < text.length; i += 1) {
+    hash = (hash * 31 + text.charCodeAt(i)) >>> 0;
+  }
+  return hash;
+}
+
+/** Generate a demo resistance timeline when live capture is unavailable. */
+export function buildDemoTimeline(
+  durationSeconds: number,
+  baseResistance: number,
+  seedKey = "session",
+): number[] {
+  const length = Math.max(24, Math.min(180, Math.floor(Math.max(1, durationSeconds) / 4)));
+  const seed = hashSeed(seedKey);
+  const base = Math.max(5, baseResistance);
+  const points: number[] = [];
+  for (let i = 0; i < length; i += 1) {
+    const wave = Math.sin(i * 0.35 + (seed % 7)) * 0.18;
+    const pulse = Math.sin(i * 0.12 + 1.2) * 0.1;
+    const stepBoost = i % 17 === 0 ? 0.22 : 0;
+    const value = base * (0.82 + wave + pulse + stepBoost);
+    points.push(Math.round(value * 10) / 10);
+  }
+  return points;
+}
+
+function downsampleSeries(series: number[], maxPoints = 64): number[] {
+  if (series.length <= maxPoints) return series;
+  const step = series.length / maxPoints;
+  const result: number[] = [];
+  for (let i = 0; i < maxPoints; i += 1) {
+    result.push(series[Math.floor(i * step)]);
+  }
+  return result;
+}
+
+export type BuildTrainingReportInput = {
+  preset: TrainingPreset;
+  durationSeconds: number;
+  userName?: string;
+  userAvatar?: string;
+  source?: TrainingReportSource;
+  scene?: TrainingReportScene;
+  sceneLabel?: string;
+  title?: string;
+  id?: string;
+  timeline?: number[];
+  planName?: string;
+  planDayName?: string;
+  planMoves?: ReportPlanMove[];
+  finalAiScore?: number;
+  accuracyDistribution?: TrainingReport["accuracyDistribution"];
+  coachNote?: string;
+  finishedAt?: number;
+};
+
+export function buildTrainingReport(input: BuildTrainingReportInput | TrainingPreset, durationSecondsArg?: number): TrainingReport {
+  const normalized: BuildTrainingReportInput =
+    durationSecondsArg != null && !("preset" in (input as BuildTrainingReportInput))
+      ? { preset: input as TrainingPreset, durationSeconds: durationSecondsArg }
+      : (input as BuildTrainingReportInput);
+
+  const {
+    preset,
+    durationSeconds,
+    userName = "运动达人",
+    userAvatar = "运",
+    source = "free_training",
+    scene,
+    sceneLabel,
+    title,
+    id,
+    timeline: timelineInput,
+    planName,
+    planDayName,
+    planMoves,
+    finalAiScore,
+    accuracyDistribution,
+    coachNote,
+    finishedAt = Date.now(),
+  } = normalized;
+
+  const resolvedScene: TrainingReportScene =
+    scene ??
+    (source === "plan_follow"
+      ? "plan-training"
+      : source === "movement_follow"
+        ? "movement"
+        : preset.trainingType === "pilates"
+          ? "pilates"
+          : "free");
+
+  const resolvedSceneLabel =
+    sceneLabel ??
+    (resolvedScene === "plan-training"
+      ? "计划训练"
+      : resolvedScene === "movement"
+        ? "动作跟练"
+        : TRAINING_TYPE_LABELS[preset.trainingType]);
+
+  const capacityKg = Math.round(getTotalResistance(preset) * Math.max(1, durationSeconds / 60) * 10) / 10;
   const caloriesKcal = resolveSessionCaloriesKcal(capacityKg, preset.trainingType);
+  const energyKj = Math.round(caloriesKcal * 4.184);
+  const baseResistance = getTotalResistance(preset);
+  const timeline = downsampleSeries(
+    timelineInput?.length
+      ? timelineInput
+      : buildDemoTimeline(durationSeconds, baseResistance, `${id ?? "live"}-${preset.trainingType}`),
+  );
+  const maxResistance = timeline.length ? Math.max(...timeline, baseResistance) : baseResistance;
+  const intensity = buildIntensityDistribution(timeline);
+  const consistency = calcConsistency(timeline, maxResistance);
+  const peak = timeline.length ? Math.max(...timeline) : 0;
+  const hideResistanceMetrics =
+    resolvedScene === "pilates" || preset.trainingType === "pilates";
+
+  const enrichedMoves = (planMoves ?? []).map((move, idx) => ({
+    ...move,
+    powerSeries:
+      move.powerSeries ??
+      buildPowerSeries(
+        buildDemoTimeline(
+          Math.max(30, move.durationSeconds || 60),
+          Math.max(8, baseResistance * (0.7 + (idx % 3) * 0.1)),
+          `${move.name}-${idx}`,
+        ),
+      ),
+  }));
 
   return {
+    id,
+    title,
+    userName,
+    userAvatar: String(userAvatar || "运").slice(0, 1).toUpperCase(),
+    source,
+    sourceLabel: SOURCE_LABELS[source],
+    scene: resolvedScene,
+    sceneLabel: resolvedSceneLabel,
     trainingType: preset.trainingType,
     trainingTypeLabel: TRAINING_TYPE_LABELS[preset.trainingType],
     durationSeconds,
-    capacityKg: Math.round(capacityKg * 10) / 10,
+    capacityKg: hideResistanceMetrics ? 0 : capacityKg,
     energyKj,
     caloriesKcal,
+    hideResistanceMetrics,
+    isEstimatedBurn: false,
     mode: preset.mode,
     modeLabel: MODE_LABELS[preset.mode],
     equipment: preset.equipment,
     equipmentLabel:
       preset.trainingType === "pilates" ? "手柄" : EQUIPMENT_LABELS[preset.equipment],
-    finishedAt: Date.now(),
+    maxResistance: Math.round(maxResistance * 10) / 10,
+    timeline,
+    intensity,
+    consistency,
+    coachNote: coachNote ?? getCoachNote(consistency, peak, maxResistance),
+    finalAiScore,
+    accuracyDistribution,
+    planName,
+    planDayName,
+    planMoves: enrichedMoves.length ? enrichedMoves : undefined,
+    finishedAt,
   };
 }
 

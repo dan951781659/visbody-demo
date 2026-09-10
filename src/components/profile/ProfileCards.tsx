@@ -37,7 +37,7 @@ export function ActivePlanCard({ plan }: ActivePlanCardProps) {
 
 type SettingsMenuRowProps = {
   title: string;
-  subtitle: string;
+  subtitle?: string;
   icon: SettingsMenuIcon;
   destructive?: boolean;
   onPress?: () => void;
@@ -64,8 +64,10 @@ export function SettingsMenuRow({
           <Ionicons name={icon} size={20} color={destructive ? colors.red : colors.textPrimary} />
         </View>
         <View style={styles.rowContent}>
-          <Text style={[styles.rowTitle, destructive && styles.destructiveText]}>{title}</Text>
-          <Text style={styles.rowSubtitle}>{subtitle}</Text>
+          <Text style={[styles.rowTitle, !subtitle && styles.rowTitleSolo, destructive && styles.destructiveText]}>
+            {title}
+          </Text>
+          {subtitle ? <Text style={styles.rowSubtitle}>{subtitle}</Text> : null}
         </View>
         <Ionicons name="chevron-forward" size={18} color={colors.textMuted} />
       </GlassSurface>
@@ -129,6 +131,9 @@ function createStyles(colors: ColorPalette) {
     ...typography.subtitle,
     color: colors.textPrimary,
     marginBottom: 2,
+  },
+  rowTitleSolo: {
+    marginBottom: 0,
   },
   rowSubtitle: {
     ...typography.caption,

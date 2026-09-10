@@ -11,7 +11,9 @@ export default function AuthLayout() {
       <Stack.Screen name="profile-completion" />
       <Stack.Screen name="training-goals-setup" />
       <Stack.Screen name="forgot-password" />
+      <Stack.Screen name="reset-password" />
       <Stack.Screen name="register" />
+      <Stack.Screen name="register-password" />
     </Stack>
   );
 }

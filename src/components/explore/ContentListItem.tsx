@@ -11,20 +11,42 @@ type ContentListItemProps = {
   item: LibraryItem;
   tab: LibraryTab;
   onPress: () => void;
+  /** When true, show unavailable overlay and block detail navigation. */
+  showUnavailableOverlay?: boolean;
 };
 
-export function ContentListItem({ item, tab, onPress }: ContentListItemProps) {
+export function isLibraryItemUnavailable(item: LibraryItem): boolean {
+  return item.available === false;
+}
+
+export function ContentListItem({
+  item,
+  tab,
+  onPress,
+  showUnavailableOverlay = false,
+}: ContentListItemProps) {
   const { colors } = useTheme();
   const styles = useMemo(() => createStyles(colors), [colors]);
   const tags = getMetaTags(item, tab);
+  const unavailable = showUnavailableOverlay && isLibraryItemUnavailable(item);
 
   return (
     <Pressable
       accessibilityRole="button"
-      onPress={onPress}
-      style={({ pressed }) => [styles.card, pressed && styles.pressed]}
+      accessibilityState={{ disabled: unavailable }}
+      accessibilityLabel={unavailable ? `${item.name}，该动作已下架` : item.name}
+      disabled={unavailable}
+      onPress={unavailable ? undefined : onPress}
+      style={({ pressed }) => [styles.card, pressed && !unavailable && styles.pressed]}
     >
-      <LinearGradient colors={item.gradient} style={styles.thumbnail} />
+      <View style={styles.thumbnailWrap}>
+        <LinearGradient colors={item.gradient} style={styles.thumbnail} />
+        {unavailable ? (
+          <View style={styles.unavailableOverlay} pointerEvents="none">
+            <Text style={styles.unavailableText}>该动作已下架</Text>
+          </View>
+        ) : null}
+      </View>
       <View style={styles.content}>
         <View style={styles.top}>
           <Text style={styles.title} numberOfLines={2}>
@@ -70,10 +92,27 @@ function createStyles(colors: ColorPalette) {
     pressed: {
       opacity: 0.9,
     },
-    thumbnail: {
+    thumbnailWrap: {
       width: "100%",
       aspectRatio: 4 / 3,
+      position: "relative",
+    },
+    thumbnail: {
+      width: "100%",
+      height: "100%",
       borderRadius: 0,
+    },
+    unavailableOverlay: {
+      ...StyleSheet.absoluteFillObject,
+      backgroundColor: "rgba(28,28,30,0.72)",
+      alignItems: "center",
+      justifyContent: "center",
+      paddingHorizontal: spacing.md,
+    },
+    unavailableText: {
+      ...typography.label,
+      color: "#FFFFFF",
+      textAlign: "center",
     },
     content: {
       minWidth: 0,

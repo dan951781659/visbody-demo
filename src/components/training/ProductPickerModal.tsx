@@ -14,7 +14,6 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { Ionicons } from "@expo/vector-icons";
 import { DeviceAddMenu } from "@/components/training/DeviceAddMenu";
 import { RadarScan } from "@/components/training/RadarScan";
-import { SwipeableDisconnectRow } from "@/components/training/SwipeableDisconnectRow";
 import { useToast } from "@/components/ToastProvider";
 import { useTheme } from "@/context/ThemeContext";
 import { useTraining } from "@/context/TrainingContext";
@@ -42,7 +41,6 @@ export function DevicePickerScreen() {
   const [isScanning, setIsScanning] = useState(false);
   const [hasScanned, setHasScanned] = useState(false);
   const [scanCollapsed, setScanCollapsed] = useState(false);
-  const [failedDeviceId, setFailedDeviceId] = useState<string | null>(null);
   const [addMenuVisible, setAddMenuVisible] = useState(false);
   const [manualAddVisible, setManualAddVisible] = useState(false);
   const [manualDeviceName, setManualDeviceName] = useState("");
@@ -81,7 +79,6 @@ export function DevicePickerScreen() {
 
   const startScan = useCallback(() => {
     clearTimer();
-    setFailedDeviceId(null);
     setIsScanning(true);
     setHasScanned(false);
     setScanCollapsed(false);
@@ -99,7 +96,6 @@ export function DevicePickerScreen() {
       stopScan();
       setHasScanned(false);
       setScanCollapsed(false);
-      setFailedDeviceId(null);
     };
   }, [startScan, stopScan]);
 
@@ -107,12 +103,7 @@ export function DevicePickerScreen() {
     stopScan();
     setHasScanned(false);
     setScanCollapsed(false);
-    setFailedDeviceId(null);
     router.back();
-  };
-
-  const openHelp = (path: "/help" | "/help/motionstation" = "/help") => {
-    router.push(path);
   };
 
   const handleScanAddDevice = () => {
@@ -137,26 +128,23 @@ export function DevicePickerScreen() {
     setManualDeviceName("");
   };
 
-  const handleSelectConnected = (device: Device) => {
+  const handleOpenDeviceDetail = (device: Device) => {
     selectDevice(device.id);
-    handleClose();
+    router.push(`/devices/${encodeURIComponent(device.id)}`);
   };
 
   const handleReconnect = (device: Device) => {
     const result = reconnectDevice(device.id);
     if (result === "connected") {
       showToast(`${device.name} 连接成功`);
-      setFailedDeviceId(null);
       return;
     }
     showToast("连接失败，请重试");
-    setFailedDeviceId(device.id);
   };
 
   const handleDisconnect = (device: Device) => {
     disconnectDevice(device.id);
     showToast(`${device.name} 已断开`);
-    setFailedDeviceId(null);
   };
 
   const handleSelectNearby = (device: NearbyDevice) => {
@@ -196,14 +184,6 @@ export function DevicePickerScreen() {
           </Pressable>
           <View style={styles.headerCenter}>
             <Text style={styles.title}>我的设备</Text>
-            <Pressable
-              accessibilityRole="button"
-              accessibilityLabel="连接帮助"
-              onPress={() => openHelp("/help/motionstation")}
-              style={({ pressed }) => [styles.headerHelpInline, pressed && styles.pressed]}
-            >
-              <Ionicons name="help-circle-outline" size={20} color={colors.textSecondary} />
-            </Pressable>
           </View>
           <Pressable
             accessibilityRole="button"
@@ -262,66 +242,62 @@ export function DevicePickerScreen() {
             {connectedDevices.map((device) => {
               const selected = device.id === selectedDevice?.id;
               return (
-                <SwipeableDisconnectRow
+                <View
                   key={device.id}
-                  onDisconnect={() => handleDisconnect(device)}
+                  style={[styles.option, selected && styles.optionSelected]}
                 >
                   <Pressable
                     accessibilityRole="button"
-                    accessibilityHint="左滑可断开连接"
-                    onPress={() => handleSelectConnected(device)}
-                    style={({ pressed }) => [
-                      styles.option,
-                      selected && styles.optionSelected,
-                      pressed && styles.pressed,
-                    ]}
+                    accessibilityHint="点击查看设备详情"
+                    onPress={() => handleOpenDeviceDetail(device)}
+                    style={({ pressed }) => [styles.optionMain, pressed && styles.pressed]}
                   >
-                    <View style={styles.optionText}>
+                    <View style={styles.nameRow}>
                       <Text style={styles.optionName}>{device.name}</Text>
-                    </View>
-                    <View style={styles.optionRight}>
                       <View style={[styles.statusPill, styles.statusOnline]}>
                         <Text style={[styles.statusText, styles.statusTextOnline]}>已连接</Text>
                       </View>
                     </View>
                   </Pressable>
-                </SwipeableDisconnectRow>
+                  <Pressable
+                    accessibilityRole="button"
+                    accessibilityLabel={`断开 ${device.name}`}
+                    onPress={() => handleDisconnect(device)}
+                    style={({ pressed }) => [styles.actionBtn, styles.disconnectBtn, pressed && styles.pressed]}
+                  >
+                    <Text style={styles.disconnectBtnText}>断开</Text>
+                  </Pressable>
+                </View>
               );
             })}
 
             {offlineDevices.map((device) => {
-              const showHelp = failedDeviceId === device.id;
               return (
                 <View key={device.id} style={styles.deviceBlock}>
                   <View style={[styles.option, styles.optionOffline]}>
-                    <View style={styles.optionText}>
+                    <Pressable
+                      accessibilityRole="button"
+                      accessibilityHint="点击查看设备详情"
+                      onPress={() => handleOpenDeviceDetail(device)}
+                      style={({ pressed }) => [styles.optionMain, pressed && styles.pressed]}
+                    >
                       <View style={styles.nameRow}>
                         <Text style={styles.optionName}>{device.name}</Text>
                         {renderLastUsedTag(device.id)}
+                        <View style={[styles.statusPill, styles.statusBusy]}>
+                          <Text style={[styles.statusText, styles.statusTextBusy]}>已离线</Text>
+                        </View>
                       </View>
-                      <Text style={styles.optionSubtitle}>设备已离线，点击刷新重连</Text>
-                    </View>
+                    </Pressable>
                     <Pressable
                       accessibilityRole="button"
-                      accessibilityLabel={`刷新重连 ${device.name}`}
+                      accessibilityLabel={`连接 ${device.name}`}
                       onPress={() => handleReconnect(device)}
-                      style={({ pressed }) => [styles.refreshBtn, pressed && styles.pressed]}
+                      style={({ pressed }) => [styles.actionBtn, styles.connectBtn, pressed && styles.pressed]}
                     >
-                      <Ionicons name="refresh" size={20} color={colors.accent} />
+                      <Text style={styles.connectBtnText}>连接</Text>
                     </Pressable>
                   </View>
-                  {showHelp ? (
-                    <Pressable
-                      accessibilityRole="button"
-                      accessibilityLabel="查看连接帮助"
-                      onPress={() => openHelp("/help/motionstation")}
-                      style={({ pressed }) => [styles.helpLink, pressed && styles.pressed]}
-                    >
-                      <Ionicons name="help-circle-outline" size={18} color={colors.accent} />
-                      <Text style={styles.helpLinkText}>查看连接帮助</Text>
-                      <Ionicons name="chevron-forward" size={16} color={colors.accent} />
-                    </Pressable>
-                  ) : null}
                 </View>
               );
             })}
@@ -495,12 +471,6 @@ function createStyles(colors: ColorPalette) {
       ...typography.subtitle,
       color: colors.textPrimary,
     },
-    headerHelpInline: {
-      width: 28,
-      height: 28,
-      alignItems: "center",
-      justifyContent: "center",
-    },
     headerAdd: {
       width: 36,
       height: 36,
@@ -600,6 +570,11 @@ function createStyles(colors: ColorPalette) {
       flex: 1,
       gap: spacing.xs,
     },
+    optionMain: {
+      flex: 1,
+      gap: spacing.xs,
+      alignItems: "flex-start",
+    },
     nameRow: {
       flexDirection: "row",
       alignItems: "center",
@@ -635,17 +610,34 @@ function createStyles(colors: ColorPalette) {
       fontSize: 11,
       color: colors.textMuted,
     },
-    refreshBtn: {
-      width: 40,
-      height: 40,
+    actionBtn: {
+      paddingHorizontal: spacing.md,
+      paddingVertical: spacing.sm,
       borderRadius: radius.pill,
+      borderWidth: 1,
+      minHeight: 36,
       alignItems: "center",
       justifyContent: "center",
-      borderWidth: 1,
-      borderColor: colors.glassBorder,
+      flexShrink: 0,
+    },
+    connectBtn: {
+      borderColor: colors.accent,
       backgroundColor: colors.accentGlass,
     },
+    connectBtnText: {
+      ...typography.label,
+      color: colors.accent,
+    },
+    disconnectBtn: {
+      borderColor: colors.glassBorder,
+      backgroundColor: colors.glass,
+    },
+    disconnectBtnText: {
+      ...typography.label,
+      color: colors.textSecondary,
+    },
     statusPill: {
+      alignSelf: "flex-start",
       paddingHorizontal: spacing.sm,
       paddingVertical: spacing.xs,
       borderRadius: radius.pill,
@@ -675,18 +667,6 @@ function createStyles(colors: ColorPalette) {
     },
     statusTextBusy: {
       color: colors.textMuted,
-    },
-    helpLink: {
-      flexDirection: "row",
-      alignItems: "center",
-      gap: spacing.xs,
-      paddingHorizontal: spacing.md,
-      paddingVertical: spacing.sm,
-    },
-    helpLinkText: {
-      ...typography.caption,
-      color: colors.accent,
-      flex: 1,
     },
     emptyHint: {
       ...typography.caption,

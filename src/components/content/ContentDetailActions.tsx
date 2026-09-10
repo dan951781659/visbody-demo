@@ -6,12 +6,14 @@ import { ColorPalette, radius, spacing, typography } from "@/theme";
 
 type ContentDetailActionsProps = {
   onPreview: () => void;
+  onStartTraining?: () => void;
   primaryNotice?: string;
   startTrainingDisabled?: boolean;
 };
 
 export function ContentDetailActions({
   onPreview,
+  onStartTraining,
   primaryNotice,
   startTrainingDisabled = true,
 }: ContentDetailActionsProps) {
@@ -21,12 +23,15 @@ export function ContentDetailActions({
     <View style={styles.wrap}>
       <Pressable
         accessibilityRole="button"
+        accessibilityLabel="开始训练"
         accessibilityState={{ disabled: startTrainingDisabled }}
         disabled={startTrainingDisabled}
-        style={[
+        onPress={startTrainingDisabled ? undefined : onStartTraining}
+        style={({ pressed }) => [
           styles.button,
           styles.buttonPrimary,
           startTrainingDisabled && styles.buttonPrimaryDisabled,
+          pressed && !startTrainingDisabled && styles.pressed,
         ]}
       >
         <Text
@@ -41,6 +46,7 @@ export function ContentDetailActions({
       {primaryNotice ? <Text style={styles.notice}>{primaryNotice}</Text> : null}
       <Pressable
         accessibilityRole="button"
+        accessibilityLabel="预览"
         onPress={onPreview}
         style={({ pressed }) => [styles.button, styles.buttonSecondary, pressed && styles.pressed]}
       >

@@ -33,7 +33,9 @@ export default function ProfileEditScreen() {
   const { user, updateProfile } = useUser();
 
   const [nickname, setNickname] = useState(user?.nickname ?? "");
-  const [gender, setGender] = useState<"male" | "female" | "other">(user?.gender ?? "female");
+  const [gender, setGender] = useState<"male" | "female">(
+    user?.gender === "male" ? "male" : "female",
+  );
   const [birthYear, setBirthYear] = useState(user?.birthYear ?? "");
   const [birthMonth, setBirthMonth] = useState(user?.birthMonth ?? "");
   const [birthDay, setBirthDay] = useState(user?.birthDay ?? "");
