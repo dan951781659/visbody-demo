@@ -663,6 +663,11 @@
         color: #0369a1;
         box-shadow: 0 2px 8px rgba(15,23,42,.08);
       }
+      .orientation-toggle { margin-top:10px; }
+      .orientation-toggle button { min-height:48px; }
+      .orientation-toggle button span { display:block;margin-top:2px;color:#94a3b8;font-size:10px;font-weight:500; }
+      .orientation-toggle button.active { background:#0284c7;color:#fff; }
+      .orientation-toggle button.active span { color:#e0f2fe; }
       .pillow-stage {
         position: relative;
         overflow: hidden;
@@ -674,7 +679,10 @@
         height: 100%;
         display: block;
         object-fit: contain;
+        transition: transform .3s ease;
       }
+      .pillow-stage > img.is-concave { transform:rotate(180deg); }
+      .orientation-badge { position:absolute;left:12px;top:12px;z-index:3;border:1px solid #e0f2fe;border-radius:999px;background:rgba(255,255,255,.95);padding:6px 11px;color:#0369a1;font-size:11px;font-weight:700;box-shadow:0 2px 8px rgba(15,23,42,.08); }
       .pillow-hotspot {
         position: absolute;
         z-index: 2;
@@ -1497,6 +1505,21 @@
       body.sales-mode .advisor-entry { display:none; }
       .action-message { min-height:18px;margin-top:8px;text-align:center;color:#059669;font-size:12px; }
       .trade-row select,.trade-row input { width:100%;min-width:0;border:0;background:transparent;font-size:10px; }.qty { display:flex;justify-content:center;gap:4px; }.qty button { border:0;background:transparent; }
+      body.modal-open { overflow:hidden; }
+      .blocking-modal { position:fixed;inset:0;z-index:100;display:flex;align-items:center;justify-content:center;padding:20px;background:rgba(15,23,42,.46);backdrop-filter:blur(2px); }
+      .blocking-modal[hidden] { display:none; }
+      .modal-card { width:100%;max-width:382px;border:1px solid rgba(255,255,255,.7);border-radius:24px;background:#fff;padding:20px;box-shadow:0 24px 70px rgba(15,23,42,.28); }
+      .modal-icon { display:grid;width:48px;height:48px;margin:0 auto;place-items:center;border-radius:16px;background:#f0f9ff;color:#0284c7;font-size:24px;font-weight:800; }
+      .modal-card h3 { margin:16px 0 0;text-align:center;color:#0f172a;font-size:19px;line-height:1.4; }
+      .reminder-list { display:grid;gap:10px;margin-top:16px; }
+      .reminder-item { display:flex;align-items:flex-start;gap:12px;border-radius:16px;background:#f8fafc;padding:12px 14px;color:#334155;font-size:13px;line-height:20px; }
+      .reminder-item i { display:grid;width:24px;height:24px;flex:0 0 auto;place-items:center;border-radius:50%;background:#0284c7;color:#fff;font-size:12px;font-style:normal;font-weight:800; }
+      .modal-primary { width:100%;min-height:48px;margin-top:20px;border:0;border-radius:999px;background:#0284c7;color:#fff;font-size:14px;font-weight:700;box-shadow:0 8px 18px rgba(2,132,199,.24); }
+      .confirm-card h3 { margin-top:0;text-align:left;font-size:18px; }
+      .confirm-card p { margin:8px 0 0;color:#475569;font-size:13px;line-height:24px; }
+      .modal-actions { display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:20px; }
+      .modal-actions button { min-height:44px;border:1px solid #e2e8f0;border-radius:999px;background:#fff;color:#475569;font-size:13px;font-weight:700; }
+      .modal-actions button.primary { border-color:#0284c7;background:#0284c7;color:#fff; }
     </style>
   </head>
   <body>
@@ -1515,7 +1538,7 @@
               <div class="muted">检测用户</div>
               <div class="name">郭英俊</div>
             </div>
-            <div style="display:flex;align-items:center;gap:8px"><a id="advisorEntry" class="advisor-entry" href="?mode=sales&amp;tab=睡眠顾问">睡眠顾问入口</a><button id="privacyToggle" class="icon-btn" aria-label="显示用户数据">◉</button><div class="tag">设备报告</div></div>
+            <div style="display:flex;align-items:center;gap:8px"><a id="advisorEntry" class="advisor-entry" href="?mode=sales&amp;tab=睡眠顾问">睡眠顾问入口</a><button id="privacyToggle" class="icon-btn" aria-label="显示用户数据">◉</button></div>
           </div>
           <div class="stats">
             <div class="stat"><span class="muted">身高</span><b data-private="161.0cm">***</b></div>
@@ -1651,14 +1674,17 @@
         <section id="product-selection">
           <h2>产品选择与型号匹配</h2>
           <div class="panel panel-pad">
-            <p class="muted" style="margin:0 0 8px;font-size:11px">选型与最终确认已合并为一步；选定后分区垫片参数立即联动，无需二次确认。</p>
             <div class="generation-toggle product-type-actions"><button data-type="gen2" class="active">中国·梦 尊享定制枕</button><button data-type="gen1">中国·梦 瑧享定制枕</button></div>
             <div id="generationOneSelection" style="display:none">
               <div class="note" style="background:#ecfdf5;color:#047857"><b>推荐型号：3号枕</b><br />结合测量高度与问卷「枕高偏好：偏低」仲裁得出，可作为试躺起始型号；导购可按试睡体验自由改选。</div>
               <div class="actions model-actions"><button data-model="1号枕">1号枕</button><button data-model="2号枕">2号枕</button><button data-model="3号枕" class="active">3号枕</button><button data-model="4号枕">4号枕</button></div>
-              <div class="grid-2 stack-top"><div class="info"><span class="muted">当前型号</span><b id="selectedModelLabel">3号枕</b></div><div class="info"><span class="muted">平均高度差</span><b id="selectedModelDiff">1.5cm</b></div></div>
             </div>
-            <div id="generationTwoSelection" class="note" style="background:#f0f9ff;color:#0369a1"><b>中国·梦 尊享定制枕（已选）</b><br />中国·梦 尊享定制枕已自动导入推荐高度；请按垫片调节规则微调各分区。</div>
+            <div id="generationTwoSelection" class="note" style="background:#f0f9ff;color:#0369a1">
+              <b>中国·梦 尊享定制枕（已选）</b>
+              <p id="orientationRecommendation" style="margin:5px 0 0;line-height:1.7">系统推荐：凹面（3区仰睡）。当前颈椎前伸未达到重度异常，优先从凹面方案开始试躺。</p>
+              <div class="generation-toggle orientation-toggle"><button type="button" data-orientation="convex">凸面<span>1区仰睡</span></button><button type="button" data-orientation="concave" class="active">凹面<span>3区仰睡</span></button></div>
+              <small style="display:block;margin-top:8px;line-height:1.6">导购可结合用户试躺感受切换面型；切换后加载对应的分区推荐设置。</small>
+            </div>
           </div>
         </section>
 
@@ -1667,6 +1693,7 @@
           <div class="panel" style="overflow:hidden">
             <div id="pillowStage" class="pillow-stage">
               <img id="pillowStageImage" src="src/assets/mercury-pillow-gen2-clean.png" alt="中国·梦 尊享定制枕分区调节" />
+              <div id="orientationBadge" class="orientation-badge">当前：凹面 · 3区仰睡</div>
               <div id="pillowHotspots"></div>
             </div>
             <div id="pillowTooltip" class="pillow-tooltip"><b>头窝区</b><span>4.4cm · 0片</span></div>
@@ -1813,6 +1840,25 @@
 
       <div class="footer">本页面为水星报告静态兼容预览 · mercury-v1.12.1</div>
     </main>
+    <div id="salesReminder" class="blocking-modal" hidden>
+      <div class="modal-card" role="dialog" aria-modal="true" aria-labelledby="salesReminderTitle">
+        <div class="modal-icon">✓</div>
+        <h3 id="salesReminderTitle">必做 3 步</h3>
+        <div class="reminder-list">
+          <div class="reminder-item"><i>1</i><span>压力采集</span></div>
+          <div class="reminder-item"><i>2</i><span>分区调节</span></div>
+          <div class="reminder-item"><i>3</i><span>成交记录</span></div>
+        </div>
+        <button id="startSalesOperation" class="modal-primary" type="button">我知道了，开始操作</button>
+      </div>
+    </div>
+    <div id="orientationConfirm" class="blocking-modal" hidden>
+      <div class="modal-card confirm-card" role="dialog" aria-modal="true" aria-labelledby="orientationConfirmTitle">
+        <h3 id="orientationConfirmTitle">切换面型？</h3>
+        <p>当前面型的调整尚未保存，切换后将恢复目标面型的推荐设置，是否继续？</p>
+        <div class="modal-actions"><button id="cancelOrientation" type="button">取消</button><button id="confirmOrientation" class="primary" type="button">确认切换</button></div>
+      </div>
+    </div>
     <script>
       const isSalesMode = new URLSearchParams(window.location.search).get("mode") === "sales" || window.location.hash === "#sales";
       document.body.classList.toggle("sales-mode", isSalesMode);
@@ -1823,6 +1869,16 @@
         advisorUrl.searchParams.set("tab", "睡眠顾问");
         advisorEntry.href = advisorUrl.href;
       }
+      const salesReminder = document.getElementById("salesReminder");
+      if (isSalesMode) {
+        salesReminder.hidden = false;
+        document.body.classList.add("modal-open");
+      }
+      document.getElementById("startSalesOperation").addEventListener("click", () => {
+        salesReminder.hidden = true;
+        document.body.classList.remove("modal-open");
+        activateTab("睡眠顾问");
+      });
       document.querySelectorAll(".metric").forEach((metric) => {
         const guide = metric.querySelector(".metric-guide");
         if (!guide) return;
@@ -1891,29 +1947,39 @@
       const gen1Models = {"1号枕": { zones:[[90,7.0],[60,6.5],[50,4.2],[50,4.8],[180,9.0],[180,9.0],[300,8.3],[300,8.3]] },"2号枕": { zones:[[110,8.0],[80,7.5],[50,4.2],[50,4.8],[200,10.0],[200,10.0],[300,8.3],[300,8.3]] },"3号枕": { zones:[[130,9.0],[100,8.5],[50,4.7],[50,5.3],[220,11.0],[220,11.0],[300,9.3],[300,9.3]] },"4号枕": { zones:[[150,10.0],[120,9.5],[50,4.7],[50,5.3],[240,12.0],[240,12.0],[300,9.3],[300,9.3]] }};
       const SHIM_HEIGHT_CM = 0.5;
       const SHIM_WEIGHT_G = 15;
-      const gen2Zones = Array.from({length:11}, (_,i) => { const id=i+1; const source=universalZones.find(zone => zone.gen2.includes(id)); const height = source ? source.height : 10; return { id, name:source ? source.title : `${id}区`, baseHeight: height, recommended: height, hotspot:gen2Hotspots[i] }; });
+      const gen2BaseZones = Array.from({length:11}, (_,i) => { const id=i+1; const source=universalZones.find(zone => zone.gen2.includes(id)); const height = source ? source.height : 10; return { id, name:source ? source.title : `${id}区`, baseHeight: height, recommended: height, hotspot:gen2Hotspots[i] }; });
       const productNames = { gen1:"中国·梦 瑧享定制枕", gen2:"中国·梦 尊享定制枕" };
-      let productType = "gen2"; let selectedModel = productNames.gen2; let selectedZoneId = 2; let currentPads = [];
+      const orientationMeta = { convex:{label:"凸面",copy:"1区仰睡",supineZoneId:1}, concave:{label:"凹面",copy:"3区仰睡",supineZoneId:3} };
+      const forwardNeckSeverity = "mild";
+      const recommendedOrientation = forwardNeckSeverity === "severe" ? "convex" : "concave";
+      let productType = "gen2"; let selectedModel = productNames.gen2; let pillowOrientation = recommendedOrientation; let pendingOrientation = null; let selectedZoneId = orientationMeta[recommendedOrientation].supineZoneId; let currentPads = []; let savedPads = [];
       function heightFromPads(base, pads) { return Math.round((base + pads * SHIM_HEIGHT_CM) * 10) / 10; }
       function weightFromPads(pads) { return Math.round(pads * SHIM_WEIGHT_G * 10) / 10; }
       function padsFromTarget(base, target) { return Math.max(0, Math.round((target - base) / SHIM_HEIGHT_CM)); }
-      function currentZones() { if (productType === "gen2") return gen2Zones; return gen1Models[selectedModel].zones.map((zone, index) => ({ id:index+1, name:gen1ZoneNames[index], baseHeight:zone[1], recommended:gen1Recommended[index], hotspot:gen1Hotspots[index] })); }
+      function currentZones() { if (productType === "gen2") return gen2BaseZones.map(zone => ({...zone, hotspot:pillowOrientation === "concave" ? [100-zone.hotspot[0],100-zone.hotspot[1]] : zone.hotspot})); return gen1Models[selectedModel].zones.map((zone, index) => ({ id:index+1, name:gen1ZoneNames[index], baseHeight:zone[1], recommended:gen1Recommended[index], hotspot:gen1Hotspots[index] })); }
       function originalPads() { return currentZones().map(zone => padsFromTarget(zone.baseHeight, zone.recommended)); }
-      function renderBusinessModels() { const models = productType === "gen1" ? Object.keys(gen1Models) : [productNames.gen2]; document.querySelector(".trade-row select").innerHTML = models.map(model => `<option ${model === selectedModel ? "selected" : ""}>${model}</option>`).join(""); document.getElementById("modelCopy").textContent = `当前方案：${productNames[productType]}${productType === "gen1" ? ` · ${selectedModel}` : ""}。请根据用户试躺反馈选择1-5星。`; }
-      function renderProductSelection() { document.querySelectorAll(".product-type-actions button").forEach(button => button.classList.toggle("active", button.dataset.type === productType)); document.getElementById("generationOneSelection").style.display = productType === "gen1" ? "block" : "none"; document.getElementById("generationTwoSelection").style.display = productType === "gen2" ? "block" : "none"; if (productType === "gen1") { document.querySelectorAll(".model-actions button").forEach(button => button.classList.toggle("active", button.dataset.model === selectedModel)); document.getElementById("selectedModelLabel").textContent = selectedModel; document.getElementById("selectedModelDiff").textContent = gen1ModelDiffs[selectedModel]; } }
+      function renderBusinessModels() { const models = productType === "gen1" ? Object.keys(gen1Models) : [productNames.gen2]; document.querySelector(".trade-row select").innerHTML = models.map(model => `<option ${model === selectedModel ? "selected" : ""}>${model}</option>`).join(""); document.getElementById("modelCopy").textContent = `当前方案：${productNames[productType]}${productType === "gen1" ? ` · ${selectedModel}` : ` · ${orientationMeta[pillowOrientation].label}`}。请根据用户试躺反馈选择1-5星。`; }
+      function renderProductSelection() { document.querySelectorAll(".product-type-actions button").forEach(button => button.classList.toggle("active", button.dataset.type === productType)); document.getElementById("generationOneSelection").style.display = productType === "gen1" ? "block" : "none"; document.getElementById("generationTwoSelection").style.display = productType === "gen2" ? "block" : "none"; const recommendation = orientationMeta[recommendedOrientation]; document.getElementById("orientationRecommendation").textContent = `系统推荐：${recommendation.label}（${recommendation.copy}）。${recommendedOrientation === "convex" ? "颈椎前伸重度异常，优先加强仰睡颈部承托。" : "当前颈椎前伸未达到重度异常，优先从凹面方案开始试躺。"}`; document.querySelectorAll(".orientation-toggle button").forEach(button => button.classList.toggle("active", button.dataset.orientation === pillowOrientation)); if (productType === "gen1") { document.querySelectorAll(".model-actions button").forEach(button => button.classList.toggle("active", button.dataset.model === selectedModel)); } }
       function clampPads(value) { return Math.min(12, Math.max(0, Math.round(Number(value) || 0))); }
-      function renderZoneStage() { const zones = currentZones(); if (!zones.some(zone => zone.id === selectedZoneId)) selectedZoneId = zones[0].id; const selectedIndex = zones.findIndex(zone => zone.id === selectedZoneId); const selectedZone = zones[selectedIndex]; const pads = currentPads[selectedIndex] || 0; const height = heightFromPads(selectedZone.baseHeight, pads); const weight = weightFromPads(pads); const image = document.getElementById("pillowStageImage"); image.src = productType === "gen1" ? "src/assets/mercury-pillow-gen1-clean.png" : "src/assets/mercury-pillow-gen2-clean.png"; image.alt = `${productNames[productType]}分区调节`; document.getElementById("pillowHotspots").innerHTML = zones.map(zone => `<button type="button" class="pillow-hotspot ${zone.id === selectedZoneId ? "active" : ""}" data-zone-id="${zone.id}" style="left:${zone.hotspot[0]}%;top:${zone.hotspot[1]}%" aria-label="选择${zone.name}" aria-pressed="${zone.id === selectedZoneId}">${zone.id}</button>`).join(""); document.querySelectorAll(".pillow-hotspot").forEach(button => button.addEventListener("click", () => { selectedZoneId = Number(button.dataset.zoneId); renderZoneStage(); })); document.getElementById("pillowTooltip").innerHTML = `<b>${selectedZone.name}</b><span>${height.toFixed(1)}cm · ${pads}片</span>`; document.getElementById("selectedZoneTitle").textContent = `${selectedZone.id}区 · ${selectedZone.name}`; document.getElementById("selectedZoneSource").textContent = "按垫片片数调节，高度与克重自动换算"; document.getElementById("selectedZoneWeight").style.display = "inline-block"; document.getElementById("selectedZoneWeight").textContent = `克重 ${weight}g`; document.getElementById("originalZoneHeight").textContent = `${selectedZone.baseHeight.toFixed(1)}cm`; document.getElementById("recommendedZoneHeight").textContent = `${pads}片`; document.getElementById("currentZoneHeight").textContent = `${height.toFixed(1)}cm`; document.getElementById("selectedZoneInput").value = pads; }
+      function renderZoneStage() { const zones = currentZones(); if (!zones.some(zone => zone.id === selectedZoneId)) selectedZoneId = zones[0].id; const selectedIndex = zones.findIndex(zone => zone.id === selectedZoneId); const selectedZone = zones[selectedIndex]; const pads = currentPads[selectedIndex] || 0; const height = heightFromPads(selectedZone.baseHeight, pads); const weight = weightFromPads(pads); const orientation = orientationMeta[pillowOrientation]; const isSupineZone = productType === "gen2" && selectedZone.id === orientation.supineZoneId; const selectedZoneName = isSupineZone ? `${selectedZone.name}（当前仰睡区）` : selectedZone.name; const image = document.getElementById("pillowStageImage"); image.src = productType === "gen1" ? "src/assets/mercury-pillow-gen1-clean.png" : "src/assets/mercury-pillow-gen2-clean.png"; image.alt = `${productNames[productType]}分区调节`; image.classList.toggle("is-concave", productType === "gen2" && pillowOrientation === "concave"); const badge = document.getElementById("orientationBadge"); badge.style.display = productType === "gen2" ? "block" : "none"; badge.textContent = `当前：${orientation.label} · ${orientation.copy}`; document.getElementById("pillowHotspots").innerHTML = zones.map(zone => { const label = productType === "gen2" && zone.id === orientation.supineZoneId ? `${zone.name}，当前仰睡区` : zone.name; return `<button type="button" class="pillow-hotspot ${zone.id === selectedZoneId ? "active" : ""}" data-zone-id="${zone.id}" style="left:${zone.hotspot[0]}%;top:${zone.hotspot[1]}%" aria-label="选择${label}" aria-pressed="${zone.id === selectedZoneId}">${zone.id}</button>`; }).join(""); document.querySelectorAll(".pillow-hotspot").forEach(button => button.addEventListener("click", () => { selectedZoneId = Number(button.dataset.zoneId); renderZoneStage(); })); document.getElementById("pillowTooltip").innerHTML = `<b>${selectedZoneName}</b><span>${height.toFixed(1)}cm · ${pads}片</span>`; document.getElementById("selectedZoneTitle").textContent = `${selectedZone.id}区 · ${selectedZoneName}`; document.getElementById("selectedZoneSource").textContent = "按垫片片数调节，高度与克重自动换算"; document.getElementById("selectedZoneWeight").style.display = "inline-block"; document.getElementById("selectedZoneWeight").textContent = `克重 ${weight}g`; document.getElementById("originalZoneHeight").textContent = `${selectedZone.baseHeight.toFixed(1)}cm`; document.getElementById("recommendedZoneHeight").textContent = `${pads}片`; document.getElementById("currentZoneHeight").textContent = `${height.toFixed(1)}cm`; document.getElementById("selectedZoneInput").value = pads; }
       function updateSelectedZone(value) { const zones = currentZones(); const selectedIndex = zones.findIndex(zone => zone.id === selectedZoneId); currentPads[selectedIndex] = clampPads(value); renderZoneStage(); renderPreview(); }
       function renderAllZones() { renderProductSelection(); renderZoneStage(); renderPreview(); renderBusinessModels(); }
-      function renderPreview() { document.getElementById("previewModel").textContent = `当前方案：${productNames[productType]}${productType === "gen1" ? ` · ${selectedModel}` : ""}`; document.getElementById("previewRows").innerHTML = currentZones().map((zone, index) => { const pads = currentPads[index] || 0; return `<tr><td>${zone.id}区 ${zone.name}</td><td>${zone.baseHeight.toFixed(1)}</td><td>${pads}</td><td>${weightFromPads(pads)}</td><td data-preview-height>${heightFromPads(zone.baseHeight, pads).toFixed(1)}</td></tr>`; }).join(""); }
-      document.querySelectorAll(".product-type-actions button").forEach(button => button.addEventListener("click", () => { productType = button.dataset.type; selectedModel = productType === "gen1" ? "3号枕" : productNames.gen2; selectedZoneId = productType === "gen1" ? 3 : 2; currentPads = originalPads(); renderAllZones(); }));
-      document.querySelectorAll(".model-actions button").forEach(button => button.addEventListener("click", () => { selectedModel = button.dataset.model; selectedZoneId = 3; currentPads = originalPads(); renderAllZones(); }));
+      function renderPreview() { document.getElementById("previewModel").textContent = `当前方案：${productNames[productType]}${productType === "gen1" ? ` · ${selectedModel}` : ` · ${orientationMeta[pillowOrientation].label}`}`; document.getElementById("previewRows").innerHTML = currentZones().map((zone, index) => { const pads = currentPads[index] || 0; return `<tr><td>${zone.id}区 ${zone.name}</td><td>${zone.baseHeight.toFixed(1)}</td><td>${pads}</td><td>${weightFromPads(pads)}</td><td data-preview-height>${heightFromPads(zone.baseHeight, pads).toFixed(1)}</td></tr>`; }).join(""); }
+      function hasUnsavedOrientationChanges() { return productType === "gen2" && currentPads.some((pads,index) => pads !== savedPads[index]); }
+      function applyOrientation(nextOrientation) { pillowOrientation = nextOrientation; selectedZoneId = orientationMeta[nextOrientation].supineZoneId; currentPads = originalPads(); savedPads = [...currentPads]; pendingOrientation = null; document.getElementById("orientationConfirm").hidden = true; document.body.classList.remove("modal-open"); renderAllZones(); }
+      function requestOrientation(nextOrientation) { if (nextOrientation === pillowOrientation) return; if (!hasUnsavedOrientationChanges()) { applyOrientation(nextOrientation); return; } pendingOrientation = nextOrientation; document.getElementById("orientationConfirmTitle").textContent = `切换为${orientationMeta[nextOrientation].label}？`; document.getElementById("orientationConfirm").hidden = false; document.body.classList.add("modal-open"); }
+      document.querySelectorAll(".product-type-actions button").forEach(button => button.addEventListener("click", () => { productType = button.dataset.type; selectedModel = productType === "gen1" ? "3号枕" : productNames.gen2; if (productType === "gen2") pillowOrientation = recommendedOrientation; selectedZoneId = productType === "gen1" ? 3 : orientationMeta[pillowOrientation].supineZoneId; currentPads = originalPads(); savedPads = [...currentPads]; renderAllZones(); }));
+      document.querySelectorAll(".orientation-toggle button").forEach(button => button.addEventListener("click", () => requestOrientation(button.dataset.orientation)));
+      document.getElementById("cancelOrientation").addEventListener("click", () => { pendingOrientation = null; document.getElementById("orientationConfirm").hidden = true; document.body.classList.remove("modal-open"); });
+      document.getElementById("confirmOrientation").addEventListener("click", () => { if (pendingOrientation) applyOrientation(pendingOrientation); });
+      document.querySelectorAll(".model-actions button").forEach(button => button.addEventListener("click", () => { selectedModel = button.dataset.model; selectedZoneId = 3; currentPads = originalPads(); savedPads = [...currentPads]; renderAllZones(); }));
       document.getElementById("selectedZoneMinus").addEventListener("click", () => updateSelectedZone(Number(document.getElementById("selectedZoneInput").value) - 1));
       document.getElementById("selectedZonePlus").addEventListener("click", () => updateSelectedZone(Number(document.getElementById("selectedZoneInput").value) + 1));
       document.getElementById("selectedZoneInput").addEventListener("input", (event) => updateSelectedZone(event.target.value));
-      document.getElementById("saveZones").addEventListener("click", () => document.getElementById("zoneMessage").textContent = "分区垫片设置已保存");
+      document.getElementById("saveZones").addEventListener("click", () => { savedPads = [...currentPads]; document.getElementById("zoneMessage").textContent = productType === "gen2" ? `${orientationMeta[pillowOrientation].label}分区垫片设置已保存` : "分区垫片设置已保存"; });
       document.getElementById("resetZones").addEventListener("click", () => { currentPads = originalPads(); renderAllZones(); document.getElementById("zoneMessage").textContent = "已恢复原始垫片数"; });
       currentPads = originalPads();
+      savedPads = [...currentPads];
       renderAllZones();
       let comfortScore = 5;
       const stars = Array.from(document.querySelectorAll("#starRating button"));
