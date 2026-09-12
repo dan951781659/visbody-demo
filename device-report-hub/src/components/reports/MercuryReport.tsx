@@ -809,9 +809,9 @@ function ProductSelection({
             <div className="flex items-start justify-between gap-3">
               <div>
                 <div className="text-[13px] font-semibold text-sky-700">中国·梦 尊享定制枕（已选）</div>
-                <p className="mt-1 text-[11px] leading-5 text-sky-700">系统推荐：{pillowOrientationMeta[recommendedPillowOrientation].label}（{pillowOrientationMeta[recommendedPillowOrientation].copy}）。{recommendedPillowOrientation === "convex" ? "颈椎前伸重度异常，优先加强仰睡颈部承托。" : "当前颈椎前伸未达到重度异常，优先从凹面方案开始试躺。"}</p>
+                <p className="mt-1 text-[11px] leading-5 text-sky-700">{orientation === "convex" && recommendedPillowOrientation === "convex" ? "颈椎前伸重度异常，系统推荐凸面（1区仰睡区）。" : `${orientation === recommendedPillowOrientation ? "系统推荐" : "导购选择"}：${pillowOrientationMeta[orientation].label}（${pillowOrientationMeta[orientation].copy}）。`}{orientation === "convex" ? "颈椎前伸重度异常时，系统推荐凸面（1区仰睡区）。通过对应分区匹配颈部承托，请结合试躺确认贴合度。" : "以3区作为仰睡区，通过头窝与周边分区配合承托头颈；请结合试躺确认头部落位和颈部贴合。"}</p>
               </div>
-              <span className="flex-none rounded-full bg-white px-2 py-1 text-[10px] font-semibold text-sky-700 shadow-sm">系统推荐</span>
+              <span className="flex-none rounded-full bg-white px-2 py-1 text-[10px] font-semibold text-sky-700 shadow-sm">{orientation === recommendedPillowOrientation ? "系统推荐" : "导购选择"}</span>
             </div>
             <div className="mt-3 grid grid-cols-2 gap-1 rounded-xl bg-white/70 p-1">
               {(["convex", "concave"] as PillowOrientation[]).map((item) => (
@@ -1020,6 +1020,8 @@ function BusinessControls({ productType, orientation, selectedModel, onModelChan
   const [message, setMessage] = useState("");
   const [quantity, setQuantity] = useState(1);
   const [date, setDate] = useState("");
+  const faceLabel = productType === "gen2" ? `${pillowOrientationMeta[orientation].label} · ${pillowOrientationMeta[orientation].copy}` : "";
+  const tradeLabel = `${selectedModel}${faceLabel ? `（${faceLabel}）` : ""}`;
   const modelOptions = productType === "gen1" ? generationOneModels.map((model) => model.id) : [pillowProductNames.gen2];
 
   useEffect(() => {
@@ -1040,7 +1042,7 @@ function BusinessControls({ productType, orientation, selectedModel, onModelChan
             <span className="ml-2 text-[14px] text-slate-600">{rating}分</span>
           </div>
           <div className="mt-3">
-            <button type="button" onClick={() => setMessage(`已确认${selectedModel}，舒适度${rating}分`)} className="w-full rounded-full bg-sky-600 text-white py-2.5 text-[13px] font-semibold active:scale-[0.99]">确认试躺方案</button>
+            <button type="button" onClick={() => setMessage(`已确认${tradeLabel}，舒适度${rating}分`)} className="w-full rounded-full bg-sky-600 text-white py-2.5 text-[13px] font-semibold active:scale-[0.99]">确认试躺方案</button>
           </div>
           {message && <div className="mt-2 text-center text-[12px] text-emerald-600">{message}</div>}
         </Panel>
@@ -1054,13 +1056,13 @@ function BusinessControls({ productType, orientation, selectedModel, onModelChan
           </div>
           <div className="grid grid-cols-[40px_1fr_58px_82px] text-[12px] border border-slate-100 border-t-0 rounded-b-xl">
             <div className="px-2 py-2 text-slate-700">1</div>
-            <select value={selectedModel} onChange={(event) => onModelChange(event.target.value)} className="min-w-0 px-1 text-slate-700">{modelOptions.map((model) => <option key={model}>{model}</option>)}</select>
+            <div className="min-w-0 py-2"><select value={selectedModel} onChange={(event) => onModelChange(event.target.value)} className="w-full min-w-0 px-1 text-slate-700">{modelOptions.map((model) => <option key={model} value={model}>{model}</option>)}</select>{faceLabel && <div className="mt-1 px-1 text-[11px] text-sky-700">{faceLabel}</div>}</div>
             <div className="flex items-center justify-center gap-1 text-slate-700"><button type="button" onClick={() => setQuantity(Math.max(1, quantity - 1))}>-</button><b>{quantity}</b><button type="button" onClick={() => setQuantity(quantity + 1)}>+</button></div>
             <input aria-label="成交日期" type="date" value={date} onChange={(event) => setDate(event.target.value)} className="min-w-0 px-1 text-[10px]" />
           </div>
           <div className="mt-3 grid grid-cols-2 gap-3">
             <button type="button" onClick={() => setMessage("已添加一项商品")} className="rounded-full bg-white border border-slate-200 text-slate-500 py-2 text-[12px]">添加商品</button>
-            <button type="button" onClick={() => setMessage(date ? "成交信息已保存" : "请填写成交日期")} className="rounded-full bg-emerald-500 text-white py-2 text-[12px] font-medium">保存成交信息</button>
+            <button type="button" onClick={() => setMessage(date ? `成交信息已保存：${tradeLabel}` : "请填写成交日期")} className="rounded-full bg-emerald-500 text-white py-2 text-[12px] font-medium">保存成交信息</button>
           </div>
         </Panel>
       </div>
