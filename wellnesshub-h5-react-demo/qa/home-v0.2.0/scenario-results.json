@@ -1,0 +1,228 @@
+[
+  {
+    "scenario": "none",
+    "dates": [
+      "07-23",
+      "08-06",
+      "08-10"
+    ],
+    "empty": false,
+    "error": false,
+    "model": true,
+    "score": "本次报告评分82/100",
+    "services": [
+      {
+        "state": "empty",
+        "type": "ai"
+      },
+      {
+        "state": "empty",
+        "type": "training"
+      }
+    ]
+  },
+  {
+    "scenario": "ai-only",
+    "dates": [
+      "07-23",
+      "08-06",
+      "08-10"
+    ],
+    "empty": false,
+    "error": false,
+    "model": true,
+    "score": "本次报告评分82/100",
+    "services": [
+      {
+        "state": "available",
+        "type": "ai"
+      },
+      {
+        "state": "empty",
+        "type": "training"
+      }
+    ]
+  },
+  {
+    "scenario": "training-only",
+    "dates": [
+      "07-23",
+      "08-06",
+      "08-10"
+    ],
+    "empty": false,
+    "error": false,
+    "model": true,
+    "score": "本次报告评分82/100",
+    "services": [
+      {
+        "state": "empty",
+        "type": "ai"
+      },
+      {
+        "state": "available",
+        "type": "training"
+      }
+    ]
+  },
+  {
+    "scenario": "both",
+    "dates": [
+      "07-23",
+      "08-06",
+      "08-10"
+    ],
+    "empty": false,
+    "error": false,
+    "model": true,
+    "score": "本次报告评分82/100",
+    "services": [
+      {
+        "state": "available",
+        "type": "ai"
+      },
+      {
+        "state": "available",
+        "type": "training"
+      }
+    ]
+  },
+  {
+    "scenario": "historical",
+    "dates": [
+      "07-23",
+      "08-06",
+      "08-10"
+    ],
+    "empty": false,
+    "error": false,
+    "model": true,
+    "score": "本次报告评分82/100",
+    "services": [
+      {
+        "state": "historical",
+        "type": "ai"
+      },
+      {
+        "state": "historical",
+        "type": "training"
+      }
+    ]
+  },
+  {
+    "scenario": "empty",
+    "dates": [],
+    "empty": true,
+    "error": false,
+    "missing": "暂无数据",
+    "model": false,
+    "services": [
+      {
+        "state": "empty",
+        "type": "ai"
+      },
+      {
+        "state": "empty",
+        "type": "training"
+      }
+    ]
+  },
+  {
+    "scenario": "single",
+    "dates": [
+      "08-10"
+    ],
+    "empty": false,
+    "error": false,
+    "model": true,
+    "score": "本次报告评分82/100",
+    "services": [
+      {
+        "state": "empty",
+        "type": "ai"
+      },
+      {
+        "state": "empty",
+        "type": "training"
+      }
+    ]
+  },
+  {
+    "scenario": "missing",
+    "dates": [
+      "07-23",
+      "08-06",
+      "08-10"
+    ],
+    "empty": false,
+    "error": false,
+    "model": false,
+    "score": "本次报告评分82/100",
+    "services": [
+      {
+        "state": "empty",
+        "type": "ai"
+      },
+      {
+        "state": "empty",
+        "type": "training"
+      }
+    ]
+  },
+  {
+    "scenario": "different",
+    "dates": [
+      "07-23",
+      "08-10"
+    ],
+    "empty": false,
+    "error": false,
+    "model": true,
+    "score": "本次报告评分82/100",
+    "services": [
+      {
+        "state": "empty",
+        "type": "ai"
+      },
+      {
+        "state": "empty",
+        "type": "training"
+      }
+    ]
+  },
+  {
+    "scenario": "unlinked",
+    "dates": [
+      "07-23",
+      "08-06",
+      "08-10"
+    ],
+    "empty": false,
+    "error": false,
+    "model": true,
+    "score": "本次报告评分82/100",
+    "services": [
+      {
+        "state": "empty",
+        "type": "ai"
+      },
+      {
+        "state": "empty",
+        "type": "training"
+      }
+    ]
+  },
+  {
+    "scenario": "error",
+    "dates": [
+      "07-23",
+      "08-06",
+      "08-10"
+    ],
+    "empty": false,
+    "error": true,
+    "model": true,
+    "score": "本次报告评分82/100",
+    "services": []
+  }
+]

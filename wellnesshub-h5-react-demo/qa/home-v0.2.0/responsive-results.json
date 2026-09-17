@@ -1,0 +1,386 @@
+[
+  {
+    "width": 320,
+    "locale": "zh",
+    "theme": "light",
+    "cards": 2,
+    "dir": "ltr",
+    "overflow": []
+  },
+  {
+    "width": 320,
+    "locale": "zh",
+    "theme": "dark",
+    "cards": 2,
+    "dir": "ltr",
+    "overflow": []
+  },
+  {
+    "width": 320,
+    "locale": "en",
+    "theme": "light",
+    "cards": 2,
+    "dir": "ltr",
+    "overflow": []
+  },
+  {
+    "width": 320,
+    "locale": "en",
+    "theme": "dark",
+    "cards": 2,
+    "dir": "ltr",
+    "overflow": []
+  },
+  {
+    "width": 320,
+    "locale": "de",
+    "theme": "light",
+    "cards": 2,
+    "dir": "ltr",
+    "overflow": []
+  },
+  {
+    "width": 320,
+    "locale": "de",
+    "theme": "dark",
+    "cards": 2,
+    "dir": "ltr",
+    "overflow": []
+  },
+  {
+    "width": 320,
+    "locale": "ar",
+    "theme": "light",
+    "cards": 2,
+    "dir": "rtl",
+    "overflow": []
+  },
+  {
+    "width": 320,
+    "locale": "ar",
+    "theme": "dark",
+    "cards": 2,
+    "dir": "rtl",
+    "overflow": []
+  },
+  {
+    "width": 375,
+    "locale": "zh",
+    "theme": "light",
+    "cards": 2,
+    "dir": "ltr",
+    "overflow": []
+  },
+  {
+    "width": 375,
+    "locale": "zh",
+    "theme": "dark",
+    "cards": 2,
+    "dir": "ltr",
+    "overflow": []
+  },
+  {
+    "width": 375,
+    "locale": "en",
+    "theme": "light",
+    "cards": 2,
+    "dir": "ltr",
+    "overflow": []
+  },
+  {
+    "width": 375,
+    "locale": "en",
+    "theme": "dark",
+    "cards": 2,
+    "dir": "ltr",
+    "overflow": []
+  },
+  {
+    "width": 375,
+    "locale": "de",
+    "theme": "light",
+    "cards": 2,
+    "dir": "ltr",
+    "overflow": []
+  },
+  {
+    "width": 375,
+    "locale": "de",
+    "theme": "dark",
+    "cards": 2,
+    "dir": "ltr",
+    "overflow": []
+  },
+  {
+    "width": 375,
+    "locale": "ar",
+    "theme": "light",
+    "cards": 2,
+    "dir": "rtl",
+    "overflow": []
+  },
+  {
+    "width": 375,
+    "locale": "ar",
+    "theme": "dark",
+    "cards": 2,
+    "dir": "rtl",
+    "overflow": []
+  },
+  {
+    "width": 390,
+    "locale": "zh",
+    "theme": "light",
+    "cards": 2,
+    "dir": "ltr",
+    "overflow": []
+  },
+  {
+    "width": 390,
+    "locale": "zh",
+    "theme": "dark",
+    "cards": 2,
+    "dir": "ltr",
+    "overflow": []
+  },
+  {
+    "width": 390,
+    "locale": "en",
+    "theme": "light",
+    "cards": 2,
+    "dir": "ltr",
+    "overflow": []
+  },
+  {
+    "width": 390,
+    "locale": "en",
+    "theme": "dark",
+    "cards": 2,
+    "dir": "ltr",
+    "overflow": []
+  },
+  {
+    "width": 390,
+    "locale": "de",
+    "theme": "light",
+    "cards": 2,
+    "dir": "ltr",
+    "overflow": []
+  },
+  {
+    "width": 390,
+    "locale": "de",
+    "theme": "dark",
+    "cards": 2,
+    "dir": "ltr",
+    "overflow": []
+  },
+  {
+    "width": 390,
+    "locale": "ar",
+    "theme": "light",
+    "cards": 2,
+    "dir": "rtl",
+    "overflow": []
+  },
+  {
+    "width": 390,
+    "locale": "ar",
+    "theme": "dark",
+    "cards": 2,
+    "dir": "rtl",
+    "overflow": []
+  },
+  {
+    "width": 393,
+    "locale": "zh",
+    "theme": "light",
+    "cards": 2,
+    "dir": "ltr",
+    "overflow": []
+  },
+  {
+    "width": 393,
+    "locale": "zh",
+    "theme": "dark",
+    "cards": 2,
+    "dir": "ltr",
+    "overflow": []
+  },
+  {
+    "width": 393,
+    "locale": "en",
+    "theme": "light",
+    "cards": 2,
+    "dir": "ltr",
+    "overflow": []
+  },
+  {
+    "width": 393,
+    "locale": "en",
+    "theme": "dark",
+    "cards": 2,
+    "dir": "ltr",
+    "overflow": []
+  },
+  {
+    "width": 393,
+    "locale": "de",
+    "theme": "light",
+    "cards": 2,
+    "dir": "ltr",
+    "overflow": []
+  },
+  {
+    "width": 393,
+    "locale": "de",
+    "theme": "dark",
+    "cards": 2,
+    "dir": "ltr",
+    "overflow": []
+  },
+  {
+    "width": 393,
+    "locale": "ar",
+    "theme": "light",
+    "cards": 2,
+    "dir": "rtl",
+    "overflow": []
+  },
+  {
+    "width": 393,
+    "locale": "ar",
+    "theme": "dark",
+    "cards": 2,
+    "dir": "rtl",
+    "overflow": []
+  },
+  {
+    "width": 423,
+    "locale": "zh",
+    "theme": "light",
+    "cards": 2,
+    "dir": "ltr",
+    "overflow": []
+  },
+  {
+    "width": 423,
+    "locale": "zh",
+    "theme": "dark",
+    "cards": 2,
+    "dir": "ltr",
+    "overflow": []
+  },
+  {
+    "width": 423,
+    "locale": "en",
+    "theme": "light",
+    "cards": 2,
+    "dir": "ltr",
+    "overflow": []
+  },
+  {
+    "width": 423,
+    "locale": "en",
+    "theme": "dark",
+    "cards": 2,
+    "dir": "ltr",
+    "overflow": []
+  },
+  {
+    "width": 423,
+    "locale": "de",
+    "theme": "light",
+    "cards": 2,
+    "dir": "ltr",
+    "overflow": []
+  },
+  {
+    "width": 423,
+    "locale": "de",
+    "theme": "dark",
+    "cards": 2,
+    "dir": "ltr",
+    "overflow": []
+  },
+  {
+    "width": 423,
+    "locale": "ar",
+    "theme": "light",
+    "cards": 2,
+    "dir": "rtl",
+    "overflow": []
+  },
+  {
+    "width": 423,
+    "locale": "ar",
+    "theme": "dark",
+    "cards": 2,
+    "dir": "rtl",
+    "overflow": []
+  },
+  {
+    "width": 427,
+    "locale": "zh",
+    "theme": "light",
+    "cards": 2,
+    "dir": "ltr",
+    "overflow": []
+  },
+  {
+    "width": 427,
+    "locale": "zh",
+    "theme": "dark",
+    "cards": 2,
+    "dir": "ltr",
+    "overflow": []
+  },
+  {
+    "width": 427,
+    "locale": "en",
+    "theme": "light",
+    "cards": 2,
+    "dir": "ltr",
+    "overflow": []
+  },
+  {
+    "width": 427,
+    "locale": "en",
+    "theme": "dark",
+    "cards": 2,
+    "dir": "ltr",
+    "overflow": []
+  },
+  {
+    "width": 427,
+    "locale": "de",
+    "theme": "light",
+    "cards": 2,
+    "dir": "ltr",
+    "overflow": []
+  },
+  {
+    "width": 427,
+    "locale": "de",
+    "theme": "dark",
+    "cards": 2,
+    "dir": "ltr",
+    "overflow": []
+  },
+  {
+    "width": 427,
+    "locale": "ar",
+    "theme": "light",
+    "cards": 2,
+    "dir": "rtl",
+    "overflow": []
+  },
+  {
+    "width": 427,
+    "locale": "ar",
+    "theme": "dark",
+    "cards": 2,
+    "dir": "rtl",
+    "overflow": []
+  }
+]
