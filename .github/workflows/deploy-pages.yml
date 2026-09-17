@@ -28,6 +28,20 @@ jobs:
       - name: Configure Pages
         uses: actions/configure-pages@v5
 
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Build WellnessHub H5
+        run: |
+          build_dir=$(mktemp -d)
+          cp -R wellnesshub-h5-react-demo/. "$build_dir/"
+          cd "$build_dir"
+          npm ci
+          npm run build
+          node "$GITHUB_WORKSPACE/scripts/package-wellnesshub-pages.mjs" "$build_dir/dist/client" "$GITHUB_WORKSPACE/wellnesshub-h5"
+
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
