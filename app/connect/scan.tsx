@@ -1,3 +1,5 @@
+import { useExperience } from "@/context/ExperienceContext";
+import { useCopy } from "@/components/onboarding/DemoUI";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { Animated, Easing, Pressable, StyleSheet, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
@@ -17,6 +19,12 @@ const AUTO_SCAN_DELAY_MS = 2200;
 
 export default function ConnectScanScreen() {
   const router = useRouter();
+  const { request } = useExperience();
+  const t = useCopy();
+  const [cameraReady, setCameraReady] = useState(false);
+  const [askingCamera, setAskingCamera] = useState(false);
+  const alive = useRef(true);
+  useEffect(() => { alive.current = true; return () => { alive.current = false; }; }, []);
   const { showToast } = useToast();
   const { colors } = useTheme();
   const authStyles = useAuthStyles();
@@ -45,7 +53,7 @@ export default function ConnectScanScreen() {
   );
 
   const completeScan = useCallback(() => {
-    if (completedRef.current || busy) return;
+    if (completedRef.current || busy || !cameraReady) return;
     completedRef.current = true;
     setBusy(true);
 
@@ -65,9 +73,10 @@ export default function ConnectScanScreen() {
       result.session.deviceName,
       result.session.expiresAt,
     );
-  }, [busy, ensureDeviceLoginSession, routeAfterScan, router, scanDeviceQr, showToast]);
+  }, [busy, cameraReady, ensureDeviceLoginSession, routeAfterScan, router, scanDeviceQr, showToast]);
 
   useEffect(() => {
+    if (!cameraReady) return;
     const animation = Animated.loop(
       Animated.sequence([
         Animated.timing(scanLineAnim, {
@@ -94,7 +103,7 @@ export default function ConnectScanScreen() {
       animation.stop();
       clearTimeout(timer);
     };
-  }, [completeScan, scanLineAnim]);
+  }, [completeScan, scanLineAnim, cameraReady]);
 
   const scanLineTranslateY = scanLineAnim.interpolate({
     inputRange: [0, 1],
@@ -132,9 +141,9 @@ export default function ConnectScanScreen() {
 
         <Pressable
           accessibilityRole="button"
-          accessibilityLabel={authCopy.scan.mockButton}
-          disabled={busy}
-          onPress={completeScan}
+          accessibilityLabel={cameraReady ? authCopy.scan.mockButton : t("开启相机扫描（演示）", "Enable camera scan (demo)")}
+          disabled={busy || askingCamera}
+          onPress={async () => { if (cameraReady) { completeScan(); return; } setAskingCamera(true); const allowed = await request("camera"); if (alive.current) { setCameraReady(allowed); setAskingCamera(false); } }}
           style={({ pressed }) => [
             authStyles.primaryButton,
             styles.mockButton,
@@ -142,7 +151,7 @@ export default function ConnectScanScreen() {
           ]}
         >
           <Text style={authStyles.primaryButtonText}>
-            {busy ? authCopy.scan.validating : authCopy.scan.mockButton}
+            {!cameraReady ? t("开启相机扫描（演示）", "Enable camera scan (demo)") : busy ? authCopy.scan.validating : authCopy.scan.mockButton}
           </Text>
         </Pressable>
 

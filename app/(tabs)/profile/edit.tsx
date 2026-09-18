@@ -1,3 +1,4 @@
+import { Action as DemoAction, useCopy } from "@/components/onboarding/DemoUI";
 import { useMemo, useState } from "react";
 import { StyleSheet, Text, View } from "react-native";
 import { useRouter } from "expo-router";
@@ -26,6 +27,7 @@ import { ColorPalette, spacing, typography } from "@/theme";
 
 export default function ProfileEditScreen() {
   const router = useRouter();
+  const t = useCopy();
   const { showToast } = useToast();
   const { colors } = useTheme();
   const authStyles = useAuthStyles();
@@ -108,6 +110,7 @@ export default function ProfileEditScreen() {
           </View>
         </View>
 
+        <DemoAction secondary label={t("头像照片授权演示", "Avatar permission demo")} onPress={() => router.push("/media-demo")} />
         <AuthField label={authCopy.personalInfo.nickname}>
           <AuthInput
             value={nickname}

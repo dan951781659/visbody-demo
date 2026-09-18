@@ -1,3 +1,5 @@
+import { ExperienceProvider } from "@/context/ExperienceContext";
+import { WelcomeGate } from "@/components/onboarding/WelcomeGate";
 import { useEffect } from "react";
 import { ActivityIndicator, View } from "react-native";
 import { Stack } from "expo-router";
@@ -49,6 +51,7 @@ function RootNavigator() {
 
   return (
     <LocaleProvider>
+      <ExperienceProvider><WelcomeGate>
       <UserProvider>
         <AuthVerificationProvider>
           <TrainingProvider>
@@ -75,6 +78,7 @@ function RootNavigator() {
           </TrainingProvider>
         </AuthVerificationProvider>
       </UserProvider>
+    </WelcomeGate></ExperienceProvider>
     </LocaleProvider>
   );
 }

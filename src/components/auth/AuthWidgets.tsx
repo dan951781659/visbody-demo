@@ -1,3 +1,4 @@
+import { useRouter } from "expo-router";
 import { Ionicons } from "@expo/vector-icons";
 import { Pressable, Text, View } from "react-native";
 import { useAuthUi } from "@/components/auth/AuthScreen";
@@ -11,6 +12,7 @@ type PolicyAgreementProps = {
 };
 
 export function PolicyAgreement({ checked, onToggle }: PolicyAgreementProps) {
+  const router = useRouter();
   const authStyles = useAuthStyles();
   const { colors } = useTheme();
   const { variant } = useAuthUi();
@@ -37,11 +39,11 @@ export function PolicyAgreement({ checked, onToggle }: PolicyAgreementProps) {
       </View>
       <Text style={cinematic ? authStyles.cinematicPolicyText : authStyles.policyText}>
         {authCopy.policy.prefix}
-        <Text style={cinematic ? authStyles.cinematicPolicyLink : authStyles.policyLink}>
+        <Text onPress={(event) => { event.stopPropagation(); router.push("/legal?kind=terms"); }} style={cinematic ? authStyles.cinematicPolicyLink : authStyles.policyLink}>
           {authCopy.policy.userAgreement}
         </Text>
         {authCopy.policy.connector}
-        <Text style={cinematic ? authStyles.cinematicPolicyLink : authStyles.policyLink}>
+        <Text onPress={(event) => { event.stopPropagation(); router.push("/legal?kind=privacy"); }} style={cinematic ? authStyles.cinematicPolicyLink : authStyles.policyLink}>
           {authCopy.policy.privacyPolicy}
         </Text>
         {authCopy.policy.suffix}

@@ -1,3 +1,5 @@
+import { useExperience } from "@/context/ExperienceContext";
+import { Action as DemoAction, useCopy } from "@/components/onboarding/DemoUI";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import {
   ActivityIndicator,
@@ -25,6 +27,8 @@ const LAN_HINT = "APP与设备应在同一局域网内";
 
 export function DevicePickerScreen() {
   const router = useRouter();
+  const t = useCopy();
+  const { request } = useExperience();
   const { showToast } = useToast();
   const { colors } = useTheme();
   const styles = useMemo(() => createStyles(colors), [colors]);
@@ -77,27 +81,8 @@ export function DevicePickerScreen() {
     setIsScanning(false);
   }, [clearTimer]);
 
-  const startScan = useCallback(() => {
-    clearTimer();
-    setIsScanning(true);
-    setHasScanned(false);
-    setScanCollapsed(false);
-    timerRef.current = setTimeout(() => {
-      setIsScanning(false);
-      setHasScanned(true);
-      setScanCollapsed(true);
-      timerRef.current = null;
-    }, SCAN_DURATION_MS);
-  }, [clearTimer]);
-
-  useEffect(() => {
-    startScan();
-    return () => {
-      stopScan();
-      setHasScanned(false);
-      setScanCollapsed(false);
-    };
-  }, [startScan, stopScan]);
+  const startScan = () => { router.push("/connect/discover"); };
+  useEffect(() => () => stopScan(), [stopScan]);
 
   const handleClose = () => {
     stopScan();
@@ -116,12 +101,13 @@ export function DevicePickerScreen() {
     setManualAddVisible(true);
   };
 
-  const handleSubmitManualAdd = () => {
+  const handleSubmitManualAdd = async () => {
     const name = manualDeviceName.trim();
     if (!name) {
       showToast("请输入设备名称");
       return;
     }
+    if (!(await request("localNetwork"))) return;
     addDevice(name);
     showToast(`${name} 连接成功`);
     setManualAddVisible(false);
@@ -133,7 +119,8 @@ export function DevicePickerScreen() {
     router.push(`/devices/${encodeURIComponent(device.id)}`);
   };
 
-  const handleReconnect = (device: Device) => {
+  const handleReconnect = async (device: Device) => {
+    if (!(await request("localNetwork"))) return;
     const result = reconnectDevice(device.id);
     if (result === "connected") {
       showToast(`${device.name} 连接成功`);
@@ -206,6 +193,7 @@ export function DevicePickerScreen() {
             }}
             scrollEventThrottle={16}
           >
+            <DemoAction label={t("发现局域网设备", "Discover LAN devices")} onPress={() => router.push("/connect/discover")} />
             <View style={styles.scanStatus}>
               {isScanning && !scanCollapsed ? (
                 <>

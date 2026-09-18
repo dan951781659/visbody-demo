@@ -1,3 +1,4 @@
+import { Action as DemoAction, useCopy } from "@/components/onboarding/DemoUI";
 import { useEffect, useMemo, useState } from "react";
 import { Modal, Pressable, ScrollView, StyleSheet, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
@@ -38,6 +39,7 @@ type AboutPanel = "menu" | "version" | "edition";
 
 export default function ProfileScreen() {
   const router = useRouter();
+  const t = useCopy();
   const { showToast } = useToast();
   const { colors, schemeId } = useTheme();
   const styles = useMemo(() => createStyles(colors), [colors]);
@@ -116,7 +118,7 @@ export default function ProfileScreen() {
       return;
     }
     if (itemId === "privacy") {
-      setPrivacyVisible(true);
+      router.push("/legal?kind=privacy");
       return;
     }
     if (itemId === "about") {
@@ -216,6 +218,7 @@ export default function ProfileScreen() {
 
               <View style={[styles.section, styles.lastSection]}>
                 <SectionHeader title="设置" />
+                <DemoAction secondary label={t("权限与流程演示", "Permissions & demo")} onPress={() => router.push("/permissions")} />
                 {settingsMenuItems.map((item) => (
                   <SettingsMenuRow
                     key={item.id}
@@ -239,6 +242,7 @@ export default function ProfileScreen() {
           ) : (
             <View style={[styles.section, styles.lastSection]}>
               <SectionHeader title="设置" />
+                <DemoAction secondary label={t("权限与流程演示", "Permissions & demo")} onPress={() => router.push("/permissions")} />
               <GlassSurface contentStyle={styles.guestSettings}>
                 <Text style={styles.guestSettingsTitle}>登录后可查看完整数据</Text>
                 <Text style={styles.guestSettingsHint}>训练记录、体测数据与训练计划将在登录后展示</Text>

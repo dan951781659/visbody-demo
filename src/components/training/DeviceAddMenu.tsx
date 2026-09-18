@@ -1,3 +1,5 @@
+import { useRouter } from "expo-router";
+import { useCopy } from "@/components/onboarding/DemoUI";
 import { Modal, Pressable, StyleSheet, Text, View } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { GlassSurface } from "@/components/GlassSurface";
@@ -16,6 +18,7 @@ export function DeviceAddMenu({
   onScanAdd,
   onManualAdd,
 }: DeviceAddMenuProps) {
+  const router = useRouter(); const t = useCopy();
   const handleScanAdd = () => {
     onClose();
     onScanAdd();
@@ -31,6 +34,7 @@ export function DeviceAddMenu({
       <Pressable style={styles.backdrop} onPress={onClose}>
         <View style={styles.menuWrap}>
           <GlassSurface contentStyle={styles.menu}>
+            <MenuItem icon="wifi-outline" label={t("发现局域网设备", "Discover LAN devices")} onPress={() => { onClose(); router.push("/connect/discover"); }} />
             <MenuItem icon="scan-outline" label="扫码添加" onPress={handleScanAdd} />
             <MenuItem icon="create-outline" label="手动添加" onPress={handleManualAdd} />
           </GlassSurface>

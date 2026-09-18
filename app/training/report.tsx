@@ -1,3 +1,4 @@
+import { Platform } from "react-native";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { ScrollView, StyleSheet, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
@@ -50,6 +51,7 @@ export default function TrainingReportScreen() {
   }, [clearReport, clearSession, params.returnTo, router]);
 
   const handleSave = useCallback(async () => {
+    if (Platform.OS === "web") { router.push("/media-demo?mode=report"); return; }
     if (saving) return;
     setSaving(true);
     const result = await saveTrainingReportLongImage(captureRef);
@@ -59,7 +61,7 @@ export default function TrainingReportScreen() {
       return;
     }
     showToast(result.message);
-  }, [saving, showToast]);
+  }, [saving, showToast, router]);
 
   if (!enrichedReport) {
     return null;
