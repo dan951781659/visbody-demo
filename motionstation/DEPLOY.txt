@@ -1,3 +1,3 @@
 MotionStation interactive Web Demo
-Source: feat/v1.0.0 @ 46b1702
+Source: feat/v1.0.0 @ 8be6c3e
 Base URL: /visbody-demo/motionstation
