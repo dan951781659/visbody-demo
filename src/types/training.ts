@@ -1,3 +1,4 @@
+import { ImageSourcePropType } from "react-native";
 import { ProductOption } from "@/data/mockData";
 
 export type ProductId = "motionstation" | "visbody";
@@ -177,8 +178,9 @@ export type FreeTrainingOption = {
   id: FreeTrainingType;
   title: string;
   subtitle: string;
-  icon: "barbell-outline" | "body-outline" | "heart-outline";
-  gradient: [string, string];
+  image: ImageSourcePropType;
+  features: string;
+  en: { title: string; subtitle: string; features: string };
 };
 
 export type DeviceSearchResult = {
