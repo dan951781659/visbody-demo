@@ -1,0 +1,1762 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>腰腹围度对比 - 当次 vs 上次</title>
+  <style>
+    :root {
+      /* 浅色科技蓝 · 统一令牌（与体围页一致） */
+      --bg-page: #f0f4f9;
+      --bg: #ffffff;
+      --panel: #ffffff;
+      --bg-surface: #f7f9fc;
+      --border: #e2e8f0;
+      --border-strong: #cbd5e1;
+      --text: #1e293b;
+      --subtext: #64748b;
+      --primary: #2563eb;
+      --primary-hover: #1d4ed8;
+      --primary-soft: rgba(37, 99, 235, 0.08);
+      --accent-cyan: #0ea5e9;
+      --accent-slate: #64748b;
+      --ai-tint: #f5f3ff;
+      --ai-border: #ddd6fe;
+      --contour-prev: #dc2626;
+      --contour-current: #2563eb;
+      --up: #dc2626;
+      --down: #16a34a;
+      --current-scale: 1;
+      --current-waist: 1;
+      --history-scale: 1;
+      --history-waist: 1;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      background: var(--bg-page);
+      color: var(--text);
+      font-family: "PingFang SC", "Microsoft YaHei", Arial, sans-serif;
+      overflow-x: hidden;
+    }
+
+    .page {
+      width: min(1780px, 100%);
+      margin: 0 auto;
+      padding: 16px 16px 24px;
+    }
+
+    .top-title {
+      text-align: center;
+      font-size: 22px;
+      font-weight: 700;
+      margin: 0 0 12px;
+      color: var(--text);
+      letter-spacing: 0.02em;
+    }
+
+    .topbar {
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 7px 10px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 13px;
+      margin-bottom: 10px;
+    }
+
+    .left-info, .right-tools {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      color: #606a7b;
+    }
+
+    .tabs {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 8px;
+    }
+
+    .tab {
+      border: 1px solid var(--border);
+      border-radius: 3px;
+      background: #fff;
+      color: #4e5a6d;
+      padding: 6px 12px;
+      font-size: 12px;
+      font-weight: 500;
+    }
+
+    .tab.active {
+      background: var(--primary);
+      border-color: var(--primary);
+      color: #fff;
+    }
+
+    /* 窄屏保持「左数据 | 中模型 | 右数据」三栏不变，整体横向滚动查看 */
+    .layout-scroll {
+      width: 100%;
+      overflow-x: auto;
+      overflow-y: visible;
+      -webkit-overflow-scrolling: touch;
+      overscroll-behavior-x: contain;
+      margin-bottom: 4px;
+    }
+
+    .layout-scroll::-webkit-scrollbar {
+      height: 8px;
+    }
+
+    .layout-scroll::-webkit-scrollbar-thumb {
+      background: #c9d4e8;
+      border-radius: 4px;
+    }
+
+    .layout {
+      display: grid;
+      grid-template-columns: minmax(500px, 1.45fr) 320px minmax(360px, 1.1fr);
+      gap: 12px;
+      align-items: stretch;
+      min-width: 1260px;
+    }
+
+    .card {
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      box-shadow: 0 4px 20px rgba(15, 23, 42, 0.04);
+    }
+
+    .current-card {
+      min-width: 0;
+    }
+
+    .card-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 8px 10px;
+      border-bottom: 1px solid var(--border);
+      font-size: 13px;
+      color: #667386;
+      background: #fbfcff;
+    }
+
+    .card-head .title {
+      font-size: 14px;
+      color: #384457;
+      font-weight: 600;
+    }
+
+    .table-wrap {
+      padding: 6px 8px 10px;
+      overflow: auto;
+      flex: 0 1 auto;
+    }
+
+    .current-card .table-wrap {
+      width: 100%;
+      overflow-x: hidden;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: separate;
+      border-spacing: 0;
+      min-width: 320px;
+    }
+
+    .current-card table {
+      display: block;
+      width: 100%;
+      min-width: 0;
+      border-spacing: 0;
+      table-layout: auto;
+    }
+
+    .current-card thead,
+    .current-card tbody {
+      display: block;
+      width: 100%;
+    }
+
+    .current-card thead tr,
+    .current-card tbody tr.metric-row {
+      display: grid;
+      grid-template-columns: minmax(0, 44%) minmax(0, 56%);
+      column-gap: 8px;
+      width: 100%;
+      align-items: stretch;
+    }
+
+    .current-card thead tr {
+      margin-bottom: 6px;
+    }
+
+    th {
+      color: #667386;
+      font-size: 11px;
+      font-weight: 500;
+      text-align: left;
+      padding: 0 8px;
+    }
+
+    td {
+      background: #fff;
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+      padding: 8px 8px;
+      font-size: 13px;
+      color: #3b4658;
+      vertical-align: middle;
+    }
+
+    td:first-child {
+      border-left: 1px solid var(--border);
+      border-radius: 6px 0 0 6px;
+      width: 38%;
+      color: #556278;
+    }
+
+    td:last-child {
+      border-right: 1px solid var(--border);
+      border-radius: 0 6px 6px 0;
+      width: 62%;
+      text-align: right;
+    }
+
+    .current-card th:first-child,
+    .current-card td:first-child {
+      width: auto;
+    }
+
+    .current-card th:last-child,
+    .current-card td:last-child {
+      width: auto;
+    }
+
+    .current-card td {
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      margin: 0;
+    }
+
+    .current-card td:first-child,
+    .current-card td:last-child {
+      border-left: 1px solid var(--border);
+      border-right: 1px solid var(--border);
+      border-radius: 8px;
+    }
+
+    .current-card th {
+      padding: 0 4px;
+    }
+
+    td.cell-delta {
+      text-align: right;
+      white-space: nowrap;
+    }
+
+    .delta-pill {
+      display: inline-block;
+      margin-left: 8px;
+      padding: 2px 7px;
+      border-radius: 999px;
+      font-size: 12px;
+      font-weight: 600;
+      vertical-align: middle;
+    }
+
+    .delta-pill.up {
+      color: var(--up);
+      background: #fff1f0;
+      border: 1px solid #f5cfcb;
+    }
+
+    .delta-pill.down {
+      color: var(--down);
+      background: #eefaf3;
+      border: 1px solid #c6ead8;
+    }
+
+    .delta-pill.flat {
+      color: #95a1b3;
+      background: #f4f6f9;
+      border: 1px solid #e3e8ef;
+    }
+
+    /* —— 体围行：分层交互（hover / 选中）—— */
+    tr.metric-row {
+      cursor: pointer;
+      transition: background-color 200ms ease-out, box-shadow 200ms ease-out;
+    }
+
+    tr.metric-row td {
+      transition: background-color 200ms ease-out, border-color 200ms ease-out;
+      overflow: visible;
+    }
+
+    .current-card tr.metric-row {
+      width: 100%;
+    }
+
+    tr.metric-row.is-hover td {
+      background: #f5f9ff;
+      border-color: #6aa6ff;
+      box-shadow: inset 0 0 0 1px rgba(84, 126, 255, 0.25);
+    }
+
+    tr.metric-row.is-selected td {
+      background: linear-gradient(90deg, #f2f7ff 0%, #faf5ff 100%);
+      border-color: #5e8fff;
+      box-shadow: inset 0 0 0 1px rgba(76, 106, 255, 0.35);
+    }
+
+    tr.metric-row.is-selected.is-hover td {
+      background: linear-gradient(90deg, #e8f2ff 0%, #f0f8ff 100%);
+    }
+
+    tr.metric-row-history {
+      cursor: pointer;
+      transition: background-color 200ms ease-out, box-shadow 200ms ease-out;
+    }
+
+    tr.metric-row-history td {
+      transition: background-color 200ms ease-out, border-color 200ms ease-out;
+    }
+
+    tr.metric-row-history.is-hover td {
+      background: #f5f9ff;
+    }
+
+    tr.metric-row-history.is-selected td {
+      background: linear-gradient(90deg, #eef6ff 0%, #f8fbff 100%);
+      border-color: #93c5fd;
+      box-shadow: inset 0 0 0 1px rgba(35, 118, 255, 0.25);
+    }
+
+    .row-label {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      position: relative;
+    }
+
+    .info-dot {
+      width: 14px;
+      height: 14px;
+      border-radius: 50%;
+      border: 1px solid #c5d0e0;
+      color: #8b95a7;
+      font-size: 10px;
+      line-height: 12px;
+      text-align: center;
+      flex-shrink: 0;
+    }
+
+    .cell-with-ai {
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      flex-wrap: wrap;
+      gap: 6px;
+      width: 100%;
+    }
+
+    .cell-with-ai .value-block {
+      display: inline-flex;
+      align-items: baseline;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+      gap: 4px;
+    }
+
+    .ai-btn {
+      flex-shrink: 0;
+      font-size: 11px;
+      padding: 3px 10px;
+      border-radius: 6px;
+      border: 1px solid var(--ai-border);
+      background: linear-gradient(135deg, var(--primary) 0%, #4f46e5 100%);
+      color: #fff;
+      cursor: pointer;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 200ms ease-out, transform 200ms ease-out, box-shadow 200ms ease-out;
+      box-shadow: 0 4px 14px rgba(37, 99, 235, 0.35);
+      transform: translateY(4px);
+    }
+
+    .ai-btn.is-float {
+      position: absolute;
+      top: -28px;
+      left: -2px;
+      z-index: 5;
+      white-space: nowrap;
+    }
+
+    .ai-btn.is-float::after {
+      content: "";
+      position: absolute;
+      left: 14px;
+      bottom: -7px;
+      width: 0;
+      height: 0;
+      border-left: 6px solid transparent;
+      border-right: 6px solid transparent;
+      border-top: 7px solid #4f46e5;
+    }
+
+    .trend-btn {
+      flex-shrink: 0;
+      width: 22px;
+      height: 22px;
+      border-radius: 5px;
+      border: 1px solid #dbeafe;
+      background: #fff;
+      color: var(--primary);
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 12px;
+      opacity: 0.55;
+      transition: opacity 200ms ease-out, background 200ms ease-out, transform 200ms ease-out;
+    }
+
+    .trend-btn:hover,
+    .trend-btn.is-active {
+      opacity: 1;
+      background: #edf5ff;
+      transform: translateY(-1px);
+    }
+
+    tr.metric-row:hover .ai-btn,
+    tr.metric-row.is-selected .ai-btn,
+    tr.metric-row:hover .trend-btn,
+    tr.metric-row.is-selected .trend-btn {
+      opacity: 1;
+      pointer-events: auto;
+      transform: translateY(0);
+    }
+
+    .ai-btn:hover {
+      filter: brightness(1.06);
+      box-shadow: 0 4px 12px rgba(47, 131, 255, 0.45);
+    }
+
+    .ai-btn:focus-visible {
+      outline: 2px solid var(--primary);
+      outline-offset: 2px;
+      opacity: 1;
+    }
+
+    .trend-inline-row td {
+      padding: 0;
+      border: none;
+      background: transparent;
+    }
+
+    .trend-inline {
+      margin: 2px 0 10px;
+      border: 1px solid #dbe8fb;
+      border-radius: 10px;
+      background: linear-gradient(180deg, #f8fbff 0%, #ffffff 100%);
+      box-shadow: 0 10px 24px rgba(37, 99, 235, 0.08);
+      overflow: hidden;
+    }
+
+    .trend-inline-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 10px 12px;
+      border-bottom: 1px solid #e6edf7;
+      color: #2f3b4d;
+      font-size: 13px;
+      font-weight: 600;
+    }
+
+    .trend-inline-close {
+      border: none;
+      background: transparent;
+      color: #7f95b3;
+      font-size: 16px;
+      line-height: 1;
+      cursor: pointer;
+    }
+
+    .trend-inline-wrap {
+      padding: 8px 12px 10px;
+    }
+
+    .trend-chart {
+      width: 100%;
+      height: 130px;
+      display: block;
+    }
+
+    .trend-axis-labels {
+      margin-top: 4px;
+      display: flex;
+      justify-content: space-between;
+      color: #99a3b3;
+      font-size: 11px;
+      padding: 0 2px;
+    }
+
+    .waist-extensions {
+      margin-top: 16px;
+      display: grid;
+      gap: 14px;
+    }
+
+    .waist-block {
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      background: linear-gradient(180deg, #ffffff 0%, var(--bg-surface) 100%);
+      padding: 16px;
+      box-shadow: 0 8px 28px rgba(15, 23, 42, 0.06);
+    }
+
+    .waist-block-head {
+      margin: 0 0 10px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .waist-block h3 {
+      margin: 0;
+      font-size: 16px;
+      color: #2f3b4d;
+      font-weight: 700;
+    }
+
+    .contour-legend {
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+      font-size: 12px;
+      color: #7b8799;
+    }
+
+    .legend-item {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .legend-item::before {
+      content: "";
+      width: 18px;
+      height: 2px;
+      border-radius: 2px;
+      background: currentColor;
+    }
+
+    .legend-item.prev {
+      color: var(--contour-prev);
+    }
+
+    .legend-item.current {
+      color: var(--contour-current);
+    }
+
+    .waist-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+    }
+
+    .mini-table {
+      width: 100%;
+      border-collapse: separate;
+      border-spacing: 0 6px;
+      min-width: 0;
+    }
+
+    .mini-table th {
+      font-size: 12px;
+      color: #6b778a;
+      background: #f5f7fa;
+      border: 1px solid #edf2f7;
+      border-radius: 6px;
+      padding: 8px 10px;
+      font-weight: 600;
+      text-align: center;
+    }
+
+    .mini-table td {
+      border: 1px solid #edf2f7;
+      border-radius: 6px;
+      padding: 10px 10px;
+      background: #fff;
+      font-size: 13px;
+      color: #3f4b5d;
+      vertical-align: middle;
+      transition: border-color 180ms ease, box-shadow 180ms ease, background-color 180ms ease;
+    }
+
+    .mini-table tbody tr:hover td {
+      border-color: #cfe0fb;
+      background: #f9fbff;
+      box-shadow: inset 0 0 0 1px rgba(47, 131, 255, 0.12);
+    }
+
+    .mini-table td.value {
+      text-align: left;
+      font-weight: 600;
+      line-height: 1.45;
+    }
+
+    .contour-value-prev {
+      color: var(--contour-prev);
+      display: block;
+    }
+
+    .contour-value-current {
+      color: var(--contour-current);
+      display: block;
+    }
+
+    .outline-cell {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+    }
+
+    .outline-svg {
+      width: 46px;
+      height: 26px;
+      display: inline-block;
+    }
+
+    .outline-path--prev {
+      stroke: var(--contour-prev);
+      stroke-width: 2;
+      fill: none;
+    }
+
+    .outline-path--cur {
+      stroke: var(--contour-current);
+      stroke-width: 1.8;
+      fill: none;
+    }
+
+    .outline-meta {
+      font-size: 12px;
+      color: #7b8799;
+      line-height: 1.5;
+      min-width: 30px;
+    }
+
+    .metric-explain {
+      position: fixed;
+      z-index: 1200;
+      width: 280px;
+      max-width: calc(100vw - 24px);
+      background: #fff;
+      border: 1px solid #dbe7f7;
+      border-radius: 10px;
+      box-shadow: 0 12px 28px rgba(15, 23, 42, 0.16);
+      padding: 12px 14px 10px;
+      display: none;
+    }
+
+    .metric-explain.is-open {
+      display: block;
+    }
+
+    .metric-explain h4 {
+      margin: 0 24px 6px 0;
+      font-size: 14px;
+      color: #2f3b4d;
+    }
+
+    .metric-explain p {
+      margin: 0;
+      color: #5f6d82;
+      font-size: 12px;
+      line-height: 1.55;
+    }
+
+    .metric-explain-close {
+      position: absolute;
+      top: 8px;
+      right: 8px;
+      border: none;
+      background: transparent;
+      color: #90a0b7;
+      font-size: 16px;
+      cursor: pointer;
+      line-height: 1;
+    }
+
+    /* 当次模型上的围度线（示意） */
+    .girth-lines {
+      position: absolute;
+      inset: 0;
+      z-index: 2;
+      pointer-events: none;
+    }
+
+    .girth-line {
+      position: absolute;
+      left: 12%;
+      right: 12%;
+      height: 2px;
+      padding: 0;
+      margin: 0;
+      border: none;
+      border-radius: 2px;
+      background: rgba(148, 163, 184, 0.85);
+      cursor: pointer;
+      pointer-events: auto;
+      transform: translateY(-50%);
+      transition:
+        opacity 200ms ease-out,
+        height 200ms ease-out,
+        background 200ms ease-out,
+        box-shadow 200ms ease-out;
+    }
+
+    .girth-line.dim {
+      opacity: 0.3;
+    }
+
+    .girth-line.is-hover {
+      height: 4px;
+      background: var(--primary);
+      box-shadow: 0 0 10px rgba(35, 118, 255, 0.65), 0 0 4px rgba(35, 118, 255, 0.4);
+    }
+
+    .girth-line.is-selected {
+      height: 4px;
+      background: #1d4ed8;
+      box-shadow: 0 0 12px rgba(29, 78, 216, 0.75), 0 0 6px rgba(29, 78, 216, 0.45);
+    }
+
+    .girth-line.pulse-once {
+      animation: girth-pulse 200ms ease-out 1;
+    }
+
+    @keyframes girth-pulse {
+      0% {
+        filter: brightness(1);
+        box-shadow: 0 0 6px rgba(35, 118, 255, 0.4);
+      }
+      50% {
+        filter: brightness(1.15);
+        box-shadow: 0 0 16px rgba(35, 118, 255, 0.9);
+      }
+      100% {
+        filter: brightness(1);
+        box-shadow: 0 0 10px rgba(35, 118, 255, 0.65);
+      }
+    }
+
+    .silhouette-area .human,
+    .silhouette-area .ring {
+      z-index: 1;
+    }
+
+    /* AI 弹层 */
+    .ai-modal {
+      position: fixed;
+      inset: 0;
+      z-index: 1000;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      opacity: 0;
+      visibility: hidden;
+      transition: opacity 200ms ease-out, visibility 200ms ease-out;
+    }
+
+    .ai-modal.is-open {
+      opacity: 1;
+      visibility: visible;
+    }
+
+    .ai-modal__backdrop {
+      position: absolute;
+      inset: 0;
+      background: rgba(15, 23, 42, 0.45);
+    }
+
+    .ai-modal__panel {
+      position: relative;
+      width: min(400px, 100%);
+      background: #fff;
+      border-radius: 12px;
+      padding: 20px 22px;
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.15);
+      border: 1px solid var(--border);
+      z-index: 1;
+    }
+
+    .ai-modal__panel h3 {
+      margin: 0 0 10px;
+      font-size: 17px;
+      font-weight: 600;
+    }
+
+    .ai-modal__panel p {
+      margin: 0 0 16px;
+      font-size: 13px;
+      color: #4b5563;
+      line-height: 1.55;
+    }
+
+    .ai-modal__close {
+      position: absolute;
+      top: 12px;
+      right: 12px;
+      width: 32px;
+      height: 32px;
+      border: none;
+      background: #f3f4f6;
+      border-radius: 8px;
+      font-size: 20px;
+      line-height: 1;
+      cursor: pointer;
+      color: #6b7280;
+    }
+
+    .ai-modal__close:hover {
+      background: #e5e7eb;
+    }
+
+    .ai-modal__action {
+      width: 100%;
+      padding: 10px 14px;
+      border-radius: 8px;
+      border: none;
+      background: var(--primary);
+      color: #fff;
+      font-size: 14px;
+      font-weight: 500;
+      cursor: pointer;
+    }
+
+    .ai-modal__action:hover {
+      filter: brightness(1.05);
+    }
+
+    .value-current {
+      color: var(--primary);
+      font-weight: 700;
+      font-size: 18px;
+    }
+
+    .value-history {
+      color: #425068;
+      font-weight: 600;
+      font-size: 18px;
+    }
+
+    .unit {
+      font-size: 11px;
+      margin-left: 4px;
+      color: #6f7b90;
+      font-weight: 500;
+    }
+
+    .time-switch {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 12px;
+      color: #667386;
+    }
+
+    .time-switch select {
+      height: 30px;
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      background: #fff;
+      color: #3b4658;
+      font-size: 12px;
+      padding: 0 8px;
+      min-width: 170px;
+      outline: none;
+    }
+
+    .model-center {
+      padding: 12px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      height: auto;
+    }
+
+    .dual-models {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+    }
+
+    .model-col {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .model-col.current .silhouette-area {
+      border-color: #cfe4ff;
+      box-shadow: inset 0 0 0 1px rgba(35, 118, 255, 0.06);
+    }
+
+    .model-col.history .silhouette-area {
+      border-color: #e2e6ee;
+      background: linear-gradient(180deg, #f7f8fb 0%, #eceff5 100%);
+    }
+
+    .model-time {
+      font-size: 12px;
+      color: #7b8799;
+      text-align: center;
+      padding: 5px 6px;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      background: #fbfcff;
+    }
+
+    .model-metric-hint {
+      margin-top: 4px;
+      font-size: 11px;
+      color: #5d6c80;
+    }
+
+    .silhouette-area {
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      background: linear-gradient(180deg, #f8fafd 0%, #eef3fb 100%);
+      position: relative;
+      min-height: 360px;
+    }
+
+    .ring {
+      position: absolute;
+      left: 50%;
+      bottom: 24px;
+      transform: translateX(-50%);
+      width: 170px;
+      height: 24px;
+      border-radius: 50%;
+      border: 3px solid #d7deec;
+      background: rgba(245, 248, 253, 0.8);
+    }
+
+    .ring.current {
+      width: calc(170px * var(--current-waist));
+    }
+
+    .ring.history {
+      width: calc(170px * var(--history-waist));
+    }
+
+    .human {
+      position: absolute;
+      left: 50%;
+      top: 28px;
+      transform: translateX(-50%);
+      width: 108px;
+      height: 320px;
+      background: linear-gradient(180deg, #c5cfdd, #aeb9cd);
+      border-radius: 50px 50px 30px 30px;
+      box-shadow: inset 0 0 0 4px rgba(255, 255, 255, 0.4);
+      transform-origin: 50% 85%;
+    }
+
+    .human.current {
+      transform: translateX(-50%) scale(var(--current-scale));
+    }
+
+    .human.history {
+      transform: translateX(-50%) scale(var(--history-scale));
+      filter: saturate(0.92) brightness(0.98);
+    }
+
+    .human::before,
+    .human::after {
+      content: "";
+      position: absolute;
+      top: 102px;
+      width: 32px;
+      height: 140px;
+      background: linear-gradient(180deg, #c4cedd, #a8b5cb);
+      border-radius: 24px;
+    }
+
+    .human::before { left: -20px; transform: rotate(18deg); }
+    .human::after { right: -20px; transform: rotate(-18deg); }
+
+    .head {
+      position: absolute;
+      top: -38px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 58px;
+      height: 58px;
+      background: linear-gradient(180deg, #c6d0df, #aebace);
+      border-radius: 50%;
+      box-shadow: inset 0 0 0 3px rgba(255, 255, 255, 0.35);
+    }
+
+    @media (max-width: 1360px) {
+      .layout {
+        grid-template-columns: minmax(460px, 1.35fr) 300px minmax(330px, 1fr);
+        min-width: 1160px;
+        gap: 10px;
+      }
+      .value-current,
+      .value-history {
+        font-size: 16px;
+      }
+    }
+
+    /* 窄屏：不改为单列；仅略微压缩字号与内边距，三栏仍由 .layout-scroll 横向滚动承载 */
+    @media (max-width: 1120px) {
+      .page {
+        padding: 10px 12px 16px;
+      }
+      .top-title {
+        font-size: 26px;
+      }
+      .card-head {
+        padding: 8px 10px;
+      }
+      .card-head .title {
+        font-size: 14px;
+      }
+      .layout {
+        min-width: 1080px;
+      }
+      .silhouette-area {
+        min-height: 320px;
+      }
+      .waist-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .layout {
+        min-width: 1040px;
+      }
+      .topbar {
+        flex-wrap: nowrap;
+        overflow-x: auto;
+        gap: 10px;
+        -webkit-overflow-scrolling: touch;
+      }
+      .left-info,
+      .right-tools {
+        flex-shrink: 0;
+      }
+      .tabs {
+        flex-wrap: nowrap;
+        overflow-x: auto;
+        padding-bottom: 4px;
+        -webkit-overflow-scrolling: touch;
+      }
+      .tab {
+        flex-shrink: 0;
+      }
+    }
+  </style>
+  <link rel="stylesheet" href="report-demo-shared.css?v=20260921" />
+</head>
+<body>
+  <div class="page">
+    <h1 class="top-title">腰腹围度对比分析</h1>
+
+    <div class="topbar">
+      <div class="left-info">
+        <span>← 返回</span>
+        <span>ID：杨打 | 15168800206</span>
+        <span>男 | 175 cm | 28 岁</span>
+        <span>2026-04-15 20:06:18</span>
+      </div>
+      <div class="right-tools">
+        <span>简体中文</span>
+        <span>X Atest</span>
+      </div>
+    </div>
+
+    <div class="tabs">
+      <button class="tab">身体成分</button>
+      <button class="tab">体态评估</button>
+      <button class="tab" onclick="window.location.href='body-circumference-compare-demo.html?v=20260921'">体围测量</button>
+      <button class="tab active">腰腹围度</button>
+    </div>
+
+    <div class="layout-scroll">
+      <main class="layout" id="mainLayout">
+      <section class="card current-card">
+        <div class="card-head">
+          <span class="title">腰腹围度当次数据</span>
+          <span>2026-04-15 19:54:04</span>
+        </div>
+        <div class="table-wrap" id="wrapCurrent">
+          <table>
+            <thead>
+              <tr>
+                <th>项目名称</th>
+                <th>当次值与变化</th>
+              </tr>
+            </thead>
+            <tbody id="currentRows"></tbody>
+          </table>
+        </div>
+      </section>
+
+      <section class="card">
+        <div class="card-head">
+          <span class="title">模型对比视图</span>
+          <span>中轴对照区</span>
+        </div>
+        <div class="model-center">
+          <div class="dual-models">
+            <div class="model-col current">
+              <div class="model-time" id="currentModelTime">当次模型 · 2026-04-15 19:54:04</div>
+              <div class="silhouette-area" id="currentSilhouette">
+                <div class="girth-lines pointer-on" id="girthLines" aria-label="围度线示意，可点击与列表联动"></div>
+                <div class="human current" id="currentHuman"><div class="head"></div></div>
+                <div class="ring current" id="currentRing"></div>
+              </div>
+            </div>
+            <div class="model-col history">
+              <div class="model-time" id="historyModelTime">
+                上次模型 · 2026-03-15 20:22:11
+                <div class="model-metric-hint" id="historyMetricHint">当前对比：高腰围</div>
+              </div>
+              <div class="silhouette-area" id="historySilhouette">
+                <div class="girth-lines pointer-on" id="historyGirthLines" aria-label="上次围度线示意，可联动高亮"></div>
+                <div class="human history" id="historyHuman"><div class="head"></div></div>
+                <div class="ring history" id="historyRing"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="card">
+        <div class="card-head">
+          <span class="title">腰腹围度上次数据</span>
+          <label class="time-switch" for="compareTimeSelect">
+            对比时间
+            <select id="compareTimeSelect"></select>
+          </label>
+        </div>
+        <div class="table-wrap" id="wrapHistory">
+          <table>
+            <thead>
+              <tr>
+                <th>项目名称</th>
+                <th id="historyHeader">上次值</th>
+              </tr>
+            </thead>
+            <tbody id="historyRows"></tbody>
+          </table>
+        </div>
+      </section>
+      </main>
+    </div>
+
+    <section class="waist-extensions">
+      <div class="waist-block">
+        <div class="waist-block-head">
+          <h3>轮廓分析</h3>
+          <div class="contour-legend" aria-label="轮廓图图例">
+            <span class="legend-item prev">上次</span>
+            <span class="legend-item current">本次</span>
+          </div>
+        </div>
+        <div class="waist-grid">
+          <table class="mini-table">
+            <thead>
+              <tr><th>项目名称</th><th>轮廓图</th><th>测量值</th></tr>
+            </thead>
+            <tbody id="contourLeftRows"></tbody>
+          </table>
+          <table class="mini-table">
+            <thead>
+              <tr><th>项目名称</th><th>轮廓图</th><th>测量值</th></tr>
+            </thead>
+            <tbody id="contourRightRows"></tbody>
+          </table>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <div id="aiModal" class="ai-modal" role="dialog" aria-modal="true" aria-labelledby="aiModalTitle" aria-hidden="true">
+    <div class="ai-modal__backdrop" id="aiModalBackdrop"></div>
+    <div class="ai-modal__panel">
+      <button type="button" class="ai-modal__close" id="aiModalClose" aria-label="关闭">×</button>
+      <h3 id="aiModalTitle">快速咨询 AI</h3>
+      <p id="aiModalContext"></p>
+      <button type="button" class="ai-modal__action" id="aiModalConfirm">开始对话（Demo）</button>
+    </div>
+  </div>
+
+  <div id="metricExplain" class="metric-explain" aria-hidden="true">
+    <button type="button" class="metric-explain-close" id="metricExplainClose" aria-label="关闭说明">×</button>
+    <h4 id="metricExplainTitle">指标说明</h4>
+    <p id="metricExplainText"></p>
+  </div>
+
+  <script>
+    const currentTime = "2026-04-15 19:54:04";
+
+    const currentMetrics = [
+      { name: "高腰围", current: 42.1, unit: "in" },
+      { name: "高腰中线", current: 42.3, unit: "in" },
+      { name: "高腰下线", current: 42.2, unit: "in" },
+      { name: "低腰上线", current: 39.9, unit: "in" },
+      { name: "低腰中线", current: 42.4, unit: "in" },
+      { name: "低腰围", current: 42.7, unit: "in" },
+      { name: "腰臀比", current: 0.99, unit: "" },
+      { name: "右腰上段体积", current: 99.0, unit: "in³" },
+      { name: "高腰下段体积", current: 100.7, unit: "in³" },
+      { name: "中腰部体积", current: 103.0, unit: "in³" },
+      { name: "低腰上段体积", current: 105.5, unit: "in³" },
+      { name: "低腰下段体积", current: 108.3, unit: "in³" },
+      { name: "背部体积", current: 106.7, unit: "in³" },
+      { name: "臀围", current: 16.8, unit: "in" }
+    ];
+
+    /** 与列表行索引一一对应：围度线在模型上的垂直位置（%） */
+    const METRIC_LINE_TOP_PCT = [10, 17, 21, 28, 36, 42, 48, 54, 62, 68, 76, 82, 86, 90];
+
+    const historyMeasurements = [
+      {
+        time: "2026-03-15 20:22:11",
+        values: [41.8, 42.0, 41.9, 39.6, 42.1, 42.4, 1.00, 98.4, 100.1, 102.3, 104.9, 107.8, 105.9, 16.5]
+      },
+      {
+        time: "2026-02-24 18:40:35",
+        values: [41.5, 41.7, 41.6, 39.2, 41.8, 42.0, 1.01, 97.7, 99.4, 101.6, 104.1, 106.9, 105.1, 16.2]
+      },
+      {
+        time: "2026-01-30 21:13:06",
+        values: [41.2, 41.4, 41.3, 38.9, 41.5, 41.7, 1.02, 96.9, 98.6, 100.8, 103.4, 106.1, 104.5, 15.9]
+      }
+    ];
+
+    function formatValue(item, value) {
+      if (item.name === "腰臀比") return value.toFixed(2);
+      return value.toFixed(1);
+    }
+
+    function getMetricByName(name) {
+      return currentMetrics.find((m) => m.name === name);
+    }
+
+    function outlineSvg(currentValue, prevValue) {
+      const base = [
+        [5, 10], [12, 5], [24, 4], [37, 9], [40, 15], [30, 22], [16, 23], [6, 18]
+      ];
+      const cx = 23;
+      const cy = 13;
+      const baseline = (currentValue + prevValue) / 2 || 1;
+      const curRatio = clamp(currentValue / baseline, 0.92, 1.08);
+      const prevRatio = clamp(prevValue / baseline, 0.92, 1.08);
+
+      const toPath = (pts) => pts.map((p, i) => `${i === 0 ? "M" : "L"}${p[0].toFixed(2)} ${p[1].toFixed(2)}`).join(" ") + " Z";
+      const curPath = toPath(base.map(([x, y]) => [cx + (x - cx) * curRatio, cy + (y - cy) * curRatio]));
+      const prevPath = toPath(base.map(([x, y]) => [cx + (x - cx) * prevRatio, cy + (y - cy) * prevRatio]));
+
+      return `
+        <svg class="outline-svg" viewBox="0 0 46 26" aria-hidden="true">
+          <path class="outline-path outline-path--prev" d="${prevPath}" />
+          <path class="outline-path outline-path--cur" d="${curPath}" />
+        </svg>
+      `;
+    }
+
+    function renderContourRows() {
+      const selected = historyMeasurements[selectedHistoryIndex] || historyMeasurements[0];
+      contourLeftRows.innerHTML = contourLeftNames.map((name) => {
+        const metric = getMetricByName(name);
+        const idx = currentMetrics.findIndex((m) => m.name === name);
+        const prev = selected.values[idx];
+        return `
+          <tr>
+            <td>${name}</td>
+            <td>
+              <div class="outline-cell">
+                <div class="outline-meta">后<br/>前</div>
+                ${outlineSvg(metric.current, prev)}
+              </div>
+            </td>
+            <td class="value">
+              <span class="contour-value-prev">上次: ${formatValue(metric, prev)} ${metric.unit}</span>
+              <span class="contour-value-current">本次: ${formatValue(metric, metric.current)} ${metric.unit}</span>
+            </td>
+          </tr>
+        `;
+      }).join("");
+
+      contourRightRows.innerHTML = contourRightNames.map((name) => {
+        const metric = getMetricByName(name);
+        const idx = currentMetrics.findIndex((m) => m.name === name);
+        const prev = selected.values[idx];
+        return `
+          <tr>
+            <td>${name}</td>
+            <td>
+              <div class="outline-cell">
+                <div class="outline-meta">后<br/>前</div>
+                ${outlineSvg(metric.current, prev)}
+              </div>
+            </td>
+            <td class="value">
+              <span class="contour-value-prev">上次: ${formatValue(metric, prev)} ${metric.unit}</span>
+              <span class="contour-value-current">本次: ${formatValue(metric, metric.current)} ${metric.unit}</span>
+            </td>
+          </tr>
+        `;
+      }).join("");
+    }
+
+    const currentRows = document.getElementById("currentRows");
+    const historyRows = document.getElementById("historyRows");
+    const compareTimeSelect = document.getElementById("compareTimeSelect");
+    const historyHeader = document.getElementById("historyHeader");
+    const historyModelTime = document.getElementById("historyModelTime");
+    const root = document.documentElement;
+    const girthLinesEl = document.getElementById("girthLines");
+    const historyGirthLinesEl = document.getElementById("historyGirthLines");
+    const wrapCurrent = document.getElementById("wrapCurrent");
+    const wrapHistory = document.getElementById("wrapHistory");
+    const aiModal = document.getElementById("aiModal");
+    const aiModalContext = document.getElementById("aiModalContext");
+    const aiModalBackdrop = document.getElementById("aiModalBackdrop");
+    const aiModalClose = document.getElementById("aiModalClose");
+    const aiModalConfirm = document.getElementById("aiModalConfirm");
+    const historyMetricHint = document.getElementById("historyMetricHint");
+    const contourLeftRows = document.getElementById("contourLeftRows");
+    const contourRightRows = document.getElementById("contourRightRows");
+    const metricExplain = document.getElementById("metricExplain");
+    const metricExplainTitle = document.getElementById("metricExplainTitle");
+    const metricExplainText = document.getElementById("metricExplainText");
+    const metricExplainClose = document.getElementById("metricExplainClose");
+
+    let selectedHistoryIndex = 0;
+    let hoverMetricIdx = null;
+    let selectedMetricIdx = null;
+    let activeTrendMetricIdx = null;
+
+    const contourLeftNames = ["高腰围", "高腰中线", "高腰下线"];
+    const contourRightNames = ["低腰上线", "低腰中线", "低腰围"];
+    const metricExplainMap = {
+      "高腰围": "高腰围用于评估上腹区域围度变化，常用于观察腰腹脂肪分布趋势。",
+      "高腰中线": "高腰中线反映上腹中部围度变化，可辅助判断腰腹线条紧实度。",
+      "高腰下线": "高腰下线用于观察上腹向腰部过渡区变化，适合跟踪训练效果。",
+      "低腰上线": "低腰上线反映腰部上缘围度，通常与核心控制和腹压变化相关。",
+      "低腰中线": "低腰中线是腰腹核心带关键指标，适合做阶段性围度对比。",
+      "低腰围": "低腰围用于衡量下腹与髂嵴周边围度，是腰腹管理核心指标。",
+      "腰臀比": "腰臀比用于评估腰腹与臀围比例结构，值越接近合理区间代表体型分布更平衡。",
+      "右腰上段体积": "右腰上段体积反映右侧上腹体积分布变化，常用于左右平衡观察。",
+      "高腰下段体积": "高腰下段体积用于评估上腹下缘体积变化，适合配合围度趋势分析。",
+      "中腰部体积": "中腰部体积反映腰部核心区域总体体积变化，是重点对比指标。",
+      "低腰上段体积": "低腰上段体积用于观察腰下区域体积变化，适合训练周期跟踪。",
+      "低腰下段体积": "低腰下段体积反映下腹与骨盆上缘区域变化，可辅助动作计划调整。",
+      "背部体积": "背部体积用于观察背侧躯干厚度和体积分布变化，可辅助评估整体体态与训练效果。",
+      "臀围": "臀围用于衡量臀部围度变化，常与腰围、腰臀比联合评估体型趋势。"
+    };
+
+    function deltaPill(item, delta) {
+      const abs = Math.abs(delta);
+      const text = delta > 0 ? `+${formatValue(item, abs)}` : delta < 0 ? `-${formatValue(item, abs)}` : "0";
+      const cls = delta > 0 ? "up" : delta < 0 ? "down" : "flat";
+      const unitText = item.unit ? ` ${item.unit}` : "";
+      return `<span class="delta-pill ${cls}">${text}${unitText}</span>`;
+    }
+
+    function clamp(n, min, max) {
+      return Math.min(max, Math.max(min, n));
+    }
+
+    function getTrendSeries(metricIdx) {
+      const history = historyMeasurements
+        .map((r) => ({ date: r.time.slice(5, 10).replace("-", "/"), value: r.values[metricIdx] }))
+        .reverse();
+      history.push({ date: currentTime.slice(5, 10).replace("-", "/"), value: currentMetrics[metricIdx].current });
+      return history;
+    }
+
+    function buildTrendInline(metricIdx) {
+      const metricName = currentMetrics[metricIdx].name;
+      const series = getTrendSeries(metricIdx);
+      const values = series.map((d) => d.value);
+      const min = Math.min(...values);
+      const max = Math.max(...values);
+      const span = Math.max(max - min, 0.5);
+      const width = 680;
+      const height = 130;
+      const padding = { x: 20, y: 14 };
+      const innerW = width - padding.x * 2;
+      const innerH = height - padding.y * 2;
+
+      const points = series.map((d, i) => {
+        const x = padding.x + (innerW * i) / (series.length - 1 || 1);
+        const y = padding.y + innerH - ((d.value - min) / span) * innerH;
+        return { x, y, ...d };
+      });
+
+      const linePath = points.map((p, i) => `${i === 0 ? "M" : "L"}${p.x.toFixed(2)} ${p.y.toFixed(2)}`).join(" ");
+      const areaPath = `${linePath} L ${points[points.length - 1].x.toFixed(2)} ${(padding.y + innerH).toFixed(2)} L ${points[0].x.toFixed(2)} ${(padding.y + innerH).toFixed(2)} Z`;
+
+      return `
+        <div class="trend-inline">
+          <div class="trend-inline-head">
+            <span>${metricName} 趋势变化</span>
+            <button type="button" class="trend-inline-close" data-metric-idx="${metricIdx}" aria-label="关闭趋势">×</button>
+          </div>
+          <div class="trend-inline-wrap">
+            <svg class="trend-chart" viewBox="0 0 680 130" preserveAspectRatio="none" aria-label="历史测量趋势图">
+              <defs>
+                <linearGradient id="trendFill-${metricIdx}" x1="0" x2="0" y1="0" y2="1">
+                  <stop offset="0%" stop-color="#74b8ff" stop-opacity="0.35"/>
+                  <stop offset="100%" stop-color="#74b8ff" stop-opacity="0"/>
+                </linearGradient>
+              </defs>
+              <line x1="${padding.x}" y1="${padding.y + innerH}" x2="${width - padding.x}" y2="${padding.y + innerH}" stroke="#e8eef7" stroke-width="1"/>
+              <line x1="${padding.x}" y1="${padding.y + innerH * 0.55}" x2="${width - padding.x}" y2="${padding.y + innerH * 0.55}" stroke="#edf2f8" stroke-width="1"/>
+              <path d="${areaPath}" fill="url(#trendFill-${metricIdx})"></path>
+              <path d="${linePath}" fill="none" stroke="#2563eb" stroke-width="2.5"></path>
+              ${points.map((p) => `<circle cx="${p.x}" cy="${p.y}" r="3.5" fill="#fff" stroke="#2563eb" stroke-width="2"/>`).join("")}
+              <text x="${points[points.length - 1].x}" y="${points[points.length - 1].y - 8}" text-anchor="middle" fill="#5d6c80" font-size="12">${points[points.length - 1].value.toFixed(1)}</text>
+            </svg>
+            <div class="trend-axis-labels">${series.map((d) => `<span>${d.date}</span>`).join("")}</div>
+          </div>
+        </div>
+      `;
+    }
+
+    function closeTrendPanel() {
+      activeTrendMetricIdx = null;
+      refreshCurrentTable();
+    }
+
+    function openMetricExplain(name, x, y) {
+      metricExplainTitle.textContent = name;
+      metricExplainText.textContent = metricExplainMap[name] || "该指标用于反映腰腹局部围度与体积变化，请结合趋势与对比结果综合判断。";
+      metricExplain.classList.add("is-open");
+      metricExplain.setAttribute("aria-hidden", "false");
+      const vw = window.innerWidth;
+      const vh = window.innerHeight;
+      const boxW = 280;
+      const boxH = 160;
+      const left = Math.min(vw - boxW - 12, Math.max(12, x + 12));
+      const top = Math.min(vh - boxH - 12, Math.max(12, y + 12));
+      metricExplain.style.left = `${left}px`;
+      metricExplain.style.top = `${top}px`;
+    }
+
+    function closeMetricExplain() {
+      metricExplain.classList.remove("is-open");
+      metricExplain.setAttribute("aria-hidden", "true");
+    }
+
+    function applyModelVisuals(selected, metricIdx = null) {
+      const focusIdx = metricIdx ?? 0;
+      const currentValue = currentMetrics[focusIdx]?.current ?? 0;
+      const historyValue = selected.values[focusIdx] ?? 0;
+      const delta = currentValue - historyValue;
+
+      const currentScale = clamp(1 + delta * 0.008, 0.92, 1.1);
+      const historyScale = clamp(1 - delta * 0.006, 0.9, 1.08);
+      const currentWaistRing = clamp(1 + delta * 0.02, 0.84, 1.14);
+      const historyWaistRing = clamp(1 - delta * 0.016, 0.82, 1.12);
+
+      root.style.setProperty("--current-scale", String(currentScale));
+      root.style.setProperty("--history-scale", String(historyScale));
+      root.style.setProperty("--current-waist", String(currentWaistRing));
+      root.style.setProperty("--history-waist", String(historyWaistRing));
+
+      const metric = currentMetrics[focusIdx];
+      if (metric && historyMetricHint) {
+        historyMetricHint.textContent = `当前对比：${metric.name}（上次 ${formatValue(metric, historyValue)}${metric.unit ? " " + metric.unit : ""}）`;
+      }
+    }
+
+    function buildGirthLines() {
+      const linesHtml = METRIC_LINE_TOP_PCT.map((top, idx) =>
+        `<button type="button" class="girth-line" data-metric-idx="${idx}" style="top:${top}%" aria-label="${currentMetrics[idx].name}围度线"></button>`
+      ).join("");
+      girthLinesEl.innerHTML = linesHtml;
+      historyGirthLinesEl.innerHTML = linesHtml;
+
+      const bindLines = (host) => {
+        host.querySelectorAll(".girth-line").forEach((btn) => {
+          btn.addEventListener("mouseenter", () => {
+            hoverMetricIdx = Number(btn.dataset.metricIdx);
+            syncInteractionVisuals();
+          });
+          btn.addEventListener("mouseleave", () => {
+            hoverMetricIdx = null;
+            syncInteractionVisuals();
+          });
+          btn.addEventListener("click", (e) => {
+            e.stopPropagation();
+            const i = Number(btn.dataset.metricIdx);
+            selectedMetricIdx = i;
+            pulseLine(i);
+            syncInteractionVisuals();
+            scrollRowIntoView(i);
+            applyModelVisuals(historyMeasurements[selectedHistoryIndex], i);
+          });
+        });
+      };
+      bindLines(girthLinesEl);
+      bindLines(historyGirthLinesEl);
+    }
+
+    function pulseLine(idx) {
+      const lineA = girthLinesEl.querySelector(`.girth-line[data-metric-idx="${idx}"]`);
+      const lineB = historyGirthLinesEl.querySelector(`.girth-line[data-metric-idx="${idx}"]`);
+      [lineA, lineB].forEach((line) => {
+        if (!line) return;
+        line.classList.remove("pulse-once");
+        void line.offsetWidth;
+        line.classList.add("pulse-once");
+        setTimeout(() => line.classList.remove("pulse-once"), 220);
+      });
+    }
+
+    function syncInteractionVisuals() {
+      const lines = [...girthLinesEl.querySelectorAll(".girth-line"), ...historyGirthLinesEl.querySelectorAll(".girth-line")];
+      const activeHover = hoverMetricIdx;
+      const activeSel = selectedMetricIdx;
+
+      lines.forEach((line) => {
+        const i = Number(line.dataset.metricIdx);
+        line.classList.remove("dim", "is-hover", "is-selected");
+        if (activeHover !== null) {
+          if (i !== activeHover) line.classList.add("dim");
+          else line.classList.add("is-hover");
+        } else if (activeSel !== null) {
+          if (i !== activeSel) line.classList.add("dim");
+          else line.classList.add("is-selected");
+        }
+      });
+
+      document.querySelectorAll("tr.metric-row").forEach((row) => {
+        const i = Number(row.dataset.metricIdx);
+        row.classList.toggle("is-hover", activeHover !== null && i === activeHover);
+        row.classList.toggle("is-selected", activeSel !== null && i === activeSel);
+      });
+      document.querySelectorAll("tr.metric-row-history").forEach((row) => {
+        const i = Number(row.dataset.metricIdx);
+        row.classList.toggle("is-hover", activeHover !== null && i === activeHover);
+        row.classList.toggle("is-selected", activeSel !== null && i === activeSel);
+      });
+    }
+
+    function scrollRowIntoView(idx) {
+      const cur = document.querySelector(`tr.metric-row[data-metric-idx="${idx}"]`);
+      const hist = document.querySelector(`tr.metric-row-history[data-metric-idx="${idx}"]`);
+      cur?.scrollIntoView({ behavior: "smooth", block: "nearest" });
+      hist?.scrollIntoView({ behavior: "smooth", block: "nearest" });
+    }
+
+    function openAiModal(metricIdx) {
+      const item = currentMetrics[metricIdx];
+      const sel = historyMeasurements[selectedHistoryIndex];
+      const prev = sel.values[metricIdx];
+      const delta = item.current - prev;
+      const deltaStr = delta > 0 ? `+${formatValue(item, delta)}` : formatValue(item, delta);
+      const unitText = item.unit ? ` ${item.unit}` : "";
+      aiModalContext.innerHTML =
+        `当前项目：<strong>${item.name}</strong><br/>` +
+        `当次：<strong>${formatValue(item, item.current)}${unitText}</strong>（对比上次 ${formatValue(item, prev)}${unitText}，变化 ${deltaStr}${unitText}）<br/>` +
+        `可将以上数据作为上下文发送至 AI 进行解读与建议。`;
+      aiModal.classList.add("is-open");
+      aiModal.setAttribute("aria-hidden", "false");
+    }
+
+    function closeAiModal() {
+      aiModal.classList.remove("is-open");
+      aiModal.setAttribute("aria-hidden", "true");
+    }
+
+    function bindTableRowInteractions() {
+      function bindRows(selector, isHistory) {
+        document.querySelectorAll(selector).forEach((row) => {
+          row.tabIndex = 0;
+          row.addEventListener('keydown', (e) => {
+            if (e.target !== row || !['Enter', ' '].includes(e.key)) return;
+            e.preventDefault();
+            row.click();
+          });
+          row.addEventListener("mouseenter", () => {
+            hoverMetricIdx = Number(row.dataset.metricIdx);
+            syncInteractionVisuals();
+          });
+          row.addEventListener("mouseleave", () => {
+            hoverMetricIdx = null;
+            syncInteractionVisuals();
+          });
+          row.addEventListener("click", (e) => {
+            if (e.target.closest(".ai-btn") || e.target.closest(".trend-btn")) return;
+            const i = Number(row.dataset.metricIdx);
+            selectedMetricIdx = i;
+            pulseLine(i);
+            syncInteractionVisuals();
+            applyModelVisuals(historyMeasurements[selectedHistoryIndex], i);
+          });
+        });
+      }
+      bindRows("tr.metric-row", false);
+      bindRows("tr.metric-row-history", true);
+
+      document.querySelectorAll(".ai-btn").forEach((btn) => {
+        btn.addEventListener("click", (e) => {
+          e.stopPropagation();
+          const idx = Number(btn.dataset.metricIdx);
+          openAiModal(idx);
+        });
+      });
+
+      document.querySelectorAll(".info-dot").forEach((dot) => {
+        dot.addEventListener("click", (e) => {
+          e.stopPropagation();
+          const idx = Number(dot.dataset.metricIdx);
+          const metric = currentMetrics[idx];
+          if (metric) openMetricExplain(metric.name, e.clientX, e.clientY);
+        });
+      });
+
+      document.querySelectorAll(".trend-btn").forEach((btn) => {
+        btn.addEventListener("click", (e) => {
+          e.stopPropagation();
+          const idx = Number(btn.dataset.metricIdx);
+          if (activeTrendMetricIdx === idx) {
+            closeTrendPanel();
+          } else {
+            activeTrendMetricIdx = idx;
+            refreshCurrentTable();
+          }
+        });
+      });
+
+      document.querySelectorAll(".trend-inline-close").forEach((btn) => {
+        btn.addEventListener("click", (e) => {
+          e.stopPropagation();
+          closeTrendPanel();
+        });
+      });
+    }
+
+    function renderCurrentTable(selected) {
+      currentRows.innerHTML = currentMetrics.map((item, idx) => {
+        const previousValue = selected.values[idx];
+        const delta = item.current - previousValue;
+        const trendRow = activeTrendMetricIdx === idx ? `
+          <tr class="trend-inline-row">
+            <td colspan="2">${buildTrendInline(idx)}</td>
+          </tr>
+        ` : "";
+        return `
+        <tr class="metric-row" data-metric-idx="${idx}">
+          <td>
+            <div class="row-label">
+              <button type="button" class="ai-btn is-float" data-metric-idx="${idx}">快速咨询 AI</button>
+              <span>${item.name}</span>
+              <button type="button" class="info-dot" data-metric-idx="${idx}" aria-label="${item.name}指标解释">i</button>
+            </div>
+          </td>
+          <td class="cell-delta cell-with-ai">
+            <span class="value-block">
+              <span class="value-current">${formatValue(item, item.current)}</span><span class="unit">${item.unit}</span>
+              ${deltaPill(item, delta)}
+            </span>
+            <button type="button" class="trend-btn ${activeTrendMetricIdx === idx ? "is-active" : ""}" data-metric-idx="${idx}" title="查看历史趋势">↗</button>
+          </td>
+        </tr>
+        ${trendRow}
+      `;
+      }).join("");
+    }
+
+    function refreshCurrentTable() {
+      const selected = historyMeasurements[selectedHistoryIndex];
+      renderCurrentTable(selected);
+      bindTableRowInteractions();
+      syncInteractionVisuals();
+    }
+
+    function renderHistoryAndSummary(historyIndex) {
+      selectedHistoryIndex = historyIndex;
+      hoverMetricIdx = null;
+      if (selectedMetricIdx === null) selectedMetricIdx = 0;
+      const selected = historyMeasurements[historyIndex];
+      historyHeader.textContent = `上次值（${selected.time}）`;
+
+      historyRows.innerHTML = currentMetrics.map((item, idx) => {
+        const value = selected.values[idx];
+        return `
+          <tr class="metric-row-history" data-metric-idx="${idx}">
+            <td>${item.name}</td>
+            <td><span class="value-history">${formatValue(item, value)}</span><span class="unit">${item.unit}</span></td>
+          </tr>
+        `;
+      }).join("");
+
+      historyModelTime.textContent = `上次模型 · ${selected.time}`;
+
+      renderCurrentTable(selected);
+      applyModelVisuals(selected, selectedMetricIdx);
+      buildGirthLines();
+      bindTableRowInteractions();
+      syncInteractionVisuals();
+      renderContourRows();
+    }
+
+    compareTimeSelect.innerHTML = historyMeasurements
+      .map((record, idx) => `<option value="${idx}">${record.time}</option>`)
+      .join("");
+
+    compareTimeSelect.addEventListener("change", (event) => {
+      renderHistoryAndSummary(Number(event.target.value));
+    });
+
+    aiModalBackdrop.addEventListener("click", closeAiModal);
+    aiModalClose.addEventListener("click", closeAiModal);
+    aiModalConfirm.addEventListener("click", closeAiModal);
+    metricExplainClose.addEventListener("click", closeMetricExplain);
+
+    document.addEventListener("keydown", (e) => {
+      if (e.key === "Escape" && aiModal.classList.contains("is-open")) closeAiModal();
+      if (e.key === "Escape" && metricExplain.classList.contains("is-open")) closeMetricExplain();
+    });
+
+    document.addEventListener("click", (e) => {
+      if (metricExplain.classList.contains("is-open") && !e.target.closest("#metricExplain") && !e.target.closest(".info-dot")) {
+        closeMetricExplain();
+      }
+    });
+
+    renderHistoryAndSummary(0);
+  </script>
+</body>
+</html>
