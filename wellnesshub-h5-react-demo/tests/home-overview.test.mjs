@@ -5,7 +5,9 @@ import { stripTypeScriptTypes } from 'node:module';
 
 // Exercise the exact app-owned domain functions, not a second implementation.
 const source = readFileSync(new URL('../src/Prototype.tsx', import.meta.url), 'utf8');
-const domain = source.split('// HOME_DOMAIN_START')[1].split('// HOME_DOMAIN_END')[0];
+// UI count-up was added inside the old domain boundary in v0.2.3.
+// Exclude that React component, while still exercising the actual pure functions.
+const domain = source.split('// HOME_DOMAIN_START')[1].split('// HOME_DOMAIN_END')[0].replace(/function ScoreCountUp[\s\S]*?(?=function resolveServiceSummary)/, '');
 const run = code => new Function('return ' + stripTypeScriptTypes('(function(){' + code + '\n})()', { mode: 'strip' }))();
 const { buildHomeOverview, homeMetricValue, homeServiceSummary, isHomeServiceResult, homeModelAsset, previewServiceTypes } = run(domain + '\nreturn { buildHomeOverview, homeMetricValue, homeServiceSummary, isHomeServiceResult, homeModelAsset, previewServiceTypes };');
 const reports = run(source.slice(source.indexOf('const modules: ReportModule[]'), source.indexOf('const highlights =')) + '\nreturn seed;');
@@ -16,11 +18,11 @@ test('uses measurement time, not array order, without mutating records',()=>{
   const input=[reports[2],reports[0],reports[1]]; const overview=buildHomeOverview(input);
   assert.equal(overview.latest.id,reports[0].id); assert.equal(input[0].id,reports[2].id);
 });
-test('trend nodes come from the three reports, never the old seven-day series',()=>{
+test('trend nodes come from the seven latest comparable report batches',()=>{
   const o=buildHomeOverview(reports);
-  assert.deepEqual(o.trends.score.map(p=>p.value),[76,79,82]);
+  assert.deepEqual(o.trends.score.map(p=>p.value),[68,70,72,74,76,79,82]);
   assert.deepEqual(o.trends.score.map(p=>p.measuredAt),reports.slice().reverse().map(r=>r.date));
-  assert.deepEqual(o.trends.fat.map(p=>p.value),[42.1,42.1,42.1]);
+  assert.deepEqual(o.trends.fat.map(p=>p.value),[45.1,44.5,44,43.6,43,42.5,42.1]);
   assert.equal(o.trends.weight.at(-1).value,72.8);
 });
 test('empty and deleted reports do not fall back to seed data',()=>{
@@ -41,7 +43,21 @@ test('device and metric-definition changes are not connected',()=>{
   assert.equal(buildHomeOverview([reports[0],changed,algorithm]).trends.score.length,1);
 });
 test('invalid dates are ignored',()=>assert.equal(buildHomeOverview([{...reports[0],date:'invalid'}]).latest,undefined));
-test('top three priorities come from measured statuses in stable order',()=>assert.deepEqual(buildHomeOverview(reports).concerns.map(m=>m.id),['composition','neck','spine']));
+test('top three priorities put higher-risk findings before lower-risk new findings',()=>assert.deepEqual(buildHomeOverview(reports).concerns.map(m=>m.id),['composition','neck','spine']));
+test('window and module coverage use actual batches without filling missing modules',()=>{
+  const o=buildHomeOverview(reports);
+  assert.equal(o.window.length,7);
+  assert.equal(o.coverage.find(item=>item.moduleId==='composition').measuredBatchCount,7);
+  assert.equal(o.coverage.find(item=>item.moduleId==='balance').measuredBatchCount,4);
+  assert.equal(o.coverage.find(item=>item.moduleId==='hip').measuredBatchCount,2);
+});
+test('longitudinal finding states respect the three-record persistence threshold',()=>{
+  const o=buildHomeOverview(reports);
+  assert.equal(o.findings.find(item=>item.module.id==='composition').state,'persistent');
+  assert.equal(o.findings.find(item=>item.module.id==='balance').state,'new');
+  assert.equal(o.findings.find(item=>item.module.id==='posture').state,'improved');
+  assert.notEqual(buildHomeOverview(reports.slice(0,2)).findings.find(item=>item.module.id==='composition').state,'persistent');
+});
 test('model belongs to the known measurement and supports missing model',()=>{
   assert.ok(homeModelAsset(reports[0])); assert.equal(homeModelAsset(reports[1]),undefined);
   assert.equal(homeModelAsset({...reports[0],modelAsset:null}),undefined);
@@ -68,6 +84,10 @@ test('four preview scenarios expose only their declared service results',()=>{
 test('historical services preserve their source report',()=>{
   const result=ai(reports[1].id), summary=homeServiceSummary('ai',buildHomeOverview(reports),[result]);
   assert.equal(summary.state,'historical'); assert.equal(summary.report.id,reports[1].id);
+});
+test('training remains a current user service when its source report is historical',()=>{
+  const result=training(reports[1].id), summary=homeServiceSummary('training',buildHomeOverview(reports),[result]);
+  assert.equal(summary.state,'available'); assert.equal(summary.report.id,reports[1].id);
 });
 test('current report service wins over a later-generated historical result',()=>{
   const old={...ai(reports[1].id),generatedAt:'2026-09-01 09:00'};

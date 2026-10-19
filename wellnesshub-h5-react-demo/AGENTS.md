@@ -1,5 +1,11 @@
 # Mobile Prototype Agent Guide
 
+## Project memory
+
+- 每次项目对话开始前读取本目录 `PROJECT_MEMORY.md`，结合用户最新要求继续工作。
+- 每次回复结束前更新该文件中的当前状态、决策或交流日志；纯讨论也记录结论，无实质变化时记录简短状态。记录实际完成与验证范围，不将计划写成完成。
+- 保留重要决定的历史，注明被取代的规则；禁止写入凭据、令牌或真实个人健康数据。此要求适用于在本工程上下文中的后续对话。
+
 ## Prototype Instructions
 
 In ChatGPT Work Mode, run `sites-preview start "$PWD"`, open `http://terminal.local:4173/` in the cloud browser, and verify the rendered app and its primary interactions. Keep that preview open and tell the user to inspect it in the cloud browser; do not present the local URL as a user-facing chat link. In Codex Desktop, run the local server yourself, open the preview in the in-app browser, and provide the clickable local URL. Do not deploy to Sites unless the user explicitly asks to share, publish, or deploy. Do not give the user server-start instructions when you can run it.
@@ -47,6 +53,22 @@ See `src/mobile/COMPONENTS.md` for the full component and gesture contract.
 
 ## WellnessHub H5 durable design decisions
 
+- v0.2.13 国内手机号绑定页与固定登录页共用 ChinaLogin，沿用海外 auth-page/login-page 的布局、品牌、Prefs、字段与按钮样式。绑定页不使用详情页固定标题栏，返回微信授权置于表单辅助区；保留绑定操作及原报告跳转语义。
+
+- v0.2.14 homepage interaction plan is confirmed and implemented: every summary count opens a matching filtered stage-findings detail page with traceable measurement evidence; label counts as modules. Keep only one interactive metric-trend section. The main Demo shows both AI and training generated through in-memory fixtures, without on-page service-state debugging controls; never persist these as personal service results. Shape comparison uses two explicitly simulated geometries derived from one asset, not two real scans; support synchronized rotation, overlay, date selection and view controls. Retain meaningful entry, selection, detail and 3D transitions, reduced-motion support, and return-state restoration. Existing isolated service preview routes remain available.
+
+- v0.2.11 homepage is a longitudinal body-status overview, not a thumbnail of the latest report. Fixed entry and ordinary sign-in open the homepage; device scan, measurement completion, and report notifications open their bound report. The homepage defaults to the latest seven valid batches in the latest device/comparison stream, shows the real date span and module coverage, and treats missing measurements as unknown rather than normal. Metric trends use each metric's latest seven comparable observations. AI remains report-bound; training is the user's current service and does not depend on AI. Keep the latest report as a secondary end-of-page entry and do not restore the user's name, one-off score, large current 3D model, or latest-report finding summary to the first screen.
+
+- v0.2.10 国内微信流程遵循“登录前分流、身份确认后合流”。新用户扫码后仅静默识别、关注公众号并从报告生成通知进入授权/手机号绑定；已绑定微信的老用户有两条并行路径：扫码后立即打开本次报告（未合成时显示等待页，完成后自动打开），且报告合成成功时同时发送公众号通知，供退出后的独立回看。老用户的两条路径均绝不重复展示微信授权、手机号绑定或中间识别页。国内固定链接复用海外登录版式，手机号验证码为主、微信为第三方入口，非微信环境仅保留手机号。国内身份确认后必须进入标准 UserPrototype，禁止再渲染国内专属报告壳或游客只读壳。所谓“恢复已绑定账号登录态”只指服务端复用/签发同一既有账号的 H5 会话，绝非新建用户账号。
+
+- v0.2.12 国内扫码与通知页仅能在微信内打开；非微信环境不得展示或推断报告内容，只提示回微信打开。新用户关注后，报告未生成时必须显示可恢复的“已关注公众号”状态页；报告生成后以通知承接授权/绑定。通知发送失败不能阻断已绑定老用户的扫码查看，只能进入标准首页作为 Demo 兜底；真实系统由服务端重试和报告列表回看。通知正文仅可显示报告生成、机构与时间，不能泄露健康结论或数值。所有扫码/通知访问必须由服务端按报告范围、接收微信身份、有效期和撤销状态校验，禁止以 reportId 作为凭证。
+
+- v0.2.6 guest entry is a full-width secondary button with the same 48px height and 9px radius as the primary sign-in button. Center the label「游客模式」, use a hairline border and brand-blue text, and do not restore the icon tile, chevron, or card shadow. The login page does not show the local Demo notice, the persistent scan instruction, or the exit-guest button. A missing scan still reports in the form error slot when the button is pressed. Report pages may keep the exit action.
+
+- v0.2.4 guest entry shows title only, no subtitle. Guest basic profile has no Mock footer or exit action; keep its back navigation. Put age/height ranges in the corresponding input placeholders and show localized field errors only for invalid input, retaining disabled submit until all required data is valid.
+
+- v0.2.3 guest access supersedes sample-data browsing: device scan → login → required age (10–99), gender and height (100–230 cm) → the QR-bound report. Never auto-bind a report when scan context is missing. Guests have an isolated, tab-scoped sessionStorage context; do not modify registered-user data or session. Generated AI and training are independent, permission-checked read-only services; hide history, personal navigation and all write/share actions. Public Mock QR examples are not production credentials; real access checks and calculations must be server-side.
+
 - v0.2 original-version homepage uses: latest measured overview with first-screen 3D → independent AI/training services → up to three measured concerns with expandable positive findings → one four-metric trend chart. This supersedes the old homepage's repeated report/insight/outline lists; do not import the 童允强-version layout.
 - Homepage values and dates must come from the user's report collection. Do not substitute profile weight, fabricate trend days, or repopulate deleted reports. Compare only the same device and metric definition.
 - AI interpretation and training are independent services. A global Demo outline is not a personal generated result. Only validated content linked to an existing report may appear as ready; identify historical content explicitly. Health profiles are not equivalent to basic height/weight profile fields.
@@ -60,7 +82,7 @@ See `src/mobile/COMPONENTS.md` for the full component and gesture contract.
 - v0.2.1 preview routes are read-only in-memory fixtures under `#/preview/{none|ai|training|both}`. They may read locale/theme preferences but must never mount personal reports, profile, service-result or session storage, and must preserve the preview scenario through detail navigation.
 - Homepage 3D models auto-rotate at roughly 30 seconds per revolution. Pause during interaction, offscreen and while the tab is hidden; resume three seconds after interaction unless the user explicitly paused. Respect reduced-motion as the initial paused state.
 - Key section titles use semantic library icons, never oversized/decorative SVGs. Chart styling must target chart classes, not every nested SVG. Both themes must use readable semantic colors throughout all routes.
-- Keep the complete default login surface—including social login, guest mode, and the Demo notice—visible within one phone viewport without requiring vertical scrolling.
+- Keep the complete default login surface—including social login and guest mode—visible within one phone viewport without requiring vertical scrolling. Do not put the local Demo notice or the exit-guest button back on the login page.
 - Use one primary action per authentication screen. Authentication titles are 20px, body/input copy is 14px, labels/help text are 12px, and no legal or Demo copy may be smaller than 11px. Inputs and primary buttons are 48px high with 12px radii.
 - v0.2.2: both phone screens place the same blue outlined email-code return after account creation and before the social divider. Email-password places its icon-only ellipsis in that channel region, never beside forgot-password. Email-code has no phone entry. Password screens keep credential switching at logical start and forgot-password at logical end; code screens reserve an empty end column. Hide the keyboard on mode changes and retain the muted phone-code entry.
 - Registration defaults to email, keeps phone registration as a secondary segment, and enables submission only after nickname, account, code, password, and consent are valid. A newly registered user must begin the first-profile screen with required identity fields empty.
