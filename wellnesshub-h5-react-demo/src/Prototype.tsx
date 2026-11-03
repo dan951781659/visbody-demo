@@ -10,6 +10,7 @@ import {
   type ReactNode,
 } from "react";
 import { createPortal } from "react-dom";
+import { motion, MotionConfig, useReducedMotion } from "motion/react";
 import { useDrag } from "@use-gesture/react";
 import { LuSparkles, LuChartNoAxesCombined, LuFlame, LuDumbbell, LuGauge, LuClipboardList, LuPause, LuPlay } from "react-icons/lu";
 import { useMobileDevice } from "./mobile/Device";
@@ -141,6 +142,7 @@ const zh = {
   me: "我的",
   reports: "评估记录",
   bodyProfile: "身体档案",
+  newUserRegister: "新用户注册",
   settings: "设置",
   help: "测试帮助",
   latest: "最新评估结果",
@@ -245,6 +247,7 @@ const en = {
   me: "Me",
   reports: "Assessment records",
   bodyProfile: "Health profile",
+  newUserRegister: "New user registration",
   settings: "Settings",
   help: "Test help",
   latest: "Latest assessment",
@@ -369,6 +372,7 @@ const ar = {
   me: "حسابي",
   reports: "سجل التقييمات",
   bodyProfile: "الملف الصحي",
+  newUserRegister: "تسجيل مستخدم جديد",
   settings: "الإعدادات",
   language: "اللغة",
   appearance: "المظهر",
@@ -406,8 +410,8 @@ Object.assign(zh, {
   privacyAccept: "我已阅读并同意用户协议与隐私政策",
   google: "使用 Google 登录",
   facebook: "使用 Facebook 登录",
-  guest: "游客体验",
-  guestHint: "无需注册，使用示例数据浏览 WellnessHub",
+  guest: "游客模式",
+  guestHint: "无需账号，填写年龄、性别和身高后查看本次测量报告。",
   hideKeyboard: "收起键盘",
   scoreUnit: "分",
   measuredAt: "检测时间",
@@ -431,8 +435,8 @@ Object.assign(en, {
     "I have read and accept the Terms of Service and Privacy Policy",
   google: "Continue with Google",
   facebook: "Continue with Facebook",
-  guest: "Continue as guest",
-  guestHint: "Explore WellnessHub with sample data—no registration required",
+  guest: "Guest mode",
+  guestHint: "No account needed. Enter age, gender and height to view this measurement.",
   hideKeyboard: "Hide keyboard",
   scoreUnit: "pts",
   measuredAt: "Measured",
@@ -484,8 +488,8 @@ Object.assign(de, {
     "Ich akzeptiere die Nutzungsbedingungen und die Datenschutzrichtlinie",
   google: "Mit Google fortfahren",
   facebook: "Mit Facebook fortfahren",
-  guest: "Als Gast fortfahren",
-  guestHint: "WellnessHub ohne Registrierung mit Beispieldaten ansehen",
+  guest: "Gastmodus",
+  guestHint: "Ohne Konto: Alter, Geschlecht und Größe angeben und diese Messung ansehen.",
   hideKeyboard: "Tastatur schließen",
   scoreUnit: "Pkt.",
   measuredAt: "Gemessen",
@@ -509,8 +513,8 @@ Object.assign(ar, {
   privacyAccept: "قرأت شروط الاستخدام وسياسة الخصوصية وأوافق عليهما",
   google: "المتابعة باستخدام Google",
   facebook: "المتابعة باستخدام Facebook",
-  guest: "المتابعة كزائر",
-  guestHint: "استكشف WellnessHub ببيانات تجريبية من دون تسجيل",
+  guest: "وضع الزائر",
+  guestHint: "من دون حساب: أدخل العمر والجنس والطول لعرض هذا القياس.",
   hideKeyboard: "إخفاء لوحة المفاتيح",
   scoreUnit: "نقطة",
   measuredAt: "وقت القياس",
@@ -548,7 +552,8 @@ Object.assign(zh, {
   alreadyAccount: "已有账号？",
   returnLogin: "返回登录",
   profileHint: "这些信息将用于报告计算与个性化建议，请填写真实信息。",
-  profileValidation: "请完整填写资料：年龄需为 13–100 岁。",
+  profileValidation: "允许测量的年龄范围是 10-99 周岁",
+  ageYears: "年龄",
   dateFormat: "YYYY-MM-DD",
   resetPasswordHint: "密码找回为本地模拟流程。",
 });
@@ -586,7 +591,8 @@ Object.assign(en, {
   returnLogin: "Back to sign in",
   profileHint:
     "These details support report calculations and personalized guidance. Please enter accurate information.",
-  profileValidation: "Complete all fields. Age must be between 13 and 100.",
+  profileValidation: "Allowed measurement age is 10–99 years.",
+  ageYears: "Age",
   dateFormat: "YYYY-MM-DD",
   resetPasswordHint: "Password recovery is simulated in this demo.",
 });
@@ -627,7 +633,8 @@ Object.assign(de, {
   profileHint:
     "Diese Angaben werden für Berichte und persönliche Empfehlungen verwendet.",
   profileValidation:
-    "Füllen Sie alle Felder aus. Das Alter muss 13–100 Jahre betragen.",
+    "Das zulässige Messalter liegt zwischen 10 und 99 Jahren.",
+  ageYears: "Alter",
   dateFormat: "JJJJ-MM-TT",
   resetPasswordHint:
     "Die Passwortwiederherstellung wird in dieser Demo simuliert.",
@@ -663,7 +670,8 @@ Object.assign(ar, {
   alreadyAccount: "لديك حساب بالفعل؟",
   returnLogin: "العودة إلى تسجيل الدخول",
   profileHint: "تُستخدم هذه البيانات لحساب التقارير وتقديم إرشادات مخصصة.",
-  profileValidation: "أكمل جميع الحقول. يجب أن يكون العمر بين 13 و100 سنة.",
+  profileValidation: "نطاق العمر المسموح للقياس هو 10–99 سنة.",
+  ageYears: "العمر",
   dateFormat: "YYYY-MM-DD",
   resetPasswordHint: "استعادة كلمة المرور محاكاة في هذا العرض.",
 });
@@ -909,7 +917,7 @@ Object.assign(ar, {
 });
 Object.assign(de, {
   legal:"Bitte lesen und akzeptieren Sie Nutzungsbedingungen, Datenschutz und KI-Hinweise.", switchPhone:"Telefon und Passwort verwenden", switchCode:"Bestätigungscode verwenden", switchEmail:"Zurück zur E-Mail-Anmeldung",
-  bodyProfile:"Körperprofil", help:"Hilfe zur Messung", latest:"Letzte Bewertung", fullReport:"Vollständiger Bericht", core:"Erkenntnisse", issues:"Handlungsfelder", strengths:"Stärken", history:"Verlauf", trainingPlan:"Trainingsplan", next:"Nächster Schritt",
+  bodyProfile:"Körperprofil", newUserRegister:"Neuregistrierung", help:"Hilfe zur Messung", latest:"Letzte Bewertung", fullReport:"Vollständiger Bericht", core:"Erkenntnisse", issues:"Handlungsfelder", strengths:"Stärken", history:"Verlauf", trainingPlan:"Trainingsplan", next:"Nächster Schritt",
   account:"Kontosicherheit", store:"Studio wechseln", faq:"Häufige Fragen", about:"Über uns", logoutTitle:"Jetzt abmelden?", logoutBody:"Für den nächsten Besuch müssen Sie sich erneut anmelden. Sprache, Darstellung und Einheiten bleiben gespeichert.", confirmLogout:"Abmelden", save:"Profil speichern", saved:"Profil gespeichert",
   demoOnly:"Hinweis zur Demo", demoDesc:"Diese Funktion wird hier nur demonstriert und ist nicht mit einem Live-Dienst verbunden.", close:"Schließen", cancel:"Abbrechen", confirmDelete:"Bericht löschen", deleteTitle:"Diesen Bericht löschen?", deleteBody:"Der Bericht wird dauerhaft aus Ihrem Verlauf entfernt.",
   sendTitle:"Bericht per E-Mail", sendDesc:"Der Bericht wird als PDF und mit einem Ansichtslink an diese Adresse gesendet.", send:"Bericht senden", sending:"PDF wird erstellt…", sent:"Bericht gesendet", invalidEmail:"Gültige E-Mail-Adresse eingeben", copied:"Freigabelink kopiert", readOnly:"Geteilter Inhalt · nur lesen",
@@ -1268,6 +1276,31 @@ const modules: ReportModule[] = [
     advice: "每两周在相同状态下复测并持续管理腰腹围度。",
   },
 ];
+function sampleModules({
+  fat,
+  muscle,
+  weight,
+  include = ["composition", "posture", "balance", "neck", "hip", "spine", "girth"],
+  statuses = {},
+}: {
+  fat: number;
+  muscle: number;
+  weight: number;
+  include?: ModuleId[];
+  statuses?: Partial<Record<ModuleId, ReportModule["status"]>>;
+}): ReportModule[] {
+  return modules.filter(module => include.includes(module.id)).map(module => ({
+    ...module,
+    status: statuses[module.id] ?? module.status,
+    metrics: module.metrics.map(metric => {
+      if (module.id !== "composition") return { ...metric };
+      if (metric.label === "体脂率") return { ...metric, value: `${fat.toFixed(1)}%` };
+      if (metric.label === "肌肉量") return { ...metric, value: `${muscle.toFixed(1)} kg` };
+      if (metric.label === "体重") return { ...metric, value: `${weight.toFixed(1)} kg` };
+      return { ...metric };
+    }),
+  }));
+}
 const seed: Report[] = [
   {
     id: "m60-20260810",
@@ -1275,7 +1308,7 @@ const seed: Report[] = [
     device: "VISBODY M60",
     score: 82,
     summary: "体态表现整体可控，但代谢风险和下肢稳定仍需优先处理。",
-    modules,
+    modules: sampleModules({ fat: 42.1, muscle: 39.7, weight: 72.8 }),
   },
   {
     id: "m60-20260806",
@@ -1283,7 +1316,13 @@ const seed: Report[] = [
     device: "VISBODY M60",
     score: 79,
     summary: "综合表现较上次提升 3 分，体脂和腰腹围度仍需持续管理。",
-    modules,
+    modules: sampleModules({
+      fat: 42.5,
+      muscle: 39.5,
+      weight: 73.2,
+      include: ["composition","posture","balance","neck","spine","girth"],
+      statuses: { posture: "risk", balance: "good" },
+    }),
   },
   {
     id: "m60-20260723",
@@ -1291,7 +1330,45 @@ const seed: Report[] = [
     device: "VISBODY M60",
     score: 76,
     summary: "首次测量已建立基线，建议从基础力量和日常活动习惯开始。",
-    modules,
+    modules: sampleModules({
+      fat: 43.0,
+      muscle: 39.1,
+      weight: 73.9,
+      include: ["composition","posture","neck","hip","spine","girth"],
+      statuses: { posture: "risk" },
+    }),
+  },
+  {
+    id: "m60-20260702",
+    date: "2026-07-02 10:28",
+    device: "VISBODY M60",
+    score: 74,
+    summary: "本次完成身体成分、平衡、颈部和体围测量。",
+    modules: sampleModules({ fat: 43.6, muscle: 38.8, weight: 74.4, include: ["composition","balance","neck","girth"], statuses: { balance: "good" } }),
+  },
+  {
+    id: "m60-20260612",
+    date: "2026-06-12 18:12",
+    device: "VISBODY M60",
+    score: 72,
+    summary: "本次完成身体成分、体态、脊柱和体围测量。",
+    modules: sampleModules({ fat: 44.0, muscle: 38.5, weight: 74.9, include: ["composition","posture","spine","girth"], statuses: { posture: "risk" } }),
+  },
+  {
+    id: "m60-20260520",
+    date: "2026-05-20 09:36",
+    device: "VISBODY M60",
+    score: 70,
+    summary: "本次完成身体成分、颈部和平衡测量。",
+    modules: sampleModules({ fat: 44.5, muscle: 38.2, weight: 75.4, include: ["composition","neck","balance"], statuses: { balance: "good" } }),
+  },
+  {
+    id: "m60-20260418",
+    date: "2026-04-18 14:42",
+    device: "VISBODY M60",
+    score: 68,
+    summary: "建立首轮身体成分、体态和体围基线。",
+    modules: sampleModules({ fat: 45.1, muscle: 37.9, weight: 76.1, include: ["composition","posture","girth"], statuses: { posture: "risk" } }),
   },
 ];
 const highlights = {
@@ -1730,6 +1807,7 @@ function parseRoute(): Route {
   const contentId = new URLSearchParams(query).get("content") || undefined;
   if (p[0] === "share") return { page: "share", type: p[1], id: p[2], contentId };
   if (p[0] === "history") return { page: "history" };
+  if (["stage", "shape", "home-service"].includes(p[0])) return { page: p[0], type: p[1] };
   if (p[0] === "reports" && p[2])
     return {
       page: modules.some((m) => m.id === p[2]) ? "report" : p[2],
@@ -1751,13 +1829,215 @@ function convert(v: string, u: Units) {
 }
 
 const HeaderHost = createContext<HTMLElement | null>(null);
+type GuestDraft = { age: string; gender: string; heightCm: string };
+type GuestState = { token: string; draft: GuestDraft; submitted: boolean };
+type GuestService = "ready" | "empty" | "denied";
+const guestKey = "wellnesshub.guest.v1";
+const chinaFlowKey = "wellnesshub.china-flow.v1";
+const chinaReportStateKey = "wellnesshub.china-report-state.v1";
+const chinaPendingReportKey = "wellnesshub.china.pending-report.v1";
+const chinaEnvironmentKey = "wellnesshub.china-environment.v1";
+const chinaNoticeStateKey = "wellnesshub.china-notice-state.v1";
+const emptyGuestDraft = (): GuestDraft => ({ age: "", gender: "", heightCm: "" });
+// Public Mock identifiers, not production access credentials. No fallback report.
+export function resolveGuestScan(token: string) {
+  const fixtures: Record<string, { reportId: string; ai: GuestService; training: GuestService }> = {
+    "demo-both": { reportId: "m60-20260810", ai: "ready", training: "ready" },
+    "demo-ai": { reportId: "m60-20260810", ai: "ready", training: "empty" },
+    "demo-training": { reportId: "m60-20260810", ai: "empty", training: "ready" },
+    "demo-none": { reportId: "m60-20260810", ai: "empty", training: "empty" },
+    "demo-denied": { reportId: "m60-20260810", ai: "denied", training: "denied" },
+    "demo-mixed": { reportId: "m60-20260810", ai: "denied", training: "ready" },
+    "demo-other": { reportId: "m60-20260806", ai: "empty", training: "empty" },
+  };
+  const grant = Object.hasOwn(fixtures,token) ? fixtures[token] : undefined;
+  return { status: !token ? "missing" : token === "demo-expired" ? "expired" : token === "demo-missing" ? "notFound" : grant ? "valid" : "invalid", grant };
+}
+export function validGuestDraft(d: GuestDraft) {
+  return !!d && /^(male|female)$/.test(d.gender) && /^\d+$/.test(d.age) && +d.age >= 10 && +d.age <= 99 && /^\d+(\.\d+)?$/.test(d.heightCm) && Number.isFinite(+d.heightCm) && +d.heightCm >= 100 && +d.heightCm <= 230;
+}
+const guestCopy: Record<Locale, Record<string, string>> = {
+  zh: { title:"填写基本资料", purpose:"年龄、性别和身高仅用于本次报告分析。", view:"查看本次报告", exit:"退出游客模式", readonly:"本次测量 · 游客模式", missing:"请先扫描设备上的测量二维码，再使用游客模式。", expired:"二维码已过期，请重新扫描设备上的测量二维码。", notFound:"未找到本次测量记录，请联系门店并重新扫码。", invalid:"二维码无效，请重新扫描设备上的测量二维码。", blocked:"只能查看本次扫码对应的报告。", denied:"暂未开放查看权限", empty:"尚未生成", ready:"已生成 · 查看", range:"年龄 10–99 岁，身高 100–230 cm。", mock:"扫码流程 Mock：资料只保存在当前标签页，不重新计算测量评分。", back:"返回登录", age:"年龄", height:"身高", gender:"性别", trainingHint:"基于本次报告和健康档案生成，不要求先做 AI 解读。" },
+  en: { title:"Basic information", purpose:"Age, gender and height are used only for this report analysis.", view:"View this report", exit:"Exit guest access", readonly:"This measurement · Guest access", missing:"Scan the measurement QR code on the device before continuing as a guest.", expired:"This QR code has expired. Scan a new code on the device.", notFound:"Measurement not found. Contact the location and scan again.", invalid:"Invalid QR code. Scan the measurement code on the device again.", blocked:"You can only access the report linked to this scan.", denied:"Viewing is not permitted", empty:"Not generated", ready:"Ready · View", range:"Age 10–99 years; height 100–230 cm.", mock:"Mock scan flow: information stays in this tab; measurement scores are not recalculated.", back:"Back to sign in", age:"Age", height:"Height", gender:"Gender", trainingHint:"Uses this report and a health profile; AI interpretation is not required." },
+  de: { title:"Grundangaben ausfüllen", purpose:"Alter, Geschlecht und Größe dienen nur der Analyse dieses Berichts.", view:"Diesen Bericht ansehen", exit:"Gastzugang beenden", readonly:"Diese Messung · Gastzugang", missing:"Bitte zuerst den Messungs-QR-Code am Gerät scannen.", expired:"Der QR-Code ist abgelaufen. Bitte am Gerät erneut scannen.", notFound:"Messung nicht gefunden. Bitte den Standort kontaktieren und erneut scannen.", invalid:"Ungültiger QR-Code. Bitte den Messungscode erneut scannen.", blocked:"Nur der Bericht dieses Scans ist zugänglich.", denied:"Keine Anzeigeberechtigung", empty:"Noch nicht erstellt", ready:"Erstellt · Ansehen", range:"Alter 10–99 Jahre; Größe 100–230 cm.", mock:"Mock-Ablauf: Angaben bleiben in diesem Tab; Messwerte werden nicht neu berechnet.", back:"Zur Anmeldung", age:"Alter", height:"Größe", gender:"Geschlecht", trainingHint:"Basiert auf Messbericht und Gesundheitsprofil; keine KI-Auswertung erforderlich." },
+  ar: { title:"إدخال المعلومات الأساسية", purpose:"يُستخدم العمر والجنس والطول لتحليل هذا التقرير فقط.", view:"عرض هذا التقرير", exit:"إنهاء وضع الزائر", readonly:"هذا القياس · وضع الزائر", missing:"امسح رمز القياس على الجهاز أولاً للمتابعة كزائر.", expired:"انتهت صلاحية الرمز. امسح رمزاً جديداً على الجهاز.", notFound:"لم يتم العثور على القياس. تواصل مع المركز وأعد المسح.", invalid:"الرمز غير صالح. أعد مسح رمز القياس على الجهاز.", blocked:"يمكنك عرض التقرير المرتبط بهذا المسح فقط.", denied:"العرض غير مسموح حالياً", empty:"لم يتم الإنشاء", ready:"جاهز · عرض", range:"العمر 10–99 عاماً والطول 100–230 سم.", mock:"مسار تجريبي: تبقى المعلومات في علامة التبويب هذه ولا تعاد حساب درجات القياس.", back:"العودة لتسجيل الدخول", age:"العمر", height:"الطول", gender:"الجنس", trainingHint:"يعتمد على التقرير والملف الصحي، ولا يتطلب تفسير الذكاء الاصطناعي." },
+};
+function GuestPrototype({hash}: {hash:string}) {
+  const keyboard = useKeyboard();
+  const {device} = useMobileDevice();
+  const [headerHost,setHeaderHost] = useState<HTMLDivElement|null>(null);
+  const [locale,setLocale] = useState<Locale>(()=>{const v=localStorage.getItem(K.locale);return (["zh","en","de","ar"].includes(v||"")?v:"zh") as Locale;});
+  const [theme,setTheme] = useState<Theme>(()=>{const v=localStorage.getItem(K.theme);return (["system","light","dark"].includes(v||"")?v:"system") as Theme;});
+  const [units,setUnits] = useState<Units>("metric");
+  const [mode,setMode] = useState<Mode>("emailCode");
+  const [showPass,setShowPass] = useState(false);
+  const {isKeyboardVisible,bottomInset} = useKeyboardInsets();
+  const [error,setError] = useState("");
+  const [active,setActive] = useState<ModuleId>("composition");
+  const [systemDark,setSystemDark]=useState(()=>matchMedia("(prefers-color-scheme:dark)").matches);
+  const [state,setState] = useState<GuestState>(()=>{
+    try { const s=JSON.parse(sessionStorage.getItem(guestKey)||"null"); if(s && typeof s.token==="string" && s.draft && typeof s.draft.age==="string" && typeof s.draft.heightCm==="string" && typeof s.draft.gender==="string") return s; } catch {}
+    return {token:"",draft:emptyGuestDraft(),submitted:false};
+  });
+  const [heightText,setHeightText] = useState(state.draft.heightCm);
+  const scanToken=hash.startsWith("#/scan/") ? hash.slice(7).split(/[/?#]/)[0] : null;
+  const resolution=resolveGuestScan(scanToken ?? state.token);
+  const report=seed.find(r=>r.id===resolution.grant?.reportId);
+  const C=guestCopy[locale];
+  const T=(key:string)=>key==="readOnly"?C.readonly:(lang[locale] as Record<string,string>)[key]||key;
+  const go=(path:string)=>{keyboard.hide();setError("");location.hash=path;};
+  const exit=(path="/")=>{keyboard.hide();sessionStorage.removeItem(guestKey);location.hash=path;};
+  useEffect(()=>{
+    if(scanToken===null)return;
+    const old=resolveGuestScan(state.token);
+    const same=!!resolution.grant && old.grant?.reportId===resolution.grant.reportId;
+    const next:GuestState={token:scanToken,draft:same?state.draft:emptyGuestDraft(),submitted:false};
+    sessionStorage.setItem(guestKey,JSON.stringify(next));setState(next);setHeightText(next.draft.heightCm);setUnits("metric");go("/guest/login");
+  },[scanToken]);
+  useEffect(()=>{document.documentElement.dir=locale==="ar"?"rtl":"ltr";document.documentElement.lang=locale;},[locale]);
+  useEffect(()=>{const m=matchMedia("(prefers-color-scheme:dark)");const f=()=>setSystemDark(m.matches);m.addEventListener("change",f);return()=>m.removeEventListener("change",f);},[]);
+  const update=(draft:GuestDraft,submitted=false)=>{const next={...state,draft,submitted};setState(next);sessionStorage.setItem(guestKey,JSON.stringify(next));};
+  const base=`/guest/reports/${report?.id}`;
+  const path=hash.replace(/^#/,"").split("?")[0];
+  const eligible=resolution.status==="valid" && !!report;
+  const allowed=eligible && state.submitted && validGuestDraft(state.draft);
+  const ageHint = {zh:"请输入年龄（10–99岁）",en:"Enter age (10–99 years)",de:"Alter eingeben (10–99 Jahre)",ar:"أدخل العمر (10–99 عاماً)"}[locale];
+  const heightHint = units==="metric" ? {zh:"请输入身高（100–230 cm）",en:"Enter height (100–230 cm)",de:"Größe eingeben (100–230 cm)",ar:"أدخل الطول (100–230 cm)"}[locale] : {zh:"请输入身高（39.38–90.55 in）",en:"Enter height (39.38–90.55 in)",de:"Größe eingeben (39.38–90.55 in)",ar:"أدخل الطول (39.38–90.55 in)"}[locale];
+  const ageInvalid = state.draft.age!=="" && !validGuestDraft({...state.draft,gender:"male",heightCm:"170"});
+  const heightInvalid = heightText!=="" && !validGuestDraft({...state.draft,gender:"male",age:"30"});
+  let view:ReactNode;
+  const showingAuth=path==="/guest/login" || scanToken!==null;
+  if(showingAuth) view=<Auth T={T} locale={locale} setLocale={setLocale} theme={theme} setTheme={setTheme} mode={mode} setMode={setMode} showPass={showPass} setShowPass={setShowPass} error={error} setError={setError} toast={setError} guestLogin={()=>eligible?go("/guest/profile"):setError(C[resolution.status]||C.invalid)} login={()=>{localStorage.setItem(K.session,"true");localStorage.setItem("wellnesshub.session.role","user");exit(report?`/reports/${report.id}`:"/home");}} register={()=>exit("/register")} forgot={()=>setError(T("demoDesc"))}/>;
+  else if(path==="/guest/profile" && eligible) view=<section className="product-page guest-profile"><Header title={C.title} back={()=>go("/guest/login")}/><p>{C.purpose}</p><form onSubmit={e=>{e.preventDefault();if(validGuestDraft(state.draft)){update(state.draft,true);go(base);}}}>
+    <div className="guest-validation-field"><Field label={`${C.age} *`}><KeyboardInput aria-label={C.age} inputMode="numeric" placeholder={ageHint} aria-invalid={ageInvalid} aria-describedby={ageInvalid?"guest-age-error":undefined} value={state.draft.age} onChange={e=>update({...state.draft,age:e.target.value})}/></Field>{ageInvalid&&<p id="guest-age-error" className="guest-field-error" role="alert">{ageHint}</p>}</div>
+    <fieldset><legend>{C.gender} *</legend><div className="choice-row">{["male","female"].map(g=><button key={g} type="button" aria-pressed={state.draft.gender===g} className={state.draft.gender===g?"active":""} onClick={()=>{keyboard.hide();update({...state.draft,gender:g});}}>{T(g)}</button>)}</div></fieldset>
+    <div className="unit-toggle">{(["metric","imperial"] as Units[]).map(u=><button type="button" key={u} aria-pressed={units===u} onClick={()=>{keyboard.hide();setUnits(u);setHeightText(state.draft.heightCm===""?"":u==="metric"?state.draft.heightCm:String(Math.round(+state.draft.heightCm/2.54*100)/100));}}>{T(u)}</button>)}</div>
+    <div className="guest-validation-field"><Field label={`${C.height} * (${units==="metric"?"cm":"in"})`}><KeyboardInput aria-label={C.height} inputMode="decimal" placeholder={heightHint} aria-invalid={heightInvalid} aria-describedby={heightInvalid?"guest-height-error":undefined} value={heightText} onChange={e=>{setHeightText(e.target.value);update({...state.draft,heightCm:e.target.value===""?"":units==="metric"?e.target.value:String(Math.round(+e.target.value*2.54*100)/100)});}}/></Field>{heightInvalid&&<p id="guest-height-error" className="guest-field-error" role="alert">{heightHint}</p>}</div>
+    <button className="primary-btn" disabled={!validGuestDraft(state.draft)}>{C.view}</button></form></section>;
+  else if(allowed && (path===base || path===`${base}/ai` || path===`${base}/training`)) {
+    const profile:Profile={nickname:T("guest"),gender:state.draft.gender,heightCm:+state.draft.heightCm,weightKg:0,birthday:`${new Date().getFullYear()-Number(state.draft.age)}-01-01`};
+    const service=path.endsWith("/ai")?"ai":path.endsWith("/training")?"training":null;
+    if(service && resolution.grant![service]!=="ready") view=<section className="product-page"><Header title={T(service)} back={()=>go(base)}/><p>{C[resolution.grant![service]]}</p></section>;
+    else if(service==="ai") view=<AIPage report={report} homeContent={previewAI[locale]} T={T} locale={locale} readOnly back={()=>go(base)}/>;
+    else if(service==="training") view=<PreviewTrainingDetail locale={locale} back={()=>go(base)} readonlyLabel={C.readonly}/>;
+    else view=<><M60Report report={report} profile={profile} locale={locale} units={units} active={active} setActive={setActive} T={T} readOnly guestOnly back={()=>go("/guest/profile")}/><section className="guest-services">{(["ai","training"] as const).map(service=><div key={service}><h2>{T(service)}</h2>{service==="training"&&<p>{C.trainingHint}</p>}{resolution.grant![service]==="ready"?<button className="secondary-btn" onClick={()=>go(`${base}/${service}`)}>{C.ready}<ChevronRightIcon/></button>:<p role="status">{C[resolution.grant![service]]}</p>}</div>)}</section></>;
+  } else view=<section className="product-page"><Header title={T("guest")} back={()=>go("/guest/login")}/><p role="alert">{eligible?C.blocked:C[resolution.status]||C.invalid}</p><button className="secondary-btn" onClick={()=>go(allowed?base:"/guest/login")}>{allowed?C.view:C.back}</button></section>;
+  return <div className={`wh-app ${theme==="dark"||(theme==="system"&&systemDark)?"wh-dark":"wh-light"} guest-shell`} data-locale={locale} style={{"--app-safe-top":`${device.geometry.safeArea.top}px`,"--app-safe-bottom":`${device.platform==="ios"?device.geometry.safeArea.bottom:0}px`} as CSSProperties}><div className="app-header-host" ref={setHeaderHost}/><HeaderHost.Provider value={headerHost}><MobileScroll key={path} className="app-screen"><main className={`screen-content ${showingAuth?"":"fx-shell"}`}>{view}{!showingAuth&&path!=="/guest/profile"&&<button className="guest-exit" onClick={()=>exit()}>{C.exit}</button>}</main></MobileScroll></HeaderHost.Provider>{isKeyboardVisible&&<button className="keyboard-dismiss" style={{bottom:Math.max(bottomInset+10,18)}} onClick={()=>keyboard.hide()} aria-label={T("hideKeyboard")}><ChevronDownIcon/>{T("hideKeyboard")}</button>}</div>;
+}
+
+function FlowSimulator({hash}:{hash:string}) {
+  const domestic=hash.startsWith("#/cn/") || !!sessionStorage.getItem(chinaFlowKey);
+  const scenario=(hash.includes("/existing") || sessionStorage.getItem(chinaFlowKey)==="existing"?"existing":"new") as "new"|"existing";
+  const reportState=(hash.includes("existing-processing") || sessionStorage.getItem(chinaReportStateKey)==="processing"?"processing":"ready") as "ready"|"processing";
+  const environmentOverride=/(?:[?&])environment=(wechat|browser)/.exec(hash)?.[1];
+  const inWechat=environmentOverride ? environmentOverride==="wechat" : sessionStorage.getItem(chinaEnvironmentKey)==="wechat" || (!sessionStorage.getItem(chinaEnvironmentKey) && /MicroMessenger/i.test(navigator.userAgent));
+  const noticeFailed=sessionStorage.getItem(chinaNoticeStateKey)==="failed";
+  const choose=(market:"overseas"|"domestic")=>{
+    sessionStorage.removeItem(guestKey);
+    if(market==="overseas") { sessionStorage.removeItem(chinaFlowKey); sessionStorage.removeItem(chinaPendingReportKey); location.hash="/"; return; }
+    sessionStorage.setItem(chinaFlowKey,"new"); sessionStorage.setItem(chinaReportStateKey,"ready"); sessionStorage.setItem(chinaNoticeStateKey,"sent"); sessionStorage.setItem(chinaEnvironmentKey,"wechat"); location.hash="/cn/scan/new";
+  };
+  const setScenario=(value:"new"|"existing")=>{ sessionStorage.setItem(chinaFlowKey,value); location.hash=value==="new"?"/cn/scan/new":`/cn/scan/existing-${reportState}`; };
+  const setReportState=(value:"ready"|"processing")=>{ sessionStorage.setItem(chinaReportStateKey,value); location.hash=scenario==="existing"?`/cn/scan/existing-${value}?state=${value}`:`/cn/scan/new?state=${value}`; };
+  const setEnvironment=(value:"wechat"|"browser")=>{sessionStorage.setItem(chinaEnvironmentKey,value); if(hash.startsWith("#/cn/")) location.hash=`${hash.replace(/^#/,'').split('?')[0]}?environment=${value}`;};
+  const setNoticeState=(value:"sent"|"failed")=>{sessionStorage.setItem(chinaNoticeStateKey,value); if(value==="failed") location.hash="/cn/error/notice?environment=wechat"; else if(hash.includes("/cn/error/notice")) location.hash=scenario==="existing"?`/cn/scan/existing-${reportState}`:"/cn/scan/new";};
+  return createPortal(<aside className="flow-simulator" aria-label="登录流程模拟器">
+    <strong>流程模拟</strong>
+    <div className="flow-market-switch" role="group" aria-label="选择登录地区流程">
+      <button aria-pressed={!domestic} onPointerDown={()=>choose("overseas")} onClick={()=>choose("overseas")}>海外</button>
+      <button aria-pressed={domestic} onPointerDown={()=>choose("domestic")} onClick={()=>choose("domestic")}>国内</button>
+    </div>
+    {domestic&&<><div className="flow-scenario-switch" role="group" aria-label="选择国内用户场景">
+      <button aria-pressed={scenario==="new"} onPointerDown={()=>setScenario("new")} onClick={()=>setScenario("new")}>新用户</button>
+      <button aria-pressed={scenario==="existing"} onPointerDown={()=>setScenario("existing")} onClick={()=>setScenario("existing")}>老用户</button>
+    </div><div className="flow-scenario-switch" role="group" aria-label="选择报告状态">
+      <button aria-pressed={reportState==="ready"} onPointerDown={()=>setReportState("ready")} onClick={()=>setReportState("ready")}>已生成</button>
+      <button aria-pressed={reportState==="processing"} onPointerDown={()=>setReportState("processing")} onClick={()=>setReportState("processing")}>生成中</button>
+    </div><div className="flow-scenario-switch" role="group" aria-label="选择国内打开环境"><button aria-pressed={inWechat} onClick={()=>setEnvironment("wechat")}>微信内</button><button aria-pressed={!inWechat} onClick={()=>setEnvironment("browser")}>非微信</button></div><button className="flow-fixed-entry" onClick={()=>location.hash="/cn/fixed"}>国内固定链接</button></>}
+    {domestic&&<div className="flow-scenario-switch" role="group" aria-label="选择公众号通知状态"><button aria-pressed={!noticeFailed} onClick={()=>setNoticeState("sent")}>通知已发送</button><button aria-pressed={noticeFailed} onClick={()=>setNoticeState("failed")}>通知失败</button></div>}
+    <small>{domestic?(scenario==="new"?"扫码关注 → 通知 → 授权绑定 → 标准报告":reportState==="ready"?"扫码直达报告 ＋ 公众号通知回看":"扫码进入合成中页 ＋ 公众号通知回看"):"邮箱、手机号及海外社交账号"}</small>
+  </aside>,document.body);
+}
+
+function WeChatPrototype({hash}:{hash:string}) {
+  const keyboard=useKeyboard();
+  const {device}=useMobileDevice();
+  const {isKeyboardVisible,bottomInset}=useKeyboardInsets();
+  const [headerHost,setHeaderHost]=useState<HTMLDivElement|null>(null);
+  const [phone,setPhone]=useState("");
+  const [code,setCode]=useState("");
+  const [sent,setSent]=useState(false);
+  const [accepted,setAccepted]=useState(true);
+  const [theme,setTheme]=useState<Theme>(()=>(localStorage.getItem(K.theme) as Theme)||"system");
+  const [systemDark,setSystemDark]=useState(()=>matchMedia("(prefers-color-scheme:dark)").matches);
+  const path=hash.replace(/^#/,"").split("?")[0];
+  const existing=sessionStorage.getItem(chinaFlowKey)==="existing";
+  const reportState=sessionStorage.getItem(chinaReportStateKey)==="processing"?"processing":"ready";
+  const environmentOverride=/(?:[?&])environment=(wechat|browser)/.exec(hash)?.[1];
+  const inWechat=environmentOverride ? environmentOverride==="wechat" : sessionStorage.getItem(chinaEnvironmentKey)==="wechat" || (!sessionStorage.getItem(chinaEnvironmentKey) && /MicroMessenger/i.test(navigator.userAgent));
+  const noticeFailed=sessionStorage.getItem(chinaNoticeStateKey)==="failed";
+  const report=seed.find(r=>r.id==="m60-20260810") || seed[0];
+  const dark=theme==="dark" || (theme==="system"&&systemDark);
+  const T=(key:string)=>(lang.zh as Record<string,string>)[key]||key;
+  const go=(next:string)=>{keyboard.hide();location.hash=next;};
+  const setPendingReport=()=>sessionStorage.setItem(chinaPendingReportKey,report.id);
+  const finish=(target:"home"|"report")=>{ keyboard.hide(); localStorage.setItem(K.consent,"true"); localStorage.setItem(K.session,"true"); localStorage.setItem("wellnesshub.session.role","user"); sessionStorage.removeItem(chinaPendingReportKey); location.hash=target==="report"?`/reports/${report.id}`:"/home"; };
+  useEffect(()=>{ const media=matchMedia("(prefers-color-scheme:dark)"); const update=()=>setSystemDark(media.matches); media.addEventListener("change",update); return()=>media.removeEventListener("change",update); },[]);
+  useEffect(()=>localStorage.setItem(K.theme,theme),[theme]);
+  useEffect(()=>{ if(path.includes("/existing")) sessionStorage.setItem(chinaFlowKey,"existing"); else if(path.includes("/new") || path==="/cn/fixed") sessionStorage.setItem(chinaFlowKey,"new"); },[path]);
+  useEffect(()=>{
+    if(path==="/cn/scan/existing-ready" && inWechat) { setPendingReport(); const timer=window.setTimeout(()=>finish("report"),850); return()=>window.clearTimeout(timer); }
+    if((path==="/cn/scan/existing-processing" || path==="/cn/follow/wait" || path.startsWith("/cn/messages/")) && inWechat) setPendingReport();
+    if(path==="/cn/silent/fixed") { const timer=window.setTimeout(()=>finish("home"),650); return()=>window.clearTimeout(timer); }
+  },[path]);
+  const requestCode=()=>{ if(!sent) setSent(true); };
+  const bindingValid=/^1\d{10}$/.test(phone) && /^\d{6}$/.test(code) && accepted;
+  const bindingTarget=path.includes("fixed")?"home":"report";
+  const bind=()=>{ if(bindingValid) finish(bindingTarget); };
+  const authTarget=path.includes("fixed")?"home":"report";
+  let view:ReactNode;
+  const requiresWechat=path.startsWith("/cn/scan/") || path.startsWith("/cn/messages/") || path==="/cn/follow/wait";
+  if(requiresWechat && !inWechat) view=<section className="cn-center-state cn-open-wechat"><div className="cn-wechat-mark">微</div><h1>请在微信内打开</h1><p>本次报告需要通过微信扫码或公众号通知进入，以确认测量归属。</p><button className="secondary-btn" onClick={()=>go("/cn/fixed")}>返回国内登录页</button></section>;
+  else if(path==="/cn/fixed") view=<ChinaLogin T={T} theme={theme} setTheme={setTheme} phone={phone} setPhone={setPhone} code={code} setCode={setCode} sent={sent} requestCode={requestCode} accepted={accepted} setAccepted={setAccepted} showWechat={inWechat} onPhoneLogin={()=>bindingValid&&finish("home")} onWechat={()=>go(existing?"/cn/silent/fixed":"/cn/oauth/fixed")}/>;
+  else if(path==="/cn/scan/existing-ready") view=<section className="cn-center-state"><div className="cn-wechat-mark">微</div><h1>正在打开本次报告</h1><p>{noticeFailed?"报告已合成，正在进入本次测量报告。公众号通知暂未送达，不影响本次查看。":"报告已合成，正在进入本次测量报告；公众号通知也已发送，方便你稍后回看。"}</p><span className="cn-loading" aria-label="加载中"/></section>;
+  else if(path==="/cn/scan/existing-processing") view=<section className="cn-center-state cn-waiting"><div className="cn-wechat-mark">微</div><h1>报告正在生成</h1><p>合成完成后将自动打开本次报告，并同时发送公众号通知供你后续回看。</p><button className="secondary-btn" disabled={reportState!=="ready"} onClick={()=>reportState==="ready"&&go("/cn/scan/existing-ready")}>刷新状态<ReloadIcon/></button></section>;
+  else if(path==="/cn/follow/wait") view=<section className="cn-center-state cn-waiting"><div className="cn-wechat-mark">微</div><h1>已关注公众号</h1><p>报告合成后会发送通知。你可以留在此页查看状态，也可以稍后从公众号通知继续完成查看。</p><button className="secondary-btn" disabled={reportState!=="ready"} onClick={()=>reportState==="ready"&&go("/cn/messages/new")}>刷新状态<ReloadIcon/></button></section>;
+  else if(path==="/cn/messages/new" || path==="/cn/messages/existing") { const isNew=path.endsWith("new"); view=<section className="cn-wechat-chat"><header><button onClick={()=>go(isNew?"/cn/scan/new":"/cn/scan/existing-processing")} aria-label="返回"><ArrowLeftIcon/></button><strong>维塑智能体测</strong><PersonIcon/></header><div className="cn-chat-time">报告生成成功</div><article className="cn-notice-card"><div className="cn-notice-title"><strong>体检报告生成通知</strong><DotsHorizontalIcon/></div><dl><div><dt>体检机构</dt><dd>VISBODY Wellness Center</dd></div><div><dt>时间</dt><dd>2026-08-10 16:09:00</dd></div></dl><button onClick={()=>isNew?go("/cn/oauth/report"):finish("report")}>查看详情<ChevronRightIcon/></button></article><p className="cn-chat-tip">演示通知：真实环境应由报告生成成功事件触发并由服务端去重。</p></section>; }
+  else if(path==="/cn/oauth/report" || path==="/cn/oauth/fixed") view=<section className="cn-center-state cn-oauth"><div className="cn-app-logo"><Logo/></div><h1>微信登录授权</h1><p>维塑智能体测将使用微信身份识别你的账号，并继续打开{authTarget==="report"?"本次测量报告":"首页"}。</p><div className="cn-oauth-scope"><PersonIcon/><span><strong>微信身份</strong><small>仅用于账号识别、登录与本次报告关联</small></span></div><button className="primary-btn cn-wechat-primary" onClick={()=>go(authTarget==="report"?"/cn/bind-phone/report":"/cn/bind-phone/fixed")}>允许并继续</button><button className="cn-text-btn" onClick={()=>go(authTarget==="report"?"/cn/messages/new":"/cn/fixed")}>暂不授权</button></section>;
+  else if(path==="/cn/silent/fixed") view=<section className="cn-center-state"><div className="cn-wechat-mark">微</div><h1>正在登录</h1><p>已识别已绑定微信账号，正在进入首页。</p><span className="cn-loading" aria-label="加载中"/></section>;
+  else if(path==="/cn/bind-phone/report" || path==="/cn/bind-phone/fixed") view=<ChinaLogin T={T} theme={theme} setTheme={setTheme} phone={phone} setPhone={setPhone} code={code} setCode={setCode} sent={sent} requestCode={requestCode} accepted={accepted} setAccepted={setAccepted} showWechat={false} onPhoneLogin={bind} onWechat={()=>{}} bindingTarget={bindingTarget} onBack={()=>go(path.endsWith("report")?"/cn/oauth/report":"/cn/oauth/fixed")}/>;
+  else if(path.startsWith("/cn/error/")) { const message=path.endsWith("expired")?"二维码已过期，请回到设备重新扫码。":path.endsWith("denied")?"当前微信账号无权查看此报告。":path.endsWith("notice")?"公众号通知暂未送达，不影响已绑定用户通过扫码查看本次报告。":"未找到本次测量记录，请重新扫码。"; const action=path.endsWith("notice")?()=>finish("home"):()=>go("/cn/scan/new"); view=<section className="cn-center-state"><div className="cn-wechat-mark">!</div><h1>{path.endsWith("notice")?"通知暂未送达":"暂时无法打开报告"}</h1><p>{message}</p><button className="secondary-btn" onClick={action}>{path.endsWith("notice")?"前往首页":"返回扫码流程"}</button></section>; }
+  else view=<section className="cn-follow-page"><div className="cn-follow-hero"><div className="cn-wechat-mark">微</div><span>微信扫码查看报告</span><h1>关注公众号，接收报告通知</h1><p>我们已记录本次测量。报告生成后会通过公众号通知继续完成授权与手机号绑定。</p></div><div className="cn-follow-account"><div className="cn-account-avatar">V</div><div><strong>维塑智能体测</strong><small>VISBODY 官方服务公众号</small></div></div><ol><li><b>1</b><span>关注公众号</span></li><li><b>2</b><span>等待报告生成通知</span></li><li><b>3</b><span>微信授权并绑定手机号</span></li></ol><button className="primary-btn cn-wechat-primary" onClick={()=>{setPendingReport();go(reportState==="ready"?"/cn/messages/new":"/cn/follow/wait");}}>模拟完成关注</button><p className="cn-demo-note">当前为交互 Demo，不会真实关注公众号或发送消息。</p></section>;
+  return <div className={`wh-app ${dark?"wh-dark":"wh-light"} cn-shell`} data-locale="zh" style={{"--app-safe-top":`${device.geometry.safeArea.top}px`,"--app-safe-bottom":`${device.platform==="ios"?device.geometry.safeArea.bottom:0}px`} as CSSProperties}><div className="app-header-host" ref={setHeaderHost}/><HeaderHost.Provider value={headerHost}><MobileScroll key={path} className="app-screen"><main className={`screen-content ${path==="/cn/fixed" || path.startsWith("/cn/bind-phone/")?"":"fx-shell"}`}>{view}</main></MobileScroll></HeaderHost.Provider>{isKeyboardVisible&&<button className="keyboard-dismiss" style={{bottom:Math.max(bottomInset+10,18)}} onClick={()=>keyboard.hide()} aria-label="收起键盘"><ChevronDownIcon/>收起键盘</button>}</div>;
+}
+
+function ChinaLogin({T,theme,setTheme,phone,setPhone,code,setCode,sent,requestCode,accepted,setAccepted,showWechat,onPhoneLogin,onWechat,bindingTarget,onBack}:{T:(key:string)=>string;theme:Theme;setTheme:(value:Theme)=>void;phone:string;setPhone:(value:string)=>void;code:string;setCode:(value:string)=>void;sent:boolean;requestCode:()=>void;accepted:boolean;setAccepted:(value:boolean)=>void;showWechat:boolean;onPhoneLogin:()=>void;onWechat:()=>void;bindingTarget?:"home"|"report";onBack?:()=>void;}) {
+  const valid=/^1\d{10}$/.test(phone) && /^\d{6}$/.test(code) && accepted;
+  return <section className="auth-page login-page cn-login-page" data-auth-mode={bindingTarget?"chinaPhoneBinding":"chinaPhoneCode"}>
+    <Prefs T={T} locale="zh" setLocale={()=>{}} theme={theme} setTheme={setTheme}/>
+    <Logo/><p className="auth-kicker">WellnessHub</p>
+    <h1>{bindingTarget?"绑定手机号":"手机号登录"}</h1>
+    <p className="auth-hint">{bindingTarget?"验证并绑定手机号，后续微信扫码可直接查看报告。":"使用手机号验证码登录，查看测量报告和健康服务。"}</p>
+    <form className="auth-form" onSubmit={e=>{e.preventDefault();if(valid)onPhoneLogin();}}>
+      <Field label="手机号"><MobileIcon/><span className="dial static">+86</span><KeyboardInput inputMode="tel" value={phone} onChange={e=>setPhone(e.target.value)} placeholder="请输入手机号"/></Field>
+      <Field label="验证码"><EnvelopeClosedIcon/><KeyboardInput inputMode="numeric" value={code} onChange={e=>setCode(e.target.value)} placeholder="请输入 6 位验证码"/><button type="button" className="inline-action" onClick={requestCode}>{sent?"已发送":"获取验证码"}</button></Field>
+      <div className="login-assist-row"><span/>{onBack?<button type="button" onClick={onBack}>返回微信授权</button>:<span/>}</div>
+      <label className="privacy-check"><input type="checkbox" checked={accepted} onChange={e=>setAccepted(e.target.checked)}/><span>我已阅读并同意用户协议与隐私政策</span></label>
+      <button className="primary-btn" disabled={!valid}>{bindingTarget==="report"?"绑定并查看报告":bindingTarget==="home"?"绑定并进入首页":"登录"}</button>
+    </form>
+    {showWechat&&<div className="auth-alt-block"><div className="divider">其他登录方式</div><div className="auth-alt-icons" role="group" aria-label="其他登录方式"><button type="button" className="alt-icon-btn alt-icon-btn--wechat" onClick={onWechat} aria-label="使用微信登录"><span>微</span></button></div></div>}
+  </section>;
+}
+
 export default function Prototype() {
   const [hash,setHash]=useState(location.hash);
   useEffect(()=>{const update=()=>setHash(location.hash);addEventListener("hashchange",update);return()=>removeEventListener("hashchange",update);},[]);
-  return hash.startsWith("#/preview/") ? <PreviewPrototype /> : <UserPrototype />;
+  const content=hash.startsWith("#/cn/") ? <WeChatPrototype hash={hash}/> : hash.startsWith("#/scan/") || hash.startsWith("#/guest/") || sessionStorage.getItem("wellnesshub.guest.v1") ? <GuestPrototype hash={hash}/> : hash.startsWith("#/preview/") ? <PreviewPrototype /> : <UserPrototype />;
+  return <MotionConfig reducedMotion="user">{content}<FlowSimulator hash={hash}/></MotionConfig>;
 }
 
 function UserPrototype() {
+  const homeScroll = useRef(0);
   const [headerHost, setHeaderHost] = useState<HTMLDivElement | null>(null);
   const { device } = useMobileDevice();
   const keyboard = useKeyboard();
@@ -1776,8 +2056,15 @@ function UserPrototype() {
     () => localStorage.getItem(K.consent) === "true",
   );
   const [session, setSession] = useState(
-    () => localStorage.getItem(K.session) === "true",
+    () => localStorage.getItem(K.session) === "true" && localStorage.getItem("wellnesshub.session.role") !== "guest",
   );
+  useEffect(() => {
+    // Migrate only the obsolete sample-browsing guest login, never an account session.
+    if (localStorage.getItem("wellnesshub.session.role") === "guest") {
+      localStorage.removeItem(K.session);
+      localStorage.removeItem("wellnesshub.session.role");
+    }
+  }, []);
   const [mode, setMode] = useState<Mode>("emailCode");
   const [showPass, setShowPass] = useState(false);
   const [reports, setReports] = useState<Report[]>(() =>
@@ -1825,7 +2112,7 @@ function UserPrototype() {
     requestAnimationFrame(() =>
       document
         .querySelector<HTMLElement>('[data-testid="mobile-scroll"]')
-        ?.scrollTo({ top: 0 }),
+        ?.scrollTo({ top: route.page === "home" ? homeScroll.current : 0 }),
     );
   }, [route.page, route.id, route.type]);
   useEffect(() => {
@@ -1841,6 +2128,7 @@ function UserPrototype() {
     return () => clearTimeout(x);
   }, [toast]);
   const go = (p: string, opts?: { replace?: boolean }) => {
+    if (route.page === "home") homeScroll.current = document.querySelector<HTMLElement>('[data-testid="mobile-scroll"]')?.scrollTop ?? 0;
     keyboard.hide();
     const hash = p.startsWith("#") ? p : `#${p.startsWith("/") ? p : `/${p}`}`;
     if (opts?.replace) {
@@ -1865,10 +2153,7 @@ function UserPrototype() {
     go("/home", { replace: true });
   };
   const guestLogin = () => {
-    localStorage.setItem(K.session, "true");
-    localStorage.setItem("wellnesshub.session.role", "guest");
-    setSession(true);
-    go("/home", { replace: true });
+    go("/guest/login");
   };
   const logout = () => {
     localStorage.removeItem(K.session);
@@ -1994,8 +2279,8 @@ function UserPrototype() {
           setProfile({
             nickname: "",
             gender: "",
-            heightCm: 168,
-            weightKg: 65,
+            heightCm: 0,
+            weightKg: 0,
             birthday: "",
           });
           go("/profile", { replace: true });
@@ -2030,6 +2315,12 @@ function UserPrototype() {
         go={go}
       />
     );
+  else if (route.page === "stage")
+    view = <StageFindingsPage reports={reports} locale={locale} filter={route.type} go={go} back={() => go("/home")} />;
+  else if (route.page === "shape")
+    view = <section className="home-detail-page"><Header title={interactionText(locale,"shape")} back={() => go("/home")}/><ShapeComparison reports={buildHomeOverview(reports).window} locale={locale} full /></section>;
+  else if (route.page === "home-service")
+    view = route.type === "training" ? <PreviewTrainingDetail locale={locale} back={() => go("/home")} /> : <AIPage report={report} homeContent={previewAI[locale]} T={(key:string)=>key==="readOnly"?homeText(locale,"previewReadOnly"):T(key)} locale={locale} back={() => go("/home")} readOnly />;
   else if (route.page === "me")
     view = (
       <SourceMe
@@ -2077,6 +2368,7 @@ function UserPrototype() {
         T={T}
         locale={locale}
         units={units}
+        reports={reports}
         back={() => back("/home")}
       />
     );
@@ -2346,10 +2638,20 @@ function Consent(p: any) {
     </section>
   );
 }
-function Field({ label, children }: { label: string; children: ReactNode }) {
+function Field({
+  label,
+  children,
+  required,
+}: {
+  label: string;
+  children: ReactNode;
+  required?: boolean;
+}) {
   return (
     <label className="field-group">
-      <span>{label}</span>
+      <span>
+        {required ? <span className="field-required">*</span> : null} {label}
+      </span>
       <div className="text-field">{children}</div>
     </label>
   );
@@ -2529,12 +2831,7 @@ function Auth(p: any) {
         </label>
       </form>
       <button type="button" className="guest-cta" onClick={p.guestLogin}>
-        <PersonIcon />
-        <span>
-          <b>{p.T("guest")}</b>
-          <small>{p.T("guestHint")}</small>
-        </span>
-        <ChevronRightIcon />
+        {p.T("guest")}
       </button>
       <p className="auth-register-row">
         <span>{p.T("noAccount")}</span>
@@ -2590,7 +2887,6 @@ function Auth(p: any) {
           )}
         </div>
       </div>
-      <p className="demo-note">{p.T("demo")}</p>
       <BottomSheet
         open={moreOpen}
         onOpenChange={setMoreOpen}
@@ -2754,54 +3050,29 @@ function Register({ T, back, done }: any) {
 }
 function ProfilePage({ T, data, units, setUnits, save, done, back }: any) {
   const [x, setX] = useState<Profile>(data);
-  const dateMatch = /^\d{4}-\d{2}-\d{2}$/.test(x.birthday);
-  const dateParts = dateMatch ? x.birthday.split("-").map(Number) : null;
-  const birthDate = dateParts
-    ? new Date(dateParts[0], dateParts[1] - 1, dateParts[2])
-    : null;
   const now = new Date();
-  const exactDate = Boolean(
-    birthDate &&
-    dateParts &&
-    birthDate.getFullYear() === dateParts[0] &&
-    birthDate.getMonth() === dateParts[1] - 1 &&
-    birthDate.getDate() === dateParts[2],
-  );
-  const dateLimit = (yearsAgo: number) => {
-    const value = new Date(
-      now.getFullYear() - yearsAgo,
-      now.getMonth(),
-      now.getDate(),
-    );
-    return [
-      value.getFullYear(),
-      String(value.getMonth() + 1).padStart(2, "0"),
-      String(value.getDate()).padStart(2, "0"),
-    ].join("-");
+  const age = x.birthday ? calcAge(x.birthday) : -1;
+  const setAgeYears = (nextAge: number) => {
+    setX({
+      ...x,
+      birthday:
+        Number.isFinite(nextAge) && nextAge >= 10 && nextAge <= 99
+          ? `${now.getFullYear() - nextAge}-01-01`
+          : "",
+    });
   };
-  const age = birthDate
-    ? now.getFullYear() -
-      birthDate.getFullYear() -
-      (now <
-      new Date(now.getFullYear(), birthDate.getMonth(), birthDate.getDate())
-        ? 1
-        : 0)
-    : -1;
   const valid =
-    x.nickname.trim().length >= 2 &&
     Boolean(x.gender) &&
     Number.isFinite(x.heightCm) &&
     x.heightCm >= 100 &&
     x.heightCm <= 230 &&
-    Number.isFinite(x.weightKg) &&
-    x.weightKg >= 30 &&
-    x.weightKg <= 300 &&
-    exactDate &&
-    age >= 13 &&
-    age <= 100;
+    age >= 10 &&
+    age <= 99;
   return (
-    <section className="product-page profile-edit">
-      <Header title={T("bodyProfile")} back={back} />
+    <section
+      className={`product-page profile-edit ${back ? "profile-edit-existing" : "profile-setup"}`}
+    >
+      <Header title={T(back ? "bodyProfile" : "newUserRegister")} back={back} />
       <Logo />
       <p className="flow-hint profile-hint">{T("profileHint")}</p>
       <div className="unit-toggle">
@@ -2840,9 +3111,11 @@ function ProfilePage({ T, data, units, setUnits, save, done, back }: any) {
           />
         </Field>
         <div className="field-group">
-          <span>{T("gender")}</span>
+          <span>
+            <span className="field-required">*</span> {T("gender")}
+          </span>
           <div className="choice-row">
-            {["male", "female", "private"].map((g) => (
+            {["male", "female"].map((g) => (
               <button
                 type="button"
                 key={g}
@@ -2854,14 +3127,19 @@ function ProfilePage({ T, data, units, setUnits, save, done, back }: any) {
             ))}
           </div>
         </div>
-        <Field label={`${T("height")} · ${units === "metric" ? "cm" : "in"}`}>
+        <Field
+          label={`${T("height")} · ${units === "metric" ? "cm" : "in"}`}
+          required
+        >
           <BarChartIcon />
           <KeyboardInput
             inputMode="decimal"
             value={
-              units === "metric"
-                ? x.heightCm
-                : Math.round((x.heightCm / 2.54) * 10) / 10
+              x.heightCm > 0
+                ? units === "metric"
+                  ? x.heightCm
+                  : Math.round((x.heightCm / 2.54) * 10) / 10
+                : ""
             }
             onChange={(e) =>
               setX({
@@ -2872,40 +3150,18 @@ function ProfilePage({ T, data, units, setUnits, save, done, back }: any) {
             }
           />
         </Field>
-        <Field label={`${T("weight")} · ${units === "metric" ? "kg" : "lb"}`}>
-          <BarChartIcon />
+        <Field label={T("ageYears")} required>
           <KeyboardInput
-            inputMode="decimal"
-            value={
-              units === "metric"
-                ? x.weightKg
-                : Math.round(x.weightKg * 2.20462 * 10) / 10
-            }
-            onChange={(e) =>
-              setX({
-                ...x,
-                weightKg:
-                  units === "metric"
-                    ? +e.target.value
-                    : +e.target.value / 2.20462,
-              })
-            }
-          />
-        </Field>
-        <Field label={T("birthday")}>
-          <KeyboardInput
-            type="date"
-            value={x.birthday}
-            onChange={(e) => setX({ ...x, birthday: e.target.value })}
             inputMode="numeric"
-            min={dateLimit(100)}
-            max={dateLimit(13)}
-            placeholder={T("dateFormat")}
+            value={age >= 0 ? age : ""}
+            onChange={(e) => setAgeYears(+e.target.value)}
+            placeholder={T("ageYears")}
           />
+          <span className="field-suffix">{T("age")}</span>
         </Field>
-        {!valid && (
+        {age >= 0 && (age < 10 || age > 99) ? (
           <p className="profile-validation">{T("profileValidation")}</p>
-        )}
+        ) : null}
         <button className="primary-btn" disabled={!valid}>
           {back ? T("save") : T("start")}
         </button>
@@ -2968,7 +3224,34 @@ function BottomNav({ page, T, go }: any) {
 // HOME_DOMAIN_START
 type HomeMetricId = "score" | "fat" | "muscle" | "weight";
 type HomeTrendPoint = { reportId: string; measuredAt: string; value: number; unit: string; comparisonKey: string };
-type HomeOverview = { latest?: Report; reports: Report[]; concerns: ReportModule[]; trends: Record<HomeMetricId, HomeTrendPoint[]> };
+type HomeFindingState = "persistent" | "new" | "latest" | "improved" | "good" | "stale";
+type HomeModuleCoverage = {
+  moduleId: ModuleId;
+  measuredBatchCount: number;
+  latestMeasuredAt?: string;
+  latestReportId?: string;
+};
+type HomeFindingSummary = {
+  module: ReportModule;
+  report: Report;
+  previous?: ReportModule;
+  state: HomeFindingState;
+  occurrenceCount: number;
+};
+type HomeOverview = {
+  latest?: Report;
+  reports: Report[];
+  window: Report[];
+  activeDeviceFamily?: string;
+  supportedModules: ModuleId[];
+  coverage: HomeModuleCoverage[];
+  findings: HomeFindingSummary[];
+  concerns: ReportModule[];
+  trends: Record<HomeMetricId, HomeTrendPoint[]>;
+  improvedCount: number;
+  persistentConcernCount: number;
+  newConcernCount: number;
+};
 type HomeLocalized<T> = Record<Locale, T>;
 type HomeAIContent = { summary: string; risks: string[]; strengths: string[]; actions: string[] };
 type HomeServiceResult = {
@@ -2993,6 +3276,12 @@ const homeModuleOrder: ModuleId[] = ["composition", "posture", "balance", "neck"
 const homeSeverity = { good: 0, attention: 1, risk: 2 };
 function homeTimestamp(date: string) { return Date.parse(date.replace(" ", "T")); }
 function homeComparisonKey(report: Report) { return report.device + ":" + (report.comparisonKey ?? "legacy-m60-v1"); }
+function homeDeviceModules(report?: Report): ModuleId[] {
+  if (!report) return [];
+  // Demo capability matrix. Production must receive this from the device/report service.
+  if (/M60/i.test(report.device)) return homeModuleOrder;
+  return Array.from(new Set(report.modules.map(module => module.id)));
+}
 function homeMetricValue(report: Report, id: HomeMetricId): number | undefined {
   if (id === "score") return typeof report.score === "number" && Number.isFinite(report.score) ? report.score : undefined;
   const metric = report.modules.find(m => m.id === "composition")?.metrics.find(m => m.label === homeMetricSpec[id].label);
@@ -3005,14 +3294,63 @@ function homeMetricValue(report: Report, id: HomeMetricId): number | undefined {
 function buildHomeOverview(records: Report[]): HomeOverview {
   const reports = records.filter(r => Number.isFinite(homeTimestamp(r.date))).slice().sort((a, b) => homeTimestamp(b.date) - homeTimestamp(a.date));
   const latest = reports[0];
-  const concerns = (latest?.modules ?? []).filter(m => m.status !== "good").slice().sort((a,b) =>
-    homeSeverity[b.status] - homeSeverity[a.status] || homeModuleOrder.indexOf(a.id) - homeModuleOrder.indexOf(b.id)).slice(0,3);
+  const activeDeviceFamily = latest ? homeComparisonKey(latest) : undefined;
+  const stream = activeDeviceFamily ? reports.filter(report => homeComparisonKey(report) === activeDeviceFamily) : [];
+  const window = stream.slice(0, 7);
+  const supportedModules = homeDeviceModules(latest);
+  const coverage = supportedModules.map(moduleId => {
+    const measured = window.filter(report => report.modules.some(module => module.id === moduleId));
+    return {
+      moduleId,
+      measuredBatchCount: measured.length,
+      latestMeasuredAt: measured[0]?.date,
+      latestReportId: measured[0]?.id,
+    };
+  });
+  const findings = supportedModules.flatMap<HomeFindingSummary>(moduleId => {
+    const measured = window.flatMap(report => {
+      const module = report.modules.find(item => item.id === moduleId);
+      return module ? [{ report, module }] : [];
+    });
+    const current = measured[0];
+    if (!current) return [];
+    const previous = measured[1]?.module;
+    const recentStatuses = measured.slice(0, 3).map(item => item.module.status);
+    const occurrenceCount = measured.findIndex(item => item.module.status === "good");
+    const attentionRun = occurrenceCount === -1 ? measured.length : occurrenceCount;
+    const batchIndex = window.findIndex(report => report.id === current.report.id);
+    let state: HomeFindingState;
+    if (batchIndex >= 2 && current.module.status !== "good") state = "stale";
+    else if (previous && homeSeverity[current.module.status] < homeSeverity[previous.status]) state = "improved";
+    else if (current.module.status === "good" && recentStatuses.length >= 3 && recentStatuses.every(status => status === "good")) state = "good";
+    else if (current.module.status !== "good" && previous?.status === "good") state = "new";
+    else if (current.module.status !== "good" && recentStatuses.length >= 3 && recentStatuses.every(status => status !== "good")) state = "persistent";
+    else state = "latest";
+    return [{ module: current.module, report: current.report, previous, state, occurrenceCount: current.module.status === "good" ? recentStatuses.filter(status => status === "good").length : Math.max(1, attentionRun) }];
+  });
+  const concernPriority: Record<HomeFindingState, number> = { new: 5, persistent: 4, latest: 3, stale: 2, improved: 1, good: 0 };
+  const concernFindings = findings.filter(item => ["new", "persistent", "latest", "stale"].includes(item.state)).sort((a,b) =>
+    homeSeverity[b.module.status] - homeSeverity[a.module.status] || concernPriority[b.state] - concernPriority[a.state] || homeTimestamp(b.report.date) - homeTimestamp(a.report.date));
+  const concerns = concernFindings.slice(0, 3).map(item => item.module);
   const trends = Object.fromEntries((Object.keys(homeMetricSpec) as HomeMetricId[]).map(id => [
-    id, reports.filter(r => latest && homeComparisonKey(r) === homeComparisonKey(latest)).map(r => ({
+    id, stream.map(r => ({
       reportId: r.id, measuredAt: r.date, value: homeMetricValue(r,id), unit: homeMetricSpec[id].unit, comparisonKey: homeComparisonKey(r),
-    })).filter((p): p is HomeTrendPoint => p.value !== undefined).reverse(),
+    })).filter((p): p is HomeTrendPoint => p.value !== undefined).slice(0, 7).reverse(),
   ])) as HomeOverview["trends"];
-  return { reports, latest, concerns, trends };
+  return {
+    reports,
+    latest,
+    window,
+    activeDeviceFamily,
+    supportedModules,
+    coverage,
+    findings,
+    concerns,
+    trends,
+    improvedCount: findings.filter(item => item.state === "improved").length,
+    persistentConcernCount: findings.filter(item => item.state === "persistent").length,
+    newConcernCount: findings.filter(item => item.state === "new").length,
+  };
 }
 function isHomeServiceResult(value: unknown): value is HomeServiceResult {
   if (!value || typeof value !== "object") return false;
@@ -3036,7 +3374,41 @@ function homeServiceSummary(type: HomeServiceResult["type"], overview: HomeOverv
     .sort((a,b) => homeTimestamp(b.generatedAt) - homeTimestamp(a.generatedAt));
   const result = linked.find(r => r.reportId === overview.latest?.id) ?? linked[0];
   const report = overview.reports.find(p => p.id === result?.reportId);
-  return result && report ? { type, state: report.id === overview.latest?.id ? "available" : "historical", result, report } : { type, state: "empty" };
+  return result && report ? { type, state: type === "training" || report.id === overview.latest?.id ? "available" : "historical", result, report } : { type, state: "empty" };
+}
+type ServicePreviewMode = "live" | "generated" | "empty";
+function ScoreCountUp({ value, active }: { value: number; active: boolean }) {
+  const [display, setDisplay] = useState(active ? 0 : value);
+  useEffect(() => {
+    if (!active) {
+      setDisplay(value);
+      return;
+    }
+    let frame = 0;
+    const start = performance.now();
+    const duration = 550;
+    const tick = (now: number) => {
+      const t = Math.min(1, (now - start) / duration);
+      setDisplay(Math.round(value * (1 - Math.pow(1 - t, 3))));
+      if (t < 1) frame = requestAnimationFrame(tick);
+    };
+    frame = requestAnimationFrame(tick);
+    return () => cancelAnimationFrame(frame);
+  }, [value, active]);
+  return <>{display}</>;
+}
+function resolveServiceSummary(
+  type: HomeServiceResult["type"],
+  overview: HomeOverview,
+  services: ReturnType<typeof useHomeServices>,
+  previewMode: ServicePreviewMode,
+): HomeServiceSummary {
+  if (previewMode === "empty") return { type, state: "empty" };
+  if (previewMode === "generated" && overview.latest) {
+    const result = previewServices("both", overview.latest).results.find((r) => r.type === type);
+    if (result) return { type, state: "available", result, report: overview.latest };
+  }
+  return homeServiceSummary(type, overview, services.results);
 }
 function homeModelAsset(report: Report): string | undefined {
   if (report.modelAsset === null) return undefined;
@@ -3112,12 +3484,65 @@ const homeWords = {
   firstPoint: ["该指标的首次可比测量","First comparable measurement","Erste vergleichbare Messung","أول قياس قابل للمقارنة"],
   excluded: ["部分记录口径不同，未并入趋势。","Some records use different definitions and are excluded.","Abweichende Messdefinitionen wurden ausgeschlossen.","استُبعدت بعض السجلات لاختلاف تعريف القياس."],
   recentSeven: ["展示最近 7 次可比测量","Showing 7 recent comparable measurements","Die letzten 7 vergleichbaren Messungen","آخر 7 قياسات قابلة للمقارنة"],
+  recentSevenBadge: ["近 7 次测量","Last 7 measurements","Letzte 7 Messungen","آخر 7 قياسات"],
+  viewAllTrends: ["查看全部","View all","Alle anzeigen","عرض الكل"],
+  previewLive: ["实际数据","Live data","Live-Daten","البيانات الفعلية"],
+  previewGenerated: ["已生成预览","Generated preview","Generiert","معاينة جاهزة"],
+  previewEmpty: ["未生成预览","Not generated","Nicht erstellt","غير مُنشأ"],
+  interactionPreview: ["交互方案预览","Interaction preview","Interaktionsvorschau","معاينة التفاعل"],
+  interactionDefault: ["默认","Default","Standard","افتراضي"],
+  interactionA: ["A Hero","A Hero","A Hero","A Hero"],
+  interactionB: ["B Deck","B Deck","B Deck","B Deck"],
+  interactionC: ["C Scrub","C Scrub","C Scrub","C Scrub"],
+  interactionD: ["D 入场","D Reveal","D Reveal","D Reveal"],
+  interactionDescDefault: ["当前线上交互，无额外动效","Current production interaction","Aktuelle Produktionsinteraktion","التفاعل الحالي"],
+  interactionDescA: ["评分数字滚动揭示 + 指标 chip 按压弹性展开","Score count-up + elastic metric chips","Score count-up + elastische Metrik-Chips","عدّاد النتيجة + شرائح مرنة"],
+  interactionDescB: ["服务卡片左右滑 Deck + 点击翻转已生成/未生成","Swipeable service deck + flip states","Wischbares Service-Deck + Flip","بطاقات قابلة للسحب + قلب"],
+  interactionDescC: ["趋势图横向拖拽磁吸选点 + 光带跟随","Trend scrub with magnetic snap + glow","Trend-Scrub mit Magnet-Snap","سحب المخطط مع التثبيت"],
+  interactionDescD: ["分区滚动 stagger 入场 + 右侧进度指示","Section stagger reveal + scroll rail","Stagger-Einblendung + Scroll-Leiste","ظهور متتابع + مؤشر التمرير"],
+  deckTapFlip: ["点击卡片翻转","Tap card to flip","Karte antippen zum Umdrehen","اضغط لقلب البطاقة"],
   basic: ["基础评估结果","Basic assessment results","Grundlegende Messergebnisse","نتائج التقييم الأساسية"],
   demo: ["本地 Demo · 示例测量数据，非实时健康监测。","Local Demo · Sample assessments, not live health monitoring.","Lokales Demo · Beispieldaten, keine Echtzeit-Gesundheitsüberwachung.","عرض محلي · قياسات تجريبية وليست مراقبة صحية آنية."],
   preview: ["演示预览","Demo preview","Demo-Vorschau","معاينة تجريبية"],
   exitPreview: ["退出预览","Exit preview","Vorschau verlassen","الخروج من المعاينة"],
   previewMissing: ["该预览场景不存在","This preview scenario does not exist","Diese Vorschau ist nicht verfügbar","سيناريو المعاينة غير موجود"],
   previewReadOnly: ["只读示例，不会读取或修改个人数据。","Read-only sample. Personal data is neither read nor changed.","Schreibgeschütztes Beispiel. Persönliche Daten werden weder gelesen noch geändert.","مثال للعرض فقط؛ لا تتم قراءة البيانات الشخصية أو تعديلها."],
+  statusOverview: ["身体状态总览","Body status overview","Körperstatus im Überblick","نظرة عامة على حالة الجسم"],
+  stageDetail: ["查看阶段详情","View period details","Zeitraum ansehen","عرض تفاصيل المرحلة"],
+  recentMeasurements: ["最近测量","Recent assessments","Letzte Messungen","القياسات الأخيرة"],
+  firstAssessment: ["首次测量","First assessment","Erste Messung","القياس الأول"],
+  coverage: ["测量覆盖","Measurement coverage","Messabdeckung","تغطية القياس"],
+  coverageOpen: ["展开覆盖详情","Show coverage","Abdeckung anzeigen","عرض التغطية"],
+  coverageClose: ["收起覆盖详情","Hide coverage","Abdeckung ausblenden","إخفاء التغطية"],
+  measuredTimes: ["次","times","Mal","مرات"],
+  neverMeasured: ["尚未测量","Not measured yet","Noch nicht gemessen","لم يُقَس بعد"],
+  improvedItems: ["项改善","improved","verbessert","تحسنت"],
+  persistentItems: ["项持续关注","ongoing","weiter beobachten","تحتاج متابعة"],
+  newItems: ["项新增关注","new","neu","جديدة"],
+  coreChanges: ["核心指标变化","Key metric changes","Veränderung der Kernwerte","تغيرات المؤشرات الرئيسية"],
+  currentValue: ["当前值","Current","Aktuell","الحالي"],
+  sinceLastShort: ["较上次","Since last","Seit letzter Messung","مقارنة بالسابق"],
+  stageChange: ["阶段变化","Period change","Veränderung im Zeitraum","تغير المرحلة"],
+  sourceDate: ["数据来源","Source","Quelle","المصدر"],
+  needNextMeasurement: ["完成下一次同类型测量后可查看变化","Complete another comparable assessment to see change","Nach einer weiteren vergleichbaren Messung wird die Veränderung sichtbar","أكمل قياساً مماثلاً آخر لعرض التغير"],
+  findingsTitle: ["需要关注与已有改善","Attention and improvements","Aufmerksamkeit und Verbesserungen","نقاط الاهتمام والتحسن"],
+  findingsSub: ["按模块最近有效记录判断，未测量不等于正常。","Based on each module's latest valid result; unmeasured does not mean normal.","Basis ist das letzte gültige Ergebnis je Modul; nicht gemessen bedeutet nicht normal.","يعتمد على أحدث نتيجة صالحة لكل وحدة؛ عدم القياس لا يعني أن النتيجة طبيعية."],
+  persistentFinding: ["持续关注","Ongoing attention","Weiter beobachten","متابعة مستمرة"],
+  newFinding: ["本次新增","New finding","Neu festgestellt","ملاحظة جديدة"],
+  latestFinding: ["当前需关注","Needs attention","Aktuell beachten","يحتاج إلى اهتمام"],
+  improvedFinding: ["较上次改善","Improved","Verbessert","تحسن"],
+  goodFinding: ["持续良好","Consistently good","Anhaltend gut","جيد باستمرار"],
+  staleFinding: ["近期未复测","Not reassessed recently","Kürzlich nicht erneut gemessen","لم يُعد قياسه مؤخراً"],
+  shapeChanges: ["形态变化","Shape changes","Formveränderung","تغيرات الشكل"],
+  shapeChangesSub: ["仅比较同设备与同模型口径的 3D 记录。","Only comparable 3D records from the same device and model definition are used.","Verglichen werden nur kompatible 3D-Daten desselben Geräts und Modellstandards.","تُقارن فقط سجلات ثلاثية الأبعاد المتوافقة من الجهاز وتعريف النموذج نفسيهما."],
+  compareModels: ["查看完整 3D 对比","View full 3D comparison","Vollständigen 3D-Vergleich ansehen","عرض المقارنة ثلاثية الأبعاد كاملة"],
+  shapeNeedsSecond: ["完成下一次同类型测量后，可查看身体形态变化。","Complete another comparable assessment to view body-shape changes.","Nach einer weiteren vergleichbaren Messung werden Formveränderungen sichtbar.","أكمل قياساً مماثلاً آخر لعرض تغيرات شكل الجسم."],
+  earlierModel: ["阶段起点","Period start","Beginn","بداية المرحلة"],
+  latestModel: ["最近一次","Latest","Zuletzt","الأحدث"],
+  recentReport: ["最近报告","Latest report","Letzter Bericht","أحدث تقرير"],
+  reportModules: ["本次完成模块","Modules completed","Abgeschlossene Module","الوحدات المكتملة"],
+  viewRecentReport: ["查看最近报告","View latest report","Letzten Bericht ansehen","عرض أحدث تقرير"],
+  allRecords: ["全部评估记录","All assessment records","Alle Messungen","كل سجلات التقييم"],
 } satisfies Record<string, [string,string,string,string]>;
 type HomeWord = keyof typeof homeWords;
 function homeText(locale: Locale, key: HomeWord) { return homeWords[key][(["zh","en","de","ar"] as Locale[]).indexOf(locale)]; }
@@ -3190,7 +3615,7 @@ function parsePreviewRoute(parts:string[],query?:string):Route {
   const contentId = new URLSearchParams(query).get("content") || undefined;
   if (parts[0] === "reports" && parts[2]) return {page:modules.some(m=>m.id===parts[2])?"report":parts[2],id:parts[1],type:parts[2],contentId};
   if (parts[0] === "reports" && parts[1]) return {page:"report",id:parts[1]};
-  return {page:parts[0] || "home"};
+  return {page:parts[0] || "home",type:parts[1]};
 }
 const previewSummary:Record<"ai"|"training",HomeLocalized<string>> = {
   ai:{zh:"已结合本次测量整理重点关注项、优势与行动建议。",en:"Key findings, strengths and actions have been prepared for this assessment.",de:"Schwerpunkte, Stärken und nächste Schritte wurden für diese Messung aufbereitet.",ar:"تم إعداد أبرز النتائج ونقاط القوة والخطوات العملية لهذا القياس."},
@@ -3217,14 +3642,14 @@ function previewServices(scenario:PreviewScenario,report:Report) {
   if (previewServiceTypes(scenario).includes("training")) results.push({id:"preview-training",reportId:report.id,type:"training",generatedAt:report.date,summary:previewSummary.training,training:previewTrainingData});
   return {status:"ready" as const,results,retry:()=>{}};
 }
-function PreviewTrainingDetail({locale,back,share}:{locale:Locale;back:()=>void;share:()=>void}) {
+function PreviewTrainingDetail({locale,back,share,readonlyLabel}:{locale:Locale;back:()=>void;share?:()=>void;readonlyLabel?:string}) {
   const copy={
     zh:{title:"个性化训练大纲",tag:"已生成",intro:"该示例大纲由本次测量报告与已填写的示例健康档案生成，不依赖 AI 报告解读。",goal:"训练目标",goalText:"建立稳定运动习惯，循序改善核心控制与下肢稳定。",phases:"四周安排",items:[["第 1 周","呼吸与体态筑基"],["第 2–3 周","核心唤醒与下肢激活"],["第 4 周","整合收束与复测准备"]],note:"演示内容仅用于说明产品结构，不构成医疗或训练处方。"},
     en:{title:"Personalised training outline",tag:"Ready",intro:"This sample uses the assessment and a completed sample health profile. It does not depend on AI interpretation.",goal:"Training goal",goalText:"Build a consistent exercise habit and progressively support core control and lower-body stability.",phases:"Four-week structure",items:[["Week 1","Breathing and posture foundations"],["Weeks 2–3","Core awareness and lower-body activation"],["Week 4","Consolidation and reassessment preparation"]],note:"Demo content illustrates the product structure and is not medical or exercise prescription."},
     de:{title:"Persönlicher Trainingsrahmen",tag:"Verfügbar",intro:"Dieses Beispiel nutzt die Messung und ein ausgefülltes Beispiel-Gesundheitsprofil, unabhängig von der KI-Auswertung.",goal:"Trainingsziel",goalText:"Eine regelmäßige Bewegungsroutine aufbauen und Rumpfkontrolle sowie Unterkörperstabilität schrittweise unterstützen.",phases:"Vier-Wochen-Struktur",items:[["Woche 1","Atmung und Haltungsgrundlagen"],["Wochen 2–3","Rumpfwahrnehmung und Unterkörperaktivierung"],["Woche 4","Festigung und Vorbereitung der Folgemessung"]],note:"Demo-Inhalte zeigen nur die Produktstruktur und sind keine medizinische oder trainingsbezogene Verordnung."},
     ar:{title:"خطة تدريب مخصصة",tag:"جاهز",intro:"يعتمد هذا المثال على القياس وملف صحي تجريبي مكتمل، ولا يعتمد على تفسير الذكاء الاصطناعي.",goal:"هدف التدريب",goalText:"بناء عادة حركة منتظمة ودعم التحكم بالجذع وثبات الجزء السفلي تدريجياً.",phases:"هيكل أربعة أسابيع",items:[["الأسبوع 1","أساسيات التنفس والقوام"],["الأسبوعان 2–3","وعي الجذع وتنشيط الجزء السفلي"],["الأسبوع 4","الدمج والاستعداد لإعادة القياس"]],note:"محتوى العرض يوضح بنية المنتج فقط ولا يمثل وصفة طبية أو تدريبية."},
   }[locale];
-  return <section className="fx-detail training-page preview-training-detail"><Header title={copy.title} back={back} actions={<button className="icon-btn" onClick={share} aria-label={copy.title}><Share2Icon/></button>}/><div className="readonly-banner">{homeText(locale,"previewReadOnly")}</div><div className="training-v2"><section className="training-hero"><span className="home-status ready">{copy.tag}</span><h1>{copy.title}</h1><p>{copy.intro}</p></section><section className="training-panel"><SectionTitle title={copy.goal} icon={<TargetIcon/>} accent="accent-emerald"/><p>{copy.goalText}</p></section><section className="training-panel"><SectionTitle title={copy.phases} icon={<LuClipboardList/>} accent="accent-emerald"/><div className="preview-phase-list">{copy.items.map(([weeks,title])=><div key={weeks}><span>{weeks}</span><strong>{title}</strong></div>)}</div></section><p className="report-disclaimer">{copy.note}</p></div></section>;
+  return <section className="fx-detail training-page preview-training-detail"><Header title={copy.title} back={back} actions={share && <button className="icon-btn" onClick={share} aria-label={copy.title}><Share2Icon/></button>}/><div className="readonly-banner">{readonlyLabel || homeText(locale,"previewReadOnly")}</div><div className="training-v2"><section className="training-hero"><span className="home-status ready">{copy.tag}</span><h1>{copy.title}</h1><p>{copy.intro}</p></section><section className="training-panel"><SectionTitle title={copy.goal} icon={<TargetIcon/>} accent="accent-emerald"/><p>{copy.goalText}</p></section><section className="training-panel"><SectionTitle title={copy.phases} icon={<LuClipboardList/>} accent="accent-emerald"/><div className="preview-phase-list">{copy.items.map(([weeks,title])=><div key={weeks}><span>{weeks}</span><strong>{title}</strong></div>)}</div></section><p className="report-disclaimer">{copy.note}</p></div></section>;
 }
 function PreviewPrototype() {
   const [locationKey,setLocationKey]=useState(location.hash);
@@ -3256,7 +3681,9 @@ function PreviewPrototype() {
   else if(parsed.route.page==="ai" && (scenario==="ai"||scenario==="both")) view=<AIPage report={report} homeContent={previewAI[locale]} T={T} locale={locale} back={back} share={share} readOnly/>;
   else if(parsed.route.page==="training" && (scenario==="training"||scenario==="both")) view=<PreviewTrainingDetail locale={locale} back={back} share={share}/>;
   else if(parsed.route.page==="report") view=<M60Report report={report} profile={profile} locale={locale} units="metric" active={moduleId} setActive={setModuleId} T={T} back={back} share={share} go={go} readOnly/>;
-  else if(parsed.route.page==="home") view=<><div className="preview-banner"><span><InfoCircledIcon/>{homeText(locale,"preview")}</span><button onClick={()=>{location.hash="/home"}}>{homeText(locale,"exitPreview")}</button></div><SourceHome T={T} locale={locale} profile={profile} reports={reports} units="metric" go={go} services={previewServices(scenario,report)}/></>;
+  else if(parsed.route.page==="home") view=<><div className="preview-banner"><span><InfoCircledIcon/>{homeText(locale,"preview")}</span><button onClick={()=>{location.hash="/home"}}>{homeText(locale,"exitPreview")}</button></div><SourceHome T={T} locale={locale} profile={profile} reports={reports} units="metric" go={go} services={previewServices(scenario,report)} demoFull={false}/></>;
+  else if(parsed.route.page==="stage") view=<StageFindingsPage reports={reports} locale={locale} filter={parsed.route.type} go={go} back={back}/>;
+  else if(parsed.route.page==="shape") view=<section className="home-detail-page"><Header title={interactionText(locale,"shape")} back={back}/><ShapeComparison reports={buildHomeOverview(reports).window} locale={locale} full/></section>;
   else view=<section className="home-overview-page"><div className="home-empty"><p>{homeText(locale,"previewReadOnly")}</p><button className="home-link" onClick={back}>{homeText(locale,"overview")}</button></div></section>;
   const nav=parsed.valid&&parsed.route.page==="home";
   return <div className={`wh-app ${dark?"wh-dark":"wh-light"} preview-shell${nav?" is-home":""}`} data-locale={locale} style={{"--app-safe-top":`${device.geometry.safeArea.top}px`,"--app-safe-bottom":`${device.platform==="ios"?device.geometry.safeArea.bottom:0}px`} as CSSProperties}><div className="app-header-host" ref={setHeaderHost}/><HeaderHost.Provider value={headerHost}><MobileScroll className="app-screen"><main className={`screen-content ${nav?"with-nav":""} fx-shell`}>{parsed.valid&&parsed.route.page!=="home"&&<div className="preview-banner preview-banner-detail"><span><InfoCircledIcon/>{homeText(locale,"preview")}</span><button onClick={()=>{location.hash="/home"}}>{homeText(locale,"exitPreview")}</button></div>}{view}</main></MobileScroll></HeaderHost.Provider>{nav&&<BottomNav page="home" T={T} go={(path:string)=>path==="/home"?go("home"):go("preview-info")}/>} {toast&&<div className="toast"><CheckCircledIcon/>{toast}</div>}</div>;
@@ -3415,98 +3842,289 @@ function ModelCanvas() {
   }, []);
   return <div ref={mount} className="report-model-canvas" />;
 }
-function SourceHome({ T, locale, profile, reports, units, go, services }: {
+function homeMeasurementCount(locale: Locale, count: number, comparable = false) {
+  const copy = {
+    zh: comparable ? `最近 ${count} 次可比测量` : `最近 ${count} 次测量`,
+    en: `${count} recent ${comparable ? "comparable " : ""}assessments`,
+    de: `${count} letzte ${comparable ? "vergleichbare " : ""}Messungen`,
+    ar: `آخر ${count} قياسات${comparable ? " قابلة للمقارنة" : ""}`,
+  };
+  return copy[locale];
+}
+function homeFindingTitle(item: HomeFindingSummary, locale: Locale) {
+  const name = moduleNames[locale][item.module.id];
+  const copy: Record<HomeFindingState, Record<Locale, string>> = {
+    persistent: {
+      zh: `${name}连续 ${item.occurrenceCount} 次需要关注`,
+      en: `${name} needs attention across ${item.occurrenceCount} assessments`,
+      de: `${name} ist seit ${item.occurrenceCount} Messungen auffällig`,
+      ar: `${name} يحتاج إلى اهتمام في ${item.occurrenceCount} قياسات متتالية`,
+    },
+    new: { zh: `${name}出现新的关注项`, en: `New finding in ${name}`, de: `Neuer Befund bei ${name}`, ar: `ملاحظة جديدة في ${name}` },
+    latest: { zh: `${name}当前结果需要关注`, en: `${name} currently needs attention`, de: `${name} ist aktuell auffällig`, ar: `${name} يحتاج إلى اهتمام حالياً` },
+    improved: { zh: `${name}较上次已有改善`, en: `${name} improved since last time`, de: `${name} hat sich verbessert`, ar: `تحسن ${name} منذ القياس السابق` },
+    good: { zh: `${name}连续保持良好`, en: `${name} remains consistently good`, de: `${name} bleibt anhaltend gut`, ar: `${name} مستمر بحالة جيدة` },
+    stale: { zh: `${name}上次存在关注项，近期未复测`, en: `${name} had a previous finding and has not been reassessed`, de: `${name} war auffällig und wurde kürzlich nicht erneut gemessen`, ar: `كان لدى ${name} ملاحظة سابقة ولم يُعد قياسه مؤخراً` },
+  };
+  return copy[item.state][locale];
+}
+const interactionWords = {
+  stage: ["阶段变化详情","Changes in this period","Veränderungen im Zeitraum","تفاصيل تغيرات المرحلة"],
+  all: ["全部","All","Alle","الكل"],
+  improved: ["已有改善","Improved","Verbessert","تحسّن"],
+  persistent: ["持续关注","Ongoing attention","Weiter beobachten","اهتمام مستمر"],
+  new: ["新增关注","New findings","Neue Auffälligkeit","ملاحظات جديدة"],
+  latest: ["最近结果","Latest finding","Letzter Befund","أحدث نتيجة"],
+  stale: ["待复测","Reassessment due","Erneut messen","بانتظار إعادة القياس"],
+  good: ["保持良好","Consistently good","Weiterhin gut","جيد باستمرار"],
+  modules: ["个模块","modules","Module","وحدات"],
+  evidence: ["测量依据","Measurement evidence","Messgrundlage","أساس القياس"],
+  notMeasured: ["未测","Not measured","Nicht gemessen","لم يُقَس"],
+  risk: ["风险","Flagged","Auffällig","مؤشر خطر"],
+  attention: ["需关注","Attention","Beachten","يحتاج اهتماماً"],
+  normal: ["良好","Good","Gut","جيد"],
+  original: ["查看原始报告","View source report","Originalbericht ansehen","عرض التقرير الأصلي"],
+  improvedNote: ["状态较上次改善，不代表已恢复正常。","Improved since last time; this does not mean all findings have resolved.","Gegenüber der letzten Messung verbessert, nicht zwingend unauffällig.","تحسنت الحالة منذ آخر قياس؛ لا يعني ذلك زوال كل الملاحظات."],
+  noFinding: ["此分类暂无模块","No modules in this category","Keine Module in dieser Kategorie","لا توجد وحدات في هذه الفئة"],
+  shape: ["形态对比","Shape comparison","Formvergleich","مقارنة الشكل"],
+  simulated: ["模拟形态 · 交互演示","Simulated shapes · interaction demo","Simulierte Formen · Interaktionsdemo","أشكال محاكاة · عرض تفاعلي"],
+  pair: ["并排","Side by side","Nebeneinander","جنباً إلى جنب"],
+  overlay: ["叠加","Overlay","Überlagert","تراكب"],
+  front: ["正面","Front","Vorne","أمام"],
+  side: ["侧面","Side","Seite","جانب"],
+  rear: ["背面","Back","Hinten","خلف"],
+  before: ["对比起点","Earlier","Früher","الأسبق"],
+  after: ["对比终点","Later","Später","الأحدث"],
+  compare: ["查看形态对比","Explore shape comparison","Formvergleich öffnen","عرض مقارنة الشكل"],
+  drag: ["拖动同步旋转 · 双指缩放","Drag to rotate both · pinch to zoom","Gemeinsam drehen · mit zwei Fingern zoomen","اسحب لتدوير النموذجين · قرّب بإصبعين"],
+  opacity: ["起点模型透明度","Earlier model opacity","Deckkraft des früheren Modells","عتامة النموذج الأسبق"],
+  trend: ["指标变化","Metric changes","Kennwertverlauf","تغير المؤشرات"],
+  moreMetrics: ["更多指标","More metrics","Weitere Kennwerte","مؤشرات أخرى"],
+  stageDelta: ["阶段变化","Period change","Veränderung im Zeitraum","تغير المرحلة"],
+  serviceDemo: ["AI 与训练大纲均已生成 · 演示内容","AI and training ready · demo content","KI und Training verfügbar · Demo-Inhalte","التفسير والتدريب جاهزان · محتوى تجريبي"],
+  shapeUnavailable: ["暂无可对比的两次记录","Two comparable records are required","Zwei vergleichbare Messungen erforderlich","يلزم وجود قياسين قابلين للمقارنة"],
+} satisfies Record<string,[string,string,string,string]>;
+function interactionText(locale:Locale,key:keyof typeof interactionWords) { return interactionWords[key][(["zh","en","de","ar"] as Locale[]).indexOf(locale)]; }
+const homeInteractionMemory: { entered:boolean; metric:HomeMetricId; selections:Partial<Record<HomeMetricId,string>>; shapeMode:"pair"|"overlay"; before?:string; after?:string; view:number; paused?:boolean } = {entered:false,metric:"fat",selections:{},shapeMode:"pair",view:0};
+function StageFindingsPage({reports,locale,filter,go,back}:{reports:Report[];locale:Locale;filter?:string;go:(path:string)=>void;back:()=>void}) {
+  const overview=buildHomeOverview(reports);
+  const t=(key:keyof typeof interactionWords)=>interactionText(locale,key);
+  const active=["persistent","new","improved"].includes(filter||"")?filter!:"all";
+  const ordered=overview.findings.slice().sort((a,b)=>homeSeverity[b.module.status]-homeSeverity[a.module.status]);
+  const items=active==="all"?ordered:ordered.filter(item=>item.state===active);
+  const oldest=overview.window.at(-1);
+  return <section className="home-detail-page stage-detail"><Header title={t("stage")} back={back}/>
+    <div className="stage-period"><span>{homeMeasurementCount(locale,overview.window.length)}</span><time>{oldest?.date.slice(0,10)} — {overview.latest?.date.slice(0,10)}</time></div>
+    <Carousel className="stage-filter-carousel" contentClassName="stage-filter-track" ariaLabel={t("stage")}>
+      {(["all","persistent","new","improved"] as const).map(key=><button key={key} type="button" aria-pressed={active===key} onClick={()=>go("/stage/"+key)}>{active===key&&<motion.span layoutId="stage-filter" className="selection-plate" transition={{type:"spring",stiffness:450,damping:35}}/>}<span>{t(key)} <b>{key==="all"?ordered.length:ordered.filter(item=>item.state===key).length}</b></span></button>)}
+    </Carousel>
+    <motion.div key={active} initial={{opacity:0,y:16}} animate={{opacity:1,y:0}} transition={{duration:.24}} className="stage-finding-list">
+    {items.length===0&&<p className="home-empty">{t("noFinding")}</p>}
+    {items.map((item,index)=><motion.article key={item.module.id} className="stage-finding-card" initial={{opacity:0,y:18}} animate={{opacity:1,y:0}} transition={{delay:index*.045,duration:.25}}>
+      <div className="home-heading"><h2><IconTile accent={homeModuleAccent(item.module.id)}>{homeModuleIcon(item.module.id)}</IconTile>{moduleNames[locale][item.module.id]}</h2><span className={"home-status "+item.module.status}>{t(item.state)}</span></div>
+      <h3>{homeFindingTitle(item,locale)}</h3><p>{homeFinding(item.module,locale)}</p>
+      {item.state==="improved"&&<p className="stage-improved-note">{t("improvedNote")}</p>}
+      <h4>{t("evidence")}</h4>
+      <Carousel className="stage-evidence-carousel" contentClassName="stage-evidence-track" ariaLabel={t("evidence")}>
+        {overview.window.slice().reverse().map(record=>{const m=record.modules.find(x=>x.id===item.module.id);return <button key={record.id} disabled={!m} className={m?m.status:"unmeasured"} onClick={()=>go("/reports/"+record.id+"/"+item.module.id)} aria-label={record.date+" · "+(m?t(m.status==="good"?"normal":m.status):t("notMeasured"))}><span className="evidence-node"/><time>{record.date.slice(5,10)}</time><small>{m?t(m.status==="good"?"normal":m.status):t("notMeasured")}</small></button>;})}
+      </Carousel>
+      <button className="home-link" onClick={()=>go("/reports/"+item.report.id+"/"+item.module.id)}>{t("original")}<ChevronRightIcon/></button>
+    </motion.article>)}
+    </motion.div>
+  </section>;
+}
+function ShapeComparison({reports,locale,full=false,go}:{reports:Report[];locale:Locale;full?:boolean;go?:(path:string)=>void}) {
+  const t=(key:keyof typeof interactionWords)=>interactionText(locale,key);
+  const records=reports.slice().reverse();
+  const [before,setBefore]=useState(()=>records.some(r=>r.id===homeInteractionMemory.before)?homeInteractionMemory.before!:records[0]?.id);
+  const [after,setAfter]=useState(()=>records.some(r=>r.id===homeInteractionMemory.after)?homeInteractionMemory.after!:records.at(-1)?.id);
+  const [mode,setMode]=useState(homeInteractionMemory.shapeMode);
+  const [view,setView]=useState(homeInteractionMemory.view);
+  const [viewCommand,setViewCommand]=useState(0);
+  const [opacity,setOpacity]=useState(.45);
+  const [paused,setPaused]=useState(()=>homeInteractionMemory.paused??matchMedia("(prefers-reduced-motion: reduce)").matches);
+  const [load,setLoad]=useState<"loading"|"ready"|"error">("loading");
+  const [attempt,setAttempt]=useState(0);
+  const mount=useRef<HTMLDivElement>(null);
+  const options=useRef({mode,view,viewCommand,opacity,paused,before,after});
+  options.current={mode,view,viewCommand,opacity,paused,before,after};
+  useEffect(()=>{homeInteractionMemory.shapeMode=mode;homeInteractionMemory.before=before;homeInteractionMemory.after=after;homeInteractionMemory.paused=paused;},[mode,before,after,paused]);
+  useEffect(()=>{
+    const el=mount.current;
+    if(!el||records.length<2)return;
+    let renderer:THREE.WebGLRenderer;
+    try {renderer=new THREE.WebGLRenderer({alpha:true,antialias:true});} catch {setLoad("error");return;}
+    setLoad("loading");
+    let disposed=false,frame=0,visible=false,interacting=false,resumeAt=0,lastViewCommand=options.current.viewCommand,targetAngle:number|undefined;
+    const scene=new THREE.Scene();
+    const camera=new THREE.PerspectiveCamera(34,1,.1,50);camera.position.set(0,0,4.8);
+    const orbitCamera=camera.clone();
+    orbitCamera.position.set(Math.sin(homeInteractionMemory.view)*4.8,0,Math.cos(homeInteractionMemory.view)*4.8);
+    const controls=new OrbitControls(orbitCamera,el);controls.enablePan=false;controls.enableDamping=true;controls.dampingFactor=.08;controls.minDistance=3.3;controls.maxDistance=6;controls.minPolarAngle=Math.PI*.3;controls.maxPolarAngle=Math.PI*.7;controls.autoRotateSpeed=2;
+    const onStart=()=>{interacting=true;targetAngle=undefined;};const onEnd=()=>{interacting=false;resumeAt=performance.now()+3000;homeInteractionMemory.view=controls.getAzimuthalAngle();};
+    controls.addEventListener("start",onStart);controls.addEventListener("end",onEnd);
+    renderer.setPixelRatio(Math.min(devicePixelRatio,1.7));el.appendChild(renderer.domElement);
+    scene.add(new THREE.HemisphereLight(0xffffff,0x294973,2.6));
+    const light=new THREE.DirectionalLight(0xc2efff,2.8);light.position.set(2,4,5);scene.add(light);
+    let models:THREE.Group[]=[];
+    const geometrySet=new Set<THREE.BufferGeometry>(),materialSet=new Set<THREE.Material>();
+    new OBJLoader().load(new URL("assets/h5-source/skin.obj",document.baseURI).href,obj=>{
+      if(disposed){obj.traverse(node=>{if(node instanceof THREE.Mesh){node.geometry.dispose();const mats=Array.isArray(node.material)?node.material:[node.material];mats.forEach(mat=>mat.dispose());}});return;}
+      const size=new THREE.Box3().setFromObject(obj).getSize(new THREE.Vector3());obj.scale.setScalar(2.5/Math.max(size.x,size.y,size.z));obj.position.sub(new THREE.Box3().setFromObject(obj).getCenter(new THREE.Vector3()));
+      models=[0,1].map(index=>{const group=new THREE.Group();const body=obj.clone(true);body.traverse(node=>{if(node instanceof THREE.Mesh){geometrySet.add(node.geometry);const originals=Array.isArray(node.material)?node.material:[node.material];originals.forEach(m=>m.dispose());const mat=new THREE.MeshStandardMaterial({color:index===0?0xa190ef:0x3da4dc,roughness:.4,metalness:.12,transparent:true,opacity:1,depthWrite:true});node.material=mat;materialSet.add(mat);}});group.add(body);scene.add(group);return group;});
+      setLoad("ready");
+    },undefined,()=>{if(!disposed)setLoad("error");});
+    const observer=new IntersectionObserver(entries=>{visible=entries[0]?.isIntersecting??false;},{threshold:.05});observer.observe(el);
+    const resize=()=>{const w=el.clientWidth,h=el.clientHeight;if(w&&h){camera.aspect=w/h;camera.updateProjectionMatrix();renderer.setSize(w,h);}};const ro=new ResizeObserver(resize);ro.observe(el);resize();
+    const clock=new THREE.Clock();
+    const render=()=>{
+      frame=requestAnimationFrame(render);const dt=Math.min(clock.getDelta(),.05);
+      if(!visible||document.hidden)return;
+      const o=options.current;
+      if(o.viewCommand!==lastViewCommand){lastViewCommand=o.viewCommand;targetAngle=o.view;}
+      if(targetAngle!==undefined){const currentAngle=controls.getAzimuthalAngle(),diff=Math.atan2(Math.sin(targetAngle-currentAngle),Math.cos(targetAngle-currentAngle));const next=currentAngle+diff*Math.min(1,dt*13),distance=orbitCamera.position.length();orbitCamera.position.set(Math.sin(next)*distance,THREE.MathUtils.damp(orbitCamera.position.y,0,13,dt),Math.cos(next)*distance);if(Math.abs(diff)<.005)targetAngle=undefined;}
+      controls.autoRotate=!o.paused&&!interacting&&targetAngle===undefined&&performance.now()>resumeAt;controls.update(dt);
+      const azimuth=controls.getAzimuthalAngle(),polar=controls.getPolarAngle()-Math.PI/2;
+      camera.position.z=orbitCamera.position.length();
+      models.forEach((model,index)=>{
+        const targetX=o.mode==="overlay"?0:index===0?-.64:.64;
+        model.position.x=THREE.MathUtils.damp(model.position.x,targetX,10,dt);
+        model.rotation.set(polar,azimuth,0);
+        // A derived geometry fixture demonstrates the UI, not a second measured scan.
+        const recordIndex=Math.max(0,records.findIndex(r=>r.id===(index===0?o.before:o.after)));
+        const scale=1.07-recordIndex/Math.max(1,records.length-1)*.07;
+        model.scale.x=THREE.MathUtils.damp(model.scale.x,scale,8,dt);model.scale.z=THREE.MathUtils.damp(model.scale.z,scale,8,dt);
+        model.traverse(node=>{if(node instanceof THREE.Mesh){const mat=node.material as THREE.MeshStandardMaterial;const targetOpacity=o.mode==="overlay"?(index===0?o.opacity:.78):1;mat.opacity=THREE.MathUtils.damp(mat.opacity,targetOpacity,10,dt);mat.depthWrite=o.mode!=="overlay";}});
+      });
+      renderer.render(scene,camera);
+    };render();
+    return()=>{homeInteractionMemory.view=controls.getAzimuthalAngle();disposed=true;cancelAnimationFrame(frame);observer.disconnect();ro.disconnect();controls.removeEventListener("start",onStart);controls.removeEventListener("end",onEnd);controls.dispose();geometrySet.forEach(g=>g.dispose());materialSet.forEach(m=>m.dispose());renderer.dispose();el.replaceChildren();};
+  },[attempt,reports.map(r=>r.id).join("|")]);
+  if(records.length<2)return <div className="home-shape-empty"><p>{t("shapeUnavailable")}</p></div>;
+  const selectDate=(which:"before"|"after",id:string)=>{const i=records.findIndex(r=>r.id===id);if(which==="before"&&i<records.findIndex(r=>r.id===after))setBefore(id);if(which==="after"&&i>records.findIndex(r=>r.id===before))setAfter(id);};
+  return <div className={"shape-experience "+(full?"shape-full":"shape-compact")}>
+    <div className="shape-toolbar"><span className="shape-simulation-tag">{t("simulated")}</span><div role="group" aria-label={t("shape")}>{(["pair","overlay"] as const).map(key=><button key={key} onClick={()=>setMode(key)} aria-pressed={mode===key}>{t(key)}</button>)}</div></div>
+    <div className="shape-stage"><div ref={mount} className="shape-canvas" data-scroll-drag="ignore" role="img" aria-label={t("shape")}/><div className="shape-floor"/>
+      {load!=="ready"&&<div className="shape-loading" role="status">{load==="loading"?<span className="shape-loader"/>:<button className="home-link" onClick={()=>setAttempt(n=>n+1)}>{homeText(locale,"retry")}</button>}</div>}
+      <button className="shape-pause" aria-label={homeText(locale,paused?"resumeRotation":"pauseRotation")} aria-pressed={paused} onClick={()=>setPaused(v=>!v)}>{paused?<LuPlay/>:<LuPause/>}</button>
+      <div className="shape-date-labels"><span><i/>{t("before")}<b>{records.find(r=>r.id===before)?.date.slice(0,10)}</b></span><span><i/>{t("after")}<b>{records.find(r=>r.id===after)?.date.slice(0,10)}</b></span></div>
+    </div>
+    <div className="shape-view-tabs">{(["front","side","rear"] as const).map((key,i)=><button key={key} aria-pressed={view===i*Math.PI/2} onClick={()=>{setView(i*Math.PI/2);setViewCommand(n=>n+1);setPaused(true);}}>{t(key)}</button>)}</div>
+    <p className="shape-gesture-hint">{t("drag")}</p>
+    {full&&mode==="overlay"&&<div className="shape-opacity"><span>{t("opacity")}</span>{[.25,.45,.65].map(value=><button key={value} aria-pressed={opacity===value} onClick={()=>setOpacity(value)}>{Math.round(value*100)}%</button>)}</div>}
+    {full&&(["before","after"] as const).map(which=><div className="shape-date-picker" key={which}><h3>{t(which)}</h3><Carousel className="shape-date-carousel" contentClassName="shape-date-track" ariaLabel={t(which)}>{records.map((r,i)=><button key={r.id} disabled={which==="before"?i>=records.findIndex(x=>x.id===after):i<=records.findIndex(x=>x.id===before)} aria-pressed={(which==="before"?before:after)===r.id} onClick={()=>selectDate(which,r.id)}>{r.date.slice(5,10)}</button>)}</Carousel></div>)}
+    {!full&&<button className="shape-detail-link" onClick={()=>go?.("/shape")}>{t("compare")}<ChevronRightIcon/></button>}
+  </div>;
+}
+function SourceHome({ T, locale, profile: _profile, reports, units, go, services, demoFull=true }: {
   T: (key:string)=>string; locale:Locale; profile:Profile; reports:Report[]; units:Units;
-  go:(path:string)=>void; services:ReturnType<typeof useHomeServices>;
+  go:(path:string)=>void; services:ReturnType<typeof useHomeServices>; demoFull?:boolean;
 }) {
   const h = (key:HomeWord)=>homeText(locale,key);
   const overview = buildHomeOverview(reports);
   const latest = overview.latest;
   const [info,setInfo] = useState<"ai"|"training"|null>(null);
   const [expanded,setExpanded] = useState(false);
-  const primaryLabel: Record<ModuleId,[string,string,string,string]> = {
-    composition:["体脂率","Body fat","Körperfett","نسبة الدهون"],
-    posture:["头前引","Forward head","Kopfvorhaltung","تقدم الرأس"],
-    neck:["颈椎前屈","Neck flexion","Nackenbeugung","ثني الرقبة"],
-    spine:["结构异常评分","Structural deviation score","Struktureller Abweichungswert","درجة الانحراف الهيكلي"],
-    hip:["本次臀围","Hip girth","Hüftumfang","محيط الورك"],
-    balance:["COP 轨迹面积","COP area","COP-Fläche","مساحة مسار مركز الضغط"],
-    girth:["颈围","Neck girth","Halsumfang","محيط الرقبة"],
+  const [coverageExpanded,setCoverageExpanded] = useState(false);
+  const servicePreview:ServicePreviewMode = demoFull ? "generated" : "live";
+  const reducedMotion=useReducedMotion();
+  const [firstVisit]=useState(()=>!homeInteractionMemory.entered);
+  useEffect(()=>{homeInteractionMemory.entered=true;},[]);
+  const [visibleSections,setVisibleSections] = useState(0);
+  const pageRef = useRef<HTMLElement>(null);
+  useEffect(() => {
+    const root = pageRef.current;
+    if (!root) return;
+    const targets = Array.from(root.querySelectorAll(".home-reveal-target"));
+    targets.forEach((node) => node.classList.remove("is-visible"));
+    const io = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) entry.target.classList.add("is-visible");
+        });
+        const visible=entries.filter(entry=>entry.isIntersecting).sort((a,b)=>b.intersectionRatio-a.intersectionRatio)[0];
+        if(visible)setVisibleSections(targets.indexOf(visible.target));
+      },
+      { threshold: 0.22 },
+    );
+    targets.forEach((node) => io.observe(node));
+    root.querySelector(".home-overview-card")?.classList.add("is-visible");
+    return () => io.disconnect();
+  }, [latest?.id]);
+  const positiveFindings = overview.findings.filter(item => item.state === "improved" || item.state === "good").slice(0,2);
+  const concernFindings = overview.concerns.map(module=>overview.findings.find(item=>item.module.id===module.id)!);
+  const coveredCount = overview.coverage.filter(item => item.measuredBatchCount > 0).length;
+  const oldest = overview.window.at(-1);
+  const rangeLabel = latest && oldest ? `${oldest.date.slice(0,10)} — ${latest.date.slice(0,10)}` : "";
+  const jumpSection=(index:number)=>{
+    const container=pageRef.current?.closest('[data-testid="mobile-scroll"]') as HTMLElement|null;
+    const node=pageRef.current?.querySelectorAll<HTMLElement>(".home-reveal-target")[index];
+    if(!container||!node)return;
+    const scale=container.clientHeight/container.getBoundingClientRect().height;
+    container.scrollTo({top:container.scrollTop+(node.getBoundingClientRect().top-container.getBoundingClientRect().top)*scale-16,behavior:reducedMotion?"instant":"smooth"});
   };
-  const primaryMetric = (m:ReportModule) => m.metrics.find(x => x.label === ({
-    composition:"体脂率",posture:"头前引",neck:"颈椎前屈",spine:"脊柱结构异常",hip:"本次臀围",balance:"COP 轨迹面积",girth:"颈围",
-  }[m.id]));
-  const formatMetric = (value:string) => convert(value.replace(/\s*分$/, " " + h("scoreUnit")),units);
-  const previous = overview.reports.find(r=>r.id !== latest?.id && latest && homeComparisonKey(r) === homeComparisonKey(latest));
-  const strengths = (latest?.modules ?? []).flatMap<{module:ReportModule;metric:Metric|undefined}>(m => {
-    const positive = m.metrics.find(x=>x.tone === "good");
-    if (positive) return [{ module:m, metric:positive }];
-    return m.status === "good" ? [{ module:m, metric:undefined }] : [];
-  }).slice(0,2);
-  const nickname = profile.nickname === "New User" ? ({zh:"新用户",en:"New user",de:"Neuer Nutzer",ar:"مستخدم جديد"}[locale]) : profile.nickname;
-  return <section className="home-overview-page" data-version="0.2.1">
-    {!latest ? <div className="home-empty">
+  return <section ref={pageRef} className={`home-overview-page home-unified-v3${firstVisit?"":" home-restored"}`} data-version="0.2.14">
+    <div className="home-scroll-rail" aria-label={h("statusOverview")}>
+      {[h("statusOverview"),h("services"),h("findingsTitle"),h("shapeChanges"),interactionText(locale,"trend"),h("recentReport")].map((label,i) => (
+        <button key={label} type="button" aria-label={label} aria-current={visibleSections===i?"location":undefined} className={visibleSections === i ? "active" : ""} onClick={()=>jumpSection(i)}><span/><small>{label}</small></button>
+      ))}
+    </div>
+    {!latest ? <div className="home-empty home-reveal-target">
       <IconTile><LuChartNoAxesCombined /></IconTile><h1>{h("noReport")}</h1><p>{h("startHint")}</p>
       <button className="home-link" onClick={()=>go("/reports")}>{h("records")}<ChevronRightIcon /></button>
-    </div> : <section className="home-overview-card" aria-labelledby="home-overview-title">
-      <div className="home-heading"><h2 id="home-overview-title">{h("overview")}</h2>
-        <button className="home-link" onClick={()=>go("/reports/"+latest.id)}>{h("full")}<ChevronRightIcon /></button>
+    </div> : <section className="home-overview-card home-stage-hero home-reveal-target" aria-labelledby="home-overview-title" style={{ animationDelay: "0ms" }}>
+      <div className="home-heading"><h2 id="home-overview-title">{h("statusOverview")}</h2>
+        <button className="home-link" onClick={()=>go("/stage/all")}>{h("stageDetail")}<ChevronRightIcon /></button>
       </div>
-      <div className="home-identity">
-        <div><strong>{nickname}</strong><span>{latest.device}</span><time dateTime={latest.date.replace(" ","T")}>{h("measured")} {latest.date}</time></div>
-        {homeMetricValue(latest,"score") !== undefined && <div className="home-report-score"><span>{h("reportScore")}</span><strong>{latest.score}<small>/100</small></strong></div>}
+      <div className="home-stage-period">
+        <strong>{overview.window.length === 1 ? h("firstAssessment") : homeMeasurementCount(locale,overview.window.length)}</strong>
+        <time>{rangeLabel}</time>
+        <span>{latest.device}</span>
       </div>
-      <p className="home-result-summary">{!latest.modules.length ? h("missing") : overview.concerns.length ? h("focusIntro") + overview.concerns.map(m=>moduleNames[locale][m.id]).join(locale==="zh"?"、":" · ") : h("noConcerns")}</p>
-      <BodyModel key={latest.id} report={latest} T={T} locale={locale} />
-      <div className="home-core-metrics">
-        {(["fat","muscle","weight"] as HomeMetricId[]).map(metric => {
-          const value=homeMetricValue(latest,metric);
-          return <button key={metric} onClick={()=>go("/reports/"+latest.id+"/composition")} disabled={value===undefined}>
-            <span>{h(metric)}</span><strong dir="ltr">{value===undefined ? "—" : homeValue(value,metric,units,locale)}</strong>
-          </button>;
-        })}
-      </div>
-      <p className="home-footnote">{h("measuredOnly")}</p>
+      <button className="home-coverage-summary" type="button" onClick={()=>setCoverageExpanded(value=>!value)} aria-expanded={coverageExpanded} aria-controls="home-coverage-list">
+        <span className="home-coverage-number"><strong>{coveredCount}</strong><small>/{overview.supportedModules.length}</small></span>
+        <span><b>{h("coverage")}</b><small>{coverageExpanded?h("coverageClose"):h("coverageOpen")}</small></span>
+        <ChevronDownIcon className={coverageExpanded?"expanded":""}/>
+      </button>
+      {coverageExpanded && <div id="home-coverage-list" className="home-coverage-list">
+        {overview.coverage.map(item=><div key={item.moduleId}>
+          <span><IconTile accent={homeModuleAccent(item.moduleId)}>{homeModuleIcon(item.moduleId)}</IconTile><b>{moduleNames[locale][item.moduleId]}</b></span>
+          <span className={item.measuredBatchCount?"":"is-empty"}>{item.measuredBatchCount ? `${item.measuredBatchCount}/${overview.window.length} ${h("measuredTimes")}` : h("neverMeasured")}<small>{item.latestMeasuredAt?.slice(0,10) || "—"}</small></span>
+        </div>)}
+      </div>}
+      {overview.window.length > 1 ? <div className="home-stage-stats home-interactive-stats">
+        {([{key:"improved",count:overview.improvedCount},{key:"persistent",count:overview.persistentConcernCount},{key:"new",count:overview.newConcernCount}] as const).map((item,i)=><motion.button key={item.key} type="button" whileTap={{scale:.94}} onClick={()=>go("/stage/"+item.key)} initial={reducedMotion||!firstVisit?false:{opacity:0,y:15}} animate={{opacity:1,y:0}} transition={{delay:.15+i*.08}}><strong><ScoreCountUp value={item.count} active={firstVisit&&!reducedMotion}/></strong><small>{interactionText(locale,"modules")}<br/>{interactionText(locale,item.key)}</small><ChevronRightIcon/></motion.button>)}
+      </div> : <p className="home-stage-first">{h("needNextMeasurement")}</p>}
     </section>}
 
-    <section className="home-section-v2" aria-labelledby="home-services-title">
+    <section className="home-section-v2 home-reveal-target" aria-labelledby="home-services-title" style={{ animationDelay: "120ms" }}>
       <div className="home-heading"><h2 id="home-services-title"><IconTile accent="accent-violet"><LuClipboardList /></IconTile>{h("services")}</h2></div>
-      <p className="home-section-sub">{h("servicesSub")}</p>
-      {services.status === "loading" ? <div className="home-service-state" role="status" aria-busy="true">{h("serviceLoading")}</div>
-        : services.status === "error" ? <div className="home-service-state" role="alert"><p>{h("serviceError")}</p><button className="home-link" onClick={services.retry}><ReloadIcon />{h("retry")}</button></div>
-        : <div className="home-service-grid">{(["ai","training"] as const).map(type=>{
-          const summary=homeServiceSummary(type,overview,services.results);
-          const result=summary.result;
-          return <article className="home-service-card" key={type} data-service={type} data-state={summary.state}>
-            <div className="home-service-title"><IconTile accent={type==="ai"?"accent-violet":"accent-emerald"}>{type==="ai"?<LuSparkles />:<LuDumbbell />}</IconTile><h3>{h(type)}</h3>
-              <span className={`home-status ${result?"ready":"empty"}`}>{h(result?(summary.state==="historical"?"historical":"available"):"notGenerated")}</span>
-            </div>
-            <p className="home-service-summary">{result ? result.summary[locale] : h(type==="ai"?"aiHint":"trainingHint")}</p>
-            {summary.report && <p className="home-service-note">{h("source")} · {summary.report.date}</p>}
-            {summary.state==="historical" && <p className="home-service-note">{h("historicalHint")}</p>}
-            <button className="home-link" onClick={()=>result ? go("/reports/"+result.reportId+"/"+type+"?content="+encodeURIComponent(result.id)) : setInfo(type)}>
-              {h(result?(type==="ai"?"viewAI":"viewTraining"):"info")}<ChevronRightIcon />
-            </button>
-          </article>;
-        })}</div>}
+      <p className="home-section-sub">{demoFull?interactionText(locale,"serviceDemo"):h("servicesSub")}</p>
+      {
+          <HomeServiceDeck
+            overview={overview}
+            services={services}
+            servicePreview={servicePreview}
+            locale={locale}
+            h={h}
+            go={go}
+            setInfo={setInfo}
+          />
+        }
     </section>
 
-    {latest && <section className="home-section-v2" aria-labelledby="home-concerns-title">
-      <div className="home-heading"><h2 id="home-concerns-title"><IconTile accent="accent-orange"><TargetIcon /></IconTile>{h("concerns")}</h2></div>
-      <p className="home-section-sub">{h("concernsSub")}</p>
+    {latest && <section className="home-section-v2 home-reveal-target" aria-labelledby="home-concerns-title" style={{ animationDelay: "180ms" }}>
+      <div className="home-heading"><h2 id="home-concerns-title"><IconTile accent="accent-orange"><TargetIcon /></IconTile>{h("findingsTitle")}</h2></div>
+      <p className="home-section-sub">{h("findingsSub")}</p>
       <div className="home-concern-list">
-        {overview.concerns.length===0 && <p className="home-service-state">{h(latest.modules.length ? "noConcerns" : "missing")}</p>}
-        {overview.concerns.map(m=>{
-          const metric=primaryMetric(m);
-          const prior=previous?.modules.find(x=>x.id===m.id);
-          const change=prior ? homeSeverity[m.status]-homeSeverity[prior.status] : undefined;
+        {concernFindings.length===0 && <p className="home-service-state">{h(latest.modules.length ? "noConcerns" : "missing")}</p>}
+        {concernFindings.map(item=>{
+          const m=item.module;
           return <article key={m.id} className="home-concern">
-            <div className="home-heading"><h3><IconTile accent={homeModuleAccent(m.id)}>{homeModuleIcon(m.id)}</IconTile>{moduleNames[locale][m.id]}</h3>
-              <button className="home-link" onClick={()=>go("/reports/"+latest.id+"/"+m.id)}>{h("details")}<ChevronRightIcon /></button></div>
-            <div className="home-finding-value"><span>{primaryLabel[m.id][(["zh","en","de","ar"] as Locale[]).indexOf(locale)]}</span>
-              <strong dir="ltr">{metric ? formatMetric(metric.value) : "—"}</strong><span className={"home-status "+m.status}>{h(m.status)}</span></div>
+            <div className="home-heading"><h3><IconTile accent={homeModuleAccent(m.id)}>{homeModuleIcon(m.id)}</IconTile>{homeFindingTitle(item,locale)}</h3>
+              <button className="home-link" onClick={()=>go("/reports/"+item.report.id+"/"+m.id)}>{h("details")}<ChevronRightIcon /></button></div>
+            <div className="home-finding-meta"><span className={"home-status "+m.status}>{h(item.state === "persistent" ? "persistentFinding" : item.state === "new" ? "newFinding" : item.state === "stale" ? "staleFinding" : "latestFinding")}</span><time>{item.report.date.slice(0,10)}</time></div>
             <p>{homeFinding(m,locale)}</p>
-            {change !== undefined && <div className="home-comparison"><span>{h(change===0?"same":change<0?"improved":"worsened")}</span><time>{previous?.date.slice(0,10)}</time></div>}
           </article>;
         })}
       </div>
@@ -3514,21 +4132,34 @@ function SourceHome({ T, locale, profile, reports, units, go, services }: {
         <button className="home-strengths-toggle" onClick={()=>setExpanded(x=>!x)} aria-expanded={expanded} aria-controls="home-strengths-content">
           <span><CheckCircledIcon />{h("strengths")}</span><ChevronDownIcon className={expanded?"expanded":""} />
         </button>
-        <p>{h(strengths.length ? "strengthsSub" : "noStrengths")}</p>
+        <p>{h(positiveFindings.length ? "strengthsSub" : "noStrengths")}</p>
         {expanded && <div id="home-strengths-content" className="home-strengths-results">
-          {strengths.map(({module:m,metric})=><button key={m.id} onClick={()=>go("/reports/"+latest.id+"/"+m.id)}>
-            <span>{moduleNames[locale][m.id]}{metric && <small>{metric.label === "感官系统评价" ? ({zh:"感官系统评价",en:"Sensory assessment",de:"Sensorische Bewertung",ar:"التقييم الحسي"}[locale]) : h("basic")}</small>}</span>
-            <strong>{metric ? h("good") : m.score+" "+h("scoreUnit")}<ChevronRightIcon /></strong>
+          {positiveFindings.map(item=><button key={item.module.id} onClick={()=>go("/reports/"+item.report.id+"/"+item.module.id)}>
+            <span>{homeFindingTitle(item,locale)}<small>{item.report.date.slice(0,10)}</small></span>
+            <strong>{h(item.state === "improved" ? "improvedFinding" : "goodFinding")}<ChevronRightIcon /></strong>
           </button>)}
         </div>}
       </div>
     </section>}
-    <section className="home-section-v2" aria-labelledby="home-trends-title">
-      <div className="home-heading"><h2 id="home-trends-title"><IconTile accent="accent-cyan"><LuChartNoAxesCombined /></IconTile>{h("trends")}</h2>
-        <button className="home-link" onClick={()=>go("/reports")}>{h("records")}<ChevronRightIcon /></button></div>
-      <p className="home-section-sub">{h("trendsSub")}</p>
-      <HomeTrends key={overview.reports.map(r=>r.id+":"+r.date).join("|")} overview={overview} units={units} locale={locale} go={go} />
+
+    {latest && <section className="home-section-v2 home-reveal-target" aria-labelledby="home-shape-title" style={{ animationDelay: "240ms" }}>
+      <div className="home-heading"><h2 id="home-shape-title"><IconTile accent="accent-violet"><PersonIcon /></IconTile>{h("shapeChanges")}</h2></div>
+      <p className="home-section-sub">{h("shapeChangesSub")}</p>
+      <ShapeComparison reports={overview.window} locale={locale} go={go}/>
+    </section>}
+
+    <section className="home-section-v2 home-reveal-target" aria-labelledby="home-trends-title" style={{ animationDelay: "300ms" }}>
+      <div className="home-heading"><h2 id="home-trends-title"><IconTile accent="accent-cyan"><LuChartNoAxesCombined /></IconTile>{interactionText(locale,"trend")}</h2>
+        <button className="home-link" onClick={()=>go("/history")}>{interactionText(locale,"moreMetrics")}<ChevronRightIcon /></button></div>
+      <p className="home-section-sub">{h("trendsSub")} <span className="home-seven-badge">{homeMeasurementCount(locale,overview.window.length)}</span></p>
+      <HomeTrends key={overview.reports.map(r=>r.id+":"+r.date).join("|")} overview={overview} units={units} locale={locale} go={go} onViewAll={()=>go("/history")} />
     </section>
+
+    {latest && <section className="home-section-v2 home-reveal-target home-latest-report" aria-labelledby="home-latest-report-title" style={{ animationDelay: "360ms" }}>
+      <div className="home-heading"><h2 id="home-latest-report-title"><IconTile accent="accent-brand"><FileTextIcon/></IconTile>{h("recentReport")}</h2></div>
+      <div className="home-latest-report-card"><div><time>{latest.date}</time><strong>{latest.device}</strong><span>{h("reportModules")} · {latest.modules.length}</span></div><button className="home-link" onClick={()=>go("/reports/"+latest.id)}>{h("viewRecentReport")}<ChevronRightIcon/></button></div>
+      <button className="home-secondary-action" type="button" onClick={()=>go("/reports")}>{h("allRecords")}<ChevronRightIcon/></button>
+    </section>}
     <p className="home-demo-note"><InfoCircledIcon />{h("demo")}</p>
     <BottomSheet open={info!==null} onOpenChange={open=>{if(!open)setInfo(null);}} title={h(info==="training"?"training":"ai")}>
       <div className="home-service-explanation"><p>{h(info==="training"?"infoTraining":"infoAI")}</p></div>
@@ -3536,24 +4167,88 @@ function SourceHome({ T, locale, profile, reports, units, go, services }: {
   </section>;
 }
 
-function HomeTrends({overview,units,locale,go}:{overview:HomeOverview;units:Units;locale:Locale;go:(p:string)=>void}) {
+function HomeServiceDeck({
+  overview,
+  services,
+  servicePreview,
+  locale,
+  h,
+  go,
+  setInfo,
+}: {
+  overview: HomeOverview;
+  services: ReturnType<typeof useHomeServices>;
+  servicePreview: ServicePreviewMode;
+  locale: Locale;
+  h: (key: HomeWord) => string;
+  go: (path: string) => void;
+  setInfo: (type: "ai" | "training") => void;
+}) {
+  return (
+    <Carousel className="home-service-deck" contentClassName="home-service-deck-track" ariaLabel={h("services")}>
+      {(["ai", "training"] as const).map((type) => {
+        const summary = resolveServiceSummary(type, overview, services, servicePreview);
+        const result = summary.result;
+        return (
+          <motion.article
+            key={type}
+            className="home-service-card home-service-ready-card"
+            data-service={type}
+            data-state={summary.state}
+            whileTap={{scale:.985}}
+          >
+                <div className="home-service-title">
+                  <IconTile accent={type === "ai" ? "accent-violet" : "accent-emerald"}>
+                    {type === "ai" ? <LuSparkles /> : <LuDumbbell />}
+                  </IconTile>
+                  <h3>{h(type)}</h3>
+                  <span className={`home-status ${result ? "ready" : "empty"}`}>
+                    {h(result ? (summary.state === "historical" ? "historical" : "available") : "notGenerated")}
+                  </span>
+                </div>
+                <p className="home-service-summary">
+                  {result ? result.summary[locale] : h(type === "ai" ? "aiHint" : "trainingHint")}
+                </p>
+                {summary.report&&<time className="home-service-source">{h("sourceDate")} · {summary.report.date.slice(0,10)}</time>}
+            <button
+              type="button"
+              className="home-link"
+              onClick={(e) => {
+                e.stopPropagation();
+                result
+                  ? go(servicePreview==="generated"?`/home-service/${type}`:`/reports/${result.reportId}/${type}?content=${encodeURIComponent(result.id)}`)
+                  : setInfo(type);
+              }}
+            >
+              {h(result ? (type === "ai" ? "viewAI" : "viewTraining") : "info")}
+              <ChevronRightIcon />
+            </button>
+          </motion.article>
+        );
+      })}
+    </Carousel>
+  );
+}
+function HomeTrends({overview,units,locale,go,onViewAll}:{overview:HomeOverview;units:Units;locale:Locale;go:(p:string)=>void;onViewAll?:()=>void}) {
   const ids:HomeMetricId[]=["score","fat","muscle","weight"];
-  const [metric,setMetric]=useState<HomeMetricId>(()=>ids.find(id=>overview.trends[id].length)??"score");
+  const [metric,setMetric]=useState<HomeMetricId>(()=>overview.trends[homeInteractionMemory.metric].length?homeInteractionMemory.metric:ids.find(id=>overview.trends[id].length)??"score");
   const h=(key:HomeWord)=>homeText(locale,key);
   return <div className="home-trends">
     <div className="home-metric-tabs" role="group" aria-label={h("trends")}>
-      {ids.map(id=><button key={id} aria-pressed={metric===id} onClick={()=>setMetric(id)}>{h(id)}</button>)}
+      {ids.map(id=><button key={id} aria-pressed={metric===id} onClick={()=>{setMetric(id);homeInteractionMemory.metric=id;}}>{metric===id&&<motion.span className="selection-plate" layoutId="metric-tab-plate" transition={{type:"spring",stiffness:420,damping:34}}/>}<span>{h(id)}</span></button>)}
     </div>
-    <HomeTrendPlot key={metric} metric={metric} points={overview.trends[metric]} units={units} locale={locale} go={go} />
+    <HomeTrendPlot key={metric} metric={metric} points={overview.trends[metric]} units={units} locale={locale} go={go} onViewAll={onViewAll} />
     {overview.latest && overview.reports.some(r=>homeComparisonKey(r)!==homeComparisonKey(overview.latest!)) && <p className="home-footnote">{h("excluded")}</p>}
   </div>;
 }
-function HomeTrendPlot({metric,points,units,locale,go}:{metric:HomeMetricId;points:HomeTrendPoint[];units:Units;locale:Locale;go:(p:string)=>void}) {
+function HomeTrendPlot({metric,points,units,locale,go,onViewAll}:{metric:HomeMetricId;points:HomeTrendPoint[];units:Units;locale:Locale;go:(p:string)=>void;onViewAll?:()=>void}) {
   const visible=points.slice(-7);
-  const [selected,setSelected]=useState(visible.length-1);
+  const [selected,setSelected]=useState(()=>{const saved=visible.findIndex(p=>p.reportId===homeInteractionMemory.selections[metric]);return saved>=0?saved:visible.length-1;});
+  const svgRef = useRef<SVGSVGElement>(null);
   const current=visible[selected];
   const h=(key:HomeWord)=>homeText(locale,key);
   const gradientId=useId().replace(/:/g,"");
+  const glowId=useId().replace(/:/g,"");
   if (!current) return <div className="home-trend-empty"><BarChartIcon /><p>{h("missing")}</p></div>;
   const previous=points[points.findIndex(p=>p.reportId===current.reportId)-1];
   const delta=previous ? current.value-previous.value : undefined;
@@ -3561,16 +4256,36 @@ function HomeTrendPlot({metric,points,units,locale,go}:{metric:HomeMetricId;poin
   const coords=visible.map((p,i)=>({x:26+(visible.length===1?124:i*248/(visible.length-1)),y:max===min?80:120-(p.value-min)/(max-min)*80}));
   const line=coords.map(p=>p.x+","+p.y).join(" ");
   const selectedCoord=coords[selected];
-  const choose=(i:number)=>setSelected(Math.max(0,Math.min(i,visible.length-1)));
-  return <div className="home-trend-card">
+  const choose=(i:number)=>{const index=Math.max(0,Math.min(i,visible.length-1));setSelected(index);homeInteractionMemory.selections[metric]=visible[index]?.reportId;};
+  const snapFromClientX = (clientX: number) => {
+    const svg = svgRef.current;
+    if (!svg || visible.length < 2) return;
+    const rect = svg.getBoundingClientRect();
+    const ratio = Math.max(0, Math.min(1, (clientX - rect.left) / rect.width));
+    choose(Math.round(ratio * (visible.length - 1)));
+  };
+  useDrag(
+    ({ event, xy: [x] }) => {
+      event.preventDefault();
+      snapFromClientX(x);
+    },
+    { target: svgRef, axis:"x", eventOptions: { passive: false } },
+  );
+  const stageDelta=current.value-visible[0].value;
+  const changeValue=(value:number)=>`${value>0?"+":value<0?"−":""}${metric==="fat"?Math.abs(value).toFixed(1)+({zh:" 个百分点",en:" pp",de:" Prozentpunkte",ar:" نقطة مئوية"}[locale]):homeValue(Math.abs(value),metric,units,locale)}`;
+  return <motion.div className="home-trend-card home-trend-scrub" initial={{opacity:0,y:10}} animate={{opacity:1,y:0}} transition={{duration:.22}}>
     <div className="home-trend-head"><IconTile accent={metric==="fat"?"accent-orange":metric==="muscle"?"accent-emerald":"accent-brand"}>{metric==="score"?<LuGauge />:metric==="fat"?<LuFlame />:metric==="muscle"?<LuDumbbell />:<BarChartIcon />}</IconTile>
       <div><h3>{h(metric)}</h3><time>{current.measuredAt}</time></div><strong dir="ltr" aria-live="polite">{homeValue(current.value,metric,units,locale)}</strong></div>
-    {visible.length>1 ? <svg className="home-trend-svg" viewBox="0 0 300 154" aria-hidden="true">
-      <defs><linearGradient id={gradientId} x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="currentColor" stopOpacity=".2"/><stop offset="100%" stopColor="currentColor" stopOpacity="0"/></linearGradient></defs>
+    {visible.length>1 ? <svg ref={svgRef} className="home-trend-svg" viewBox="0 0 300 154" aria-hidden="true">
+      <defs>
+        <linearGradient id={gradientId} x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="currentColor" stopOpacity=".2"/><stop offset="100%" stopColor="currentColor" stopOpacity="0"/></linearGradient>
+        <linearGradient id={glowId} x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="currentColor" stopOpacity=".55"/><stop offset="100%" stopColor="currentColor" stopOpacity="0"/></linearGradient>
+      </defs>
       {[40,80,120].map(y=><line key={y} x1="26" x2="274" y1={y} y2={y} stroke="currentColor" strokeOpacity=".13" strokeDasharray="3 5"/>)}
       <polygon points={"26,140 "+line+" 274,140"} fill={"url(#"+gradientId+")"} />
-      <polyline points={line} stroke="currentColor" strokeWidth="2.5" fill="none" strokeLinejoin="round" strokeLinecap="round"/>
-      <line x1={selectedCoord.x} x2={selectedCoord.x} y1={20} y2={140} stroke="currentColor" strokeDasharray="3 4" strokeOpacity=".4"/>
+      <motion.polyline points={line} stroke="currentColor" strokeWidth="2.5" fill="none" strokeLinejoin="round" strokeLinecap="round" initial={{pathLength:0}} animate={{pathLength:1}} transition={{duration:.55,ease:"easeOut"}}/>
+      <rect x={selectedCoord.x - 14} y={18} width={28} height={124} fill={`url(#${glowId})`} rx={14} className="home-trend-glow" />
+      <line x1={selectedCoord.x} x2={selectedCoord.x} y1={20} y2={140} stroke="currentColor" strokeDasharray="3 4" strokeOpacity=".72" strokeWidth={2}/>
       {coords.map((p,i)=><g key={visible[i].reportId}><circle cx={p.x} cy={p.y} r={selected===i?6:4} fill="currentColor" stroke="var(--home-surface)" strokeWidth="2"/><circle cx={p.x} cy={p.y} r="22" fill="transparent" onClick={()=>choose(i)} style={{cursor:"pointer"}}/></g>)}
     </svg> : <p className="home-single">{h("single")}</p>}
     <Carousel className="home-date-carousel" contentClassName="home-date-track" ariaLabel={h("measured")}>
@@ -3581,10 +4296,12 @@ function HomeTrendPlot({metric,points,units,locale,go}:{metric:HomeMetricId;poin
           if(next!==null){e.preventDefault();choose(next);const buttons=e.currentTarget.parentElement?.querySelectorAll("button");buttons?.[Math.max(0,Math.min(next,visible.length-1))]?.focus();}
         }}>{p.measuredAt.slice(5,10)}</button>)}
     </Carousel>
-    <div className="home-trend-footer"><p aria-live="polite">{delta===undefined?h("firstPoint"):Math.abs(delta)<0.00001?h("flat"):h("delta")+" "+(delta>0?"+":"−")+homeValue(Math.abs(delta),metric,units,locale)}</p>
-      <button className="home-link" onClick={()=>go("/reports/"+current.reportId)}>{h("viewPoint")}<ChevronRightIcon /></button></div>
-    {points.length>7 && <p className="home-footnote">{h("recentSeven")}</p>}
-  </div>;
+    <div className="home-trend-footer"><div className="home-delta-pair" aria-live="polite"><p>{h("sinceLastShort")}<b dir="ltr">{delta===undefined?"—":changeValue(delta)}</b></p><p>{interactionText(locale,"stageDelta")}<b dir="ltr">{selected===0?"—":changeValue(stageDelta)}</b></p></div>
+      <div className="home-trend-actions">
+        <button type="button" className="home-link" onClick={()=>go("/reports/"+current.reportId)}>{h("viewPoint")}<ChevronRightIcon /></button>
+      </div></div>
+    <p className="home-footnote">{homeMeasurementCount(locale,visible.length,true)}</p>
+  </motion.div>;
 }
 function IconTile({ children, accent }: { children: ReactNode; accent?: string }) {
   return <span className={`icon-tile${accent ? ` ${accent}` : ""}`} aria-hidden="true">{children}</span>;
@@ -3802,53 +4519,90 @@ function TrendCard({ data, index, units, T, locale }: any) {
     </div>
   );
 }
-function HistoryTrendsPage({ T, locale, units, back }: any) {
-  const [metric, setMetric] = useState(0);
-  const data = trendData[metric];
-  const titles = [T("latest"), T("bodyFatRate"), T("muscleMass"), T("weightTrend")];
+function HistoryTrendsPage({ T, locale, units, reports, back }: any) {
+  const h = (key: HomeWord) => homeText(locale, key);
+  const overview = buildHomeOverview(reports);
+  const ids: HomeMetricId[] = ["score", "fat", "muscle", "weight"];
+  const [expanded, setExpanded] = useState<HomeMetricId | null>("score");
+  const metricAccent: Record<HomeMetricId, string> = {
+    score: "accent-brand",
+    fat: "accent-orange",
+    muscle: "accent-emerald",
+    weight: "accent-brand",
+  };
+  const metricIcon = (id: HomeMetricId) =>
+    id === "score" ? (
+      <LuGauge />
+    ) : id === "fat" ? (
+      <LuFlame />
+    ) : id === "muscle" ? (
+      <LuDumbbell />
+    ) : (
+      <BarChartIcon />
+    );
   return (
     <section className="m60-page history-page">
       <Header title={T("historyTrends")} back={back} />
-      <div
-        className="segmented history-metric-tabs"
-        data-count="4"
-        style={
-          {
-            "--seg-index": metric,
-            "--seg-count": 4,
-          } as CSSProperties
-        }
-      >
-        {titles.map((label, i) => (
-          <button
-            key={label}
-            type="button"
-            className={metric === i ? "active" : ""}
-            onClick={() => setMetric(i)}
-          >
-            {label}
-          </button>
-        ))}
-      </div>
-      <div className="home-section history-chart-card">
-        <div className="section-title">
-          <div>
-            <h2>
-              <IconTile accent="accent-cyan">
-                <LuChartNoAxesCombined />
-              </IconTile>
-              {titles[metric]}
-            </h2>
-            <p>{T("historySub")}</p>
-          </div>
-        </div>
-        <InteractiveTrendChart
-          values={data.values}
-          dates={data.dates}
-          unit={data.unit}
-          units={units}
-          T={T}
-        />
+      <p className="history-page-sub">
+        {h("trendsSub")} · {h("recentSevenBadge")}
+      </p>
+      <div className="history-metric-list">
+        {ids.map((id) => {
+          const points = overview.trends[id].slice(-7);
+          const latest = points[points.length - 1];
+          const prev = points[points.length - 2];
+          const delta =
+            latest && prev ? latest.value - prev.value : undefined;
+          const open = expanded === id;
+          return (
+            <article
+              key={id}
+              className={`history-metric-row${open ? " open" : ""}`}
+            >
+              <button
+                type="button"
+                className="history-metric-head"
+                aria-expanded={open}
+                onClick={() => setExpanded(open ? null : id)}
+              >
+                <IconTile accent={metricAccent[id]}>{metricIcon(id)}</IconTile>
+                <span className="history-metric-copy">
+                  <strong>{h(id)}</strong>
+                  <small>
+                    {latest
+                      ? delta === undefined
+                        ? h("firstPoint")
+                        : Math.abs(delta) < 0.00001
+                          ? h("flat")
+                          : `${h("delta")} ${delta > 0 ? "+" : "−"}${homeValue(Math.abs(delta), id, units, locale)}`
+                      : h("missing")}
+                  </small>
+                </span>
+                <strong dir="ltr" className="history-metric-value">
+                  {latest
+                    ? homeValue(latest.value, id, units, locale)
+                    : "—"}
+                </strong>
+                <ChevronDownIcon className={open ? "expanded" : ""} />
+              </button>
+              {open ? (
+                <div className="history-metric-body">
+                  {points.length ? (
+                    <InteractiveTrendChart
+                      values={points.map((p) => p.value)}
+                      dates={points.map((p) => p.measuredAt.slice(5, 10))}
+                      unit={homeMetricSpec[id].unit}
+                      units={units}
+                      T={T}
+                    />
+                  ) : (
+                    <p className="home-trend-empty">{h("missing")}</p>
+                  )}
+                </div>
+              ) : null}
+            </article>
+          );
+        })}
       </div>
     </section>
   );
@@ -3883,7 +4637,16 @@ function SourceMe({ T, locale, profile, reports, units, go }: any) {
         icon={<PersonIcon />}
         accent="accent-emerald"
         title={T("bodyProfile")}
-        sub={`${convert(`${profile.heightCm} cm`, units)} · ${convert(`${profile.weightKg} kg`, units)} · ${profile.birthday}`}
+        sub={[
+          profile.heightCm > 0
+            ? convert(`${profile.heightCm} cm`, units)
+            : null,
+          profile.birthday
+            ? `${calcAge(profile.birthday)}${T("age")}`
+            : null,
+        ]
+          .filter(Boolean)
+          .join(" · ")}
         onClick={() => go("/profile")}
       />
       <p className="group-label">{T("systemServices")}</p>
@@ -4150,6 +4913,7 @@ function M60Report({
   email,
   go,
   readOnly,
+  guestOnly,
 }: any) {
   const requestedModule = parseRoute().type;
   const [profileVisible, setProfileVisible] = useState(false);
@@ -4192,13 +4956,13 @@ function M60Report({
                 <EnvelopeClosedIcon />
               </button>
             )}
-            <button
+            {share && <button
               className="icon-btn"
               onClick={share}
               aria-label={T("share")}
             >
               <Share2Icon />
-            </button>
+            </button>}
           </>
         }
       />
@@ -4244,9 +5008,9 @@ function M60Report({
           >
             <div className="m60-user-profile" aria-hidden={!profileVisible}>
               <span>
-                <small>{T("nickname")}</small>
+                <small>{T(guestOnly ? "gender" : "nickname")}</small>
                 <b>
-                  {profile.nickname === "New User"
+                  {guestOnly ? T(profile.gender) : profile.nickname === "New User"
                     ? (
                         {
                           zh: "新用户",
@@ -4268,10 +5032,10 @@ function M60Report({
                   {age} {T("age")}
                 </b>
               </span>
-              <span>
+              {!guestOnly && <span>
                 <small>{T("weight")}</small>
                 <b>{convert(`${profile.weightKg} kg`, units)}</b>
-              </span>
+              </span>}
             </div>
           </div>
         )}
@@ -4306,7 +5070,7 @@ function M60Report({
         </strong>
       </div>
       <ModuleVisual id={mod.id} T={T} locale={locale} />
-      <MetricSection mod={mod} units={units} locale={locale} T={T} />
+      <MetricSection mod={mod} units={units} locale={locale} T={T} hideHistory={guestOnly} />
       <div className="m60-copy">
         <h2>{T("summary")}</h2>
         <p>
@@ -4335,7 +5099,7 @@ function M60Report({
     </section>
   );
 }
-function MetricSection({ mod, units, locale, T }: any) {
+function MetricSection({ mod, units, locale, T, hideHistory }: any) {
   const valueCopy: Record<string, Record<string,string>> = {
     "优秀":{en:"Excellent",de:"Sehr gut",ar:"ممتاز"}, "较差":{en:"Poor",de:"Schwach",ar:"ضعيف"},
     "梨形臀":{en:"Pear-shaped",de:"Birnenförmig",ar:"شكل كمثري"},
@@ -4369,8 +5133,7 @@ function MetricSection({ mod, units, locale, T }: any) {
         </div>
         <ReportSubhead title={T("viewDetails")} />
         <SegmentBody T={T} />
-        <ReportSubhead title={T("history")} />
-        <MiniHistory T={T} />
+        {!hideHistory && <><ReportSubhead title={T("history")} /><MiniHistory T={T} /></>}
       </>
     );
   if (mod.id === "posture")
@@ -4772,7 +5535,7 @@ function AIPage({ report, T, locale, back, share, readOnly, homeContent }: any) 
         title={T("ai")}
         back={back}
         actions={
-          <button className="icon-btn" onClick={share} aria-label={T("share")}>
+          share && <button className="icon-btn" onClick={share} aria-label={T("share")}>
             <Share2Icon />
           </button>
         }
@@ -4833,7 +5596,7 @@ function TrainingOutline({ T, locale, go, back, share, readOnly, homeContent }: 
         title={T("training")}
         back={back}
         actions={
-          <button className="icon-btn" onClick={share} aria-label={T("share")}>
+          share && <button className="icon-btn" onClick={share} aria-label={T("share")}>
             <Share2Icon />
           </button>
         }

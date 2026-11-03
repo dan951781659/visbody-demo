@@ -1,7 +1,7 @@
 {
   "name": "wellnesshub-h5-react-demo",
   "private": true,
-  "version": "0.2.2",
+  "version": "0.2.14",
   "type": "module",
   "scripts": {
     "check:runtime": "node scripts/check-mobile-runtime.mjs",
@@ -10,6 +10,8 @@
     "test:sites": "node --test tests/sites-worker.test.mjs",
     "test:home": "node --test tests/home-overview.test.mjs",
     "test:auth": "node --test tests/auth-layout.test.mjs",
+    "test:guest": "node --test tests/guest-access.test.mjs",
+    "test:china-login": "node --test tests/china-login-flow.test.mjs",
     "predev": "npm run check:runtime",
     "dev": "vite",
     "prebuild": "npm run check:runtime",
