@@ -1222,7 +1222,7 @@
       }
     }
   </style>
-</head>
+<link rel="stylesheet" href="./platform.css"></head>
 <body>
   <div class="app">
     <aside class="sidebar">
@@ -1232,33 +1232,33 @@
 
       <div class="nav-group">
         <div class="nav-title">报告管理</div>
-        <div class="nav-item">用户信息绑定</div>
-        <div class="nav-item">报告列表</div>
+        <div class="nav-item" title="用户信息绑定" aria-label="用户信息绑定"><span class="platform-icon" aria-hidden="true">&#xf3c6;</span></div>
+        <div class="nav-item" title="报告列表" aria-label="报告列表"><span class="platform-icon" aria-hidden="true">&#xed17;</span></div>
       </div>
 
       <div class="nav-group">
         <div class="nav-title">用户管理</div>
-        <div class="nav-item">用户管理</div>
-        <div class="nav-item">用户分配</div>
+        <div class="nav-item" title="用户管理" aria-label="用户管理"><span class="platform-icon" aria-hidden="true">&#xeb67;</span></div>
+        <div class="nav-item" title="用户分配" aria-label="用户分配"><span class="platform-icon" aria-hidden="true">&#xf3c4;</span></div>
       </div>
 
       <div class="nav-group">
         <div class="nav-title">门店管理</div>
-        <div class="nav-item">门店管理</div>
-        <div class="nav-item">子门店权限管理</div>
+        <div class="nav-item" title="门店管理" aria-label="门店管理"><span class="platform-icon" aria-hidden="true">&#xf1a7;</span></div>
+        <div class="nav-item" title="子门店权限管理" aria-label="子门店权限管理"><span class="platform-icon" aria-hidden="true">&#xea07;</span></div>
       </div>
 
       <div class="nav-group">
         <div class="nav-title">设备管理</div>
-        <div class="nav-item">设备列表</div>
+        <div class="nav-item" title="设备列表" aria-label="设备列表"><span class="platform-icon" aria-hidden="true">&#xf217;</span></div>
       </div>
 
       <div class="nav-group">
         <div class="nav-title">系统设置</div>
-        <div class="nav-item">员工权限管理</div>
-        <div class="nav-item">员工账号</div>
-        <div class="nav-item" id="navProPoints">我的套餐</div>
-        <div class="nav-item" id="navPayments">缴费记录</div>
+        <div class="nav-item" title="员工权限管理" aria-label="员工权限管理"><span class="platform-icon" aria-hidden="true">&#xf1de;</span></div>
+        <div class="nav-item" title="员工账号" aria-label="员工账号"><span class="platform-icon" aria-hidden="true">&#xea8a;</span></div>
+        <div class="nav-item" id="navProPoints" title="我的套餐" aria-label="我的套餐"><span class="platform-icon" aria-hidden="true">&#xef65;</span></div>
+        <div class="nav-item" id="navPayments" title="缴费记录" aria-label="缴费记录"><span class="platform-icon" aria-hidden="true">&#xeeb8;</span></div>
       </div>
 
       <div class="nav-foot">
@@ -1268,7 +1268,7 @@
     </aside>
 
     <main class="main">
-      <header class="topbar">
+      <header class="topbar"><div class="platform-brand"><img src="./assets/visbody.png" alt="VISBODY"><img src="./assets/powered.png" alt="Powered by Kuafu"></div>
         <h1>维塑数字健康平台</h1>
         <div class="topbar-right">
           <span>简体中文 ▼</span>
@@ -1313,6 +1313,7 @@
     </div>
   </div>
 
+  <script src="./rollout.js"></script>
   <script>
     const plan = {
       monthPrice: 129,
@@ -1323,6 +1324,15 @@
       foreverPoints: 20000,
       packPrices: { 1000: 99, 5000: 399, 10000: 699 }
     };
+
+    const savedConfig = JSON.parse(localStorage.getItem('wellnesshub-pro-points-demo-v1') || 'null');
+    if (savedConfig) {
+      [plan.monthPoints, plan.yearPoints, plan.foreverPoints] = savedConfig.grants;
+      plan.packPrices = Object.fromEntries(savedConfig.tiers.map(row => [row.qty, row.cny]));
+    }
+
+    const packOptions = Object.keys(plan.packPrices).map(Number);
+    const defaultPack = packOptions.includes(5000) ? 5000 : packOptions[0];
 
     /** 积分包列表副文案（面向门店管理员，与当前单次扣减规则一致：解读 10 / 大纲 70 / 对话 1） */
     const packPurchaseCopy = {
@@ -1475,7 +1485,7 @@
     function formatAccountProExpiryDisplay() {
       const e = state.expiry || '';
       if (!e) return '—';
-      if (e.includes(':')) return e;
+      if (e === '永久' || e.includes(':')) return e;
       return `${e.trim()} 23:59:59`;
     }
 
@@ -1711,7 +1721,7 @@
       availableCouponIds: clone(scenes.normal.coupons),
       selectedCouponId: 'none',
       selectedCycle: 'month',
-      selectedPack: 5000,
+      selectedPack: defaultPack,
       selectedDeviceIds: ['m30'],
       usageRows: buildUsageRows('normal'),
       paymentRows: buildPaymentRows('normal'),
@@ -1728,6 +1738,7 @@
     };
 
     function isExpired() {
+      if (state.expiry === '永久') return false;
       return new Date(state.expiry + 'T23:59:59') < new Date('2026-03-25T00:00:00');
     }
 
@@ -1866,7 +1877,7 @@
     }
 
     function renewPaidAmount() {
-      return renewSubtotal();
+      return Math.max(0, renewSubtotal() - (getSelectedCoupon().discount || 0));
     }
 
     function renewAwardPoints() {
@@ -1876,13 +1887,21 @@
     function renewExtendedDays() {
       if (state.selectedCycle === 'month') return 30;
       if (state.selectedCycle === 'year') return 365;
-      return 3650;
+      return 0;
     }
 
     function nextExpiry(baseDate, addDays) {
       const date = new Date(baseDate + 'T23:59:59');
       date.setDate(date.getDate() + addDays);
       return date.toISOString().slice(0, 10) + ' 23:59:59';
+    }
+
+    if (savedConfig) {
+      ['report', 'outline', 'consult'].forEach((id, index) => {
+        const feature = currentFeature(id);
+        feature.points = savedConfig.consume[index];
+        feature.usageText = feature.usageText.replace(/消耗 \d+ 积分/, `消耗 ${feature.points} 积分`);
+      });
     }
 
     function currentFeature(id) {
@@ -1906,14 +1925,14 @@
     function applyScene(sceneKey) {
       const scene = scenes[sceneKey];
       state.scene = sceneKey;
-      state.balance = scene.balance;
+      state.balance = scene.balance + (sceneKey === 'normal' ? pointsRollout.balance() : 0);
       state.used30 = scene.used30;
       state.expiry = scene.expiry;
       state.notice = scene.notice;
       state.availableCouponIds = clone(scene.coupons);
       state.selectedCouponId = 'none';
       state.selectedCycle = 'month';
-      state.selectedPack = 5000;
+      state.selectedPack = defaultPack;
       state.selectedDeviceIds = ['m30'];
       state.usageRows = buildUsageRows(sceneKey);
       state.paymentRows = buildPaymentRows(sceneKey);
@@ -2007,8 +2026,11 @@
       if (!totalSelectedDevices()) return;
       const awardPoints = renewAwardPoints();
       const paid = renewPaidAmount();
-      const extendDays = renewExtendedDays();
-      const newExpiry = nextExpiry(isExpired() ? '2026-03-25' : state.expiry, extendDays);
+      const extendDays = renewExtendedDays() + (getSelectedCoupon().extraDays || 0);
+      const wasExpired = isExpired();
+      const newExpiry = state.selectedCycle === 'forever'
+        ? '永久'
+        : nextExpiry(wasExpired || state.expiry === '永久' ? '2026-03-25' : state.expiry, extendDays);
       const cycleLabel =
         state.selectedCycle === 'month' ? 'Pro/月' : state.selectedCycle === 'year' ? 'Pro/年' : 'Pro/永久';
       const cycleText =
@@ -2022,7 +2044,7 @@
       const subtotalStr = `¥${renewSubtotal().toFixed(2)}`;
 
       state.balance += awardPoints;
-      state.expiry = newExpiry.slice(0, 10);
+      if (state.expiry !== '永久') state.expiry = newExpiry.slice(0, 10);
       state.paymentRows.unshift({
         id,
         orderNo,
@@ -2035,7 +2057,9 @@
         detail: {
           cycle: cycleText,
           points: awardPoints,
-          earlyRenewal: isExpired() ? '否' : '是',
+          couponName: getSelectedCoupon().name,
+          discount: renewSubtotal() - paid,
+          earlyRenewal: wasExpired ? '否' : '是',
           perPrice: `¥${renewUnitPrice().toFixed(2)}/${perUnit}`,
           subtotal: subtotalStr,
           linePrice: subtotalStr,
@@ -2045,6 +2069,10 @@
           proExpire: newExpiry
         }
       });
+      if (state.selectedCouponId !== 'none') {
+        state.availableCouponIds = state.availableCouponIds.filter(id => id !== state.selectedCouponId);
+        state.selectedCouponId = 'none';
+      }
       state.activePaymentId = id;
       state.page = 'paymentDetail';
       render();
@@ -2054,6 +2082,7 @@
       const id = `pack-${Date.now()}`;
       const orderNo = `${Date.now()}`.slice(-18);
       const price = plan.packPrices[state.selectedPack];
+      if (isExpired() || !Number.isFinite(price)) return;
       state.balance += state.selectedPack;
       state.paymentRows.unshift({
         id,
@@ -2154,7 +2183,7 @@
         <div class="account-wrap">
           <div class="page-head">
             <div class="back-link" id="accountBack" role="button" tabindex="0">← 返回</div>
-            <div class="top-actions">
+            <div class="top-actions"><button type="button" class="btn primary">我的账号</button>
               <button type="button" class="btn btn-outline" id="openCouponBtn">我的优惠券</button>
             </div>
           </div>
@@ -2179,7 +2208,7 @@
             <div class="summary-card">
               <div class="label">Pro 到期时间</div>
               <div class="value" style="font-size:24px;">${state.expiry}</div>
-              <div class="meta">${isExpired() ? '当前服务已结束，请先续费后恢复 AI 能力' : '当前周期内不可提前续费；如需扩容请新增设备开通 Pro'}</div>
+              <div class="meta">${isExpired() ? '当前服务已结束，请先续费后恢复 AI 能力' : '积分有效期随账户内有效 Pro 权益'}</div>
             </div>
           </div>
 
@@ -2197,46 +2226,14 @@
 
           <div class="notice ${notice ? `show ${notice.type}` : ''}">${notice ? notice.text : ''}</div>
 
-          <div class="usage-snapshot">
-            <div class="usage-snapshot-head">
-              <strong>近期积分消耗</strong>
-              <span style="color: var(--muted); font-size: 13px; margin-left: 10px;">与「积分使用记录」一致口径，仅展示最近 5 条</span>
-            </div>
-            <table class="usage-snapshot-table">
-              <thead>
-                <tr>
-                  <th>时间</th>
-                  <th>功能</th>
-                  <th>设备</th>
-                  <th style="text-align:right;">消耗积分</th>
-                  <th>状态</th>
-                </tr>
-              </thead>
-              <tbody>
-                ${state.usageRows
-                  .slice(0, 5)
-                  .map(
-                    (r) => `
-                  <tr>
-                    <td>${r.time}</td>
-                    <td>${r.feature}</td>
-                    <td>${r.device}</td>
-                    <td style="text-align:right;">${r.points}</td>
-                    <td>${r.status}</td>
-                  </tr>`
-                  )
-                  .join('')}
-              </tbody>
-            </table>
-            <div class="usage-snapshot-actions">
-              <button type="button" class="btn light" id="goUsageFromSnapshot">查看全部积分使用记录</button>
-            </div>
+          <div style="margin:12px 0">
+            <button type="button" class="btn light" id="goUsageFromSnapshot">积分使用与到账记录</button>
           </div>
 
           <div class="device-panel">
             ${devices.map((device) => `
               <div class="device-card">
-                <div class="device-card-thumb">${device.name.includes('S30') ? 'S30' : device.name.includes('Explorer') ? 'R' : device.name.includes('M60') ? 'M60' : 'M30'}</div>
+                <div class="device-card-thumb"><img src="./assets/${device.name.includes('S30') ? 'S30' : device.name.includes('M60') ? 'M60' : 'M30'}.png" alt="${device.name}"></div>
                 <div class="device-card-main">
                   <h3>${device.name}</h3>
                   <p><strong>门店：</strong>${device.store}</p>
@@ -2360,12 +2357,13 @@
                   <span class="pay-card-qty">x${n}</span>
                   <div class="pay-card-price ${state.selectedCycle === 'forever' ? 'grad' : ''}">¥ ${plan.foreverPrice}</div>
                   <div class="pay-card-points">到账 <strong>${plan.foreverPoints}</strong> 积分/台</div>
-                  <div class="pay-card-unit">台/永久</div>
+                  <div class="pay-card-unit">永久 · 每台一次性发放</div>
                 </div>
               </div>
 
+              <button type="button" class="btn light" id="renewCouponBtn">优惠券 · ${getSelectedCoupon().name}</button>
               <div class="renew-tip-banner">
-                已选 <strong>${n}</strong> 台设备，需支付 <strong>¥${renewPaidAmount().toFixed(2)}</strong>，到账 <strong>${renewAwardPoints()}</strong> 积分。
+                已选 <strong>${n}</strong> 台设备，优惠 <strong>¥${(renewSubtotal() - renewPaidAmount()).toFixed(2)}</strong>，实付 <strong>¥${renewPaidAmount().toFixed(2)}</strong>，预计到账 <strong>${renewAwardPoints()}</strong> 积分。
               </div>
 
               <div class="renew-actions">
@@ -2454,6 +2452,7 @@
         };
       });
       document.getElementById('renewCancelBtn').onclick = () => openPage('account');
+      document.getElementById('renewCouponBtn').onclick = () => openModal('coupon');
       document.getElementById('payNowBtn').onclick = confirmRenew;
       document.getElementById('accordionDetail').querySelector('.accordion-head').onclick = () => toggleAccordion('detail');
       document.getElementById('accordionRules').querySelector('.accordion-head').onclick = () => toggleAccordion('rules');
@@ -2473,11 +2472,11 @@
           </p>
 
           <div class="pack-list">
-            ${[1000, 5000, 10000].map((pack) => `
+            ${packOptions.map((pack) => `
               <div class="pack-item ${state.selectedPack === pack ? 'active' : ''}" data-pack-page="${pack}">
                 <div>
                   <h4>${pack} 积分</h4>
-                  <p>${packPurchaseCopy[pack]}</p>
+                  <p>${packPurchaseCopy[pack] || '积分到账后并入账户余额。'}</p>
                 </div>
                 <div class="price">¥${plan.packPrices[pack]}</div>
               </div>
@@ -2535,6 +2534,13 @@
               </div>
             </div>
           </div>
+
+          ${state.scene === 'normal' && pointsRollout.customerEntries().length ? `
+            <div class="table-card" id="rolloutReceipts">
+              <strong>积分到账记录</strong>
+              <table class="feature-table"><thead><tr><th>到账时间</th><th>来源</th><th>活动名称</th><th>到账积分</th></tr></thead><tbody>${pointsRollout.customerEntries().map(entry => `<tr><td>${escAttr(entry.time || '—')}</td><td>${escAttr(entry.source)}</td><td>${escAttr(entry.name || '—')}</td><td>+${Number(entry.points)}</td></tr>`).join('')}</tbody></table>
+            </div>
+          ` : ''}
 
           <div class="filters">
             <div class="filter-box">
@@ -2792,6 +2798,7 @@
                     <div class="product-row"><span>Pro套餐价格：</span><strong>${detail.perPrice || '—'}</strong></div>
                     <div class="product-row"><span>Pro到期时间：</span><strong>${detail.proExpire || '—'}</strong></div>
                     <div class="product-row"><span>价格：</span><strong>${detail.linePrice || detail.subtotal || '—'}</strong></div>
+                    ${detail.discount === undefined ? '' : `<div class="product-row"><span>优惠券：</span><strong>${detail.couponName}</strong></div><div class="product-row"><span>优惠金额：</span><strong>¥${detail.discount.toFixed(2)}</strong></div>`}
                     <div class="product-row"><span>本次到账积分：</span><strong>${detail.points ?? '—'}</strong></div>
                   `;
       page.innerHTML = `
@@ -2861,6 +2868,7 @@
       overlay.classList.add('show');
 
       if (state.modal === 'coupon') {
+        const originalCoupon = state.selectedCouponId;
         modal.innerHTML = `
           <h3>我的优惠券</h3>
           <p>选择本次续费要使用的优惠券。代金券仅减少实付金额，时间优惠券仅延长有效期，不影响本次积分到账数。</p>
@@ -2885,12 +2893,12 @@
         `;
         modal.querySelectorAll('[data-coupon]').forEach((el) => {
           el.onclick = () => {
-            state.selectedCouponId = el.dataset.coupon;
-            renderModal();
+            modal.querySelectorAll('[data-coupon]').forEach(row => row.classList.toggle('active', row === el));
           };
         });
         document.getElementById('couponCancelBtn').onclick = closeModal;
         document.getElementById('couponConfirmBtn').onclick = () => {
+          state.selectedCouponId = modal.querySelector('[data-coupon].active')?.dataset.coupon || originalCoupon;
           closeModal();
           if (state.page === 'renew') renderRenewPage();
         };
@@ -2901,11 +2909,11 @@
           <h3>购买积分包</h3>
           <p>支付成功后积分立即到账，与 Pro 套餐获赠积分合并统计。积分有效期与当前账户 Pro 有效期一致，购买积分包不会延长 Pro 到期时间。</p>
           <div class="modal-list">
-            ${[1000, 5000, 10000].map((pack) => `
+            ${packOptions.map((pack) => `
               <div class="modal-item ${state.selectedPack === pack ? 'active' : ''}" data-pack="${pack}">
                 <div>
                   <strong>${pack} 积分</strong>
-                  <div style="color: var(--muted); font-size: 13px; line-height:1.55;">${packPurchaseCopy[pack]}</div>
+                  <div style="color: var(--muted); font-size: 13px; line-height:1.55;">${packPurchaseCopy[pack] || '积分到账后并入账户余额。'}</div>
                 </div>
                 <div style="font-weight: 700;">¥${plan.packPrices[pack]}</div>
               </div>
@@ -3038,6 +3046,29 @@
     initTopAccountMenu();
     initSceneDock();
     applyScene('normal');
+    let lastRolloutBalance = pointsRollout.balance();
+    window.addEventListener('storage', event => {
+      if (event.key !== pointsRollout.key) return;
+      const balance = pointsRollout.balance();
+      if (state.scene === 'normal') {
+        state.balance += balance - lastRolloutBalance;
+        render();
+      }
+      lastRolloutBalance = balance;
+    });
+
+    function showReviewPage(page) {
+      state.modal = null;
+      if (page === 'renew') goRenew();
+      if (['account', 'pack', 'usage', 'payments'].includes(page)) openPage(page);
+    }
+    if (new URLSearchParams(location.search).has('review')) {
+      window.addEventListener('message', event => {
+        if (event.source === window.parent && event.data?.type === 'wellnesshub-review-page') {
+          showReviewPage(event.data.page);
+        }
+      });
+    }
   </script>
 </body>
 </html>
