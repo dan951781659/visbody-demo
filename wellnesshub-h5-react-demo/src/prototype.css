@@ -44,24 +44,25 @@
   --press-scale: 0.98;
 }
 .wh-dark {
-  --bg: #0a0a0a;
-  --surface: #141414;
-  --surface2: #1c1c1e;
-  --text: #f5f5f7;
-  --muted: #98989d;
-  --line: rgba(255, 255, 255, 0.12);
-  --blue: #0a84ff;
-  --purple: #bf5af2;
-  --cyan: #64d2ff;
-  --danger: #ff453a;
-  --good: #30d158;
-  --accent-rose: #ff375f;
-  --accent-violet: #bf5af2;
-  --accent-emerald: #30d158;
-  --accent-orange: #ff9f0a;
-  --accent-cyan: #64d2ff;
-  --icon-bg: #1c1c1e;
-  --elevated-shadow: 0 8px 24px rgba(0, 0, 0, 0.35);
+  /* v0.2.15: whole app uses the M60 report navy palette (modudoc /m60-report). */
+  --bg: #0a0d21;
+  --surface: #111830;
+  --surface2: #16203b;
+  --text: #e8eeff;
+  --muted: #9aaad8;
+  --line: #1c2850;
+  --blue: #60a5fa;
+  --purple: #a78bfa;
+  --cyan: #22d3ee;
+  --danger: #ff6680;
+  --good: #35e89d;
+  --accent-rose: #ff6680;
+  --accent-violet: #a78bfa;
+  --accent-emerald: #35e89d;
+  --accent-orange: #e56016;
+  --accent-cyan: #22d3ee;
+  --icon-bg: #16203b;
+  --elevated-shadow: 0 12px 30px #00081833;
   --card-shadow: none;
   --focus: color-mix(in srgb, var(--blue) 42%, transparent);
   --fxbg: var(--bg);
@@ -3920,16 +3921,16 @@ button:disabled {
   --danger: #ff3b30;
 }
 [data-phone-screen]:has(.wh-dark) {
-  --bg: #0a0e1a;
-  --surface: rgba(16, 24, 48, 0.92);
-  --surface2: rgba(22, 34, 68, 0.85);
-  --text: #e8ecf4;
-  --muted: #7f91b3;
-  --line: rgba(100, 140, 255, 0.12);
-  --blue: #2b8cff;
+  --bg: #0a0d21;
+  --surface: #111830;
+  --surface2: #16203b;
+  --text: #e8eeff;
+  --muted: #9aaad8;
+  --line: #1c2850;
+  --blue: #60a5fa;
   --purple: #a78bfa;
-  --cyan: #00e5ff;
-  --danger: #ff6b6b;
+  --cyan: #22d3ee;
+  --danger: #ff6680;
 }
 
 /* BottomSheet theme overrides (runtime styles.css stays protected) */

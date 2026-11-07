@@ -53,6 +53,8 @@ See `src/mobile/COMPONENTS.md` for the full component and gesture contract.
 
 ## WellnessHub H5 durable design decisions
 
+- v0.2.15 深色模式全应用统一使用 M60 海军蓝色板：页面 `#0a0d21`、卡片 `#111830`、抬升 `#16203b`、线 `#1c2850`、文字 `#e8eeff`、弱化 `#9aaad8`、强调 `#60a5fa`。令牌只在全局 `.wh-dark`（及同源的底部弹层令牌）中定义，不要再为单个页面做深色底覆盖，也不要重新引入中性黑 `#0a0a0a` 或 `#0a0e1a`。此条取代 v0.2.3 的“减少海军蓝偏色”决定。
+
 - v0.2.13 国内手机号绑定页与固定登录页共用 ChinaLogin，沿用海外 auth-page/login-page 的布局、品牌、Prefs、字段与按钮样式。绑定页不使用详情页固定标题栏，返回微信授权置于表单辅助区；保留绑定操作及原报告跳转语义。
 
 - v0.2.14 homepage interaction plan is confirmed and implemented: every summary count opens a matching filtered stage-findings detail page with traceable measurement evidence; label counts as modules. Keep only one interactive metric-trend section. The main Demo shows both AI and training generated through in-memory fixtures, without on-page service-state debugging controls; never persist these as personal service results. Shape comparison uses two explicitly simulated geometries derived from one asset, not two real scans; support synchronized rotation, overlay, date selection and view controls. Retain meaningful entry, selection, detail and 3D transitions, reduced-motion support, and return-state restoration. Existing isolated service preview routes remain available.
@@ -86,7 +88,7 @@ See `src/mobile/COMPONENTS.md` for the full component and gesture contract.
 - Use one primary action per authentication screen. Authentication titles are 20px, body/input copy is 14px, labels/help text are 12px, and no legal or Demo copy may be smaller than 11px. Inputs and primary buttons are 48px high with 12px radii.
 - v0.2.2: both phone screens place the same blue outlined email-code return after account creation and before the social divider. Email-password places its icon-only ellipsis in that channel region, never beside forgot-password. Email-code has no phone entry. Password screens keep credential switching at logical start and forgot-password at logical end; code screens reserve an empty end column. Hide the keyboard on mode changes and retain the muted phone-code entry.
 - Registration defaults to email, keeps phone registration as a secondary segment, and enables submission only after nickname, account, code, password, and consent are valid. A newly registered user must begin the first-profile screen with required identity fields empty.
-- M60 modules use the supplied dark navy device-report visual language and independent assets. Never use the full reference screenshots as page backgrounds and do not redesign them into generic white cards.
+- M60 report content and dark colors follow the modudoc page `/m60-report`. Dark report surfaces use page `#0a0d21`, card `#111830`, raised `#16203b`, line `#1c2850`, text `#e8eeff`, muted `#9aaad8`, accent `#60a5fa`. The whole app now shares this palette (v0.2.15). Never use the full reference screenshots as page backgrounds and do not redesign the modules into generic white cards.
 
 ## Keyboard Rule
 

@@ -4,6 +4,8 @@
 
 | 版本 | 用途 | 快照目录 |
 | --- | --- | --- |
+| v0.2.15 | 深色模式全应用统一为 M60 海军蓝 | `../wellnesshub-h5-react-demo-versions/v0.2.15-dark-navy-20261107` |
+| pre-v0.2.15 | 深色统一前完整 v0.2.14 工作区 | `../wellnesshub-h5-react-demo-versions/pre-v0.2.15-dark-navy-20261107` |
 | v0.2.14 | 首页交互、阶段详情与双次形态模拟 | `../wellnesshub-h5-react-demo-versions/v0.2.14-home-motion-20261015` |
 | pre-v0.2.14 | 首页交互调整前完整 v0.2.13 工作区 | `../wellnesshub-h5-react-demo-versions/pre-v0.2.14-home-motion-20261015` |
 | v0.2.13 | 国内绑定页统一登录布局 | `../wellnesshub-h5-react-demo-versions/v0.2.13-cn-auth-layout-20261015` |
