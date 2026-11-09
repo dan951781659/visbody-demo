@@ -4,6 +4,11 @@
 
 | 版本 | 用途 | 快照目录 |
 | --- | --- | --- |
+| v0.2.18 | 主页标题、去掉底部切换、个人中心 | `../wellnesshub-h5-react-demo-versions/v0.2.18-home-title-center-20261109` |
+| v0.2.17 | 我的页对齐线上主页排版并补测量图标 | `../wellnesshub-h5-react-demo-versions/v0.2.17-me-layout-20261109` |
+| pre-v0.2.17 | 我的页改版前完整 v0.2.16 工作区 | `../wellnesshub-h5-react-demo-versions/pre-v0.2.17-me-layout-20261109` |
+| v0.2.16 | 游客模式免扫码进入资料页 | `../wellnesshub-h5-react-demo-versions/v0.2.16-guest-entry-20261109` |
+| pre-v0.2.16 | 游客入口调整前完整 v0.2.15 工作区 | `../wellnesshub-h5-react-demo-versions/pre-v0.2.16-guest-entry-20261109` |
 | v0.2.15 | 深色模式全应用统一为 M60 海军蓝 | `../wellnesshub-h5-react-demo-versions/v0.2.15-dark-navy-20261107` |
 | pre-v0.2.15 | 深色统一前完整 v0.2.14 工作区 | `../wellnesshub-h5-react-demo-versions/pre-v0.2.15-dark-navy-20261107` |
 | v0.2.14 | 首页交互、阶段详情与双次形态模拟 | `../wellnesshub-h5-react-demo-versions/v0.2.14-home-motion-20261015` |

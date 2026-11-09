@@ -30,5 +30,7 @@ test('guest report routes have exact scope and a submitted demographics gate',()
  assert.match(source,/sessionStorage.removeItem\(guestKey\)/);
  const originalGuest=source.slice(source.indexOf('const guestLogin ='),source.indexOf('const logout ='));
  assert.ok(!originalGuest.includes('localStorage'));
- assert.match(originalGuest,/go\("\/guest\/login"\)/);
+ assert.match(originalGuest,/token: "demo-both"/);
+ assert.match(originalGuest,/go\("\/guest\/profile"\)/);
+ assert.match(source,/if\(resolution\.status==="missing"\)\{[\s\S]*?token:"demo-both"/);
 });

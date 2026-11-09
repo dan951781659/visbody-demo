@@ -20,6 +20,7 @@ import { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js";
 import {
   ArrowLeftIcon,
   BarChartIcon,
+  CalendarIcon,
   CheckCircledIcon,
   ChevronDownIcon,
   ChevronRightIcon,
@@ -128,6 +129,9 @@ const zh = {
   register: "立即注册",
   getCode: "获取验证码",
   nickname: "昵称",
+  userNickname: "用户昵称",
+  personalCenter: "个人中心",
+  mainPage: "主页",
   gender: "性别",
   height: "身高",
   weight: "体重",
@@ -160,6 +164,7 @@ const zh = {
   account: "账号安全",
   store: "切换门店",
   faq: "常见问题",
+  noFaq: "暂无问题数据",
   about: "关于我们",
   system: "跟随系统",
   light: "浅色",
@@ -169,6 +174,7 @@ const zh = {
   logoutBody: "退出后需要重新登录，语言、外观和单位偏好会保留。",
   confirmLogout: "退出",
   save: "保存资料",
+  saveShort: "保存",
   saved: "资料已保存",
   demoOnly: "Demo 功能说明",
   demoDesc: "该入口已按线上结构保留，当前版本暂不连接真实后台服务。",
@@ -233,6 +239,9 @@ const en = {
   register: "Create account",
   getCode: "Get code",
   nickname: "Nickname",
+  userNickname: "Nickname",
+  personalCenter: "Profile",
+  mainPage: "Home",
   gender: "Gender",
   height: "Height",
   weight: "Weight",
@@ -265,6 +274,7 @@ const en = {
   account: "Account security",
   store: "Switch studio",
   faq: "FAQ",
+  noFaq: "No questions yet",
   about: "About",
   system: "System",
   light: "Light",
@@ -275,6 +285,7 @@ const en = {
     "You will need to sign in again. Language, appearance, and unit preferences will be kept.",
   confirmLogout: "Sign out",
   save: "Save profile",
+  saveShort: "Save",
   saved: "Profile saved",
   demoOnly: "Demo information",
   demoDesc:
@@ -358,6 +369,9 @@ const ar = {
   register: "إنشاء الحساب",
   getCode: "إرسال الرمز",
   nickname: "الاسم المستعار",
+  userNickname: "الاسم",
+  personalCenter: "الملف الشخصي",
+  mainPage: "الرئيسية",
   gender: "الجنس",
   height: "الطول",
   weight: "الوزن",
@@ -462,6 +476,9 @@ Object.assign(de, {
   register: "Konto erstellen",
   getCode: "Code senden",
   nickname: "Anzeigename",
+  userNickname: "Anzeigename",
+  personalCenter: "Profil",
+  mainPage: "Startseite",
   gender: "Geschlecht",
   height: "Körpergröße",
   weight: "Gewicht",
@@ -918,13 +935,13 @@ Object.assign(ar, {
 Object.assign(de, {
   legal:"Bitte lesen und akzeptieren Sie Nutzungsbedingungen, Datenschutz und KI-Hinweise.", switchPhone:"Telefon und Passwort verwenden", switchCode:"Bestätigungscode verwenden", switchEmail:"Zurück zur E-Mail-Anmeldung",
   bodyProfile:"Körperprofil", newUserRegister:"Neuregistrierung", help:"Hilfe zur Messung", latest:"Letzte Bewertung", fullReport:"Vollständiger Bericht", core:"Erkenntnisse", issues:"Handlungsfelder", strengths:"Stärken", history:"Verlauf", trainingPlan:"Trainingsplan", next:"Nächster Schritt",
-  account:"Kontosicherheit", store:"Studio wechseln", faq:"Häufige Fragen", about:"Über uns", logoutTitle:"Jetzt abmelden?", logoutBody:"Für den nächsten Besuch müssen Sie sich erneut anmelden. Sprache, Darstellung und Einheiten bleiben gespeichert.", confirmLogout:"Abmelden", save:"Profil speichern", saved:"Profil gespeichert",
+  account:"Kontosicherheit", store:"Studio wechseln", faq:"Häufige Fragen", noFaq:"Noch keine Fragen", about:"Über uns", logoutTitle:"Jetzt abmelden?", logoutBody:"Für den nächsten Besuch müssen Sie sich erneut anmelden. Sprache, Darstellung und Einheiten bleiben gespeichert.", confirmLogout:"Abmelden", save:"Profil speichern", saved:"Profil gespeichert",
   demoOnly:"Hinweis zur Demo", demoDesc:"Diese Funktion wird hier nur demonstriert und ist nicht mit einem Live-Dienst verbunden.", close:"Schließen", cancel:"Abbrechen", confirmDelete:"Bericht löschen", deleteTitle:"Diesen Bericht löschen?", deleteBody:"Der Bericht wird dauerhaft aus Ihrem Verlauf entfernt.",
   sendTitle:"Bericht per E-Mail", sendDesc:"Der Bericht wird als PDF und mit einem Ansichtslink an diese Adresse gesendet.", send:"Bericht senden", sending:"PDF wird erstellt…", sent:"Bericht gesendet", invalidEmail:"Gültige E-Mail-Adresse eingeben", copied:"Freigabelink kopiert", readOnly:"Geteilter Inhalt · nur lesen",
   summary:"Zusammenfassung", actions:"Empfehlungen", ai:"KI-Berichtsanalyse", risks:"Wichtige Risiken", disclaimer:"Nur zur Gesundheitsinformation. Kein Ersatz für medizinische Diagnose oder Behandlung.", noReports:"Noch keine Bewertungen", invalidLogin:"Bitte Zugangsdaten prüfen. Das Demo-Passwort lautet wellness1.", codeSent:"Code gesendet. Demo-Code: 123456.", demo:"Lokale interaktive Demo. Es werden keine echten Nachrichten, E-Mails oder Gesundheitsdaten versendet.", phonePasswordHint:"Mit registrierter Telefonnummer und Passwort anmelden."
 });
 Object.assign(ar, {
-  legal:"يرجى قراءة شروط الاستخدام وسياسة الخصوصية وإخلاء مسؤولية الذكاء الاصطناعي والموافقة عليها.", help:"مساعدة القياس", latest:"آخر تقييم", core:"أهم النتائج", issues:"نقاط الاهتمام", strengths:"نقاط القوة", history:"سجل التقدم", next:"الخطوة التالية", account:"أمان الحساب", store:"تغيير المركز", faq:"الأسئلة الشائعة", about:"من نحن",
+  legal:"يرجى قراءة شروط الاستخدام وسياسة الخصوصية وإخلاء مسؤولية الذكاء الاصطناعي والموافقة عليها.", help:"مساعدة القياس", latest:"آخر تقييم", core:"أهم النتائج", issues:"نقاط الاهتمام", strengths:"نقاط القوة", history:"سجل التقدم", next:"الخطوة التالية", account:"أمان الحساب", store:"تغيير المركز", faq:"الأسئلة الشائعة", noFaq:"لا توجد أسئلة بعد", about:"من نحن",
   logoutTitle:"هل تريد تسجيل الخروج؟", logoutBody:"ستحتاج إلى تسجيل الدخول مجددًا. ستُحفظ تفضيلات اللغة والمظهر والوحدات.", confirmLogout:"تسجيل الخروج", save:"حفظ الملف", saved:"تم حفظ الملف", demoOnly:"معلومات العرض التجريبي", demoDesc:"هذه الوظيفة للعرض فقط وغير متصلة بخدمة فعلية.", close:"إغلاق", deleteTitle:"هل تريد حذف هذا التقرير؟", deleteBody:"سيُحذف التقرير من سجلك نهائيًا ولا يمكن التراجع عن ذلك.",
   sendDesc:"سيُرسل التقرير بصيغة PDF مع رابط لعرضه إلى هذا البريد.", sending:"جارٍ إنشاء PDF…", sent:"تم إرسال التقرير", invalidEmail:"أدخل بريدًا إلكترونيًا صالحًا", copied:"تم نسخ رابط المشاركة", disclaimer:"لإدارة الصحة فقط، ولا يحل محل التشخيص أو العلاج الطبي.", noReports:"لا توجد تقييمات بعد", invalidLogin:"تحقق من بيانات الدخول. كلمة مرور العرض هي wellness1.", codeSent:"تم إرسال الرمز. رمز العرض هو 123456.", phonePasswordHint:"سجّل الدخول برقم الهاتف المسجّل وكلمة المرور."
 });
@@ -1816,9 +1833,8 @@ function parseRoute(): Route {
       contentId,
     };
   if (p[0] === "reports" && p[1]) return { page: "report", id: p[1] };
-  // Empty hash must resolve to home so BottomNav (home/me) stays visible after login.
-  // Unauthenticated users still hit Auth via the !session gate below.
-  return { page: p[0] || "home" };
+  // This version has no homepage tab. An empty hash opens the account page titled 主页.
+  return { page: p[0] || "me" };
 }
 function convert(v: string, u: Units) {
   return u === "metric"
@@ -1907,7 +1923,15 @@ function GuestPrototype({hash}: {hash:string}) {
   const heightInvalid = heightText!=="" && !validGuestDraft({...state.draft,gender:"male",age:"30"});
   let view:ReactNode;
   const showingAuth=path==="/guest/login" || scanToken!==null;
-  if(showingAuth) view=<Auth T={T} locale={locale} setLocale={setLocale} theme={theme} setTheme={setTheme} mode={mode} setMode={setMode} showPass={showPass} setShowPass={setShowPass} error={error} setError={setError} toast={setError} guestLogin={()=>eligible?go("/guest/profile"):setError(C[resolution.status]||C.invalid)} login={()=>{localStorage.setItem(K.session,"true");localStorage.setItem("wellnesshub.session.role","user");exit(report?`/reports/${report.id}`:"/home");}} register={()=>exit("/register")} forgot={()=>setError(T("demoDesc"))}/>;
+  const enterGuest=()=>{
+    if(resolution.status==="missing"){
+      const next:GuestState={token:"demo-both",draft:emptyGuestDraft(),submitted:false};
+      sessionStorage.setItem(guestKey,JSON.stringify(next));setState(next);setHeightText("");go("/guest/profile");return;
+    }
+    if(eligible){go("/guest/profile");return;}
+    setError(C[resolution.status]||C.invalid);
+  };
+  if(showingAuth) view=<Auth T={T} locale={locale} setLocale={setLocale} theme={theme} setTheme={setTheme} mode={mode} setMode={setMode} showPass={showPass} setShowPass={setShowPass} error={error} setError={setError} toast={setError} guestLogin={enterGuest} login={()=>{localStorage.setItem(K.session,"true");localStorage.setItem("wellnesshub.session.role","user");exit(report?`/reports/${report.id}`:"/home");}} register={()=>exit("/register")} forgot={()=>setError(T("demoDesc"))}/>;
   else if(path==="/guest/profile" && eligible) view=<section className="product-page guest-profile"><Header title={C.title} back={()=>go("/guest/login")}/><p>{C.purpose}</p><form onSubmit={e=>{e.preventDefault();if(validGuestDraft(state.draft)){update(state.draft,true);go(base);}}}>
     <div className="guest-validation-field"><Field label={`${C.age} *`}><KeyboardInput aria-label={C.age} inputMode="numeric" placeholder={ageHint} aria-invalid={ageInvalid} aria-describedby={ageInvalid?"guest-age-error":undefined} value={state.draft.age} onChange={e=>update({...state.draft,age:e.target.value})}/></Field>{ageInvalid&&<p id="guest-age-error" className="guest-field-error" role="alert">{ageHint}</p>}</div>
     <fieldset><legend>{C.gender} *</legend><div className="choice-row">{["male","female"].map(g=><button key={g} type="button" aria-pressed={state.draft.gender===g} className={state.draft.gender===g?"active":""} onClick={()=>{keyboard.hide();update({...state.draft,gender:g});}}>{T(g)}</button>)}</div></fieldset>
@@ -2150,10 +2174,11 @@ function UserPrototype() {
     localStorage.setItem(K.session, "true");
     localStorage.setItem("wellnesshub.session.role", "user");
     setSession(true);
-    go("/home", { replace: true });
+    go("/me", { replace: true });
   };
   const guestLogin = () => {
-    go("/guest/login");
+    sessionStorage.setItem(guestKey, JSON.stringify({ token: "demo-both", draft: emptyGuestDraft(), submitted: false }));
+    go("/guest/profile");
   };
   const logout = () => {
     localStorage.removeItem(K.session);
@@ -2298,7 +2323,7 @@ function UserPrototype() {
         done={() => {
           localStorage.setItem(K.session, "true");
           setSession(true);
-          go("/home", { replace: true });
+          go("/me", { replace: true });
         }}
         back={session ? () => back("/me") : undefined}
       />
@@ -2320,7 +2345,17 @@ function UserPrototype() {
   else if (route.page === "shape")
     view = <section className="home-detail-page"><Header title={interactionText(locale,"shape")} back={() => go("/home")}/><ShapeComparison reports={buildHomeOverview(reports).window} locale={locale} full /></section>;
   else if (route.page === "home-service")
-    view = route.type === "training" ? <PreviewTrainingDetail locale={locale} back={() => go("/home")} /> : <AIPage report={report} homeContent={previewAI[locale]} T={(key:string)=>key==="readOnly"?homeText(locale,"previewReadOnly"):T(key)} locale={locale} back={() => go("/home")} readOnly />;
+    view = route.type === "training" ? <PreviewTrainingDetail locale={locale} back={() => go("/me")} /> : <AIPage report={report} homeContent={previewAI[locale]} T={(key:string)=>key==="readOnly"?homeText(locale,"previewReadOnly"):T(key)} locale={locale} back={() => go("/home")} readOnly />;
+  else if (route.page === "center")
+    view = (
+      <PersonalCenter
+        T={T}
+        profile={profile}
+        units={units}
+        save={(next: Profile) => { saveProfile(next); back("/me"); }}
+        back={() => back("/me")}
+      />
+    );
   else if (route.page === "me")
     view = (
       <SourceMe
@@ -2330,7 +2365,16 @@ function UserPrototype() {
         reports={reports}
         units={units}
         go={go}
+        outlineReady
+        onCreate={() => setSheet("demo")}
       />
+    );
+  else if (route.page === "faq")
+    view = (
+      <section className="settings-page">
+        <Header title={T("faq")} back={() => back("/me")} />
+        <p className="me-faq-empty">{T("noFaq")}</p>
+      </section>
     );
   else if (route.page === "settings")
     view = (
@@ -2430,7 +2474,7 @@ function UserPrototype() {
         go={go}
       />
     );
-  const nav = session && (route.page === "home" || route.page === "me");
+  const nav = false;
   const sheetOpen = sheet !== null;
   return (
     <div
@@ -4607,65 +4651,197 @@ function HistoryTrendsPage({ T, locale, units, reports, back }: any) {
     </section>
   );
 }
-function SourceMe({ T, locale, profile, reports, units, go }: any) {
+const moduleIconOrder: ModuleId[] = ["composition", "posture", "spine", "girth", "balance", "neck", "hip"];
+function ModuleGlyph({ id }: { id: ModuleId }) {
+  return <img className="module-glyph" src={`/assets/module-icons/${id}.svg`} alt="" draggable={false} />;
+}
+const meOutlineCopy: Record<Locale, { title: string; ready: string; empty: string; view: string; create: string; phases: [string, string, string][] }> = {
+  zh: {
+    title: "训练大纲",
+    ready: "基于您的测量报告、健康档案。AI解读数据生成专属训练大纲",
+    empty: "您还没有训练大纲。可基于测量报告与健康档案生成专属方案。",
+    view: "查看完整训练大纲",
+    create: "生成训练大纲",
+    phases: [
+      ["基础适应期", "2周", "建立运动习惯，提升基础体能"],
+      ["强化训练期", "4周", "针对性训练，改善核心力量"],
+      ["巩固提升期", "2周", "稳固成果，优化体态表现"],
+    ],
+  },
+  en: {
+    title: "Training outline",
+    ready: "A personal outline generated from your assessment and health profile.",
+    empty: "No training outline yet. One can be created from your assessment and health profile.",
+    view: "View full outline",
+    create: "Create outline",
+    phases: [
+      ["Foundation", "2 weeks", "Build an exercise habit and base fitness"],
+      ["Strength", "4 weeks", "Targeted work for core strength"],
+      ["Consolidation", "2 weeks", "Hold the gains and refine posture"],
+    ],
+  },
+  de: {
+    title: "Trainingsrahmen",
+    ready: "Ein persönlicher Rahmen aus Messbericht und Gesundheitsprofil.",
+    empty: "Noch kein Trainingsrahmen. Er kann aus Messung und Gesundheitsprofil erstellt werden.",
+    view: "Gesamten Rahmen ansehen",
+    create: "Rahmen erstellen",
+    phases: [
+      ["Grundlage", "2 Wochen", "Bewegungsgewohnheit und Basis aufbauen"],
+      ["Kräftigung", "4 Wochen", "Gezieltes Training für die Rumpfkraft"],
+      ["Festigung", "2 Wochen", "Fortschritt halten und Haltung verfeinern"],
+    ],
+  },
+  ar: {
+    title: "خطة التدريب",
+    ready: "خطة مخصصة أُنشئت من تقرير القياس والملف الصحي.",
+    empty: "لا توجد خطة تدريب بعد. يمكن إنشاؤها من تقرير القياس والملف الصحي.",
+    view: "عرض الخطة الكاملة",
+    create: "إنشاء الخطة",
+    phases: [
+      ["التأسيس", "أسبوعان", "بناء عادة الحركة واللياقة الأساسية"],
+      ["التقوية", "4 أسابيع", "تدريب موجه لقوة الجذع"],
+      ["التثبيت", "أسبوعان", "تثبيت النتائج وتحسين القوام"],
+    ],
+  },
+};
+function PersonalCenter({ T, profile, units, save, back }: any) {
+  const [draft, setDraft] = useState<Profile>(profile);
+  const [edit, setEdit] = useState("");
+  const age = draft.birthday ? calcAge(draft.birthday) : -1;
+  const heightShown = draft.heightCm > 0 ? convert(`${draft.heightCm} cm`, units) : "";
+  const weightShown = draft.weightKg > 0 ? convert(`${draft.weightKg} kg`, units) : "";
+  const ageShown = draft.birthday && age >= 0 ? `${draft.birthday}/${age}${T("age")}` : "";
+  const valid = Boolean(draft.nickname.trim()) && Boolean(draft.gender) && draft.heightCm >= 100 && draft.heightCm <= 230 && draft.weightKg >= 20 && draft.weightKg <= 300 && age >= 10 && age <= 99;
+  const rows = [
+    { id: "nickname", icon: <FileTextIcon />, label: T("userNickname"), value: draft.nickname },
+    { id: "gender", icon: <PersonIcon />, label: T("gender"), value: draft.gender ? T(draft.gender) : "" },
+    { id: "birthday", icon: <CalendarIcon />, label: T("ageYears"), value: ageShown },
+    { id: "height", icon: <BarChartIcon />, label: T("height"), value: heightShown },
+    { id: "weight", icon: <TargetIcon />, label: T("weight"), value: weightShown },
+  ];
+  return (
+    <section className="source-page center-page">
+      <Header title={T("personalCenter")} back={back} />
+      <div className="center-hero">
+        <div className="center-avatar" aria-hidden="true"><PersonIcon /></div>
+        <strong>{draft.nickname}</strong>
+      </div>
+      <div className="center-list">
+        {rows.map((row) => (
+          <div className="center-row" key={row.id}>
+            <span className="center-icon" aria-hidden="true">{row.icon}</span>
+            <b>{row.label}</b>
+            {edit === row.id && row.id === "gender" ? (
+              <span className="center-choice">
+                {["male", "female"].map((gender) => (
+                  <button type="button" key={gender} className={draft.gender === gender ? "active" : ""} onClick={() => { setDraft({ ...draft, gender }); setEdit(""); }}>{T(gender)}</button>
+                ))}
+              </span>
+            ) : edit === row.id ? (
+              <KeyboardInput
+                className="center-input"
+                inputMode={row.id === "nickname" ? "text" : row.id === "birthday" ? "text" : "decimal"}
+                value={row.id === "nickname" ? draft.nickname : row.id === "birthday" ? draft.birthday : row.id === "height" ? (units === "metric" ? String(draft.heightCm || "") : String(Math.round((draft.heightCm / 2.54) * 10) / 10 || "")) : (units === "metric" ? String(draft.weightKg || "") : String(Math.round(draft.weightKg * 2.20462 * 10) / 10 || ""))}
+                onChange={(e) => {
+                  const value = e.target.value;
+                  if (row.id === "nickname") setDraft({ ...draft, nickname: value });
+                  else if (row.id === "birthday") setDraft({ ...draft, birthday: value });
+                  else if (row.id === "height") setDraft({ ...draft, heightCm: units === "metric" ? +value : +value * 2.54 });
+                  else setDraft({ ...draft, weightKg: units === "metric" ? +value : +value / 2.20462 });
+                }}
+              />
+            ) : (
+              <button type="button" className="center-value" onClick={() => setEdit(row.id)}>
+                <em>{row.value}</em>
+                <ChevronRightIcon />
+              </button>
+            )}
+          </div>
+        ))}
+      </div>
+      <button className="primary-btn" type="button" disabled={!valid} onClick={() => valid && save(draft)}>{T("saveShort")}</button>
+    </section>
+  );
+}
+function SourceMe({ T, locale, profile, reports, units, go, outlineReady = true, onCreate }: any) {
+  const latest = reports[0] as Report | undefined;
+  const measured = moduleIconOrder.filter((id) => latest?.modules.some((module) => module.id === id));
+  const profileSub = [
+    profile.heightCm > 0 ? convert(`${profile.heightCm} cm`, units) : null,
+    profile.birthday ? `${calcAge(profile.birthday)}${T("age")}` : null,
+  ].filter(Boolean).join(" · ");
+  const outline = meOutlineCopy[locale as Locale];
+  const displayName = profile.nickname === "New User"
+    ? ({ zh: "新用户", en: "New user", de: "Neuer Nutzer", ar: "مستخدم جديد" } as Record<string, string>)[locale]
+    : profile.nickname;
   return (
     <section className="source-page me-page">
-      <div className="source-profile">
-        <div className="avatar">{profile.nickname[0]}</div>
+      <Header title={T("mainPage")} />
+      <button type="button" className="me-user" onClick={() => go("/center")}>
+        <div className="me-avatar" aria-hidden="true"><PersonIcon /></div>
         <div>
-          <h1>{profile.nickname === "New User" ? ({zh:"新用户",en:"New user",de:"Neuer Nutzer",ar:"مستخدم جديد"} as Record<string,string>)[locale] : profile.nickname}</h1>
+          <strong>{displayName}</strong>
           <p>138****1792</p>
         </div>
-      </div>
-      <p className="group-label">{T("measurementReports")}</p>
-      <button className="assessment-entry" onClick={() => go("/reports")}>
-        <span className="entry-icon">
-          <FileTextIcon />
-        </span>
-        <b>{T("reports")}</b>
-        <em>
-          {reports.length} {T("recordsCount")} ›
-        </em>
-        <div>
-          <small>{reports[0]?.date}</small>
-          <span>{reports[0]?.device}</span>
-          <p className="assessment-tags">{(["composition", "posture", "girth"] as ModuleId[]).map(id => <span key={id} data-module={id}>{moduleNames[locale as Locale][id]}</span>)}</p>
-        </div>
       </button>
-      <p className="group-label">{T("bodyData")}</p>
-      <Menu
-        icon={<PersonIcon />}
-        accent="accent-emerald"
-        title={T("bodyProfile")}
-        sub={[
-          profile.heightCm > 0
-            ? convert(`${profile.heightCm} cm`, units)
-            : null,
-          profile.birthday
-            ? `${calcAge(profile.birthday)}${T("age")}`
-            : null,
-        ]
-          .filter(Boolean)
-          .join(" · ")}
-        onClick={() => go("/profile")}
-      />
-      <p className="group-label">{T("systemServices")}</p>
-      <div className="menu-panel">
-        <Menu
-          icon={<GearIcon />}
-          accent="accent-violet"
-          title={T("settings")}
-          sub={`${T("language")} · ${T("appearance")} · ${T("units")}`}
-          onClick={() => go("/settings")}
-        />
-        <Menu
-          icon={<InfoCircledIcon />}
-          accent="accent-orange"
-          title={T("help")}
-          sub={T("demoDesc")}
-          onClick={() => go("/settings")}
-        />
+      <div className="me-quick">
+        <button type="button" onClick={() => go("/profile")}>
+          <FileTextIcon />
+          <span><b>{T("bodyProfile")}</b><ChevronRightIcon /></span>
+          <small>{profileSub}</small>
+        </button>
+        <button type="button" onClick={() => go("/settings")}>
+          <GearIcon />
+          <span><b>{T("settings")}</b><ChevronRightIcon /></span>
+          <small>{T("language")} · {T("appearance")}</small>
+        </button>
       </div>
+      <section className="me-scan">
+        <button type="button" className="me-scan-bar" onClick={() => go("/reports")}>
+          <span><FileTextIcon />{T("reports")}</span>
+          <em>{reports.length} {T("recordsCount")}<ChevronRightIcon /></em>
+        </button>
+        {latest ? (
+          <button type="button" className="me-scan-body" onClick={() => go(`/reports/${latest.id}`)}>
+            <div className="me-scan-meta">
+              <span><CalendarIcon />{latest.date}</span>
+              <b>{latest.device}</b>
+            </div>
+            <div className="me-module-grid">
+              {measured.map((id) => (
+                <span key={id}><ModuleGlyph id={id} />{moduleNames[locale as Locale][id]}</span>
+              ))}
+            </div>
+          </button>
+        ) : null}
+      </section>
+      <section className="me-outline">
+        <h2>{outline.title}</h2>
+        <p>{outlineReady ? outline.ready : outline.empty}</p>
+        {outlineReady ? (
+          <ol className="me-outline-phases">
+            {outline.phases.map(([name, weeks, desc], index) => (
+              <li key={name}>
+                <span>{index + 1}</span>
+                <div>
+                  <strong>{name}<em>{weeks}</em></strong>
+                  <small>{desc}</small>
+                </div>
+              </li>
+            ))}
+          </ol>
+        ) : null}
+        <button type="button" className="primary-btn" onClick={() => outlineReady ? go("/home-service/training") : onCreate?.()}>
+          {outlineReady ? outline.view : outline.create}
+          <ChevronRightIcon />
+        </button>
+      </section>
+      <button type="button" className="me-help" onClick={() => go("/faq")}>
+        <span className="me-help-icon"><InfoCircledIcon /></span>
+        <b>{T("faq")}</b>
+        <ChevronRightIcon />
+      </button>
     </section>
   );
 }
@@ -4886,11 +5062,10 @@ function SwipeReportRow({
           <div>
             <strong>{r.date}</strong>
             <small>{r.device}</small>
-            <p>
-              {r.modules
-                .slice(0, 3)
-                .map((m) => moduleNames[locale as Locale][m.id])
-                .join(" · ")}
+            <p className="report-modules">
+              {r.modules.slice(0, 3).map((m) => (
+                <span key={m.id}><ModuleGlyph id={m.id} />{moduleNames[locale as Locale][m.id]}</span>
+              ))}
             </p>
           </div>
           <ChevronRightIcon />
