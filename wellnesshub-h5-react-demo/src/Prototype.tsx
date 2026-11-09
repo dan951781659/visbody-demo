@@ -149,6 +149,7 @@ const zh = {
   newUserRegister: "新用户注册",
   settings: "设置",
   help: "测试帮助",
+  helpSub: "测量遇到问题时，按准备和姿势快速排查",
   latest: "最新评估结果",
   fullReport: "查看完整报告",
   core: "核心问题 / 亮点",
@@ -259,6 +260,7 @@ const en = {
   newUserRegister: "New user registration",
   settings: "Settings",
   help: "Test help",
+  helpSub: "If a measurement looks off, check preparation and posture.",
   latest: "Latest assessment",
   fullReport: "View full report",
   core: "Key findings",
@@ -2372,8 +2374,8 @@ function UserPrototype() {
   else if (route.page === "faq")
     view = (
       <section className="settings-page">
-        <Header title={T("faq")} back={() => back("/me")} />
-        <p className="me-faq-empty">{T("noFaq")}</p>
+        <Header title={T("help")} back={() => back("/me")} />
+        <p className="me-faq-empty">{T("helpSub")}</p>
       </section>
     );
   else if (route.page === "settings")
@@ -4839,7 +4841,10 @@ function SourceMe({ T, locale, profile, reports, units, go, outlineReady = true,
       </section>
       <button type="button" className="me-help" onClick={() => go("/faq")}>
         <span className="me-help-icon"><InfoCircledIcon /></span>
-        <b>{T("faq")}</b>
+        <span>
+          <b>{T("help")}</b>
+          <small>{T("helpSub")}</small>
+        </span>
         <ChevronRightIcon />
       </button>
     </section>

@@ -4394,7 +4394,8 @@ button:disabled {
   background: color-mix(in srgb, #0a84ff 16%, var(--surface));
   color: #0a84ff;
 }
-.me-help b { font-size: 15px; font-weight: 700; }
+.me-help b { display: block; font-size: 15px; font-weight: 700; line-height: 1.3; }
+.me-help small { display: block; margin-top: 2px; color: var(--muted); font-size: 12px; line-height: 1.45; }
 .me-faq-empty {
   margin: 28px 8px 0;
   color: var(--muted);
