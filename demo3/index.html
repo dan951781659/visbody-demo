@@ -92,6 +92,21 @@
     .admin-footer { text-align: center; padding: 12px; font-size: 12px; color: var(--muted); }
     .page { display: none; }
     .page.active { display: block; }
+    [hidden] { display: none !important; }
+    #page-mode-form .admin-card { background: #fff; }
+    #page-mode-form .form-grid > :is(select, input, textarea),
+    #modePriceRows input {
+      width: 100%;
+      min-width: 0;
+      padding: 7px 10px;
+      border: 1px solid transparent;
+      border-radius: 3px;
+      background: #f2f3f5;
+      font: inherit;
+    }
+    #page-mode-form fieldset { margin: 12px 0; padding: 0; border: 0; }
+    #page-mode-form fieldset legend { float: left; margin-right: 18px; }
+    #page-mode-form .admin-card > h4 { margin-top: 20px; }
     .page-title {
       margin: 0 0 4px; font-size: 18px; font-weight: 600;
     }
@@ -180,19 +195,30 @@
       .admin-header-center { font-size: 14px; }
       .content-inner { padding: 10px; }
     }
-  </style>
-</head>
+      .coupon-admin {padding:0;background:#fff;border:1px solid #e1e4e9}
+    .coupon-tabs {padding:10px 18px;background:#f1f2f4;color:#505c6b}
+    .coupon-tabs span {margin-left:14px;color:#315efb}
+    .coupon-body {padding:24px}
+    .coupon-fields {display:grid;grid-template-columns:140px minmax(0,1fr);gap:14px;align-items:center;max-width:960px}
+    .coupon-fields input,.coupon-fields select {width:100%;min-width:0;background:#f1f2f4;border:1px solid transparent;border-radius:3px;padding:9px 12px}
+    .coupon-actions {display:flex;justify-content:flex-end;gap:8px;margin-top:18px}
+    .coupon-body fieldset {border:0;padding:12px 0;margin:12px 0}
+    .coupon-body fieldset label {display:block;margin:6px 0}
+    .coupon-body table {margin-top:12px}
+    #campaignConfirm {border:1px solid #e1e4e9;border-radius:6px;padding:20px;max-width:90vw}
+    #campaignConfirm::backdrop {background:#18233755}
+</style>
+<link rel="stylesheet" href="./platform.css"></head>
 <body>
   <div class="admin-root">
     <header class="admin-header">
       <div class="admin-header-left">
-        <span class="logo-mark" aria-hidden="true"></span>
-        <span class="logo-text">维塑</span>
+        <img src="./assets/kuafu.png" alt="夸父" style="width:142px;height:auto">
       </div>
       <div class="admin-header-center">维塑大中台管理系统</div>
       <div class="admin-header-right">
         <span class="user-avatar">h</span>
-        <span class="user-name">hudandan</span>
+        <span class="user-name">superadmin</span>
       </div>
     </header>
 
@@ -207,11 +233,12 @@
             <div class="nav-parent"><span>付费管理</span><span class="chev">▼</span></div>
             <div class="submenu">
               <div class="nav-sub active" data-view="payment-mode">付费模式</div>
+              <div class="nav-sub" data-view="points-mode">积分模式配置</div>
               <div class="nav-sub" data-view="customer-payment">客户付费管理</div>
               <div class="nav-sub" data-view="payment-records">缴费记录</div>
             </div>
           </div>
-          <div class="nav-item-top">优惠券管理</div>
+          <div class="nav-parent">优惠券管理</div><button type="button" class="nav-sub" data-view="coupons">优惠券管理</button><button type="button" class="nav-sub" id="couponRecordsNav">优惠券使用记录</button>
           <div class="nav-item-top">资源管理</div>
           <div class="nav-item-top">系统管理</div>
         </nav>
@@ -220,18 +247,44 @@
 
       <div class="admin-main">
         <nav class="mobile-nav" aria-label="模块切换">
+          <button type="button" class="mobile-nav-btn" data-view="coupons">优惠券管理</button>
           <button type="button" class="mobile-nav-btn active" data-view="payment-mode">付费模式</button>
+              <button class="mobile-nav-btn" data-view="points-mode">积分模式配置</button>
           <button type="button" class="mobile-nav-btn" data-view="customer-payment">客户付费</button>
           <button type="button" class="mobile-nav-btn" data-view="payment-records">缴费记录</button>
         </nav>
         <div class="content-inner">
           <div class="canvas">
             <!-- 付费模式：列表 + Pro 下积分包与策略配置 -->
+            <section class="page" id="page-rollout">
+              <div class="admin-card" id="rolloutPanel">
+                <h1 class="page-title">上线初始化 · 迁移演示</h1>
+                <p>有效月付设备 1 台，剩余 15 / 30 天，预计发放 250 分。</p>
+                <button class="btn primary" id="applyRollout" type="button">执行模拟初始化</button>
+                <p id="rolloutResult" role="status"></p>
+              </div>
+            </section>
+<section class="page" id="page-coupons">
+<div id="couponList"><div class="coupon-toolbar"><button class="btn primary" id="newCampaign">＋ 新建</button><div><input id="campaignSearch" placeholder="请输入优惠券批次/名称查询"><select id="campaignFilter"><option value="">全部类型</option><option>积分发放</option><option>代金券</option><option>免费体验券</option></select><button class="btn primary" id="searchCampaign">查询</button></div></div>
+<div class="status-tabs"><button data-status="已通过" class="active">已通过</button><button data-status="待审核">待审核</button><button data-status="已禁用/拒绝/过期">已禁用/拒绝/过期</button></div>
+<div class="table-scroll"><table class="data-table"><thead><tr><th>序号</th><th>优惠券批次</th><th>优惠券名称</th><th>适用类型</th><th>优惠券类型</th><th>每客户积分 / 优惠</th><th>有效期</th><th>生成数量/份</th><th>剩余数量/份</th><th>创建时间</th><th>状态</th><th>操作</th></tr></thead><tbody id="campaignRows"></tbody></table></div><p id="campaignCount"></p></div>
+<div id="campaignIssue" hidden><button class="btn light" id="issueBack">← 返回</button><div class="issue-summary" id="issueSummary"></div><h3>选择发放客户</h3><div class="coupon-toolbar"><input id="audienceSearch" placeholder="请输入客户ID/客户名称/账户名查询"><select id="audienceCountry"><option value="">选择国家</option><option>中国</option><option>美国</option></select><button class="btn primary" id="audienceQuery">搜索</button></div><div class="table-scroll"><table class="data-table"><thead><tr><th><input type="checkbox" id="audienceAll" aria-label="全选可发放客户"></th><th>客户ID</th><th>客户名称</th><th>国家</th><th>门店类型</th><th>账户名</th><th>Pro 状态</th><th>发放资格</th></tr></thead><tbody id="campaignAudience"></tbody></table></div><div class="coupon-actions"><span id="selectionTotal"></span><button class="btn primary" id="issueNow">立即发放</button></div><p id="issueResult" role="status"></p></div>
+<div id="campaignRecords" hidden><h3>优惠券使用记录 · 积分发放</h3><input id="recordSearch" placeholder="查询活动名称/客户ID/客户名称"><div class="table-scroll"><table class="data-table"><thead><tr><th>批次 / 活动</th><th>客户ID</th><th>客户名称</th><th>积分</th><th>操作人</th><th>时间</th><th>结果</th><th>操作</th></tr></thead><tbody id="campaignResults"></tbody></table></div></div>
+</section>
+<dialog id="campaignEditor" class="platform-dialog"><form id="campaignForm"><div class="dialog-heading"><strong id="campaignTitle">新建优惠券</strong><button type="button" id="closeCampaign" aria-label="关闭">×</button></div><div class="coupon-fields">
+<label for="campaignName"><em>*</em> 优惠券名称</label><input id="campaignName" name="name" maxlength="60" required placeholder="请输入优惠券名称">
+<label for="campaignApplicable"><em>*</em> 适用类型</label><input id="campaignApplicable" value="Pro" readonly>
+<label for="campaignType"><em>*</em> 优惠券类型</label><select id="campaignType" name="type"><option>代金券</option><option>免费体验券</option><option>积分发放</option></select>
+<label for="campaignStart"><em>*</em> 有效期</label><div><div class="date-range"><input id="campaignStart" name="start" type="date" required aria-label="有效期开始时间"><input id="campaignEnd" name="end" type="date" required aria-label="有效期结束时间"></div><small id="validityHint"></small></div>
+<label for="campaignAmount" id="campaignAmountLabel">优惠价格</label><div class="date-range"><input id="campaignAmount" name="amount" type="number" min="1" step="1" required placeholder="请输入额度"><select id="campaignCurrency" name="currency"><option>USD</option><option>CNY</option><option>EUR</option></select></div>
+<label for="campaignQuantity"><em>*</em> 数量</label><div><input id="campaignQuantity" name="quantity" type="number" min="1" step="1" required placeholder="请输入总数量"><small id="quantityHint"></small></div>
+</div><p id="campaignError" role="alert"></p><div class="dialog-footer"><button type="button" class="btn light" id="cancelCampaign">取消</button><button class="btn primary" type="submit" id="saveCampaign">确定</button></div></form></dialog>
+<dialog id="campaignConfirm" class="platform-dialog"><div class="dialog-heading"><strong>确认发放积分</strong></div><p id="campaignPreview"></p><form method="dialog" class="dialog-footer"><button class="btn light" value="cancel">取消</button><button class="btn primary" value="issue">确认发放</button></form></dialog>
             <section class="page active" id="page-payment-mode">
               <h1 class="page-title">付费模式</h1>
-              <p class="page-desc">维护付费模式列表；在 <strong>Pro 付费模式</strong> 中配置套餐发放积分、AI 单次消耗及<strong>积分包价格</strong>（与客户端「购买积分包」一致）。</p>
+              <p class="page-desc">维护付费模式列表；在 <strong>Pro 付费模式</strong> 中配置套餐赠送积分。</p>
               <div class="toolbar-row">
-                <button type="button" class="btn primary">+ 新建</button>
+                <button type="button" class="btn primary" id="newPaymentMode">+ 新建</button>
                 <select aria-label="筛一"><option>全部</option></select>
                 <select aria-label="筛二"><option>全部</option></select>
                 <input type="search" placeholder="请输入付费模式查询" style="min-width:200px;" />
@@ -256,25 +309,33 @@
                       <td>Pro</td>
                       <td>中国</td>
                       <td><span class="pill-ok">启用中</span></td>
-                      <td><button type="button" class="btn link">详情</button> <button type="button" class="btn link">编辑</button></td>
-                    </tr>
-                    <tr>
-                      <td>2</td>
-                      <td>（演示）与下方积分配置联动</td>
-                      <td>Pro</td>
-                      <td>中国</td>
-                      <td><span class="pill-ok">启用中</span></td>
-                      <td><span class="text-muted">—</span></td>
+                      <td><button type="button" class="btn link">详情</button> <button type="button" class="btn link" id="editPaymentMode">编辑</button></td>
                     </tr>
                   </tbody>
                 </table>
               </div>
 
+            </section>
+            <section class="page" id="page-mode-form">
               <div class="admin-card">
-                <h3>Pro 付费模式 · 积分与计费</h3>
-                <p class="text-muted" style="margin:0 0 12px;">以下配置对应客户端 demo「账户与权益 / 续费 / 购买积分包」中的数值来源；保存仅为前端演示。</p>
+                <button type="button" class="btn" id="backPaymentMode">← 返回</button>
+                <h1 class="page-title" id="paymentModeTitle" style="text-align:center">新增付费模式</h1>
+                <div class="form-grid" style="display:grid;grid-template-columns:120px 1fr;gap:16px;align-items:center">
+                  <label for="modeType">适用类型</label><select id="modeType"><option>Pro</option></select>
+                  <label for="modeCountry">国家</label><select id="modeCountry"><option>中国</option></select>
+                  <label for="modeCurrency">货币单位</label><select id="modeCurrency"><option>CNY</option></select>
+                  <label for="modeName">付费模式名称</label><input id="modeName" maxlength="50">
+                  <label for="modeDescription">详细描述</label><textarea id="modeDescription" maxlength="100"></textarea>
+                </div>
+                <h4>功能及单价</h4>
+                <table class="data-table">
+                  <thead><tr><th>功能</th><th>详细描述</th><th>价格/永久</th><th>价格/年</th><th>价格/月</th></tr></thead>
+                  <tbody id="modePriceRows"></tbody>
+                </table>
+                <h3>Pro 积分</h3>
+                <p class="text-muted" style="margin:0 0 12px;">同一周期的赠送积分按设备计算，与国家、币种和实付金额无关。</p>
 
-                <h4>套餐档位发放积分（支付成功即发，与实付解耦）</h4>
+                <h4>套餐赠送积分（分/台）</h4>
                 <table class="data-table" id="tableProGrant">
                   <thead>
                     <tr>
@@ -286,6 +347,21 @@
                   <tbody></tbody>
                 </table>
 
+                <h4>优惠券</h4>
+                <label>优惠券 <select><option>无优惠券</option></select></label>
+                <fieldset><legend>是否直接发放给关联的客户</legend><label><input type="radio" name="couponGrant" checked> 是</label> <label><input type="radio" name="couponGrant"> 否</label></fieldset>
+                <h4>标准付费模式</h4>
+                <fieldset><legend>是否为标准付费模式</legend><label><input type="radio" name="standardMode"> 是</label> <label><input type="radio" name="standardMode" checked> 否</label></fieldset>
+                <div style="margin-top:12px;">
+                  <button type="button" class="btn primary" id="savePaymentModePoints">确定</button>
+                </div>
+              </div>
+            </section>
+
+            <section class="page" id="page-points-mode">
+              <h1 class="page-title">积分模式配置</h1>
+              <p class="page-desc">统一管理 AI 功能扣分和积分包价格，适用于所有使用积分的客户。</p>
+              <div class="admin-card">
                 <h4>AI 能力单次消耗积分</h4>
                 <table class="data-table" id="tableConsume">
                   <thead>
@@ -326,9 +402,9 @@
                   </thead>
                   <tbody></tbody>
                 </table>
-                <div style="margin-top:12px;">
-                  <button type="button" class="btn primary" id="savePaymentModePoints">保存积分相关配置</button>
-                </div>
+                <button type="button" class="btn primary" id="editGlobalPoints">编辑</button>
+                <button type="button" class="btn primary" id="saveGlobalPoints" hidden>保存配置</button>
+                <button type="button" class="btn light" id="cancelGlobalPoints" hidden>取消</button>
               </div>
             </section>
 
@@ -517,6 +593,8 @@
 
   <div class="toast" id="toast" role="status"></div>
 
+  <script src="../pro-points/rollout.js"></script>
+  <script src="./campaigns.js"></script>
   <script>
 (function () {
   /** 与 demo2-pro-upgrade-page.html buildPaymentRows('normal') 同源示例数据 */
@@ -539,8 +617,9 @@
   const state = {
     view: 'payment-mode',
     proGrant: [
-      { id: 'Pro-月付', points: 500, note: '方案 A 默认' },
-      { id: 'Pro-年付', points: 5000, note: '方案 A 默认' }
+      { id: 'Pro-月付', points: 500, note: '默认' },
+      { id: 'Pro-年付', points: 5000, note: '默认' },
+      { id: 'Pro-永久', points: 20000, note: '暂定默认，购买时一次性发放' }
     ],
     consume: [
       { key: 'ai_report_interpretation', name: 'AI 报告解读', points: 10, note: '成功扣减' },
@@ -574,6 +653,7 @@
 
   function setView(id) {
     state.view = id;
+    if (id === 'coupons') renderCampaigns();
     document.querySelectorAll('.nav-sub[data-view]').forEach((n) => {
       n.classList.toggle('active', n.dataset.view === id);
     });
@@ -742,18 +822,99 @@
     el.addEventListener('click', () => setView(el.dataset.view));
   });
 
+  const configKey = 'wellnesshub-pro-points-demo-v1';
+  const savedConfig = JSON.parse(localStorage.getItem(configKey) || 'null') || {
+    grants: state.proGrant.map(row => row.points),
+    consume: state.consume.map(row => row.points),
+    tiers: state.purchaseTiers.map(row => ({ ...row })),
+    custom: [state.customMin, state.customMax, state.customStep]
+  };
+  if (savedConfig) {
+    state.proGrant.forEach((row, index) => { row.points = savedConfig.grants[index]; });
+    state.consume.forEach((row, index) => { row.points = savedConfig.consume[index]; });
+    state.purchaseTiers = savedConfig.tiers.map(row => ({ ...row }));
+    [state.customMin, state.customMax, state.customStep] = savedConfig.custom;
+  }
+
+  const modeFeatures = [
+    ['多门店管理', '管理下级门店的设备与测量记录'],
+    ['AI自由对话', '围绕体测报告进行问答'],
+    ['AI报告解读', '分析报告中的关键异常指标'],
+    ['AI个性化训练大纲', '生成训练方案与里程碑']
+  ];
+  document.getElementById('modePriceRows').innerHTML = modeFeatures.map(([name, description], index) =>
+    `<tr><td>${name}</td><td><input aria-label="${name}详细描述" value="${description}"></td>${['永久', '年', '月'].map((cycle, column) => `<td><input aria-label="${name}价格/${cycle}" type="number" min="0" value="${index ? 0 : [3999, 990, 129][column]}"></td>`).join('')}</tr>`
+  ).join('');
+  function openModeForm(editing) {
+    document.getElementById('paymentModeTitle').textContent = editing ? '编辑付费模式' : '新增付费模式';
+    document.getElementById('modeName').value = editing ? 'VA-Pro6 China 标准 Pro' : '';
+    setView('mode-form');
+  }
+  document.getElementById('newPaymentMode').onclick = () => openModeForm(false);
+  document.getElementById('editPaymentMode').onclick = () => openModeForm(true);
+  document.getElementById('backPaymentMode').onclick = () => setView('payment-mode');
+
   document.getElementById('savePaymentModePoints').addEventListener('click', () => {
+    const grants = Array.from(document.querySelectorAll('.inp-pro'), input => input.valueAsNumber);
+    if (grants.some(value => !Number.isSafeInteger(value) || value < 0)) {
+      toast('请输入大于或等于 0 的整数积分');
+      return;
+    }
+    savedConfig.grants = grants;
+    localStorage.setItem(configKey, JSON.stringify(savedConfig));
+    toast('套餐赠送积分已保存');
+  });
+
+  function setPointsEditing(editing) {
+    document.querySelectorAll('#page-points-mode input').forEach(input => { input.disabled = !editing; });
+    document.getElementById('editGlobalPoints').hidden = editing;
+    document.getElementById('saveGlobalPoints').hidden = !editing;
+    document.getElementById('cancelGlobalPoints').hidden = !editing;
+  }
+  document.getElementById('editGlobalPoints').onclick = () => setPointsEditing(true);
+  document.getElementById('cancelGlobalPoints').onclick = () => {
+    state.consume.forEach((row, i) => { row.points = savedConfig.consume[i]; });
+    state.purchaseTiers = savedConfig.tiers.map(row => ({ ...row }));
+    [state.customMin, state.customMax, state.customStep] = savedConfig.custom;
+    renderConsume();
+    renderPurchase();
+    setPointsEditing(false);
+  };
+
+  document.getElementById('saveGlobalPoints').addEventListener('click', () => {
     state.customMin = +document.getElementById('customMin').value;
     state.customMax = +document.getElementById('customMax').value;
     const st = document.getElementById('customStep').value;
     state.customStep = st ? +st : null;
-    toast('已保存（演示）：Pro 发放、AI 消耗、积分包价格');
+    const deductions = Array.from(document.querySelectorAll('.inp-con'), input => input.valueAsNumber);
+    const quantities = state.purchaseTiers.map(row => row.qty);
+    const fieldsValid = Array.from(document.querySelectorAll('#page-points-mode input')).every(input =>
+      input.checkValidity() && (input.id === 'customStep' || input.value !== '')
+    );
+    if (!fieldsValid || state.customMin > state.customMax ||
+        deductions.some(value => !Number.isSafeInteger(value)) ||
+        new Set(quantities).size !== quantities.length) {
+      toast('请检查积分范围、扣分和积分包档位，档位数量不可重复');
+      return;
+    }
+    savedConfig.consume = deductions;
+    savedConfig.tiers = state.purchaseTiers.map(row => ({ ...row }));
+    savedConfig.custom = [state.customMin, state.customMax, state.customStep];
+    localStorage.setItem(configKey, JSON.stringify(savedConfig));
+    setPointsEditing(false);
+    toast('积分模式配置已保存');
   });
+
+  document.getElementById('applyRollout').onclick = () => {
+    const added = pointsRollout.add({ ...pointsRollout.initial, time: new Date().toLocaleString('zh-CN') });
+    document.getElementById('rolloutResult').textContent = added ? '已初始化 250 分' : '该权益周期已初始化';
+  };
 
   document.getElementById('openCustomerDetail').addEventListener('click', () => {
     document.getElementById('panel-customer-list').hidden = true;
     document.getElementById('panel-customer-detail').hidden = false;
     renderUsageTable();
+    document.getElementById('detailBalance').textContent = 420 + pointsRollout.balance();
   });
   document.getElementById('backCustomerList').addEventListener('click', () => {
     document.getElementById('panel-customer-detail').hidden = true;
@@ -789,11 +950,32 @@
     }
   });
 
+  setupCampaigns();
   renderProGrant();
   renderConsume();
   renderPurchase();
   bindCustomInputs();
+  setPointsEditing(false);
   renderPaymentRecordsTable();
+  function showReviewPage(page) {
+    document.querySelectorAll('dialog[open]').forEach(d => d.close());
+    if (page === 'mode-form') openModeForm(true);
+    if (page === 'points-mode') setView('points-mode');
+    if (page === 'coupons' || page === 'rollout') { setView(page); if (page === 'coupons') campaignPanel('couponList'); }
+    if (page === 'coupon-new') { setView('coupons'); campaignPanel('couponList'); openCampaign(); document.getElementById('campaignType').value='积分发放'; updateCampaignType(); }
+    if (page === 'coupon-records') { setView('coupons'); campaignPanel('campaignRecords'); renderCampaignRecords(); }
+    if (page === 'customer-detail') {
+      setView('customer-payment');
+      document.getElementById('openCustomerDetail').click();
+    }
+  }
+    if (new URLSearchParams(location.search).has('review')) {
+      window.addEventListener('message', event => {
+        if (event.source === window.parent && event.data?.type === 'wellnesshub-review-page') {
+          showReviewPage(event.data.page);
+        }
+      });
+    }
 })();
   </script>
 </body>

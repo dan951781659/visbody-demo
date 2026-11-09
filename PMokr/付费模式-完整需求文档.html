@@ -1,0 +1,266 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>WellnessHub 付费模式需求文档</title>
+<style>
+*{box-sizing:border-box}body{margin:0;background:#f4f7fb;color:#20324b;font:15px/1.75 -apple-system,BlinkMacSystemFont,"PingFang SC",sans-serif;display:grid;grid-template-columns:220px minmax(0,1fr)}aside{position:sticky;top:0;height:100dvh;overflow:auto;padding:25px 16px;background:#fff;border-right:1px solid #e1e7ef}.brand{font-size:23px;font-weight:750;line-height:1.3}.brand span{display:block;font-size:14px;color:#3970af;margin-top:8px}.caption{color:#57708d;font-size:12px;margin:0 0 8px}nav .caption{margin:16px 8px 4px}a{color:#2264ad}nav a{display:block;padding:7px 9px;text-decoration:none;border-radius:6px}nav a[aria-current]{background:#eaf2ff;color:#185aa8;font-weight:650}.links{border-top:1px solid #e1e7ef;margin-top:20px;padding-top:12px}.links a{display:block}main{min-width:0;padding:26px;max-width:1700px}header{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:20px}h1{font-size:27px;margin:0}.version{background:#eaf2ff;border-radius:6px;padding:4px 9px;font-size:12px;color:#2264ad;white-space:nowrap}.workspace{display:grid;grid-template-columns:minmax(0,432px) minmax(0,1fr);gap:22px;align-items:start}.stage,article{background:#fff;border:1px solid #e1e7ef;border-radius:12px;padding:18px;min-width:0}.stage{background:#edf2f8}article{padding:20px 24px}details{margin:10px 0;background:#fff;border:1px solid #dce5f0;border-radius:7px;padding:9px}summary{cursor:pointer;font-weight:650}img{display:block;max-width:100%;max-height:70vh;object-fit:contain;margin:8px auto 0}article h3{font-size:17px;margin:22px 0 8px}article li{margin:7px 0}table{width:100%;border-collapse:collapse;font-size:13px;margin:14px 0}td,th{padding:8px;vertical-align:top;border:1px solid #dce5f0;text-align:left}th{background:#edf4fe}section[hidden]{display:none}.flow{padding-left:24px}.flow li{padding:8px} @media(max-width:1100px){.workspace{grid-template-columns:minmax(0,1fr)}article{grid-row:1}}@media(max-width:650px){body{display:block}aside{position:static;height:auto}nav{display:flex;flex-wrap:wrap;align-items:center}main{padding:14px}}
+@media print{body{display:block}aside{display:none}section[hidden]{display:block}section{break-before:page}.workspace{display:block}.stage{margin-bottom:12px}}
+
+body{grid-template-columns:210px minmax(0,1fr)}
+main{max-width:none;padding:18px}.workspace{grid-template-columns:minmax(0,1fr) minmax(300px,30%);gap:16px}
+.platforms{display:flex;gap:5px;margin:18px 0}.platforms button{cursor:pointer;border:1px solid #dce5f0;background:#fff;color:#20324b;padding:6px 8px;border-radius:6px}.platforms button[aria-pressed=true]{background:#eaf2ff;color:#185aa8}
+[hidden]{display:none!important}.stage{padding:0;overflow:hidden}.stage iframe{display:block;width:100%;height:calc(100dvh - 126px);min-height:560px;border:0;background:white}
+article{max-height:calc(100dvh - 126px);overflow:auto}article h2{font-size:20px;margin:0 0 12px}header{margin-bottom:14px}
+@media(max-width:1050px){.workspace{grid-template-columns:minmax(0,1fr)}article{grid-row:auto;max-height:none}}
+
+.stage{border-radius:3px}.preview-toolbar{display:flex;justify-content:space-between;align-items:center;padding:8px 12px;background:#fff;border-bottom:1px solid #e5e6eb;font-size:12px}.preview-toolbar button,.preview-toolbar select{font:inherit;padding:5px 8px;border:1px solid #e5e6eb;background:#f7f8fa;border-radius:2px}.preview-viewport{height:calc(100dvh - 168px);overflow:auto;background:#f2f3f5}.stage iframe{width:1440px;height:1000px;min-height:0;transform-origin:top left}.stage:fullscreen{background:white}.stage:fullscreen .preview-viewport{height:calc(100vh - 44px)}
+</style></head><body><aside><div class="brand">WellnessHub<span>付费模式需求文档</span></div>
+<div class="platforms" aria-label="平台切换"><button data-platform="admin">管理后台</button><button data-platform="client">客户端</button></div>
+<p class="caption">本次新增与修改</p><nav><a href="#module-3" data-platform="admin">套餐赠送积分</a><a href="#admin-points" data-platform="admin">AI 扣分与积分包配置</a><a href="#module-2" data-platform="admin">存量初始化</a><a href="#admin-grant" data-platform="admin">活动积分发放</a><a href="#coupon-new" data-platform="admin">　新建积分活动</a><a href="#coupon-records" data-platform="admin">　发放结果与记录</a><a href="#module-1" data-platform="client">我的套餐与积分余额</a><a href="#module-4" data-platform="client">套餐购买与代金券</a><a href="#client-orders" data-platform="client">缴费记录与实际到账</a><a href="#module-5" data-platform="client">积分包购买</a><a href="#client-usage" data-platform="client">积分使用与到账记录</a><a href="#module-6" data-platform="client">验收与上线确认</a></nav></aside>
+<main><header><div><p class="caption" id="platformLabel"></p><h1 id="pageTitle">付费模式需求文档</h1></div><span class="version">需求评审稿</span></header>
+<div class="workspace"><div class="stage"><div class="preview-toolbar"><label>视图 <select id="previewScale"><option value="fit">适应宽度</option><option value="1">100%</option><option value="0.75">75%</option></select></label><button id="previewFull">全屏查看</button></div><div class="preview-viewport"><iframe id="admin" title="管理后台 Demo" src="../demo3/index.html?review=1"></iframe><iframe id="client" title="客户端 Demo" src="../pro-points/index.html?review=1" hidden></iframe></div></div>
+<article><section id="module-3" data-platform="admin" data-route="mode-form" hidden><h2>套餐赠送积分</h2><h3>新增字段与交互</h3><table><thead><tr><th>字段／操作</th><th>规则</th></tr></thead><tbody><tr><td>每台赠送积分</td><td>月付、年付、永久分别填写非负整数。默认 500、5,000、暂定 20,000。</td></tr><tr><td>预计发放</td><td>按档位每台赠分乘设备数，订单结算且生效后入账。</td></tr></tbody></table><p class="caption">业务规则</p><ul>
+<li><strong>付费模式 → 编辑。</strong> 按周期配置套餐赠分。月付默认 500 分／台，年付 5,000 分／台，永久暂定 20,000 分／台，购买时一次性发放。相同档位采用统一赠分规则，付费价格沿用现有国家、币种与阶梯折扣规则。</li>
+<li><strong>积分模式配置 → 编辑。</strong> 默认只读。有积分配置权限的运营人员可以编辑、保存或取消。这里统一维护 AI 扣分与积分包价格。AI 默认报告解读 10 分、训练大纲 70 分、自由对话 1 分。积分包按档位和币种配置价格，并可配置自定义额度校验范围。客户端 Demo 演示固定档位购买。</li>
+<li>保存后新订单和新发起的 AI 请求使用新规则。已确认订单保存价格、优惠及赠分快照，按快照入账。取消编辑恢复已保存的值。</li>
+</ul>
+<h3>字段与操作状态</h3>
+<table>
+<thead>
+<tr>
+<th>区域</th>
+<th>校验或行为</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>套餐赠分、AI 单次扣分</td>
+<td>填写非负整数。按周期或功能保存。</td>
+</tr>
+<tr>
+<td>积分包</td>
+<td>数量为正整数且档位不重复，价格按币种填写。自定义最小值不得大于最大值，步长为可选正整数。</td>
+</tr>
+<tr>
+<td>查看与编辑</td>
+<td>进入先查看当前配置。具备权限时显示编辑入口。保存失败保留输入并提示原因，取消恢复已保存值。</td>
+</tr>
+<tr>
+<td>变更追溯</td>
+<td>保留修改人、时间及修改前后值，便于定位后续订单或扣分差异。</td>
+</tr>
+</tbody>
+</table></section><section id="admin-points" data-platform="admin" data-route="points-mode" hidden><h2>AI 扣分与积分包配置</h2><h3>新增字段与交互</h3><table><thead><tr><th>字段／操作</th><th>规则</th></tr></thead><tbody><tr><td>AI 单次扣分</td><td>按能力配置非负整数。默认解读 10、大纲 70、对话 1。</td></tr><tr><td>积分包档位与价格</td><td>档位为不重复的正整数，按币种填写价格。</td></tr><tr><td>最小值、最大值、步长</td><td>校验自定义额度，最小值不得大于最大值。步长可选。</td></tr><tr><td>编辑状态</td><td>默认只读，编辑后可保存或取消。</td></tr></tbody></table><p class="caption">业务规则</p><ul>
+<li><strong>付费模式 → 编辑。</strong> 按周期配置套餐赠分。月付默认 500 分／台，年付 5,000 分／台，永久暂定 20,000 分／台，购买时一次性发放。相同档位采用统一赠分规则，付费价格沿用现有国家、币种与阶梯折扣规则。</li>
+<li><strong>积分模式配置 → 编辑。</strong> 默认只读。有积分配置权限的运营人员可以编辑、保存或取消。这里统一维护 AI 扣分与积分包价格。AI 默认报告解读 10 分、训练大纲 70 分、自由对话 1 分。积分包按档位和币种配置价格，并可配置自定义额度校验范围。客户端 Demo 演示固定档位购买。</li>
+<li>保存后新订单和新发起的 AI 请求使用新规则。已确认订单保存价格、优惠及赠分快照，按快照入账。取消编辑恢复已保存的值。</li>
+</ul>
+<h3>字段与操作状态</h3>
+<table>
+<thead>
+<tr>
+<th>区域</th>
+<th>校验或行为</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>套餐赠分、AI 单次扣分</td>
+<td>填写非负整数。按周期或功能保存。</td>
+</tr>
+<tr>
+<td>积分包</td>
+<td>数量为正整数且档位不重复，价格按币种填写。自定义最小值不得大于最大值，步长为可选正整数。</td>
+</tr>
+<tr>
+<td>查看与编辑</td>
+<td>进入先查看当前配置。具备权限时显示编辑入口。保存失败保留输入并提示原因，取消恢复已保存值。</td>
+</tr>
+<tr>
+<td>变更追溯</td>
+<td>保留修改人、时间及修改前后值，便于定位后续订单或扣分差异。</td>
+</tr>
+</tbody>
+</table></section><section id="module-2" data-platform="admin" data-route="rollout" hidden><h2>存量初始化</h2><h3>新增字段与交互</h3><table><thead><tr><th>字段／操作</th><th>规则</th></tr></thead><tbody><tr><td>预计发放</td><td>依据有效设备、当前付费周期和剩余时长折算。示例 250 分。</td></tr><tr><td>来源与余额</td><td>标记上线初始化。同一权益周期只发一次。</td></tr></tbody></table><p class="caption">业务规则</p><p>以下为迁移方案。折算取整、历史永久档初始额度和有效期须在执行迁移前确认。</p>
+<table>
+<thead>
+<tr>
+<th>上线时的设备权益</th>
+<th>初始化处理</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>有效月付／年付</td>
+<td>按设备计算「该档每台赠分 × 当前付费周期剩余时长 ÷ 该周期总时长」，再汇总到所属客户。Demo 按设备向下取整，月付剩 15 / 30 天发 250 分。</td>
+</tr>
+<tr>
+<td>已到期／Basic</td>
+<td>不发套餐积分。</td>
+</tr>
+<tr>
+<td>仍在免费体验期</td>
+<td>按剩余体验天数核算独立体验额度，随体验期结束失效。</td>
+</tr>
+<tr>
+<td>历史永久 Pro</td>
+<td>单列待确认。新购永久档的暂定赠分为 20,000 分／台，历史初始化额度另行确定。</td>
+</tr>
+</tbody>
+</table>
+<p>以上线时点为界，预览客户、设备、权益周期和预计发放量，核对后入账。已生效的存量周期走初始化，跨上线时点尚未生效的订单在生效后走订单发放。每个设备权益周期只归属一种发放路径。初始化以客户、设备及权益周期去重，重跑仅补写漏项。入账记录「上线初始化」及对应权益来源。</p></section><section id="admin-grant" data-platform="admin" data-route="coupons" hidden>
+<h2>活动积分发放</h2><p>优惠券管理 → 新建 → 选择积分发放 → 审核通过 → 发放积分 → 选择客户 → 确认 → 查看到账记录。</p><h3>新建／编辑弹窗</h3><table><tr><th>字段</th><th>规则</th></tr><tr><td>优惠券名称</td><td>必填；作为客户端活动来源名称。</td></tr><tr><td>适用类型／优惠券类型</td><td>适用类型固定 Pro；类型新增积分发放。</td></tr><tr><td>有效期</td><td>开始和结束时间必填，开始不得晚于结束。仅限制运营执行发放的时间，不作为到账积分的独立到期时间。</td></tr><tr><td>每位客户发放积分</td><td>正整数，替换优惠价格，不展示币种。首次成功发放后不可修改。</td></tr><tr><td>数量</td><td>正整数。一份对应一位客户。剩余＝总数量－成功发放客户数；修改后不得少于已成功份数。</td></tr></table><h3>独立发放页</h3><p>沿用真实页面的批次信息、客户搜索、国家筛选和客户表格。积分类型固定每客户 1 份，不允许通过填写多份绕过单活动去重。仅有效 Pro 可选，已发客户不可重复选择；确认前展示目标人数、每人积分及预计总量。</p><h3>提交和到账</h3><ul><li>执行时复核已审核通过、未禁用、处于有效期、剩余份数与客户 Pro 权益。</li><li>同一活动＋同一客户仅成功一次；处理中预占份数，成功占用、失败释放。生产系统需原子更新份数和账本。</li><li>按客户记录批次、活动名称、积分、操作人、时间和结果；失败可重试，重试重新校验，不重复已成功记录。</li><li>成功即到账，进入统一积分池，沿用积分有效期，不需要领取、不延长 Pro、不产生支付订单。</li></ul><h3>审核演示边界</h3><p>现网列表已核对有已通过、待审核、已禁用/拒绝/过期。Demo 提供明确标注的模拟审核；编辑保存暂回待审核。正式审核人权限、是否重审仍需按现网后台核对，不将模拟策略视为既有规则。</p></section><section id="coupon-new" data-platform="admin" data-route="coupon-new" hidden><h2>新建积分活动</h2><p>在现有新建优惠券弹窗中选择「积分发放」。填写名称、起止时间、每客户积分和总数量；不在此处选择客户。</p><p>适用 Pro；一份对应一位客户。积分类型不展示币种。详细字段规则见「活动积分发放」。</p></section><section id="coupon-records" data-platform="admin" data-route="coupon-records" hidden><h2>发放结果与记录</h2><p>沿用优惠券使用记录入口，查看批次、活动名、客户、积分、操作人、时间与结果。失败可重试；成功记录不可重复发放。</p><p>记录页内部字段为本次增量设计；现网记录页细则尚未完成核对。</p></section><section id="module-1" data-platform="client" data-route="account" hidden><h2>我的套餐与积分余额</h2><h3>新增字段与交互</h3><table><thead><tr><th>字段／操作</th><th>规则</th></tr></thead><tbody><tr><td>可用积分</td><td>展示客户统一积分池余额。</td></tr><tr><td>Pro 有效期</td><td>用于判断购买积分包及耗分功能是否可用。</td></tr></tbody></table><p class="caption">业务规则</p><ol>
+<li><strong>配置并上线。</strong> 后台维护套餐赠分、AI 扣分和积分包价格。核对存量权益后，一次性初始化余额。</li>
+<li><strong>开通或续费。</strong> 客户选设备、周期和优惠券。支付成功且权益生效后入账。待生效时等待，支付失败可重试。</li>
+<li><strong>使用和补购。</strong> 发起 AI 前校验权益及余额。成功扣分，失败保留余额。余额不足可购买积分包，再回原功能重试。</li>
+<li><strong>活动发放与到期。</strong> 运营通过优惠券管理发放活动积分。全部 Pro 到期时清零并停用耗分功能，续费生效后重新发放。</li>
+</ol>
+<p>客户总门店使用一个积分池，有权限的子门店共用余额。客户在「我的套餐」查看余额与有效期，在「积分使用记录」查看使用和到账记录，在「缴费记录」查看订单明细。</p></section><section id="module-4" data-platform="client" data-route="renew" hidden><h2>套餐购买与代金券</h2><h3>新增字段与交互</h3><table><thead><tr><th>字段／操作</th><th>规则</th></tr></thead><tbody><tr><td>每台到账与预计到账</td><td>按选中周期及设备数计算。</td></tr><tr><td>优惠金额与实付</td><td>代金券抵减订单金额，赠分继续按套餐档位计算。</td></tr></tbody></table><p class="caption">业务规则</p><ol>
+<li>客户在「我的套餐」选设备、周期和优惠券，确认页并列展示优惠额、实付与预计到账。<strong>代金券减价不减分</strong>。赠分按「该档每台赠分 × 对应设备数」计算。两台月付使用代金券后仍获 1,000 分。</li>
+<li>支付成功且订单生效后，积分入账一次。失败或待生效时不入账，重复支付回调不重复发放。全额抵扣订单以现有订单系统确认结算成功并生效为触发条件，该分支需接入后验收。</li>
+<li>订单详情展示优惠券、优惠额、实付和实际到账积分。余额同步更新。</li>
+<li>免费体验券按固定天数、以 2,000 分／月折算独立体验额度，体验期只扣这笔额度。折算取整待确认。时间券延长对应权益期限，赠分仍按所购档位计算。</li>
+</ol></section><section id="client-orders" data-platform="client" data-route="payments" hidden><h2>缴费记录与实际到账</h2><h3>新增字段与交互</h3><table><thead><tr><th>字段／操作</th><th>规则</th></tr></thead><tbody><tr><td>实际到账积分</td><td>订单结算成功且生效后展示实际发放值。</td></tr><tr><td>优惠券、优惠额与实付</td><td>以订单快照展示，便于与积分入账对照。</td></tr></tbody></table><p class="caption">业务规则</p><ol>
+<li>客户在「我的套餐」选设备、周期和优惠券，确认页并列展示优惠额、实付与预计到账。<strong>代金券减价不减分</strong>。赠分按「该档每台赠分 × 对应设备数」计算。两台月付使用代金券后仍获 1,000 分。</li>
+<li>支付成功且订单生效后，积分入账一次。失败或待生效时不入账，重复支付回调不重复发放。全额抵扣订单以现有订单系统确认结算成功并生效为触发条件，该分支需接入后验收。</li>
+<li>订单详情展示优惠券、优惠额、实付和实际到账积分。余额同步更新。</li>
+<li>免费体验券按固定天数、以 2,000 分／月折算独立体验额度，体验期只扣这笔额度。折算取整待确认。时间券延长对应权益期限，赠分仍按所购档位计算。</li>
+</ol></section><section id="module-5" data-platform="client" data-route="pack" hidden><h2>积分包购买</h2><h3>新增字段与交互</h3><table><thead><tr><th>字段／操作</th><th>规则</th></tr></thead><tbody><tr><td>档位与价格</td><td>按可售档位和币种展示。</td></tr><tr><td>预计到账</td><td>支付成功后按所购数量入账。有效 Pro 可购买。</td></tr></tbody></table><p class="caption">业务规则</p><ul>
+<li><strong>AI 扣分。</strong> 发起前校验权益与余额，成功后扣减并记流水，失败可重试。余额不足展示当前余额、所需积分和购买入口。有效 Pro 客户可主动购买积分包，支付成功即到账，Pro 到期时间沿用原权益。</li>
+<li><strong>活动发放。</strong> 发放时复核活动有效期和客户 Pro 权益。成功即入客户统一积分池，沿用积分池有效期。同一活动对同一客户只入账一次。结果按客户记录活动、积分、操作人、时间与状态，失败记录可单独重试。客户端在积分到账记录查看「活动发放」、活动名称、积分和到账时间。</li>
+<li><strong>到期。</strong> 有任一有效 Pro 时账户积分可用。全部到期后清零，停用耗分 AI 和购买积分包，续费生效后重新发分。Demo 暂按永久 Pro 可维持积分池演示，正式有效期规则待确认。</li>
+</ul>
+<h3>账户状态与客户操作</h3>
+<table>
+<thead>
+<tr>
+<th>状态</th>
+<th>客户操作与结果</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>有效 Pro、余额足够</td>
+<td>可发起 AI。服务成功后扣分，失败不扣。</td>
+</tr>
+<tr>
+<td>有效 Pro、余额不足</td>
+<td>展示本次所需积分和可用余额，提供购买积分包入口。</td>
+</tr>
+<tr>
+<td>体验中</td>
+<td>使用独立体验额度，并显示体验到期时间。</td>
+</tr>
+<tr>
+<td>全部 Pro 到期</td>
+<td>停用需积分的 AI 与积分包购买，引导续费。</td>
+</tr>
+</tbody>
+</table></section><section id="client-usage" data-platform="client" data-route="usage" hidden><h2>积分使用与到账记录</h2><h3>新增字段与交互</h3><table><thead><tr><th>字段／操作</th><th>规则</th></tr></thead><tbody><tr><td>积分来源</td><td>区分上线初始化与活动发放。</td></tr><tr><td>AI 扣减与余额</td><td>成功扣减后记录，失败保留余额。</td></tr></tbody></table><p class="caption">业务规则</p><ul>
+<li><strong>AI 扣分。</strong> 发起前校验权益与余额，成功后扣减并记流水，失败可重试。余额不足展示当前余额、所需积分和购买入口。有效 Pro 客户可主动购买积分包，支付成功即到账，Pro 到期时间沿用原权益。</li>
+<li><strong>活动发放。</strong> 发放时复核活动有效期和客户 Pro 权益。成功即入客户统一积分池，沿用积分池有效期。同一活动对同一客户只入账一次。结果按客户记录活动、积分、操作人、时间与状态，失败记录可单独重试。客户端在积分到账记录查看「活动发放」、活动名称、积分和到账时间。</li>
+<li><strong>到期。</strong> 有任一有效 Pro 时账户积分可用。全部到期后清零，停用耗分 AI 和购买积分包，续费生效后重新发分。Demo 暂按永久 Pro 可维持积分池演示，正式有效期规则待确认。</li>
+</ul>
+<h3>账户状态与客户操作</h3>
+<table>
+<thead>
+<tr>
+<th>状态</th>
+<th>客户操作与结果</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>有效 Pro、余额足够</td>
+<td>可发起 AI。服务成功后扣分，失败不扣。</td>
+</tr>
+<tr>
+<td>有效 Pro、余额不足</td>
+<td>展示本次所需积分和可用余额，提供购买积分包入口。</td>
+</tr>
+<tr>
+<td>体验中</td>
+<td>使用独立体验额度，并显示体验到期时间。</td>
+</tr>
+<tr>
+<td>全部 Pro 到期</td>
+<td>停用需积分的 AI 与积分包购买，引导续费。</td>
+</tr>
+</tbody>
+</table></section><section id="module-6" data-platform="client" data-route="account" hidden><h2>验收与上线确认</h2><p class="caption">业务规则</p><table>
+<thead>
+<tr>
+<th>场景</th>
+<th>预期结果</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>编辑扣分规则后取消，再次打开</td>
+<td>显示原配置。保存后新操作读取新值。</td>
+</tr>
+<tr>
+<td>月付剩一半，初始化重复执行</td>
+<td>同一权益周期只入账 250 分。跨上线待生效订单由订单路径发放一次。</td>
+</tr>
+<tr><td>向有效 Pro 客户发放 100 分</td><td>同一活动只到账一次，客户端显示活动名称及到账时间，失败记录可单独重试。</td></tr>
+<tr>
+<td>单台月付 ¥129，使用 ¥50 代金券</td>
+<td>实付 ¥79，订单生效后到账 500 分，预览、订单与余额一致。</td>
+</tr>
+<tr>
+<td>AI 失败、积分不足、全部 Pro 到期</td>
+<td>分别验证失败不扣、余额不足拦截并可补购、到期清零后可续费恢复。</td>
+</tr>
+</tbody>
+</table>
+<h3>上线前需要确认</h3>
+<ul>
+<li>存量月付、年付的正式取整方式，以及免费体验额度的取整口径。</li>
+<li>历史永久 Pro 的初始化额度，以及仅剩永久 Pro 时积分池的有效期。</li>
+
+<li>全额抵扣订单的真实结算及生效触发点。</li>
+</ul></section></article></div></main>
+<script>
+const sections = [...document.querySelectorAll('article section')];
+const links = [...document.querySelectorAll('nav a')];
+const platforms = [...document.querySelectorAll('.platforms button')];
+const frames = [...document.querySelectorAll('iframe')];
+const lastSection = {};
+let active;
+const targetOrigin = location.origin === 'null' ? '*' : location.origin;
+function navigateFrame(frame) {
+  if (active && frame.id === active.dataset.platform) {
+    frame.contentWindow.postMessage({type: 'wellnesshub-review-page', page: active.dataset.route}, targetOrigin);
+  }
+}
+function selectModule() {
+  active = sections.find(section => '#' + section.id === location.hash) || sections[0];
+  const platform = active.dataset.platform;
+  lastSection[platform] = active.id;
+  sections.forEach(section => { section.hidden = section !== active; });
+  links.forEach(link => {
+    link.hidden = link.dataset.platform !== platform;
+    if (link.hash === '#' + active.id) link.setAttribute('aria-current', 'page');
+    else link.removeAttribute('aria-current');
+  });
+  platforms.forEach(button => button.setAttribute('aria-pressed', String(button.dataset.platform === platform)));
+  document.getElementById('platformLabel').textContent = platform === 'admin' ? '管理后台 / PRO 积分' : '客户端 / PRO 积分';
+  document.getElementById('pageTitle').textContent = active.querySelector('h2').textContent;
+  document.querySelector('article').scrollTop = 0;
+  frames.forEach(frame => { frame.hidden = frame.id !== platform; navigateFrame(frame); });
+}
+platforms.forEach(button => {
+  button.onclick = () => {
+    const platform = button.dataset.platform;
+    location.hash = lastSection[platform] || sections.find(section => section.dataset.platform === platform).id;
+  };
+});
+frames.forEach(frame => frame.addEventListener('load', () => navigateFrame(frame)));
+window.addEventListener('hashchange', selectModule);
+selectModule();
+const stage=document.querySelector('.stage'),viewport=document.querySelector('.preview-viewport');
+function sizePreview(){const value=document.getElementById('previewScale').value;const scale=value==='fit'?Math.min(1,viewport.clientWidth/1440):Number(value);frames.forEach(f=>{f.style.zoom=scale;f.style.height=Math.max(900,viewport.clientHeight/scale)+'px';});}
+document.getElementById('previewScale').onchange=sizePreview;
+document.getElementById('previewFull').onclick=()=>document.fullscreenElement?document.exitFullscreen():stage.requestFullscreen();
+new ResizeObserver(sizePreview).observe(viewport);window.addEventListener('hashchange',sizePreview);sizePreview();
+</script></body></html>
