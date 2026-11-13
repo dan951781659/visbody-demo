@@ -1222,7 +1222,7 @@
       }
     }
   </style>
-<link rel="stylesheet" href="./platform.css"></head>
+<link rel="stylesheet" href="./platform.css"><link rel="stylesheet" href="../shared/cpay-desktop.css?v=2.2.0-release"></head>
 <body>
   <div class="app">
     <aside class="sidebar">
@@ -1259,6 +1259,7 @@
         <div class="nav-item" title="员工账号" aria-label="员工账号"><span class="platform-icon" aria-hidden="true">&#xea8a;</span></div>
         <div class="nav-item" id="navProPoints" title="我的套餐" aria-label="我的套餐"><span class="platform-icon" aria-hidden="true">&#xef65;</span></div>
         <div class="nav-item" id="navPayments" title="缴费记录" aria-label="缴费记录"><span class="platform-icon" aria-hidden="true">&#xeeb8;</span></div>
+        <button class="nav-item" id="navCOrders" title="客户服务订单" aria-label="客户服务订单" style="border:0;background:transparent;width:100%"><span class="platform-icon" aria-hidden="true">&#xeeb8;</span></button>
       </div>
 
       <div class="nav-foot">
@@ -1285,7 +1286,7 @@
 
       <section class="content">
         <div class="canvas">
-          <div class="page active" id="pageAccount"></div>
+          <div class="page active" id="pageAccount"></div><div class="page" id="page-cpay-stores"></div><div class="page" id="page-cpay-store"></div><div class="page" id="page-cpay-orders"></div>
           <div class="page" id="pageRenew"></div>
           <div class="page" id="pagePack"></div>
           <div class="page" id="pageUsage"></div>
@@ -1313,7 +1314,7 @@
     </div>
   </div>
 
-  <script src="./rollout.js"></script>
+  <script src="./rollout.js"></script><script src="../shared/cpay.js?v=2.3.0-release"></script><script src="../shared/cpay-desktop.js?v=2.2.0-release"></script>
   <script>
     const plan = {
       monthPrice: 129,
@@ -1959,11 +1960,13 @@
     function openModal(type) {
       state.modal = type;
       renderModal();
+
     }
 
     function closeModal() {
       state.modal = null;
       renderModal();
+
     }
 
     function toggleAccordion(section) {
@@ -2043,6 +2046,7 @@
         devices.find((d) => state.selectedDeviceIds.includes(d.id)) || devices[0] || {};
       const subtotalStr = `¥${renewSubtotal().toFixed(2)}`;
 
+      CPay.update({pro:true},'客户续费成功');
       state.balance += awardPoints;
       if (state.expiry !== '永久') state.expiry = newExpiry.slice(0, 10);
       state.paymentRows.unshift({
@@ -2159,6 +2163,7 @@
     }
 
     function renderNav() {
+      document.getElementById('navCOrders').onclick=()=>window.cpNavigate('cpay-orders');document.getElementById('navCOrders').classList.toggle('active',state.page==='cpay-orders');
       const payActive = state.page === 'payments' || state.page === 'paymentDetail';
       const proActive = state.page === 'account' || state.page === 'renew' || state.page === 'pack' || state.page === 'usage';
       const navPay = document.getElementById('navPayments');
@@ -2537,8 +2542,8 @@
 
           ${state.scene === 'normal' && pointsRollout.customerEntries().length ? `
             <div class="table-card" id="rolloutReceipts">
-              <strong>积分到账记录</strong>
-              <table class="feature-table"><thead><tr><th>到账时间</th><th>来源</th><th>活动名称</th><th>到账积分</th></tr></thead><tbody>${pointsRollout.customerEntries().map(entry => `<tr><td>${escAttr(entry.time || '—')}</td><td>${escAttr(entry.source)}</td><td>${escAttr(entry.name || '—')}</td><td>+${Number(entry.points)}</td></tr>`).join('')}</tbody></table>
+              <strong>积分到账与 C 端服务消耗记录</strong>
+              <table class="feature-table"><thead><tr><th>时间</th><th>来源</th><th>活动／服务名称</th><th>积分变动</th></tr></thead><tbody>${pointsRollout.customerEntries().map(entry => `<tr><td>${escAttr(entry.time || '—')}</td><td>${escAttr(entry.source)}</td><td>${escAttr(entry.name || '—')}</td><td>${Number(entry.points)>0?'+':''}${Number(entry.points)}</td></tr>`).join('')}</tbody></table>
             </div>
           ` : ''}
 
@@ -2933,6 +2938,7 @@
           el.onclick = () => {
             state.selectedPack = Number(el.dataset.pack);
             renderModal();
+
           };
         });
         document.getElementById('packCancelBtn').onclick = closeModal;
@@ -3003,6 +3009,7 @@
       }
     }
 
+    window.cpNavigate = (page) => { state.page=page; render(); };
     function render() {
       renderSceneSwitch();
       renderSimulateSwitch();
@@ -3014,6 +3021,10 @@
       renderPaymentsPage();
       renderPaymentDetailPage();
       renderModal();
+      document.querySelectorAll('[id^="page-cpay-"]').forEach(p=>p.classList.toggle('active',p.id==='page-'+state.page));
+      if(state.page.startsWith('cpay-')) CPDesktop.render(document.getElementById('page-'+state.page),state.page.slice(5));
+      document.querySelector('[title="门店管理"]').onclick=()=>window.cpNavigate('cpay-stores');
+
     }
 
     document.getElementById('overlay').addEventListener('click', (event) => {
@@ -3046,6 +3057,7 @@
     initTopAccountMenu();
     initSceneDock();
     applyScene('normal');
+    if(location.hash.startsWith("#cpay-")) window.cpNavigate(location.hash.slice(1));
     let lastRolloutBalance = pointsRollout.balance();
     window.addEventListener('storage', event => {
       if (event.key !== pointsRollout.key) return;
@@ -3058,6 +3070,7 @@
     });
 
     function showReviewPage(page) {
+      if(page?.startsWith("cpay-")) window.cpNavigate(page);
       state.modal = null;
       if (page === 'renew') goRenew();
       if (['account', 'pack', 'usage', 'payments'].includes(page)) openPage(page);

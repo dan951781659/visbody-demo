@@ -208,7 +208,7 @@
     #campaignConfirm {border:1px solid #e1e4e9;border-radius:6px;padding:20px;max-width:90vw}
     #campaignConfirm::backdrop {background:#18233755}
 </style>
-<link rel="stylesheet" href="./platform.css"></head>
+<link rel="stylesheet" href="./platform.css"><link rel="stylesheet" href="../shared/cpay-desktop.css?v=2.2.0-release"></head>
 <body>
   <div class="admin-root">
     <header class="admin-header">
@@ -226,7 +226,7 @@
       <aside class="admin-sider">
         <div class="sider-brand">夸父</div>
         <nav class="nav-scroll" aria-label="侧边导航">
-          <div class="nav-item-top">客户管理</div>
+          <button class="nav-sub" data-view="cpay-customers">客户信息管理</button>
           <div class="nav-item-top">销售管理工具</div>
           <div class="nav-item-top">设备管理</div>
           <div class="submenu-wrap">
@@ -235,7 +235,7 @@
               <div class="nav-sub active" data-view="payment-mode">付费模式</div>
               <div class="nav-sub" data-view="points-mode">积分模式配置</div>
               <div class="nav-sub" data-view="customer-payment">客户付费管理</div>
-              <div class="nav-sub" data-view="payment-records">缴费记录</div>
+              <div class="nav-sub" data-view="payment-records">缴费记录</div><button class="nav-sub" data-view="cpay-prices">C 端服务定价</button><button class="nav-sub" data-view="cpay-orders">C 端服务订单</button>
             </div>
           </div>
           <div class="nav-parent">优惠券管理</div><button type="button" class="nav-sub" data-view="coupons">优惠券管理</button><button type="button" class="nav-sub" id="couponRecordsNav">优惠券使用记录</button>
@@ -247,7 +247,7 @@
 
       <div class="admin-main">
         <nav class="mobile-nav" aria-label="模块切换">
-          <button type="button" class="mobile-nav-btn" data-view="coupons">优惠券管理</button>
+          <button type="button" class="mobile-nav-btn" data-view="coupons">优惠券管理</button><button type="button" class="mobile-nav-btn" data-view="coupon-records">优惠券使用记录</button>
           <button type="button" class="mobile-nav-btn active" data-view="payment-mode">付费模式</button>
               <button class="mobile-nav-btn" data-view="points-mode">积分模式配置</button>
           <button type="button" class="mobile-nav-btn" data-view="customer-payment">客户付费</button>
@@ -255,7 +255,7 @@
         </nav>
         <div class="content-inner">
           <div class="canvas">
-            <!-- 付费模式：列表 + Pro 下积分包与策略配置 -->
+            <section class="page" id="page-cpay-customers"></section><section class="page" id="page-cpay-config"></section><section class="page" id="page-cpay-prices"></section><section class="page" id="page-cpay-orders"></section><!-- 付费模式：列表 + Pro 下积分包与策略配置 -->
             <section class="page" id="page-rollout">
               <div class="admin-card" id="rolloutPanel">
                 <h1 class="page-title">上线初始化 · 迁移演示</h1>
@@ -269,7 +269,7 @@
 <div class="status-tabs"><button data-status="已通过" class="active">已通过</button><button data-status="待审核">待审核</button><button data-status="已禁用/拒绝/过期">已禁用/拒绝/过期</button></div>
 <div class="table-scroll"><table class="data-table"><thead><tr><th>序号</th><th>优惠券批次</th><th>优惠券名称</th><th>适用类型</th><th>优惠券类型</th><th>每客户积分 / 优惠</th><th>有效期</th><th>生成数量/份</th><th>剩余数量/份</th><th>创建时间</th><th>状态</th><th>操作</th></tr></thead><tbody id="campaignRows"></tbody></table></div><p id="campaignCount"></p></div>
 <div id="campaignIssue" hidden><button class="btn light" id="issueBack">← 返回</button><div class="issue-summary" id="issueSummary"></div><h3>选择发放客户</h3><div class="coupon-toolbar"><input id="audienceSearch" placeholder="请输入客户ID/客户名称/账户名查询"><select id="audienceCountry"><option value="">选择国家</option><option>中国</option><option>美国</option></select><button class="btn primary" id="audienceQuery">搜索</button></div><div class="table-scroll"><table class="data-table"><thead><tr><th><input type="checkbox" id="audienceAll" aria-label="全选可发放客户"></th><th>客户ID</th><th>客户名称</th><th>国家</th><th>门店类型</th><th>账户名</th><th>Pro 状态</th><th>发放资格</th></tr></thead><tbody id="campaignAudience"></tbody></table></div><div class="coupon-actions"><span id="selectionTotal"></span><button class="btn primary" id="issueNow">立即发放</button></div><p id="issueResult" role="status"></p></div>
-<div id="campaignRecords" hidden><h3>优惠券使用记录 · 积分发放</h3><input id="recordSearch" placeholder="查询活动名称/客户ID/客户名称"><div class="table-scroll"><table class="data-table"><thead><tr><th>批次 / 活动</th><th>客户ID</th><th>客户名称</th><th>积分</th><th>操作人</th><th>时间</th><th>结果</th><th>操作</th></tr></thead><tbody id="campaignResults"></tbody></table></div></div>
+<div id="campaignRecords" hidden><h3>优惠券使用记录 · 积分发放</h3><button class="btn" id="resetCampaignExamples">重置活动示例</button><input id="recordSearch" placeholder="查询活动名称/客户ID/客户名称"><div class="table-scroll"><table class="data-table"><thead><tr><th>批次 / 活动</th><th>客户ID</th><th>客户名称</th><th>额度／积分</th><th>操作人</th><th>时间</th><th>结果</th><th>操作</th></tr></thead><tbody id="campaignResults"></tbody></table></div></div>
 </section>
 <dialog id="campaignEditor" class="platform-dialog"><form id="campaignForm"><div class="dialog-heading"><strong id="campaignTitle">新建优惠券</strong><button type="button" id="closeCampaign" aria-label="关闭">×</button></div><div class="coupon-fields">
 <label for="campaignName"><em>*</em> 优惠券名称</label><input id="campaignName" name="name" maxlength="60" required placeholder="请输入优惠券名称">
@@ -359,7 +359,7 @@
             </section>
 
             <section class="page" id="page-points-mode">
-              <h1 class="page-title">积分模式配置</h1>
+              <h1 class="page-title">积分模式配置</h1><div class="cp-tabs"><button class="active">AI 扣分与积分包</button><button onclick="cpNavigate('cpay-prices')">C 端服务定价</button></div>
               <p class="page-desc">统一管理 AI 功能扣分和积分包价格，适用于所有使用积分的客户。</p>
               <div class="admin-card">
                 <h4>AI 能力单次消耗积分</h4>
@@ -594,7 +594,7 @@
   <div class="toast" id="toast" role="status"></div>
 
   <script src="../pro-points/rollout.js"></script>
-  <script src="./campaigns.js"></script>
+  <script src="./campaigns.js?v=2.2.0-release"></script><script src="../shared/cpay.js?v=2.3.0-release"></script><script src="../shared/cpay-desktop.js?v=2.2.0-release"></script>
   <script>
 (function () {
   /** 与 demo2-pro-upgrade-page.html buildPaymentRows('normal') 同源示例数据 */
@@ -653,7 +653,11 @@
 
   function setView(id) {
     state.view = id;
-    if (id === 'coupons') renderCampaigns();
+    const records = id === 'coupon-records';
+    document.getElementById('couponRecordsNav').classList.toggle('active', records);
+    if(id.startsWith('cpay-')) CPDesktop.render(document.getElementById('page-'+id),id.slice(5));
+    if (id === 'coupons') { campaignPanel('couponList'); renderCampaigns(); }
+    if (records) { campaignPanel('campaignRecords'); renderCampaignRecords(); }
     document.querySelectorAll('.nav-sub[data-view]').forEach((n) => {
       n.classList.toggle('active', n.dataset.view === id);
     });
@@ -661,7 +665,7 @@
       b.classList.toggle('active', b.dataset.view === id);
     });
     document.querySelectorAll('.page').forEach((p) => {
-      p.classList.toggle('active', p.id === 'page-' + id);
+      p.classList.toggle('active', p.id === 'page-' + (records ? 'coupons' : id));
     });
     if (id === 'customer-payment') {
       const list = document.getElementById('panel-customer-list');
@@ -951,19 +955,22 @@
   });
 
   setupCampaigns();
+  if(location.hash.startsWith("#cpay-")) setView(location.hash.slice(1));
   renderProGrant();
   renderConsume();
   renderPurchase();
   bindCustomInputs();
   setPointsEditing(false);
   renderPaymentRecordsTable();
+  window.cpNavigate = setView;
   function showReviewPage(page) {
+    if (page?.startsWith("cpay-")) setView(page);
     document.querySelectorAll('dialog[open]').forEach(d => d.close());
     if (page === 'mode-form') openModeForm(true);
     if (page === 'points-mode') setView('points-mode');
     if (page === 'coupons' || page === 'rollout') { setView(page); if (page === 'coupons') campaignPanel('couponList'); }
     if (page === 'coupon-new') { setView('coupons'); campaignPanel('couponList'); openCampaign(); document.getElementById('campaignType').value='积分发放'; updateCampaignType(); }
-    if (page === 'coupon-records') { setView('coupons'); campaignPanel('campaignRecords'); renderCampaignRecords(); }
+    if (page === 'coupon-records') { setView('coupon-records'); }
     if (page === 'customer-detail') {
       setView('customer-payment');
       document.getElementById('openCustomerDetail').click();
