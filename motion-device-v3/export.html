@@ -1,0 +1,24 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<title>Motion 设备端 · 单屏导出</title>
+<link rel="stylesheet" href="ui.css">
+<style>html,body{margin:0;background:transparent;overflow:hidden}.phone{border-radius:0;box-shadow:none}</style>
+</head>
+<body>
+<div id="s"></div>
+<script src="ui.js"></script>
+<script>
+const q = new URLSearchParams(location.search);
+const s = document.getElementById('s');
+s.dataset.theme = q.get('theme') || 'light';
+s.dataset.dir = q.get('dir') || 'v1';
+s.dataset.screen = q.get('screen') || 'strength';
+s.dataset.lang = q.get('lang') || 'zh';
+if (s.dataset.screen === 'home') s.setAttribute('data-long', '');
+MotionV3.mountAll();
+document.body.dataset.h = Math.ceil(s.offsetHeight * 100) / 100;
+</script>
+</body>
+</html>

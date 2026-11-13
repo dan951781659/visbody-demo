@@ -1,0 +1,105 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<title>Motion device · 3 schemes</title>
+<link rel="stylesheet" href="ui.css">
+<style>
+body{background:#F2F4F8;font-family:-apple-system,"PingFang SC","Noto Sans SC",sans-serif;color:#17191E;margin:0;overflow-x:hidden}
+.top{max-width:1500px;margin:0 auto;padding:24px 32px 0}
+.top h1{font-size:22px;font-weight:700}
+.top p{font-size:13px;line-height:20px;color:#5D6573;margin-top:6px}
+.sw{display:flex;gap:6px;margin-top:12px;flex-wrap:wrap;align-items:center}
+.sw a{padding:6px 14px;border-radius:999px;font-size:12px;font-weight:600;color:#5D6573;text-decoration:none;background:#fff}
+.sw a.on{background:#17191E;color:#fff}
+.sw .sp{width:16px}
+.wrap{padding:16px 24px 40px;overflow:hidden}
+.board{margin:0 auto;padding:28px 28px 24px;border-radius:24px;transform-origin:top center;width:max-content}
+.board.light{background:#E3E7EE}
+.board.dark{background:#050607}
+.cols{display:flex;gap:28px;align-items:flex-start}
+.col{width:400px}
+.col h3{font-size:13px;font-weight:700;margin-bottom:2px}
+.col p{font-size:10.5px;line-height:15px;color:#5D6573;margin-bottom:12px;min-height:30px}
+.dark .col h3{color:#F5F7FA}.dark .col p{color:#A6ADBA}
+.foot3{margin-top:16px;font-size:10.5px;color:#5D6573}
+.dark .foot3{color:#A6ADBA}
+.col .phone{cursor:zoom-in}
+#lb{position:fixed;inset:0;background:rgba(5,6,7,.86);display:none;align-items:flex-start;justify-content:center;z-index:9;cursor:zoom-out;overflow:auto}
+#lb.on{display:flex}
+#lb .phone{zoom:2.7;cursor:default}
+</style>
+</head>
+<body>
+<div class="top">
+  <h1 id="ttl">Motion 设备端 · 三方案对比</h1>
+  <p>画布 400×711 逻辑单位，导出 1080×1920。统一主题色品牌蓝 #1769E8。页面数字均为示意。点任意屏幕可按 1080×1920 查看，左右键切换。</p>
+  <div class="sw" id="sw"></div>
+</div>
+<div class="wrap"><div class="board" id="board"></div></div>
+<div id="lb"></div>
+<script src="ui.js"></script>
+<script>
+const q = new URLSearchParams(location.search);
+const bare = q.get('bare');
+if (bare) document.write('<style>.top{display:none}.wrap{padding:0}.board{border-radius:0}body{overflow:hidden}</style>');
+const theme = q.get('theme') === 'dark' ? 'dark' : 'light';
+const lang = q.get('lang') === 'en' ? 'en' : 'zh';
+const page = MotionV3.SCREENS.includes(q.get('page')) ? q.get('page') : 'strength';
+const PAGES = lang === 'en'
+  ? { home: 'Home', me: 'Me', library: 'Library', strength: 'Strength', pilates: 'Pilates', cardio: 'Cardio' }
+  : { home: '首页', me: '我的', library: '全部训练', strength: '力量训练', pilates: '普拉提训练', cardio: '阻力有氧' };
+const DESC = lang === 'en' ? {
+  v1: ['Scheme 1 · Pure White', 'White page and floating cards; blue only on selected states, rings and primary buttons'],
+  v2: ['Scheme 2 · Blue Focus', 'Key content in a blue block; solid blue selected states; rest stays white'],
+  v3: ['Scheme 3 · Floating Capsules', 'Floating accents, capsule controls, floating nav and actions']
+} : {
+  v1: ['方案一 · 纯白清透', '整页纯白，白卡柔和浮起；蓝色只在选中态、圆环/弧线和主按钮'],
+  v2: ['方案二 · 蓝色重点', '关键内容用蓝色渐变块突出，选中态蓝色实心；其余白底'],
+  v3: ['方案三 · 强悬浮加胶囊', '少数重点悬浮，控件全部胶囊，导航与操作栏悬浮']
+};
+const qbase = p => `?page=${p}&theme=${theme}&lang=${lang}`;
+document.getElementById('ttl').textContent = lang === 'en'
+  ? 'Motion device · ' + PAGES[page] + ' · 3 schemes'
+  : 'Motion 设备端 · ' + PAGES[page] + ' · 三方案对比';
+document.querySelector('.top p').textContent = lang === 'en'
+  ? 'Canvas 400×711 logical units, export 1080×1920. Brand blue #1769E8. Figures are illustrative. Click a screen to view at 1080×1920.'
+  : '画布 400×711 逻辑单位，导出 1080×1920。统一主题色品牌蓝 #1769E8。页面数字均为示意。点任意屏幕可按 1080×1920 查看，左右键切换。';
+document.getElementById('sw').innerHTML =
+  Object.entries(PAGES).map(([k, n]) => `<a class="${k === page ? 'on' : ''}" href="${qbase(k)}">${n}</a>`).join('') +
+  `<span class="sp"></span><a class="${theme === 'light' ? 'on' : ''}" href="?page=${page}&theme=light&lang=${lang}">${lang === 'en' ? 'Light' : '浅色'}</a><a class="${theme === 'dark' ? 'on' : ''}" href="?page=${page}&theme=dark&lang=${lang}">${lang === 'en' ? 'Dark' : '深色'}</a>` +
+  `<span class="sp"></span><a class="${lang === 'zh' ? 'on' : ''}" href="?page=${page}&theme=${theme}&lang=zh">中文</a><a class="${lang === 'en' ? 'on' : ''}" href="?page=${page}&theme=${theme}&lang=en">EN</a>`;
+const b = document.getElementById('board');
+b.className = 'board ' + theme;
+const long = page === 'home' ? ' data-long' : '';
+const trainNote = (page === 'strength' || page === 'pilates' || page === 'cardio') ? (lang === 'en' ? ' (in session)' : '（训练中状态）') : '';
+b.innerHTML = `<div class="cols">${['v1', 'v2', 'v3'].map(d => `<div class="col"><h3>${DESC[d][0]}</h3><p>${DESC[d][1]}</p><div class="phone" data-dir="${d}" data-theme="${theme}" data-screen="${page}" data-lang="${lang}"${long}></div></div>`).join('')}</div><div class="foot3">${theme === 'light' ? (lang === 'en' ? 'Light' : '浅色') : (lang === 'en' ? 'Dark' : '深色')} · ${PAGES[page]}${trainNote} · ${lang === 'en' ? 'Figures are illustrative' : '页面数字为示意'}</div>`;
+MotionV3.mountAll();
+document.body.dataset.w = Math.ceil(b.offsetWidth);
+document.body.dataset.h = Math.ceil(b.offsetHeight);
+function fit() {
+  const z = Math.min(1, (window.innerWidth - 48) / b.scrollWidth);
+  b.style.transform = 'scale(' + z + ')';
+  b.style.marginBottom = (b.offsetHeight * (z - 1)) + 'px';
+}
+if (!q.get('nofit')) { fit(); addEventListener('resize', fit); }
+const lb = document.getElementById('lb');
+const phones = [...document.querySelectorAll('.col .phone')];
+let cur = -1;
+function open(i) {
+  cur = (i + phones.length) % phones.length;
+  const p = phones[cur];
+  lb.innerHTML = `<div class="phone view" data-dir="${p.dataset.dir}" data-theme="${p.dataset.theme}" data-screen="${p.dataset.screen}" data-lang="${lang}"${long}></div>`;
+  MotionV3.mount(lb.firstChild);
+  lb.classList.add('on');
+}
+phones.forEach((p, i) => p.addEventListener('click', () => open(i)));
+lb.addEventListener('click', () => { lb.classList.remove('on'); cur = -1; });
+addEventListener('keydown', e => {
+  if (e.key === 'Escape') lb.click();
+  if (cur >= 0 && e.key === 'ArrowRight') open(cur + 1);
+  if (cur >= 0 && e.key === 'ArrowLeft') open(cur - 1);
+});
+</script>
+</body>
+</html>
