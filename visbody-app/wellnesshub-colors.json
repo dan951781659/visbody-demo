@@ -1,0 +1,95 @@
+{
+  "name": "Visbody APP 功能分类配色 v5",
+  "reference": "https://dan951781659.github.io/visbody-demo/wellnesshub-h5/",
+  "note": "品牌蓝 #0066E7 全局操作色；AI 专用渐变独立管理；绿橙红仅作状态。",
+  "themes": {
+    "light": {
+      "bg": "#fff",
+      "surface": "#fff",
+      "surface2": "#f5f5f7",
+      "text": "#1c1c1e",
+      "muted": "#636366",
+      "line": "#e5e5ea",
+      "blue": "#0066E7",
+      "icon-bg": "#f2f2f7",
+      "elevated-shadow": "0 2px 16px 4px #00000014",
+      "card-shadow": "0 2px 10px #0000000a",
+      "focus": "color-mix(in srgb, var(--blue) 30%, transparent)",
+      "success": "#059669",
+      "warning": "#b45309",
+      "danger": "#d92d20"
+    },
+    "dark": {
+      "bg": "#0a0d21",
+      "surface": "#111830",
+      "surface2": "#16203b",
+      "text": "#e8eeff",
+      "muted": "#9aaad8",
+      "line": "#1c2850",
+      "blue": "#0066E7",
+      "icon-bg": "#16203b",
+      "elevated-shadow": "0 12px 30px #00081833",
+      "card-shadow": "none",
+      "focus": "color-mix(in srgb, var(--blue) 42%, transparent)",
+      "success": "#35e89d",
+      "warning": "#FF8A24",
+      "danger": "#D92D20"
+    }
+  },
+  "rules": {
+    "blue": "按钮、链接、选中态、普通功能图标、指标与趋势",
+    "success": "已完成、已保存、已发布等明确成功状态",
+    "warning": "需关注、生成中等明确提示",
+    "danger": "失败、无权限、失效等错误状态",
+    "ai": "完整七色渐变表示 AI；其中单色允许作为明确的功能分类色",
+    "categories": "图标、标签色点、细边和局部淡底；名称用主题文字色；浅底10%、深底16%；通用操作保持品牌蓝"
+  },
+  "brand": {
+    "hex": "#0066E7",
+    "rgb": [
+      0,
+      102,
+      231
+    ],
+    "source": "用户提供的品牌规范图片文字标注",
+    "application": "深浅主题全局统一；浅色阶为品牌蓝派生色"
+  },
+  "ai": {
+    "colors": [
+      "#00B6FF",
+      "#006EFF",
+      "#0049FF",
+      "#4A53F7",
+      "#C159E3",
+      "#FC4244",
+      "#FF7409"
+    ],
+    "gradient": "linear-gradient(90deg,#00B6FF 0%,#006EFF 18%,#0049FF 40%,#4A53F7 55%,#C159E3 70%,#FC4244 88%,#FF7409 100%)",
+    "positions": [
+      0,
+      18,
+      40,
+      55,
+      70,
+      88,
+      100
+    ],
+    "note": "色值来自用户提供的品牌图；色标位置根据图示比例近似，非原始设计参数。",
+    "use": [
+      "AI 报告解读",
+      "AI 动作",
+      "AI 生成状态标识"
+    ],
+    "notFor": [
+      "普通扫码",
+      "普通训练操作",
+      "成功/警告/失败状态"
+    ]
+  },
+  "categories": {
+    "measurement": "#0066E7",
+    "strength": "#4A53F7",
+    "pilates": "#C159E3",
+    "cardio": "#FF7409"
+  }
+}
