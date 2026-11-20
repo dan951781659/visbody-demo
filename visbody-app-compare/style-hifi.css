@@ -21,6 +21,8 @@ body.hifi-solo{margin:0;background:#DDE3EF;font:14px/1.45 "PingFang SC","Microso
 .scheme-filter{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
 .scheme-filter button{padding:8px 14px;border-radius:10px;border:1px solid #d3dce8;background:#fff;color:#26364b;font-size:13px;font-weight:650;cursor:pointer}
 .scheme-filter button[aria-pressed=true]{background:#0066E7;border-color:#0066E7;color:#fff}
+.tone-filter .tone-label{font-size:12px;font-weight:650;color:#657187;margin-right:2px}
+.tone-filter button[aria-pressed=true]{background:#0A4FB8;border-color:#0A4FB8}
 body[data-scheme=cards] .scheme-row[data-scheme=glass],
 body[data-scheme=glass] .scheme-row[data-scheme=cards]{display:none}
 @media(max-width:1850px){.scheme-row .board{grid-template-columns:repeat(2,430px)}}
@@ -531,3 +533,262 @@ body[data-scheme=glass] .scheme-row[data-scheme=cards]{display:none}
 .phone .h5-concerns .h5-concern,.phone .h5-concerns .h5-concern.bar{
   margin:0!important;border-top:0!important;border-radius:20px;
 }
+
+/* ========== Glass tone A/B (light hierarchy) ========== */
+/* Shared content-card selectors for tone overrides */
+.phone[data-skin=glass][data-theme=light][data-tone=a] .week-card,
+.phone[data-skin=glass][data-theme=light][data-tone=a] .week-card.flat,
+.phone[data-skin=glass][data-theme=light][data-tone=a] .day-plan,
+.phone[data-skin=glass][data-theme=light][data-tone=a] .library,
+.phone[data-skin=glass][data-theme=light][data-tone=a] .userdata-card,
+.phone[data-skin=glass][data-theme=light][data-tone=a] .listgroup,
+.phone[data-skin=glass][data-theme=light][data-tone=a] .guide-card,
+.phone[data-skin=glass][data-theme=light][data-tone=a] .scheme-card,
+.phone[data-skin=glass][data-theme=light][data-tone=a] .quick4 button,
+.phone[data-skin=glass][data-theme=light][data-tone=a] .h5-card,
+.phone[data-skin=glass][data-theme=light][data-tone=a] .h5-concern,
+.phone[data-skin=glass][data-theme=light][data-tone=a] .h5-svc,
+.phone[data-skin=glass][data-theme=light][data-tone=a] .metrics-card,
+.phone[data-skin=glass][data-theme=light][data-tone=a] .card,
+.phone[data-skin=glass][data-theme=light][data-tone=a] .report-card,
+.phone[data-skin=glass][data-theme=light][data-tone=a] .training-summary,
+.phone[data-skin=glass][data-theme=light][data-tone=a] .daily-diet,
+.phone[data-skin=glass][data-theme=light][data-tone=a] .long-plan,
+.phone[data-skin=glass][data-theme=light][data-tone=a] .bx-mini,
+.phone[data-skin=glass][data-theme=light][data-tone=a] .h5-concern.bar,
+.phone[data-skin=glass][data-theme=light][data-tone=a] .recommend-grid>*{
+  background:#FFFFFF!important;
+  border:1px solid #E3E9F7!important;
+  box-shadow:0 10px 28px rgba(40,70,140,.1)!important;
+  backdrop-filter:none!important;
+  -webkit-backdrop-filter:none!important;
+}
+
+/* Tone A: pale canvas + opaque white cards */
+.phone[data-skin=glass][data-theme=light][data-tone=a]{
+  --bg:#F4F7FF;
+  --skin-fade:#F4F7FF;
+  --glass-fill:rgba(255,255,255,.72);
+  --glass-border:rgba(255,255,255,.9);
+  --glass-blur:blur(22px) saturate(1.35);
+  --surface:#FFFFFF;
+  --surface2:#FFFFFF;
+  --card:#FFFFFF;
+  --inner:#EAF1FF;
+  --line:#E3E9F7;
+  --nav:rgba(255,255,255,.78);
+  --soft:rgba(0,102,231,.1);
+  --sheet:#FFFFFF;
+  background:
+    radial-gradient(120% 80% at 50% -22%,rgba(0,102,231,.22),transparent 58%),
+    radial-gradient(70% 50% at 100% 0%,rgba(74,83,247,.1),transparent 55%),
+    linear-gradient(180deg,#E3ECFF 0px,#F3F6FF 130px,#F7F8FD 100%);
+}
+.phone[data-skin=glass][data-theme=light][data-tone=a]:before{
+  background:
+    radial-gradient(120% 90% at 50% -20%,rgba(0,102,231,.22),transparent 58%),
+    linear-gradient(180deg,rgba(227,236,255,.5) 0%,transparent 70%);
+}
+.phone[data-skin=glass][data-theme=light][data-tone=a] .seg-tabs,
+.phone[data-skin=glass][data-theme=light][data-tone=a] .schedule-tabs,
+.phone[data-skin=glass][data-theme=light][data-tone=a] .chips,
+.phone[data-skin=glass][data-theme=light][data-tone=a] .mine-seg{
+  background:rgba(255,255,255,.7)!important;
+  border:1px solid rgba(255,255,255,.95)!important;
+  backdrop-filter:blur(18px) saturate(1.3)!important;
+  -webkit-backdrop-filter:blur(18px) saturate(1.3)!important;
+}
+.phone[data-skin=glass][data-theme=light][data-tone=a] .tabs{
+  background:rgba(255,255,255,.78)!important;
+  border:1px solid #fff!important;
+  box-shadow:0 12px 30px rgba(40,70,140,.16)!important;
+  backdrop-filter:blur(24px) saturate(1.35)!important;
+  -webkit-backdrop-filter:blur(24px) saturate(1.35)!important;
+}
+.phone[data-skin=glass][data-theme=light][data-tone=a] .tb-ico,
+.phone[data-skin=glass][data-theme=light][data-tone=a] .iconbtn{
+  background:rgba(255,255,255,.72)!important;
+  border:1px solid rgba(255,255,255,.95)!important;
+}
+/* Inner cells: solid ice-blue, not nested glass */
+.phone[data-skin=glass][data-theme=light][data-tone=a] .wk-days i,
+.phone[data-skin=glass][data-theme=light][data-tone=a] .ud-item,
+.phone[data-skin=glass][data-theme=light][data-tone=a] .metric,
+.phone[data-skin=glass][data-theme=light][data-tone=a] .h5-stats button,
+.phone[data-skin=glass][data-theme=light][data-tone=a] .h5-stats.key-stats button{
+  background:#EAF1FF!important;
+  border:0!important;
+  box-shadow:none!important;
+  backdrop-filter:none!important;
+  -webkit-backdrop-filter:none!important;
+}
+.phone[data-skin=glass][data-theme=light][data-tone=a] .wk-days .on i{
+  background:#0066E7!important;
+}
+
+/* Tone B: original soft blue-lavender canvas (lighter) + bright ~90% white cards */
+.phone[data-skin=glass][data-theme=light][data-tone=b]{
+  --bg:#D4E2FF;
+  --skin-fade:#DCE7FF;
+  --glass-fill:rgba(255,255,255,.9);
+  --glass-border:rgba(255,255,255,.95);
+  --glass-blur:blur(28px) saturate(1.5);
+  --surface:rgba(255,255,255,.9);
+  --surface2:rgba(255,255,255,.92);
+  --card:rgba(255,255,255,.9);
+  --inner:rgba(234,241,255,.95);
+  --line:rgba(255,255,255,.9);
+  --nav:rgba(255,255,255,.55);
+  --soft:rgba(0,102,231,.16);
+  --sheet:rgba(255,255,255,.92);
+  background:
+    radial-gradient(130% 95% at 50% -18%,rgba(0,102,231,.48),transparent 54%),
+    radial-gradient(95% 75% at 100% 6%,rgba(74,83,247,.34),transparent 50%),
+    radial-gradient(85% 60% at -5% 40%,rgba(193,89,227,.2),transparent 48%),
+    radial-gradient(75% 50% at 90% 100%,rgba(255,116,9,.16),transparent 52%),
+    linear-gradient(180deg,#BFD4FF 0%,#D8E5FF 32%,#EAF0FF 62%,#F5F3FF 100%);
+}
+.phone[data-skin=glass][data-theme=light][data-tone=b]:before{
+  background:
+    radial-gradient(120% 90% at 50% -20%,rgba(0,102,231,.34),transparent 58%),
+    linear-gradient(180deg,rgba(220,231,255,.35) 0%,rgba(220,231,255,.08) 55%,transparent 100%);
+}
+.phone[data-skin=glass][data-theme=light][data-tone=b] .week-card,
+.phone[data-skin=glass][data-theme=light][data-tone=b] .week-card.flat,
+.phone[data-skin=glass][data-theme=light][data-tone=b] .day-plan,
+.phone[data-skin=glass][data-theme=light][data-tone=b] .library,
+.phone[data-skin=glass][data-theme=light][data-tone=b] .userdata-card,
+.phone[data-skin=glass][data-theme=light][data-tone=b] .listgroup,
+.phone[data-skin=glass][data-theme=light][data-tone=b] .guide-card,
+.phone[data-skin=glass][data-theme=light][data-tone=b] .scheme-card,
+.phone[data-skin=glass][data-theme=light][data-tone=b] .quick4 button,
+.phone[data-skin=glass][data-theme=light][data-tone=b] .h5-card,
+.phone[data-skin=glass][data-theme=light][data-tone=b] .h5-concern,
+.phone[data-skin=glass][data-theme=light][data-tone=b] .h5-svc,
+.phone[data-skin=glass][data-theme=light][data-tone=b] .metrics-card,
+.phone[data-skin=glass][data-theme=light][data-tone=b] .card,
+.phone[data-skin=glass][data-theme=light][data-tone=b] .report-card,
+.phone[data-skin=glass][data-theme=light][data-tone=b] .training-summary,
+.phone[data-skin=glass][data-theme=light][data-tone=b] .daily-diet,
+.phone[data-skin=glass][data-theme=light][data-tone=b] .long-plan,
+.phone[data-skin=glass][data-theme=light][data-tone=b] .bx-mini,
+.phone[data-skin=glass][data-theme=light][data-tone=b] .h5-concern.bar,
+.phone[data-skin=glass][data-theme=light][data-tone=b] .recommend-grid>*{
+  background:rgba(255,255,255,.9)!important;
+  border:1px solid rgba(255,255,255,.95)!important;
+  box-shadow:0 14px 34px rgba(50,60,160,.22)!important;
+  backdrop-filter:blur(18px) saturate(1.35)!important;
+  -webkit-backdrop-filter:blur(18px) saturate(1.35)!important;
+}
+.phone[data-skin=glass][data-theme=light][data-tone=b] .seg-tabs,
+.phone[data-skin=glass][data-theme=light][data-tone=b] .schedule-tabs,
+.phone[data-skin=glass][data-theme=light][data-tone=b] .chips,
+.phone[data-skin=glass][data-theme=light][data-tone=b] .mine-seg{
+  background:rgba(255,255,255,.5)!important;
+  border:1px solid rgba(255,255,255,.85)!important;
+  backdrop-filter:blur(22px) saturate(1.4)!important;
+  -webkit-backdrop-filter:blur(22px) saturate(1.4)!important;
+}
+.phone[data-skin=glass][data-theme=light][data-tone=b] .tabs{
+  background:rgba(255,255,255,.55)!important;
+  border:1px solid rgba(255,255,255,.9)!important;
+  box-shadow:0 14px 34px rgba(50,60,160,.28)!important;
+  backdrop-filter:blur(28px) saturate(1.5)!important;
+  -webkit-backdrop-filter:blur(28px) saturate(1.5)!important;
+}
+.phone[data-skin=glass][data-theme=light][data-tone=b] .tb-ico,
+.phone[data-skin=glass][data-theme=light][data-tone=b] .iconbtn{
+  background:rgba(255,255,255,.55)!important;
+  border:1px solid rgba(255,255,255,.9)!important;
+}
+.phone[data-skin=glass][data-theme=light][data-tone=b] .wk-days i,
+.phone[data-skin=glass][data-theme=light][data-tone=b] .ud-item,
+.phone[data-skin=glass][data-theme=light][data-tone=b] .metric,
+.phone[data-skin=glass][data-theme=light][data-tone=b] .h5-stats button,
+.phone[data-skin=glass][data-theme=light][data-tone=b] .h5-stats.key-stats button{
+  background:rgba(234,241,255,.95)!important;
+  border:0!important;
+  box-shadow:none!important;
+  backdrop-filter:none!important;
+  -webkit-backdrop-filter:none!important;
+}
+.phone[data-skin=glass][data-theme=light][data-tone=b] .wk-days .on i{
+  background:#0066E7!important;
+}
+/* Dark: lift content cards one notch (shared for A/B) */
+.phone[data-skin=glass][data-theme=dark] .week-card,
+.phone[data-skin=glass][data-theme=dark] .week-card.flat,
+.phone[data-skin=glass][data-theme=dark] .day-plan,
+.phone[data-skin=glass][data-theme=dark] .library,
+.phone[data-skin=glass][data-theme=dark] .userdata-card,
+.phone[data-skin=glass][data-theme=dark] .listgroup,
+.phone[data-skin=glass][data-theme=dark] .guide-card,
+.phone[data-skin=glass][data-theme=dark] .scheme-card,
+.phone[data-skin=glass][data-theme=dark] .quick4 button,
+.phone[data-skin=glass][data-theme=dark] .h5-card,
+.phone[data-skin=glass][data-theme=dark] .h5-concern,
+.phone[data-skin=glass][data-theme=dark] .h5-svc,
+.phone[data-skin=glass][data-theme=dark] .metrics-card,
+.phone[data-skin=glass][data-theme=dark] .card,
+.phone[data-skin=glass][data-theme=dark] .report-card,
+.phone[data-skin=glass][data-theme=dark] .training-summary,
+.phone[data-skin=glass][data-theme=dark] .daily-diet,
+.phone[data-skin=glass][data-theme=dark] .long-plan,
+.phone[data-skin=glass][data-theme=dark] .bx-mini,
+.phone[data-skin=glass][data-theme=dark] .h5-concern.bar,
+.phone[data-skin=glass][data-theme=dark] .bodyx .bx-mini{
+  background:rgba(255,255,255,.14)!important;
+  border:1px solid rgba(255,255,255,.2)!important;
+  box-shadow:0 16px 36px rgba(0,0,0,.36),inset 0 1px 0 rgba(255,255,255,.14)!important;
+}
+.phone[data-skin=glass][data-theme=dark] .ud-item,
+.phone[data-skin=glass][data-theme=dark] .metric,
+.phone[data-skin=glass][data-theme=dark] .wk-days i,
+.phone[data-skin=glass][data-theme=dark] .h5-stats button,
+.phone[data-skin=glass][data-theme=dark] .h5-stats.key-stats button{
+  background:rgba(255,255,255,.1)!important;
+  border:0!important;
+  box-shadow:none!important;
+  backdrop-filter:none!important;
+  -webkit-backdrop-filter:none!important;
+}
+.phone[data-skin=glass][data-theme=dark] .wk-days .on i{
+  background:#0066E7!important;
+}
+
+/* Dark: readable accents, icon tiles, dates, links */
+.phone[data-skin=glass][data-theme=dark] .ud-ico,
+.phone[data-skin=glass][data-theme=dark] .sec-ico,
+.phone[data-skin=glass][data-theme=dark] .ud-date{
+  background:rgba(0,102,231,.34)!important;
+  color:#BBD6FF!important;
+  border:1px solid rgba(255,255,255,.14)!important;
+}
+.phone[data-skin=glass][data-theme=dark] .ud-ico svg,
+.phone[data-skin=glass][data-theme=dark] .sec-ico svg{color:#BBD6FF!important;stroke:currentColor}
+.phone[data-skin=glass][data-theme=dark] .ud-date b,
+.phone[data-skin=glass][data-theme=dark] .ud-date small{color:#E8F1FF!important}
+.phone[data-skin=glass][data-theme=dark] .ud-date small{opacity:.85}
+.phone[data-skin=glass][data-theme=dark] .textbtn,
+.phone[data-skin=glass][data-theme=dark] .textbtn svg,
+.phone[data-skin=glass][data-theme=dark] .h5-link,
+.phone[data-skin=glass][data-theme=dark] .wk-head .blue,
+.phone[data-skin=glass][data-theme=dark] .section .more,
+.phone[data-skin=glass][data-theme=dark] .head .link{
+  color:#8DBBFF!important;
+}
+.phone[data-skin=glass][data-theme=dark] .ud-stat small,
+.phone[data-skin=glass][data-theme=dark] .ud-row small,
+.phone[data-skin=glass][data-theme=dark] .ud-list-h+.ud-row small{
+  color:#C3CCEC!important;
+}
+.phone[data-skin=glass][data-theme=dark] .ud-block,
+.phone[data-skin=glass][data-theme=dark] .ud-recent{
+  border-color:rgba(255,255,255,.12)!important;
+}
+.phone[data-skin=glass][data-theme=dark] .ud-row{
+  border-color:rgba(255,255,255,.1)!important;
+  border-top-color:rgba(255,255,255,.1)!important;
+  border-bottom-color:rgba(255,255,255,.1)!important;
+}
+.phone[data-skin=glass][data-theme=dark] .ud-row>svg{color:#C3CCEC!important}
