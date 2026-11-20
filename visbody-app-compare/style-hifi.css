@@ -1,0 +1,533 @@
+/* Visbody: 清爽卡片 vs 渐变毛玻璃 — brand blue #0066E7 */
+:root{--blue:#0066E7;--blue2:#3B8BFF;--blue3:#0A4FB8}
+*{box-sizing:border-box}
+img{display:block;max-width:100%}
+body.hifi-solo{margin:0;background:#DDE3EF;font:14px/1.45 "PingFang SC","Microsoft YaHei",system-ui,sans-serif;color:#14151a}
+[data-hifi-root]{display:block;padding:28px 22px 80px;max-width:920px;margin:0 auto}
+[data-hifi-root] .hero small{letter-spacing:2px;font-size:11px;font-weight:700;color:var(--blue)}
+[data-hifi-root] .hero h1{margin:6px 0 8px;font:800 26px/1.25 Sora,sans-serif}
+[data-hifi-root] .hero p{margin:0;color:#5c6578;font-size:13.5px}
+[data-hifi-root] .note{margin-top:22px;padding:16px 18px;background:#fff;border-radius:16px;border:1px solid #d5dceb;color:#5c6578;font-size:13px}
+[data-hifi-root] .note a{color:var(--blue);font-weight:650}
+
+/* ========== Two-scheme board ========== */
+.scheme-row{margin:8px 0 28px}
+.scheme-title{max-width:1840px;margin:0 auto;padding:8px 34px 12px;display:flex;align-items:baseline;justify-content:space-between;gap:16px}
+.scheme-title h2{margin:0;font-size:18px;font-weight:750}
+.scheme-title p{margin:0;font-size:12.5px;color:#657187}
+.scheme-row .board{display:grid;grid-template-columns:repeat(4,430px);gap:26px;padding:0 34px 20px;width:max-content;margin:0 auto}
+.scheme-row .page-label{display:flex;justify-content:space-between;font-size:13px;color:#677287;padding:10px 3px}
+.scheme-row .page-label b{color:#26364b;font-size:16px}
+.scheme-filter{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.scheme-filter button{padding:8px 14px;border-radius:10px;border:1px solid #d3dce8;background:#fff;color:#26364b;font-size:13px;font-weight:650;cursor:pointer}
+.scheme-filter button[aria-pressed=true]{background:#0066E7;border-color:#0066E7;color:#fff}
+body[data-scheme=cards] .scheme-row[data-scheme=glass],
+body[data-scheme=glass] .scheme-row[data-scheme=cards]{display:none}
+@media(max-width:1850px){.scheme-row .board{grid-template-columns:repeat(2,430px)}}
+@media(max-width:950px){
+  .scheme-row .board{grid-template-columns:430px;padding:0 14px 20px}
+  .scheme-title{padding:8px 14px 12px}
+}
+
+/* ========== Glass skin — strong differentiation ========== */
+.phone[data-skin=glass]{
+  font-family:Sora,"PingFang SC","Microsoft YaHei",sans-serif;
+  --glass-r:28px;
+  --skin-fade:#DCE7FF;
+  --glass-fill:rgba(255,255,255,.28);
+  --glass-border:rgba(255,255,255,.72);
+  --glass-blur:blur(28px) saturate(1.45);
+}
+.phone[data-skin=glass] .content{padding-bottom:132px}
+.phone[data-skin=glass] .page-hero h1,
+.phone[data-skin=glass] .head h2{letter-spacing:-.55px;font-weight:800}
+
+/* Top: soft blue wash only — no solid white band */
+.phone[data-skin=glass]:before{
+  content:"";
+  position:absolute;left:0;right:0;top:0;height:260px;
+  pointer-events:none;z-index:1;
+  background:
+    radial-gradient(120% 90% at 50% -20%,rgba(0,102,231,.34),transparent 58%),
+    linear-gradient(180deg,rgba(220,231,255,.35) 0%,rgba(220,231,255,.08) 55%,transparent 100%);
+}
+.phone[data-skin=glass][data-theme=dark]:before{
+  background:
+    radial-gradient(120% 90% at 50% -18%,rgba(0,102,231,.4),transparent 55%),
+    linear-gradient(180deg,rgba(40,70,160,.22) 0%,transparent 70%);
+}
+.phone[data-skin=glass]>.statusbar,
+.phone[data-skin=glass]>.topbar{position:relative;z-index:8}
+.phone[data-skin=glass]>.topbar{
+  background:transparent!important;
+  border-bottom-color:transparent!important;
+}
+.phone[data-skin=glass]>.topbar:after{opacity:0!important;background:transparent!important}
+.phone[data-skin=glass].is-scrolled>.topbar,
+.phone[data-skin=glass].is-collapsed>.topbar{
+  background:rgba(255,255,255,.22)!important;
+  backdrop-filter:var(--glass-blur);
+  -webkit-backdrop-filter:var(--glass-blur);
+  border-bottom:1px solid rgba(255,255,255,.35)!important;
+}
+.phone[data-skin=glass][data-theme=dark].is-scrolled>.topbar,
+.phone[data-skin=glass][data-theme=dark].is-collapsed>.topbar{
+  background:rgba(12,16,40,.45)!important;
+  border-bottom:1px solid rgba(255,255,255,.1)!important;
+}
+.phone[data-skin=glass].is-scrolled>.topbar:after,
+.phone[data-skin=glass].is-collapsed>.topbar:after{opacity:0!important}
+/* Bottom fade must sit under tab bar, not clip it */
+.phone[data-skin=glass]:after{
+  height:110px!important;
+  background:linear-gradient(transparent 0%,color-mix(in srgb,var(--skin-fade) 55%,transparent) 55%,var(--skin-fade) 100%)!important;
+  z-index:3!important;
+  pointer-events:none;
+}
+.phone[data-skin=glass] .home-tools{
+  background:transparent!important;
+  backdrop-filter:none;
+}
+
+/* Frosted top icons */
+.phone[data-skin=glass] .tb-ico,
+.phone[data-skin=glass] .iconbtn{
+  width:38px;height:38px;border-radius:14px;
+  background:var(--glass-fill)!important;
+  border:1px solid var(--glass-border)!important;
+  box-shadow:0 8px 20px rgba(32,56,120,.1),inset 0 1px 0 rgba(255,255,255,.65);
+  backdrop-filter:var(--glass-blur);
+  -webkit-backdrop-filter:var(--glass-blur);
+}
+.phone[data-skin=glass][data-theme=dark] .tb-ico,
+.phone[data-skin=glass][data-theme=dark] .iconbtn{
+  background:rgba(255,255,255,.1)!important;
+  border:1px solid rgba(255,255,255,.18)!important;
+  box-shadow:0 8px 18px rgba(0,0,0,.28),inset 0 1px 0 rgba(255,255,255,.08);
+}
+
+/* Cards — more transparent so blur + bg show through */
+.phone[data-skin=glass] .card,
+.phone[data-skin=glass] .metrics-card,
+.phone[data-skin=glass] .listgroup,
+.phone[data-skin=glass] .userdata-card,
+.phone[data-skin=glass] .report-card,
+.phone[data-skin=glass] .library,
+.phone[data-skin=glass] .training-summary,
+.phone[data-skin=glass] .week-card,
+.phone[data-skin=glass] .day-plan,
+.phone[data-skin=glass] .h5-card,
+.phone[data-skin=glass] .h5-concern,
+.phone[data-skin=glass] .h5-svc,
+.phone[data-skin=glass] .org,
+.phone[data-skin=glass] .quiet-empty,
+.phone[data-skin=glass] .empty,
+.phone[data-skin=glass] .guide-card,
+.phone[data-skin=glass] .filter-panel,
+.phone[data-skin=glass] .scene-card,
+.phone[data-skin=glass] .mp-card,
+.phone[data-skin=glass] .scheme-card,
+.phone[data-skin=glass] .measure-card,
+.phone[data-skin=glass] .bodyx .bx-mini,
+.phone[data-skin=glass] .rec-card,
+.phone[data-skin=glass] .recommend-grid > *,
+.phone[data-skin=glass] .photo-card{
+  border-radius:var(--glass-r)!important;
+  background:var(--glass-fill)!important;
+  border:1px solid var(--glass-border)!important;
+  box-shadow:
+    0 16px 40px rgba(32,56,120,.12),
+    0 0 0 1px rgba(0,102,231,.05),
+    inset 0 1px 0 rgba(255,255,255,.85)!important;
+  backdrop-filter:var(--glass-blur);
+  -webkit-backdrop-filter:var(--glass-blur);
+  color:var(--text);
+}
+/* Health hero stats — frosted, not solid empty white blocks */
+.phone[data-skin=glass] .h5-stats button,
+.phone[data-skin=glass] .h5-stats.key-stats button{
+  background:rgba(255,255,255,.55)!important;
+  border:1px solid rgba(255,255,255,.75)!important;
+  color:var(--text)!important;
+  box-shadow:0 8px 18px rgba(10,13,33,.08),inset 0 1px 0 rgba(255,255,255,.9)!important;
+  backdrop-filter:blur(16px);
+  -webkit-backdrop-filter:blur(16px);
+}
+.phone[data-skin=glass] .h5-stats button strong,
+.phone[data-skin=glass] .h5-stats.key-stats button strong{color:#0A4FB8!important}
+.phone[data-skin=glass] .h5-stats button small,
+.phone[data-skin=glass] .h5-stats.key-stats button small{color:#5A6478!important}
+.phone[data-skin=glass][data-theme=dark] .h5-stats button,
+.phone[data-skin=glass][data-theme=dark] .h5-stats.key-stats button{
+  background:rgba(255,255,255,.1)!important;
+  border:1px solid rgba(255,255,255,.16)!important;
+  color:var(--text)!important;
+}
+.phone[data-skin=glass][data-theme=dark] .h5-stats button strong{color:#7EB2FF!important}
+.phone[data-skin=glass][data-theme=dark] .h5-stats button small{color:#A3AED8!important}
+.phone[data-skin=glass] .key-card,
+.phone[data-skin=glass] .h5-hero,
+.phone[data-skin=glass] .profile-hero,
+.phone[data-skin=glass] .bx-hero.is-key,
+.phone[data-skin=glass] .scheme-guide,
+.phone[data-skin=glass] .today,
+.phone[data-skin=glass] .scanhero{
+  border-radius:var(--glass-r)!important;
+  background:linear-gradient(145deg,rgba(0,102,231,.88),rgba(74,83,247,.72) 55%,rgba(193,89,227,.45))!important;
+  border:1px solid rgba(255,255,255,.4)!important;
+  color:#fff!important;
+  box-shadow:0 18px 40px rgba(0,102,231,.28),inset 0 1px 0 rgba(255,255,255,.35)!important;
+  backdrop-filter:blur(10px);
+  -webkit-backdrop-filter:blur(10px);
+}
+.phone[data-skin=glass] .key-card *,
+.phone[data-skin=glass] .h5-hero *,
+.phone[data-skin=glass] .profile-hero *,
+.phone[data-skin=glass] .bx-hero.is-key *,
+.phone[data-skin=glass] .scheme-guide *,
+.phone[data-skin=glass] .today .kicker,
+.phone[data-skin=glass] .today p,
+.phone[data-skin=glass] .today-bottom small,
+.phone[data-skin=glass] .scanhero small{color:#fff}
+
+/* Capsule segments / chips */
+.phone[data-skin=glass] .seg-tabs,
+.phone[data-skin=glass] .seg,
+.phone[data-skin=glass] .chips,
+.phone[data-skin=glass] .mine-seg{
+  padding:4px!important;
+  border-radius:999px!important;
+  gap:4px!important;
+  background:rgba(255,255,255,.42)!important;
+  border:1px solid rgba(255,255,255,.75);
+  backdrop-filter:blur(12px);
+  -webkit-backdrop-filter:blur(12px);
+}
+.phone[data-skin=glass] .seg-tabs button,
+.phone[data-skin=glass] .seg button,
+.phone[data-skin=glass] .chips button,
+.phone[data-skin=glass] .mine-seg button{
+  border-radius:999px!important;
+  border:0!important;
+  background:transparent!important;
+}
+.phone[data-skin=glass] .seg-tabs button[aria-pressed=true],
+.phone[data-skin=glass] .seg button[aria-pressed=true],
+.phone[data-skin=glass] .chips .selected,
+.phone[data-skin=glass] .chips button.selected,
+.phone[data-skin=glass] .mine-seg button[aria-pressed=true]{
+  background:linear-gradient(90deg,#0066E7,#4A53F7)!important;
+  color:#fff!important;
+  box-shadow:0 8px 18px rgba(0,102,231,.3);
+}
+
+/* Floating capsule tab bar — above bottom fade, never clipped */
+.phone[data-skin=glass] .tabs{
+  position:absolute!important;
+  z-index:6!important;
+  left:16px!important;right:16px!important;bottom:18px!important;
+  height:62px!important;
+  border-radius:999px!important;
+  background:rgba(255,255,255,.42)!important;
+  border:1px solid rgba(255,255,255,.85)!important;
+  box-shadow:0 16px 40px rgba(20,24,42,.16),inset 0 1px 0 rgba(255,255,255,.9)!important;
+  backdrop-filter:blur(28px) saturate(1.4);
+  -webkit-backdrop-filter:blur(28px) saturate(1.4);
+  overflow:visible!important;
+}
+.phone[data-skin=glass] .tabs button{
+  border-radius:999px;
+  position:relative;z-index:1;
+}
+.phone[data-skin=glass] .tabs .active{
+  background:rgba(0,102,231,.16)!important;
+  color:#0066E7!important;
+  border-radius:999px;
+  box-shadow:0 0 0 1px rgba(0,102,231,.12);
+}
+.phone[data-skin=glass] .homeindicator{z-index:7!important;opacity:.35}
+
+/* List: less “solid slab” */
+.phone[data-skin=glass] .listgroup{
+  padding:6px 10px!important;
+  background:rgba(255,255,255,.36)!important;
+}
+.phone[data-skin=glass] .listrow{
+  border-bottom-color:rgba(20,24,42,.06)!important;
+  background:transparent!important;
+}
+.phone[data-skin=glass] .listgroup .listrow:first-child,
+.phone[data-skin=glass] .listgroup .listrow:last-child{border-radius:18px}
+
+/* Quick actions / chips as frosted tiles */
+.phone[data-skin=glass] .quick4 button,
+.phone[data-skin=glass] .bx-mini,
+.phone[data-skin=glass] .quick3 button{
+  border-radius:22px!important;
+  background:rgba(255,255,255,.5)!important;
+  border:1px solid rgba(255,255,255,.8)!important;
+  box-shadow:0 10px 22px rgba(20,24,42,.08);
+  backdrop-filter:blur(12px);
+  -webkit-backdrop-filter:blur(12px);
+}
+
+/* Numbers slightly heavier + blue tint on key metrics */
+.phone[data-skin=glass] .big-number,
+.phone[data-skin=glass] .wk-nums b,
+.phone[data-skin=glass] .ud-item b,
+.phone[data-skin=glass] .h5-covnum strong{
+  font-weight:800;
+  letter-spacing:-.6px;
+  background:linear-gradient(90deg,#0A4FB8,#0066E7);
+  -webkit-background-clip:text;
+  background-clip:text;
+  color:transparent;
+}
+.phone[data-skin=glass][data-theme=dark] .big-number,
+.phone[data-skin=glass][data-theme=dark] .wk-nums b,
+.phone[data-skin=glass][data-theme=dark] .ud-item b,
+.phone[data-skin=glass][data-theme=dark] .h5-covnum strong{
+  background:linear-gradient(90deg,#7EB2FF,#3B8BFF);
+  -webkit-background-clip:text;
+  background-clip:text;
+  color:transparent;
+}
+
+/* ----- Light theme canvas — stronger color so glass blur reads clearly ----- */
+.phone[data-skin=glass][data-theme=light]{
+  --bg:#D4E2FF;
+  --skin-fade:#DCE7FF;
+  --glass-fill:rgba(245,249,255,.16);
+  --glass-border:rgba(255,255,255,.7);
+  --glass-blur:blur(36px) saturate(1.7);
+  --surface:rgba(255,255,255,.26);
+  --surface2:rgba(255,255,255,.4);
+  --card:rgba(255,255,255,.26);
+  --inner:rgba(255,255,255,.55);
+  --text:#14182A;
+  --muted:#5A6478;
+  --line:rgba(255,255,255,.78);
+  --nav:rgba(255,255,255,.42);
+  --soft:rgba(0,102,231,.14);
+  --sheet:rgba(255,255,255,.82);
+  background:
+    radial-gradient(130% 95% at 50% -18%,rgba(0,102,231,.48),transparent 54%),
+    radial-gradient(95% 75% at 100% 6%,rgba(74,83,247,.34),transparent 50%),
+    radial-gradient(85% 60% at -5% 40%,rgba(193,89,227,.2),transparent 48%),
+    radial-gradient(75% 50% at 90% 100%,rgba(255,116,9,.16),transparent 52%),
+    linear-gradient(180deg,#BFD4FF 0%,#D8E5FF 32%,#EAF0FF 62%,#F5F3FF 100%);
+}
+
+/* ----- Dark theme canvas ----- */
+.phone[data-skin=glass][data-theme=dark]{
+  --bg:#0A0E22;
+  --skin-fade:#0A0E22;
+  --glass-fill:rgba(255,255,255,.09);
+  --glass-border:rgba(255,255,255,.16);
+  --glass-blur:blur(28px) saturate(1.35);
+  --surface:rgba(255,255,255,.09);
+  --surface2:rgba(255,255,255,.12);
+  --card:rgba(255,255,255,.09);
+  --inner:rgba(255,255,255,.12);
+  --text:#E8EEFF;
+  --muted:#A3AED8;
+  --line:rgba(255,255,255,.16);
+  --nav:rgba(14,18,40,.55);
+  --soft:rgba(0,102,231,.22);
+  --sheet:#12182E;
+  background:
+    radial-gradient(120% 90% at 50% -16%,rgba(0,102,231,.48),transparent 52%),
+    radial-gradient(95% 70% at 100% 8%,rgba(193,89,227,.3),transparent 48%),
+    radial-gradient(80% 55% at 0% 42%,rgba(74,83,247,.22),transparent 46%),
+    radial-gradient(70% 45% at 80% 100%,rgba(255,116,9,.12),transparent 48%),
+    linear-gradient(180deg,#141A42 0%,#0A0E22 48%,#070A16 100%);
+}
+.phone[data-skin=glass][data-theme=dark] .card,
+.phone[data-skin=glass][data-theme=dark] .metrics-card,
+.phone[data-skin=glass][data-theme=dark] .listgroup,
+.phone[data-skin=glass][data-theme=dark] .userdata-card,
+.phone[data-skin=glass][data-theme=dark] .report-card,
+.phone[data-skin=glass][data-theme=dark] .library,
+.phone[data-skin=glass][data-theme=dark] .training-summary,
+.phone[data-skin=glass][data-theme=dark] .week-card,
+.phone[data-skin=glass][data-theme=dark] .day-plan,
+.phone[data-skin=glass][data-theme=dark] .h5-card,
+.phone[data-skin=glass][data-theme=dark] .h5-concern,
+.phone[data-skin=glass][data-theme=dark] .org,
+.phone[data-skin=glass][data-theme=dark] .guide-card,
+.phone[data-skin=glass][data-theme=dark] .filter-panel,
+.phone[data-skin=glass][data-theme=dark] .scene-card,
+.phone[data-skin=glass][data-theme=dark] .mp-card,
+.phone[data-skin=glass][data-theme=dark] .bodyx .bx-mini{
+  background:var(--glass-fill)!important;
+  border:1px solid var(--glass-border)!important;
+  box-shadow:0 16px 36px rgba(0,0,0,.32),inset 0 1px 0 rgba(255,255,255,.1)!important;
+  backdrop-filter:var(--glass-blur);
+  -webkit-backdrop-filter:var(--glass-blur);
+}
+.phone[data-skin=glass][data-theme=dark] .key-card,
+.phone[data-skin=glass][data-theme=dark] .h5-hero,
+.phone[data-skin=glass][data-theme=dark] .profile-hero,
+.phone[data-skin=glass][data-theme=dark] .bx-hero.is-key,
+.phone[data-skin=glass][data-theme=dark] .scheme-guide,
+.phone[data-skin=glass][data-theme=dark] .today,
+.phone[data-skin=glass][data-theme=dark] .scanhero{
+  background:linear-gradient(145deg,rgba(0,102,231,.6),rgba(74,83,247,.4) 55%,rgba(193,89,227,.28))!important;
+  border:1px solid rgba(255,255,255,.2)!important;
+}
+.phone[data-skin=glass][data-theme=dark] .seg-tabs,
+.phone[data-skin=glass][data-theme=dark] .seg,
+.phone[data-skin=glass][data-theme=dark] .chips,
+.phone[data-skin=glass][data-theme=dark] .mine-seg{
+  background:rgba(255,255,255,.06)!important;
+  border-color:rgba(255,255,255,.12);
+}
+.phone[data-skin=glass][data-theme=dark] .tabs{
+  background:rgba(14,18,40,.48)!important;
+  border:1px solid rgba(255,255,255,.16)!important;
+  box-shadow:0 16px 40px rgba(0,0,0,.42),inset 0 1px 0 rgba(255,255,255,.08)!important;
+  color:#A3AED8;
+  z-index:6!important;
+}
+.phone[data-skin=glass][data-theme=dark] .tabs .active{
+  background:rgba(0,102,231,.32)!important;
+  color:#7EB2FF!important;
+}
+.phone[data-skin=glass][data-theme=dark] .listgroup{background:rgba(255,255,255,.05)!important}
+.phone[data-skin=glass][data-theme=dark] .listrow{border-bottom-color:rgba(255,255,255,.08)!important}
+.phone[data-skin=glass][data-theme=dark] .quick4 button,
+.phone[data-skin=glass][data-theme=dark] .bx-mini,
+.phone[data-skin=glass][data-theme=dark] .quick3 button{
+  background:rgba(255,255,255,.06)!important;
+  border:1px solid rgba(255,255,255,.12)!important;
+}
+
+/* hero pill: frosted capsule with readable white text */
+.phone[data-skin=glass] .key-card .key-pill{
+  background:rgba(255,255,255,.22)!important;color:#fff!important;
+  border:1px solid rgba(255,255,255,.55)!important;
+  backdrop-filter:blur(14px) saturate(1.4);-webkit-backdrop-filter:blur(14px) saturate(1.4);
+}
+.phone[data-skin=glass] .key-card .key-pill *{color:#fff!important}
+
+/* ===== Red-box fixes ===== */
+/* 1) Scrolled top: soft frosted veil that fades out (no hard band) */
+.phone[data-skin=glass]>.statusbar{z-index:9}
+.phone[data-skin=glass].is-scrolled>.topbar,
+.phone[data-skin=glass].is-collapsed>.topbar,
+.phone[data-skin=glass][data-theme=dark].is-scrolled>.topbar,
+.phone[data-skin=glass][data-theme=dark].is-collapsed>.topbar{
+  background:transparent!important;
+  backdrop-filter:none!important;
+  -webkit-backdrop-filter:none!important;
+  border-bottom:0!important;
+}
+.phone[data-skin=glass]>.topbar:before{
+  content:"";position:absolute;left:0;right:0;top:-43px;height:calc(100% + 43px + 30px);
+  z-index:-1;pointer-events:none;opacity:0;transition:opacity .22s ease;
+  background:linear-gradient(180deg,color-mix(in srgb,var(--skin-fade) 78%,transparent) 0%,color-mix(in srgb,var(--skin-fade) 55%,transparent) 62%,transparent 100%);
+  backdrop-filter:blur(22px) saturate(1.4);
+  -webkit-backdrop-filter:blur(22px) saturate(1.4);
+  -webkit-mask-image:linear-gradient(180deg,#000 0%,#000 58%,transparent 100%);
+  mask-image:linear-gradient(180deg,#000 0%,#000 58%,transparent 100%);
+}
+.phone[data-skin=glass].is-scrolled>.topbar:before,
+.phone[data-skin=glass].is-collapsed>.topbar:before{opacity:1}
+
+/* 2) Bottom: tab bar floats on a long soft fade, not a dark slab */
+.phone[data-skin=glass]:after{
+  height:150px!important;
+  background:linear-gradient(180deg,transparent 0%,color-mix(in srgb,var(--skin-fade) 38%,transparent) 45%,color-mix(in srgb,var(--skin-fade) 88%,transparent) 100%)!important;
+}
+.phone[data-skin=glass] .tabs{
+  bottom:16px!important;
+  display:flex!important;align-items:stretch!important;
+  padding:5px!important;box-sizing:border-box!important;
+  overflow:hidden!important;
+}
+.phone[data-skin=glass] .tabs button{
+  height:100%!important;min-height:0!important;margin:0!important;
+  align-self:stretch!important;flex:1 1 0;
+}
+.phone[data-skin=glass]:after{
+  background:linear-gradient(180deg,transparent 0%,color-mix(in srgb,var(--skin-fade) 55%,transparent) 40%,color-mix(in srgb,var(--skin-fade) 96%,transparent) 78%,var(--skin-fade) 100%)!important;
+}
+.phone[data-skin=glass] .tabs .active{
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.55),0 6px 16px rgba(0,102,231,.16)!important;
+}
+.phone[data-skin=glass][data-theme=dark] .tabs .active{
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.18),0 6px 16px rgba(0,102,231,.3)!important;
+}
+
+/* 3) Health: no nested card-in-card for concerns; remove hero bubble artifact */
+.phone[data-skin=glass] .h5-concerns{
+  background:transparent!important;border:0!important;box-shadow:none!important;
+  backdrop-filter:none!important;-webkit-backdrop-filter:none!important;
+  padding:0!important;display:grid;gap:10px;
+}
+.phone[data-skin=glass] .h5-concern{margin:0!important}
+.phone[data-skin=glass] .h5-concern.bar{padding:14px 14px 14px 18px!important}
+.phone[data-skin=glass] .h5-hero.key-card:before{display:none!important}
+.phone[data-skin=glass] .h5-hero.shape-notch-bl{
+  -webkit-mask:none!important;mask:none!important;border-radius:28px!important;
+}
+
+/* Final light overrides — beat sport-revision surface2 solid cards */
+.phone[data-skin=glass][data-theme=light] .week-card,
+.phone[data-skin=glass][data-theme=light] .week-card.flat,
+.phone[data-skin=glass][data-theme=light] .day-plan,
+.phone[data-skin=glass][data-theme=light] .library,
+.phone[data-skin=glass][data-theme=light] .userdata-card,
+.phone[data-skin=glass][data-theme=light] .listgroup,
+.phone[data-skin=glass][data-theme=light] .guide-card,
+.phone[data-skin=glass][data-theme=light] .scheme-card,
+.phone[data-skin=glass][data-theme=light] .quick4 button,
+.phone[data-skin=glass][data-theme=light] .h5-card,
+.phone[data-skin=glass][data-theme=light] .h5-concern,
+.phone[data-skin=glass][data-theme=light] .h5-svc,
+.phone[data-skin=glass][data-theme=light] .metrics-card,
+.phone[data-skin=glass][data-theme=light] .card,
+.phone[data-skin=glass][data-theme=light] .report-card,
+.phone[data-skin=glass][data-theme=light] .training-summary,
+.phone[data-skin=glass][data-theme=light] .daily-diet,
+.phone[data-skin=glass][data-theme=light] .long-plan,
+.phone[data-skin=glass][data-theme=light] .bx-mini,
+.phone[data-skin=glass][data-theme=light] .h5-concern.bar{
+  background:rgba(245,249,255,.16)!important;
+  border:1px solid rgba(255,255,255,.75)!important;
+  box-shadow:0 18px 44px rgba(40,80,160,.14),inset 0 1px 0 rgba(255,255,255,.9)!important;
+  backdrop-filter:blur(36px) saturate(1.7)!important;
+  -webkit-backdrop-filter:blur(36px) saturate(1.7)!important;
+}
+.phone[data-skin=glass][data-theme=light] .seg-tabs,
+.phone[data-skin=glass][data-theme=light] .schedule-tabs,
+.phone[data-skin=glass][data-theme=light] .chips,
+.phone[data-skin=glass][data-theme=light] .mine-seg{
+  background:rgba(255,255,255,.28)!important;
+  border:1px solid rgba(255,255,255,.7)!important;
+  backdrop-filter:blur(24px) saturate(1.5)!important;
+  -webkit-backdrop-filter:blur(24px) saturate(1.5)!important;
+}
+.phone[data-skin=glass][data-theme=light] .tabs{
+  background:rgba(255,255,255,.32)!important;
+  border:1px solid rgba(255,255,255,.8)!important;
+  backdrop-filter:blur(32px) saturate(1.6)!important;
+  -webkit-backdrop-filter:blur(32px) saturate(1.6)!important;
+}
+.phone[data-skin=glass][data-theme=light] .h5-coverage,
+.phone[data-skin=glass][data-theme=light] .h5-cov,
+.phone[data-skin=glass][data-theme=light] .key-cov{
+  background:rgba(255,255,255,.18)!important;
+  border:1px solid rgba(255,255,255,.35)!important;
+  backdrop-filter:blur(14px);
+  -webkit-backdrop-filter:blur(14px);
+}
+
+/* Concern list: independent cards with spacing (both schemes) */
+.phone .h5-concerns{
+  background:transparent!important;border:0!important;box-shadow:none!important;
+  padding:0!important;display:grid;gap:12px;
+}
+.phone .h5-concerns .h5-concern,.phone .h5-concerns .h5-concern.bar{
+  margin:0!important;border-top:0!important;border-radius:20px;
+}
