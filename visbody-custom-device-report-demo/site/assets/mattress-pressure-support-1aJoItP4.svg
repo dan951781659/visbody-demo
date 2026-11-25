@@ -1,0 +1,79 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 980 344" role="img" aria-label="仰卧人体与床垫七分区承托示意图">
+  <defs>
+    <linearGradient id="bed" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#edf7fd"/>
+      <stop offset="1" stop-color="#f6fbfe"/>
+    </linearGradient>
+    <linearGradient id="body" x1="0" y1="0" x2=".16" y2="1">
+      <stop offset="0" stop-color="#f5fbff"/>
+      <stop offset=".33" stop-color="#dcecf8"/>
+      <stop offset=".68" stop-color="#b7d6ea"/>
+      <stop offset="1" stop-color="#82b3d6"/>
+    </linearGradient>
+    <linearGradient id="limb" x1="0" y1="0" x2=".14" y2="1">
+      <stop offset="0" stop-color="#e9f5fc"/>
+      <stop offset=".48" stop-color="#cbdfee"/>
+      <stop offset="1" stop-color="#95bad9"/>
+    </linearGradient>
+    <radialGradient id="head" cx=".56" cy=".21" r=".85">
+      <stop offset="0" stop-color="#f6fbff"/>
+      <stop offset=".6" stop-color="#d4e7f4"/>
+      <stop offset="1" stop-color="#94bfdf"/>
+    </radialGradient>
+    <radialGradient id="cool">
+      <stop offset="0" stop-color="#075bf8"/>
+      <stop offset=".35" stop-color="#00b6ff"/>
+      <stop offset=".65" stop-color="#51d4f4" stop-opacity=".8"/>
+      <stop offset="1" stop-color="#9be9ff" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="cyan">
+      <stop offset="0" stop-color="#00bbd9"/>
+      <stop offset=".43" stop-color="#22d9de"/>
+      <stop offset=".72" stop-color="#8beafa" stop-opacity=".72"/>
+      <stop offset="1" stop-color="#aaeaff" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="green">
+      <stop offset="0" stop-color="#b4f42c"/>
+      <stop offset=".42" stop-color="#17dcb1"/>
+      <stop offset=".72" stop-color="#69e6e4" stop-opacity=".68"/>
+      <stop offset="1" stop-color="#9be9ff" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="warm">
+      <stop offset="0" stop-color="#ff7a00"/>
+      <stop offset=".3" stop-color="#ffd91c"/>
+      <stop offset=".57" stop-color="#b2ed38"/>
+      <stop offset=".79" stop-color="#4de4d6" stop-opacity=".75"/>
+      <stop offset="1" stop-color="#b1f1ff" stop-opacity="0"/>
+    </radialGradient>
+    <filter id="shadow" x="-.1" y="-.3" width="1.2" height="1.7">
+      <feGaussianBlur stdDeviation="5"/>
+    </filter>
+  </defs>
+  <rect width="980" height="344" fill="#fff"/>
+  <rect x="22" y="165" width="936" height="103" rx="18" fill="url(#bed)" stroke="#a0d9fb" stroke-width="2.2"/>
+  <g>
+    <ellipse cx="116" cy="178" rx="59" ry="31" fill="url(#cool)"/>
+    <ellipse cx="235" cy="182" rx="57" ry="30" fill="url(#cool)"/>
+    <ellipse cx="339" cy="181" rx="65" ry="36" fill="url(#green)"/>
+    <ellipse cx="455" cy="179" rx="60" ry="33" fill="url(#green)"/>
+    <ellipse cx="555" cy="182" rx="72" ry="39" fill="url(#warm)"/>
+    <ellipse cx="690" cy="180" rx="71" ry="32" fill="url(#cyan)"/>
+    <ellipse cx="845" cy="180" rx="57" ry="30" fill="url(#cyan)"/>
+  </g>
+  <path d="M83 164 Q210 177 337 172 T590 176 T879 166" fill="none" stroke="#78add0" stroke-width="10" stroke-linecap="round" opacity=".39" filter="url(#shadow)"/>
+  <!-- 后侧手臂、腿与人体侧面轮廓 -->
+  <path d="M475 125 C529 112 574 119 622 137 C675 153 741 155 811 151 C842 149 857 135 867 117 C871 109 876 98 881 100 C886 104 881 114 876 126 L864 154 C857 165 844 170 830 171 C750 174 684 179 612 173 C558 170 509 165 475 157Z" fill="url(#limb)" stroke="#c1dbe9" stroke-width="1.2"/>
+  <path d="M150 133 C165 131 183 124 197 115 C211 105 234 106 253 110 C285 112 304 117 333 118 C379 117 399 109 442 115 C477 120 503 123 535 125 C583 124 615 136 661 148 C719 163 781 163 828 158 C855 154 870 137 879 119 L893 97 C896 92 900 92 901 97 L897 107 C902 101 905 101 906 106 L901 118 C904 111 908 112 908 117 L903 128 C906 124 910 127 908 132 L897 154 C887 171 873 178 854 178 C783 180 725 182 657 178 C600 175 561 171 523 176 C478 183 430 176 387 174 C349 172 317 177 279 174 C244 173 215 166 190 160 C175 156 160 160 151 163 L139 148Z" fill="url(#body)" stroke="#c3ddeb" stroke-width="1.4"/>
+  <path d="M537 134 C588 135 617 148 665 158 C725 170 782 171 834 164 C858 160 874 150 884 138" fill="none" stroke="#edf7fd" stroke-width="3" stroke-linecap="round" opacity=".82"/>
+  <path d="M538 173 C597 169 619 177 660 178 C732 181 797 178 852 175" fill="none" stroke="#90b7d5" stroke-width="1.4" opacity=".7"/>
+  <!-- 头部侧面、颈部及五官 -->
+  <path d="M89 172 C72 164 62 150 63 134 C63 115 75 95 93 87 C105 82 117 83 127 81 C137 80 143 75 149 76 C154 77 153 83 154 87 L163 91 C169 94 171 100 168 103 L178 108 C188 109 191 115 186 121 L180 127 C184 136 178 143 167 144 C158 143 151 149 147 157 C142 170 131 177 114 177 C105 177 96 176 89 172Z" fill="url(#head)" stroke="#c5ddeb" stroke-width="1.3"/>
+  <path d="M127 111 C137 108 141 111 145 112 M174 114 Q180 116 183 114 M169 132 Q175 133 178 130" fill="none" stroke="#9bbfd8" stroke-width="1.5" stroke-linecap="round"/>
+  <path d="M117 140 C105 130 101 145 110 152 C116 157 123 151 118 145 C115 141 111 141 111 146" fill="none" stroke="#91b9d7" stroke-width="1.8" stroke-linecap="round"/>
+  <path d="M76 134 C83 104 104 90 125 87" fill="none" stroke="#f2f9fd" stroke-width="3.5" stroke-linecap="round" opacity=".75"/>
+  <!-- 双臂交叠于胸腹部 -->
+  <path d="M216 116 C236 105 269 100 296 94 C316 89 334 81 352 78 C361 76 368 77 370 82 C371 87 364 88 357 89 L343 92 C357 88 371 85 376 88 C381 93 375 96 367 98 L348 103 C365 99 380 99 381 105 C381 109 374 110 365 111 L344 117 C314 124 290 137 261 148 C235 157 211 157 199 144 C189 132 201 122 216 116Z" fill="url(#limb)" stroke="#bfd7e8" stroke-width="1.1"/>
+  <path d="M208 131 C223 127 238 135 248 142 C258 151 266 158 277 157 C290 153 300 139 311 126 C322 112 335 104 349 100 C363 96 381 96 392 101 C401 105 397 110 388 109 L368 105 C380 107 396 111 401 116 C405 121 400 125 392 122 L376 117 C390 124 398 128 393 132 C389 134 380 130 367 125 C356 124 348 132 341 141 C319 164 299 181 279 184 C262 187 250 177 233 168 C219 161 201 155 197 145 C194 139 198 134 208 131Z" fill="url(#body)" stroke="#bad4e7" stroke-width="1.1"/>
+  <path d="M206 135 C223 130 238 142 250 152 C263 163 277 175 288 170 C303 164 320 147 332 132" fill="none" stroke="#eef7fc" stroke-width="3.2" stroke-linecap="round" opacity=".78"/>
+  <path d="M288 182 C311 176 326 160 341 143" fill="none" stroke="#98bad5" stroke-width="1.5" stroke-linecap="round"/>
+</svg>
